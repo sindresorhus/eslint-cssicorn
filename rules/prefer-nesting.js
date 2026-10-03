@@ -76,18 +76,22 @@ const getCandidate = selector => {
 	}
 
 	const trailingArguments = getIsSelectorList(children.at(-1));
-	if (children.length < 3 || !trailingArguments || !isDescendantCombinator(children.at(-2))) {
+	if (children.length < 3 || !trailingArguments || children.at(-2).type !== 'Combinator') {
 		return;
 	}
 
-	// Unlike :is(), a nested selector list gives each branch its own specificity.
-	const specificities = trailingArguments.children.map(argument => getRuleSelectorSpecificity(argument, [0, 0, 0]));
-	const hasEqualSpecificity = specificities.every(specificity => compareSpecificity(specificity, specificities[0]) === 0);
+	let innerNodes = children.slice(-2);
+	if (isDescendantCombinator(children.at(-2))) {
+		// Unlike :is(), a nested selector list gives each branch its own specificity.
+		const specificities = trailingArguments.children.map(argument => getRuleSelectorSpecificity(argument, [0, 0, 0]));
+		const hasEqualSpecificity = specificities.every(specificity => compareSpecificity(specificity, specificities[0]) === 0);
+		innerNodes = hasEqualSpecificity && canUnwrapSelectorList(trailingArguments) ? trailingArguments.children : [children.at(-1)];
+	}
 
 	return {
 		node: children.at(-1),
 		outerNodes: children.slice(0, -2),
-		innerNodes: hasEqualSpecificity && canUnwrapSelectorList(trailingArguments) ? trailingArguments.children : [children.at(-1)],
+		innerNodes,
 		attached: false,
 	};
 };

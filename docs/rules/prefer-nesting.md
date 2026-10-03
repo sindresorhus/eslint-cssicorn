@@ -9,7 +9,7 @@
 <!-- end auto-generated rule header -->
 <!-- Do not manually modify this header. Run: `npm run fix:eslint-docs` -->
 
-Prefer native CSS nesting when `:is()` groups selectors at the beginning of a selector or after a descendant combinator at its end. This separates selector groups into parent and child rules without changing which elements match or the declaration order.
+Prefer native CSS nesting when `:is()` groups selectors at the beginning of a selector or after a combinator at its end. This separates selector groups into parent and child rules without changing which elements match or the declaration order.
 
 The fix keeps the `:is()` wrapper when needed to preserve specificity or forgiving selector-list behavior.
 
@@ -24,6 +24,22 @@ a :is(.foo, .bar) {
 /* ✅ */
 a {
 	.foo, .bar {
+		color: red;
+	}
+}
+```
+
+For trailing `:is()` after child (`>`), next-sibling (`+`), or subsequent-sibling (`~`) combinators, the fix moves the combinator and the entire `:is()` into the nested rule:
+
+```css
+/* ❌ */
+a > :is(.foo, .bar) {
+	color: red;
+}
+
+/* ✅ */
+a {
+	> :is(.foo, .bar) {
 		color: red;
 	}
 }
@@ -105,7 +121,7 @@ a {
 
 ## Specificity
 
-For a trailing `:is()`, arguments are unwrapped only when they have equal specificity. Otherwise, the fix keeps `:is()` so all matching branches retain the maximum specificity of the argument list.
+For a trailing `:is()` after a descendant combinator, arguments are unwrapped only when they have equal specificity. Otherwise, the fix keeps `:is()` so all matching branches retain the maximum specificity of the argument list.
 
 ```css
 /* ❌ */
@@ -125,7 +141,7 @@ A leading `:is()` can have mixed specificity. The nesting selector takes the max
 
 ## Limitations
 
-The rule only checks rules with one selector and at least two compound `:is()` arguments. It ignores complex arguments such as `.foo .bar`, selectors that already contain `&`, single-argument or standalone `:is()`, other pseudo-classes, and patterns such as `a:is(.foo, .bar)`, `a :is(.foo, .bar) b`, or `a > :is(.foo, .bar)`. It does not merge neighboring rules or their generated parent wrappers.
+The rule only checks rules with one selector and at least two compound `:is()` arguments. It ignores complex arguments such as `.foo .bar`, selectors that already contain `&`, single-argument or standalone `:is()`, other pseudo-classes, and patterns such as `a:is(.foo, .bar)` or `a :is(.foo, .bar) b`. It does not merge neighboring rules or their generated parent wrappers.
 
 Unrepresentable selectors and files containing `@namespace` are ignored. Pseudo-class names are case-insensitive, and selector escapes are preserved. Escaped `:is()` names are ignored because `@eslint/css` exposes their arguments as raw text rather than parsed selectors.
 

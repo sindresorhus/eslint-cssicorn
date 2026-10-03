@@ -23,7 +23,9 @@ test.snapshot({
 		'a :has(.foo, .bar) {}',
 		'a :matches(.foo, .bar) {}',
 		String.raw`a :\69 s(.foo, .bar) {}`,
-		'a > :is(.foo, .bar) {}',
+		'a > :is(.foo) {}',
+		'a > :is(.foo .bar, .baz) {}',
+		'a > :is(.foo, .bar), b {}',
 		'a :is(.foo .bar, .baz .qux) {}',
 		':is(.foo .bar, .baz) a {}',
 		':is(.foo > .bar, .baz).active {}',
@@ -93,6 +95,40 @@ test.snapshot({
 test({
 	valid: [],
 	invalid: [
+		...['>', '+', '~'].map(combinator => ({
+			code: `a ${combinator} :is(.foo, .bar) { color: red; }`,
+			output: `a { ${combinator} :is(.foo, .bar) { color: red; } }`,
+			errors: [{messageId: 'prefer-nesting'}],
+		})),
+		{
+			code: 'a ~ :is(.foo, #bar) { color: red; }',
+			output: 'a { ~ :is(.foo, #bar) { color: red; } }',
+			errors: 1,
+		},
+		{
+			code: 'a + :is(.foo, :blank) { color: red; }',
+			output: 'a { + :is(.foo, :blank) { color: red; } }',
+			errors: 1,
+		},
+		{
+			code: String.raw`.f\6f o>:IS(.bar, .b\61 z) { color: red; }`,
+			output: String.raw`.f\6f o { >:IS(.bar, .b\61 z) { color: red; } }`,
+			errors: 1,
+		},
+		{
+			code: 'a > /* keep */ :is(.foo, .bar) { color: red; }',
+			errors: 1,
+		},
+		{
+			code: 'a > :is(.foo, .bar) {\r\n  color: red;\r\n}',
+			output: 'a {\r\n  > :is(.foo, .bar) {\r\n    color: red;\r\n  }\r\n}',
+			errors: 1,
+		},
+		{
+			code: ':where(article, p) ~ :is(h1, h2) { color: red; }',
+			output: ':where(article, p) { ~ :is(h1, h2) { color: red; } }',
+			errors: 1,
+		},
 		...['>', '+', '~'].map(combinator => ({
 			code: `:is(.foo, .bar) ${combinator} a { color: red; }`,
 			output: `.foo, .bar { ${combinator} a { color: red; } }`,
@@ -246,6 +282,14 @@ nodeTest('nesting fixes settle across overlapping and repeated candidates', () =
 	};
 	const cases = [
 		{
+			code: '.parent, #parent { a > :is(.foo, .bar) { color: red; & > b { color: blue; } } }',
+			output: '.parent, #parent { a { > :is(.foo, .bar) { color: red; & > b { color: blue; } } } }',
+		},
+		{
+			code: 'a > :is(.foo, .bar) { b + :is(.baz, #qux) { color: red; } }',
+			output: 'a { > :is(.foo, .bar) { b { + :is(.baz, #qux) { color: red; } } } }',
+		},
+		{
 			code: ':is(.foo, .bar) > a :is(.baz, #qux) { color: red; }',
 			output: '.foo, .bar { > a { :is(.baz, #qux) { color: red; } } }',
 		},
@@ -303,6 +347,11 @@ nodeTest('nesting fixes work with the other nesting rules', () => {
 	assert.equal(trailingMixedSpecificity.output, 'a { :is(.foo, #bar) { color: red; } }');
 	assert.deepEqual(trailingMixedSpecificity.messages, []);
 	assert.equal(linter.verifyAndFix(trailingMixedSpecificity.output, config, {filename: 'test.css'}).fixed, false);
+
+	const trailingCombinator = linter.verifyAndFix('a > :is(.foo, #bar) { color: red; }', config, {filename: 'test.css'});
+	assert.equal(trailingCombinator.output, 'a { > :is(.foo, #bar) { color: red; } }');
+	assert.deepEqual(trailingCombinator.messages, []);
+	assert.equal(linter.verifyAndFix(trailingCombinator.output, config, {filename: 'test.css'}).fixed, false);
 
 	const mixedSpecificity = linter.verifyAndFix(':is(.foo, #bar) a { color: red; }', config, {filename: 'test.css'});
 	assert.equal(mixedSpecificity.output, '.foo, #bar { a { color: red; } }');
