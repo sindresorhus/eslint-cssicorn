@@ -1,0 +1,917 @@
+exports[`invalid(1): @keyframes fade { calc(100%) { animation-duration: 2s; opacity: 1 !important; } to { animation-timing-function: ease; } } 1`] = `
+
+  1 | @keyframes fade { calc(100%) { animation-duration: 2s; opacity: 1 !important; } to { animation-timing-function: ease; } }
+
+`;
+
+exports[`invalid(1): @keyframes fade { calc(100%) { animation-duration: 2s; opacity: 1 !important; } to { animation-timing-function: ease; } } 2`] = `
+
+Message:
+> 1 | @keyframes fade { calc(100%) { animation-duration: 2s; opacity: 1 !important; } to { animation-timing-function: ease; } }
+    |                                ^^^^^^^^^^^^^^^^^^^^^^ \`animation-duration\` has no effect inside keyframes. Set it on the animated element instead.
+
+Output:
+  1 | @keyframes fade { calc(100%) {  opacity: 1 !important; } to { animation-timing-function: ease; } }
+
+`;
+
+exports[`invalid(1): @keyframes fade { calc(100%) { animation-duration: 2s; opacity: 1 !important; } to { animation-timing-function: ease; } } 3`] = `
+
+Message:
+> 1 | @keyframes fade { calc(100%) { animation-duration: 2s; opacity: 1 !important; } to { animation-timing-function: ease; } }
+    |                                                        ^^^^^^^^^^^^^^^^^^^^^ Declarations with \`!important\` are ignored inside keyframes.
+
+Output:
+  1 | @keyframes fade { calc(100%) { animation-duration: 2s;  } to { animation-timing-function: ease; } }
+
+`;
+
+exports[`invalid(1): @keyframes fade { from { animation-name: fade; } } 1`] = `
+
+  1 | @keyframes fade { from { animation-name: fade; } }
+
+`;
+
+exports[`invalid(1): @keyframes fade { from { animation-name: fade; } } 2`] = `
+
+Message:
+> 1 | @keyframes fade { from { animation-name: fade; } }
+    |                          ^^^^^^^^^^^^^^^^^^^^ \`animation-name\` has no effect inside keyframes. Set it on the animated element instead.
+
+Output:
+  1 | @keyframes fade { from {  } }
+
+`;
+
+exports[`invalid(10): @keyframes fade { from { animation-timeline: scroll(); } } 1`] = `
+
+  1 | @keyframes fade { from { animation-timeline: scroll(); } }
+
+`;
+
+exports[`invalid(10): @keyframes fade { from { animation-timeline: scroll(); } } 2`] = `
+
+Message:
+> 1 | @keyframes fade { from { animation-timeline: scroll(); } }
+    |                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`animation-timeline\` has no effect inside keyframes. Set it on the animated element instead.
+
+Output:
+  1 | @keyframes fade { from {  } }
+
+`;
+
+exports[`invalid(11): @keyframes fade { from { animation-range: entry exit; } } 1`] = `
+
+  1 | @keyframes fade { from { animation-range: entry exit; } }
+
+`;
+
+exports[`invalid(11): @keyframes fade { from { animation-range: entry exit; } } 2`] = `
+
+Message:
+> 1 | @keyframes fade { from { animation-range: entry exit; } }
+    |                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`animation-range\` has no effect inside keyframes. Set it on the animated element instead.
+
+Output:
+  1 | @keyframes fade { from {  } }
+
+`;
+
+exports[`invalid(12): @keyframes fade { from { animation-range-start: entry 10%; } } 1`] = `
+
+  1 | @keyframes fade { from { animation-range-start: entry 10%; } }
+
+`;
+
+exports[`invalid(12): @keyframes fade { from { animation-range-start: entry 10%; } } 2`] = `
+
+Message:
+> 1 | @keyframes fade { from { animation-range-start: entry 10%; } }
+    |                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`animation-range-start\` has no effect inside keyframes. Set it on the animated element instead.
+
+Output:
+  1 | @keyframes fade { from {  } }
+
+`;
+
+exports[`invalid(13): @keyframes fade { from { animation-range-end: exit 90%; } } 1`] = `
+
+  1 | @keyframes fade { from { animation-range-end: exit 90%; } }
+
+`;
+
+exports[`invalid(13): @keyframes fade { from { animation-range-end: exit 90%; } } 2`] = `
+
+Message:
+> 1 | @keyframes fade { from { animation-range-end: exit 90%; } }
+    |                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`animation-range-end\` has no effect inside keyframes. Set it on the animated element instead.
+
+Output:
+  1 | @keyframes fade { from {  } }
+
+`;
+
+exports[`invalid(14): @keyframes fade { from { animation-trigger: none; } } 1`] = `
+
+  1 | @keyframes fade { from { animation-trigger: none; } }
+
+`;
+
+exports[`invalid(14): @keyframes fade { from { animation-trigger: none; } } 2`] = `
+
+Message:
+> 1 | @keyframes fade { from { animation-trigger: none; } }
+    |                          ^^^^^^^^^^^^^^^^^^^^^^^ \`animation-trigger\` has no effect inside keyframes. Set it on the animated element instead.
+
+Output:
+  1 | @keyframes fade { from {  } }
+
+`;
+
+exports[`invalid(15): @keyframes fade { from { animation-duration: var(--duration); } } 1`] = `
+
+  1 | @keyframes fade { from { animation-duration: var(--duration); } }
+
+`;
+
+exports[`invalid(15): @keyframes fade { from { animation-duration: var(--duration); } } 2`] = `
+
+Message:
+> 1 | @keyframes fade { from { animation-duration: var(--duration); } }
+    |                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`animation-duration\` has no effect inside keyframes. Set it on the animated element instead.
+
+Output:
+  1 | @keyframes fade { from {  } }
+
+`;
+
+exports[`invalid(16): @keyframes fade { to { animation-timing-function: ease-in; } } 1`] = `
+
+  1 | @keyframes fade { to { animation-timing-function: ease-in; } }
+
+`;
+
+exports[`invalid(16): @keyframes fade { to { animation-timing-function: ease-in; } } 2`] = `
+
+Message:
+> 1 | @keyframes fade { to { animation-timing-function: ease-in; } }
+    |                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`animation-timing-function\` has no effect on a final \`to\` or \`100%\` keyframe.
+
+Output:
+  1 | @keyframes fade { to {  } }
+
+`;
+
+exports[`invalid(17): @keyframes fade { 100% { animation-timing-function: ease-in; } } 1`] = `
+
+  1 | @keyframes fade { 100% { animation-timing-function: ease-in; } }
+
+`;
+
+exports[`invalid(17): @keyframes fade { 100% { animation-timing-function: ease-in; } } 2`] = `
+
+Message:
+> 1 | @keyframes fade { 100% { animation-timing-function: ease-in; } }
+    |                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`animation-timing-function\` has no effect on a final \`to\` or \`100%\` keyframe.
+
+Output:
+  1 | @keyframes fade { 100% {  } }
+
+`;
+
+exports[`invalid(18): @keyframes fade { +100.0%, 1e2%, to { animation-timing-function: ease-in; } } 1`] = `
+
+  1 | @keyframes fade { +100.0%, 1e2%, to { animation-timing-function: ease-in; } }
+
+`;
+
+exports[`invalid(18): @keyframes fade { +100.0%, 1e2%, to { animation-timing-function: ease-in; } } 2`] = `
+
+Message:
+> 1 | @keyframes fade { +100.0%, 1e2%, to { animation-timing-function: ease-in; } }
+    |                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`animation-timing-function\` has no effect on a final \`to\` or \`100%\` keyframe.
+
+Output:
+  1 | @keyframes fade { +100.0%, 1e2%, to {  } }
+
+`;
+
+exports[`invalid(19): @keyframes fade { 100%, to { animation-timing-function: var(--easing); } } 1`] = `
+
+  1 | @keyframes fade { 100%, to { animation-timing-function: var(--easing); } }
+
+`;
+
+exports[`invalid(19): @keyframes fade { 100%, to { animation-timing-function: var(--easing); } } 2`] = `
+
+Message:
+> 1 | @keyframes fade { 100%, to { animation-timing-function: var(--easing); } }
+    |                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`animation-timing-function\` has no effect on a final \`to\` or \`100%\` keyframe.
+
+Output:
+  1 | @keyframes fade { 100%, to {  } }
+
+`;
+
+exports[`invalid(2): @keyframes fade { from { animation-duration: 2s; } } 1`] = `
+
+  1 | @keyframes fade { from { animation-duration: 2s; } }
+
+`;
+
+exports[`invalid(2): @keyframes fade { from { animation-duration: 2s; } } 2`] = `
+
+Message:
+> 1 | @keyframes fade { from { animation-duration: 2s; } }
+    |                          ^^^^^^^^^^^^^^^^^^^^^^ \`animation-duration\` has no effect inside keyframes. Set it on the animated element instead.
+
+Output:
+  1 | @keyframes fade { from {  } }
+
+`;
+
+exports[`invalid(20): @keyframes fade { to { animation-timing-function: ease; } from { opacity: 0; } } 1`] = `
+
+  1 | @keyframes fade { to { animation-timing-function: ease; } from { opacity: 0; } }
+
+`;
+
+exports[`invalid(20): @keyframes fade { to { animation-timing-function: ease; } from { opacity: 0; } } 2`] = `
+
+Message:
+> 1 | @keyframes fade { to { animation-timing-function: ease; } from { opacity: 0; } }
+    |                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`animation-timing-function\` has no effect on a final \`to\` or \`100%\` keyframe.
+
+Output:
+  1 | @keyframes fade { to {  } from { opacity: 0; } }
+
+`;
+
+exports[`invalid(21): @keyframes fade { from { animation-timing-function: ease; } to { animation-timing-function: ease-out; animation-composition: add; opacity: 1; } } 1`] = `
+
+  1 | @keyframes fade { from { animation-timing-function: ease; } to { animation-timing-function: ease-out; animation-composition: add; opacity: 1; } }
+
+`;
+
+exports[`invalid(21): @keyframes fade { from { animation-timing-function: ease; } to { animation-timing-function: ease-out; animation-composition: add; opacity: 1; } } 2`] = `
+
+Message:
+> 1 | @keyframes fade { from { animation-timing-function: ease; } to { animation-timing-function: ease-out; animation-composition: add; opacity: 1; } }
+    |                                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`animation-timing-function\` has no effect on a final \`to\` or \`100%\` keyframe.
+
+Output:
+  1 | @keyframes fade { from { animation-timing-function: ease; } to {  animation-composition: add; opacity: 1; } }
+
+`;
+
+exports[`invalid(22): @keyframes fade { from { opacity: 0 !important; } } 1`] = `
+
+  1 | @keyframes fade { from { opacity: 0 !important; } }
+
+`;
+
+exports[`invalid(22): @keyframes fade { from { opacity: 0 !important; } } 2`] = `
+
+Message:
+> 1 | @keyframes fade { from { opacity: 0 !important; } }
+    |                          ^^^^^^^^^^^^^^^^^^^^^ Declarations with \`!important\` are ignored inside keyframes.
+
+Output:
+  1 | @keyframes fade { from {  } }
+
+`;
+
+exports[`invalid(23): @keyframes fade { to { --progress: 1 !important; } } 1`] = `
+
+  1 | @keyframes fade { to { --progress: 1 !important; } }
+
+`;
+
+exports[`invalid(23): @keyframes fade { to { --progress: 1 !important; } } 2`] = `
+
+Message:
+> 1 | @keyframes fade { to { --progress: 1 !important; } }
+    |                        ^^^^^^^^^^^^^^^^^^^^^^^^ Declarations with \`!important\` are ignored inside keyframes.
+
+Output:
+  1 | @keyframes fade { to {  } }
+
+`;
+
+exports[`invalid(24): @keyframes fade { to { animation-composition: add !important; } } 1`] = `
+
+  1 | @keyframes fade { to { animation-composition: add !important; } }
+
+`;
+
+exports[`invalid(24): @keyframes fade { to { animation-composition: add !important; } } 2`] = `
+
+Message:
+> 1 | @keyframes fade { to { animation-composition: add !important; } }
+    |                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Declarations with \`!important\` are ignored inside keyframes.
+
+Output:
+  1 | @keyframes fade { to {  } }
+
+`;
+
+exports[`invalid(25): @keyframes fade { to { animation: fade 2s !important; } } 1`] = `
+
+  1 | @keyframes fade { to { animation: fade 2s !important; } }
+
+`;
+
+exports[`invalid(25): @keyframes fade { to { animation: fade 2s !important; } } 2`] = `
+
+Message:
+> 1 | @keyframes fade { to { animation: fade 2s !important; } }
+    |                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Declarations with \`!important\` are ignored inside keyframes.
+
+Output:
+  1 | @keyframes fade { to {  } }
+
+`;
+
+exports[`invalid(26): @keyframes fade { to { opacity: 1 ! IMPORTANT; } } 1`] = `
+
+  1 | @keyframes fade { to { opacity: 1 ! IMPORTANT; } }
+
+`;
+
+exports[`invalid(26): @keyframes fade { to { opacity: 1 ! IMPORTANT; } } 2`] = `
+
+Message:
+> 1 | @keyframes fade { to { opacity: 1 ! IMPORTANT; } }
+    |                        ^^^^^^^^^^^^^^^^^^^^^^ Declarations with \`!important\` are ignored inside keyframes.
+
+Output:
+  1 | @keyframes fade { to {  } }
+
+`;
+
+exports[`invalid(27): @keyframes fade { to { opacity: 1 !/**/important; } } 1`] = `
+
+  1 | @keyframes fade { to { opacity: 1 !/**/important; } }
+
+`;
+
+exports[`invalid(27): @keyframes fade { to { opacity: 1 !/**/important; } } 2`] = `
+
+Message:
+> 1 | @keyframes fade { to { opacity: 1 !/**/important; } }
+    |                        ^^^^^^^^^^^^^^^^^^^^^^^^^ Declarations with \`!important\` are ignored inside keyframes.
+
+`;
+
+exports[`invalid(28): @keyframes fade { to { opacity: 1 !impor\\74 ant; } } 1`] = `
+
+  1 | @keyframes fade { to { opacity: 1 !impor\\74 ant; } }
+
+`;
+
+exports[`invalid(28): @keyframes fade { to { opacity: 1 !impor\\74 ant; } } 2`] = `
+
+Message:
+> 1 | @keyframes fade { to { opacity: 1 !impor\\74 ant; } }
+    |                        ^^^^^^^^^^^^^^^^^^^^^^^^ Declarations with \`!important\` are ignored inside keyframes.
+
+Output:
+  1 | @keyframes fade { to {  } }
+
+`;
+
+exports[`invalid(29): @keyframes fade { to { opacity: 1 !\\49 MPORTANT; } } 1`] = `
+
+  1 | @keyframes fade { to { opacity: 1 !\\49 MPORTANT; } }
+
+`;
+
+exports[`invalid(29): @keyframes fade { to { opacity: 1 !\\49 MPORTANT; } } 2`] = `
+
+Message:
+> 1 | @keyframes fade { to { opacity: 1 !\\49 MPORTANT; } }
+    |                        ^^^^^^^^^^^^^^^^^^^^^^^^ Declarations with \`!important\` are ignored inside keyframes.
+
+Output:
+  1 | @keyframes fade { to {  } }
+
+`;
+
+exports[`invalid(3): @keyframes fade { from { animation-delay: 1s; } } 1`] = `
+
+  1 | @keyframes fade { from { animation-delay: 1s; } }
+
+`;
+
+exports[`invalid(3): @keyframes fade { from { animation-delay: 1s; } } 2`] = `
+
+Message:
+> 1 | @keyframes fade { from { animation-delay: 1s; } }
+    |                          ^^^^^^^^^^^^^^^^^^^ \`animation-delay\` has no effect inside keyframes. Set it on the animated element instead.
+
+Output:
+  1 | @keyframes fade { from {  } }
+
+`;
+
+exports[`invalid(30): @KEYFRAMES fade { TO { ANIMATION-DURATION: 2s; ANIMATION-TIMING-FUNCTION: ease; } } 1`] = `
+
+  1 | @KEYFRAMES fade { TO { ANIMATION-DURATION: 2s; ANIMATION-TIMING-FUNCTION: ease; } }
+
+`;
+
+exports[`invalid(30): @KEYFRAMES fade { TO { ANIMATION-DURATION: 2s; ANIMATION-TIMING-FUNCTION: ease; } } 2`] = `
+
+Message:
+> 1 | @KEYFRAMES fade { TO { ANIMATION-DURATION: 2s; ANIMATION-TIMING-FUNCTION: ease; } }
+    |                        ^^^^^^^^^^^^^^^^^^^^^^ \`animation-duration\` has no effect inside keyframes. Set it on the animated element instead.
+
+Output:
+  1 | @KEYFRAMES fade { TO {  ANIMATION-TIMING-FUNCTION: ease; } }
+
+`;
+
+exports[`invalid(30): @KEYFRAMES fade { TO { ANIMATION-DURATION: 2s; ANIMATION-TIMING-FUNCTION: ease; } } 3`] = `
+
+Message:
+> 1 | @KEYFRAMES fade { TO { ANIMATION-DURATION: 2s; ANIMATION-TIMING-FUNCTION: ease; } }
+    |                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`animation-timing-function\` has no effect on a final \`to\` or \`100%\` keyframe.
+
+Output:
+  1 | @KEYFRAMES fade { TO { ANIMATION-DURATION: 2s;  } }
+
+`;
+
+exports[`invalid(31): @\\6b eyframes fade { \\74 o { animation-\\64 uration: 2s; animation-timing-\\66 unction: ease; } } 1`] = `
+
+  1 | @\\6b eyframes fade { \\74 o { animation-\\64 uration: 2s; animation-timing-\\66 unction: ease; } }
+
+`;
+
+exports[`invalid(31): @\\6b eyframes fade { \\74 o { animation-\\64 uration: 2s; animation-timing-\\66 unction: ease; } } 2`] = `
+
+Message:
+> 1 | @\\6b eyframes fade { \\74 o { animation-\\64 uration: 2s; animation-timing-\\66 unction: ease; } }
+    |                              ^^^^^^^^^^^^^^^^^^^^^^^^^ \`animation-duration\` has no effect inside keyframes. Set it on the animated element instead.
+
+Output:
+  1 | @\\6b eyframes fade { \\74 o {  animation-timing-\\66 unction: ease; } }
+
+`;
+
+exports[`invalid(31): @\\6b eyframes fade { \\74 o { animation-\\64 uration: 2s; animation-timing-\\66 unction: ease; } } 3`] = `
+
+Message:
+> 1 | @\\6b eyframes fade { \\74 o { animation-\\64 uration: 2s; animation-timing-\\66 unction: ease; } }
+    |                                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`animation-timing-function\` has no effect on a final \`to\` or \`100%\` keyframe.
+
+Output:
+  1 | @\\6b eyframes fade { \\74 o { animation-\\64 uration: 2s;  } }
+
+`;
+
+exports[`invalid(32): @-webkit-keyframes fade { to { animation-duration: 2s; animation-timing-function: ease; } } 1`] = `
+
+  1 | @-webkit-keyframes fade { to { animation-duration: 2s; animation-timing-function: ease; } }
+
+`;
+
+exports[`invalid(32): @-webkit-keyframes fade { to { animation-duration: 2s; animation-timing-function: ease; } } 2`] = `
+
+Message:
+> 1 | @-webkit-keyframes fade { to { animation-duration: 2s; animation-timing-function: ease; } }
+    |                                ^^^^^^^^^^^^^^^^^^^^^^ \`animation-duration\` has no effect inside keyframes. Set it on the animated element instead.
+
+Output:
+  1 | @-webkit-keyframes fade { to {  animation-timing-function: ease; } }
+
+`;
+
+exports[`invalid(32): @-webkit-keyframes fade { to { animation-duration: 2s; animation-timing-function: ease; } } 3`] = `
+
+Message:
+> 1 | @-webkit-keyframes fade { to { animation-duration: 2s; animation-timing-function: ease; } }
+    |                                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`animation-timing-function\` has no effect on a final \`to\` or \`100%\` keyframe.
+
+Output:
+  1 | @-webkit-keyframes fade { to { animation-duration: 2s;  } }
+
+`;
+
+exports[`invalid(33): @-moz-keyframes fade { from { animation-delay: 2s; } } 1`] = `
+
+  1 | @-moz-keyframes fade { from { animation-delay: 2s; } }
+
+`;
+
+exports[`invalid(33): @-moz-keyframes fade { from { animation-delay: 2s; } } 2`] = `
+
+Message:
+> 1 | @-moz-keyframes fade { from { animation-delay: 2s; } }
+    |                               ^^^^^^^^^^^^^^^^^^^ \`animation-delay\` has no effect inside keyframes. Set it on the animated element instead.
+
+Output:
+  1 | @-moz-keyframes fade { from {  } }
+
+`;
+
+exports[`invalid(34): @-o-keyframes fade { from { opacity: 0 !important; } } 1`] = `
+
+  1 | @-o-keyframes fade { from { opacity: 0 !important; } }
+
+`;
+
+exports[`invalid(34): @-o-keyframes fade { from { opacity: 0 !important; } } 2`] = `
+
+Message:
+> 1 | @-o-keyframes fade { from { opacity: 0 !important; } }
+    |                             ^^^^^^^^^^^^^^^^^^^^^ Declarations with \`!important\` are ignored inside keyframes.
+
+Output:
+  1 | @-o-keyframes fade { from {  } }
+
+`;
+
+exports[`invalid(35): @keyframes \"fade\" { to { animation-timing-function: ease; } } 1`] = `
+
+  1 | @keyframes "fade" { to { animation-timing-function: ease; } }
+
+`;
+
+exports[`invalid(35): @keyframes \"fade\" { to { animation-timing-function: ease; } } 2`] = `
+
+Message:
+> 1 | @keyframes "fade" { to { animation-timing-function: ease; } }
+    |                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`animation-timing-function\` has no effect on a final \`to\` or \`100%\` keyframe.
+
+Output:
+  1 | @keyframes "fade" { to {  } }
+
+`;
+
+exports[`invalid(36): @media (prefers-reduced-motion: no-preference) { @supports (animation-composition: add) { @keyframes fade { to { animation-duration: 2s; } } } } 1`] = `
+
+  1 | @media (prefers-reduced-motion: no-preference) { @supports (animation-composition: add) { @keyframes fade { to { animation-duration: 2s; } } } }
+
+`;
+
+exports[`invalid(36): @media (prefers-reduced-motion: no-preference) { @supports (animation-composition: add) { @keyframes fade { to { animation-duration: 2s; } } } } 2`] = `
+
+Message:
+> 1 | @media (prefers-reduced-motion: no-preference) { @supports (animation-composition: add) { @keyframes fade { to { animation-duration: 2s; } } } }
+    |                                                                                                                  ^^^^^^^^^^^^^^^^^^^^^^ \`animation-duration\` has no effect inside keyframes. Set it on the animated element instead.
+
+Output:
+  1 | @media (prefers-reduced-motion: no-preference) { @supports (animation-composition: add) { @keyframes fade { to {  } } } }
+
+`;
+
+exports[`invalid(37): @keyframes fade { entry 100% { animation-duration: 2s; animation-timing-function: ease; opacity: 1 !important; } to { animation-timing-function: ease; } } 1`] = `
+
+  1 | @keyframes fade { entry 100% { animation-duration: 2s; animation-timing-function: ease; opacity: 1 !important; } to { animation-timing-function: ease; } }
+
+`;
+
+exports[`invalid(37): @keyframes fade { entry 100% { animation-duration: 2s; animation-timing-function: ease; opacity: 1 !important; } to { animation-timing-function: ease; } } 2`] = `
+
+Message:
+> 1 | @keyframes fade { entry 100% { animation-duration: 2s; animation-timing-function: ease; opacity: 1 !important; } to { animation-timing-function: ease; } }
+    |                                ^^^^^^^^^^^^^^^^^^^^^^ \`animation-duration\` has no effect inside keyframes. Set it on the animated element instead.
+
+Output:
+  1 | @keyframes fade { entry 100% {  animation-timing-function: ease; opacity: 1 !important; } to { animation-timing-function: ease; } }
+
+`;
+
+exports[`invalid(37): @keyframes fade { entry 100% { animation-duration: 2s; animation-timing-function: ease; opacity: 1 !important; } to { animation-timing-function: ease; } } 3`] = `
+
+Message:
+> 1 | @keyframes fade { entry 100% { animation-duration: 2s; animation-timing-function: ease; opacity: 1 !important; } to { animation-timing-function: ease; } }
+    |                                                                                         ^^^^^^^^^^^^^^^^^^^^^ Declarations with \`!important\` are ignored inside keyframes.
+
+Output:
+  1 | @keyframes fade { entry 100% { animation-duration: 2s; animation-timing-function: ease;  } to { animation-timing-function: ease; } }
+
+`;
+
+exports[`invalid(38): @keyframes fade { to { animation-duration: 2s !important; } } 1`] = `
+
+  1 | @keyframes fade { to { animation-duration: 2s !important; } }
+
+`;
+
+exports[`invalid(38): @keyframes fade { to { animation-duration: 2s !important; } } 2`] = `
+
+Message:
+> 1 | @keyframes fade { to { animation-duration: 2s !important; } }
+    |                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Declarations with \`!important\` are ignored inside keyframes.
+
+Output:
+  1 | @keyframes fade { to {  } }
+
+`;
+
+exports[`invalid(39): @keyframes fade { to { animation-timing-function: ease !important; } } 1`] = `
+
+  1 | @keyframes fade { to { animation-timing-function: ease !important; } }
+
+`;
+
+exports[`invalid(39): @keyframes fade { to { animation-timing-function: ease !important; } } 2`] = `
+
+Message:
+> 1 | @keyframes fade { to { animation-timing-function: ease !important; } }
+    |                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Declarations with \`!important\` are ignored inside keyframes.
+
+Output:
+  1 | @keyframes fade { to {  } }
+
+`;
+
+exports[`invalid(4): @keyframes fade { from { animation-delay-start: 1s; } } 1`] = `
+
+  1 | @keyframes fade { from { animation-delay-start: 1s; } }
+
+`;
+
+exports[`invalid(4): @keyframes fade { from { animation-delay-start: 1s; } } 2`] = `
+
+Message:
+> 1 | @keyframes fade { from { animation-delay-start: 1s; } }
+    |                          ^^^^^^^^^^^^^^^^^^^^^^^^^ \`animation-delay-start\` has no effect inside keyframes. Set it on the animated element instead.
+
+Output:
+  1 | @keyframes fade { from {  } }
+
+`;
+
+exports[`invalid(40): @keyframes fade { to { opacity: 1 !important; animation-duration: 2s; animation-timing-function: ease; } } 1`] = `
+
+  1 | @keyframes fade { to { opacity: 1 !important; animation-duration: 2s; animation-timing-function: ease; } }
+
+`;
+
+exports[`invalid(40): @keyframes fade { to { opacity: 1 !important; animation-duration: 2s; animation-timing-function: ease; } } 2`] = `
+
+Message:
+> 1 | @keyframes fade { to { opacity: 1 !important; animation-duration: 2s; animation-timing-function: ease; } }
+    |                        ^^^^^^^^^^^^^^^^^^^^^ Declarations with \`!important\` are ignored inside keyframes.
+
+Output:
+  1 | @keyframes fade { to {  animation-duration: 2s; animation-timing-function: ease; } }
+
+`;
+
+exports[`invalid(40): @keyframes fade { to { opacity: 1 !important; animation-duration: 2s; animation-timing-function: ease; } } 3`] = `
+
+Message:
+> 1 | @keyframes fade { to { opacity: 1 !important; animation-duration: 2s; animation-timing-function: ease; } }
+    |                                               ^^^^^^^^^^^^^^^^^^^^^^ \`animation-duration\` has no effect inside keyframes. Set it on the animated element instead.
+
+Output:
+  1 | @keyframes fade { to { opacity: 1 !important;  animation-timing-function: ease; } }
+
+`;
+
+exports[`invalid(40): @keyframes fade { to { opacity: 1 !important; animation-duration: 2s; animation-timing-function: ease; } } 4`] = `
+
+Message:
+> 1 | @keyframes fade { to { opacity: 1 !important; animation-duration: 2s; animation-timing-function: ease; } }
+    |                                                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`animation-timing-function\` has no effect on a final \`to\` or \`100%\` keyframe.
+
+Output:
+  1 | @keyframes fade { to { opacity: 1 !important; animation-duration: 2s;  } }
+
+`;
+
+exports[`invalid(41): @keyframes fade { to { animation-duration: /* retain */ 2s; } } 1`] = `
+
+  1 | @keyframes fade { to { animation-duration: /* retain */ 2s; } }
+
+`;
+
+exports[`invalid(41): @keyframes fade { to { animation-duration: /* retain */ 2s; } } 2`] = `
+
+Message:
+> 1 | @keyframes fade { to { animation-duration: /* retain */ 2s; } }
+    |                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`animation-duration\` has no effect inside keyframes. Set it on the animated element instead.
+
+`;
+
+exports[`invalid(42): @keyframes fade { to { animation-duration: 2s /* retain */ ; opacity: 1; } } 1`] = `
+
+  1 | @keyframes fade { to { animation-duration: 2s /* retain */ ; opacity: 1; } }
+
+`;
+
+exports[`invalid(42): @keyframes fade { to { animation-duration: 2s /* retain */ ; opacity: 1; } } 2`] = `
+
+Message:
+> 1 | @keyframes fade { to { animation-duration: 2s /* retain */ ; opacity: 1; } }
+    |                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`animation-duration\` has no effect inside keyframes. Set it on the animated element instead.
+
+`;
+
+exports[`invalid(43): @keyframes fade { to { animation-duration: 2s; /* retain */ opacity: 1; } } 1`] = `
+
+  1 | @keyframes fade { to { animation-duration: 2s; /* retain */ opacity: 1; } }
+
+`;
+
+exports[`invalid(43): @keyframes fade { to { animation-duration: 2s; /* retain */ opacity: 1; } } 2`] = `
+
+Message:
+> 1 | @keyframes fade { to { animation-duration: 2s; /* retain */ opacity: 1; } }
+    |                        ^^^^^^^^^^^^^^^^^^^^^^ \`animation-duration\` has no effect inside keyframes. Set it on the animated element instead.
+
+Output:
+  1 | @keyframes fade { to {  /* retain */ opacity: 1; } }
+
+`;
+
+exports[`invalid(44): @keyframes fade { to { /* retain */ animation-duration: 2s; opacity: 1; } } 1`] = `
+
+  1 | @keyframes fade { to { /* retain */ animation-duration: 2s; opacity: 1; } }
+
+`;
+
+exports[`invalid(44): @keyframes fade { to { /* retain */ animation-duration: 2s; opacity: 1; } } 2`] = `
+
+Message:
+> 1 | @keyframes fade { to { /* retain */ animation-duration: 2s; opacity: 1; } }
+    |                                     ^^^^^^^^^^^^^^^^^^^^^^ \`animation-duration\` has no effect inside keyframes. Set it on the animated element instead.
+
+Output:
+  1 | @keyframes fade { to { /* retain */  opacity: 1; } }
+
+`;
+
+exports[`invalid(45): @keyframes fade { from { animation-duration: 2s; } } @keyframes move { entry 100% {} to { animation-timing-function: ease; } } 1`] = `
+
+  1 | @keyframes fade { from { animation-duration: 2s; } } @keyframes move { entry 100% {} to { animation-timing-function: ease; } }
+
+`;
+
+exports[`invalid(45): @keyframes fade { from { animation-duration: 2s; } } @keyframes move { entry 100% {} to { animation-timing-function: ease; } } 2`] = `
+
+Message:
+> 1 | @keyframes fade { from { animation-duration: 2s; } } @keyframes move { entry 100% {} to { animation-timing-function: ease; } }
+    |                          ^^^^^^^^^^^^^^^^^^^^^^ \`animation-duration\` has no effect inside keyframes. Set it on the animated element instead.
+
+Output:
+  1 | @keyframes fade { from {  } } @keyframes move { entry 100% {} to { animation-timing-function: ease; } }
+
+`;
+
+exports[`invalid(46): @keyframes fade {\n\tfrom {\n\t\tanimation-duration: 2s; opacity: 0;\n\t}\n\n\tto {\n\t\tanimation-timing-function: ease-in; opacity: 1;\n\t}\n} 1`] = `
+
+  1 | @keyframes fade {
+  2 | 	from {
+  3 | 		animation-duration: 2s; opacity: 0;
+  4 | 	}
+  5 |
+  6 | 	to {
+  7 | 		animation-timing-function: ease-in; opacity: 1;
+  8 | 	}
+  9 | }
+
+`;
+
+exports[`invalid(46): @keyframes fade {\n\tfrom {\n\t\tanimation-duration: 2s; opacity: 0;\n\t}\n\n\tto {\n\t\tanimation-timing-function: ease-in; opacity: 1;\n\t}\n} 2`] = `
+
+Message:
+  1 | @keyframes fade {
+  2 | 	from {
+> 3 | 		animation-duration: 2s; opacity: 0;
+    | 		^^^^^^^^^^^^^^^^^^^^^^ \`animation-duration\` has no effect inside keyframes. Set it on the animated element instead.
+  4 | 	}
+  5 |
+  6 | 	to {
+  7 | 		animation-timing-function: ease-in; opacity: 1;
+  8 | 	}
+  9 | }
+
+Output:
+  1 | @keyframes fade {
+  2 | 	from {
+  3 | 		 opacity: 0;
+  4 | 	}
+  5 |
+  6 | 	to {
+  7 | 		animation-timing-function: ease-in; opacity: 1;
+  8 | 	}
+  9 | }
+
+`;
+
+exports[`invalid(46): @keyframes fade {\n\tfrom {\n\t\tanimation-duration: 2s; opacity: 0;\n\t}\n\n\tto {\n\t\tanimation-timing-function: ease-in; opacity: 1;\n\t}\n} 3`] = `
+
+Message:
+  1 | @keyframes fade {
+  2 | 	from {
+  3 | 		animation-duration: 2s; opacity: 0;
+  4 | 	}
+  5 |
+  6 | 	to {
+> 7 | 		animation-timing-function: ease-in; opacity: 1;
+    | 		^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`animation-timing-function\` has no effect on a final \`to\` or \`100%\` keyframe.
+  8 | 	}
+  9 | }
+
+Output:
+  1 | @keyframes fade {
+  2 | 	from {
+  3 | 		animation-duration: 2s; opacity: 0;
+  4 | 	}
+  5 |
+  6 | 	to {
+  7 | 		 opacity: 1;
+  8 | 	}
+  9 | }
+
+`;
+
+exports[`invalid(5): @keyframes fade { from { animation-delay-end: 1s; } } 1`] = `
+
+  1 | @keyframes fade { from { animation-delay-end: 1s; } }
+
+`;
+
+exports[`invalid(5): @keyframes fade { from { animation-delay-end: 1s; } } 2`] = `
+
+Message:
+> 1 | @keyframes fade { from { animation-delay-end: 1s; } }
+    |                          ^^^^^^^^^^^^^^^^^^^^^^^ \`animation-delay-end\` has no effect inside keyframes. Set it on the animated element instead.
+
+Output:
+  1 | @keyframes fade { from {  } }
+
+`;
+
+exports[`invalid(6): @keyframes fade { from { animation-iteration-count: infinite; } } 1`] = `
+
+  1 | @keyframes fade { from { animation-iteration-count: infinite; } }
+
+`;
+
+exports[`invalid(6): @keyframes fade { from { animation-iteration-count: infinite; } } 2`] = `
+
+Message:
+> 1 | @keyframes fade { from { animation-iteration-count: infinite; } }
+    |                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`animation-iteration-count\` has no effect inside keyframes. Set it on the animated element instead.
+
+Output:
+  1 | @keyframes fade { from {  } }
+
+`;
+
+exports[`invalid(7): @keyframes fade { from { animation-direction: alternate; } } 1`] = `
+
+  1 | @keyframes fade { from { animation-direction: alternate; } }
+
+`;
+
+exports[`invalid(7): @keyframes fade { from { animation-direction: alternate; } } 2`] = `
+
+Message:
+> 1 | @keyframes fade { from { animation-direction: alternate; } }
+    |                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`animation-direction\` has no effect inside keyframes. Set it on the animated element instead.
+
+Output:
+  1 | @keyframes fade { from {  } }
+
+`;
+
+exports[`invalid(8): @keyframes fade { from { animation-fill-mode: both; } } 1`] = `
+
+  1 | @keyframes fade { from { animation-fill-mode: both; } }
+
+`;
+
+exports[`invalid(8): @keyframes fade { from { animation-fill-mode: both; } } 2`] = `
+
+Message:
+> 1 | @keyframes fade { from { animation-fill-mode: both; } }
+    |                          ^^^^^^^^^^^^^^^^^^^^^^^^^ \`animation-fill-mode\` has no effect inside keyframes. Set it on the animated element instead.
+
+Output:
+  1 | @keyframes fade { from {  } }
+
+`;
+
+exports[`invalid(9): @keyframes fade { from { animation-play-state: paused; } } 1`] = `
+
+  1 | @keyframes fade { from { animation-play-state: paused; } }
+
+`;
+
+exports[`invalid(9): @keyframes fade { from { animation-play-state: paused; } } 2`] = `
+
+Message:
+> 1 | @keyframes fade { from { animation-play-state: paused; } }
+    |                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`animation-play-state\` has no effect inside keyframes. Set it on the animated element instead.
+
+Output:
+  1 | @keyframes fade { from {  } }
+
+`;
