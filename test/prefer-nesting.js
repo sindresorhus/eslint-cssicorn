@@ -1,0 +1,155 @@
+import assert from 'node:assert/strict';
+import nodeTest from 'node:test';
+import {Linter} from 'eslint';
+import css from '@eslint/css';
+import plugin from '../index.js';
+import {getTester} from './utils/test.js';
+
+const {test} = getTester(import.meta);
+
+test.snapshot({
+	valid: [
+		'a { color: red; }',
+		'a:is(.foo, .bar) {}',
+		':is(.foo, .bar) {}',
+		'a :is(.foo) {}',
+		':is(.foo) a {}',
+		'a :is(.foo, .bar) b {}',
+		'a :is(.foo, .bar).active {}',
+		'a :is(.foo, .bar), b {}',
+		':is(.foo, .bar) a, b {}',
+		'a :where(.foo, .bar) {}',
+		'a :not(.foo, .bar) {}',
+		'a :has(.foo, .bar) {}',
+		'a :matches(.foo, .bar) {}',
+		String.raw`a :\69 s(.foo, .bar) {}`,
+		'a > :is(.foo, .bar) {}',
+		':is(.foo, .bar) > a {}',
+		':is(.foo, .bar) + a {}',
+		':is(.foo, .bar) ~ a {}',
+		'a :is(.foo, #bar) {}',
+		'a :is(.foo, button) {}',
+		'a :is(.foo, .bar.active) {}',
+		'a :is(.foo .bar, .baz .qux) {}',
+		':is(.foo .bar, .baz) a {}',
+		':is(.foo > .bar, .baz).active {}',
+		'a :is(.foo, :unknown) {}',
+		':is(.foo, :unknown) a {}',
+		'a :is(.foo, ::before) {}',
+		':is(.foo, :before).active {}',
+		':is(.foo, :has(:has(.bar))) a {}',
+		'a::before :is(.foo, .bar) {}',
+		'a:is(.foo, .bar)::before {}',
+		'.parent { &:is(:focus, :hover) svg {} }',
+		'.parent { & :is(.foo, .bar) {} }',
+		'.parent { :is(&.foo, &.bar) a {} }',
+		'.parent { :is(.foo, .bar):not(&) {} }',
+		'.parent { :is(.foo:has(&), .bar) a {} }',
+		'.parent { :is(:is(:unknown(&), .foo), .bar) a {} }',
+		'@namespace url("http://www.w3.org/1999/xhtml"); a :is(.foo, .bar) {}',
+		String.raw`@NAMESP\41 CE svg url("http://www.w3.org/2000/svg"); :is(.foo, .bar) a {}`,
+		'a { --selector: a :is(.foo, .bar); content: "a :is(.foo, .bar)"; background: url("is(.foo,.bar)"); }',
+	],
+	invalid: [
+		'a :is(.foo, .bar) {}',
+		':is(.foo, .bar) a[data-x] {}',
+		':is(.foo, .bar)::before {}',
+		':is(a, button).active {}',
+		':is(.foo, #bar) a {}',
+		':is(.foo, #bar).active {}',
+		'a :IS(.foo, .bar) { COLOR: RED !important; }',
+		String.raw`a :is(.f\6f o, .bar) { color: red; }`,
+		String.raw`:IS(.f\6f o, .bar) .t\61 rget { color: red; }`,
+		'a :is([data-x], [data-y]) { color: red; }',
+		'a :is([data-x="&"], [data-y="&"]) { color: red; }',
+		'a :is(:hover, :focus) { color: red; }',
+		'a :is(.foo:not(.disabled), .bar:not(.hidden)) { color: red; }',
+		'a :is(:nth-child(2n), :nth-last-child(2n)) { color: red; }',
+		':is(.foo, .bar):hover > a { color: red; }',
+		':is(.foo, .bar) a > b + c { color: red; }',
+		'a > b :is(.foo, .bar) { color: red; }',
+		'a :is(:where(#foo), *) { color: red; }',
+		'a :is(.foo:has(> b), .bar:has(> c)) { color: red; }',
+		':is(.foo, .bar) :is(.baz, .qux) {}',
+		'a :is(.foo, .bar) :is(.baz, .qux) {}',
+		'.parent { :is(.foo, .bar) a { color: red; } }',
+		'.parent { a :is(.foo, .bar) { color: red; } }',
+		'a :is(.foo, .bar) { --value: var(--color); color: var(--value); & > b { color: blue; } }',
+		...['media (width > 0px)', 'supports (display: grid)', 'container (width > 0px)', 'layer theme', 'scope (.parent)'].map(atRule => `@${atRule} { a :is(.foo, .bar) { color: red; } }`),
+		'a :is(.foo, .bar) { color: red; /* keep */ }',
+		'a /* keep */ :is(.foo, .bar) { color: red; }',
+		':is(.foo, /* keep */ .bar) a { color: red; }',
+		'a :is(.foo, .bar) /* keep */ { color: red; }',
+		'a :is(.foo, .bar) {\n\tcolor: red;\n\tbackground: blue;\n}',
+		':is(.foo, .bar).active {\n  color: red;\n}',
+		'@media (width > 0px) {\r\n  a :is(.foo, .bar) {\r\n    color: red;\r\n  }\r\n}',
+		':is(.foo, .bar) a {\n\tcolor: red;\n\n\t& > b {\n\t\tcolor: blue;\n\t}\n}',
+		'a :is(.foo, .bar) {\ncolor: red;\n}',
+		'a :is(.foo, .bar) {\n}',
+		'a :is(.foo, .bar) {\n\tcontent: "a\\\n\tb";\n}',
+		'a :is(.foo, .bar) {\n\t--value: a\n\t\tb;\n}',
+	],
+});
+
+test({
+	valid: [],
+	invalid: [
+		{
+			code: 'a :is(.foo, .bar) { color: red; }',
+			output: 'a { .foo, .bar { color: red; } }',
+			errors: [{messageId: 'prefer-nesting'}],
+		},
+		{
+			code: ':is(.foo, #bar)::before { content: ""; }',
+			output: '.foo, #bar { &::before { content: ""; } }',
+			errors: 1,
+		},
+		{
+			code: 'a :is(.foo, .bar) {\n  color: red;\n}',
+			output: 'a {\n  .foo, .bar {\n    color: red;\n  }\n}',
+			errors: 1,
+		},
+		{
+			code: 'a :is(.foo, .bar) {\n\tcolor: red;\n}',
+			output: 'a {\n\t.foo, .bar {\n\t\tcolor: red;\n\t}\n}',
+			errors: 1,
+		},
+		{
+			code: '@media (width > 0px) {\r\n  a :is(.foo, .bar) {\r\n    color: red;\r\n  }\r\n}',
+			output: '@media (width > 0px) {\r\n  a {\r\n    .foo, .bar {\r\n      color: red;\r\n    }\r\n  }\r\n}',
+			errors: 1,
+		},
+		{
+			code: 'a :is(.foo, .bar) { color: red; /* keep */ }',
+			errors: 1,
+		},
+		{
+			code: 'a :is(.foo, .bar) {\n\tanimation-name: \\61\nbc;\n}',
+			errors: 1,
+		},
+	],
+});
+
+nodeTest('nesting fixes work with the other nesting rules', () => {
+	const linter = new Linter();
+	const config = {
+		files: ['**/*.css'],
+		language: 'css/css',
+		plugins: {css, cssicorn: plugin},
+		rules: {
+			'cssicorn/prefer-nesting': 'error',
+			'cssicorn/no-redundant-nested-style-rules': 'error',
+			'cssicorn/no-declarations-after-nested-rules': 'error',
+			'cssicorn/no-unscoped-nesting-selector': 'error',
+			'cssicorn/no-nesting-with-mixed-specificity': 'error',
+		},
+	};
+	const equalSpecificity = linter.verifyAndFix(':is(a, button).active { color: red; }', config, {filename: 'test.css'});
+	assert.equal(equalSpecificity.output, 'a, button { &.active { color: red; } }');
+	assert.deepEqual(equalSpecificity.messages, []);
+	assert.equal(linter.verifyAndFix(equalSpecificity.output, config, {filename: 'test.css'}).fixed, false);
+
+	const mixedSpecificity = linter.verifyAndFix(':is(.foo, #bar) a { color: red; }', config, {filename: 'test.css'});
+	assert.equal(mixedSpecificity.output, '.foo, #bar { a { color: red; } }');
+	assert.deepEqual(mixedSpecificity.messages.map(message => message.ruleId), ['cssicorn/no-nesting-with-mixed-specificity']);
+});

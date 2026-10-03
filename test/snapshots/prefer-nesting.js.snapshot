@@ -1,0 +1,743 @@
+exports[`invalid(1): a :is(.foo, .bar) {} 1`] = `
+
+  1 | a :is(.foo, .bar) {}
+
+`;
+
+exports[`invalid(1): a :is(.foo, .bar) {} 2`] = `
+
+Message:
+> 1 | a :is(.foo, .bar) {}
+    |   ^^^^^^^^^^^^^^^ Prefer CSS nesting over \`:is()\`.
+
+Output:
+  1 | a { .foo, .bar {} }
+
+`;
+
+exports[`invalid(10): a :is([data-x], [data-y]) { color: red; } 1`] = `
+
+  1 | a :is([data-x], [data-y]) { color: red; }
+
+`;
+
+exports[`invalid(10): a :is([data-x], [data-y]) { color: red; } 2`] = `
+
+Message:
+> 1 | a :is([data-x], [data-y]) { color: red; }
+    |   ^^^^^^^^^^^^^^^^^^^^^^^ Prefer CSS nesting over \`:is()\`.
+
+Output:
+  1 | a { [data-x], [data-y] { color: red; } }
+
+`;
+
+exports[`invalid(11): a :is([data-x=\"&\"], [data-y=\"&\"]) { color: red; } 1`] = `
+
+  1 | a :is([data-x="&"], [data-y="&"]) { color: red; }
+
+`;
+
+exports[`invalid(11): a :is([data-x=\"&\"], [data-y=\"&\"]) { color: red; } 2`] = `
+
+Message:
+> 1 | a :is([data-x="&"], [data-y="&"]) { color: red; }
+    |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Prefer CSS nesting over \`:is()\`.
+
+Output:
+  1 | a { [data-x="&"], [data-y="&"] { color: red; } }
+
+`;
+
+exports[`invalid(12): a :is(:hover, :focus) { color: red; } 1`] = `
+
+  1 | a :is(:hover, :focus) { color: red; }
+
+`;
+
+exports[`invalid(12): a :is(:hover, :focus) { color: red; } 2`] = `
+
+Message:
+> 1 | a :is(:hover, :focus) { color: red; }
+    |   ^^^^^^^^^^^^^^^^^^^ Prefer CSS nesting over \`:is()\`.
+
+Output:
+  1 | a { :hover, :focus { color: red; } }
+
+`;
+
+exports[`invalid(13): a :is(.foo:not(.disabled), .bar:not(.hidden)) { color: red; } 1`] = `
+
+  1 | a :is(.foo:not(.disabled), .bar:not(.hidden)) { color: red; }
+
+`;
+
+exports[`invalid(13): a :is(.foo:not(.disabled), .bar:not(.hidden)) { color: red; } 2`] = `
+
+Message:
+> 1 | a :is(.foo:not(.disabled), .bar:not(.hidden)) { color: red; }
+    |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Prefer CSS nesting over \`:is()\`.
+
+Output:
+  1 | a { .foo:not(.disabled), .bar:not(.hidden) { color: red; } }
+
+`;
+
+exports[`invalid(14): a :is(:nth-child(2n), :nth-last-child(2n)) { color: red; } 1`] = `
+
+  1 | a :is(:nth-child(2n), :nth-last-child(2n)) { color: red; }
+
+`;
+
+exports[`invalid(14): a :is(:nth-child(2n), :nth-last-child(2n)) { color: red; } 2`] = `
+
+Message:
+> 1 | a :is(:nth-child(2n), :nth-last-child(2n)) { color: red; }
+    |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Prefer CSS nesting over \`:is()\`.
+
+Output:
+  1 | a { :nth-child(2n), :nth-last-child(2n) { color: red; } }
+
+`;
+
+exports[`invalid(15): :is(.foo, .bar):hover > a { color: red; } 1`] = `
+
+  1 | :is(.foo, .bar):hover > a { color: red; }
+
+`;
+
+exports[`invalid(15): :is(.foo, .bar):hover > a { color: red; } 2`] = `
+
+Message:
+> 1 | :is(.foo, .bar):hover > a { color: red; }
+    | ^^^^^^^^^^^^^^^ Prefer CSS nesting over \`:is()\`.
+
+Output:
+  1 | .foo, .bar { &:hover > a { color: red; } }
+
+`;
+
+exports[`invalid(16): :is(.foo, .bar) a > b + c { color: red; } 1`] = `
+
+  1 | :is(.foo, .bar) a > b + c { color: red; }
+
+`;
+
+exports[`invalid(16): :is(.foo, .bar) a > b + c { color: red; } 2`] = `
+
+Message:
+> 1 | :is(.foo, .bar) a > b + c { color: red; }
+    | ^^^^^^^^^^^^^^^ Prefer CSS nesting over \`:is()\`.
+
+Output:
+  1 | .foo, .bar { a > b + c { color: red; } }
+
+`;
+
+exports[`invalid(17): a > b :is(.foo, .bar) { color: red; } 1`] = `
+
+  1 | a > b :is(.foo, .bar) { color: red; }
+
+`;
+
+exports[`invalid(17): a > b :is(.foo, .bar) { color: red; } 2`] = `
+
+Message:
+> 1 | a > b :is(.foo, .bar) { color: red; }
+    |       ^^^^^^^^^^^^^^^ Prefer CSS nesting over \`:is()\`.
+
+Output:
+  1 | a > b { .foo, .bar { color: red; } }
+
+`;
+
+exports[`invalid(18): a :is(:where(#foo), *) { color: red; } 1`] = `
+
+  1 | a :is(:where(#foo), *) { color: red; }
+
+`;
+
+exports[`invalid(18): a :is(:where(#foo), *) { color: red; } 2`] = `
+
+Message:
+> 1 | a :is(:where(#foo), *) { color: red; }
+    |   ^^^^^^^^^^^^^^^^^^^^ Prefer CSS nesting over \`:is()\`.
+
+Output:
+  1 | a { :where(#foo), * { color: red; } }
+
+`;
+
+exports[`invalid(19): a :is(.foo:has(> b), .bar:has(> c)) { color: red; } 1`] = `
+
+  1 | a :is(.foo:has(> b), .bar:has(> c)) { color: red; }
+
+`;
+
+exports[`invalid(19): a :is(.foo:has(> b), .bar:has(> c)) { color: red; } 2`] = `
+
+Message:
+> 1 | a :is(.foo:has(> b), .bar:has(> c)) { color: red; }
+    |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Prefer CSS nesting over \`:is()\`.
+
+Output:
+  1 | a { .foo:has(> b), .bar:has(> c) { color: red; } }
+
+`;
+
+exports[`invalid(2): :is(.foo, .bar) a[data-x] {} 1`] = `
+
+  1 | :is(.foo, .bar) a[data-x] {}
+
+`;
+
+exports[`invalid(2): :is(.foo, .bar) a[data-x] {} 2`] = `
+
+Message:
+> 1 | :is(.foo, .bar) a[data-x] {}
+    | ^^^^^^^^^^^^^^^ Prefer CSS nesting over \`:is()\`.
+
+Output:
+  1 | .foo, .bar { a[data-x] {} }
+
+`;
+
+exports[`invalid(20): :is(.foo, .bar) :is(.baz, .qux) {} 1`] = `
+
+  1 | :is(.foo, .bar) :is(.baz, .qux) {}
+
+`;
+
+exports[`invalid(20): :is(.foo, .bar) :is(.baz, .qux) {} 2`] = `
+
+Message:
+> 1 | :is(.foo, .bar) :is(.baz, .qux) {}
+    | ^^^^^^^^^^^^^^^ Prefer CSS nesting over \`:is()\`.
+
+Output:
+  1 | .foo, .bar { :is(.baz, .qux) {} }
+
+`;
+
+exports[`invalid(21): a :is(.foo, .bar) :is(.baz, .qux) {} 1`] = `
+
+  1 | a :is(.foo, .bar) :is(.baz, .qux) {}
+
+`;
+
+exports[`invalid(21): a :is(.foo, .bar) :is(.baz, .qux) {} 2`] = `
+
+Message:
+> 1 | a :is(.foo, .bar) :is(.baz, .qux) {}
+    |                   ^^^^^^^^^^^^^^^ Prefer CSS nesting over \`:is()\`.
+
+Output:
+  1 | a :is(.foo, .bar) { .baz, .qux {} }
+
+`;
+
+exports[`invalid(22): .parent { :is(.foo, .bar) a { color: red; } } 1`] = `
+
+  1 | .parent { :is(.foo, .bar) a { color: red; } }
+
+`;
+
+exports[`invalid(22): .parent { :is(.foo, .bar) a { color: red; } } 2`] = `
+
+Message:
+> 1 | .parent { :is(.foo, .bar) a { color: red; } }
+    |           ^^^^^^^^^^^^^^^ Prefer CSS nesting over \`:is()\`.
+
+Output:
+  1 | .parent { .foo, .bar { a { color: red; } } }
+
+`;
+
+exports[`invalid(23): .parent { a :is(.foo, .bar) { color: red; } } 1`] = `
+
+  1 | .parent { a :is(.foo, .bar) { color: red; } }
+
+`;
+
+exports[`invalid(23): .parent { a :is(.foo, .bar) { color: red; } } 2`] = `
+
+Message:
+> 1 | .parent { a :is(.foo, .bar) { color: red; } }
+    |             ^^^^^^^^^^^^^^^ Prefer CSS nesting over \`:is()\`.
+
+Output:
+  1 | .parent { a { .foo, .bar { color: red; } } }
+
+`;
+
+exports[`invalid(24): a :is(.foo, .bar) { --value: var(--color); color: var(--value); & > b { color: blue; } } 1`] = `
+
+  1 | a :is(.foo, .bar) { --value: var(--color); color: var(--value); & > b { color: blue; } }
+
+`;
+
+exports[`invalid(24): a :is(.foo, .bar) { --value: var(--color); color: var(--value); & > b { color: blue; } } 2`] = `
+
+Message:
+> 1 | a :is(.foo, .bar) { --value: var(--color); color: var(--value); & > b { color: blue; } }
+    |   ^^^^^^^^^^^^^^^ Prefer CSS nesting over \`:is()\`.
+
+Output:
+  1 | a { .foo, .bar { --value: var(--color); color: var(--value); & > b { color: blue; } } }
+
+`;
+
+exports[`invalid(25): @media (width > 0px) { a :is(.foo, .bar) { color: red; } } 1`] = `
+
+  1 | @media (width > 0px) { a :is(.foo, .bar) { color: red; } }
+
+`;
+
+exports[`invalid(25): @media (width > 0px) { a :is(.foo, .bar) { color: red; } } 2`] = `
+
+Message:
+> 1 | @media (width > 0px) { a :is(.foo, .bar) { color: red; } }
+    |                          ^^^^^^^^^^^^^^^ Prefer CSS nesting over \`:is()\`.
+
+Output:
+  1 | @media (width > 0px) { a { .foo, .bar { color: red; } } }
+
+`;
+
+exports[`invalid(26): @supports (display: grid) { a :is(.foo, .bar) { color: red; } } 1`] = `
+
+  1 | @supports (display: grid) { a :is(.foo, .bar) { color: red; } }
+
+`;
+
+exports[`invalid(26): @supports (display: grid) { a :is(.foo, .bar) { color: red; } } 2`] = `
+
+Message:
+> 1 | @supports (display: grid) { a :is(.foo, .bar) { color: red; } }
+    |                               ^^^^^^^^^^^^^^^ Prefer CSS nesting over \`:is()\`.
+
+Output:
+  1 | @supports (display: grid) { a { .foo, .bar { color: red; } } }
+
+`;
+
+exports[`invalid(27): @container (width > 0px) { a :is(.foo, .bar) { color: red; } } 1`] = `
+
+  1 | @container (width > 0px) { a :is(.foo, .bar) { color: red; } }
+
+`;
+
+exports[`invalid(27): @container (width > 0px) { a :is(.foo, .bar) { color: red; } } 2`] = `
+
+Message:
+> 1 | @container (width > 0px) { a :is(.foo, .bar) { color: red; } }
+    |                              ^^^^^^^^^^^^^^^ Prefer CSS nesting over \`:is()\`.
+
+Output:
+  1 | @container (width > 0px) { a { .foo, .bar { color: red; } } }
+
+`;
+
+exports[`invalid(28): @layer theme { a :is(.foo, .bar) { color: red; } } 1`] = `
+
+  1 | @layer theme { a :is(.foo, .bar) { color: red; } }
+
+`;
+
+exports[`invalid(28): @layer theme { a :is(.foo, .bar) { color: red; } } 2`] = `
+
+Message:
+> 1 | @layer theme { a :is(.foo, .bar) { color: red; } }
+    |                  ^^^^^^^^^^^^^^^ Prefer CSS nesting over \`:is()\`.
+
+Output:
+  1 | @layer theme { a { .foo, .bar { color: red; } } }
+
+`;
+
+exports[`invalid(29): @scope (.parent) { a :is(.foo, .bar) { color: red; } } 1`] = `
+
+  1 | @scope (.parent) { a :is(.foo, .bar) { color: red; } }
+
+`;
+
+exports[`invalid(29): @scope (.parent) { a :is(.foo, .bar) { color: red; } } 2`] = `
+
+Message:
+> 1 | @scope (.parent) { a :is(.foo, .bar) { color: red; } }
+    |                      ^^^^^^^^^^^^^^^ Prefer CSS nesting over \`:is()\`.
+
+Output:
+  1 | @scope (.parent) { a { .foo, .bar { color: red; } } }
+
+`;
+
+exports[`invalid(3): :is(.foo, .bar)::before {} 1`] = `
+
+  1 | :is(.foo, .bar)::before {}
+
+`;
+
+exports[`invalid(3): :is(.foo, .bar)::before {} 2`] = `
+
+Message:
+> 1 | :is(.foo, .bar)::before {}
+    | ^^^^^^^^^^^^^^^ Prefer CSS nesting over \`:is()\`.
+
+Output:
+  1 | .foo, .bar { &::before {} }
+
+`;
+
+exports[`invalid(30): a :is(.foo, .bar) { color: red; /* keep */ } 1`] = `
+
+  1 | a :is(.foo, .bar) { color: red; /* keep */ }
+
+`;
+
+exports[`invalid(30): a :is(.foo, .bar) { color: red; /* keep */ } 2`] = `
+
+Message:
+> 1 | a :is(.foo, .bar) { color: red; /* keep */ }
+    |   ^^^^^^^^^^^^^^^ Prefer CSS nesting over \`:is()\`.
+
+`;
+
+exports[`invalid(31): a /* keep */ :is(.foo, .bar) { color: red; } 1`] = `
+
+  1 | a /* keep */ :is(.foo, .bar) { color: red; }
+
+`;
+
+exports[`invalid(31): a /* keep */ :is(.foo, .bar) { color: red; } 2`] = `
+
+Message:
+> 1 | a /* keep */ :is(.foo, .bar) { color: red; }
+    |              ^^^^^^^^^^^^^^^ Prefer CSS nesting over \`:is()\`.
+
+`;
+
+exports[`invalid(32): :is(.foo, /* keep */ .bar) a { color: red; } 1`] = `
+
+  1 | :is(.foo, /* keep */ .bar) a { color: red; }
+
+`;
+
+exports[`invalid(32): :is(.foo, /* keep */ .bar) a { color: red; } 2`] = `
+
+Message:
+> 1 | :is(.foo, /* keep */ .bar) a { color: red; }
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^ Prefer CSS nesting over \`:is()\`.
+
+`;
+
+exports[`invalid(33): a :is(.foo, .bar) /* keep */ { color: red; } 1`] = `
+
+  1 | a :is(.foo, .bar) /* keep */ { color: red; }
+
+`;
+
+exports[`invalid(33): a :is(.foo, .bar) /* keep */ { color: red; } 2`] = `
+
+Message:
+> 1 | a :is(.foo, .bar) /* keep */ { color: red; }
+    |   ^^^^^^^^^^^^^^^ Prefer CSS nesting over \`:is()\`.
+
+`;
+
+exports[`invalid(34): a :is(.foo, .bar) {\n\tcolor: red;\n\tbackground: blue;\n} 1`] = `
+
+  1 | a :is(.foo, .bar) {
+  2 | 	color: red;
+  3 | 	background: blue;
+  4 | }
+
+`;
+
+exports[`invalid(34): a :is(.foo, .bar) {\n\tcolor: red;\n\tbackground: blue;\n} 2`] = `
+
+Message:
+> 1 | a :is(.foo, .bar) {
+    |   ^^^^^^^^^^^^^^^ Prefer CSS nesting over \`:is()\`.
+  2 | 	color: red;
+  3 | 	background: blue;
+  4 | }
+
+Output:
+  1 | a {
+  2 | 	.foo, .bar {
+  3 | 		color: red;
+  4 | 		background: blue;
+  5 | 	}
+  6 | }
+
+`;
+
+exports[`invalid(35): :is(.foo, .bar).active {\n  color: red;\n} 1`] = `
+
+  1 | :is(.foo, .bar).active {
+  2 |   color: red;
+  3 | }
+
+`;
+
+exports[`invalid(35): :is(.foo, .bar).active {\n  color: red;\n} 2`] = `
+
+Message:
+> 1 | :is(.foo, .bar).active {
+    | ^^^^^^^^^^^^^^^ Prefer CSS nesting over \`:is()\`.
+  2 |   color: red;
+  3 | }
+
+Output:
+  1 | .foo, .bar {
+  2 |   &.active {
+  3 |     color: red;
+  4 |   }
+  5 | }
+
+`;
+
+exports[`invalid(36): @media (width > 0px) {\r\n  a :is(.foo, .bar) {\r\n    color: red;\r\n  }\r\n} 1`] = `
+
+  1 | @media (width > 0px) {
+  2 |   a :is(.foo, .bar) {
+  3 |     color: red;
+  4 |   }
+  5 | }
+
+`;
+
+exports[`invalid(36): @media (width > 0px) {\r\n  a :is(.foo, .bar) {\r\n    color: red;\r\n  }\r\n} 2`] = `
+
+Message:
+  1 | @media (width > 0px) {
+> 2 |   a :is(.foo, .bar) {
+    |     ^^^^^^^^^^^^^^^ Prefer CSS nesting over \`:is()\`.
+  3 |     color: red;
+  4 |   }
+  5 | }
+
+Output:
+  1 | @media (width > 0px) {
+  2 |   a {
+  3 |     .foo, .bar {
+  4 |       color: red;
+  5 |     }
+  6 |   }
+  7 | }
+
+`;
+
+exports[`invalid(37): :is(.foo, .bar) a {\n\tcolor: red;\n\n\t& > b {\n\t\tcolor: blue;\n\t}\n} 1`] = `
+
+  1 | :is(.foo, .bar) a {
+  2 | 	color: red;
+  3 |
+  4 | 	& > b {
+  5 | 		color: blue;
+  6 | 	}
+  7 | }
+
+`;
+
+exports[`invalid(37): :is(.foo, .bar) a {\n\tcolor: red;\n\n\t& > b {\n\t\tcolor: blue;\n\t}\n} 2`] = `
+
+Message:
+> 1 | :is(.foo, .bar) a {
+    | ^^^^^^^^^^^^^^^ Prefer CSS nesting over \`:is()\`.
+  2 | 	color: red;
+  3 |
+  4 | 	& > b {
+  5 | 		color: blue;
+  6 | 	}
+  7 | }
+
+Output:
+  1 | .foo, .bar {
+  2 | 	a {
+  3 | 		color: red;
+  4 |
+  5 | 		& > b {
+  6 | 			color: blue;
+  7 | 		}
+  8 | 	}
+  9 | }
+
+`;
+
+exports[`invalid(38): a :is(.foo, .bar) {\ncolor: red;\n} 1`] = `
+
+  1 | a :is(.foo, .bar) {
+  2 | color: red;
+  3 | }
+
+`;
+
+exports[`invalid(38): a :is(.foo, .bar) {\ncolor: red;\n} 2`] = `
+
+Message:
+> 1 | a :is(.foo, .bar) {
+    |   ^^^^^^^^^^^^^^^ Prefer CSS nesting over \`:is()\`.
+  2 | color: red;
+  3 | }
+
+`;
+
+exports[`invalid(39): a :is(.foo, .bar) {\n} 1`] = `
+
+  1 | a :is(.foo, .bar) {
+  2 | }
+
+`;
+
+exports[`invalid(39): a :is(.foo, .bar) {\n} 2`] = `
+
+Message:
+> 1 | a :is(.foo, .bar) {
+    |   ^^^^^^^^^^^^^^^ Prefer CSS nesting over \`:is()\`.
+  2 | }
+
+`;
+
+exports[`invalid(4): :is(a, button).active {} 1`] = `
+
+  1 | :is(a, button).active {}
+
+`;
+
+exports[`invalid(4): :is(a, button).active {} 2`] = `
+
+Message:
+> 1 | :is(a, button).active {}
+    | ^^^^^^^^^^^^^^ Prefer CSS nesting over \`:is()\`.
+
+Output:
+  1 | a, button { &.active {} }
+
+`;
+
+exports[`invalid(40): a :is(.foo, .bar) {\n\tcontent: \"a\\\n\tb\";\n} 1`] = `
+
+  1 | a :is(.foo, .bar) {
+  2 | 	content: "a\\
+  3 | 	b";
+  4 | }
+
+`;
+
+exports[`invalid(40): a :is(.foo, .bar) {\n\tcontent: \"a\\\n\tb\";\n} 2`] = `
+
+Message:
+> 1 | a :is(.foo, .bar) {
+    |   ^^^^^^^^^^^^^^^ Prefer CSS nesting over \`:is()\`.
+  2 | 	content: "a\\
+  3 | 	b";
+  4 | }
+
+`;
+
+exports[`invalid(41): a :is(.foo, .bar) {\n\t--value: a\n\t\tb;\n} 1`] = `
+
+  1 | a :is(.foo, .bar) {
+  2 | 	--value: a
+  3 | 		b;
+  4 | }
+
+`;
+
+exports[`invalid(41): a :is(.foo, .bar) {\n\t--value: a\n\t\tb;\n} 2`] = `
+
+Message:
+> 1 | a :is(.foo, .bar) {
+    |   ^^^^^^^^^^^^^^^ Prefer CSS nesting over \`:is()\`.
+  2 | 	--value: a
+  3 | 		b;
+  4 | }
+
+`;
+
+exports[`invalid(5): :is(.foo, #bar) a {} 1`] = `
+
+  1 | :is(.foo, #bar) a {}
+
+`;
+
+exports[`invalid(5): :is(.foo, #bar) a {} 2`] = `
+
+Message:
+> 1 | :is(.foo, #bar) a {}
+    | ^^^^^^^^^^^^^^^ Prefer CSS nesting over \`:is()\`.
+
+Output:
+  1 | .foo, #bar { a {} }
+
+`;
+
+exports[`invalid(6): :is(.foo, #bar).active {} 1`] = `
+
+  1 | :is(.foo, #bar).active {}
+
+`;
+
+exports[`invalid(6): :is(.foo, #bar).active {} 2`] = `
+
+Message:
+> 1 | :is(.foo, #bar).active {}
+    | ^^^^^^^^^^^^^^^ Prefer CSS nesting over \`:is()\`.
+
+Output:
+  1 | .foo, #bar { &.active {} }
+
+`;
+
+exports[`invalid(7): a :IS(.foo, .bar) { COLOR: RED !important; } 1`] = `
+
+  1 | a :IS(.foo, .bar) { COLOR: RED !important; }
+
+`;
+
+exports[`invalid(7): a :IS(.foo, .bar) { COLOR: RED !important; } 2`] = `
+
+Message:
+> 1 | a :IS(.foo, .bar) { COLOR: RED !important; }
+    |   ^^^^^^^^^^^^^^^ Prefer CSS nesting over \`:is()\`.
+
+Output:
+  1 | a { .foo, .bar { COLOR: RED !important; } }
+
+`;
+
+exports[`invalid(8): a :is(.f\\6f o, .bar) { color: red; } 1`] = `
+
+  1 | a :is(.f\\6f o, .bar) { color: red; }
+
+`;
+
+exports[`invalid(8): a :is(.f\\6f o, .bar) { color: red; } 2`] = `
+
+Message:
+> 1 | a :is(.f\\6f o, .bar) { color: red; }
+    |   ^^^^^^^^^^^^^^^^^^ Prefer CSS nesting over \`:is()\`.
+
+Output:
+  1 | a { .f\\6f o, .bar { color: red; } }
+
+`;
+
+exports[`invalid(9): :IS(.f\\6f o, .bar) .t\\61 rget { color: red; } 1`] = `
+
+  1 | :IS(.f\\6f o, .bar) .t\\61 rget { color: red; }
+
+`;
+
+exports[`invalid(9): :IS(.f\\6f o, .bar) .t\\61 rget { color: red; } 2`] = `
+
+Message:
+> 1 | :IS(.f\\6f o, .bar) .t\\61 rget { color: red; }
+    | ^^^^^^^^^^^^^^^^^^ Prefer CSS nesting over \`:is()\`.
+
+Output:
+  1 | .f\\6f o, .bar { .t\\61 rget { color: red; } }
+
+`;

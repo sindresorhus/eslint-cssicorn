@@ -29,5 +29,6 @@ export {default as 'prefer-clamp'} from './prefer-clamp.js';
 export {default as 'prefer-explicit-viewport-units'} from './prefer-explicit-viewport-units.js';
 export {default as 'prefer-media-feature-range-syntax'} from './prefer-media-feature-range-syntax.js';
 export {default as 'prefer-modern-syntax'} from './prefer-modern-syntax.js';
+export {default as 'prefer-nesting'} from './prefer-nesting.js';
 export {default as 'prefer-short-hex-color'} from './prefer-short-hex-color.js';
 export {default as 'require-property-descriptors'} from './require-property-descriptors.js';

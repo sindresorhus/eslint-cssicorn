@@ -399,6 +399,7 @@ export {
 	getRuleSpecificities,
 	hasAncestorStyleRule,
 	hasLeadingCombinator,
+	hasNestingSelectorInRawArgument,
 	hasScopeAncestor,
 	isStyleRule,
 	LEGACY_PSEUDO_ELEMENTS,

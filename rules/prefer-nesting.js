@@ -1,0 +1,162 @@
+import {find} from '@eslint/css-tree';
+import {
+	canBeRepresentedByNestingSelector,
+	canMatchSelector,
+	compareSpecificity,
+	getRuleSelectorSpecificity,
+	hasNestingSelectorInRawArgument,
+	isStyleRule,
+} from './shared/css-selector-specificity.js';
+import {hasCommentInRange, normalizeCssIdentifier} from './utils/index.js';
+
+/**
+@import * as ESLint from 'eslint';
+*/
+
+const MESSAGE_ID = 'prefer-nesting';
+const messages = {
+	[MESSAGE_ID]: 'Prefer CSS nesting over `:is()`.',
+};
+
+const isDescendantCombinator = node => node?.type === 'Combinator' && node.name === ' ';
+
+const getArguments = node => {
+	if (node?.type !== 'PseudoClassSelector' || normalizeCssIdentifier(node.name) !== 'is') {
+		return;
+	}
+
+	const argumentsList = node.children?.[0];
+	if (
+		argumentsList?.type !== 'SelectorList'
+		|| argumentsList.children.length < 2
+		|| argumentsList.children.some(selector => selector.children.some(child => child.type === 'Combinator') || !canBeRepresentedByNestingSelector(selector, false))
+	) {
+		return;
+	}
+
+	return argumentsList;
+};
+
+const getCandidate = selector => {
+	const {children} = selector;
+	const leadingArguments = getArguments(children[0]);
+	if (leadingArguments && children.length > 1 && (isDescendantCombinator(children[1]) || children[1].type !== 'Combinator')) {
+		return {
+			node: children[0],
+			outerNodes: leadingArguments.children,
+			innerNodes: children.slice(isDescendantCombinator(children[1]) ? 2 : 1),
+			attached: children[1].type !== 'Combinator',
+		};
+	}
+
+	const trailingArguments = getArguments(children.at(-1));
+	if (children.length < 3 || !trailingArguments || !isDescendantCombinator(children.at(-2))) {
+		return;
+	}
+
+	// Unlike :is(), a nested selector list gives each branch its own specificity.
+	const specificities = trailingArguments.children.map(argument => getRuleSelectorSpecificity(argument, [0, 0, 0]));
+	if (specificities.some(specificity => compareSpecificity(specificity, specificities[0]) !== 0)) {
+		return;
+	}
+
+	return {
+		node: children.at(-1),
+		outerNodes: children.slice(0, -2),
+		innerNodes: trailingArguments.children,
+		attached: false,
+	};
+};
+
+const getNodesText = (nodes, sourceCode) => sourceCode.text.slice(sourceCode.getRange(nodes[0])[0], sourceCode.getRange(nodes.at(-1))[1]);
+
+const getReplacement = (rule, candidate, context) => {
+	const {sourceCode} = context;
+	const ruleText = sourceCode.getText(rule);
+	if (hasCommentInRange(context, sourceCode.getRange(rule)) || /\\[\da-f]{0,6}[\n\f\r]/iu.test(ruleText)) {
+		return;
+	}
+
+	const outer = getNodesText(candidate.outerNodes, sourceCode);
+	const inner = `${candidate.attached ? '&' : ''}${getNodesText(candidate.innerNodes, sourceCode)}`;
+	const block = sourceCode.getText(rule.block);
+	const lineBreak = ruleText.match(/\r\n|[\n\f\r]/u)?.[0];
+	if (!lineBreak) {
+		return `${outer} { ${inner} ${block} }`;
+	}
+
+	// Reindenting raw values can change their text, including custom property values.
+	if (find(rule.block, node => node.type === 'Raw' && sourceCode.getLoc(node).start.line !== sourceCode.getLoc(node).end.line)) {
+		return;
+	}
+
+	const [ruleStart] = sourceCode.getRange(rule);
+	const indentation = sourceCode.text.slice(ruleStart - sourceCode.getLoc(rule).start.column + 1, ruleStart);
+	const content = block.slice(1, -1);
+	const bodyIndentation = content.match(/(?:\r\n|[\n\f\r])([\t ]*)[^\t\n\f\r ]/u)?.[1];
+	if (!/^[\t ]*$/u.test(indentation) || !bodyIndentation?.startsWith(indentation) || bodyIndentation.length <= indentation.length) {
+		return;
+	}
+
+	const indentationStep = bodyIndentation.slice(indentation.length);
+	const indentedBlock = block.replaceAll(/(\r\n|[\n\f\r])(?=[\t ]*[^\t\n\f\r ])/gu, lineBreak => lineBreak + indentationStep);
+	return `${outer} {${lineBreak}${indentation}${indentationStep}${inner} ${indentedBlock}${lineBreak}${indentation}}`;
+};
+
+/**
+@param {ESLint.Rule.RuleContext} context
+*/
+const create = context => {
+	const {sourceCode} = context;
+	if (sourceCode.ast.children.some(node => node.type === 'Atrule' && normalizeCssIdentifier(node.name) === 'namespace')) {
+		return;
+	}
+
+	context.on('Rule', rule => {
+		if (rule.prelude?.type !== 'SelectorList' || rule.prelude.children.length !== 1 || !isStyleRule(rule, context)) {
+			return;
+		}
+
+		const [selector] = rule.prelude.children;
+		const candidate = getCandidate(selector);
+		if (!candidate || !canMatchSelector(selector) || find(selector, node => node.type === 'NestingSelector' || hasNestingSelectorInRawArgument(node))) {
+			return;
+		}
+
+		return {
+			node: candidate.node,
+			messageId: MESSAGE_ID,
+			/**
+			@param {ESLint.Rule.RuleFixer} fixer
+			*/
+			* fix(fixer, {abort}) {
+				const replacement = getReplacement(rule, candidate, context);
+				if (replacement === undefined) {
+					return abort();
+				}
+
+				yield fixer.replaceText(rule, replacement);
+			},
+		};
+	});
+};
+
+/**
+@type {ESLint.Rule.RuleModule}
+*/
+const config = {
+	create,
+	meta: {
+		type: 'suggestion',
+		docs: {
+			description: 'Prefer CSS nesting over structural uses of `:is()`.',
+			recommended: true,
+		},
+		fixable: 'code',
+		schema: [],
+		messages,
+		languages: ['css/css'],
+	},
+};
+
+export default config;
