@@ -73,7 +73,7 @@ The rule preserves wrappers with multiple arguments, invalid or unknown argument
 :host:is(:has(.child)) {}
 ```
 
-For supported functional pseudo-classes, arguments must be selectors or plain nth formulas. Other arguments, such as those of `:lang()`, `:dir()`, and nth formulas with an `of` clause, are left wrapped. The parser accepts some invalid forms of these arguments, so this conservative boundary prevents autofixes from exposing invalid selectors to a surrounding selector list.
+For supported functional pseudo-classes, arguments must be selectors or nth formulas without an `of` clause. Wrappers around `:lang()`, `:dir()`, and nth formulas with `of` remain unchanged.
 
 ```css
 /* ✅ */

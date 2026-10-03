@@ -146,6 +146,11 @@ ruleTest({
 			errors: [{messageId: 'no-useless-is'}],
 		},
 		{
+			code: ':is(.foo /* keep */):is(.bar) {}',
+			output: ':is(.foo /* keep */).bar {}',
+			errors: [{messageId: 'no-useless-is'}, {messageId: 'no-useless-is'}],
+		},
+		{
 			code: String.raw`:is(.foo\61 ):hover {}`,
 			output: String.raw`.foo\61 :hover {}`,
 			errors: [{messageId: 'no-useless-is'}],
@@ -162,6 +167,7 @@ ruleTest({
 	valid: [],
 	invalid: [
 		[String.raw`:is(.foo\61) a {}`, String.raw`.foo\61  a {}`],
+		[String.raw`:\69 s(.foo\61) a {}`, String.raw`.foo\61  a {}`],
 		[String.raw`:is(#foo\61) a {}`, String.raw`#foo\61  a {}`],
 		[String.raw`:is(div\61) a {}`, String.raw`div\61  a {}`],
 		[String.raw`:is(:hove\72) a {}`, String.raw`:hove\72  a {}`],
