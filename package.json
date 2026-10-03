@@ -30,8 +30,9 @@
 		"lint:js": "eslint",
 		"lint:markdown": "markdownlint \"**/*.md\"",
 		"rename-rule": "node ./scripts/rename-rule.js && npm run create-rules-index-file && npm run fix:eslint-docs",
-		"test": "run-s --continue-on-error lint test:js",
-		"test:js": "node --test \"test/*.js\" \"test/unit/*.js\""
+		"test": "run-s --continue-on-error lint test:js test:types",
+		"test:js": "node --test \"test/*.js\" \"test/unit/*.js\"",
+		"test:types": "tsc --project test/types/tsconfig.json"
 	},
 	"files": [
 		"index.js",
@@ -70,6 +71,7 @@
 		"npm-run-all2": "^9.0.3",
 		"open-editor": "^6.0.0",
 		"outdent": "^0.8.0",
+		"typescript": "^6.0.3",
 		"yaml": "^2.9.1"
 	},
 	"peerDependencies": {
