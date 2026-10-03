@@ -52,6 +52,7 @@ test.snapshot({
 		':export { width: max(10px, min(5vw, 100px)); --size: max(10px, min(5vw, 100px)); }',
 		':import("./theme.css") { size: max(10px, min(5vw, 100px)); }',
 		'@supports (width: max(10px, min(5vw, 100px))) { a { width: 1px; } }',
+		'@supports (--size: max(10px, min(5vw, 100px))) { a { width: 1px; } }',
 		'@media (width: max(10px, min(5vw, 100px))) { a { width: 1px; } }',
 	],
 	invalid: [
@@ -149,6 +150,11 @@ test({
 		{
 			code: String.raw`a { width: max(10px,min(5v\77 /* preferred */,100p\78 /* upper */)); }`,
 			output: String.raw`a { width: clamp(10px,5v\77 /* preferred */,100p\78 /* upper */); }`,
+			errors: 1,
+		},
+		{
+			code: 'a {\r\n  --size: ' + String.raw`ma\78 (10px,mi\6e (5vw,100px));` + '\r\n}',
+			output: 'a {\r\n  --size: clamp(10px,5vw,100px);\r\n}',
 			errors: 1,
 		},
 		{

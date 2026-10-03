@@ -25,7 +25,7 @@ a {
 }
 ```
 
-The outer `max()` arguments may appear in either order. The inner `min()` arguments retain their source order as the preferred value and maximum; either order produces an equivalent expression. Each function must have exactly two nonempty arguments, and the inner function must be an entire outer argument.
+The outer `max()` arguments may appear in either order. The inner `min()` arguments retain their source order as the preferred value and maximum; either order produces an equivalent expression. For example, `max(10px, min(100px, 5vw))` becomes `clamp(10px, 100px, 5vw)`. Each function must have exactly two nonempty arguments, and the inner function must be an entire outer argument.
 
 ```css
 /* ❌ */

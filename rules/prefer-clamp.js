@@ -18,7 +18,6 @@ const messages = {
 };
 
 const comparisonFunctionPattern = /(?:min|max)\(|\\/iv;
-const getRange = (node, offset, context) => context.sourceCode.getRange(node).map(index => index + offset);
 
 function getTwoArguments(node) {
 	if (!node.children) {
@@ -64,18 +63,20 @@ function areOrderedBounds(minimum, maximum) {
 /**
 Get an argument's original text, including surrounding whitespace, for a fix that reorders arguments.
 */
-function getArgumentText(argument, functionNode, offset, context) {
-	const [functionStart, functionEnd] = getRange(functionNode, offset, context);
+function getArgumentText(argument, functionNode, context) {
+	const {sourceCode} = context;
+	const [functionStart, functionEnd] = sourceCode.getRange(functionNode);
 	const start = argument.previousComma
-		? getRange(argument.previousComma, offset, context)[1]
+		? sourceCode.getRange(argument.previousComma)[1]
 		: functionStart + functionNode.name.length + 1;
 	const end = argument.nextComma
-		? getRange(argument.nextComma, offset, context)[0]
+		? sourceCode.getRange(argument.nextComma)[0]
 		: functionEnd - 1;
-	return context.sourceCode.text.slice(start, end);
+	return sourceCode.text.slice(start, end);
 }
 
-function getClampProblem(node, offset, context, reportNode = node) {
+function getClampProblem(node, context, reportNode = node) {
+	const {sourceCode} = context;
 	const name = normalizeCssIdentifier(node.name);
 	if (name !== 'max' && name !== 'min') {
 		return;
@@ -118,8 +119,8 @@ function getClampProblem(node, offset, context, reportNode = node) {
 		clampArguments = [minimum, innerArguments.find(argument => argument !== minimum), bound];
 	}
 
-	const range = getRange(node, offset, context);
-	const innerRange = getRange(innerNode, offset, context);
+	const range = sourceCode.getRange(node);
+	const innerRange = sourceCode.getRange(innerNode);
 	const preservesOrder = name === 'max' && nestedArgument === outerArguments[1];
 	const problem = {
 		node: reportNode,
@@ -141,7 +142,7 @@ function getClampProblem(node, offset, context, reportNode = node) {
 			}
 
 			const argumentsText = clampArguments.map((argument, index) => {
-				const text = getArgumentText(argument, argument === bound ? node : innerNode, offset, context);
+				const text = getArgumentText(argument, argument === bound ? node : innerNode, context);
 				if (index === 0) {
 					return text.replace(/^[\t ]+/v, '');
 				}
@@ -160,7 +161,7 @@ const create = context => {
 	const {sourceCode} = context;
 
 	context.on('Function', node => {
-		const problem = getClampProblem(node, 0, context);
+		const problem = getClampProblem(node, context);
 		if (!problem) {
 			return;
 		}
@@ -194,6 +195,7 @@ const create = context => {
 				context: 'declaration',
 				parseCustomProperty: true,
 				positions: true,
+				offset: sourceCode.getRange(declaration)[0],
 			});
 		} catch {
 			return;
@@ -204,13 +206,12 @@ const create = context => {
 		}
 
 		const problems = [];
-		const [offset] = sourceCode.getRange(declaration);
 		walk(parsed.value, node => {
 			if (node.type !== 'Function') {
 				return;
 			}
 
-			const problem = getClampProblem(node, offset, context, declaration);
+			const problem = getClampProblem(node, context, declaration);
 			if (problem) {
 				problems.push(problem);
 			}
