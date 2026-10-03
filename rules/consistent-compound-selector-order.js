@@ -10,6 +10,8 @@ const messages = {
 	[MESSAGE_ID]: 'Use consistent ordering for compound selector components.',
 };
 
+const CSS_MODULES_PSEUDO_CLASSES = new Set(['local', 'global']);
+
 const selectorOrder = new Map([
 	['TypeSelector', 0],
 	['NestingSelector', 1],
@@ -20,6 +22,10 @@ const selectorOrder = new Map([
 ]);
 
 const getCompoundProblem = (children, selector, context) => {
+	if (children.some(child => child.type === 'PseudoClassSelector' && CSS_MODULES_PSEUDO_CLASSES.has(normalizeCssIdentifier(child.name)))) {
+		return;
+	}
+
 	const {sourceCode} = context;
 	let previousOrder = -1;
 	let hasInversion = false;
@@ -38,8 +44,6 @@ const getCompoundProblem = (children, selector, context) => {
 			order === undefined
 			|| !sourceCode.getLoc(child)
 			|| (child.type === 'TypeSelector' && index !== 0)
-			|| name === 'local'
-			|| name === 'global'
 		) {
 			return;
 		}
