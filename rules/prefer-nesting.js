@@ -5,6 +5,7 @@ import {
 	compareSpecificity,
 	getRuleSelectorSpecificity,
 	hasNestingSelectorInRawArgument,
+	hasScopeAncestor,
 	isStyleRule,
 } from './shared/css-selector-specificity.js';
 import {hasCommentInRange, normalizeCssIdentifier} from './utils/index.js';
@@ -141,7 +142,7 @@ const create = context => {
 
 		const [selector] = rule.prelude.children;
 		const candidate = getCandidate(selector);
-		if (!candidate || !canMatchSelector(selector) || find(selector, node => node.type === 'NestingSelector' || hasNestingSelectorInRawArgument(node))) {
+		if (!candidate || !canMatchSelector(selector) || hasScopeAncestor(rule, context) || find(selector, node => node.type === 'NestingSelector' || hasNestingSelectorInRawArgument(node))) {
 			return;
 		}
 

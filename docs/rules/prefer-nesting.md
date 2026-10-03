@@ -97,6 +97,8 @@ The rule only checks rules with one selector and at least two compound `:is()` a
 
 Unrepresentable selectors and files containing `@namespace` are ignored. Pseudo-class names are case-insensitive, and selector escapes are preserved. Escaped `:is()` names are ignored because `@eslint/css` exposes their arguments as raw text rather than parsed selectors.
 
+Rules inside `@scope` are ignored because introducing a parent rule can change their implicit scoping anchor and which elements match.
+
 Autofix preserves declaration order, nested blocks, and line endings. Multiline fixes reuse the existing body indentation. The rule reports without fixing when the rule contains comments or line breaks consumed by CSS escapes, when reindentation could change multiline raw values, or when indentation cannot be inferred safely.
 
 Only standard CSS parsed by `@eslint/css` is supported. Enable this rule when your target browsers support native CSS nesting, or when your build transforms nesting for them.

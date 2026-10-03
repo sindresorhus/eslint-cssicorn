@@ -355,20 +355,17 @@ Output:
 
 `;
 
-exports[`invalid(29): @scope (.parent) { a :is(.foo, .bar) { color: red; } } 1`] = `
+exports[`invalid(29): a :is(.foo, .bar) { color: red; /* keep */ } 1`] = `
 
-  1 | @scope (.parent) { a :is(.foo, .bar) { color: red; } }
+  1 | a :is(.foo, .bar) { color: red; /* keep */ }
 
 `;
 
-exports[`invalid(29): @scope (.parent) { a :is(.foo, .bar) { color: red; } } 2`] = `
+exports[`invalid(29): a :is(.foo, .bar) { color: red; /* keep */ } 2`] = `
 
 Message:
-> 1 | @scope (.parent) { a :is(.foo, .bar) { color: red; } }
-    |                      ^^^^^^^^^^^^^^^ Prefer CSS nesting over \`:is()\`.
-
-Output:
-  1 | @scope (.parent) { a { .foo, .bar { color: red; } } }
+> 1 | a :is(.foo, .bar) { color: red; /* keep */ }
+    |   ^^^^^^^^^^^^^^^ Prefer CSS nesting over \`:is()\`.
 
 `;
 
@@ -389,27 +386,13 @@ Output:
 
 `;
 
-exports[`invalid(30): a :is(.foo, .bar) { color: red; /* keep */ } 1`] = `
-
-  1 | a :is(.foo, .bar) { color: red; /* keep */ }
-
-`;
-
-exports[`invalid(30): a :is(.foo, .bar) { color: red; /* keep */ } 2`] = `
-
-Message:
-> 1 | a :is(.foo, .bar) { color: red; /* keep */ }
-    |   ^^^^^^^^^^^^^^^ Prefer CSS nesting over \`:is()\`.
-
-`;
-
-exports[`invalid(31): a /* keep */ :is(.foo, .bar) { color: red; } 1`] = `
+exports[`invalid(30): a /* keep */ :is(.foo, .bar) { color: red; } 1`] = `
 
   1 | a /* keep */ :is(.foo, .bar) { color: red; }
 
 `;
 
-exports[`invalid(31): a /* keep */ :is(.foo, .bar) { color: red; } 2`] = `
+exports[`invalid(30): a /* keep */ :is(.foo, .bar) { color: red; } 2`] = `
 
 Message:
 > 1 | a /* keep */ :is(.foo, .bar) { color: red; }
@@ -417,13 +400,13 @@ Message:
 
 `;
 
-exports[`invalid(32): :is(.foo, /* keep */ .bar) a { color: red; } 1`] = `
+exports[`invalid(31): :is(.foo, /* keep */ .bar) a { color: red; } 1`] = `
 
   1 | :is(.foo, /* keep */ .bar) a { color: red; }
 
 `;
 
-exports[`invalid(32): :is(.foo, /* keep */ .bar) a { color: red; } 2`] = `
+exports[`invalid(31): :is(.foo, /* keep */ .bar) a { color: red; } 2`] = `
 
 Message:
 > 1 | :is(.foo, /* keep */ .bar) a { color: red; }
@@ -431,13 +414,13 @@ Message:
 
 `;
 
-exports[`invalid(33): a :is(.foo, .bar) /* keep */ { color: red; } 1`] = `
+exports[`invalid(32): a :is(.foo, .bar) /* keep */ { color: red; } 1`] = `
 
   1 | a :is(.foo, .bar) /* keep */ { color: red; }
 
 `;
 
-exports[`invalid(33): a :is(.foo, .bar) /* keep */ { color: red; } 2`] = `
+exports[`invalid(32): a :is(.foo, .bar) /* keep */ { color: red; } 2`] = `
 
 Message:
 > 1 | a :is(.foo, .bar) /* keep */ { color: red; }
@@ -445,7 +428,7 @@ Message:
 
 `;
 
-exports[`invalid(34): a :is(.foo, .bar) {\n\tcolor: red;\n\tbackground: blue;\n} 1`] = `
+exports[`invalid(33): a :is(.foo, .bar) {\n\tcolor: red;\n\tbackground: blue;\n} 1`] = `
 
   1 | a :is(.foo, .bar) {
   2 | 	color: red;
@@ -454,7 +437,7 @@ exports[`invalid(34): a :is(.foo, .bar) {\n\tcolor: red;\n\tbackground: blue;\n}
 
 `;
 
-exports[`invalid(34): a :is(.foo, .bar) {\n\tcolor: red;\n\tbackground: blue;\n} 2`] = `
+exports[`invalid(33): a :is(.foo, .bar) {\n\tcolor: red;\n\tbackground: blue;\n} 2`] = `
 
 Message:
 > 1 | a :is(.foo, .bar) {
@@ -473,7 +456,7 @@ Output:
 
 `;
 
-exports[`invalid(35): :is(.foo, .bar).active {\n  color: red;\n} 1`] = `
+exports[`invalid(34): :is(.foo, .bar).active {\n  color: red;\n} 1`] = `
 
   1 | :is(.foo, .bar).active {
   2 |   color: red;
@@ -481,7 +464,7 @@ exports[`invalid(35): :is(.foo, .bar).active {\n  color: red;\n} 1`] = `
 
 `;
 
-exports[`invalid(35): :is(.foo, .bar).active {\n  color: red;\n} 2`] = `
+exports[`invalid(34): :is(.foo, .bar).active {\n  color: red;\n} 2`] = `
 
 Message:
 > 1 | :is(.foo, .bar).active {
@@ -498,7 +481,7 @@ Output:
 
 `;
 
-exports[`invalid(36): @media (width > 0px) {\r\n  a :is(.foo, .bar) {\r\n    color: red;\r\n  }\r\n} 1`] = `
+exports[`invalid(35): @media (width > 0px) {\r\n  a :is(.foo, .bar) {\r\n    color: red;\r\n  }\r\n} 1`] = `
 
   1 | @media (width > 0px) {
   2 |   a :is(.foo, .bar) {
@@ -508,7 +491,7 @@ exports[`invalid(36): @media (width > 0px) {\r\n  a :is(.foo, .bar) {\r\n    col
 
 `;
 
-exports[`invalid(36): @media (width > 0px) {\r\n  a :is(.foo, .bar) {\r\n    color: red;\r\n  }\r\n} 2`] = `
+exports[`invalid(35): @media (width > 0px) {\r\n  a :is(.foo, .bar) {\r\n    color: red;\r\n  }\r\n} 2`] = `
 
 Message:
   1 | @media (width > 0px) {
@@ -529,7 +512,7 @@ Output:
 
 `;
 
-exports[`invalid(37): :is(.foo, .bar) a {\n\tcolor: red;\n\n\t& > b {\n\t\tcolor: blue;\n\t}\n} 1`] = `
+exports[`invalid(36): :is(.foo, .bar) a {\n\tcolor: red;\n\n\t& > b {\n\t\tcolor: blue;\n\t}\n} 1`] = `
 
   1 | :is(.foo, .bar) a {
   2 | 	color: red;
@@ -541,7 +524,7 @@ exports[`invalid(37): :is(.foo, .bar) a {\n\tcolor: red;\n\n\t& > b {\n\t\tcolor
 
 `;
 
-exports[`invalid(37): :is(.foo, .bar) a {\n\tcolor: red;\n\n\t& > b {\n\t\tcolor: blue;\n\t}\n} 2`] = `
+exports[`invalid(36): :is(.foo, .bar) a {\n\tcolor: red;\n\n\t& > b {\n\t\tcolor: blue;\n\t}\n} 2`] = `
 
 Message:
 > 1 | :is(.foo, .bar) a {
@@ -566,7 +549,7 @@ Output:
 
 `;
 
-exports[`invalid(38): a :is(.foo, .bar) {\ncolor: red;\n} 1`] = `
+exports[`invalid(37): a :is(.foo, .bar) {\ncolor: red;\n} 1`] = `
 
   1 | a :is(.foo, .bar) {
   2 | color: red;
@@ -574,7 +557,7 @@ exports[`invalid(38): a :is(.foo, .bar) {\ncolor: red;\n} 1`] = `
 
 `;
 
-exports[`invalid(38): a :is(.foo, .bar) {\ncolor: red;\n} 2`] = `
+exports[`invalid(37): a :is(.foo, .bar) {\ncolor: red;\n} 2`] = `
 
 Message:
 > 1 | a :is(.foo, .bar) {
@@ -584,19 +567,39 @@ Message:
 
 `;
 
-exports[`invalid(39): a :is(.foo, .bar) {\n} 1`] = `
+exports[`invalid(38): a :is(.foo, .bar) {\n} 1`] = `
 
   1 | a :is(.foo, .bar) {
   2 | }
 
 `;
 
-exports[`invalid(39): a :is(.foo, .bar) {\n} 2`] = `
+exports[`invalid(38): a :is(.foo, .bar) {\n} 2`] = `
 
 Message:
 > 1 | a :is(.foo, .bar) {
     |   ^^^^^^^^^^^^^^^ Prefer CSS nesting over \`:is()\`.
   2 | }
+
+`;
+
+exports[`invalid(39): a :is(.foo, .bar) {\n\tcontent: \"a\\\n\tb\";\n} 1`] = `
+
+  1 | a :is(.foo, .bar) {
+  2 | 	content: "a\\
+  3 | 	b";
+  4 | }
+
+`;
+
+exports[`invalid(39): a :is(.foo, .bar) {\n\tcontent: \"a\\\n\tb\";\n} 2`] = `
+
+Message:
+> 1 | a :is(.foo, .bar) {
+    |   ^^^^^^^^^^^^^^^ Prefer CSS nesting over \`:is()\`.
+  2 | 	content: "a\\
+  3 | 	b";
+  4 | }
 
 `;
 
@@ -617,27 +620,7 @@ Output:
 
 `;
 
-exports[`invalid(40): a :is(.foo, .bar) {\n\tcontent: \"a\\\n\tb\";\n} 1`] = `
-
-  1 | a :is(.foo, .bar) {
-  2 | 	content: "a\\
-  3 | 	b";
-  4 | }
-
-`;
-
-exports[`invalid(40): a :is(.foo, .bar) {\n\tcontent: \"a\\\n\tb\";\n} 2`] = `
-
-Message:
-> 1 | a :is(.foo, .bar) {
-    |   ^^^^^^^^^^^^^^^ Prefer CSS nesting over \`:is()\`.
-  2 | 	content: "a\\
-  3 | 	b";
-  4 | }
-
-`;
-
-exports[`invalid(41): a :is(.foo, .bar) {\n\t--value: a\n\t\tb;\n} 1`] = `
+exports[`invalid(40): a :is(.foo, .bar) {\n\t--value: a\n\t\tb;\n} 1`] = `
 
   1 | a :is(.foo, .bar) {
   2 | 	--value: a
@@ -646,7 +629,7 @@ exports[`invalid(41): a :is(.foo, .bar) {\n\t--value: a\n\t\tb;\n} 1`] = `
 
 `;
 
-exports[`invalid(41): a :is(.foo, .bar) {\n\t--value: a\n\t\tb;\n} 2`] = `
+exports[`invalid(40): a :is(.foo, .bar) {\n\t--value: a\n\t\tb;\n} 2`] = `
 
 Message:
 > 1 | a :is(.foo, .bar) {

@@ -49,6 +49,9 @@ test.snapshot({
 		'@namespace url("http://www.w3.org/1999/xhtml"); a :is(.foo, .bar) {}',
 		String.raw`@NAMESP\41 CE svg url("http://www.w3.org/2000/svg"); :is(.foo, .bar) a {}`,
 		'a { --selector: a :is(.foo, .bar); content: "a :is(.foo, .bar)"; background: url("is(.foo,.bar)"); }',
+		'@scope (.parent) { a :is(.foo, .bar) { color: red; } }',
+		'@scope (.scope) { :is(body, html) :scope a { color: red; } }',
+		'@scope (.scope) { @media (width > 0px) { .parent { :is(.foo, .bar) a { color: red; } } } }',
 	],
 	invalid: [
 		'a :is(.foo, .bar) {}',
@@ -75,7 +78,7 @@ test.snapshot({
 		'.parent { :is(.foo, .bar) a { color: red; } }',
 		'.parent { a :is(.foo, .bar) { color: red; } }',
 		'a :is(.foo, .bar) { --value: var(--color); color: var(--value); & > b { color: blue; } }',
-		...['media (width > 0px)', 'supports (display: grid)', 'container (width > 0px)', 'layer theme', 'scope (.parent)'].map(atRule => `@${atRule} { a :is(.foo, .bar) { color: red; } }`),
+		...['media (width > 0px)', 'supports (display: grid)', 'container (width > 0px)', 'layer theme'].map(atRule => `@${atRule} { a :is(.foo, .bar) { color: red; } }`),
 		'a :is(.foo, .bar) { color: red; /* keep */ }',
 		'a /* keep */ :is(.foo, .bar) { color: red; }',
 		':is(.foo, /* keep */ .bar) a { color: red; }',
