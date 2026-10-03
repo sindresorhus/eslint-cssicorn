@@ -14,7 +14,9 @@ import {
 import {hasCommentInRange, normalizeCssIdentifier} from './utils/index.js';
 
 /**
-@import * as ESLint from 'eslint';
+@import {CssicornContext} from './rule/cssicorn-context.js';
+@import {CssicornRule} from './rule/to-eslint-rule.js';
+@import {AnyCssNode, PseudoClassSelectorPlain} from '@eslint/css-tree';
 */
 
 const MESSAGE_ID = 'no-useless-is';
@@ -24,6 +26,9 @@ const messages = {
 	[MESSAGE_ID]: 'Remove the unnecessary `:is()` wrapper.',
 };
 
+/**
+@param {AnyCssNode} node
+*/
 const isUnsupportedArgumentNode = node => {
 	if (node.type === 'Raw' || node.type === 'NestingSelector') {
 		return true;
@@ -53,13 +58,17 @@ const isUnsupportedArgumentNode = node => {
 	}
 
 	// CSSTree parses some functional arguments without validating their grammar.
-	const argument = node.children?.[0];
+	const argument = /** @type {PseudoClassSelectorPlain} */ (node).children?.[0];
 	return argument !== undefined
 		&& argument.type !== 'Selector'
 		&& argument.type !== 'SelectorList'
 		&& (argument.type !== 'Nth' || argument.selector !== null);
 };
 
+/**
+@param {PseudoClassSelectorPlain} node
+@param {CssicornContext['sourceCode']} sourceCode
+*/
 const getSelectorArgument = (node, sourceCode) => {
 	if (node.children?.length !== 1) {
 		return;
@@ -84,11 +93,11 @@ const getSelectorArgument = (node, sourceCode) => {
 	}
 
 	const [selector] = selectorList.children;
-	return selector;
+	return selector?.type === 'Selector' ? selector : undefined;
 };
 
 /**
-@param {ESLint.Rule.RuleContext} context
+@param {CssicornContext} context
 */
 const create = context => {
 	const {sourceCode} = context;
@@ -103,13 +112,13 @@ const create = context => {
 		}
 
 		const containingSelector = sourceCode.getParent(node);
-		if (containingSelector.type !== 'Selector') {
+		if (containingSelector?.type !== 'Selector') {
 			return;
 		}
 
 		const ancestors = sourceCode.getAncestors(node);
 		const owner = ancestors.findLast(ancestor => ancestor.type === 'Rule' || ancestor.type === 'Atrule');
-		if (!owner || !isStyleRule(owner, context) || !ancestors.includes(owner.prelude)) {
+		if (!owner?.prelude || !isStyleRule(owner, context) || !ancestors.includes(owner.prelude)) {
 			return;
 		}
 
@@ -168,7 +177,7 @@ const create = context => {
 };
 
 /**
-@type {ESLint.Rule.RuleModule}
+@type {CssicornRule}
 */
 const config = {
 	create,

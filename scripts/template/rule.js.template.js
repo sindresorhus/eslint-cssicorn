@@ -9,7 +9,9 @@ const imports = outdent`
 
 const typeImports = outdent`
 	/**
-	@import * as ESLint from 'eslint';
+	@import {CssicornContext} from './rule/cssicorn-context.js';
+	@import {CssicornRule} from './rule/to-eslint-rule.js';
+	@import {CssicornRuleFixer} from './rule/to-eslint-rule-fixer.js';
 	*/
 `;
 
@@ -31,7 +33,7 @@ const createMessages = data =>
 		`;
 
 const fix = outdent`
-	/** @param {ESLint.Rule.RuleFixer} fixer */
+	/** @param {Parameters<CssicornRuleFixer>[0]} fixer */
 	fix: fixer => fixer.replaceText(node, 'cssicorn'),
 `;
 
@@ -49,7 +51,7 @@ const suggestion = outdent`
 `;
 
 const createRuleCreateFunction = data => outdent`
-	/** @param {ESLint.Rule.RuleContext} context */
+	/** @param {CssicornContext} context */
 	const create = context => {
 		context.on('Identifier', node => {
 			if (node.name !== 'unicorn') {
@@ -71,7 +73,7 @@ const createRuleCreateFunction = data => outdent`
 `;
 
 const createConfig = data => outdent`
-	/** @type {ESLint.Rule.RuleModule} */
+	/** @type {CssicornRule} */
 	const config = {
 		create,
 		meta: {
