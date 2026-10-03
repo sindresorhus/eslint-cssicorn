@@ -22,6 +22,8 @@ test.snapshot({
 		'a { width: max(10px, min(, 100px)); }',
 		'a { width: max(10px, min(5vw,)); }',
 		'a { width: max(, min(5vw, 100px)); }',
+		'a { width: max(/* empty */, min(5vw, 100px)); }',
+		'a { --size: max(10px, min(/* empty */, 100px)); }',
 		'a { width: min(50px, max(100px, 5vw)); }',
 		'a { width: min(10px, max(5vw, 100px)); }',
 		'a { width: min(100px, max(1rem, 5vw)); }',
@@ -124,6 +126,33 @@ test({
 			code: 'a {\r\n  width: max(min(5vw, 100px),\r\n    10px);\r\n}',
 			output: 'a {\r\n  width: clamp(\r\n    10px, 5vw, 100px);\r\n}',
 			errors: 1,
+		},
+		{
+			code: 'a { width: min(100px, max(10px, 20px)); }',
+			output: 'a { width: clamp(10px, 20px, 100px); }',
+			errors: 1,
+		},
+		{
+			code: 'a { width: min(10px, max(20px, 5px)); }',
+			output: 'a { width: clamp(5px, 20px, 10px); }',
+			errors: 1,
+		},
+		{
+			code: String.raw`a { width: max(10px,min(5v\77 /* preferred */,100p\78 /* upper */)); }`,
+			output: String.raw`a { width: clamp(10px,5v\77 /* preferred */,100p\78 /* upper */); }`,
+			errors: 1,
+		},
+		{
+			code: 'a {\r\n  --first: ' + String.raw`m\61 x(m\69 n(5v\77 ,100p\78 ),10p\78 );` + '\r\n  --second: min(10px,max(20px,5px));\r\n}',
+			output: 'a {\r\n  --first: ' + String.raw`clamp(10p\78 , 5v\77 , 100p\78 );` + '\r\n  --second: clamp(5px, 20px, 10px);\r\n}',
+			errors: [
+				{
+					messageId: 'prefer-clamp', line: 2, column: 12, endLine: 2, endColumn: 51,
+				},
+				{
+					messageId: 'prefer-clamp', line: 3, column: 13, endLine: 3, endColumn: 36,
+				},
+			],
 		},
 	],
 });
