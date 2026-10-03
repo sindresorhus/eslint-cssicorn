@@ -123,8 +123,8 @@ test('Every rule file has the appropriate contents', () => {
 
 		assert.match(
 			ruleContents,
-			// TODO: Use `@import` instead of `import('eslint')`
-			/\/\*\*\s*@type \{(?:import\('eslint'\)|ESLint)\.Rule\.RuleModule\}\s*\*\//,
+			// TODO: Use `CssicornRule` for all rules.
+			/\/\*\*\s*@type \{(?:CssicornRule|(?:import\('eslint'\)|ESLint)\.Rule\.RuleModule)\}\s*\*\//,
 			`${ruleName} includes jsdoc comment for rule type`,
 		);
 	}
