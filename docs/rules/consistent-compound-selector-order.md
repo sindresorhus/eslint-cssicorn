@@ -11,7 +11,7 @@
 
 <!-- Ordering applies to simple selectors within each compound selector. -->
 
-Enforces a consistent order for the components of each compound selector:
+Orders each compound selector as follows:
 
 1. Type or universal selector (`button`, `*`, `svg|a`)
 2. Nesting selectors (`&`)
@@ -20,15 +20,13 @@ Enforces a consistent order for the components of each compound selector:
 5. Attribute selectors (`[disabled]`)
 6. Pseudo-classes (`:hover`, `:not(...)`)
 
-Components of the same kind keep their original order. Each compound selector is checked independently, including native nested rules and at-rules such as `@media` and `@scope`.
+Components of the same kind keep their order. Supports nesting, at-rules, and parsed selectors inside functional pseudos. Raw arguments, including those in `::cue()` and escaped `:is()` names, are ignored.
 
-Selectors inside functional pseudo-classes and pseudo-elements are checked only when the CSS parser exposes them as selector nodes. Arguments kept as raw text, such as those in `::cue(.foo#id)` or an escaped `:is()` name like `:i\73 (.foo#id)`, are not inspected.
+Ordering stops at the first pseudo-element, including legacy forms such as `:before`.
 
-Pseudo-elements form a boundary: the rule only orders the components before the first pseudo-element in each compound. It preserves the pseudo-element and everything after it, because `:hover::before` and `::before:hover` target different things. Legacy pseudo-elements such as `:before` receive the same treatment.
+Autofixes preserve casing, escapes, and formatting. Comments in the affected range prevent autofixing.
 
-Autofixes preserve original casing, escapes, and formatting. When the affected components contain comments, the rule reports the ordering problem without an autofix.
-
-Compounds containing CSS Modules' `:local` or `:global`, unsupported selector nodes, or a type selector in an invalid position are ignored. The rule targets native CSS and does not repair invalid selectors.
+Compounds containing CSS Modules' `:local` or `:global`, unsupported nodes, or misplaced type selectors are ignored.
 
 ## Examples
 
