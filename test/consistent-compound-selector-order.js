@@ -18,6 +18,8 @@ test.snapshot({
 		'a#foo.bar[data-x]:hover::before {}',
 		'a#foo.bar[data-x]:not(.disabled):hover::before {}',
 		'a:is(.foo, .bar)::before {}',
+		'::cue(.foo#id) {}',
+		String.raw`:i\73 (.foo#id) {}`,
 		'a#z#a.z.a[data-z][data-a]:hover:focus::before {}',
 		'&.foo {}',
 		'&#id.foo {}',

@@ -20,7 +20,9 @@ Enforces a consistent order for the components of each compound selector:
 5. Attribute selectors (`[disabled]`)
 6. Pseudo-classes (`:hover`, `:not(...)`)
 
-Components of the same kind keep their original order. Each compound selector is checked independently, including selectors inside functional pseudo-classes and pseudo-elements, native nested rules, and at-rules such as `@media` and `@scope`.
+Components of the same kind keep their original order. Each compound selector is checked independently, including native nested rules and at-rules such as `@media` and `@scope`.
+
+Selectors inside functional pseudo-classes and pseudo-elements are checked only when the CSS parser exposes them as selector nodes. Arguments kept as raw text, such as those in `::cue(.foo#id)` or an escaped `:is()` name like `:i\73 (.foo#id)`, are not inspected.
 
 Pseudo-elements form a boundary: the rule only orders the components before the first pseudo-element in each compound. It preserves the pseudo-element and everything after it, because `:hover::before` and `::before:hover` target different things. Legacy pseudo-elements such as `:before` receive the same treatment.
 
