@@ -1,4 +1,9 @@
-import {find, parse, toPlainObject} from '@eslint/css-tree';
+import {
+	find,
+	ident,
+	parse,
+	toPlainObject,
+} from '@eslint/css-tree';
 import {
 	canBeRepresentedByNestingSelector,
 	canMatchSelector,
@@ -51,18 +56,20 @@ const isUnsupportedArgumentNode = node => {
 
 const isHasPseudoClass = node => node.type === 'PseudoClassSelector' && normalizeCssIdentifier(node.name) === 'has';
 
-const getArgument = (node, sourceCode) => {
+const getSelectorArgument = (node, sourceCode) => {
 	if (node.children?.length !== 1) {
 		return;
 	}
 
 	let [selectorList] = node.children;
-	let offset = 0;
 	// CSSTree leaves arguments of escaped pseudo-class names unparsed.
 	if (selectorList.type === 'Raw') {
-		offset = sourceCode.getRange(selectorList)[0];
 		try {
-			selectorList = toPlainObject(parse(selectorList.value, {context: 'selectorList', positions: true}));
+			selectorList = toPlainObject(parse(selectorList.value, {
+				context: 'selectorList',
+				positions: true,
+				offset: sourceCode.getRange(selectorList)[0],
+			}));
 		} catch {
 			return;
 		}
@@ -73,7 +80,7 @@ const getArgument = (node, sourceCode) => {
 	}
 
 	const [selector] = selectorList.children;
-	return {selector, offset};
+	return selector;
 };
 
 /**
@@ -102,12 +109,11 @@ const create = context => {
 			return;
 		}
 
-		const argument = getArgument(node, sourceCode);
-		if (!argument) {
+		const selector = getSelectorArgument(node, sourceCode);
+		if (!selector) {
 			return;
 		}
 
-		const {selector, offset} = argument;
 		if (
 			selector.children.length === 0
 			|| find(selector, isUnsupportedArgumentNode)
@@ -149,8 +155,14 @@ const create = context => {
 					return abort();
 				}
 
-				const range = sourceCode.getRange(selector).map(index => index + offset);
-				yield fixer.replaceText(node, sourceCode.text.slice(...range));
+				const range = sourceCode.getRange(selector);
+				let selectorText = sourceCode.text.slice(...range);
+				// Terminate a trailing hex escape so it cannot consume surrounding selector whitespace.
+				if (selectorText.includes('\\') && ident.decode(selectorText + ' ') === ident.decode(selectorText)) {
+					selectorText += ' ';
+				}
+
+				yield fixer.replaceText(node, selectorText);
 			},
 		};
 	});

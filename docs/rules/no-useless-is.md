@@ -49,6 +49,16 @@ A complex selector can be inlined when the wrapper is the entire selector of a s
 .foo > .bar {}
 ```
 
+Escapes are preserved. Autofixes add a terminating space after a trailing hex escape so that surrounding whitespace keeps its meaning. In this example, the first space terminates the escape and the second remains a descendant combinator.
+
+```css
+/* ❌ */
+:is(.foo\61) a {}
+
+/* ✅ */
+.foo\61  a {}
+```
+
 ## Intentional exclusions
 
 The rule preserves wrappers with multiple arguments, invalid or unknown arguments, pseudo-elements, nesting selectors (`&`), namespace-qualified selectors, attribute modifiers, page-only pseudo-classes, or type selectors that cannot be inlined in their current position. It also preserves wrappers containing `:has()` inside another `:has()`.

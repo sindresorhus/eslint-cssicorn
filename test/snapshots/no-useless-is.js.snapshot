@@ -249,7 +249,7 @@ Message:
     | ^^^^^^^^^^^^ Remove the unnecessary \`:is()\` wrapper.
 
 Output:
-  1 | .foo\\61:focus {}
+  1 | .foo\\61 :focus {}
 
 `;
 

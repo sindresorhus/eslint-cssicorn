@@ -76,6 +76,7 @@ ruleTest.snapshot({
 		'@keyframes fade { :is(from) { opacity: 0; } }',
 		'@NAMESPACE url("http://www.w3.org/2000/svg"); :is(.foo) {}',
 		String.raw`@SCOPE (.root) { :\69 s(.foo > .bar) {} }`,
+		String.raw`:\69 s(.foo ?) {}`,
 	],
 	invalid: [
 		':is(.foo) {}',
@@ -149,6 +150,22 @@ ruleTest({
 			errors: [{messageId: 'no-useless-is'}],
 		},
 	],
+});
+
+ruleTest({
+	valid: [],
+	invalid: [
+		[String.raw`:is(.foo\61) a {}`, String.raw`.foo\61  a {}`],
+		[String.raw`:is(#foo\61) a {}`, String.raw`#foo\61  a {}`],
+		[String.raw`:is(div\61) a {}`, String.raw`div\61  a {}`],
+		[String.raw`:is(:hove\72) a {}`, String.raw`:hove\72  a {}`],
+		[String.raw`:is(.foo\000061) :hover {}`, String.raw`.foo\000061  :hover {}`],
+		[':is(.foo\\61)\na {}', '.foo\\61 \na {}'],
+		[':is(.foo\\61)\r\na {}', '.foo\\61 \r\na {}'],
+		[String.raw`:is(.foo\61 ) a {}`, String.raw`.foo\61  a {}`],
+		[String.raw`:is(.foo\\61) a {}`, String.raw`.foo\\61 a {}`],
+		[String.raw`:is(.foo\)) a {}`, String.raw`.foo\) a {}`],
+	].map(([code, output]) => ({code, output, errors: [{messageId: 'no-useless-is'}]})),
 });
 
 test('fixes converge with other selector rules', () => {
