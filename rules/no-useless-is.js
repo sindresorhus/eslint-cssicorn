@@ -41,8 +41,14 @@ const isUnsupportedArgumentNode = node => {
 		return false;
 	}
 
+	const name = normalizeCssIdentifier(node.name);
 	// The standard pseudo-class catalog also includes selectors for pages.
-	if (PAGE_ONLY_PSEUDO_CLASSES.has(normalizeCssIdentifier(node.name))) {
+	if (PAGE_ONLY_PSEUDO_CLASSES.has(name)) {
+		return true;
+	}
+
+	// Unwrapping `:has()` can change shadow-host matching or expose it to an unforgiving argument list.
+	if (name === 'has') {
 		return true;
 	}
 
@@ -53,8 +59,6 @@ const isUnsupportedArgumentNode = node => {
 		&& argument.type !== 'SelectorList'
 		&& (argument.type !== 'Nth' || argument.selector !== null);
 };
-
-const isHasPseudoClass = node => node.type === 'PseudoClassSelector' && normalizeCssIdentifier(node.name) === 'has';
 
 const getSelectorArgument = (node, sourceCode) => {
 	if (node.children?.length !== 1) {
@@ -119,11 +123,6 @@ const create = context => {
 			|| find(selector, isUnsupportedArgumentNode)
 			|| !canBeRepresentedByNestingSelector(selector, false)
 		) {
-			return;
-		}
-
-		// Unwrapping must not expose a nested `:has()` to an unforgiving argument list.
-		if (ancestors.some(ancestor => isHasPseudoClass(ancestor)) && find(selector, isHasPseudoClass)) {
 			return;
 		}
 

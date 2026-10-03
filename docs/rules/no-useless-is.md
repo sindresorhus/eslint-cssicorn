@@ -61,7 +61,7 @@ Escapes are preserved. Autofixes add a terminating space after a trailing hex es
 
 ## Intentional exclusions
 
-The rule preserves wrappers with multiple arguments, invalid or unknown arguments, pseudo-elements, nesting selectors (`&`), namespace-qualified selectors, attribute modifiers, page-only pseudo-classes, or type selectors that cannot be inlined in their current position. It also preserves wrappers containing `:has()` inside another `:has()`.
+The rule preserves wrappers with multiple arguments, invalid or unknown arguments, pseudo-elements, nesting selectors (`&`), namespace-qualified selectors, attribute modifiers, page-only pseudo-classes, or type selectors that cannot be inlined in their current position. It also preserves wrappers containing `:has()`, whose validity and shadow host matching depend on surrounding selectors.
 
 ```css
 /* ✅ */
@@ -70,9 +70,10 @@ The rule preserves wrappers with multiple arguments, invalid or unknown argument
 :is(:unknown) {}
 :is(::before) {}
 .foo { :is(&) {} }
+:host:is(:has(.child)) {}
 ```
 
-Functional pseudo-classes are supported when their arguments are selectors or plain nth formulas. Other arguments, such as those of `:lang()`, `:dir()`, and nth formulas with an `of` clause, are left wrapped. The parser accepts some invalid forms of these arguments, so this conservative boundary prevents autofixes from exposing invalid selectors to a surrounding selector list.
+For supported functional pseudo-classes, arguments must be selectors or plain nth formulas. Other arguments, such as those of `:lang()`, `:dir()`, and nth formulas with an `of` clause, are left wrapped. The parser accepts some invalid forms of these arguments, so this conservative boundary prevents autofixes from exposing invalid selectors to a surrounding selector list.
 
 ```css
 /* ✅ */
@@ -101,5 +102,5 @@ Autofixes assume the standard selectors used by your project are supported in yo
 
 ```css
 /* eslint-disable-next-line cssicorn/no-useless-is */
-.fallback, :is(:has(.child)) {}
+.fallback, :is(:focus-visible) {}
 ```
