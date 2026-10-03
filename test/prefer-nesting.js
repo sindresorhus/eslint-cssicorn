@@ -127,7 +127,81 @@ test({
 			code: 'a :is(.foo, .bar) {\n\tanimation-name: \\61\nbc;\n}',
 			errors: 1,
 		},
+		{
+			code: 'a :is(.foo, :blank) { color: red; }',
+			output: 'a { :is(.foo, :blank) { color: red; } }',
+			errors: 1,
+		},
+		{
+			code: ':is(.foo, :blank) a { color: red; }',
+			output: ':is(.foo, :blank) { a { color: red; } }',
+			errors: 1,
+		},
+		{
+			code: 'a :is(.foo, [x="a" s]) { color: red; }',
+			output: 'a { :is(.foo, [x="a" s]) { color: red; } }',
+			errors: 1,
+		},
+		{
+			code: ':is(.foo, [x="a" s]) a { color: red; }',
+			output: ':is(.foo, [x="a" s]) { a { color: red; } }',
+			errors: 1,
+		},
+		{
+			code: 'a :is(foo|b, c) { color: red; }',
+			output: 'a { :is(foo|b, c) { color: red; } }',
+			errors: 1,
+		},
+		{
+			code: ':is(foo|b, c) a { color: red; }',
+			output: ':is(foo|b, c) { a { color: red; } }',
+			errors: 1,
+		},
+		{
+			code: 'a :is(.foo, [foo|x]) { color: red; }',
+			output: 'a { :is(.foo, [foo|x]) { color: red; } }',
+			errors: 1,
+		},
+		{
+			code: ':IS(.foo, :blank)::before { content: ""; }',
+			output: ':IS(.foo, :blank) { &::before { content: ""; } }',
+			errors: 1,
+		},
 	],
+});
+
+nodeTest('nesting fixes settle across overlapping and repeated candidates', () => {
+	const linter = new Linter();
+	const config = {
+		...plugin.configs.recommended,
+		rules: {'cssicorn/prefer-nesting': 'error'},
+	};
+	const cases = [
+		{
+			code: 'a :is(.foo, .bar) { color: red; :is(.baz, .qux).active { color: blue; } background: white; }',
+			output: 'a { .foo, .bar { color: red; .baz, .qux { &.active { color: blue; } } background: white; } }',
+		},
+		{
+			code: 'a :is(.foo, .bar) :is(.baz, .qux) { color: red; } b :is(.x, .y) { color: blue; }',
+			output: 'a { .foo, .bar { .baz, .qux { color: red; } } } b { .x, .y { color: blue; } }',
+		},
+		{
+			code: ':is(.foo, :blank) a :is(.bar, :blank) { color: red; }',
+			output: ':is(.foo, :blank) { a { :is(.bar, :blank) { color: red; } } }',
+		},
+	];
+
+	for (const {code, output} of cases) {
+		const result = linter.verifyAndFix(code, config, {filename: 'test.css'});
+		assert.equal(result.fixed, true);
+		assert.equal(result.output, output);
+		assert.deepEqual(result.messages, []);
+		assert.deepEqual(linter.verifyAndFix(output, config, {filename: 'test.css'}), {
+			fixed: false,
+			messages: [],
+			output,
+		});
+	}
 });
 
 nodeTest('nesting fixes work with the other nesting rules', () => {

@@ -69,6 +69,22 @@ a, button {
 }
 ```
 
+When arguments contain pseudo-classes, attribute selector flags, or namespace syntax, the fix keeps the `:is()` wrapper. Its [forgiving selector list](https://drafts.csswg.org/selectors/#forgiving-selector) lets valid branches continue matching when another branch is unsupported or invalid. Unwrapping these arguments into a regular selector list could invalidate the entire rule.
+
+```css
+/* ❌ */
+a :is(.foo, :blank) {
+	color: red;
+}
+
+/* ✅ */
+a {
+	:is(.foo, :blank) {
+		color: red;
+	}
+}
+```
+
 ## Specificity
 
 For a trailing `:is()`, all arguments must have equal specificity. For example, `a :is(.foo, #bar)` is ignored: splitting its arguments into nested selectors would lower the specificity of the `.foo` branch.
@@ -77,7 +93,7 @@ A leading `:is()` can have mixed specificity. The nesting selector takes the max
 
 ## Limitations
 
-The rule only checks rules with one selector and at least two compound `:is()` arguments. It ignores complex arguments such as `.foo .bar`, existing `&` selectors, single-argument or standalone `:is()`, other pseudo-classes, and patterns such as `a:is(.foo, .bar)`, `a :is(.foo, .bar) b`, or `:is(.foo, .bar) > a`. It does not merge neighboring rules or their generated parent wrappers.
+The rule only checks rules with one selector and at least two compound `:is()` arguments. It ignores complex arguments such as `.foo .bar`, selectors that already contain `&`, single-argument or standalone `:is()`, other pseudo-classes, and patterns such as `a:is(.foo, .bar)`, `a :is(.foo, .bar) b`, or `:is(.foo, .bar) > a`. It does not merge neighboring rules or their generated parent wrappers.
 
 Unrepresentable selectors and files containing `@namespace` are ignored. Pseudo-class names are case-insensitive, and selector escapes are preserved. Escaped `:is()` names are ignored because `@eslint/css` exposes their arguments as raw text rather than parsed selectors.
 

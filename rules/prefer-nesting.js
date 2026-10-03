@@ -20,7 +20,7 @@ const messages = {
 
 const isDescendantCombinator = node => node?.type === 'Combinator' && node.name === ' ';
 
-const getArguments = node => {
+const getIsSelectorList = node => {
 	if (node?.type !== 'PseudoClassSelector' || normalizeCssIdentifier(node.name) !== 'is') {
 		return;
 	}
@@ -37,19 +37,41 @@ const getArguments = node => {
 	return argumentsList;
 };
 
+// Keep uncertain selectors inside :is() to preserve its forgiving selector-list behavior.
+const canUnwrapSelectorList = selectorList => selectorList.children.every(selector => selector.children.every(node => {
+	switch (node.type) {
+		case 'ClassSelector':
+		case 'IdSelector': {
+			return true;
+		}
+
+		case 'TypeSelector': {
+			return !node.name.includes('|');
+		}
+
+		case 'AttributeSelector': {
+			return !node.flags && !node.name.name.includes('|');
+		}
+
+		default: {
+			return false;
+		}
+	}
+}));
+
 const getCandidate = selector => {
 	const {children} = selector;
-	const leadingArguments = getArguments(children[0]);
+	const leadingArguments = getIsSelectorList(children[0]);
 	if (leadingArguments && children.length > 1 && (isDescendantCombinator(children[1]) || children[1].type !== 'Combinator')) {
 		return {
 			node: children[0],
-			outerNodes: leadingArguments.children,
+			outerNodes: canUnwrapSelectorList(leadingArguments) ? leadingArguments.children : [children[0]],
 			innerNodes: children.slice(isDescendantCombinator(children[1]) ? 2 : 1),
 			attached: children[1].type !== 'Combinator',
 		};
 	}
 
-	const trailingArguments = getArguments(children.at(-1));
+	const trailingArguments = getIsSelectorList(children.at(-1));
 	if (children.length < 3 || !trailingArguments || !isDescendantCombinator(children.at(-2))) {
 		return;
 	}
@@ -63,7 +85,7 @@ const getCandidate = selector => {
 	return {
 		node: children.at(-1),
 		outerNodes: children.slice(0, -2),
-		innerNodes: trailingArguments.children,
+		innerNodes: canUnwrapSelectorList(trailingArguments) ? trailingArguments.children : [children.at(-1)],
 		attached: false,
 	};
 };
@@ -123,20 +145,14 @@ const create = context => {
 			return;
 		}
 
+		const replacement = getReplacement(rule, candidate, context);
 		return {
 			node: candidate.node,
 			messageId: MESSAGE_ID,
 			/**
 			@param {ESLint.Rule.RuleFixer} fixer
 			*/
-			* fix(fixer, {abort}) {
-				const replacement = getReplacement(rule, candidate, context);
-				if (replacement === undefined) {
-					return abort();
-				}
-
-				yield fixer.replaceText(rule, replacement);
-			},
+			fix: replacement === undefined ? undefined : fixer => fixer.replaceText(rule, replacement),
 		};
 	});
 };
