@@ -11,7 +11,7 @@
 
 /**
 @template {CssNodePlain['type']} [NodeType=CssNodePlain['type']]
-@typedef {(node: Parameters<NonNullable<CSSRuleVisitor[NodeType]>>[0], ...parent: Parameters<NonNullable<CSSRuleVisitor[NodeType]>> extends [unknown, ...infer Parent] ? Parent : never) => CssicornProblems} CssicornRuleListener
+@typedef {(node: Parameters<NonNullable<CSSRuleVisitor[NodeType]>>[0], parent: Parameters<NonNullable<CSSRuleVisitor[NodeType]>>[1]) => CssicornProblems} CssicornRuleListener
 */
 
 /**

@@ -34,7 +34,7 @@ context.on('StyleSheet', node => {
 context.on(['StyleSheet', 'Selector'], (node, parent?: CssNodePlain) => {
 	const children: CssNodePlain[] = node.children;
 });
-// @ts-expect-error Root visitors do not receive a parent argument.
+// @ts-expect-error Root visitors cannot require a CSS parent.
 context.on('StyleSheet', (node, parent: CssNodePlain) => undefined);
 const collectSelectors = (node: SelectorPlain): void => {
 	context.sourceCode.getText(node);
