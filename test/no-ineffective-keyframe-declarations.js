@@ -116,6 +116,11 @@ test({
 			errors: [{messageId: 'no-ineffective-keyframe-declarations/terminal-easing'}],
 		},
 		{
+			code: '@keyframes fade { to { opacity: 1; animation-timing-function: ease-in; } 100% { opacity: 0.5; animation-timing-function: ease-out !important; } }',
+			output: '@keyframes fade { to { opacity: 1; animation-timing-function: ease-in; } 100% { opacity: 0.5;  } }',
+			errors: [{messageId: 'no-ineffective-keyframe-declarations/important'}],
+		},
+		{
 			code: '@keyframes fade { to { --progress: 1 !IMPORTANT /* retain */; } }',
 			errors: [{messageId: 'no-ineffective-keyframe-declarations/important'}],
 		},

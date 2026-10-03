@@ -9,7 +9,7 @@
 <!-- end auto-generated rule header -->
 <!-- Do not manually modify this header. Run: `npm run fix:eslint-docs` -->
 
-Some declarations inside [`@keyframes`](https://drafts.csswg.org/css-animations-1/#keyframes) have no effect: animation controls belong on the animated element, easing on a final `to` or `100%` keyframe is ignored, and declarations with `!important` are ignored entirely.
+Some declarations inside [`@keyframes`](https://drafts.csswg.org/css-animations-1/#keyframes) have no effect: animation controls belong on the animated element, certain easing declarations on final `to` or `100%` keyframes are unused, and declarations with `!important` are ignored entirely.
 
 This rule reports each ineffective declaration once. Autofix removes the whole declaration and preserves surrounding comments. Declarations containing comments are reported without a fix. Removing only `!important` could activate the declaration and change the animation, so the rule does not do that automatically.
 
