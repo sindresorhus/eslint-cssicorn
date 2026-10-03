@@ -282,6 +282,10 @@ nodeTest('nesting fixes settle across overlapping and repeated candidates', () =
 	};
 	const cases = [
 		{
+			code: '.parent, #parent { > a + :is(.foo, #bar) { color: red; & > b { color: blue; } } }',
+			output: '.parent, #parent { > a { + :is(.foo, #bar) { color: red; & > b { color: blue; } } } }',
+		},
+		{
 			code: '.parent, #parent { a > :is(.foo, .bar) { color: red; & > b { color: blue; } } }',
 			output: '.parent, #parent { a { > :is(.foo, .bar) { color: red; & > b { color: blue; } } } }',
 		},
