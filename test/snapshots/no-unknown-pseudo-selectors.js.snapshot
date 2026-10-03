@@ -1,0 +1,278 @@
+exports[`invalid(1): :foucs {} 1`] = `
+
+  1 | :foucs {}
+
+`;
+
+exports[`invalid(1): :foucs {} 2`] = `
+
+Message:
+> 1 | :foucs {}
+    | ^^^^^^ Unknown pseudo-selector ':foucs'.
+
+`;
+
+exports[`invalid(10): ::global(.foo) {} :ng-deep .foo {} 1`] = `
+
+  1 | ::global(.foo) {} :ng-deep .foo {}
+
+`;
+
+exports[`invalid(10): ::global(.foo) {} :ng-deep .foo {} 2`] = `
+
+Message:
+> 1 | ::global(.foo) {} :ng-deep .foo {}
+    | ^^^^^^^^^^^^^^ Unknown pseudo-selector '::global'.
+
+`;
+
+exports[`invalid(10): ::global(.foo) {} :ng-deep .foo {} 3`] = `
+
+Message:
+> 1 | ::global(.foo) {} :ng-deep .foo {}
+    |                   ^^^^^^^^ Unknown pseudo-selector ':ng-deep'.
+
+`;
+
+exports[`invalid(11): ::theme-part(.foo) {} 1`] = `
+
+  1 | ::theme-part(.foo) {}
+
+`;
+
+exports[`invalid(11): ::theme-part(.foo) {} 2`] = `
+
+Message:
+> 1 | ::theme-part(.foo) {}
+    | ^^^^^^^^^^^^^^^^^^ Unknown pseudo-selector '::theme-part'.
+
+`;
+
+exports[`invalid(12): ::--custom {} 1`] = `
+
+  1 | ::--custom {}
+
+`;
+
+exports[`invalid(12): ::--custom {} 2`] = `
+
+Message:
+> 1 | ::--custom {}
+    | ^^^^^^^^^^ Unknown pseudo-selector '::--custom'.
+
+`;
+
+exports[`invalid(13): :\\3A backdrop {} 1`] = `
+
+  1 | :\\3A backdrop {}
+
+`;
+
+exports[`invalid(13): :\\3A backdrop {} 2`] = `
+
+Message:
+> 1 | :\\3A backdrop {}
+    | ^^^^^^^^^^^^^ Unknown pseudo-selector ':\\3A backdrop'.
+
+`;
+
+exports[`invalid(14): :linK {} 1`] = `
+
+  1 | :linK {}
+
+`;
+
+exports[`invalid(14): :linK {} 2`] = `
+
+Message:
+> 1 | :linK {}
+    | ^^^^^ Unknown pseudo-selector ':linK'.
+
+`;
+
+exports[`invalid(15): ::foo {} 1`] = `
+
+Options:
+- allow:
+    - ':foo'
+
+Code:
+  1 | ::foo {}
+
+`;
+
+exports[`invalid(15): ::foo {} 2`] = `
+
+Message:
+> 1 | ::foo {}
+    | ^^^^^ Unknown pseudo-selector '::foo'.
+
+`;
+
+exports[`invalid(2): :hovr::befor {} 1`] = `
+
+  1 | :hovr::befor {}
+
+`;
+
+exports[`invalid(2): :hovr::befor {} 2`] = `
+
+Message:
+> 1 | :hovr::befor {}
+    | ^^^^^ Unknown pseudo-selector ':hovr'.
+
+`;
+
+exports[`invalid(2): :hovr::befor {} 3`] = `
+
+Message:
+> 1 | :hovr::befor {}
+    |      ^^^^^^^ Unknown pseudo-selector '::befor'.
+
+`;
+
+exports[`invalid(3): :is(.foo:foucs, :not(.bar:hovr)) {} 1`] = `
+
+  1 | :is(.foo:foucs, :not(.bar:hovr)) {}
+
+`;
+
+exports[`invalid(3): :is(.foo:foucs, :not(.bar:hovr)) {} 2`] = `
+
+Message:
+> 1 | :is(.foo:foucs, :not(.bar:hovr)) {}
+    |         ^^^^^^ Unknown pseudo-selector ':foucs'.
+
+`;
+
+exports[`invalid(3): :is(.foo:foucs, :not(.bar:hovr)) {} 3`] = `
+
+Message:
+> 1 | :is(.foo:foucs, :not(.bar:hovr)) {}
+    |                          ^^^^^ Unknown pseudo-selector ':hovr'.
+
+`;
+
+exports[`invalid(4): :has(> .foo:foucs), :nth-child(2n of :hovr), ::slotted(.bar:foucs) {} 1`] = `
+
+  1 | :has(> .foo:foucs), :nth-child(2n of :hovr), ::slotted(.bar:foucs) {}
+
+`;
+
+exports[`invalid(4): :has(> .foo:foucs), :nth-child(2n of :hovr), ::slotted(.bar:foucs) {} 2`] = `
+
+Message:
+> 1 | :has(> .foo:foucs), :nth-child(2n of :hovr), ::slotted(.bar:foucs) {}
+    |            ^^^^^^ Unknown pseudo-selector ':foucs'.
+
+`;
+
+exports[`invalid(4): :has(> .foo:foucs), :nth-child(2n of :hovr), ::slotted(.bar:foucs) {} 3`] = `
+
+Message:
+> 1 | :has(> .foo:foucs), :nth-child(2n of :hovr), ::slotted(.bar:foucs) {}
+    |                                      ^^^^^ Unknown pseudo-selector ':hovr'.
+
+`;
+
+exports[`invalid(4): :has(> .foo:foucs), :nth-child(2n of :hovr), ::slotted(.bar:foucs) {} 4`] = `
+
+Message:
+> 1 | :has(> .foo:foucs), :nth-child(2n of :hovr), ::slotted(.bar:foucs) {}
+    |                                                            ^^^^^^ Unknown pseudo-selector ':foucs'.
+
+`;
+
+exports[`invalid(5): .foo { &:hovr {} } 1`] = `
+
+  1 | .foo { &:hovr {} }
+
+`;
+
+exports[`invalid(5): .foo { &:hovr {} } 2`] = `
+
+Message:
+> 1 | .foo { &:hovr {} }
+    |         ^^^^^ Unknown pseudo-selector ':hovr'.
+
+`;
+
+exports[`invalid(6): @supports selector(:foucs) {} @scope (:hovr) to (:foucs) {} 1`] = `
+
+  1 | @supports selector(:foucs) {} @scope (:hovr) to (:foucs) {}
+
+`;
+
+exports[`invalid(6): @supports selector(:foucs) {} @scope (:hovr) to (:foucs) {} 2`] = `
+
+Message:
+> 1 | @supports selector(:foucs) {} @scope (:hovr) to (:foucs) {}
+    |                    ^^^^^^ Unknown pseudo-selector ':foucs'.
+
+`;
+
+exports[`invalid(6): @supports selector(:foucs) {} @scope (:hovr) to (:foucs) {} 3`] = `
+
+Message:
+> 1 | @supports selector(:foucs) {} @scope (:hovr) to (:foucs) {}
+    |                                       ^^^^^ Unknown pseudo-selector ':hovr'.
+
+`;
+
+exports[`invalid(6): @supports selector(:foucs) {} @scope (:hovr) to (:foucs) {} 4`] = `
+
+Message:
+> 1 | @supports selector(:foucs) {} @scope (:hovr) to (:foucs) {}
+    |                                                  ^^^^^^ Unknown pseudo-selector ':foucs'.
+
+`;
+
+exports[`invalid(7): ::hover {} 1`] = `
+
+  1 | ::hover {}
+
+`;
+
+exports[`invalid(7): ::hover {} 2`] = `
+
+Message:
+> 1 | ::hover {}
+    | ^^^^^^^ Unknown pseudo-selector '::hover'.
+
+`;
+
+exports[`invalid(8): :backdrop {} 1`] = `
+
+  1 | :backdrop {}
+
+`;
+
+exports[`invalid(8): :backdrop {} 2`] = `
+
+Message:
+> 1 | :backdrop {}
+    | ^^^^^^^^^ Unknown pseudo-selector ':backdrop'.
+
+`;
+
+exports[`invalid(9): :-hovr, ::_befor {} 1`] = `
+
+  1 | :-hovr, ::_befor {}
+
+`;
+
+exports[`invalid(9): :-hovr, ::_befor {} 2`] = `
+
+Message:
+> 1 | :-hovr, ::_befor {}
+    | ^^^^^^ Unknown pseudo-selector ':-hovr'.
+
+`;
+
+exports[`invalid(9): :-hovr, ::_befor {} 3`] = `
+
+Message:
+> 1 | :-hovr, ::_befor {}
+    |         ^^^^^^^^ Unknown pseudo-selector '::_befor'.
+
+`;

@@ -1,0 +1,329 @@
+exports[`invalid(1): @media (unknown-feature) {} 1`] = `
+
+  1 | @media (unknown-feature) {}
+
+`;
+
+exports[`invalid(1): @media (unknown-feature) {} 2`] = `
+
+Message:
+> 1 | @media (unknown-feature) {}
+    |         ^^^^^^^^^^^^^^^ Unknown media feature \`unknown-feature\`.
+
+`;
+
+exports[`invalid(10): @media (width: var(--breakpoint)) {} 1`] = `
+
+  1 | @media (width: var(--breakpoint)) {}
+
+`;
+
+exports[`invalid(10): @media (width: var(--breakpoint)) {} 2`] = `
+
+Message:
+> 1 | @media (width: var(--breakpoint)) {}
+    |                ^^^^^^^^^^^^^^^^^ Invalid value \`var(--breakpoint)\` for media feature \`width\`. Expected <length>.
+
+`;
+
+exports[`invalid(11): @media (width: calc(var(--breakpoint) + env(safe-area-inset-left))) {} 1`] = `
+
+  1 | @media (width: calc(var(--breakpoint) + env(safe-area-inset-left))) {}
+
+`;
+
+exports[`invalid(11): @media (width: calc(var(--breakpoint) + env(safe-area-inset-left))) {} 2`] = `
+
+Message:
+> 1 | @media (width: calc(var(--breakpoint) + env(safe-area-inset-left))) {}
+    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Invalid value \`calc(var(--breakpoint) + env(safe-area-inset-left))\` for media feature \`width\`. Expected <length>.
+
+`;
+
+exports[`invalid(12): @media (color: 1.5) {} 1`] = `
+
+  1 | @media (color: 1.5) {}
+
+`;
+
+exports[`invalid(12): @media (color: 1.5) {} 2`] = `
+
+Message:
+> 1 | @media (color: 1.5) {}
+    |                ^^^ Invalid value \`1.5\` for media feature \`color\`. Expected <integer>.
+
+`;
+
+exports[`invalid(13): @media (width: rgb(0 0 0)) {} 1`] = `
+
+  1 | @media (width: rgb(0 0 0)) {}
+
+`;
+
+exports[`invalid(13): @media (width: rgb(0 0 0)) {} 2`] = `
+
+Message:
+> 1 | @media (width: rgb(0 0 0)) {}
+    |                ^^^^^^^^^^ Invalid value \`rgb(0 0 0)\` for media feature \`width\`. Expected <length>.
+
+`;
+
+exports[`invalid(14): @media (min-device-pixel-ratio: 2) {} 1`] = `
+
+  1 | @media (min-device-pixel-ratio: 2) {}
+
+`;
+
+exports[`invalid(14): @media (min-device-pixel-ratio: 2) {} 2`] = `
+
+Message:
+> 1 | @media (min-device-pixel-ratio: 2) {}
+    |         ^^^^^^^^^^^^^^^^^^^^^^ Unknown media feature \`min-device-pixel-ratio\`.
+
+`;
+
+exports[`invalid(15): @media (min-widht: 10px) {} 1`] = `
+
+  1 | @media (min-widht: 10px) {}
+
+`;
+
+exports[`invalid(15): @media (min-widht: 10px) {} 2`] = `
+
+Message:
+> 1 | @media (min-widht: 10px) {}
+    |         ^^^^^^^^^ Unknown media feature \`min-widht\`.
+
+`;
+
+exports[`invalid(16): @media (aspect-ratio: 10px) {} 1`] = `
+
+  1 | @media (aspect-ratio: 10px) {}
+
+`;
+
+exports[`invalid(16): @media (aspect-ratio: 10px) {} 2`] = `
+
+Message:
+> 1 | @media (aspect-ratio: 10px) {}
+    |                       ^^^^ Invalid value \`10px\` for media feature \`aspect-ratio\`. Expected <ratio>.
+
+`;
+
+exports[`invalid(17): @media (resolution: 10px) {} 1`] = `
+
+  1 | @media (resolution: 10px) {}
+
+`;
+
+exports[`invalid(17): @media (resolution: 10px) {} 2`] = `
+
+Message:
+> 1 | @media (resolution: 10px) {}
+    |                     ^^^^ Invalid value \`10px\` for media feature \`resolution\`. Expected <resolution> | infinite.
+
+`;
+
+exports[`invalid(18): @media (grid: 2) {} 1`] = `
+
+  1 | @media (grid: 2) {}
+
+`;
+
+exports[`invalid(18): @media (grid: 2) {} 2`] = `
+
+Message:
+> 1 | @media (grid: 2) {}
+    |               ^ Invalid value \`2\` for media feature \`grid\`. Expected 0 | 1.
+
+`;
+
+exports[`invalid(19): @media (orientation: square) {} 1`] = `
+
+  1 | @media (orientation: square) {}
+
+`;
+
+exports[`invalid(19): @media (orientation: square) {} 2`] = `
+
+Message:
+> 1 | @media (orientation: square) {}
+    |                      ^^^^^^ Invalid value \`square\` for media feature \`orientation\`. Expected portrait | landscape.
+
+`;
+
+exports[`invalid(2): @media (unknown-feature: 10px) {} 1`] = `
+
+  1 | @media (unknown-feature: 10px) {}
+
+`;
+
+exports[`invalid(2): @media (unknown-feature: 10px) {} 2`] = `
+
+Message:
+> 1 | @media (unknown-feature: 10px) {}
+    |         ^^^^^^^^^^^^^^^ Unknown media feature \`unknown-feature\`.
+
+`;
+
+exports[`invalid(20): @media (display-mode: windowed) {} 1`] = `
+
+  1 | @media (display-mode: windowed) {}
+
+`;
+
+exports[`invalid(20): @media (display-mode: windowed) {} 2`] = `
+
+Message:
+> 1 | @media (display-mode: windowed) {}
+    |                       ^^^^^^^^ Invalid value \`windowed\` for media feature \`display-mode\`. Expected fullscreen | standalone | minimal-ui | browser | picture-in-picture | window-controls-overlay.
+
+`;
+
+exports[`invalid(21): @media (device-posture: flat) {} 1`] = `
+
+  1 | @media (device-posture: flat) {}
+
+`;
+
+exports[`invalid(21): @media (device-posture: flat) {} 2`] = `
+
+Message:
+> 1 | @media (device-posture: flat) {}
+    |                         ^^^^ Invalid value \`flat\` for media feature \`device-posture\`. Expected continuous | folded.
+
+`;
+
+exports[`invalid(22): @media (shape: square) {} 1`] = `
+
+  1 | @media (shape: square) {}
+
+`;
+
+exports[`invalid(22): @media (shape: square) {} 2`] = `
+
+Message:
+> 1 | @media (shape: square) {}
+    |                ^^^^^^ Invalid value \`square\` for media feature \`shape\`. Expected rect | round.
+
+`;
+
+exports[`invalid(23): @media (red < width < blue) {} 1`] = `
+
+  1 | @media (red < width < blue) {}
+
+`;
+
+exports[`invalid(23): @media (red < width < blue) {} 2`] = `
+
+Message:
+> 1 | @media (red < width < blue) {}
+    |         ^^^ Invalid value \`red\` for media feature \`width\`. Expected <length>.
+
+`;
+
+exports[`invalid(23): @media (red < width < blue) {} 3`] = `
+
+Message:
+> 1 | @media (red < width < blue) {}
+    |                       ^^^^ Invalid value \`blue\` for media feature \`width\`. Expected <length>.
+
+`;
+
+exports[`invalid(3): @media (/* before */ unknown-feature /* name */: 10px) {} 1`] = `
+
+  1 | @media (/* before */ unknown-feature /* name */: 10px) {}
+
+`;
+
+exports[`invalid(3): @media (/* before */ unknown-feature /* name */: 10px) {} 2`] = `
+
+Message:
+> 1 | @media (/* before */ unknown-feature /* name */: 10px) {}
+    |                      ^^^^^^^^^^^^^^^ Unknown media feature \`unknown-feature\`.
+
+`;
+
+exports[`invalid(4): @media (/* unknown-feature */ unknown-feature: 10px) {} 1`] = `
+
+  1 | @media (/* unknown-feature */ unknown-feature: 10px) {}
+
+`;
+
+exports[`invalid(4): @media (/* unknown-feature */ unknown-feature: 10px) {} 2`] = `
+
+Message:
+> 1 | @media (/* unknown-feature */ unknown-feature: 10px) {}
+    |                               ^^^^^^^^^^^^^^^ Unknown media feature \`unknown-feature\`.
+
+`;
+
+exports[`invalid(5): @media (unknown-feature > 10px) {} 1`] = `
+
+  1 | @media (unknown-feature > 10px) {}
+
+`;
+
+exports[`invalid(5): @media (unknown-feature > 10px) {} 2`] = `
+
+Message:
+> 1 | @media (unknown-feature > 10px) {}
+    |         ^^^^^^^^^^^^^^^ Unknown media feature \`unknown-feature\`.
+
+`;
+
+exports[`invalid(6): @media (10px < unknown-feature) {} 1`] = `
+
+  1 | @media (10px < unknown-feature) {}
+
+`;
+
+exports[`invalid(6): @media (10px < unknown-feature) {} 2`] = `
+
+Message:
+> 1 | @media (10px < unknown-feature) {}
+    |                ^^^^^^^^^^^^^^^ Unknown media feature \`unknown-feature\`.
+
+`;
+
+exports[`invalid(7): @media (light-level: normal) {} 1`] = `
+
+  1 | @media (light-level: normal) {}
+
+`;
+
+exports[`invalid(7): @media (light-level: normal) {} 2`] = `
+
+Message:
+> 1 | @media (light-level: normal) {}
+    |         ^^^^^^^^^^^ Unknown media feature \`light-level\`.
+
+`;
+
+exports[`invalid(8): @media (width: red) {} 1`] = `
+
+  1 | @media (width: red) {}
+
+`;
+
+exports[`invalid(8): @media (width: red) {} 2`] = `
+
+Message:
+> 1 | @media (width: red) {}
+    |                ^^^ Invalid value \`red\` for media feature \`width\`. Expected <length>.
+
+`;
+
+exports[`invalid(9): @media (width: 10pixels) {} 1`] = `
+
+  1 | @media (width: 10pixels) {}
+
+`;
+
+exports[`invalid(9): @media (width: 10pixels) {} 2`] = `
+
+Message:
+> 1 | @media (width: 10pixels) {}
+    |                ^^^^^^^^ Invalid value \`10pixels\` for media feature \`width\`. Expected <length>.
+
+`;

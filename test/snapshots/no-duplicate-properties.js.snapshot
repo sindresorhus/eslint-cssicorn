@@ -1,0 +1,524 @@
+exports[`invalid(1): a { color: red; color: red; } 1`] = `
+
+  1 | a { color: red; color: red; }
+
+`;
+
+exports[`invalid(1): a { color: red; color: red; } 2`] = `
+
+Message:
+> 1 | a { color: red; color: red; }
+    |                 ^^^^^ Duplicate property \`color\`. The first declaration is on line 1.
+
+Suggestion 1/1: Remove the duplicate declaration.:
+  1 | a { color: red; }
+
+`;
+
+exports[`invalid(10): a { --theme:; --theme:; } 1`] = `
+
+  1 | a { --theme:; --theme:; }
+
+`;
+
+exports[`invalid(10): a { --theme:; --theme:; } 2`] = `
+
+Message:
+> 1 | a { --theme:; --theme:; }
+    |               ^^^^^^^ Duplicate property \`--theme\`. The first declaration is on line 1.
+
+Suggestion 1/1: Remove the duplicate declaration.:
+  1 | a { --theme:; }
+
+`;
+
+exports[`invalid(11): a { color: red; color:  red ; } 1`] = `
+
+  1 | a { color: red; color:  red ; }
+
+`;
+
+exports[`invalid(11): a { color: red; color:  red ; } 2`] = `
+
+Message:
+> 1 | a { color: red; color:  red ; }
+    |                 ^^^^^ Duplicate property \`color\`. The first declaration is on line 1.
+
+Suggestion 1/1: Remove the duplicate declaration.:
+  1 | a { color: red; }
+
+`;
+
+exports[`invalid(12): a { color: rgb(0  0  0); color: rgb(0 0 0); } 1`] = `
+
+  1 | a { color: rgb(0  0  0); color: rgb(0 0 0); }
+
+`;
+
+exports[`invalid(12): a { color: rgb(0  0  0); color: rgb(0 0 0); } 2`] = `
+
+Message:
+> 1 | a { color: rgb(0  0  0); color: rgb(0 0 0); }
+    |                          ^^^^^ Duplicate property \`color\`. The first declaration is on line 1.
+
+Suggestion 1/1: Remove the duplicate declaration.:
+  1 | a { color: rgb(0  0  0); }
+
+`;
+
+exports[`invalid(13): a { --theme: red; --theme:  red ; } 1`] = `
+
+  1 | a { --theme: red; --theme:  red ; }
+
+`;
+
+exports[`invalid(13): a { --theme: red; --theme:  red ; } 2`] = `
+
+Message:
+> 1 | a { --theme: red; --theme:  red ; }
+    |                   ^^^^^^^ Duplicate property \`--theme\`. The first declaration is on line 1.
+
+Suggestion 1/1: Remove the duplicate declaration.:
+  1 | a { --theme: red; }
+
+`;
+
+exports[`invalid(14): a { color: red; background: white; color: blue; } 1`] = `
+
+  1 | a { color: red; background: white; color: blue; }
+
+`;
+
+exports[`invalid(14): a { color: red; background: white; color: blue; } 2`] = `
+
+Message:
+> 1 | a { color: red; background: white; color: blue; }
+    |                                    ^^^^^ Duplicate property \`color\`. The first declaration is on line 1.
+
+Suggestion 1/1: Remove the duplicate declaration.:
+  1 | a { color: red; background: white; }
+
+`;
+
+exports[`invalid(15): a { color: red; color: blue; color: blue; } 1`] = `
+
+  1 | a { color: red; color: blue; color: blue; }
+
+`;
+
+exports[`invalid(15): a { color: red; color: blue; color: blue; } 2`] = `
+
+Message:
+> 1 | a { color: red; color: blue; color: blue; }
+    |                              ^^^^^ Duplicate property \`color\`. The first declaration is on line 1.
+
+Suggestion 1/1: Remove the duplicate declaration.:
+  1 | a { color: red; color: blue; }
+
+`;
+
+exports[`invalid(16): a { color: red; background: white; color: blue; background: black; } 1`] = `
+
+  1 | a { color: red; background: white; color: blue; background: black; }
+
+`;
+
+exports[`invalid(16): a { color: red; background: white; color: blue; background: black; } 2`] = `
+
+Message:
+> 1 | a { color: red; background: white; color: blue; background: black; }
+    |                                    ^^^^^ Duplicate property \`color\`. The first declaration is on line 1.
+
+Suggestion 1/1: Remove the duplicate declaration.:
+  1 | a { color: red; background: white; background: black; }
+
+`;
+
+exports[`invalid(16): a { color: red; background: white; color: blue; background: black; } 3`] = `
+
+Message:
+> 1 | a { color: red; background: white; color: blue; background: black; }
+    |                                                 ^^^^^^^^^^ Duplicate property \`background\`. The first declaration is on line 1.
+
+Suggestion 1/1: Remove the duplicate declaration.:
+  1 | a { color: red; background: white; color: blue; }
+
+`;
+
+exports[`invalid(17): a { -WEBKIT-user-select: none; -webkit-USER-select: none; } 1`] = `
+
+  1 | a { -WEBKIT-user-select: none; -webkit-USER-select: none; }
+
+`;
+
+exports[`invalid(17): a { -WEBKIT-user-select: none; -webkit-USER-select: none; } 2`] = `
+
+Message:
+> 1 | a { -WEBKIT-user-select: none; -webkit-USER-select: none; }
+    |                                ^^^^^^^^^^^^^^^^^^^ Duplicate property \`-webkit-USER-select\`. The first declaration is on line 1.
+
+Suggestion 1/1: Remove the duplicate declaration.:
+  1 | a { -WEBKIT-user-select: none; }
+
+`;
+
+exports[`invalid(18): a { color: red !important; color: blue; } 1`] = `
+
+  1 | a { color: red !important; color: blue; }
+
+`;
+
+exports[`invalid(18): a { color: red !important; color: blue; } 2`] = `
+
+Message:
+> 1 | a { color: red !important; color: blue; }
+    |                            ^^^^^ Duplicate property \`color\`. The first declaration is on line 1.
+
+Suggestion 1/1: Remove the duplicate declaration.:
+  1 | a { color: red !important; }
+
+`;
+
+exports[`invalid(19): a { color: red; color: blue !important; } 1`] = `
+
+  1 | a { color: red; color: blue !important; }
+
+`;
+
+exports[`invalid(19): a { color: red; color: blue !important; } 2`] = `
+
+Message:
+> 1 | a { color: red; color: blue !important; }
+    |                 ^^^^^ Duplicate property \`color\`. The first declaration is on line 1.
+
+Suggestion 1/1: Remove the duplicate declaration.:
+  1 | a { color: red; }
+
+`;
+
+exports[`invalid(2): a { Color: red; cOlOr: red; } 1`] = `
+
+  1 | a { Color: red; cOlOr: red; }
+
+`;
+
+exports[`invalid(2): a { Color: red; cOlOr: red; } 2`] = `
+
+Message:
+> 1 | a { Color: red; cOlOr: red; }
+    |                 ^^^^^ Duplicate property \`cOlOr\`. The first declaration is on line 1.
+
+Suggestion 1/1: Remove the duplicate declaration.:
+  1 | a { Color: red; }
+
+`;
+
+exports[`invalid(20): a { color: red !important; color: red !important; } 1`] = `
+
+  1 | a { color: red !important; color: red !important; }
+
+`;
+
+exports[`invalid(20): a { color: red !important; color: red !important; } 2`] = `
+
+Message:
+> 1 | a { color: red !important; color: red !important; }
+    |                            ^^^^^ Duplicate property \`color\`. The first declaration is on line 1.
+
+Suggestion 1/1: Remove the duplicate declaration.:
+  1 | a { color: red !important; }
+
+`;
+
+exports[`invalid(21): @keyframes pulse { from { opacity: 0; opacity: 0; } } 1`] = `
+
+  1 | @keyframes pulse { from { opacity: 0; opacity: 0; } }
+
+`;
+
+exports[`invalid(21): @keyframes pulse { from { opacity: 0; opacity: 0; } } 2`] = `
+
+Message:
+> 1 | @keyframes pulse { from { opacity: 0; opacity: 0; } }
+    |                                       ^^^^^^^ Duplicate property \`opacity\`. The first declaration is on line 1.
+
+Suggestion 1/1: Remove the duplicate declaration.:
+  1 | @keyframes pulse { from { opacity: 0; } }
+
+`;
+
+exports[`invalid(22): @font-face { src: url(example.woff2); font-display: swap; SRC: url(example.woff); } 1`] = `
+
+  1 | @font-face { src: url(example.woff2); font-display: swap; SRC: url(example.woff); }
+
+`;
+
+exports[`invalid(22): @font-face { src: url(example.woff2); font-display: swap; SRC: url(example.woff); } 2`] = `
+
+Message:
+> 1 | @font-face { src: url(example.woff2); font-display: swap; SRC: url(example.woff); }
+    |                                                           ^^^ Duplicate property \`SRC\`. The first declaration is on line 1.
+
+Suggestion 1/1: Remove the duplicate declaration.:
+  1 | @font-face { src: url(example.woff2); font-display: swap; }
+
+`;
+
+exports[`invalid(23): @property --theme { syntax: \"*\"; syntax: \"*\"; inherits: false; } 1`] = `
+
+  1 | @property --theme { syntax: "*"; syntax: "*"; inherits: false; }
+
+`;
+
+exports[`invalid(23): @property --theme { syntax: \"*\"; syntax: \"*\"; inherits: false; } 2`] = `
+
+Message:
+> 1 | @property --theme { syntax: "*"; syntax: "*"; inherits: false; }
+    |                                  ^^^^^^ Duplicate property \`syntax\`. The first declaration is on line 1.
+
+Suggestion 1/1: Remove the duplicate declaration.:
+  1 | @property --theme { syntax: "*"; inherits: false; }
+
+`;
+
+exports[`invalid(24): @counter-style thumbs { symbols: \"👍\"; symbols: \"👍\"; } 1`] = `
+
+  1 | @counter-style thumbs { symbols: "👍"; symbols: "👍"; }
+
+`;
+
+exports[`invalid(24): @counter-style thumbs { symbols: \"👍\"; symbols: \"👍\"; } 2`] = `
+
+Message:
+> 1 | @counter-style thumbs { symbols: "👍"; symbols: "👍"; }
+    |                                        ^^^^^^^ Duplicate property \`symbols\`. The first declaration is on line 1.
+
+Suggestion 1/1: Remove the duplicate declaration.:
+  1 | @counter-style thumbs { symbols: "👍"; }
+
+`;
+
+exports[`invalid(25): @page { margin: 1in; margin: 1in; @top-left { content: \"A\"; content: \"A\"; } } 1`] = `
+
+  1 | @page { margin: 1in; margin: 1in; @top-left { content: "A"; content: "A"; } }
+
+`;
+
+exports[`invalid(25): @page { margin: 1in; margin: 1in; @top-left { content: \"A\"; content: \"A\"; } } 2`] = `
+
+Message:
+> 1 | @page { margin: 1in; margin: 1in; @top-left { content: "A"; content: "A"; } }
+    |                      ^^^^^^ Duplicate property \`margin\`. The first declaration is on line 1.
+
+Suggestion 1/1: Remove the duplicate declaration.:
+  1 | @page { margin: 1in; @top-left { content: "A"; content: "A"; } }
+
+`;
+
+exports[`invalid(25): @page { margin: 1in; margin: 1in; @top-left { content: \"A\"; content: \"A\"; } } 3`] = `
+
+Message:
+> 1 | @page { margin: 1in; margin: 1in; @top-left { content: "A"; content: "A"; } }
+    |                                                             ^^^^^^^ Duplicate property \`content\`. The first declaration is on line 1.
+
+Suggestion 1/1: Remove the duplicate declaration.:
+  1 | @page { margin: 1in; margin: 1in; @top-left { content: "A"; } }
+
+`;
+
+exports[`invalid(26): a {\n\tcolor: red;\n\t@media (width > 40rem) {\n\t\tcolor: blue;\n\t\tcolor: blue;\n\t}\n\tcolor: black;\n} 1`] = `
+
+  1 | a {
+  2 | 	color: red;
+  3 | 	@media (width > 40rem) {
+  4 | 		color: blue;
+  5 | 		color: blue;
+  6 | 	}
+  7 | 	color: black;
+  8 | }
+
+`;
+
+exports[`invalid(26): a {\n\tcolor: red;\n\t@media (width > 40rem) {\n\t\tcolor: blue;\n\t\tcolor: blue;\n\t}\n\tcolor: black;\n} 2`] = `
+
+Message:
+  1 | a {
+  2 | 	color: red;
+  3 | 	@media (width > 40rem) {
+  4 | 		color: blue;
+> 5 | 		color: blue;
+    | 		^^^^^ Duplicate property \`color\`. The first declaration is on line 4.
+  6 | 	}
+  7 | 	color: black;
+  8 | }
+
+Suggestion 1/1: Remove the duplicate declaration.:
+  1 | a {
+  2 | 	color: red;
+  3 | 	@media (width > 40rem) {
+  4 | 		color: blue;
+  5 | 	}
+  6 | 	color: black;
+  7 | }
+
+`;
+
+exports[`invalid(26): a {\n\tcolor: red;\n\t@media (width > 40rem) {\n\t\tcolor: blue;\n\t\tcolor: blue;\n\t}\n\tcolor: black;\n} 3`] = `
+
+Message:
+  1 | a {
+  2 | 	color: red;
+  3 | 	@media (width > 40rem) {
+  4 | 		color: blue;
+  5 | 		color: blue;
+  6 | 	}
+> 7 | 	color: black;
+    | 	^^^^^ Duplicate property \`color\`. The first declaration is on line 2.
+  8 | }
+
+Suggestion 1/1: Remove the duplicate declaration.:
+  1 | a {
+  2 | 	color: red;
+  3 | 	@media (width > 40rem) {
+  4 | 		color: blue;
+  5 | 		color: blue;
+  6 | 	}
+  7 | }
+
+`;
+
+exports[`invalid(27): a { color: red; /* keep */ color: red; } 1`] = `
+
+  1 | a { color: red; /* keep */ color: red; }
+
+`;
+
+exports[`invalid(27): a { color: red; /* keep */ color: red; } 2`] = `
+
+Message:
+> 1 | a { color: red; /* keep */ color: red; }
+    |                            ^^^^^ Duplicate property \`color\`. The first declaration is on line 1.
+
+Suggestion 1/1: Remove the duplicate declaration.:
+  1 | a { color: red; /* keep */ }
+
+`;
+
+exports[`invalid(3): a { \\43 olor: red; color: red; } 1`] = `
+
+  1 | a { \\43 olor: red; color: red; }
+
+`;
+
+exports[`invalid(3): a { \\43 olor: red; color: red; } 2`] = `
+
+Message:
+> 1 | a { \\43 olor: red; color: red; }
+    |                    ^^^^^ Duplicate property \`color\`. The first declaration is on line 1.
+
+Suggestion 1/1: Remove the duplicate declaration.:
+  1 | a { \\43 olor: red; }
+
+`;
+
+exports[`invalid(4): a { --theme: red; --theme: red; } 1`] = `
+
+  1 | a { --theme: red; --theme: red; }
+
+`;
+
+exports[`invalid(4): a { --theme: red; --theme: red; } 2`] = `
+
+Message:
+> 1 | a { --theme: red; --theme: red; }
+    |                   ^^^^^^^ Duplicate property \`--theme\`. The first declaration is on line 1.
+
+Suggestion 1/1: Remove the duplicate declaration.:
+  1 | a { --theme: red; }
+
+`;
+
+exports[`invalid(5): a { --theme: red; --theme: blue; } 1`] = `
+
+  1 | a { --theme: red; --theme: blue; }
+
+`;
+
+exports[`invalid(5): a { --theme: red; --theme: blue; } 2`] = `
+
+Message:
+> 1 | a { --theme: red; --theme: blue; }
+    |                   ^^^^^^^ Duplicate property \`--theme\`. The first declaration is on line 1.
+
+Suggestion 1/1: Remove the duplicate declaration.:
+  1 | a { --theme: red; }
+
+`;
+
+exports[`invalid(6): a { --foo: red; --f\\6f o: red; } 1`] = `
+
+  1 | a { --foo: red; --f\\6f o: red; }
+
+`;
+
+exports[`invalid(6): a { --foo: red; --f\\6f o: red; } 2`] = `
+
+Message:
+> 1 | a { --foo: red; --f\\6f o: red; }
+    |                 ^^^^^^^^ Duplicate property \`--f\\6f o\`. The first declaration is on line 1.
+
+Suggestion 1/1: Remove the duplicate declaration.:
+  1 | a { --foo: red; }
+
+`;
+
+exports[`invalid(7): a { --foo: red; \\2d\\2d foo: red; } 1`] = `
+
+  1 | a { --foo: red; \\2d\\2d foo: red; }
+
+`;
+
+exports[`invalid(7): a { --foo: red; \\2d\\2d foo: red; } 2`] = `
+
+Message:
+> 1 | a { --foo: red; \\2d\\2d foo: red; }
+    |                 ^^^^^^^^^^ Duplicate property \`\\2d\\2d foo\`. The first declaration is on line 1.
+
+Suggestion 1/1: Remove the duplicate declaration.:
+  1 | a { --foo: red; }
+
+`;
+
+exports[`invalid(8): a { --💩: red; --\\1f4a9: red; } 1`] = `
+
+  1 | a { --💩: red; --\\1f4a9: red; }
+
+`;
+
+exports[`invalid(8): a { --💩: red; --\\1f4a9: red; } 2`] = `
+
+Message:
+> 1 | a { --💩: red; --\\1f4a9: red; }
+    |                ^^^^^^^^ Duplicate property \`--\\1f4a9\`. The first declaration is on line 1.
+
+Suggestion 1/1: Remove the duplicate declaration.:
+  1 | a { --💩: red; }
+
+`;
+
+exports[`invalid(9): a { a\\0 b: one; a�b: one; } 1`] = `
+
+  1 | a { a\\0 b: one; a�b: one; }
+
+`;
+
+exports[`invalid(9): a { a\\0 b: one; a�b: one; } 2`] = `
+
+Message:
+> 1 | a { a\\0 b: one; a�b: one; }
+    |                 ^^^ Duplicate property \`a�b\`. The first declaration is on line 1.
+
+Suggestion 1/1: Remove the duplicate declaration.:
+  1 | a { a\\0 b: one; }
+
+`;

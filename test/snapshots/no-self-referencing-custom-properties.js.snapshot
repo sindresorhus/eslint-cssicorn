@@ -1,0 +1,365 @@
+exports[`invalid(1): a { --spacing: var(--spacing); } 1`] = `
+
+  1 | a { --spacing: var(--spacing); }
+
+`;
+
+exports[`invalid(1): a { --spacing: var(--spacing); } 2`] = `
+
+Message:
+> 1 | a { --spacing: var(--spacing); }
+    |                    ^^^^^^^^^ Custom property \`--spacing\` must not reference itself.
+
+`;
+
+exports[`invalid(10): a { --spacing: VAR(--spacing); } 1`] = `
+
+  1 | a { --spacing: VAR(--spacing); }
+
+`;
+
+exports[`invalid(10): a { --spacing: VAR(--spacing); } 2`] = `
+
+Message:
+> 1 | a { --spacing: VAR(--spacing); }
+    |                    ^^^^^^^^^ Custom property \`--spacing\` must not reference itself.
+
+`;
+
+exports[`invalid(11): a { --spacing: var(/* before */ --spacing /* after */, 1px); } 1`] = `
+
+  1 | a { --spacing: var(/* before */ --spacing /* after */, 1px); }
+
+`;
+
+exports[`invalid(11): a { --spacing: var(/* before */ --spacing /* after */, 1px); } 2`] = `
+
+Message:
+> 1 | a { --spacing: var(/* before */ --spacing /* after */, 1px); }
+    |                                 ^^^^^^^^^ Custom property \`--spacing\` must not reference itself.
+
+`;
+
+exports[`invalid(12): a { --spacing: var(--spacing) !important; } 1`] = `
+
+  1 | a { --spacing: var(--spacing) !important; }
+
+`;
+
+exports[`invalid(12): a { --spacing: var(--spacing) !important; } 2`] = `
+
+Message:
+> 1 | a { --spacing: var(--spacing) !important; }
+    |                    ^^^^^^^^^ Custom property \`--spacing\` must not reference itself.
+
+`;
+
+exports[`invalid(13): a { & > b { --spacing: var(--spacing); } } 1`] = `
+
+  1 | a { & > b { --spacing: var(--spacing); } }
+
+`;
+
+exports[`invalid(13): a { & > b { --spacing: var(--spacing); } } 2`] = `
+
+Message:
+> 1 | a { & > b { --spacing: var(--spacing); } }
+    |                            ^^^^^^^^^ Custom property \`--spacing\` must not reference itself.
+
+`;
+
+exports[`invalid(14): @media (width > 1px) { a { --spacing: var(--spacing); } } 1`] = `
+
+  1 | @media (width > 1px) { a { --spacing: var(--spacing); } }
+
+`;
+
+exports[`invalid(14): @media (width > 1px) { a { --spacing: var(--spacing); } } 2`] = `
+
+Message:
+> 1 | @media (width > 1px) { a { --spacing: var(--spacing); } }
+    |                                           ^^^^^^^^^ Custom property \`--spacing\` must not reference itself.
+
+`;
+
+exports[`invalid(15): @keyframes grow { to { --spacing: var(--spacing); } } 1`] = `
+
+  1 | @keyframes grow { to { --spacing: var(--spacing); } }
+
+`;
+
+exports[`invalid(15): @keyframes grow { to { --spacing: var(--spacing); } } 2`] = `
+
+Message:
+> 1 | @keyframes grow { to { --spacing: var(--spacing); } }
+    |                                       ^^^^^^^^^ Custom property \`--spacing\` must not reference itself.
+
+`;
+
+exports[`invalid(16): @supports (--spacing: var(--spacing)) { a { --spacing: var(--spacing); } } 1`] = `
+
+  1 | @supports (--spacing: var(--spacing)) { a { --spacing: var(--spacing); } }
+
+`;
+
+exports[`invalid(16): @supports (--spacing: var(--spacing)) { a { --spacing: var(--spacing); } } 2`] = `
+
+Message:
+> 1 | @supports (--spacing: var(--spacing)) { a { --spacing: var(--spacing); } }
+    |                                                            ^^^^^^^^^ Custom property \`--spacing\` must not reference itself.
+
+`;
+
+exports[`invalid(17): @container style(--spacing: var(--spacing)) { a { --spacing: var(--spacing); } } 1`] = `
+
+  1 | @container style(--spacing: var(--spacing)) { a { --spacing: var(--spacing); } }
+
+`;
+
+exports[`invalid(17): @container style(--spacing: var(--spacing)) { a { --spacing: var(--spacing); } } 2`] = `
+
+Message:
+> 1 | @container style(--spacing: var(--spacing)) { a { --spacing: var(--spacing); } }
+    |                                                                  ^^^^^^^^^ Custom property \`--spacing\` must not reference itself.
+
+`;
+
+exports[`invalid(18): a { --spacing: if(style(--enabled: yes): 1px; else: var(--spacing)); } 1`] = `
+
+  1 | a { --spacing: if(style(--enabled: yes): 1px; else: var(--spacing)); }
+
+`;
+
+exports[`invalid(18): a { --spacing: if(style(--enabled: yes): 1px; else: var(--spacing)); } 2`] = `
+
+Message:
+> 1 | a { --spacing: if(style(--enabled: yes): 1px; else: var(--spacing)); }
+    |                                                         ^^^^^^^^^ Custom property \`--spacing\` must not reference itself.
+
+`;
+
+exports[`invalid(19): a { --spacing: {value: [var(--spacing)]}; } 1`] = `
+
+  1 | a { --spacing: {value: [var(--spacing)]}; }
+
+`;
+
+exports[`invalid(19): a { --spacing: {value: [var(--spacing)]}; } 2`] = `
+
+Message:
+> 1 | a { --spacing: {value: [var(--spacing)]}; }
+    |                             ^^^^^^^^^ Custom property \`--spacing\` must not reference itself.
+
+`;
+
+exports[`invalid(2): a { --spacing: calc(var(--spacing) + 1px); } 1`] = `
+
+  1 | a { --spacing: calc(var(--spacing) + 1px); }
+
+`;
+
+exports[`invalid(2): a { --spacing: calc(var(--spacing) + 1px); } 2`] = `
+
+Message:
+> 1 | a { --spacing: calc(var(--spacing) + 1px); }
+    |                         ^^^^^^^^^ Custom property \`--spacing\` must not reference itself.
+
+`;
+
+exports[`invalid(20): a { --spacing: v\\61r(--spacing); } 1`] = `
+
+  1 | a { --spacing: v\\61r(--spacing); }
+
+`;
+
+exports[`invalid(20): a { --spacing: v\\61r(--spacing); } 2`] = `
+
+Message:
+> 1 | a { --spacing: v\\61r(--spacing); }
+    |                      ^^^^^^^^^ Custom property \`--spacing\` must not reference itself.
+
+`;
+
+exports[`invalid(21): a { --sp\\61 cing: var(--spacing); } 1`] = `
+
+  1 | a { --sp\\61 cing: var(--spacing); }
+
+`;
+
+exports[`invalid(21): a { --sp\\61 cing: var(--spacing); } 2`] = `
+
+Message:
+> 1 | a { --sp\\61 cing: var(--spacing); }
+    |                       ^^^^^^^^^ Custom property \`--spacing\` must not reference itself.
+
+`;
+
+exports[`invalid(22): a { --spacing: var(--sp\\61 cing); } 1`] = `
+
+  1 | a { --spacing: var(--sp\\61 cing); }
+
+`;
+
+exports[`invalid(22): a { --spacing: var(--sp\\61 cing); } 2`] = `
+
+Message:
+> 1 | a { --spacing: var(--sp\\61 cing); }
+    |                    ^^^^^^^^^^^^ Custom property \`--spacing\` must not reference itself.
+
+`;
+
+exports[`invalid(23): a { \\2d\\2d spacing: var(--spacing); } 1`] = `
+
+  1 | a { \\2d\\2d spacing: var(--spacing); }
+
+`;
+
+exports[`invalid(23): a { \\2d\\2d spacing: var(--spacing); } 2`] = `
+
+Message:
+> 1 | a { \\2d\\2d spacing: var(--spacing); }
+    |                         ^^^^^^^^^ Custom property \`--spacing\` must not reference itself.
+
+`;
+
+exports[`invalid(24): a { --間隔: var(--間隔); } 1`] = `
+
+  1 | a { --間隔: var(--間隔); }
+
+`;
+
+exports[`invalid(24): a { --間隔: var(--間隔); } 2`] = `
+
+Message:
+> 1 | a { --間隔: var(--間隔); }
+    |               ^^^^ Custom property \`--間隔\` must not reference itself.
+
+`;
+
+exports[`invalid(25): a {\n\t--spacing: calc(\n\t\tvar(--spacing) + 1px\n\t);\n} 1`] = `
+
+  1 | a {
+  2 | 	--spacing: calc(
+  3 | 		var(--spacing) + 1px
+  4 | 	);
+  5 | }
+
+`;
+
+exports[`invalid(25): a {\n\t--spacing: calc(\n\t\tvar(--spacing) + 1px\n\t);\n} 2`] = `
+
+Message:
+  1 | a {
+  2 | 	--spacing: calc(
+> 3 | 		var(--spacing) + 1px
+    | 		    ^^^^^^^^^ Custom property \`--spacing\` must not reference itself.
+  4 | 	);
+  5 | }
+
+`;
+
+exports[`invalid(3): a { --spacing: var(--spacing, 1px); } 1`] = `
+
+  1 | a { --spacing: var(--spacing, 1px); }
+
+`;
+
+exports[`invalid(3): a { --spacing: var(--spacing, 1px); } 2`] = `
+
+Message:
+> 1 | a { --spacing: var(--spacing, 1px); }
+    |                    ^^^^^^^^^ Custom property \`--spacing\` must not reference itself.
+
+`;
+
+exports[`invalid(4): a { --spacing: var(--spacing,); } 1`] = `
+
+  1 | a { --spacing: var(--spacing,); }
+
+`;
+
+exports[`invalid(4): a { --spacing: var(--spacing,); } 2`] = `
+
+Message:
+> 1 | a { --spacing: var(--spacing,); }
+    |                    ^^^^^^^^^ Custom property \`--spacing\` must not reference itself.
+
+`;
+
+exports[`invalid(5): a { --spacing: var(--other, var(--spacing)); } 1`] = `
+
+  1 | a { --spacing: var(--other, var(--spacing)); }
+
+`;
+
+exports[`invalid(5): a { --spacing: var(--other, var(--spacing)); } 2`] = `
+
+Message:
+> 1 | a { --spacing: var(--other, var(--spacing)); }
+    |                                 ^^^^^^^^^ Custom property \`--spacing\` must not reference itself.
+
+`;
+
+exports[`invalid(6): a { --other: 1px; --spacing: var(--other, var(--spacing)); } 1`] = `
+
+  1 | a { --other: 1px; --spacing: var(--other, var(--spacing)); }
+
+`;
+
+exports[`invalid(6): a { --other: 1px; --spacing: var(--other, var(--spacing)); } 2`] = `
+
+Message:
+> 1 | a { --other: 1px; --spacing: var(--other, var(--spacing)); }
+    |                                               ^^^^^^^^^ Custom property \`--spacing\` must not reference itself.
+
+`;
+
+exports[`invalid(7): a { --spacing: var(--other, calc(var(--base, var(--spacing)) + 1px)); } 1`] = `
+
+  1 | a { --spacing: var(--other, calc(var(--base, var(--spacing)) + 1px)); }
+
+`;
+
+exports[`invalid(7): a { --spacing: var(--other, calc(var(--base, var(--spacing)) + 1px)); } 2`] = `
+
+Message:
+> 1 | a { --spacing: var(--other, calc(var(--base, var(--spacing)) + 1px)); }
+    |                                                  ^^^^^^^^^ Custom property \`--spacing\` must not reference itself.
+
+`;
+
+exports[`invalid(8): a { --spacing: var(--spacing) var(--spacing, var(--spacing)); } 1`] = `
+
+  1 | a { --spacing: var(--spacing) var(--spacing, var(--spacing)); }
+
+`;
+
+exports[`invalid(8): a { --spacing: var(--spacing) var(--spacing, var(--spacing)); } 2`] = `
+
+Message:
+> 1 | a { --spacing: var(--spacing) var(--spacing, var(--spacing)); }
+    |                    ^^^^^^^^^ Custom property \`--spacing\` must not reference itself.
+
+`;
+
+exports[`invalid(9): a { --spacing: var(--spacing); --color: var(--color); } 1`] = `
+
+  1 | a { --spacing: var(--spacing); --color: var(--color); }
+
+`;
+
+exports[`invalid(9): a { --spacing: var(--spacing); --color: var(--color); } 2`] = `
+
+Message:
+> 1 | a { --spacing: var(--spacing); --color: var(--color); }
+    |                    ^^^^^^^^^ Custom property \`--spacing\` must not reference itself.
+
+`;
+
+exports[`invalid(9): a { --spacing: var(--spacing); --color: var(--color); } 3`] = `
+
+Message:
+> 1 | a { --spacing: var(--spacing); --color: var(--color); }
+    |                                             ^^^^^^^ Custom property \`--color\` must not reference itself.
+
+`;

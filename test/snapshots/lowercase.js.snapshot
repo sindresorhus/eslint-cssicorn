@@ -1,0 +1,1398 @@
+exports[`invalid(1): @MEDIA (MIN-WIDTH: 10PX) and (10EM < HEIGHT < 20REM) {\n\t.thing:HOVER::BEFORE {\n\t\tCOLOR: RGB(0 0 0 / 50%);\n\t\tborder: 1PX SOLID #AbCd;\n\t\tbackground: URL(\"#ABC\") NO-REPEAT;\n\t}\n} 1`] = `
+
+  1 | @MEDIA (MIN-WIDTH: 10PX) and (10EM < HEIGHT < 20REM) {
+  2 | 	.thing:HOVER::BEFORE {
+  3 | 		COLOR: RGB(0 0 0 / 50%);
+  4 | 		border: 1PX SOLID #AbCd;
+  5 | 		background: URL("#ABC") NO-REPEAT;
+  6 | 	}
+  7 | }
+
+`;
+
+exports[`invalid(1): @MEDIA (MIN-WIDTH: 10PX) and (10EM < HEIGHT < 20REM) {\n\t.thing:HOVER::BEFORE {\n\t\tCOLOR: RGB(0 0 0 / 50%);\n\t\tborder: 1PX SOLID #AbCd;\n\t\tbackground: URL(\"#ABC\") NO-REPEAT;\n\t}\n} 10`] = `
+
+Message:
+  1 | @MEDIA (MIN-WIDTH: 10PX) and (10EM < HEIGHT < 20REM) {
+  2 | 	.thing:HOVER::BEFORE {
+> 3 | 		COLOR: RGB(0 0 0 / 50%);
+    | 		^^^^^ Use lowercase for CSS property \`COLOR\`.
+  4 | 		border: 1PX SOLID #AbCd;
+  5 | 		background: URL("#ABC") NO-REPEAT;
+  6 | 	}
+  7 | }
+
+Output:
+  1 | @MEDIA (MIN-WIDTH: 10PX) and (10EM < HEIGHT < 20REM) {
+  2 | 	.thing:HOVER::BEFORE {
+  3 | 		color: RGB(0 0 0 / 50%);
+  4 | 		border: 1PX SOLID #AbCd;
+  5 | 		background: URL("#ABC") NO-REPEAT;
+  6 | 	}
+  7 | }
+
+`;
+
+exports[`invalid(1): @MEDIA (MIN-WIDTH: 10PX) and (10EM < HEIGHT < 20REM) {\n\t.thing:HOVER::BEFORE {\n\t\tCOLOR: RGB(0 0 0 / 50%);\n\t\tborder: 1PX SOLID #AbCd;\n\t\tbackground: URL(\"#ABC\") NO-REPEAT;\n\t}\n} 11`] = `
+
+Message:
+  1 | @MEDIA (MIN-WIDTH: 10PX) and (10EM < HEIGHT < 20REM) {
+  2 | 	.thing:HOVER::BEFORE {
+> 3 | 		COLOR: RGB(0 0 0 / 50%);
+    | 		       ^^^ Use lowercase for CSS function name \`RGB\`.
+  4 | 		border: 1PX SOLID #AbCd;
+  5 | 		background: URL("#ABC") NO-REPEAT;
+  6 | 	}
+  7 | }
+
+Output:
+  1 | @MEDIA (MIN-WIDTH: 10PX) and (10EM < HEIGHT < 20REM) {
+  2 | 	.thing:HOVER::BEFORE {
+  3 | 		COLOR: rgb(0 0 0 / 50%);
+  4 | 		border: 1PX SOLID #AbCd;
+  5 | 		background: URL("#ABC") NO-REPEAT;
+  6 | 	}
+  7 | }
+
+`;
+
+exports[`invalid(1): @MEDIA (MIN-WIDTH: 10PX) and (10EM < HEIGHT < 20REM) {\n\t.thing:HOVER::BEFORE {\n\t\tCOLOR: RGB(0 0 0 / 50%);\n\t\tborder: 1PX SOLID #AbCd;\n\t\tbackground: URL(\"#ABC\") NO-REPEAT;\n\t}\n} 12`] = `
+
+Message:
+  1 | @MEDIA (MIN-WIDTH: 10PX) and (10EM < HEIGHT < 20REM) {
+  2 | 	.thing:HOVER::BEFORE {
+  3 | 		COLOR: RGB(0 0 0 / 50%);
+> 4 | 		border: 1PX SOLID #AbCd;
+    | 		         ^^ Use lowercase for CSS unit \`PX\`.
+  5 | 		background: URL("#ABC") NO-REPEAT;
+  6 | 	}
+  7 | }
+
+Output:
+  1 | @MEDIA (MIN-WIDTH: 10PX) and (10EM < HEIGHT < 20REM) {
+  2 | 	.thing:HOVER::BEFORE {
+  3 | 		COLOR: RGB(0 0 0 / 50%);
+  4 | 		border: 1px SOLID #AbCd;
+  5 | 		background: URL("#ABC") NO-REPEAT;
+  6 | 	}
+  7 | }
+
+`;
+
+exports[`invalid(1): @MEDIA (MIN-WIDTH: 10PX) and (10EM < HEIGHT < 20REM) {\n\t.thing:HOVER::BEFORE {\n\t\tCOLOR: RGB(0 0 0 / 50%);\n\t\tborder: 1PX SOLID #AbCd;\n\t\tbackground: URL(\"#ABC\") NO-REPEAT;\n\t}\n} 13`] = `
+
+Message:
+  1 | @MEDIA (MIN-WIDTH: 10PX) and (10EM < HEIGHT < 20REM) {
+  2 | 	.thing:HOVER::BEFORE {
+  3 | 		COLOR: RGB(0 0 0 / 50%);
+> 4 | 		border: 1PX SOLID #AbCd;
+    | 		            ^^^^^ Use lowercase for CSS value keyword \`SOLID\`.
+  5 | 		background: URL("#ABC") NO-REPEAT;
+  6 | 	}
+  7 | }
+
+Output:
+  1 | @MEDIA (MIN-WIDTH: 10PX) and (10EM < HEIGHT < 20REM) {
+  2 | 	.thing:HOVER::BEFORE {
+  3 | 		COLOR: RGB(0 0 0 / 50%);
+  4 | 		border: 1PX solid #AbCd;
+  5 | 		background: URL("#ABC") NO-REPEAT;
+  6 | 	}
+  7 | }
+
+`;
+
+exports[`invalid(1): @MEDIA (MIN-WIDTH: 10PX) and (10EM < HEIGHT < 20REM) {\n\t.thing:HOVER::BEFORE {\n\t\tCOLOR: RGB(0 0 0 / 50%);\n\t\tborder: 1PX SOLID #AbCd;\n\t\tbackground: URL(\"#ABC\") NO-REPEAT;\n\t}\n} 14`] = `
+
+Message:
+  1 | @MEDIA (MIN-WIDTH: 10PX) and (10EM < HEIGHT < 20REM) {
+  2 | 	.thing:HOVER::BEFORE {
+  3 | 		COLOR: RGB(0 0 0 / 50%);
+> 4 | 		border: 1PX SOLID #AbCd;
+    | 		                   ^^^^ Use lowercase for CSS hexadecimal color \`#AbCd\`.
+  5 | 		background: URL("#ABC") NO-REPEAT;
+  6 | 	}
+  7 | }
+
+Output:
+  1 | @MEDIA (MIN-WIDTH: 10PX) and (10EM < HEIGHT < 20REM) {
+  2 | 	.thing:HOVER::BEFORE {
+  3 | 		COLOR: RGB(0 0 0 / 50%);
+  4 | 		border: 1PX SOLID #abcd;
+  5 | 		background: URL("#ABC") NO-REPEAT;
+  6 | 	}
+  7 | }
+
+`;
+
+exports[`invalid(1): @MEDIA (MIN-WIDTH: 10PX) and (10EM < HEIGHT < 20REM) {\n\t.thing:HOVER::BEFORE {\n\t\tCOLOR: RGB(0 0 0 / 50%);\n\t\tborder: 1PX SOLID #AbCd;\n\t\tbackground: URL(\"#ABC\") NO-REPEAT;\n\t}\n} 15`] = `
+
+Message:
+  1 | @MEDIA (MIN-WIDTH: 10PX) and (10EM < HEIGHT < 20REM) {
+  2 | 	.thing:HOVER::BEFORE {
+  3 | 		COLOR: RGB(0 0 0 / 50%);
+  4 | 		border: 1PX SOLID #AbCd;
+> 5 | 		background: URL("#ABC") NO-REPEAT;
+    | 		            ^^^ Use lowercase for CSS function name \`URL\`.
+  6 | 	}
+  7 | }
+
+Output:
+  1 | @MEDIA (MIN-WIDTH: 10PX) and (10EM < HEIGHT < 20REM) {
+  2 | 	.thing:HOVER::BEFORE {
+  3 | 		COLOR: RGB(0 0 0 / 50%);
+  4 | 		border: 1PX SOLID #AbCd;
+  5 | 		background: url("#ABC") NO-REPEAT;
+  6 | 	}
+  7 | }
+
+`;
+
+exports[`invalid(1): @MEDIA (MIN-WIDTH: 10PX) and (10EM < HEIGHT < 20REM) {\n\t.thing:HOVER::BEFORE {\n\t\tCOLOR: RGB(0 0 0 / 50%);\n\t\tborder: 1PX SOLID #AbCd;\n\t\tbackground: URL(\"#ABC\") NO-REPEAT;\n\t}\n} 16`] = `
+
+Message:
+  1 | @MEDIA (MIN-WIDTH: 10PX) and (10EM < HEIGHT < 20REM) {
+  2 | 	.thing:HOVER::BEFORE {
+  3 | 		COLOR: RGB(0 0 0 / 50%);
+  4 | 		border: 1PX SOLID #AbCd;
+> 5 | 		background: URL("#ABC") NO-REPEAT;
+    | 		                        ^^^^^^^^^ Use lowercase for CSS value keyword \`NO-REPEAT\`.
+  6 | 	}
+  7 | }
+
+Output:
+  1 | @MEDIA (MIN-WIDTH: 10PX) and (10EM < HEIGHT < 20REM) {
+  2 | 	.thing:HOVER::BEFORE {
+  3 | 		COLOR: RGB(0 0 0 / 50%);
+  4 | 		border: 1PX SOLID #AbCd;
+  5 | 		background: URL("#ABC") no-repeat;
+  6 | 	}
+  7 | }
+
+`;
+
+exports[`invalid(1): @MEDIA (MIN-WIDTH: 10PX) and (10EM < HEIGHT < 20REM) {\n\t.thing:HOVER::BEFORE {\n\t\tCOLOR: RGB(0 0 0 / 50%);\n\t\tborder: 1PX SOLID #AbCd;\n\t\tbackground: URL(\"#ABC\") NO-REPEAT;\n\t}\n} 2`] = `
+
+Message:
+> 1 | @MEDIA (MIN-WIDTH: 10PX) and (10EM < HEIGHT < 20REM) {
+    |  ^^^^^ Use lowercase for CSS at-rule name \`MEDIA\`.
+  2 | 	.thing:HOVER::BEFORE {
+  3 | 		COLOR: RGB(0 0 0 / 50%);
+  4 | 		border: 1PX SOLID #AbCd;
+  5 | 		background: URL("#ABC") NO-REPEAT;
+  6 | 	}
+  7 | }
+
+Output:
+  1 | @media (MIN-WIDTH: 10PX) and (10EM < HEIGHT < 20REM) {
+  2 | 	.thing:HOVER::BEFORE {
+  3 | 		COLOR: RGB(0 0 0 / 50%);
+  4 | 		border: 1PX SOLID #AbCd;
+  5 | 		background: URL("#ABC") NO-REPEAT;
+  6 | 	}
+  7 | }
+
+`;
+
+exports[`invalid(1): @MEDIA (MIN-WIDTH: 10PX) and (10EM < HEIGHT < 20REM) {\n\t.thing:HOVER::BEFORE {\n\t\tCOLOR: RGB(0 0 0 / 50%);\n\t\tborder: 1PX SOLID #AbCd;\n\t\tbackground: URL(\"#ABC\") NO-REPEAT;\n\t}\n} 3`] = `
+
+Message:
+> 1 | @MEDIA (MIN-WIDTH: 10PX) and (10EM < HEIGHT < 20REM) {
+    |         ^^^^^^^^^ Use lowercase for CSS media feature name \`MIN-WIDTH\`.
+  2 | 	.thing:HOVER::BEFORE {
+  3 | 		COLOR: RGB(0 0 0 / 50%);
+  4 | 		border: 1PX SOLID #AbCd;
+  5 | 		background: URL("#ABC") NO-REPEAT;
+  6 | 	}
+  7 | }
+
+Output:
+  1 | @MEDIA (min-width: 10PX) and (10EM < HEIGHT < 20REM) {
+  2 | 	.thing:HOVER::BEFORE {
+  3 | 		COLOR: RGB(0 0 0 / 50%);
+  4 | 		border: 1PX SOLID #AbCd;
+  5 | 		background: URL("#ABC") NO-REPEAT;
+  6 | 	}
+  7 | }
+
+`;
+
+exports[`invalid(1): @MEDIA (MIN-WIDTH: 10PX) and (10EM < HEIGHT < 20REM) {\n\t.thing:HOVER::BEFORE {\n\t\tCOLOR: RGB(0 0 0 / 50%);\n\t\tborder: 1PX SOLID #AbCd;\n\t\tbackground: URL(\"#ABC\") NO-REPEAT;\n\t}\n} 4`] = `
+
+Message:
+> 1 | @MEDIA (MIN-WIDTH: 10PX) and (10EM < HEIGHT < 20REM) {
+    |                      ^^ Use lowercase for CSS unit \`PX\`.
+  2 | 	.thing:HOVER::BEFORE {
+  3 | 		COLOR: RGB(0 0 0 / 50%);
+  4 | 		border: 1PX SOLID #AbCd;
+  5 | 		background: URL("#ABC") NO-REPEAT;
+  6 | 	}
+  7 | }
+
+Output:
+  1 | @MEDIA (MIN-WIDTH: 10px) and (10EM < HEIGHT < 20REM) {
+  2 | 	.thing:HOVER::BEFORE {
+  3 | 		COLOR: RGB(0 0 0 / 50%);
+  4 | 		border: 1PX SOLID #AbCd;
+  5 | 		background: URL("#ABC") NO-REPEAT;
+  6 | 	}
+  7 | }
+
+`;
+
+exports[`invalid(1): @MEDIA (MIN-WIDTH: 10PX) and (10EM < HEIGHT < 20REM) {\n\t.thing:HOVER::BEFORE {\n\t\tCOLOR: RGB(0 0 0 / 50%);\n\t\tborder: 1PX SOLID #AbCd;\n\t\tbackground: URL(\"#ABC\") NO-REPEAT;\n\t}\n} 5`] = `
+
+Message:
+> 1 | @MEDIA (MIN-WIDTH: 10PX) and (10EM < HEIGHT < 20REM) {
+    |                                 ^^ Use lowercase for CSS unit \`EM\`.
+  2 | 	.thing:HOVER::BEFORE {
+  3 | 		COLOR: RGB(0 0 0 / 50%);
+  4 | 		border: 1PX SOLID #AbCd;
+  5 | 		background: URL("#ABC") NO-REPEAT;
+  6 | 	}
+  7 | }
+
+Output:
+  1 | @MEDIA (MIN-WIDTH: 10PX) and (10em < HEIGHT < 20REM) {
+  2 | 	.thing:HOVER::BEFORE {
+  3 | 		COLOR: RGB(0 0 0 / 50%);
+  4 | 		border: 1PX SOLID #AbCd;
+  5 | 		background: URL("#ABC") NO-REPEAT;
+  6 | 	}
+  7 | }
+
+`;
+
+exports[`invalid(1): @MEDIA (MIN-WIDTH: 10PX) and (10EM < HEIGHT < 20REM) {\n\t.thing:HOVER::BEFORE {\n\t\tCOLOR: RGB(0 0 0 / 50%);\n\t\tborder: 1PX SOLID #AbCd;\n\t\tbackground: URL(\"#ABC\") NO-REPEAT;\n\t}\n} 6`] = `
+
+Message:
+> 1 | @MEDIA (MIN-WIDTH: 10PX) and (10EM < HEIGHT < 20REM) {
+    |                                      ^^^^^^ Use lowercase for CSS media feature name \`HEIGHT\`.
+  2 | 	.thing:HOVER::BEFORE {
+  3 | 		COLOR: RGB(0 0 0 / 50%);
+  4 | 		border: 1PX SOLID #AbCd;
+  5 | 		background: URL("#ABC") NO-REPEAT;
+  6 | 	}
+  7 | }
+
+Output:
+  1 | @MEDIA (MIN-WIDTH: 10PX) and (10EM < height < 20REM) {
+  2 | 	.thing:HOVER::BEFORE {
+  3 | 		COLOR: RGB(0 0 0 / 50%);
+  4 | 		border: 1PX SOLID #AbCd;
+  5 | 		background: URL("#ABC") NO-REPEAT;
+  6 | 	}
+  7 | }
+
+`;
+
+exports[`invalid(1): @MEDIA (MIN-WIDTH: 10PX) and (10EM < HEIGHT < 20REM) {\n\t.thing:HOVER::BEFORE {\n\t\tCOLOR: RGB(0 0 0 / 50%);\n\t\tborder: 1PX SOLID #AbCd;\n\t\tbackground: URL(\"#ABC\") NO-REPEAT;\n\t}\n} 7`] = `
+
+Message:
+> 1 | @MEDIA (MIN-WIDTH: 10PX) and (10EM < HEIGHT < 20REM) {
+    |                                                 ^^^ Use lowercase for CSS unit \`REM\`.
+  2 | 	.thing:HOVER::BEFORE {
+  3 | 		COLOR: RGB(0 0 0 / 50%);
+  4 | 		border: 1PX SOLID #AbCd;
+  5 | 		background: URL("#ABC") NO-REPEAT;
+  6 | 	}
+  7 | }
+
+Output:
+  1 | @MEDIA (MIN-WIDTH: 10PX) and (10EM < HEIGHT < 20rem) {
+  2 | 	.thing:HOVER::BEFORE {
+  3 | 		COLOR: RGB(0 0 0 / 50%);
+  4 | 		border: 1PX SOLID #AbCd;
+  5 | 		background: URL("#ABC") NO-REPEAT;
+  6 | 	}
+  7 | }
+
+`;
+
+exports[`invalid(1): @MEDIA (MIN-WIDTH: 10PX) and (10EM < HEIGHT < 20REM) {\n\t.thing:HOVER::BEFORE {\n\t\tCOLOR: RGB(0 0 0 / 50%);\n\t\tborder: 1PX SOLID #AbCd;\n\t\tbackground: URL(\"#ABC\") NO-REPEAT;\n\t}\n} 8`] = `
+
+Message:
+  1 | @MEDIA (MIN-WIDTH: 10PX) and (10EM < HEIGHT < 20REM) {
+> 2 | 	.thing:HOVER::BEFORE {
+    | 	       ^^^^^ Use lowercase for CSS pseudo-class name \`HOVER\`.
+  3 | 		COLOR: RGB(0 0 0 / 50%);
+  4 | 		border: 1PX SOLID #AbCd;
+  5 | 		background: URL("#ABC") NO-REPEAT;
+  6 | 	}
+  7 | }
+
+Output:
+  1 | @MEDIA (MIN-WIDTH: 10PX) and (10EM < HEIGHT < 20REM) {
+  2 | 	.thing:hover::BEFORE {
+  3 | 		COLOR: RGB(0 0 0 / 50%);
+  4 | 		border: 1PX SOLID #AbCd;
+  5 | 		background: URL("#ABC") NO-REPEAT;
+  6 | 	}
+  7 | }
+
+`;
+
+exports[`invalid(1): @MEDIA (MIN-WIDTH: 10PX) and (10EM < HEIGHT < 20REM) {\n\t.thing:HOVER::BEFORE {\n\t\tCOLOR: RGB(0 0 0 / 50%);\n\t\tborder: 1PX SOLID #AbCd;\n\t\tbackground: URL(\"#ABC\") NO-REPEAT;\n\t}\n} 9`] = `
+
+Message:
+  1 | @MEDIA (MIN-WIDTH: 10PX) and (10EM < HEIGHT < 20REM) {
+> 2 | 	.thing:HOVER::BEFORE {
+    | 	              ^^^^^^ Use lowercase for CSS pseudo-element name \`BEFORE\`.
+  3 | 		COLOR: RGB(0 0 0 / 50%);
+  4 | 		border: 1PX SOLID #AbCd;
+  5 | 		background: URL("#ABC") NO-REPEAT;
+  6 | 	}
+  7 | }
+
+Output:
+  1 | @MEDIA (MIN-WIDTH: 10PX) and (10EM < HEIGHT < 20REM) {
+  2 | 	.thing:HOVER::before {
+  3 | 		COLOR: RGB(0 0 0 / 50%);
+  4 | 		border: 1PX SOLID #AbCd;
+  5 | 		background: URL("#ABC") NO-REPEAT;
+  6 | 	}
+  7 | }
+
+`;
+
+exports[`invalid(10): a { transition-timing-function: var(--Fallback) STEPS(2, JUMP-START); transition-timing-function: STEPS(2, JUMP-START); transform: ROTATE(45DEG); } 1`] = `
+
+  1 | a { transition-timing-function: var(--Fallback) STEPS(2, JUMP-START); transition-timing-function: STEPS(2, JUMP-START); transform: ROTATE(45DEG); }
+
+`;
+
+exports[`invalid(10): a { transition-timing-function: var(--Fallback) STEPS(2, JUMP-START); transition-timing-function: STEPS(2, JUMP-START); transform: ROTATE(45DEG); } 2`] = `
+
+Message:
+> 1 | a { transition-timing-function: var(--Fallback) STEPS(2, JUMP-START); transition-timing-function: STEPS(2, JUMP-START); transform: ROTATE(45DEG); }
+    |                                                 ^^^^^ Use lowercase for CSS function name \`STEPS\`.
+
+Output:
+  1 | a { transition-timing-function: var(--Fallback) steps(2, JUMP-START); transition-timing-function: STEPS(2, JUMP-START); transform: ROTATE(45DEG); }
+
+`;
+
+exports[`invalid(10): a { transition-timing-function: var(--Fallback) STEPS(2, JUMP-START); transition-timing-function: STEPS(2, JUMP-START); transform: ROTATE(45DEG); } 3`] = `
+
+Message:
+> 1 | a { transition-timing-function: var(--Fallback) STEPS(2, JUMP-START); transition-timing-function: STEPS(2, JUMP-START); transform: ROTATE(45DEG); }
+    |                                                                                                   ^^^^^ Use lowercase for CSS function name \`STEPS\`.
+
+Output:
+  1 | a { transition-timing-function: var(--Fallback) STEPS(2, JUMP-START); transition-timing-function: steps(2, JUMP-START); transform: ROTATE(45DEG); }
+
+`;
+
+exports[`invalid(10): a { transition-timing-function: var(--Fallback) STEPS(2, JUMP-START); transition-timing-function: STEPS(2, JUMP-START); transform: ROTATE(45DEG); } 4`] = `
+
+Message:
+> 1 | a { transition-timing-function: var(--Fallback) STEPS(2, JUMP-START); transition-timing-function: STEPS(2, JUMP-START); transform: ROTATE(45DEG); }
+    |                                                                                                            ^^^^^^^^^^ Use lowercase for CSS value keyword \`JUMP-START\`.
+
+Output:
+  1 | a { transition-timing-function: var(--Fallback) STEPS(2, JUMP-START); transition-timing-function: STEPS(2, jump-start); transform: ROTATE(45DEG); }
+
+`;
+
+exports[`invalid(10): a { transition-timing-function: var(--Fallback) STEPS(2, JUMP-START); transition-timing-function: STEPS(2, JUMP-START); transform: ROTATE(45DEG); } 5`] = `
+
+Message:
+> 1 | a { transition-timing-function: var(--Fallback) STEPS(2, JUMP-START); transition-timing-function: STEPS(2, JUMP-START); transform: ROTATE(45DEG); }
+    |                                                                                                                                    ^^^^^^ Use lowercase for CSS function name \`ROTATE\`.
+
+Output:
+  1 | a { transition-timing-function: var(--Fallback) STEPS(2, JUMP-START); transition-timing-function: STEPS(2, JUMP-START); transform: rotate(45DEG); }
+
+`;
+
+exports[`invalid(10): a { transition-timing-function: var(--Fallback) STEPS(2, JUMP-START); transition-timing-function: STEPS(2, JUMP-START); transform: ROTATE(45DEG); } 6`] = `
+
+Message:
+> 1 | a { transition-timing-function: var(--Fallback) STEPS(2, JUMP-START); transition-timing-function: STEPS(2, JUMP-START); transform: ROTATE(45DEG); }
+    |                                                                                                                                             ^^^ Use lowercase for CSS unit \`DEG\`.
+
+Output:
+  1 | a { transition-timing-function: var(--Fallback) STEPS(2, JUMP-START); transition-timing-function: STEPS(2, JUMP-START); transform: ROTATE(45deg); }
+
+`;
+
+exports[`invalid(11): a { color: ATTR(RED); color: ENV(RED); } 1`] = `
+
+  1 | a { color: ATTR(RED); color: ENV(RED); }
+
+`;
+
+exports[`invalid(11): a { color: ATTR(RED); color: ENV(RED); } 2`] = `
+
+Message:
+> 1 | a { color: ATTR(RED); color: ENV(RED); }
+    |            ^^^^ Use lowercase for CSS function name \`ATTR\`.
+
+Output:
+  1 | a { color: attr(RED); color: ENV(RED); }
+
+`;
+
+exports[`invalid(11): a { color: ATTR(RED); color: ENV(RED); } 3`] = `
+
+Message:
+> 1 | a { color: ATTR(RED); color: ENV(RED); }
+    |                              ^^^ Use lowercase for CSS function name \`ENV\`.
+
+Output:
+  1 | a { color: ATTR(RED); color: env(RED); }
+
+`;
+
+exports[`invalid(12): a { \\43 OLOR: RED; color: \\52 GB(0 0 0); } 1`] = `
+
+  1 | a { \\43 OLOR: RED; color: \\52 GB(0 0 0); }
+
+`;
+
+exports[`invalid(12): a { \\43 OLOR: RED; color: \\52 GB(0 0 0); } 2`] = `
+
+Message:
+> 1 | a { \\43 OLOR: RED; color: \\52 GB(0 0 0); }
+    |     ^^^^^^^^ Use lowercase for CSS property \`\\43 OLOR\`.
+
+Output:
+  1 | a { color: RED; color: \\52 GB(0 0 0); }
+
+`;
+
+exports[`invalid(12): a { \\43 OLOR: RED; color: \\52 GB(0 0 0); } 3`] = `
+
+Message:
+> 1 | a { \\43 OLOR: RED; color: \\52 GB(0 0 0); }
+    |               ^^^ Use lowercase for CSS value keyword \`RED\`.
+
+Output:
+  1 | a { \\43 OLOR: red; color: \\52 GB(0 0 0); }
+
+`;
+
+exports[`invalid(12): a { \\43 OLOR: RED; color: \\52 GB(0 0 0); } 4`] = `
+
+Message:
+> 1 | a { \\43 OLOR: RED; color: \\52 GB(0 0 0); }
+    |                           ^^^^^^ Use lowercase for CSS function name \`\\52 GB\`.
+
+Output:
+  1 | a { \\43 OLOR: RED; color: rgb(0 0 0); }
+
+`;
+
+exports[`invalid(13): a { color: R\\45 D; border: var(--x) S\\4f LID; border: S\\4f LID; transition-timing-function: ST\\45 PS(2, J\\55 MP-START); } 1`] = `
+
+  1 | a { color: R\\45 D; border: var(--x) S\\4f LID; border: S\\4f LID; transition-timing-function: ST\\45 PS(2, J\\55 MP-START); }
+
+`;
+
+exports[`invalid(13): a { color: R\\45 D; border: var(--x) S\\4f LID; border: S\\4f LID; transition-timing-function: ST\\45 PS(2, J\\55 MP-START); } 2`] = `
+
+Message:
+> 1 | a { color: R\\45 D; border: var(--x) S\\4f LID; border: S\\4f LID; transition-timing-function: ST\\45 PS(2, J\\55 MP-START); }
+    |            ^^^^^^ Use lowercase for CSS value keyword \`R\\45 D\`.
+
+Output:
+  1 | a { color: red; border: var(--x) S\\4f LID; border: S\\4f LID; transition-timing-function: ST\\45 PS(2, J\\55 MP-START); }
+
+`;
+
+exports[`invalid(13): a { color: R\\45 D; border: var(--x) S\\4f LID; border: S\\4f LID; transition-timing-function: ST\\45 PS(2, J\\55 MP-START); } 3`] = `
+
+Message:
+> 1 | a { color: R\\45 D; border: var(--x) S\\4f LID; border: S\\4f LID; transition-timing-function: ST\\45 PS(2, J\\55 MP-START); }
+    |                                                       ^^^^^^^^ Use lowercase for CSS value keyword \`S\\4f LID\`.
+
+Output:
+  1 | a { color: R\\45 D; border: var(--x) S\\4f LID; border: solid; transition-timing-function: ST\\45 PS(2, J\\55 MP-START); }
+
+`;
+
+exports[`invalid(13): a { color: R\\45 D; border: var(--x) S\\4f LID; border: S\\4f LID; transition-timing-function: ST\\45 PS(2, J\\55 MP-START); } 4`] = `
+
+Message:
+> 1 | a { color: R\\45 D; border: var(--x) S\\4f LID; border: S\\4f LID; transition-timing-function: ST\\45 PS(2, J\\55 MP-START); }
+    |                                                                                             ^^^^^^^^ Use lowercase for CSS function name \`ST\\45 PS\`.
+
+Output:
+  1 | a { color: R\\45 D; border: var(--x) S\\4f LID; border: S\\4f LID; transition-timing-function: steps(2, J\\55 MP-START); }
+
+`;
+
+exports[`invalid(13): a { color: R\\45 D; border: var(--x) S\\4f LID; border: S\\4f LID; transition-timing-function: ST\\45 PS(2, J\\55 MP-START); } 5`] = `
+
+Message:
+> 1 | a { color: R\\45 D; border: var(--x) S\\4f LID; border: S\\4f LID; transition-timing-function: ST\\45 PS(2, J\\55 MP-START); }
+    |                                                                                                         ^^^^^^^^^^^^^ Use lowercase for CSS value keyword \`J\\55 MP-START\`.
+
+Output:
+  1 | a { color: R\\45 D; border: var(--x) S\\4f LID; border: S\\4f LID; transition-timing-function: ST\\45 PS(2, jump-start); }
+
+`;
+
+exports[`invalid(14): a { background: \\55 RL(#ABC); } 1`] = `
+
+  1 | a { background: \\55 RL(#ABC); }
+
+`;
+
+exports[`invalid(14): a { background: \\55 RL(#ABC); } 2`] = `
+
+Message:
+> 1 | a { background: \\55 RL(#ABC); }
+    |                 ^^^^^^ Use lowercase for CSS function name \`\\55 RL\`.
+
+Output:
+  1 | a { background: url(#ABC); }
+
+`;
+
+exports[`invalid(15): a { /* before */ COLOR /* after */: /* value */ RED /* end */; } 1`] = `
+
+  1 | a { /* before */ COLOR /* after */: /* value */ RED /* end */; }
+
+`;
+
+exports[`invalid(15): a { /* before */ COLOR /* after */: /* value */ RED /* end */; } 2`] = `
+
+Message:
+> 1 | a { /* before */ COLOR /* after */: /* value */ RED /* end */; }
+    |                  ^^^^^ Use lowercase for CSS property \`COLOR\`.
+
+Output:
+  1 | a { /* before */ color /* after */: /* value */ RED /* end */; }
+
+`;
+
+exports[`invalid(15): a { /* before */ COLOR /* after */: /* value */ RED /* end */; } 3`] = `
+
+Message:
+> 1 | a { /* before */ COLOR /* after */: /* value */ RED /* end */; }
+    |                                                 ^^^ Use lowercase for CSS value keyword \`RED\`.
+
+Output:
+  1 | a { /* before */ COLOR /* after */: /* value */ red /* end */; }
+
+`;
+
+exports[`invalid(16): a { font: CAPTION; } 1`] = `
+
+  1 | a { font: CAPTION; }
+
+`;
+
+exports[`invalid(16): a { font: CAPTION; } 2`] = `
+
+Message:
+> 1 | a { font: CAPTION; }
+    |           ^^^^^^^ Use lowercase for CSS value keyword \`CAPTION\`.
+
+Output:
+  1 | a { font: caption; }
+
+`;
+
+exports[`invalid(17): a { color: CanvasText; border-color: ActiveText; background-color: ReBeccAPurple; } 1`] = `
+
+  1 | a { color: CanvasText; border-color: ActiveText; background-color: ReBeccAPurple; }
+
+`;
+
+exports[`invalid(17): a { color: CanvasText; border-color: ActiveText; background-color: ReBeccAPurple; } 2`] = `
+
+Message:
+> 1 | a { color: CanvasText; border-color: ActiveText; background-color: ReBeccAPurple; }
+    |            ^^^^^^^^^^ Use lowercase for CSS value keyword \`CanvasText\`.
+
+Output:
+  1 | a { color: canvastext; border-color: ActiveText; background-color: ReBeccAPurple; }
+
+`;
+
+exports[`invalid(17): a { color: CanvasText; border-color: ActiveText; background-color: ReBeccAPurple; } 3`] = `
+
+Message:
+> 1 | a { color: CanvasText; border-color: ActiveText; background-color: ReBeccAPurple; }
+    |                                      ^^^^^^^^^^ Use lowercase for CSS value keyword \`ActiveText\`.
+
+Output:
+  1 | a { color: CanvasText; border-color: activetext; background-color: ReBeccAPurple; }
+
+`;
+
+exports[`invalid(17): a { color: CanvasText; border-color: ActiveText; background-color: ReBeccAPurple; } 4`] = `
+
+Message:
+> 1 | a { color: CanvasText; border-color: ActiveText; background-color: ReBeccAPurple; }
+    |                                                                    ^^^^^^^^^^^^^ Use lowercase for CSS value keyword \`ReBeccAPurple\`.
+
+Output:
+  1 | a { color: CanvasText; border-color: ActiveText; background-color: rebeccapurple; }
+
+`;
+
+exports[`invalid(18): a { color: #ABC; color: #1ABC; color: #12AB34; color: #1234ABCD; } 1`] = `
+
+  1 | a { color: #ABC; color: #1ABC; color: #12AB34; color: #1234ABCD; }
+
+`;
+
+exports[`invalid(18): a { color: #ABC; color: #1ABC; color: #12AB34; color: #1234ABCD; } 2`] = `
+
+Message:
+> 1 | a { color: #ABC; color: #1ABC; color: #12AB34; color: #1234ABCD; }
+    |             ^^^ Use lowercase for CSS hexadecimal color \`#ABC\`.
+
+Output:
+  1 | a { color: #abc; color: #1ABC; color: #12AB34; color: #1234ABCD; }
+
+`;
+
+exports[`invalid(18): a { color: #ABC; color: #1ABC; color: #12AB34; color: #1234ABCD; } 3`] = `
+
+Message:
+> 1 | a { color: #ABC; color: #1ABC; color: #12AB34; color: #1234ABCD; }
+    |                          ^^^^ Use lowercase for CSS hexadecimal color \`#1ABC\`.
+
+Output:
+  1 | a { color: #ABC; color: #1abc; color: #12AB34; color: #1234ABCD; }
+
+`;
+
+exports[`invalid(18): a { color: #ABC; color: #1ABC; color: #12AB34; color: #1234ABCD; } 4`] = `
+
+Message:
+> 1 | a { color: #ABC; color: #1ABC; color: #12AB34; color: #1234ABCD; }
+    |                                        ^^^^^^ Use lowercase for CSS hexadecimal color \`#12AB34\`.
+
+Output:
+  1 | a { color: #ABC; color: #1ABC; color: #12ab34; color: #1234ABCD; }
+
+`;
+
+exports[`invalid(18): a { color: #ABC; color: #1ABC; color: #12AB34; color: #1234ABCD; } 5`] = `
+
+Message:
+> 1 | a { color: #ABC; color: #1ABC; color: #12AB34; color: #1234ABCD; }
+    |                                                        ^^^^^^^^ Use lowercase for CSS hexadecimal color \`#1234ABCD\`.
+
+Output:
+  1 | a { color: #ABC; color: #1ABC; color: #12AB34; color: #1234abcd; }
+
+`;
+
+exports[`invalid(19): a { color: #\\41 BC; } 1`] = `
+
+  1 | a { color: #\\41 BC; }
+
+`;
+
+exports[`invalid(19): a { color: #\\41 BC; } 2`] = `
+
+Message:
+> 1 | a { color: #\\41 BC; }
+    |             ^^^^^^ Use lowercase for CSS hexadecimal color \`#\\41 BC\`.
+
+Output:
+  1 | a { color: #abc; }
+
+`;
+
+exports[`invalid(2): @media (/* before */ WIDTH > 1PX), (1EM < HEIGHT /* after */) {} 1`] = `
+
+  1 | @media (/* before */ WIDTH > 1PX), (1EM < HEIGHT /* after */) {}
+
+`;
+
+exports[`invalid(2): @media (/* before */ WIDTH > 1PX), (1EM < HEIGHT /* after */) {} 2`] = `
+
+Message:
+> 1 | @media (/* before */ WIDTH > 1PX), (1EM < HEIGHT /* after */) {}
+    |                      ^^^^^ Use lowercase for CSS media feature name \`WIDTH\`.
+
+Output:
+  1 | @media (/* before */ width > 1PX), (1EM < HEIGHT /* after */) {}
+
+`;
+
+exports[`invalid(2): @media (/* before */ WIDTH > 1PX), (1EM < HEIGHT /* after */) {} 3`] = `
+
+Message:
+> 1 | @media (/* before */ WIDTH > 1PX), (1EM < HEIGHT /* after */) {}
+    |                               ^^ Use lowercase for CSS unit \`PX\`.
+
+Output:
+  1 | @media (/* before */ WIDTH > 1px), (1EM < HEIGHT /* after */) {}
+
+`;
+
+exports[`invalid(2): @media (/* before */ WIDTH > 1PX), (1EM < HEIGHT /* after */) {} 4`] = `
+
+Message:
+> 1 | @media (/* before */ WIDTH > 1PX), (1EM < HEIGHT /* after */) {}
+    |                                      ^^ Use lowercase for CSS unit \`EM\`.
+
+Output:
+  1 | @media (/* before */ WIDTH > 1PX), (1em < HEIGHT /* after */) {}
+
+`;
+
+exports[`invalid(2): @media (/* before */ WIDTH > 1PX), (1EM < HEIGHT /* after */) {} 5`] = `
+
+Message:
+> 1 | @media (/* before */ WIDTH > 1PX), (1EM < HEIGHT /* after */) {}
+    |                                           ^^^^^^ Use lowercase for CSS media feature name \`HEIGHT\`.
+
+Output:
+  1 | @media (/* before */ WIDTH > 1PX), (1EM < height /* after */) {}
+
+`;
+
+exports[`invalid(20): @-WEBKIT-KEYFRAMES Fade { from { -WEBKIT-TRANSFORM: ROTATE(1DEG); } } 1`] = `
+
+  1 | @-WEBKIT-KEYFRAMES Fade { from { -WEBKIT-TRANSFORM: ROTATE(1DEG); } }
+
+`;
+
+exports[`invalid(20): @-WEBKIT-KEYFRAMES Fade { from { -WEBKIT-TRANSFORM: ROTATE(1DEG); } } 2`] = `
+
+Message:
+> 1 | @-WEBKIT-KEYFRAMES Fade { from { -WEBKIT-TRANSFORM: ROTATE(1DEG); } }
+    |  ^^^^^^^^^^^^^^^^^ Use lowercase for CSS at-rule name \`-WEBKIT-KEYFRAMES\`.
+
+Output:
+  1 | @-webkit-keyframes Fade { from { -WEBKIT-TRANSFORM: ROTATE(1DEG); } }
+
+`;
+
+exports[`invalid(20): @-WEBKIT-KEYFRAMES Fade { from { -WEBKIT-TRANSFORM: ROTATE(1DEG); } } 3`] = `
+
+Message:
+> 1 | @-WEBKIT-KEYFRAMES Fade { from { -WEBKIT-TRANSFORM: ROTATE(1DEG); } }
+    |                                  ^^^^^^^^^^^^^^^^^ Use lowercase for CSS property \`-WEBKIT-TRANSFORM\`.
+
+Output:
+  1 | @-WEBKIT-KEYFRAMES Fade { from { -webkit-transform: ROTATE(1DEG); } }
+
+`;
+
+exports[`invalid(20): @-WEBKIT-KEYFRAMES Fade { from { -WEBKIT-TRANSFORM: ROTATE(1DEG); } } 4`] = `
+
+Message:
+> 1 | @-WEBKIT-KEYFRAMES Fade { from { -WEBKIT-TRANSFORM: ROTATE(1DEG); } }
+    |                                                     ^^^^^^ Use lowercase for CSS function name \`ROTATE\`.
+
+Output:
+  1 | @-WEBKIT-KEYFRAMES Fade { from { -WEBKIT-TRANSFORM: rotate(1DEG); } }
+
+`;
+
+exports[`invalid(20): @-WEBKIT-KEYFRAMES Fade { from { -WEBKIT-TRANSFORM: ROTATE(1DEG); } } 5`] = `
+
+Message:
+> 1 | @-WEBKIT-KEYFRAMES Fade { from { -WEBKIT-TRANSFORM: ROTATE(1DEG); } }
+    |                                                             ^^^ Use lowercase for CSS unit \`DEG\`.
+
+Output:
+  1 | @-WEBKIT-KEYFRAMES Fade { from { -WEBKIT-TRANSFORM: ROTATE(1deg); } }
+
+`;
+
+exports[`invalid(21): a { transform: TRANSLATEY(0) translatey(0) TranslateY(0) translateXY(0); } 1`] = `
+
+  1 | a { transform: TRANSLATEY(0) translatey(0) TranslateY(0) translateXY(0); }
+
+`;
+
+exports[`invalid(21): a { transform: TRANSLATEY(0) translatey(0) TranslateY(0) translateXY(0); } 2`] = `
+
+Message:
+> 1 | a { transform: TRANSLATEY(0) translatey(0) TranslateY(0) translateXY(0); }
+    |                ^^^^^^^^^^ Use \`translateY\` for CSS function name \`TRANSLATEY\`.
+
+Output:
+  1 | a { transform: translateY(0) translatey(0) TranslateY(0) translateXY(0); }
+
+`;
+
+exports[`invalid(21): a { transform: TRANSLATEY(0) translatey(0) TranslateY(0) translateXY(0); } 3`] = `
+
+Message:
+> 1 | a { transform: TRANSLATEY(0) translatey(0) TranslateY(0) translateXY(0); }
+    |                              ^^^^^^^^^^ Use \`translateY\` for CSS function name \`translatey\`.
+
+Output:
+  1 | a { transform: TRANSLATEY(0) translateY(0) TranslateY(0) translateXY(0); }
+
+`;
+
+exports[`invalid(21): a { transform: TRANSLATEY(0) translatey(0) TranslateY(0) translateXY(0); } 4`] = `
+
+Message:
+> 1 | a { transform: TRANSLATEY(0) translatey(0) TranslateY(0) translateXY(0); }
+    |                                            ^^^^^^^^^^ Use \`translateY\` for CSS function name \`TranslateY\`.
+
+Output:
+  1 | a { transform: TRANSLATEY(0) translatey(0) translateY(0) translateXY(0); }
+
+`;
+
+exports[`invalid(22): a { transform: ROTATEX(1deg) rotatez(1deg) SKEWX(1deg) Scalex(1) translate3D(0, 0, 0); } 1`] = `
+
+  1 | a { transform: ROTATEX(1deg) rotatez(1deg) SKEWX(1deg) Scalex(1) translate3D(0, 0, 0); }
+
+`;
+
+exports[`invalid(22): a { transform: ROTATEX(1deg) rotatez(1deg) SKEWX(1deg) Scalex(1) translate3D(0, 0, 0); } 2`] = `
+
+Message:
+> 1 | a { transform: ROTATEX(1deg) rotatez(1deg) SKEWX(1deg) Scalex(1) translate3D(0, 0, 0); }
+    |                ^^^^^^^ Use \`rotateX\` for CSS function name \`ROTATEX\`.
+
+Output:
+  1 | a { transform: rotateX(1deg) rotatez(1deg) SKEWX(1deg) Scalex(1) translate3D(0, 0, 0); }
+
+`;
+
+exports[`invalid(22): a { transform: ROTATEX(1deg) rotatez(1deg) SKEWX(1deg) Scalex(1) translate3D(0, 0, 0); } 3`] = `
+
+Message:
+> 1 | a { transform: ROTATEX(1deg) rotatez(1deg) SKEWX(1deg) Scalex(1) translate3D(0, 0, 0); }
+    |                              ^^^^^^^ Use \`rotateZ\` for CSS function name \`rotatez\`.
+
+Output:
+  1 | a { transform: ROTATEX(1deg) rotateZ(1deg) SKEWX(1deg) Scalex(1) translate3D(0, 0, 0); }
+
+`;
+
+exports[`invalid(22): a { transform: ROTATEX(1deg) rotatez(1deg) SKEWX(1deg) Scalex(1) translate3D(0, 0, 0); } 4`] = `
+
+Message:
+> 1 | a { transform: ROTATEX(1deg) rotatez(1deg) SKEWX(1deg) Scalex(1) translate3D(0, 0, 0); }
+    |                                            ^^^^^ Use \`skewX\` for CSS function name \`SKEWX\`.
+
+Output:
+  1 | a { transform: ROTATEX(1deg) rotatez(1deg) skewX(1deg) Scalex(1) translate3D(0, 0, 0); }
+
+`;
+
+exports[`invalid(22): a { transform: ROTATEX(1deg) rotatez(1deg) SKEWX(1deg) Scalex(1) translate3D(0, 0, 0); } 5`] = `
+
+Message:
+> 1 | a { transform: ROTATEX(1deg) rotatez(1deg) SKEWX(1deg) Scalex(1) translate3D(0, 0, 0); }
+    |                                                        ^^^^^^ Use \`scaleX\` for CSS function name \`Scalex\`.
+
+Output:
+  1 | a { transform: ROTATEX(1deg) rotatez(1deg) SKEWX(1deg) scaleX(1) translate3D(0, 0, 0); }
+
+`;
+
+exports[`invalid(22): a { transform: ROTATEX(1deg) rotatez(1deg) SKEWX(1deg) Scalex(1) translate3D(0, 0, 0); } 6`] = `
+
+Message:
+> 1 | a { transform: ROTATEX(1deg) rotatez(1deg) SKEWX(1deg) Scalex(1) translate3D(0, 0, 0); }
+    |                                                                  ^^^^^^^^^^^ Use lowercase for CSS function name \`translate3D\`.
+
+Output:
+  1 | a { transform: ROTATEX(1deg) rotatez(1deg) SKEWX(1deg) Scalex(1) translate3d(0, 0, 0); }
+
+`;
+
+exports[`invalid(23): a { transform: translate\\79 (0); } 1`] = `
+
+  1 | a { transform: translate\\79 (0); }
+
+`;
+
+exports[`invalid(23): a { transform: translate\\79 (0); } 2`] = `
+
+Message:
+> 1 | a { transform: translate\\79 (0); }
+    |                ^^^^^^^^^^^^^ Use \`translateY\` for CSS function name \`translate\\79 \`.
+
+Output:
+  1 | a { transform: translateY(0); }
+
+`;
+
+exports[`invalid(24): a { font-family: BlinkMacSystemFont, SANS-SERIF; font-family: INHERIT; font: 1em BlinkMacSystemFont, SANS-SERIF; } 1`] = `
+
+  1 | a { font-family: BlinkMacSystemFont, SANS-SERIF; font-family: INHERIT; font: 1em BlinkMacSystemFont, SANS-SERIF; }
+
+`;
+
+exports[`invalid(24): a { font-family: BlinkMacSystemFont, SANS-SERIF; font-family: INHERIT; font: 1em BlinkMacSystemFont, SANS-SERIF; } 2`] = `
+
+Message:
+> 1 | a { font-family: BlinkMacSystemFont, SANS-SERIF; font-family: INHERIT; font: 1em BlinkMacSystemFont, SANS-SERIF; }
+    |                                      ^^^^^^^^^^ Use lowercase for CSS value keyword \`SANS-SERIF\`.
+
+Output:
+  1 | a { font-family: BlinkMacSystemFont, sans-serif; font-family: INHERIT; font: 1em BlinkMacSystemFont, SANS-SERIF; }
+
+`;
+
+exports[`invalid(24): a { font-family: BlinkMacSystemFont, SANS-SERIF; font-family: INHERIT; font: 1em BlinkMacSystemFont, SANS-SERIF; } 3`] = `
+
+Message:
+> 1 | a { font-family: BlinkMacSystemFont, SANS-SERIF; font-family: INHERIT; font: 1em BlinkMacSystemFont, SANS-SERIF; }
+    |                                                               ^^^^^^^ Use lowercase for CSS value keyword \`INHERIT\`.
+
+Output:
+  1 | a { font-family: BlinkMacSystemFont, SANS-SERIF; font-family: inherit; font: 1em BlinkMacSystemFont, SANS-SERIF; }
+
+`;
+
+exports[`invalid(24): a { font-family: BlinkMacSystemFont, SANS-SERIF; font-family: INHERIT; font: 1em BlinkMacSystemFont, SANS-SERIF; } 4`] = `
+
+Message:
+> 1 | a { font-family: BlinkMacSystemFont, SANS-SERIF; font-family: INHERIT; font: 1em BlinkMacSystemFont, SANS-SERIF; }
+    |                                                                                                      ^^^^^^^^^^ Use lowercase for CSS value keyword \`SANS-SERIF\`.
+
+Output:
+  1 | a { font-family: BlinkMacSystemFont, SANS-SERIF; font-family: INHERIT; font: 1em BlinkMacSystemFont, sans-serif; }
+
+`;
+
+exports[`invalid(25): a { -WEBKIT-TRANSITION: none; COLOR: red; } 1`] = `
+
+  1 | a { -WEBKIT-TRANSITION: none; COLOR: red; }
+
+`;
+
+exports[`invalid(25): a { -WEBKIT-TRANSITION: none; COLOR: red; } 2`] = `
+
+Message:
+> 1 | a { -WEBKIT-TRANSITION: none; COLOR: red; }
+    |     ^^^^^^^^^^^^^^^^^^ Use lowercase for CSS property \`-WEBKIT-TRANSITION\`.
+
+Output:
+  1 | a { -webkit-transition: none; COLOR: red; }
+
+`;
+
+exports[`invalid(25): a { -WEBKIT-TRANSITION: none; COLOR: red; } 3`] = `
+
+Message:
+> 1 | a { -WEBKIT-TRANSITION: none; COLOR: red; }
+    |                               ^^^^^ Use lowercase for CSS property \`COLOR\`.
+
+Output:
+  1 | a { -WEBKIT-TRANSITION: none; color: red; }
+
+`;
+
+exports[`invalid(26): @page { MARGIN: 0; } @font-face { FONT-DISPLAY: swap; } 1`] = `
+
+  1 | @page { MARGIN: 0; } @font-face { FONT-DISPLAY: swap; }
+
+`;
+
+exports[`invalid(26): @page { MARGIN: 0; } @font-face { FONT-DISPLAY: swap; } 2`] = `
+
+Message:
+> 1 | @page { MARGIN: 0; } @font-face { FONT-DISPLAY: swap; }
+    |         ^^^^^^ Use lowercase for CSS property \`MARGIN\`.
+
+Output:
+  1 | @page { margin: 0; } @font-face { FONT-DISPLAY: swap; }
+
+`;
+
+exports[`invalid(26): @page { MARGIN: 0; } @font-face { FONT-DISPLAY: swap; } 3`] = `
+
+Message:
+> 1 | @page { MARGIN: 0; } @font-face { FONT-DISPLAY: swap; }
+    |                                   ^^^^^^^^^^^^ Use lowercase for CSS property \`FONT-DISPLAY\`.
+
+Output:
+  1 | @page { MARGIN: 0; } @font-face { font-display: swap; }
+
+`;
+
+exports[`invalid(27): .a:export { Color: Red; } :export .a { Color: Red; } :export { .a { Color: Red; } } 1`] = `
+
+  1 | .a:export { Color: Red; } :export .a { Color: Red; } :export { .a { Color: Red; } }
+
+`;
+
+exports[`invalid(27): .a:export { Color: Red; } :export .a { Color: Red; } :export { .a { Color: Red; } } 2`] = `
+
+Message:
+> 1 | .a:export { Color: Red; } :export .a { Color: Red; } :export { .a { Color: Red; } }
+    |             ^^^^^ Use lowercase for CSS property \`Color\`.
+
+Output:
+  1 | .a:export { color: Red; } :export .a { Color: Red; } :export { .a { Color: Red; } }
+
+`;
+
+exports[`invalid(27): .a:export { Color: Red; } :export .a { Color: Red; } :export { .a { Color: Red; } } 3`] = `
+
+Message:
+> 1 | .a:export { Color: Red; } :export .a { Color: Red; } :export { .a { Color: Red; } }
+    |                    ^^^ Use lowercase for CSS value keyword \`Red\`.
+
+Output:
+  1 | .a:export { Color: red; } :export .a { Color: Red; } :export { .a { Color: Red; } }
+
+`;
+
+exports[`invalid(27): .a:export { Color: Red; } :export .a { Color: Red; } :export { .a { Color: Red; } } 4`] = `
+
+Message:
+> 1 | .a:export { Color: Red; } :export .a { Color: Red; } :export { .a { Color: Red; } }
+    |                                        ^^^^^ Use lowercase for CSS property \`Color\`.
+
+Output:
+  1 | .a:export { Color: Red; } :export .a { color: Red; } :export { .a { Color: Red; } }
+
+`;
+
+exports[`invalid(27): .a:export { Color: Red; } :export .a { Color: Red; } :export { .a { Color: Red; } } 5`] = `
+
+Message:
+> 1 | .a:export { Color: Red; } :export .a { Color: Red; } :export { .a { Color: Red; } }
+    |                                               ^^^ Use lowercase for CSS value keyword \`Red\`.
+
+Output:
+  1 | .a:export { Color: Red; } :export .a { Color: red; } :export { .a { Color: Red; } }
+
+`;
+
+exports[`invalid(27): .a:export { Color: Red; } :export .a { Color: Red; } :export { .a { Color: Red; } } 6`] = `
+
+Message:
+> 1 | .a:export { Color: Red; } :export .a { Color: Red; } :export { .a { Color: Red; } }
+    |                                                                     ^^^^^ Use lowercase for CSS property \`Color\`.
+
+Output:
+  1 | .a:export { Color: Red; } :export .a { Color: Red; } :export { .a { color: Red; } }
+
+`;
+
+exports[`invalid(27): .a:export { Color: Red; } :export .a { Color: Red; } :export { .a { Color: Red; } } 7`] = `
+
+Message:
+> 1 | .a:export { Color: Red; } :export .a { Color: Red; } :export { .a { Color: Red; } }
+    |                                                                            ^^^ Use lowercase for CSS value keyword \`Red\`.
+
+Output:
+  1 | .a:export { Color: Red; } :export .a { Color: Red; } :export { .a { Color: red; } }
+
+`;
+
+exports[`invalid(28): a { color: RGBA(0, 0, 0, 0.5); width: CALC(1PX + 2px); height: myFunc(1PX); } 1`] = `
+
+  1 | a { color: RGBA(0, 0, 0, 0.5); width: CALC(1PX + 2px); height: myFunc(1PX); }
+
+`;
+
+exports[`invalid(28): a { color: RGBA(0, 0, 0, 0.5); width: CALC(1PX + 2px); height: myFunc(1PX); } 2`] = `
+
+Message:
+> 1 | a { color: RGBA(0, 0, 0, 0.5); width: CALC(1PX + 2px); height: myFunc(1PX); }
+    |            ^^^^ Use lowercase for CSS function name \`RGBA\`.
+
+Output:
+  1 | a { color: rgba(0, 0, 0, 0.5); width: CALC(1PX + 2px); height: myFunc(1PX); }
+
+`;
+
+exports[`invalid(28): a { color: RGBA(0, 0, 0, 0.5); width: CALC(1PX + 2px); height: myFunc(1PX); } 3`] = `
+
+Message:
+> 1 | a { color: RGBA(0, 0, 0, 0.5); width: CALC(1PX + 2px); height: myFunc(1PX); }
+    |                                       ^^^^ Use lowercase for CSS function name \`CALC\`.
+
+Output:
+  1 | a { color: RGBA(0, 0, 0, 0.5); width: calc(1PX + 2px); height: myFunc(1PX); }
+
+`;
+
+exports[`invalid(28): a { color: RGBA(0, 0, 0, 0.5); width: CALC(1PX + 2px); height: myFunc(1PX); } 4`] = `
+
+Message:
+> 1 | a { color: RGBA(0, 0, 0, 0.5); width: CALC(1PX + 2px); height: myFunc(1PX); }
+    |                                             ^^ Use lowercase for CSS unit \`PX\`.
+
+Output:
+  1 | a { color: RGBA(0, 0, 0, 0.5); width: CALC(1px + 2px); height: myFunc(1PX); }
+
+`;
+
+exports[`invalid(28): a { color: RGBA(0, 0, 0, 0.5); width: CALC(1PX + 2px); height: myFunc(1PX); } 5`] = `
+
+Message:
+> 1 | a { color: RGBA(0, 0, 0, 0.5); width: CALC(1PX + 2px); height: myFunc(1PX); }
+    |                                                                        ^^ Use lowercase for CSS unit \`PX\`.
+
+Output:
+  1 | a { color: RGBA(0, 0, 0, 0.5); width: CALC(1PX + 2px); height: myFunc(1px); }
+
+`;
+
+exports[`invalid(3): @FONT-FACE { FONT-STYLE: OBLIQUE; src: LOCAL(\"Example\"), URL(font.WOFF2) FORMAT(\"WOFF2\"); } 1`] = `
+
+  1 | @FONT-FACE { FONT-STYLE: OBLIQUE; src: LOCAL("Example"), URL(font.WOFF2) FORMAT("WOFF2"); }
+
+`;
+
+exports[`invalid(3): @FONT-FACE { FONT-STYLE: OBLIQUE; src: LOCAL(\"Example\"), URL(font.WOFF2) FORMAT(\"WOFF2\"); } 2`] = `
+
+Message:
+> 1 | @FONT-FACE { FONT-STYLE: OBLIQUE; src: LOCAL("Example"), URL(font.WOFF2) FORMAT("WOFF2"); }
+    |  ^^^^^^^^^ Use lowercase for CSS at-rule name \`FONT-FACE\`.
+
+Output:
+  1 | @font-face { FONT-STYLE: OBLIQUE; src: LOCAL("Example"), URL(font.WOFF2) FORMAT("WOFF2"); }
+
+`;
+
+exports[`invalid(3): @FONT-FACE { FONT-STYLE: OBLIQUE; src: LOCAL(\"Example\"), URL(font.WOFF2) FORMAT(\"WOFF2\"); } 3`] = `
+
+Message:
+> 1 | @FONT-FACE { FONT-STYLE: OBLIQUE; src: LOCAL("Example"), URL(font.WOFF2) FORMAT("WOFF2"); }
+    |              ^^^^^^^^^^ Use lowercase for CSS property \`FONT-STYLE\`.
+
+Output:
+  1 | @FONT-FACE { font-style: OBLIQUE; src: LOCAL("Example"), URL(font.WOFF2) FORMAT("WOFF2"); }
+
+`;
+
+exports[`invalid(3): @FONT-FACE { FONT-STYLE: OBLIQUE; src: LOCAL(\"Example\"), URL(font.WOFF2) FORMAT(\"WOFF2\"); } 4`] = `
+
+Message:
+> 1 | @FONT-FACE { FONT-STYLE: OBLIQUE; src: LOCAL("Example"), URL(font.WOFF2) FORMAT("WOFF2"); }
+    |                          ^^^^^^^ Use lowercase for CSS value keyword \`OBLIQUE\`.
+
+Output:
+  1 | @FONT-FACE { FONT-STYLE: oblique; src: LOCAL("Example"), URL(font.WOFF2) FORMAT("WOFF2"); }
+
+`;
+
+exports[`invalid(3): @FONT-FACE { FONT-STYLE: OBLIQUE; src: LOCAL(\"Example\"), URL(font.WOFF2) FORMAT(\"WOFF2\"); } 5`] = `
+
+Message:
+> 1 | @FONT-FACE { FONT-STYLE: OBLIQUE; src: LOCAL("Example"), URL(font.WOFF2) FORMAT("WOFF2"); }
+    |                                        ^^^^^ Use lowercase for CSS function name \`LOCAL\`.
+
+Output:
+  1 | @FONT-FACE { FONT-STYLE: OBLIQUE; src: local("Example"), URL(font.WOFF2) FORMAT("WOFF2"); }
+
+`;
+
+exports[`invalid(3): @FONT-FACE { FONT-STYLE: OBLIQUE; src: LOCAL(\"Example\"), URL(font.WOFF2) FORMAT(\"WOFF2\"); } 6`] = `
+
+Message:
+> 1 | @FONT-FACE { FONT-STYLE: OBLIQUE; src: LOCAL("Example"), URL(font.WOFF2) FORMAT("WOFF2"); }
+    |                                                          ^^^ Use lowercase for CSS function name \`URL\`.
+
+Output:
+  1 | @FONT-FACE { FONT-STYLE: OBLIQUE; src: LOCAL("Example"), url(font.WOFF2) FORMAT("WOFF2"); }
+
+`;
+
+exports[`invalid(3): @FONT-FACE { FONT-STYLE: OBLIQUE; src: LOCAL(\"Example\"), URL(font.WOFF2) FORMAT(\"WOFF2\"); } 7`] = `
+
+Message:
+> 1 | @FONT-FACE { FONT-STYLE: OBLIQUE; src: LOCAL("Example"), URL(font.WOFF2) FORMAT("WOFF2"); }
+    |                                                                          ^^^^^^ Use lowercase for CSS function name \`FORMAT\`.
+
+Output:
+  1 | @FONT-FACE { FONT-STYLE: OBLIQUE; src: LOCAL("Example"), URL(font.WOFF2) format("WOFF2"); }
+
+`;
+
+exports[`invalid(4): @font-feature-values Font { FONT-DISPLAY: SWAP; } 1`] = `
+
+  1 | @font-feature-values Font { FONT-DISPLAY: SWAP; }
+
+`;
+
+exports[`invalid(4): @font-feature-values Font { FONT-DISPLAY: SWAP; } 2`] = `
+
+Message:
+> 1 | @font-feature-values Font { FONT-DISPLAY: SWAP; }
+    |                             ^^^^^^^^^^^^ Use lowercase for CSS property \`FONT-DISPLAY\`.
+
+Output:
+  1 | @font-feature-values Font { font-display: SWAP; }
+
+`;
+
+exports[`invalid(4): @font-feature-values Font { FONT-DISPLAY: SWAP; } 3`] = `
+
+Message:
+> 1 | @font-feature-values Font { FONT-DISPLAY: SWAP; }
+    |                                           ^^^^ Use lowercase for CSS value keyword \`SWAP\`.
+
+Output:
+  1 | @font-feature-values Font { FONT-DISPLAY: swap; }
+
+`;
+
+exports[`invalid(5): @property --ThemeColor { SYNTAX: \"<COLOR>\"; INHERITS: FALSE; INITIAL-VALUE: #ABCDEF; } 1`] = `
+
+  1 | @property --ThemeColor { SYNTAX: "<COLOR>"; INHERITS: FALSE; INITIAL-VALUE: #ABCDEF; }
+
+`;
+
+exports[`invalid(5): @property --ThemeColor { SYNTAX: \"<COLOR>\"; INHERITS: FALSE; INITIAL-VALUE: #ABCDEF; } 2`] = `
+
+Message:
+> 1 | @property --ThemeColor { SYNTAX: "<COLOR>"; INHERITS: FALSE; INITIAL-VALUE: #ABCDEF; }
+    |                          ^^^^^^ Use lowercase for CSS property \`SYNTAX\`.
+
+Output:
+  1 | @property --ThemeColor { syntax: "<COLOR>"; INHERITS: FALSE; INITIAL-VALUE: #ABCDEF; }
+
+`;
+
+exports[`invalid(5): @property --ThemeColor { SYNTAX: \"<COLOR>\"; INHERITS: FALSE; INITIAL-VALUE: #ABCDEF; } 3`] = `
+
+Message:
+> 1 | @property --ThemeColor { SYNTAX: "<COLOR>"; INHERITS: FALSE; INITIAL-VALUE: #ABCDEF; }
+    |                                             ^^^^^^^^ Use lowercase for CSS property \`INHERITS\`.
+
+Output:
+  1 | @property --ThemeColor { SYNTAX: "<COLOR>"; inherits: FALSE; INITIAL-VALUE: #ABCDEF; }
+
+`;
+
+exports[`invalid(5): @property --ThemeColor { SYNTAX: \"<COLOR>\"; INHERITS: FALSE; INITIAL-VALUE: #ABCDEF; } 4`] = `
+
+Message:
+> 1 | @property --ThemeColor { SYNTAX: "<COLOR>"; INHERITS: FALSE; INITIAL-VALUE: #ABCDEF; }
+    |                                                       ^^^^^ Use lowercase for CSS value keyword \`FALSE\`.
+
+Output:
+  1 | @property --ThemeColor { SYNTAX: "<COLOR>"; INHERITS: false; INITIAL-VALUE: #ABCDEF; }
+
+`;
+
+exports[`invalid(5): @property --ThemeColor { SYNTAX: \"<COLOR>\"; INHERITS: FALSE; INITIAL-VALUE: #ABCDEF; } 5`] = `
+
+Message:
+> 1 | @property --ThemeColor { SYNTAX: "<COLOR>"; INHERITS: FALSE; INITIAL-VALUE: #ABCDEF; }
+    |                                                              ^^^^^^^^^^^^^ Use lowercase for CSS property \`INITIAL-VALUE\`.
+
+Output:
+  1 | @property --ThemeColor { SYNTAX: "<COLOR>"; INHERITS: FALSE; initial-value: #ABCDEF; }
+
+`;
+
+exports[`invalid(6): @\\70 roperty --ThemeColor { inherits: FALSE; syntax: \"<color>\"; initial-value: red; } 1`] = `
+
+  1 | @\\70 roperty --ThemeColor { inherits: FALSE; syntax: "<color>"; initial-value: red; }
+
+`;
+
+exports[`invalid(6): @\\70 roperty --ThemeColor { inherits: FALSE; syntax: \"<color>\"; initial-value: red; } 2`] = `
+
+Message:
+> 1 | @\\70 roperty --ThemeColor { inherits: FALSE; syntax: "<color>"; initial-value: red; }
+    |                                       ^^^^^ Use lowercase for CSS value keyword \`FALSE\`.
+
+Output:
+  1 | @\\70 roperty --ThemeColor { inherits: false; syntax: "<color>"; initial-value: red; }
+
+`;
+
+exports[`invalid(7): @supports (COLOR: RED) {} 1`] = `
+
+  1 | @supports (COLOR: RED) {}
+
+`;
+
+exports[`invalid(7): @supports (COLOR: RED) {} 2`] = `
+
+Message:
+> 1 | @supports (COLOR: RED) {}
+    |            ^^^^^ Use lowercase for CSS property \`COLOR\`.
+
+Output:
+  1 | @supports (color: RED) {}
+
+`;
+
+exports[`invalid(7): @supports (COLOR: RED) {} 3`] = `
+
+Message:
+> 1 | @supports (COLOR: RED) {}
+    |                   ^^^ Use lowercase for CSS value keyword \`RED\`.
+
+Output:
+  1 | @supports (COLOR: red) {}
+
+`;
+
+exports[`invalid(8): a { @media (width > 1px) { color: RED; display: BLOCK; } } 1`] = `
+
+  1 | a { @media (width > 1px) { color: RED; display: BLOCK; } }
+
+`;
+
+exports[`invalid(8): a { @media (width > 1px) { color: RED; display: BLOCK; } } 2`] = `
+
+Message:
+> 1 | a { @media (width > 1px) { color: RED; display: BLOCK; } }
+    |                                   ^^^ Use lowercase for CSS value keyword \`RED\`.
+
+Output:
+  1 | a { @media (width > 1px) { color: red; display: BLOCK; } }
+
+`;
+
+exports[`invalid(8): a { @media (width > 1px) { color: RED; display: BLOCK; } } 3`] = `
+
+Message:
+> 1 | a { @media (width > 1px) { color: RED; display: BLOCK; } }
+    |                                                 ^^^^^ Use lowercase for CSS value keyword \`BLOCK\`.
+
+Output:
+  1 | a { @media (width > 1px) { color: RED; display: block; } }
+
+`;
+
+exports[`invalid(9): a { border: 1PX SOLID var(--Color); background: var(--Image) NO-REPEAT FIXED; animation: FadeIn 1S LINEAR; } 1`] = `
+
+  1 | a { border: 1PX SOLID var(--Color); background: var(--Image) NO-REPEAT FIXED; animation: FadeIn 1S LINEAR; }
+
+`;
+
+exports[`invalid(9): a { border: 1PX SOLID var(--Color); background: var(--Image) NO-REPEAT FIXED; animation: FadeIn 1S LINEAR; } 2`] = `
+
+Message:
+> 1 | a { border: 1PX SOLID var(--Color); background: var(--Image) NO-REPEAT FIXED; animation: FadeIn 1S LINEAR; }
+    |              ^^ Use lowercase for CSS unit \`PX\`.
+
+Output:
+  1 | a { border: 1px SOLID var(--Color); background: var(--Image) NO-REPEAT FIXED; animation: FadeIn 1S LINEAR; }
+
+`;
+
+exports[`invalid(9): a { border: 1PX SOLID var(--Color); background: var(--Image) NO-REPEAT FIXED; animation: FadeIn 1S LINEAR; } 3`] = `
+
+Message:
+> 1 | a { border: 1PX SOLID var(--Color); background: var(--Image) NO-REPEAT FIXED; animation: FadeIn 1S LINEAR; }
+    |                                                                                                  ^ Use lowercase for CSS unit \`S\`.
+
+Output:
+  1 | a { border: 1PX SOLID var(--Color); background: var(--Image) NO-REPEAT FIXED; animation: FadeIn 1s LINEAR; }
+
+`;
+
+exports[`invalid(9): a { border: 1PX SOLID var(--Color); background: var(--Image) NO-REPEAT FIXED; animation: FadeIn 1S LINEAR; } 4`] = `
+
+Message:
+> 1 | a { border: 1PX SOLID var(--Color); background: var(--Image) NO-REPEAT FIXED; animation: FadeIn 1S LINEAR; }
+    |                                                                                                    ^^^^^^ Use lowercase for CSS value keyword \`LINEAR\`.
+
+Output:
+  1 | a { border: 1PX SOLID var(--Color); background: var(--Image) NO-REPEAT FIXED; animation: FadeIn 1S linear; }
+
+`;

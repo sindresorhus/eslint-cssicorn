@@ -1,0 +1,79 @@
+{
+	"name": "eslint-cssicorn",
+	"version": "0.0.1",
+	"description": "Powerful ESLint rules for CSS",
+	"license": "MIT",
+	"repository": "github:sindresorhus/eslint-cssicorn",
+	"funding": "https://github.com/sponsors/sindresorhus",
+	"author": "Sindre Sorhus <sindresorhus@gmail.com> (https://sindresorhus.com)",
+	"type": "module",
+	"exports": {
+		"types": "./index.d.ts",
+		"default": "./index.js"
+	},
+	"sideEffects": false,
+	"engines": {
+		"node": ">=22"
+	},
+	"scripts": {
+		"create-rule": "node ./scripts/create-rule.js && npm run create-rules-index-file && npm run fix:eslint-docs",
+		"create-rules-index-file": "node ./scripts/create-rules-index-file.js",
+		"fix": "run-p --continue-on-error \"fix:*\"",
+		"fix:css-pseudo-selectors": "node ./scripts/create-css-pseudo-selectors.js",
+		"fix:eslint-docs": "eslint-doc-generator",
+		"fix:js": "eslint --fix",
+		"fix:markdown": "markdownlint --fix \"**/*.md\"",
+		"fix:snapshots": "node --test --test-update-snapshots \"test/*.js\" \"test/unit/*.js\"",
+		"lint": "run-p --continue-on-error \"lint:*\"",
+		"lint:css-pseudo-selectors": "node ./scripts/create-css-pseudo-selectors.js --check",
+		"lint:eslint-docs": "eslint-doc-generator --check",
+		"lint:js": "eslint",
+		"lint:markdown": "markdownlint \"**/*.md\"",
+		"rename-rule": "node ./scripts/rename-rule.js && npm run create-rules-index-file && npm run fix:eslint-docs",
+		"test": "run-s --continue-on-error lint test:js",
+		"test:js": "node --test \"test/*.js\" \"test/unit/*.js\""
+	},
+	"files": [
+		"index.js",
+		"index.d.ts",
+		"rules"
+	],
+	"keywords": [
+		"eslint",
+		"eslintplugin",
+		"eslint-plugin",
+		"css",
+		"linter",
+		"lint",
+		"style"
+	],
+	"dependencies": {
+		"@eslint/css-tree": "^4.1.1"
+	},
+	"devDependencies": {
+		"@babel/code-frame": "^8.0.6",
+		"@eslint-community/eslint-utils": "^4.10.1",
+		"@eslint/css": "^2.0.0",
+		"@typescript-eslint/types": "^8.71.0",
+		"@webref/css": "8.7.5",
+		"enquirer": "^2.4.1",
+		"eslint": "^10.12.0",
+		"eslint-config-xo": "^4.0.1",
+		"eslint-doc-generator": "^3.7.1",
+		"eslint-plugin-eslint-plugin": "^7.6.2",
+		"eslint-plugin-jsdoc": "^65.0.2",
+		"globals": "^17.13.0",
+		"indent-string": "^5.0.0",
+		"markdownlint-cli": "^0.49.1",
+		"nano-spawn": "^2.1.0",
+		"node-style-text": "^2.1.2",
+		"npm-run-all2": "^9.0.3",
+		"open-editor": "^6.0.0",
+		"outdent": "^0.8.0",
+		"yaml": "^2.9.1"
+	},
+	"peerDependencies": {
+		"@eslint/css": ">=2",
+		"eslint": ">=10.4"
+	}
+}

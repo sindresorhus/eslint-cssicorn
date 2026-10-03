@@ -1,0 +1,398 @@
+exports[`invalid(1): a { color: red !IMPORTANT; } 1`] = `
+
+  1 | a { color: red !IMPORTANT; }
+
+`;
+
+exports[`invalid(1): a { color: red !IMPORTANT; } 2`] = `
+
+Message:
+> 1 | a { color: red !IMPORTANT; }
+    |                ^^^^^^^^^^ CSS annotations must use the canonical form \`!important\`.
+
+Suggestion 1/1: Replace with \`!important\`.:
+  1 | a { color: red !important; }
+
+`;
+
+exports[`invalid(10): a { color: red !IMPRTANT; } 1`] = `
+
+  1 | a { color: red !IMPRTANT; }
+
+`;
+
+exports[`invalid(10): a { color: red !IMPRTANT; } 2`] = `
+
+Message:
+> 1 | a { color: red !IMPRTANT; }
+    |                ^^^^^^^^^ CSS annotations must use the canonical form \`!important\`.
+
+Suggestion 1/1: Replace with \`!important\`.:
+  1 | a { color: red !important; }
+
+`;
+
+exports[`invalid(11): a { color: red !\\69mprtant; } 1`] = `
+
+  1 | a { color: red !\\69mprtant; }
+
+`;
+
+exports[`invalid(11): a { color: red !\\69mprtant; } 2`] = `
+
+Message:
+> 1 | a { color: red !\\69mprtant; }
+    |                ^^^^^^^^^^^ CSS annotations must use the canonical form \`!important\`.
+
+Suggestion 1/1: Replace with \`!important\`.:
+  1 | a { color: red !important; }
+
+`;
+
+exports[`invalid(12): a { color: red !\\69 MPRTANT; } 1`] = `
+
+  1 | a { color: red !\\69 MPRTANT; }
+
+`;
+
+exports[`invalid(12): a { color: red !\\69 MPRTANT; } 2`] = `
+
+Message:
+> 1 | a { color: red !\\69 MPRTANT; }
+    |                ^^^^^^^^^^^^ CSS annotations must use the canonical form \`!important\`.
+
+Suggestion 1/1: Replace with \`!important\`.:
+  1 | a { color: red !important; }
+
+`;
+
+exports[`invalid(13): a { color: red ! imprtant; } 1`] = `
+
+  1 | a { color: red ! imprtant; }
+
+`;
+
+exports[`invalid(13): a { color: red ! imprtant; } 2`] = `
+
+Message:
+> 1 | a { color: red ! imprtant; }
+    |                ^^^^^^^^^^ CSS annotations must use the canonical form \`!important\`.
+
+Suggestion 1/1: Replace with \`!important\`.:
+  1 | a { color: red !important; }
+
+`;
+
+exports[`invalid(14): a { color: red !/**/imprtant; } 1`] = `
+
+  1 | a { color: red !/**/imprtant; }
+
+`;
+
+exports[`invalid(14): a { color: red !/**/imprtant; } 2`] = `
+
+Message:
+> 1 | a { color: red !/**/imprtant; }
+    |                ^^^^^^^^^^^^^ CSS annotations must use the canonical form \`!important\`.
+
+`;
+
+exports[`invalid(15): a { color: red ! /* comment */ imprtant; } 1`] = `
+
+  1 | a { color: red ! /* comment */ imprtant; }
+
+`;
+
+exports[`invalid(15): a { color: red ! /* comment */ imprtant; } 2`] = `
+
+Message:
+> 1 | a { color: red ! /* comment */ imprtant; }
+    |                ^^^^^^^^^^^^^^^^^^^^^^^^ CSS annotations must use the canonical form \`!important\`.
+
+`;
+
+exports[`invalid(16): a { color: red !imprtant /* trailing comment */; } 1`] = `
+
+  1 | a { color: red !imprtant /* trailing comment */; }
+
+`;
+
+exports[`invalid(16): a { color: red !imprtant /* trailing comment */; } 2`] = `
+
+Message:
+> 1 | a { color: red !imprtant /* trailing comment */; }
+    |                ^^^^^^^^^ CSS annotations must use the canonical form \`!important\`.
+
+Suggestion 1/1: Replace with \`!important\`.:
+  1 | a { color: red !important /* trailing comment */; }
+
+`;
+
+exports[`invalid(17): a { color: red ! /* !imprtant */ imprtant /* imprtant ! */; } 1`] = `
+
+  1 | a { color: red ! /* !imprtant */ imprtant /* imprtant ! */; }
+
+`;
+
+exports[`invalid(17): a { color: red ! /* !imprtant */ imprtant /* imprtant ! */; } 2`] = `
+
+Message:
+> 1 | a { color: red ! /* !imprtant */ imprtant /* imprtant ! */; }
+    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^ CSS annotations must use the canonical form \`!important\`.
+
+`;
+
+exports[`invalid(18): a { imprtant: imprtant !imprtant; } 1`] = `
+
+  1 | a { imprtant: imprtant !imprtant; }
+
+`;
+
+exports[`invalid(18): a { imprtant: imprtant !imprtant; } 2`] = `
+
+Message:
+> 1 | a { imprtant: imprtant !imprtant; }
+    |                        ^^^^^^^^^ CSS annotations must use the canonical form \`!important\`.
+
+Suggestion 1/1: Replace with \`!important\`.:
+  1 | a { imprtant: imprtant !important; }
+
+`;
+
+exports[`invalid(19): a { color: red !imprtant } 1`] = `
+
+  1 | a { color: red !imprtant }
+
+`;
+
+exports[`invalid(19): a { color: red !imprtant } 2`] = `
+
+Message:
+> 1 | a { color: red !imprtant }
+    |                ^^^^^^^^^ CSS annotations must use the canonical form \`!important\`.
+
+Suggestion 1/1: Replace with \`!important\`.:
+  1 | a { color: red !important }
+
+`;
+
+exports[`invalid(2): a { color: red !ImPoRtAnT; } 1`] = `
+
+  1 | a { color: red !ImPoRtAnT; }
+
+`;
+
+exports[`invalid(2): a { color: red !ImPoRtAnT; } 2`] = `
+
+Message:
+> 1 | a { color: red !ImPoRtAnT; }
+    |                ^^^^^^^^^^ CSS annotations must use the canonical form \`!important\`.
+
+Suggestion 1/1: Replace with \`!important\`.:
+  1 | a { color: red !important; }
+
+`;
+
+exports[`invalid(20): a {\n\tcolor: red\n\t\t! /* comment */\n\t\timprtant;\n} 1`] = `
+
+  1 | a {
+  2 | 	color: red
+  3 | 		! /* comment */
+  4 | 		imprtant;
+  5 | }
+
+`;
+
+exports[`invalid(20): a {\n\tcolor: red\n\t\t! /* comment */\n\t\timprtant;\n} 2`] = `
+
+Message:
+  1 | a {
+  2 | 	color: red
+> 3 | 		! /* comment */
+    | 		^^^^^^^^^^^^^^^
+> 4 | 		imprtant;
+    | ^^^^^^^^^^ CSS annotations must use the canonical form \`!important\`.
+  5 | }
+
+`;
+
+exports[`invalid(21): @font-face { font-family: Example !imprtant; } 1`] = `
+
+  1 | @font-face { font-family: Example !imprtant; }
+
+`;
+
+exports[`invalid(21): @font-face { font-family: Example !imprtant; } 2`] = `
+
+Message:
+> 1 | @font-face { font-family: Example !imprtant; }
+    |                                   ^^^^^^^^^ CSS annotations must use the canonical form \`!important\`.
+
+Suggestion 1/1: Replace with \`!important\`.:
+  1 | @font-face { font-family: Example !important; }
+
+`;
+
+exports[`invalid(22): @media (width > 0px) { a { color: red !imprtant; } } 1`] = `
+
+  1 | @media (width > 0px) { a { color: red !imprtant; } }
+
+`;
+
+exports[`invalid(22): @media (width > 0px) { a { color: red !imprtant; } } 2`] = `
+
+Message:
+> 1 | @media (width > 0px) { a { color: red !imprtant; } }
+    |                                       ^^^^^^^^^ CSS annotations must use the canonical form \`!important\`.
+
+Suggestion 1/1: Replace with \`!important\`.:
+  1 | @media (width > 0px) { a { color: red !important; } }
+
+`;
+
+exports[`invalid(23): a { &:hover { color: red !imprtant; } } 1`] = `
+
+  1 | a { &:hover { color: red !imprtant; } }
+
+`;
+
+exports[`invalid(23): a { &:hover { color: red !imprtant; } } 2`] = `
+
+Message:
+> 1 | a { &:hover { color: red !imprtant; } }
+    |                          ^^^^^^^^^ CSS annotations must use the canonical form \`!important\`.
+
+Suggestion 1/1: Replace with \`!important\`.:
+  1 | a { &:hover { color: red !important; } }
+
+`;
+
+exports[`invalid(24): @keyframes fade { to { opacity: 1 !imprtant; } } 1`] = `
+
+  1 | @keyframes fade { to { opacity: 1 !imprtant; } }
+
+`;
+
+exports[`invalid(24): @keyframes fade { to { opacity: 1 !imprtant; } } 2`] = `
+
+Message:
+> 1 | @keyframes fade { to { opacity: 1 !imprtant; } }
+    |                                   ^^^^^^^^^ CSS annotations must use the canonical form \`!important\`.
+
+Suggestion 1/1: Replace with \`!important\`.:
+  1 | @keyframes fade { to { opacity: 1 !important; } }
+
+`;
+
+exports[`invalid(3): a { color: red !\\69mportant; } 1`] = `
+
+  1 | a { color: red !\\69mportant; }
+
+`;
+
+exports[`invalid(3): a { color: red !\\69mportant; } 2`] = `
+
+Message:
+> 1 | a { color: red !\\69mportant; }
+    |                ^^^^^^^^^^^^ CSS annotations must use the canonical form \`!important\`.
+
+Suggestion 1/1: Replace with \`!important\`.:
+  1 | a { color: red !important; }
+
+`;
+
+exports[`invalid(4): a { color: red !\\49 MPORTANT; } 1`] = `
+
+  1 | a { color: red !\\49 MPORTANT; }
+
+`;
+
+exports[`invalid(4): a { color: red !\\49 MPORTANT; } 2`] = `
+
+Message:
+> 1 | a { color: red !\\49 MPORTANT; }
+    |                ^^^^^^^^^^^^^ CSS annotations must use the canonical form \`!important\`.
+
+Suggestion 1/1: Replace with \`!important\`.:
+  1 | a { color: red !important; }
+
+`;
+
+exports[`invalid(5): a { color: red ! important; } 1`] = `
+
+  1 | a { color: red ! important; }
+
+`;
+
+exports[`invalid(5): a { color: red ! important; } 2`] = `
+
+Message:
+> 1 | a { color: red ! important; }
+    |                ^^^^^^^^^^^ CSS annotations must use the canonical form \`!important\`.
+
+Suggestion 1/1: Replace with \`!important\`.:
+  1 | a { color: red !important; }
+
+`;
+
+exports[`invalid(6): a { color: red !/**/important; } 1`] = `
+
+  1 | a { color: red !/**/important; }
+
+`;
+
+exports[`invalid(6): a { color: red !/**/important; } 2`] = `
+
+Message:
+> 1 | a { color: red !/**/important; }
+    |                ^^^^^^^^^^^^^^ CSS annotations must use the canonical form \`!important\`.
+
+`;
+
+exports[`invalid(7): a { color: red ! /* comment */ important; } 1`] = `
+
+  1 | a { color: red ! /* comment */ important; }
+
+`;
+
+exports[`invalid(7): a { color: red ! /* comment */ important; } 2`] = `
+
+Message:
+> 1 | a { color: red ! /* comment */ important; }
+    |                ^^^^^^^^^^^^^^^^^^^^^^^^^ CSS annotations must use the canonical form \`!important\`.
+
+`;
+
+exports[`invalid(8): a { color: red !imprtant; } 1`] = `
+
+  1 | a { color: red !imprtant; }
+
+`;
+
+exports[`invalid(8): a { color: red !imprtant; } 2`] = `
+
+Message:
+> 1 | a { color: red !imprtant; }
+    |                ^^^^^^^^^ CSS annotations must use the canonical form \`!important\`.
+
+Suggestion 1/1: Replace with \`!important\`.:
+  1 | a { color: red !important; }
+
+`;
+
+exports[`invalid(9): a { color: red !other; } 1`] = `
+
+  1 | a { color: red !other; }
+
+`;
+
+exports[`invalid(9): a { color: red !other; } 2`] = `
+
+Message:
+> 1 | a { color: red !other; }
+    |                ^^^^^^ CSS annotations must use the canonical form \`!important\`.
+
+Suggestion 1/1: Replace with \`!important\`.:
+  1 | a { color: red !important; }
+
+`;

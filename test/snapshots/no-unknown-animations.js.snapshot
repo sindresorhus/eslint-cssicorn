@@ -1,0 +1,583 @@
+exports[`invalid(1): a { animation-name: missing; } 1`] = `
+
+  1 | a { animation-name: missing; }
+
+`;
+
+exports[`invalid(1): a { animation-name: missing; } 2`] = `
+
+Message:
+> 1 | a { animation-name: missing; }
+    |                     ^^^^^^^ Unknown animation \`missing\`.
+
+`;
+
+exports[`invalid(1): a { animation: fade 1s; } 1`] = `
+
+  1 | a { animation: fade 1s; }
+
+`;
+
+exports[`invalid(1): a { animation: fade 1s; } 2`] = `
+
+Message:
+> 1 | a { animation: fade 1s; }
+    |                ^^^^ Unknown animation \`fade\`.
+
+`;
+
+exports[`invalid(10): a { animation-name: ease; } 1`] = `
+
+  1 | a { animation-name: ease; }
+
+`;
+
+exports[`invalid(10): a { animation-name: ease; } 2`] = `
+
+Message:
+> 1 | a { animation-name: ease; }
+    |                     ^^^^ Unknown animation \`ease\`.
+
+`;
+
+exports[`invalid(11): a { animation-name: m\\69 ssing; } 1`] = `
+
+  1 | a { animation-name: m\\69 ssing; }
+
+`;
+
+exports[`invalid(11): a { animation-name: m\\69 ssing; } 2`] = `
+
+Message:
+> 1 | a { animation-name: m\\69 ssing; }
+    |                     ^^^^^^^^^^ Unknown animation \`missing\`.
+
+`;
+
+exports[`invalid(12): a { anim\\61 tion-name: missing; } 1`] = `
+
+  1 | a { anim\\61 tion-name: missing; }
+
+`;
+
+exports[`invalid(12): a { anim\\61 tion-name: missing; } 2`] = `
+
+Message:
+> 1 | a { anim\\61 tion-name: missing; }
+    |                        ^^^^^^^ Unknown animation \`missing\`.
+
+`;
+
+exports[`invalid(13): a {\n\t&:hover { animation-name: missing; }\n} 1`] = `
+
+  1 | a {
+  2 | 	&:hover { animation-name: missing; }
+  3 | }
+
+`;
+
+exports[`invalid(13): a {\n\t&:hover { animation-name: missing; }\n} 2`] = `
+
+Message:
+  1 | a {
+> 2 | 	&:hover { animation-name: missing; }
+    | 	                          ^^^^^^^ Unknown animation \`missing\`.
+  3 | }
+
+`;
+
+exports[`invalid(14): a { animation: missing var(--duration); } 1`] = `
+
+  1 | a { animation: missing var(--duration); }
+
+`;
+
+exports[`invalid(14): a { animation: missing var(--duration); } 2`] = `
+
+Message:
+> 1 | a { animation: missing var(--duration); }
+    |                ^^^^^^^ Unknown animation \`missing\`.
+
+`;
+
+exports[`invalid(15): a { animation: \"missing,animation\" var(--duration, 1s); } 1`] = `
+
+  1 | a { animation: "missing,animation" var(--duration, 1s); }
+
+`;
+
+exports[`invalid(15): a { animation: \"missing,animation\" var(--duration, 1s); } 2`] = `
+
+Message:
+> 1 | a { animation: "missing,animation" var(--duration, 1s); }
+    |                ^^^^^^^^^^^^^^^^^^^ Unknown animation \`missing,animation\`.
+
+`;
+
+exports[`invalid(16): a { animation-name: missing, var(--animation); } 1`] = `
+
+  1 | a { animation-name: missing, var(--animation); }
+
+`;
+
+exports[`invalid(16): a { animation-name: missing, var(--animation); } 2`] = `
+
+Message:
+> 1 | a { animation-name: missing, var(--animation); }
+    |                     ^^^^^^^ Unknown animation \`missing\`.
+
+`;
+
+exports[`invalid(17): a { animation: ease-in ease-out; } 1`] = `
+
+  1 | a { animation: ease-in ease-out; }
+
+`;
+
+exports[`invalid(17): a { animation: ease-in ease-out; } 2`] = `
+
+Message:
+> 1 | a { animation: ease-in ease-out; }
+    |                        ^^^^^^^^ Unknown animation \`ease-out\`.
+
+`;
+
+exports[`invalid(18): a { animation: reverse alternate, paused running; } 1`] = `
+
+  1 | a { animation: reverse alternate, paused running; }
+
+`;
+
+exports[`invalid(18): a { animation: reverse alternate, paused running; } 2`] = `
+
+Message:
+> 1 | a { animation: reverse alternate, paused running; }
+    |                        ^^^^^^^^^ Unknown animation \`alternate\`.
+
+`;
+
+exports[`invalid(18): a { animation: reverse alternate, paused running; } 3`] = `
+
+Message:
+> 1 | a { animation: reverse alternate, paused running; }
+    |                                          ^^^^^^^ Unknown animation \`running\`.
+
+`;
+
+exports[`invalid(19): a { animation: auto 1s 2s none backwards; } 1`] = `
+
+  1 | a { animation: auto 1s 2s none backwards; }
+
+`;
+
+exports[`invalid(19): a { animation: auto 1s 2s none backwards; } 2`] = `
+
+Message:
+> 1 | a { animation: auto 1s 2s none backwards; }
+    |                                ^^^^^^^^^ Unknown animation \`backwards\`.
+
+`;
+
+exports[`invalid(2): a { animation-name: --missing; } 1`] = `
+
+  1 | a { animation-name: --missing; }
+
+`;
+
+exports[`invalid(2): a { animation-name: --missing; } 2`] = `
+
+Message:
+> 1 | a { animation-name: --missing; }
+    |                     ^^^^^^^^^ Unknown animation \`--missing\`.
+
+`;
+
+exports[`invalid(2): a { animation: globalFade 1s; } 1`] = `
+
+  1 | a { animation: globalFade 1s; }
+
+`;
+
+exports[`invalid(2): a { animation: globalFade 1s; } 2`] = `
+
+Message:
+> 1 | a { animation: globalFade 1s; }
+    |                ^^^^^^^^^^ Unknown animation \`globalFade\`.
+
+`;
+
+exports[`invalid(20): a { animation: 2 infinite; } 1`] = `
+
+  1 | a { animation: 2 infinite; }
+
+`;
+
+exports[`invalid(20): a { animation: 2 infinite; } 2`] = `
+
+Message:
+> 1 | a { animation: 2 infinite; }
+    |                  ^^^^^^^^ Unknown animation \`infinite\`.
+
+`;
+
+exports[`invalid(21): a { animation: 1s --timeline auto; } 1`] = `
+
+  1 | a { animation: 1s --timeline auto; }
+
+`;
+
+exports[`invalid(21): a { animation: 1s --timeline auto; } 2`] = `
+
+Message:
+> 1 | a { animation: 1s --timeline auto; }
+    |                              ^^^^ Unknown animation \`auto\`.
+
+`;
+
+exports[`invalid(22): a { animation: st\\65 ps(2) ease; } 1`] = `
+
+  1 | a { animation: st\\65 ps(2) ease; }
+
+`;
+
+exports[`invalid(22): a { animation: st\\65 ps(2) ease; } 2`] = `
+
+Message:
+> 1 | a { animation: st\\65 ps(2) ease; }
+    |                            ^^^^ Unknown animation \`ease\`.
+
+`;
+
+exports[`invalid(23): a { animation: 1\\73  ease-in ease-out; } 1`] = `
+
+  1 | a { animation: 1\\73  ease-in ease-out; }
+
+`;
+
+exports[`invalid(23): a { animation: 1\\73  ease-in ease-out; } 2`] = `
+
+Message:
+> 1 | a { animation: 1\\73  ease-in ease-out; }
+    |                              ^^^^^^^^ Unknown animation \`ease-out\`.
+
+`;
+
+exports[`invalid(24): a { animation: ease-in ease-out, var(--animation); } 1`] = `
+
+  1 | a { animation: ease-in ease-out, var(--animation); }
+
+`;
+
+exports[`invalid(24): a { animation: ease-in ease-out, var(--animation); } 2`] = `
+
+Message:
+> 1 | a { animation: ease-in ease-out, var(--animation); }
+    |                        ^^^^^^^^ Unknown animation \`ease-out\`.
+
+`;
+
+exports[`invalid(25): a { animation: 3s none backwards; } 1`] = `
+
+  1 | a { animation: 3s none backwards; }
+
+`;
+
+exports[`invalid(25): a { animation: 3s none backwards; } 2`] = `
+
+Message:
+> 1 | a { animation: 3s none backwards; }
+    |                        ^^^^^^^^^ Unknown animation \`backwards\`.
+
+`;
+
+exports[`invalid(26): a { animation: missing 100px; } 1`] = `
+
+  1 | a { animation: missing 100px; }
+
+`;
+
+exports[`invalid(26): a { animation: missing 100px; } 2`] = `
+
+Message:
+> 1 | a { animation: missing 100px; }
+    |                ^^^^^^^ Unknown animation \`missing\`.
+
+`;
+
+exports[`invalid(27): @keyframes none {} a { animation-name: \"none\"; } 1`] = `
+
+  1 | @keyframes none {} a { animation-name: "none"; }
+
+`;
+
+exports[`invalid(27): @keyframes none {} a { animation-name: \"none\"; } 2`] = `
+
+Message:
+> 1 | @keyframes none {} a { animation-name: "none"; }
+    |                                        ^^^^^^ Unknown animation \`none\`.
+
+`;
+
+exports[`invalid(28): @keyframes inherit {} a { animation-name: \"inherit\"; } 1`] = `
+
+  1 | @keyframes inherit {} a { animation-name: "inherit"; }
+
+`;
+
+exports[`invalid(28): @keyframes inherit {} a { animation-name: \"inherit\"; } 2`] = `
+
+Message:
+> 1 | @keyframes inherit {} a { animation-name: "inherit"; }
+    |                                           ^^^^^^^^^ Unknown animation \`inherit\`.
+
+`;
+
+exports[`invalid(29): @keyframes default {} a { animation-name: \"default\"; } 1`] = `
+
+  1 | @keyframes default {} a { animation-name: "default"; }
+
+`;
+
+exports[`invalid(29): @keyframes default {} a { animation-name: \"default\"; } 2`] = `
+
+Message:
+> 1 | @keyframes default {} a { animation-name: "default"; }
+    |                                           ^^^^^^^^^ Unknown animation \`default\`.
+
+`;
+
+exports[`invalid(3): a { animation: global 1s; } 1`] = `
+
+  1 | a { animation: global 1s; }
+
+`;
+
+exports[`invalid(3): a { animation: global 1s; } 2`] = `
+
+Message:
+> 1 | a { animation: global 1s; }
+    |                ^^^^^^ Unknown animation \`global\`.
+
+`;
+
+exports[`invalid(3): a { animation: missing 1s ease; } 1`] = `
+
+  1 | a { animation: missing 1s ease; }
+
+`;
+
+exports[`invalid(3): a { animation: missing 1s ease; } 2`] = `
+
+Message:
+> 1 | a { animation: missing 1s ease; }
+    |                ^^^^^^^ Unknown animation \`missing\`.
+
+`;
+
+exports[`invalid(30): @keyframes \\69 nherit {} a { animation-name: \"inherit\"; } 1`] = `
+
+  1 | @keyframes \\69 nherit {} a { animation-name: "inherit"; }
+
+`;
+
+exports[`invalid(30): @keyframes \\69 nherit {} a { animation-name: \"inherit\"; } 2`] = `
+
+Message:
+> 1 | @keyframes \\69 nherit {} a { animation-name: "inherit"; }
+    |                                              ^^^^^^^^^ Unknown animation \`inherit\`.
+
+`;
+
+exports[`invalid(31): @keyframes fade; a { animation-name: fade; } 1`] = `
+
+  1 | @keyframes fade; a { animation-name: fade; }
+
+`;
+
+exports[`invalid(31): @keyframes fade; a { animation-name: fade; } 2`] = `
+
+Message:
+> 1 | @keyframes fade; a { animation-name: fade; }
+    |                                      ^^^^ Unknown animation \`fade\`.
+
+`;
+
+exports[`invalid(32): @keyframes fade extra {} a { animation-name: fade; } 1`] = `
+
+  1 | @keyframes fade extra {} a { animation-name: fade; }
+
+`;
+
+exports[`invalid(32): @keyframes fade extra {} a { animation-name: fade; } 2`] = `
+
+Message:
+> 1 | @keyframes fade extra {} a { animation-name: fade; }
+    |                                              ^^^^ Unknown animation \`fade\`.
+
+`;
+
+exports[`invalid(33): @Keyframes fade {} a { animation-name: fade; } 1`] = `
+
+  1 | @Keyframes fade {} a { animation-name: fade; }
+
+`;
+
+exports[`invalid(33): @Keyframes fade {} a { animation-name: fade; } 2`] = `
+
+Message:
+> 1 | @Keyframes fade {} a { animation-name: fade; }
+    |                                        ^^^^ Unknown animation \`fade\`.
+
+`;
+
+exports[`invalid(34): @-ms-keyframes fade {} a { animation-name: fade; } 1`] = `
+
+  1 | @-ms-keyframes fade {} a { animation-name: fade; }
+
+`;
+
+exports[`invalid(34): @-ms-keyframes fade {} a { animation-name: fade; } 2`] = `
+
+Message:
+> 1 | @-ms-keyframes fade {} a { animation-name: fade; }
+    |                                            ^^^^ Unknown animation \`fade\`.
+
+`;
+
+exports[`invalid(35): @-custom-keyframes fade {} a { animation-name: fade; } 1`] = `
+
+  1 | @-custom-keyframes fade {} a { animation-name: fade; }
+
+`;
+
+exports[`invalid(35): @-custom-keyframes fade {} a { animation-name: fade; } 2`] = `
+
+Message:
+> 1 | @-custom-keyframes fade {} a { animation-name: fade; }
+    |                                                ^^^^ Unknown animation \`fade\`.
+
+`;
+
+exports[`invalid(36): @supports (animation-name: ignored) { a { animation-name: missing; } } 1`] = `
+
+  1 | @supports (animation-name: ignored) { a { animation-name: missing; } }
+
+`;
+
+exports[`invalid(36): @supports (animation-name: ignored) { a { animation-name: missing; } } 2`] = `
+
+Message:
+> 1 | @supports (animation-name: ignored) { a { animation-name: missing; } }
+    |                                                           ^^^^^^^ Unknown animation \`missing\`.
+
+`;
+
+exports[`invalid(4): a { animation-name: auto; } 1`] = `
+
+  1 | a { animation-name: auto; }
+
+`;
+
+exports[`invalid(4): a { animation-name: auto; } 2`] = `
+
+Message:
+> 1 | a { animation-name: auto; }
+    |                     ^^^^ Unknown animation \`auto\`.
+
+`;
+
+exports[`invalid(4): a { animation: --timeline --missing; } 1`] = `
+
+  1 | a { animation: --timeline --missing; }
+
+`;
+
+exports[`invalid(4): a { animation: --timeline --missing; } 2`] = `
+
+Message:
+> 1 | a { animation: --timeline --missing; }
+    |                           ^^^^^^^^^ Unknown animation \`--missing\`.
+
+`;
+
+exports[`invalid(5): a { animation-name: fade, missing; }\n@keyframes fade {} 1`] = `
+
+  1 | a { animation-name: fade, missing; }
+  2 | @keyframes fade {}
+
+`;
+
+exports[`invalid(5): a { animation-name: fade, missing; }\n@keyframes fade {} 2`] = `
+
+Message:
+> 1 | a { animation-name: fade, missing; }
+    |                           ^^^^^^^ Unknown animation \`missing\`.
+  2 | @keyframes fade {}
+
+`;
+
+exports[`invalid(6): a { animation-name: missing, missing; } 1`] = `
+
+  1 | a { animation-name: missing, missing; }
+
+`;
+
+exports[`invalid(6): a { animation-name: missing, missing; } 2`] = `
+
+Message:
+> 1 | a { animation-name: missing, missing; }
+    |                     ^^^^^^^ Unknown animation \`missing\`.
+
+`;
+
+exports[`invalid(6): a { animation-name: missing, missing; } 3`] = `
+
+Message:
+> 1 | a { animation-name: missing, missing; }
+    |                              ^^^^^^^ Unknown animation \`missing\`.
+
+`;
+
+exports[`invalid(7): a { animation-name: Fade; }\n@keyframes fade {} 1`] = `
+
+  1 | a { animation-name: Fade; }
+  2 | @keyframes fade {}
+
+`;
+
+exports[`invalid(7): a { animation-name: Fade; }\n@keyframes fade {} 2`] = `
+
+Message:
+> 1 | a { animation-name: Fade; }
+    |                     ^^^^ Unknown animation \`Fade\`.
+  2 | @keyframes fade {}
+
+`;
+
+exports[`invalid(8): a { animation-name: \"missing\"; } 1`] = `
+
+  1 | a { animation-name: "missing"; }
+
+`;
+
+exports[`invalid(8): a { animation-name: \"missing\"; } 2`] = `
+
+Message:
+> 1 | a { animation-name: "missing"; }
+    |                     ^^^^^^^^^ Unknown animation \`missing\`.
+
+`;
+
+exports[`invalid(9): a { animation: 1s \"missing\"; } 1`] = `
+
+  1 | a { animation: 1s "missing"; }
+
+`;
+
+exports[`invalid(9): a { animation: 1s \"missing\"; } 2`] = `
+
+Message:
+> 1 | a { animation: 1s "missing"; }
+    |                   ^^^^^^^^^ Unknown animation \`missing\`.
+
+`;

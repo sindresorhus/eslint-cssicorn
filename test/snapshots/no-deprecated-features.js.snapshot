@@ -1,0 +1,965 @@
+exports[`invalid(1): @viewport { color: red; } 1`] = `
+
+  1 | @viewport { color: red; }
+
+`;
+
+exports[`invalid(1): @viewport { color: red; } 2`] = `
+
+Message:
+> 1 | @viewport { color: red; }
+    | ^^^^^^^^^ Do not use deprecated CSS at-rule \`@viewport\`.
+
+`;
+
+exports[`invalid(10): a { word-wrap: break-word; grid-gap: 1rem; grid-row-gap: 2rem; grid-column-gap: 3rem; } 1`] = `
+
+  1 | a { word-wrap: break-word; grid-gap: 1rem; grid-row-gap: 2rem; grid-column-gap: 3rem; }
+
+`;
+
+exports[`invalid(10): a { word-wrap: break-word; grid-gap: 1rem; grid-row-gap: 2rem; grid-column-gap: 3rem; } 2`] = `
+
+Message:
+> 1 | a { word-wrap: break-word; grid-gap: 1rem; grid-row-gap: 2rem; grid-column-gap: 3rem; }
+    |     ^^^^^^^^^ Do not use deprecated CSS property \`word-wrap\`.
+
+Output:
+  1 | a { overflow-wrap: break-word; grid-gap: 1rem; grid-row-gap: 2rem; grid-column-gap: 3rem; }
+
+`;
+
+exports[`invalid(10): a { word-wrap: break-word; grid-gap: 1rem; grid-row-gap: 2rem; grid-column-gap: 3rem; } 3`] = `
+
+Message:
+> 1 | a { word-wrap: break-word; grid-gap: 1rem; grid-row-gap: 2rem; grid-column-gap: 3rem; }
+    |                            ^^^^^^^^ Do not use deprecated CSS property \`grid-gap\`.
+
+Output:
+  1 | a { word-wrap: break-word; gap: 1rem; grid-row-gap: 2rem; grid-column-gap: 3rem; }
+
+`;
+
+exports[`invalid(10): a { word-wrap: break-word; grid-gap: 1rem; grid-row-gap: 2rem; grid-column-gap: 3rem; } 4`] = `
+
+Message:
+> 1 | a { word-wrap: break-word; grid-gap: 1rem; grid-row-gap: 2rem; grid-column-gap: 3rem; }
+    |                                            ^^^^^^^^^^^^ Do not use deprecated CSS property \`grid-row-gap\`.
+
+Output:
+  1 | a { word-wrap: break-word; grid-gap: 1rem; row-gap: 2rem; grid-column-gap: 3rem; }
+
+`;
+
+exports[`invalid(10): a { word-wrap: break-word; grid-gap: 1rem; grid-row-gap: 2rem; grid-column-gap: 3rem; } 5`] = `
+
+Message:
+> 1 | a { word-wrap: break-word; grid-gap: 1rem; grid-row-gap: 2rem; grid-column-gap: 3rem; }
+    |                                                                ^^^^^^^^^^^^^^^ Do not use deprecated CSS property \`grid-column-gap\`.
+
+Output:
+  1 | a { word-wrap: break-word; grid-gap: 1rem; grid-row-gap: 2rem; column-gap: 3rem; }
+
+`;
+
+exports[`invalid(11): a { page-break-before: always; page-break-after: always; page-break-inside: avoid; } 1`] = `
+
+  1 | a { page-break-before: always; page-break-after: always; page-break-inside: avoid; }
+
+`;
+
+exports[`invalid(11): a { page-break-before: always; page-break-after: always; page-break-inside: avoid; } 2`] = `
+
+Message:
+> 1 | a { page-break-before: always; page-break-after: always; page-break-inside: avoid; }
+    |     ^^^^^^^^^^^^^^^^^ Do not use deprecated CSS property \`page-break-before\`.
+
+Output:
+  1 | a { break-before: page; page-break-after: always; page-break-inside: avoid; }
+
+`;
+
+exports[`invalid(11): a { page-break-before: always; page-break-after: always; page-break-inside: avoid; } 3`] = `
+
+Message:
+> 1 | a { page-break-before: always; page-break-after: always; page-break-inside: avoid; }
+    |                                ^^^^^^^^^^^^^^^^ Do not use deprecated CSS property \`page-break-after\`.
+
+Output:
+  1 | a { page-break-before: always; break-after: page; page-break-inside: avoid; }
+
+`;
+
+exports[`invalid(11): a { page-break-before: always; page-break-after: always; page-break-inside: avoid; } 4`] = `
+
+Message:
+> 1 | a { page-break-before: always; page-break-after: always; page-break-inside: avoid; }
+    |                                                          ^^^^^^^^^^^^^^^^^ Do not use deprecated CSS property \`page-break-inside\`.
+
+Output:
+  1 | a { page-break-before: always; page-break-after: always; break-inside: avoid; }
+
+`;
+
+exports[`invalid(12): a { overflow: overlay; overflow-x: OVERLAY; overflow-y: overlay; text-orientation: sideways-right; } 1`] = `
+
+  1 | a { overflow: overlay; overflow-x: OVERLAY; overflow-y: overlay; text-orientation: sideways-right; }
+
+`;
+
+exports[`invalid(12): a { overflow: overlay; overflow-x: OVERLAY; overflow-y: overlay; text-orientation: sideways-right; } 2`] = `
+
+Message:
+> 1 | a { overflow: overlay; overflow-x: OVERLAY; overflow-y: overlay; text-orientation: sideways-right; }
+    |               ^^^^^^^ Do not use deprecated CSS property value \`overflow: overlay\`.
+
+Output:
+  1 | a { overflow: auto; overflow-x: OVERLAY; overflow-y: overlay; text-orientation: sideways-right; }
+
+`;
+
+exports[`invalid(12): a { overflow: overlay; overflow-x: OVERLAY; overflow-y: overlay; text-orientation: sideways-right; } 3`] = `
+
+Message:
+> 1 | a { overflow: overlay; overflow-x: OVERLAY; overflow-y: overlay; text-orientation: sideways-right; }
+    |                                    ^^^^^^^ Do not use deprecated CSS property value \`overflow-x: overlay\`.
+
+Output:
+  1 | a { overflow: overlay; overflow-x: auto; overflow-y: overlay; text-orientation: sideways-right; }
+
+`;
+
+exports[`invalid(12): a { overflow: overlay; overflow-x: OVERLAY; overflow-y: overlay; text-orientation: sideways-right; } 4`] = `
+
+Message:
+> 1 | a { overflow: overlay; overflow-x: OVERLAY; overflow-y: overlay; text-orientation: sideways-right; }
+    |                                                         ^^^^^^^ Do not use deprecated CSS property value \`overflow-y: overlay\`.
+
+Output:
+  1 | a { overflow: overlay; overflow-x: OVERLAY; overflow-y: auto; text-orientation: sideways-right; }
+
+`;
+
+exports[`invalid(12): a { overflow: overlay; overflow-x: OVERLAY; overflow-y: overlay; text-orientation: sideways-right; } 5`] = `
+
+Message:
+> 1 | a { overflow: overlay; overflow-x: OVERLAY; overflow-y: overlay; text-orientation: sideways-right; }
+    |                                                                                    ^^^^^^^^^^^^^^ Do not use deprecated CSS property value \`text-orientation: sideways-right\`.
+
+Output:
+  1 | a { overflow: overlay; overflow-x: OVERLAY; overflow-y: overlay; text-orientation: sideways; }
+
+`;
+
+exports[`invalid(13): a { appearance: button; image-rendering: optimizeQuality; text-justify: distribute; user-select: element; zoom: reset; } 1`] = `
+
+  1 | a { appearance: button; image-rendering: optimizeQuality; text-justify: distribute; user-select: element; zoom: reset; }
+
+`;
+
+exports[`invalid(13): a { appearance: button; image-rendering: optimizeQuality; text-justify: distribute; user-select: element; zoom: reset; } 2`] = `
+
+Message:
+> 1 | a { appearance: button; image-rendering: optimizeQuality; text-justify: distribute; user-select: element; zoom: reset; }
+    |                 ^^^^^^ Do not use deprecated CSS property value \`appearance: button\`.
+
+Suggestion 1/1: Replace \`appearance: button\` with \`auto\`.:
+  1 | a { appearance: auto; image-rendering: optimizeQuality; text-justify: distribute; user-select: element; zoom: reset; }
+
+`;
+
+exports[`invalid(13): a { appearance: button; image-rendering: optimizeQuality; text-justify: distribute; user-select: element; zoom: reset; } 3`] = `
+
+Message:
+> 1 | a { appearance: button; image-rendering: optimizeQuality; text-justify: distribute; user-select: element; zoom: reset; }
+    |                                          ^^^^^^^^^^^^^^^ Do not use deprecated CSS property value \`image-rendering: optimizequality\`.
+
+Suggestion 1/1: Replace \`image-rendering: optimizequality\` with \`smooth\`.:
+  1 | a { appearance: button; image-rendering: smooth; text-justify: distribute; user-select: element; zoom: reset; }
+
+`;
+
+exports[`invalid(13): a { appearance: button; image-rendering: optimizeQuality; text-justify: distribute; user-select: element; zoom: reset; } 4`] = `
+
+Message:
+> 1 | a { appearance: button; image-rendering: optimizeQuality; text-justify: distribute; user-select: element; zoom: reset; }
+    |                                                                         ^^^^^^^^^^ Do not use deprecated CSS property value \`text-justify: distribute\`.
+
+Suggestion 1/1: Replace \`text-justify: distribute\` with \`inter-character\`.:
+  1 | a { appearance: button; image-rendering: optimizeQuality; text-justify: inter-character; user-select: element; zoom: reset; }
+
+`;
+
+exports[`invalid(13): a { appearance: button; image-rendering: optimizeQuality; text-justify: distribute; user-select: element; zoom: reset; } 5`] = `
+
+Message:
+> 1 | a { appearance: button; image-rendering: optimizeQuality; text-justify: distribute; user-select: element; zoom: reset; }
+    |                                                                                                  ^^^^^^^ Do not use deprecated CSS property value \`user-select: element\`.
+
+Suggestion 1/1: Replace \`user-select: element\` with \`contain\`.:
+  1 | a { appearance: button; image-rendering: optimizeQuality; text-justify: distribute; user-select: contain; zoom: reset; }
+
+`;
+
+exports[`invalid(13): a { appearance: button; image-rendering: optimizeQuality; text-justify: distribute; user-select: element; zoom: reset; } 6`] = `
+
+Message:
+> 1 | a { appearance: button; image-rendering: optimizeQuality; text-justify: distribute; user-select: element; zoom: reset; }
+    |                                                                                                                 ^^^^^ Do not use deprecated CSS property value \`zoom: reset\`.
+
+Suggestion 1/1: Replace \`zoom: reset\` with \`1\`.:
+  1 | a { appearance: button; image-rendering: optimizeQuality; text-justify: distribute; user-select: element; zoom: 1; }
+
+`;
+
+exports[`invalid(14): a { color: activecaption; border-color: red inactiveborder; scrollbar-color: menu transparent; } 1`] = `
+
+  1 | a { color: activecaption; border-color: red inactiveborder; scrollbar-color: menu transparent; }
+
+`;
+
+exports[`invalid(14): a { color: activecaption; border-color: red inactiveborder; scrollbar-color: menu transparent; } 2`] = `
+
+Message:
+> 1 | a { color: activecaption; border-color: red inactiveborder; scrollbar-color: menu transparent; }
+    |            ^^^^^^^^^^^^^ Do not use deprecated CSS property value \`color: activecaption\`.
+
+Suggestion 1/1: Replace \`color: activecaption\` with \`canvas\`.:
+  1 | a { color: canvas; border-color: red inactiveborder; scrollbar-color: menu transparent; }
+
+`;
+
+exports[`invalid(14): a { color: activecaption; border-color: red inactiveborder; scrollbar-color: menu transparent; } 3`] = `
+
+Message:
+> 1 | a { color: activecaption; border-color: red inactiveborder; scrollbar-color: menu transparent; }
+    |                                             ^^^^^^^^^^^^^^ Do not use deprecated CSS property value \`border-color: inactiveborder\`.
+
+Suggestion 1/1: Replace \`border-color: inactiveborder\` with \`ButtonBorder\`.:
+  1 | a { color: activecaption; border-color: red ButtonBorder; scrollbar-color: menu transparent; }
+
+`;
+
+exports[`invalid(14): a { color: activecaption; border-color: red inactiveborder; scrollbar-color: menu transparent; } 4`] = `
+
+Message:
+> 1 | a { color: activecaption; border-color: red inactiveborder; scrollbar-color: menu transparent; }
+    |                                                                              ^^^^ Do not use deprecated CSS property value \`scrollbar-color: menu\`.
+
+Suggestion 1/1: Replace \`scrollbar-color: menu\` with \`canvas\`.:
+  1 | a { color: activecaption; border-color: red inactiveborder; scrollbar-color: canvas transparent; }
+
+`;
+
+exports[`invalid(15): a { scrollbar-color: custom(background) menu; } 1`] = `
+
+  1 | a { scrollbar-color: custom(background) menu; }
+
+`;
+
+exports[`invalid(15): a { scrollbar-color: custom(background) menu; } 2`] = `
+
+Message:
+> 1 | a { scrollbar-color: custom(background) menu; }
+    |                                         ^^^^ Do not use deprecated CSS property value \`scrollbar-color: menu\`.
+
+Suggestion 1/1: Replace \`scrollbar-color: menu\` with \`canvas\`.:
+  1 | a { scrollbar-color: custom(background) canvas; }
+
+`;
+
+exports[`invalid(16): a { text-decoration: blink; box-sizing: padding-box; width: intrinsic; word-break: break-word; } 1`] = `
+
+  1 | a { text-decoration: blink; box-sizing: padding-box; width: intrinsic; word-break: break-word; }
+
+`;
+
+exports[`invalid(16): a { text-decoration: blink; box-sizing: padding-box; width: intrinsic; word-break: break-word; } 2`] = `
+
+Message:
+> 1 | a { text-decoration: blink; box-sizing: padding-box; width: intrinsic; word-break: break-word; }
+    |                      ^^^^^ Do not use deprecated CSS property value \`text-decoration: blink\`.
+
+`;
+
+exports[`invalid(16): a { text-decoration: blink; box-sizing: padding-box; width: intrinsic; word-break: break-word; } 3`] = `
+
+Message:
+> 1 | a { text-decoration: blink; box-sizing: padding-box; width: intrinsic; word-break: break-word; }
+    |                                         ^^^^^^^^^^^ Do not use deprecated CSS property value \`box-sizing: padding-box\`.
+
+`;
+
+exports[`invalid(16): a { text-decoration: blink; box-sizing: padding-box; width: intrinsic; word-break: break-word; } 4`] = `
+
+Message:
+> 1 | a { text-decoration: blink; box-sizing: padding-box; width: intrinsic; word-break: break-word; }
+    |                                                             ^^^^^^^^^ Do not use deprecated CSS property value \`width: intrinsic\`.
+
+`;
+
+exports[`invalid(16): a { text-decoration: blink; box-sizing: padding-box; width: intrinsic; word-break: break-word; } 5`] = `
+
+Message:
+> 1 | a { text-decoration: blink; box-sizing: padding-box; width: intrinsic; word-break: break-word; }
+    |                                                                                    ^^^^^^^^^^ Do not use deprecated CSS property value \`word-break: break-word\`.
+
+`;
+
+exports[`invalid(17): a { -moz-box-align: center; position-try-options: --fallback; scroll-snap-margin: 1rem; clip: rect(0); } 1`] = `
+
+  1 | a { -moz-box-align: center; position-try-options: --fallback; scroll-snap-margin: 1rem; clip: rect(0); }
+
+`;
+
+exports[`invalid(17): a { -moz-box-align: center; position-try-options: --fallback; scroll-snap-margin: 1rem; clip: rect(0); } 2`] = `
+
+Message:
+> 1 | a { -moz-box-align: center; position-try-options: --fallback; scroll-snap-margin: 1rem; clip: rect(0); }
+    |     ^^^^^^^^^^^^^^ Do not use deprecated CSS property \`-moz-box-align\`.
+
+Suggestion 1/1: Replace \`-moz-box-align\` with \`align-items\`.:
+  1 | a { align-items: center; position-try-options: --fallback; scroll-snap-margin: 1rem; clip: rect(0); }
+
+`;
+
+exports[`invalid(17): a { -moz-box-align: center; position-try-options: --fallback; scroll-snap-margin: 1rem; clip: rect(0); } 3`] = `
+
+Message:
+> 1 | a { -moz-box-align: center; position-try-options: --fallback; scroll-snap-margin: 1rem; clip: rect(0); }
+    |                             ^^^^^^^^^^^^^^^^^^^^ Do not use deprecated CSS property \`position-try-options\`.
+
+Suggestion 1/1: Replace \`position-try-options\` with \`position-try-fallbacks\`.:
+  1 | a { -moz-box-align: center; position-try-fallbacks: --fallback; scroll-snap-margin: 1rem; clip: rect(0); }
+
+`;
+
+exports[`invalid(17): a { -moz-box-align: center; position-try-options: --fallback; scroll-snap-margin: 1rem; clip: rect(0); } 4`] = `
+
+Message:
+> 1 | a { -moz-box-align: center; position-try-options: --fallback; scroll-snap-margin: 1rem; clip: rect(0); }
+    |                                                               ^^^^^^^^^^^^^^^^^^ Do not use deprecated CSS property \`scroll-snap-margin\`.
+
+Suggestion 1/1: Replace \`scroll-snap-margin\` with \`scroll-margin\`.:
+  1 | a { -moz-box-align: center; position-try-options: --fallback; scroll-margin: 1rem; clip: rect(0); }
+
+`;
+
+exports[`invalid(17): a { -moz-box-align: center; position-try-options: --fallback; scroll-snap-margin: 1rem; clip: rect(0); } 5`] = `
+
+Message:
+> 1 | a { -moz-box-align: center; position-try-options: --fallback; scroll-snap-margin: 1rem; clip: rect(0); }
+    |                                                                                         ^^^^ Do not use deprecated CSS property \`clip\`.
+
+`;
+
+exports[`invalid(18): @supports (word-wrap: break-word) { a { overflow: overlay; } } 1`] = `
+
+  1 | @supports (word-wrap: break-word) { a { overflow: overlay; } }
+
+`;
+
+exports[`invalid(18): @supports (word-wrap: break-word) { a { overflow: overlay; } } 2`] = `
+
+Message:
+> 1 | @supports (word-wrap: break-word) { a { overflow: overlay; } }
+    |            ^^^^^^^^^ Do not use deprecated CSS property \`word-wrap\`.
+
+Output:
+  1 | @supports (overflow-wrap: break-word) { a { overflow: overlay; } }
+
+`;
+
+exports[`invalid(18): @supports (word-wrap: break-word) { a { overflow: overlay; } } 3`] = `
+
+Message:
+> 1 | @supports (word-wrap: break-word) { a { overflow: overlay; } }
+    |                                                   ^^^^^^^ Do not use deprecated CSS property value \`overflow: overlay\`.
+
+Output:
+  1 | @supports (word-wrap: break-word) { a { overflow: auto; } }
+
+`;
+
+exports[`invalid(19): @page acronym { background-color: activecaption; } 1`] = `
+
+  1 | @page acronym { background-color: activecaption; }
+
+`;
+
+exports[`invalid(19): @page acronym { background-color: activecaption; } 2`] = `
+
+Message:
+> 1 | @page acronym { background-color: activecaption; }
+    |                                   ^^^^^^^^^^^^^ Do not use deprecated CSS property value \`background-color: activecaption\`.
+
+Suggestion 1/1: Replace \`background-color: activecaption\` with \`canvas\`.:
+  1 | @page acronym { background-color: canvas; }
+
+`;
+
+exports[`invalid(2): @nest & > a { color: red; } 1`] = `
+
+  1 | @nest & > a { color: red; }
+
+`;
+
+exports[`invalid(2): @nest & > a { color: red; } 2`] = `
+
+Message:
+> 1 | @nest & > a { color: red; }
+    | ^^^^^ Do not use deprecated CSS at-rule \`@nest\`.
+
+`;
+
+exports[`invalid(20): main { & acronym { overflow: overlay; } } 1`] = `
+
+  1 | main { & acronym { overflow: overlay; } }
+
+`;
+
+exports[`invalid(20): main { & acronym { overflow: overlay; } } 2`] = `
+
+Message:
+> 1 | main { & acronym { overflow: overlay; } }
+    |          ^^^^^^^ Do not use deprecated CSS selector \`acronym\`.
+
+`;
+
+exports[`invalid(20): main { & acronym { overflow: overlay; } } 3`] = `
+
+Message:
+> 1 | main { & acronym { overflow: overlay; } }
+    |                              ^^^^^^^ Do not use deprecated CSS property value \`overflow: overlay\`.
+
+Output:
+  1 | main { & acronym { overflow: auto; } }
+
+`;
+
+exports[`invalid(21): :not(acronym), :nth-child(2n of applet), :host(font) { color: red; } 1`] = `
+
+  1 | :not(acronym), :nth-child(2n of applet), :host(font) { color: red; }
+
+`;
+
+exports[`invalid(21): :not(acronym), :nth-child(2n of applet), :host(font) { color: red; } 2`] = `
+
+Message:
+> 1 | :not(acronym), :nth-child(2n of applet), :host(font) { color: red; }
+    |      ^^^^^^^ Do not use deprecated CSS selector \`acronym\`.
+
+`;
+
+exports[`invalid(21): :not(acronym), :nth-child(2n of applet), :host(font) { color: red; } 3`] = `
+
+Message:
+> 1 | :not(acronym), :nth-child(2n of applet), :host(font) { color: red; }
+    |                                 ^^^^^^ Do not use deprecated CSS selector \`applet\`.
+
+`;
+
+exports[`invalid(21): :not(acronym), :nth-child(2n of applet), :host(font) { color: red; } 4`] = `
+
+Message:
+> 1 | :not(acronym), :nth-child(2n of applet), :host(font) { color: red; }
+    |                                                ^^^^ Do not use deprecated CSS selector \`font\`.
+
+`;
+
+exports[`invalid(22): @v\\69 ewport { ACRONYM:m\\61 tches(a) { w\\6f rd-wrap: break-word; } } 1`] = `
+
+  1 | @v\\69 ewport { ACRONYM:m\\61 tches(a) { w\\6f rd-wrap: break-word; } }
+
+`;
+
+exports[`invalid(22): @v\\69 ewport { ACRONYM:m\\61 tches(a) { w\\6f rd-wrap: break-word; } } 2`] = `
+
+Message:
+> 1 | @v\\69 ewport { ACRONYM:m\\61 tches(a) { w\\6f rd-wrap: break-word; } }
+    | ^^^^^^^^^^^^ Do not use deprecated CSS at-rule \`@viewport\`.
+
+`;
+
+exports[`invalid(22): @v\\69 ewport { ACRONYM:m\\61 tches(a) { w\\6f rd-wrap: break-word; } } 3`] = `
+
+Message:
+> 1 | @v\\69 ewport { ACRONYM:m\\61 tches(a) { w\\6f rd-wrap: break-word; } }
+    |                ^^^^^^^ Do not use deprecated CSS selector \`acronym\`.
+
+`;
+
+exports[`invalid(22): @v\\69 ewport { ACRONYM:m\\61 tches(a) { w\\6f rd-wrap: break-word; } } 4`] = `
+
+Message:
+> 1 | @v\\69 ewport { ACRONYM:m\\61 tches(a) { w\\6f rd-wrap: break-word; } }
+    |                       ^^^^^^^^^^^ Do not use deprecated CSS selector \`:matches\`.
+
+Output:
+  1 | @v\\69 ewport { ACRONYM:is(a) { w\\6f rd-wrap: break-word; } }
+
+`;
+
+exports[`invalid(22): @v\\69 ewport { ACRONYM:m\\61 tches(a) { w\\6f rd-wrap: break-word; } } 5`] = `
+
+Message:
+> 1 | @v\\69 ewport { ACRONYM:m\\61 tches(a) { w\\6f rd-wrap: break-word; } }
+    |                                        ^^^^^^^^^^^^ Do not use deprecated CSS property \`word-wrap\`.
+
+Output:
+  1 | @v\\69 ewport { ACRONYM:m\\61 tches(a) { overflow-wrap: break-word; } }
+
+`;
+
+exports[`invalid(23): a { color: rgb(from activecaption r g b); color: activecaption activeborder; } 1`] = `
+
+  1 | a { color: rgb(from activecaption r g b); color: activecaption activeborder; }
+
+`;
+
+exports[`invalid(23): a { color: rgb(from activecaption r g b); color: activecaption activeborder; } 2`] = `
+
+Message:
+> 1 | a { color: rgb(from activecaption r g b); color: activecaption activeborder; }
+    |                     ^^^^^^^^^^^^^ Do not use deprecated CSS property value \`color: activecaption\`.
+
+Suggestion 1/1: Replace \`color: activecaption\` with \`canvas\`.:
+  1 | a { color: rgb(from canvas r g b); color: activecaption activeborder; }
+
+`;
+
+exports[`invalid(23): a { color: rgb(from activecaption r g b); color: activecaption activeborder; } 3`] = `
+
+Message:
+> 1 | a { color: rgb(from activecaption r g b); color: activecaption activeborder; }
+    |                                                  ^^^^^^^^^^^^^ Do not use deprecated CSS property value \`color: activecaption\`.
+
+Suggestion 1/1: Replace \`color: activecaption\` with \`canvas\`.:
+  1 | a { color: rgb(from activecaption r g b); color: canvas activeborder; }
+
+`;
+
+exports[`invalid(23): a { color: rgb(from activecaption r g b); color: activecaption activeborder; } 4`] = `
+
+Message:
+> 1 | a { color: rgb(from activecaption r g b); color: activecaption activeborder; }
+    |                                                                ^^^^^^^^^^^^ Do not use deprecated CSS property value \`color: activeborder\`.
+
+Suggestion 1/1: Replace \`color: activeborder\` with \`ButtonBorder\`.:
+  1 | a { color: rgb(from activecaption r g b); color: activecaption ButtonBorder; }
+
+`;
+
+exports[`invalid(24): p { word-wrap: break-word; overflow-wrap: break-word; } 1`] = `
+
+  1 | p { word-wrap: break-word; overflow-wrap: break-word; }
+
+`;
+
+exports[`invalid(24): p { word-wrap: break-word; overflow-wrap: break-word; } 2`] = `
+
+Message:
+> 1 | p { word-wrap: break-word; overflow-wrap: break-word; }
+    |     ^^^^^^^^^ Do not use deprecated CSS property \`word-wrap\`.
+
+`;
+
+exports[`invalid(25): p { overflow-wrap: break-word; word-wrap: break-word; } 1`] = `
+
+  1 | p { overflow-wrap: break-word; word-wrap: break-word; }
+
+`;
+
+exports[`invalid(25): p { overflow-wrap: break-word; word-wrap: break-word; } 2`] = `
+
+Message:
+> 1 | p { overflow-wrap: break-word; word-wrap: break-word; }
+    |                                ^^^^^^^^^ Do not use deprecated CSS property \`word-wrap\`.
+
+`;
+
+exports[`invalid(26): p { page-break-inside: avoid; break-inside: avoid; } 1`] = `
+
+  1 | p { page-break-inside: avoid; break-inside: avoid; }
+
+`;
+
+exports[`invalid(26): p { page-break-inside: avoid; break-inside: avoid; } 2`] = `
+
+Message:
+> 1 | p { page-break-inside: avoid; break-inside: avoid; }
+    |     ^^^^^^^^^^^^^^^^^ Do not use deprecated CSS property \`page-break-inside\`.
+
+`;
+
+exports[`invalid(27): p { break-inside: avoid; page-break-inside: avoid; } 1`] = `
+
+  1 | p { break-inside: avoid; page-break-inside: avoid; }
+
+`;
+
+exports[`invalid(27): p { break-inside: avoid; page-break-inside: avoid; } 2`] = `
+
+Message:
+> 1 | p { break-inside: avoid; page-break-inside: avoid; }
+    |                          ^^^^^^^^^^^^^^^^^ Do not use deprecated CSS property \`page-break-inside\`.
+
+`;
+
+exports[`invalid(28): p { grid-gap: 1rem; gap: 1rem; } 1`] = `
+
+  1 | p { grid-gap: 1rem; gap: 1rem; }
+
+`;
+
+exports[`invalid(28): p { grid-gap: 1rem; gap: 1rem; } 2`] = `
+
+Message:
+> 1 | p { grid-gap: 1rem; gap: 1rem; }
+    |     ^^^^^^^^ Do not use deprecated CSS property \`grid-gap\`.
+
+`;
+
+exports[`invalid(29): p { gap: 1rem; grid-gap: 1rem; } 1`] = `
+
+  1 | p { gap: 1rem; grid-gap: 1rem; }
+
+`;
+
+exports[`invalid(29): p { gap: 1rem; grid-gap: 1rem; } 2`] = `
+
+Message:
+> 1 | p { gap: 1rem; grid-gap: 1rem; }
+    |                ^^^^^^^^ Do not use deprecated CSS property \`grid-gap\`.
+
+`;
+
+exports[`invalid(3): @media tv { a { color: red; } } 1`] = `
+
+  1 | @media tv { a { color: red; } }
+
+`;
+
+exports[`invalid(3): @media tv { a { color: red; } } 2`] = `
+
+Message:
+> 1 | @media tv { a { color: red; } }
+    |        ^^ Do not use deprecated CSS media type \`@media tv\`.
+
+`;
+
+exports[`invalid(30): p { page-break-before: always; break-before: page; } 1`] = `
+
+  1 | p { page-break-before: always; break-before: page; }
+
+`;
+
+exports[`invalid(30): p { page-break-before: always; break-before: page; } 2`] = `
+
+Message:
+> 1 | p { page-break-before: always; break-before: page; }
+    |     ^^^^^^^^^^^^^^^^^ Do not use deprecated CSS property \`page-break-before\`.
+
+`;
+
+exports[`invalid(31): p { word-wrap: break-word; OVERFLOW-WRAP: break-word; } 1`] = `
+
+  1 | p { word-wrap: break-word; OVERFLOW-WRAP: break-word; }
+
+`;
+
+exports[`invalid(31): p { word-wrap: break-word; OVERFLOW-WRAP: break-word; } 2`] = `
+
+Message:
+> 1 | p { word-wrap: break-word; OVERFLOW-WRAP: break-word; }
+    |     ^^^^^^^^^ Do not use deprecated CSS property \`word-wrap\`.
+
+`;
+
+exports[`invalid(32): p { word-wrap: break-word; overfl\\6f w-wrap: break-word; } 1`] = `
+
+  1 | p { word-wrap: break-word; overfl\\6f w-wrap: break-word; }
+
+`;
+
+exports[`invalid(32): p { word-wrap: break-word; overfl\\6f w-wrap: break-word; } 2`] = `
+
+Message:
+> 1 | p { word-wrap: break-word; overfl\\6f w-wrap: break-word; }
+    |     ^^^^^^^^^ Do not use deprecated CSS property \`word-wrap\`.
+
+`;
+
+exports[`invalid(33): p { -webkit-box-flex: 1; flex-grow: 1; } 1`] = `
+
+  1 | p { -webkit-box-flex: 1; flex-grow: 1; }
+
+`;
+
+exports[`invalid(33): p { -webkit-box-flex: 1; flex-grow: 1; } 2`] = `
+
+Message:
+> 1 | p { -webkit-box-flex: 1; flex-grow: 1; }
+    |     ^^^^^^^^^^^^^^^^ Do not use deprecated CSS property \`-webkit-box-flex\`.
+
+`;
+
+exports[`invalid(34): p { word-wrap: break-word; & span { overflow-wrap: break-word; } } 1`] = `
+
+  1 | p { word-wrap: break-word; & span { overflow-wrap: break-word; } }
+
+`;
+
+exports[`invalid(34): p { word-wrap: break-word; & span { overflow-wrap: break-word; } } 2`] = `
+
+Message:
+> 1 | p { word-wrap: break-word; & span { overflow-wrap: break-word; } }
+    |     ^^^^^^^^^ Do not use deprecated CSS property \`word-wrap\`.
+
+Output:
+  1 | p { overflow-wrap: break-word; & span { overflow-wrap: break-word; } }
+
+`;
+
+exports[`invalid(35): p { grid-gap: 1rem; @media (width > 1px) { gap: 2rem; } } 1`] = `
+
+  1 | p { grid-gap: 1rem; @media (width > 1px) { gap: 2rem; } }
+
+`;
+
+exports[`invalid(35): p { grid-gap: 1rem; @media (width > 1px) { gap: 2rem; } } 2`] = `
+
+Message:
+> 1 | p { grid-gap: 1rem; @media (width > 1px) { gap: 2rem; } }
+    |     ^^^^^^^^ Do not use deprecated CSS property \`grid-gap\`.
+
+Output:
+  1 | p { gap: 1rem; @media (width > 1px) { gap: 2rem; } }
+
+`;
+
+exports[`invalid(36): p { page-break-inside: avoid; } div { break-inside: avoid; } 1`] = `
+
+  1 | p { page-break-inside: avoid; } div { break-inside: avoid; }
+
+`;
+
+exports[`invalid(36): p { page-break-inside: avoid; } div { break-inside: avoid; } 2`] = `
+
+Message:
+> 1 | p { page-break-inside: avoid; } div { break-inside: avoid; }
+    |     ^^^^^^^^^^^^^^^^^ Do not use deprecated CSS property \`page-break-inside\`.
+
+Output:
+  1 | p { break-inside: avoid; } div { break-inside: avoid; }
+
+`;
+
+exports[`invalid(37): p { grid-column-gap: 1rem; -webkit-column-gap: 1rem; --column-gap: 1rem; } 1`] = `
+
+  1 | p { grid-column-gap: 1rem; -webkit-column-gap: 1rem; --column-gap: 1rem; }
+
+`;
+
+exports[`invalid(37): p { grid-column-gap: 1rem; -webkit-column-gap: 1rem; --column-gap: 1rem; } 2`] = `
+
+Message:
+> 1 | p { grid-column-gap: 1rem; -webkit-column-gap: 1rem; --column-gap: 1rem; }
+    |     ^^^^^^^^^^^^^^^ Do not use deprecated CSS property \`grid-column-gap\`.
+
+Output:
+  1 | p { column-gap: 1rem; -webkit-column-gap: 1rem; --column-gap: 1rem; }
+
+`;
+
+exports[`invalid(38): .a:export { grid-gap: 1px; } 1`] = `
+
+  1 | .a:export { grid-gap: 1px; }
+
+`;
+
+exports[`invalid(38): .a:export { grid-gap: 1px; } 2`] = `
+
+Message:
+> 1 | .a:export { grid-gap: 1px; }
+    |             ^^^^^^^^ Do not use deprecated CSS property \`grid-gap\`.
+
+Output:
+  1 | .a:export { gap: 1px; }
+
+`;
+
+exports[`invalid(4): @media only PROJECTION { a { color: red; } } 1`] = `
+
+  1 | @media only PROJECTION { a { color: red; } }
+
+`;
+
+exports[`invalid(4): @media only PROJECTION { a { color: red; } } 2`] = `
+
+Message:
+> 1 | @media only PROJECTION { a { color: red; } }
+    |             ^^^^^^^^^^ Do not use deprecated CSS media type \`@media projection\`.
+
+`;
+
+exports[`invalid(5): @media aural, projection { a { color: red; } } 1`] = `
+
+  1 | @media aural, projection { a { color: red; } }
+
+`;
+
+exports[`invalid(5): @media aural, projection { a { color: red; } } 2`] = `
+
+Message:
+> 1 | @media aural, projection { a { color: red; } }
+    |        ^^^^^ Do not use deprecated CSS media type \`@media aural\`.
+
+`;
+
+exports[`invalid(5): @media aural, projection { a { color: red; } } 3`] = `
+
+Message:
+> 1 | @media aural, projection { a { color: red; } }
+    |               ^^^^^^^^^^ Do not use deprecated CSS media type \`@media projection\`.
+
+`;
+
+exports[`invalid(6): acronym, APPLET, altGlyph, glyphRef { color: red; } 1`] = `
+
+  1 | acronym, APPLET, altGlyph, glyphRef { color: red; }
+
+`;
+
+exports[`invalid(6): acronym, APPLET, altGlyph, glyphRef { color: red; } 2`] = `
+
+Message:
+> 1 | acronym, APPLET, altGlyph, glyphRef { color: red; }
+    | ^^^^^^^ Do not use deprecated CSS selector \`acronym\`.
+
+`;
+
+exports[`invalid(6): acronym, APPLET, altGlyph, glyphRef { color: red; } 3`] = `
+
+Message:
+> 1 | acronym, APPLET, altGlyph, glyphRef { color: red; }
+    |          ^^^^^^ Do not use deprecated CSS selector \`applet\`.
+
+`;
+
+exports[`invalid(6): acronym, APPLET, altGlyph, glyphRef { color: red; } 4`] = `
+
+Message:
+> 1 | acronym, APPLET, altGlyph, glyphRef { color: red; }
+    |                  ^^^^^^^^ Do not use deprecated CSS selector \`altGlyph\`.
+
+`;
+
+exports[`invalid(6): acronym, APPLET, altGlyph, glyphRef { color: red; } 5`] = `
+
+Message:
+> 1 | acronym, APPLET, altGlyph, glyphRef { color: red; }
+    |                            ^^^^^^^^ Do not use deprecated CSS selector \`glyphRef\`.
+
+`;
+
+exports[`invalid(7): @namespace svg url(\"x\"); svg|font, *|acronym, |applet, svg|altGlyph, svg|alt\\47 lyph { color: red; } 1`] = `
+
+  1 | @namespace svg url("x"); svg|font, *|acronym, |applet, svg|altGlyph, svg|alt\\47 lyph { color: red; }
+
+`;
+
+exports[`invalid(7): @namespace svg url(\"x\"); svg|font, *|acronym, |applet, svg|altGlyph, svg|alt\\47 lyph { color: red; } 2`] = `
+
+Message:
+> 1 | @namespace svg url("x"); svg|font, *|acronym, |applet, svg|altGlyph, svg|alt\\47 lyph { color: red; }
+    |                              ^^^^ Do not use deprecated CSS selector \`font\`.
+
+`;
+
+exports[`invalid(7): @namespace svg url(\"x\"); svg|font, *|acronym, |applet, svg|altGlyph, svg|alt\\47 lyph { color: red; } 3`] = `
+
+Message:
+> 1 | @namespace svg url("x"); svg|font, *|acronym, |applet, svg|altGlyph, svg|alt\\47 lyph { color: red; }
+    |                                      ^^^^^^^ Do not use deprecated CSS selector \`acronym\`.
+
+`;
+
+exports[`invalid(7): @namespace svg url(\"x\"); svg|font, *|acronym, |applet, svg|altGlyph, svg|alt\\47 lyph { color: red; } 4`] = `
+
+Message:
+> 1 | @namespace svg url("x"); svg|font, *|acronym, |applet, svg|altGlyph, svg|alt\\47 lyph { color: red; }
+    |                                                ^^^^^^ Do not use deprecated CSS selector \`applet\`.
+
+`;
+
+exports[`invalid(7): @namespace svg url(\"x\"); svg|font, *|acronym, |applet, svg|altGlyph, svg|alt\\47 lyph { color: red; } 5`] = `
+
+Message:
+> 1 | @namespace svg url("x"); svg|font, *|acronym, |applet, svg|altGlyph, svg|alt\\47 lyph { color: red; }
+    |                                                            ^^^^^^^^ Do not use deprecated CSS selector \`altGlyph\`.
+
+`;
+
+exports[`invalid(7): @namespace svg url(\"x\"); svg|font, *|acronym, |applet, svg|altGlyph, svg|alt\\47 lyph { color: red; } 6`] = `
+
+Message:
+> 1 | @namespace svg url("x"); svg|font, *|acronym, |applet, svg|altGlyph, svg|alt\\47 lyph { color: red; }
+    |                                                                          ^^^^^^^^^^^ Do not use deprecated CSS selector \`altGlyph\`.
+
+`;
+
+exports[`invalid(8): :matches(article), :-webkit-any(article), :focus-ring { color: red; } 1`] = `
+
+  1 | :matches(article), :-webkit-any(article), :focus-ring { color: red; }
+
+`;
+
+exports[`invalid(8): :matches(article), :-webkit-any(article), :focus-ring { color: red; } 2`] = `
+
+Message:
+> 1 | :matches(article), :-webkit-any(article), :focus-ring { color: red; }
+    | ^^^^^^^^ Do not use deprecated CSS selector \`:matches\`.
+
+Output:
+  1 | :is(article), :-webkit-any(article), :focus-ring { color: red; }
+
+`;
+
+exports[`invalid(8): :matches(article), :-webkit-any(article), :focus-ring { color: red; } 3`] = `
+
+Message:
+> 1 | :matches(article), :-webkit-any(article), :focus-ring { color: red; }
+    |                    ^^^^^^^^^^^^ Do not use deprecated CSS selector \`:-webkit-any\`.
+
+`;
+
+exports[`invalid(8): :matches(article), :-webkit-any(article), :focus-ring { color: red; } 4`] = `
+
+Message:
+> 1 | :matches(article), :-webkit-any(article), :focus-ring { color: red; }
+    |                                           ^^^^^^^^^^^ Do not use deprecated CSS selector \`:focus-ring\`.
+
+`;
+
+exports[`invalid(9): ::content, ::shadow { color: red; } 1`] = `
+
+  1 | ::content, ::shadow { color: red; }
+
+`;
+
+exports[`invalid(9): ::content, ::shadow { color: red; } 2`] = `
+
+Message:
+> 1 | ::content, ::shadow { color: red; }
+    | ^^^^^^^^^ Do not use deprecated CSS selector \`::content\`.
+
+`;
+
+exports[`invalid(9): ::content, ::shadow { color: red; } 3`] = `
+
+Message:
+> 1 | ::content, ::shadow { color: red; }
+    |            ^^^^^^^^ Do not use deprecated CSS selector \`::shadow\`.
+
+`;

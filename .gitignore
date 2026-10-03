@@ -1,0 +1,6 @@
+node_modules
+yarn.lock
+coverage
+package-lock.json
+*.log
+.ai-temporary

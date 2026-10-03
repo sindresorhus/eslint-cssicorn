@@ -1,0 +1,165 @@
+#!/usr/bin/env node
+import fs, {promises as fsAsync} from 'node:fs';
+import process from 'node:process';
+import {pathToFileURL} from 'node:url';
+import enquirer from 'enquirer';
+import cssicorn from '../index.js';
+import * as ruleModules from '../rules/index.js';
+
+const sourceRuleIds = Object.keys(ruleModules);
+const renamableRules = sourceRuleIds.filter(ruleId => ruleId.includes('-'));
+const resolveFile = file => new URL(`../${file}`, import.meta.url);
+const isValidRuleId = ruleId => typeof ruleId === 'string' && /^[a-z][\d\-a-z]*$/.test(ruleId);
+
+function checkFiles(ruleId) {
+	const files = [
+		`docs/rules/${ruleId}.md`,
+		`rules/${ruleId}.js`,
+		`test/${ruleId}.js`,
+		`test/snapshots/${ruleId}.js.snapshot`,
+	];
+
+	for (const file of files) {
+		if (fs.existsSync(resolveFile(file))) {
+			throw new Error(`\`${file}\` already exists.`);
+		}
+	}
+}
+
+async function renameFile(source, target) {
+	source = resolveFile(source);
+	target = resolveFile(target);
+
+	if (fs.existsSync(source)) {
+		await fsAsync.rename(source, target);
+	}
+}
+
+async function sortReadmeRuleRow(ruleId) {
+	const readmeFile = resolveFile('readme.md');
+	const text = await fsAsync.readFile(readmeFile, 'utf8');
+	await fsAsync.writeFile(readmeFile, sortReadmeRuleRows(text, ruleId));
+}
+
+function sortReadmeRuleRows(text, ruleId) {
+	const lines = text.split('\n');
+	const rowIndex = lines.findIndex(line => line.startsWith(`| [${ruleId}](`));
+	if (rowIndex === -1) {
+		return text;
+	}
+
+	const rowPattern = /^\| \[([^\]]+)\]\(/v;
+	const [row] = lines.splice(rowIndex, 1);
+	const ruleRowIndexes = lines
+		.map((line, index) => rowPattern.test(line) ? index : undefined)
+		.filter(index => index !== undefined);
+
+	let insertAt = lines.findIndex(line => {
+		const match = line.match(rowPattern);
+		return match && match[1] > ruleId;
+	});
+	if (insertAt === -1) {
+		insertAt = ruleRowIndexes.at(-1) + 1;
+	}
+
+	lines.splice(insertAt, 0, row);
+	return lines.join('\n');
+}
+
+function replaceRuleIdInRulesIndex(text, from, to) {
+	const fromExportName = from.includes('-') ? `'${from}'` : from;
+	const toExportName = to.includes('-') ? `'${to}'` : to;
+	const fromLine = `export {default as ${fromExportName}} from './${from}.js';`;
+	const toLine = `export {default as ${toExportName}} from './${to}.js';`;
+	return text.replace(fromLine, () => toLine);
+}
+
+function replaceRuleId(text, from, to) {
+	const pattern = new RegExp(String.raw`(?<![\w-])${from}(?![\w-])`, 'gu');
+	return text.replaceAll(pattern, () => to);
+}
+
+async function renameRule(from, to) {
+	if (!sourceRuleIds.includes(from) || !isValidRuleId(to)) {
+		throw new Error('Invalid rule name.');
+	}
+
+	if (!from.includes('-')) {
+		throw new Error('Rules without hyphens must be renamed manually to avoid changing unrelated code.');
+	}
+
+	await renameFile(`docs/rules/${from}.md`, `docs/rules/${to}.md`);
+	await renameFile(`rules/${from}.js`, `rules/${to}.js`);
+	await renameFile(`test/${from}.js`, `test/${to}.js`);
+	await renameFile(`test/snapshots/${from}.js.snapshot`, `test/snapshots/${to}.js.snapshot`);
+
+	const files = [
+		'readme.md',
+		'index.js',
+		'rules/index.js',
+		`docs/rules/${to}.md`,
+		`rules/${to}.js`,
+		`test/${to}.js`,
+		`test/snapshots/${to}.js.snapshot`,
+	];
+
+	for (const filePath of files) {
+		const file = resolveFile(filePath);
+
+		if (!fs.existsSync(file)) {
+			continue;
+		}
+
+		// eslint-disable-next-line no-await-in-loop
+		let text = await fsAsync.readFile(file, 'utf8');
+		text = file.pathname.endsWith('/rules/index.js')
+			? replaceRuleIdInRulesIndex(text, from, to)
+			: replaceRuleId(text, from, to);
+		// eslint-disable-next-line no-await-in-loop
+		await fsAsync.writeFile(file, text);
+	}
+
+	await sortReadmeRuleRow(to);
+}
+
+const run = async () => {
+	const ruleSelector = new enquirer.AutoComplete({
+		message: 'Select the rule you want to rename:',
+		limit: 10,
+		choices: renamableRules,
+	});
+	const originalRuleId = await ruleSelector.run();
+
+	const ruleNamePrompt = new enquirer.Input({
+		message: 'New name:',
+		initial: originalRuleId,
+		validate: ruleId => isValidRuleId(ruleId) || 'Invalid rule name.',
+	});
+	const ruleId = await ruleNamePrompt.run();
+
+	if (!ruleId || originalRuleId === ruleId) {
+		return;
+	}
+
+	if (Object.hasOwn(cssicorn.rules, ruleId)) {
+		console.log(`${ruleId} already exists.`);
+		return;
+	}
+
+	checkFiles(ruleId);
+	await renameRule(originalRuleId, ruleId);
+};
+
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
+	await run();
+}
+
+// Exported for unit tests.
+// eslint-disable-next-line unicorn/no-exports-in-scripts
+export {
+	renamableRules,
+	renameRule,
+	replaceRuleId,
+	replaceRuleIdInRulesIndex,
+	sortReadmeRuleRows,
+};
