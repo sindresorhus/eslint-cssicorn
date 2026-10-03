@@ -13,6 +13,8 @@ import {hasCommentInRange, normalizeCssIdentifier} from './utils/index.js';
 */
 
 const MESSAGE_ID = 'no-useless-is';
+const PAGE_ONLY_PSEUDO_CLASSES = new Set(['first', 'left', 'right', 'recto', 'verso']);
+
 const messages = {
 	[MESSAGE_ID]: 'Remove the unnecessary `:is()` wrapper.',
 };
@@ -26,10 +28,25 @@ const isUnsupportedArgumentNode = node => {
 		return node.name.includes('|');
 	}
 
-	return node.type === 'AttributeSelector' && (
-		node.name.name.includes('|')
-		|| (node.flags !== null && !['i', 's'].includes(normalizeCssIdentifier(node.flags)))
-	);
+	if (node.type === 'AttributeSelector') {
+		return node.name.name.includes('|') || node.flags !== null;
+	}
+
+	if (node.type !== 'PseudoClassSelector') {
+		return false;
+	}
+
+	// The standard pseudo-class catalog also includes selectors for pages.
+	if (PAGE_ONLY_PSEUDO_CLASSES.has(normalizeCssIdentifier(node.name))) {
+		return true;
+	}
+
+	// CSSTree parses some functional arguments without validating their grammar.
+	const argument = node.children?.[0];
+	return argument !== undefined
+		&& argument.type !== 'Selector'
+		&& argument.type !== 'SelectorList'
+		&& (argument.type !== 'Nth' || argument.selector !== null);
 };
 
 const isHasPseudoClass = node => node.type === 'PseudoClassSelector' && normalizeCssIdentifier(node.name) === 'has';

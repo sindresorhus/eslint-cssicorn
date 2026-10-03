@@ -548,30 +548,13 @@ Output:
 
 `;
 
-exports[`invalid(37): :is(:lang(en)) {} 1`] = `
-
-  1 | :is(:lang(en)) {}
-
-`;
-
-exports[`invalid(37): :is(:lang(en)) {} 2`] = `
-
-Message:
-> 1 | :is(:lang(en)) {}
-    | ^^^^^^^^^^^^^^ Remove the unnecessary \`:is()\` wrapper.
-
-Output:
-  1 | :lang(en) {}
-
-`;
-
-exports[`invalid(38): :\\69 s(/* keep */.foo) {} 1`] = `
+exports[`invalid(37): :\\69 s(/* keep */.foo) {} 1`] = `
 
   1 | :\\69 s(/* keep */.foo) {}
 
 `;
 
-exports[`invalid(38): :\\69 s(/* keep */.foo) {} 2`] = `
+exports[`invalid(37): :\\69 s(/* keep */.foo) {} 2`] = `
 
 Message:
 > 1 | :\\69 s(/* keep */.foo) {}
@@ -579,13 +562,13 @@ Message:
 
 `;
 
-exports[`invalid(39): :\\69 s(.foo > .bar) {} 1`] = `
+exports[`invalid(38): :\\69 s(.foo > .bar) {} 1`] = `
 
   1 | :\\69 s(.foo > .bar) {}
 
 `;
 
-exports[`invalid(39): :\\69 s(.foo > .bar) {} 2`] = `
+exports[`invalid(38): :\\69 s(.foo > .bar) {} 2`] = `
 
 Message:
 > 1 | :\\69 s(.foo > .bar) {}
@@ -593,6 +576,23 @@ Message:
 
 Output:
   1 | .foo > .bar {}
+
+`;
+
+exports[`invalid(39): :is([data-label=\"& :is(.foo) /* text */\"]) {} 1`] = `
+
+  1 | :is([data-label="& :is(.foo) /* text */"]) {}
+
+`;
+
+exports[`invalid(39): :is([data-label=\"& :is(.foo) /* text */\"]) {} 2`] = `
+
+Message:
+> 1 | :is([data-label="& :is(.foo) /* text */"]) {}
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Remove the unnecessary \`:is()\` wrapper.
+
+Output:
+  1 | [data-label="& :is(.foo) /* text */"] {}
 
 `;
 
@@ -613,48 +613,20 @@ Output:
 
 `;
 
-exports[`invalid(40): :is([foo=\"bar\" i]) {} :is([foo=\"bar\" S]) {} 1`] = `
+exports[`invalid(40): :is(:nth-last-of-type(2n + 1)) {} 1`] = `
 
-  1 | :is([foo="bar" i]) {} :is([foo="bar" S]) {}
+  1 | :is(:nth-last-of-type(2n + 1)) {}
 
 `;
 
-exports[`invalid(40): :is([foo=\"bar\" i]) {} :is([foo=\"bar\" S]) {} 2`] = `
+exports[`invalid(40): :is(:nth-last-of-type(2n + 1)) {} 2`] = `
 
 Message:
-> 1 | :is([foo="bar" i]) {} :is([foo="bar" S]) {}
-    | ^^^^^^^^^^^^^^^^^^ Remove the unnecessary \`:is()\` wrapper.
+> 1 | :is(:nth-last-of-type(2n + 1)) {}
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Remove the unnecessary \`:is()\` wrapper.
 
 Output:
-  1 | [foo="bar" i] {} :is([foo="bar" S]) {}
-
-`;
-
-exports[`invalid(40): :is([foo=\"bar\" i]) {} :is([foo=\"bar\" S]) {} 3`] = `
-
-Message:
-> 1 | :is([foo="bar" i]) {} :is([foo="bar" S]) {}
-    |                       ^^^^^^^^^^^^^^^^^^ Remove the unnecessary \`:is()\` wrapper.
-
-Output:
-  1 | :is([foo="bar" i]) {} [foo="bar" S] {}
-
-`;
-
-exports[`invalid(41): :is([foo=\"bar\" \\69]) {} 1`] = `
-
-  1 | :is([foo="bar" \\69]) {}
-
-`;
-
-exports[`invalid(41): :is([foo=\"bar\" \\69]) {} 2`] = `
-
-Message:
-> 1 | :is([foo="bar" \\69]) {}
-    | ^^^^^^^^^^^^^^^^^^^^ Remove the unnecessary \`:is()\` wrapper.
-
-Output:
-  1 | [foo="bar" \\69] {}
+  1 | :nth-last-of-type(2n + 1) {}
 
 `;
 

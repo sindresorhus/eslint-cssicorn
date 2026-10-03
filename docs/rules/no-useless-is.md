@@ -51,7 +51,7 @@ A complex selector can be inlined when the wrapper is the entire selector of a s
 
 ## Intentional exclusions
 
-The rule preserves wrappers with multiple arguments, invalid or unknown arguments, pseudo-elements, nesting selectors (`&`), namespace-qualified selectors, or type selectors that cannot be inlined in their current position. It also preserves wrappers containing `:has()` inside another `:has()`.
+The rule preserves wrappers with multiple arguments, invalid or unknown arguments, pseudo-elements, nesting selectors (`&`), namespace-qualified selectors, attribute modifiers, page-only pseudo-classes, or type selectors that cannot be inlined in their current position. It also preserves wrappers containing `:has()` inside another `:has()`.
 
 ```css
 /* ✅ */
@@ -60,6 +60,15 @@ The rule preserves wrappers with multiple arguments, invalid or unknown argument
 :is(:unknown) {}
 :is(::before) {}
 .foo { :is(&) {} }
+```
+
+Functional pseudo-classes are supported when their arguments are selectors or plain nth formulas. Other arguments, such as those of `:lang()`, `:dir()`, and nth formulas with an `of` clause, are left wrapped. The parser accepts some invalid forms of these arguments, so this conservative boundary prevents autofixes from exposing invalid selectors to a surrounding selector list.
+
+```css
+/* ✅ */
+:is(:lang(en)) {}
+:is(:nth-child(2n of .foo)) {}
+:is([data-state="open" i]) {}
 ```
 
 Complex arguments remain wrapped inside nested rules, `@scope`, other pseudo-class arguments, and selectors with surrounding selectors because inlining can change their anchoring or matching.
