@@ -55,7 +55,7 @@ a {
 }
 ```
 
-Conflicting, calculated, mixed-unit, and percentage bounds are ignored. Percentages can resolve against a negative reference size, so their apparent order does not prove their resolved order. Signed-zero bounds are ignored when they would give the minimum precedence over a smaller negative-zero maximum.
+Conflicting, calculated, mixed-unit, and percentage bounds are ignored. Percentages can resolve against a negative reference size, so their apparent order does not prove their resolved order. Literal `0`, `+0`, and `-0` all represent the same unsigned zero in [CSS math](https://drafts.csswg.org/css-values-4/#calc-ieee), so equal zero bounds are supported regardless of their spelling.
 
 ```css
 /* ✅ */

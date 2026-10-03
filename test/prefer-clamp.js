@@ -34,8 +34,7 @@ test.snapshot({
 		'a { background-position: min(100%, max(10%, 5px)); }',
 		'a { opacity: min(1e999, max(0, .5)); }',
 		'a { opacity: min(1, max(-1e999, calc(.5))); }',
-		'a { opacity: min(-0, max(0, .5)); }',
-		'a { width: min(-0px, max(0px, 5vw)); }',
+		'a { opacity: min(calc(-1 * 0), max(0, .5)); }',
 		'a { width: max(none, min(5vw, 100px)); }',
 		'a { width: max(10px, min(5vw, none)); }',
 		String.raw`a { width: max(10px, min(5vw, n\6f ne)); }`,
@@ -135,6 +134,16 @@ test({
 		{
 			code: 'a { width: min(10px, max(20px, 5px)); }',
 			output: 'a { width: clamp(5px, 20px, 10px); }',
+			errors: 1,
+		},
+		{
+			code: 'a { opacity: min(-0, max(0, .5)); }',
+			output: 'a { opacity: clamp(0, .5, -0); }',
+			errors: 1,
+		},
+		{
+			code: 'a { width: min(-0px, max(+0px, 5vw)); }',
+			output: 'a { width: clamp(+0px, 5vw, -0px); }',
 			errors: 1,
 		},
 		{

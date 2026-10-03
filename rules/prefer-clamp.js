@@ -55,11 +55,10 @@ function areOrderedBounds(minimum, maximum) {
 
 	const minimumValue = Number(minimumNode.value);
 	const maximumValue = Number(maximumNode.value);
+	// CSS zero literals are unsigned regardless of their written sign, so the ordinary numeric comparison is sufficient.
 	return Number.isFinite(minimumValue)
 		&& Number.isFinite(maximumValue)
-		&& minimumValue <= maximumValue
-		// Negative zero is smaller than positive zero in CSS math.
-		&& !(minimumValue === 0 && !Object.is(minimumValue, -0) && Object.is(maximumValue, -0));
+		&& minimumValue <= maximumValue;
 }
 
 /**
