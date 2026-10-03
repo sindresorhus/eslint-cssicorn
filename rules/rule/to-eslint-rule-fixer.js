@@ -32,11 +32,10 @@ export default function toEslintRuleFixer(fix) {
 	@param {RuleTextEditor<CssNodePlain>} fixer
 	*/
 	return fixer => {
-		const cssicornReport = fix(fixer, fixOptions);
-
 		const eslintReport = [];
 
 		try {
+			const cssicornReport = fix(fixer, fixOptions);
 			forEachFixOrProblem(cssicornReport, eslintFix => {
 				eslintReport.push(eslintFix);
 			});

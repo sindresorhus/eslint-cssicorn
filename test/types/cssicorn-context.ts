@@ -62,12 +62,12 @@ function verifyContext(context: CssicornContext) {
 		messageId: 'message',
 		suggest: [{
 			messageId: 'suggestion',
-			* fix(fixer, {abort}) {
+			fix(fixer, {abort}) {
 				if (node.name === 'keep') {
 					return abort();
 				}
 
-				yield fixer.replaceText(node, 'replacement');
+				return fixer.replaceText(node, 'replacement');
 			},
 		}],
 	}));
