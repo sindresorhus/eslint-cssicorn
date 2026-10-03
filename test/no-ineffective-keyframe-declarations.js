@@ -27,9 +27,14 @@ test.snapshot({
 		'@keyframes fade { 0%, 100% { animation-timing-function: linear; } }',
 		'@keyframes fade { 50%, to { animation-timing-function: linear; } }',
 		'@keyframes fade { 99% { animation-timing-function: linear; } }',
+		'@keyframes fade { from { opacity: 0; } to { opacity: 1; animation-timing-function: ease-in; } to { opacity: 0.5; } }',
+		'@keyframes fade { 100% { opacity: 1; } to { opacity: 0.5; animation-timing-function: ease-in; } }',
+		'@keyframes fade { 50%, 100% { opacity: 1; } to { opacity: 0.5; animation-timing-function: ease-in; } }',
+		String.raw`@keyframes fade { \74 o { opacity: 1; } 1e2% { opacity: 0.5; animation-timing-function: ease-in; } }`,
 		'@keyframes fade { to { animation-composition: add; } }',
 		'@keyframes fade { to { --animation-duration: 2s; --easing: "!important"; content: "!important"; } }',
 		'@keyframes fade { to { --tokens: { opacity: 1 !important; }; opacity: 1; } }',
+		'@keyframes fade { to { --tokens: fn(!important); } }',
 		'@keyframes fade { to { opacity: 1 !urgent; } }',
 		'@keyframes fade { to { animation: fade 2s ease; } }',
 		'@keyframes fade { to { animation-imaginary: 2s; } }',
@@ -98,6 +103,28 @@ test({
 	valid: [],
 	invalid: [
 		{
+			code: '@keyframes fade { to { animation-timing-function: ease; animation-duration: 2s; opacity: 1 !important; } 100% { opacity: 0.5; } }',
+			output: '@keyframes fade { to { animation-timing-function: ease;   } 100% { opacity: 0.5; } }',
+			errors: [
+				{messageId: 'no-ineffective-keyframe-declarations/animation-control'},
+				{messageId: 'no-ineffective-keyframe-declarations/important'},
+			],
+		},
+		{
+			code: '@keyframes fade { 100%, to { animation-timing-function: ease; } }',
+			output: '@keyframes fade { 100%, to {  } }',
+			errors: [{messageId: 'no-ineffective-keyframe-declarations/terminal-easing'}],
+		},
+		{
+			code: '@keyframes fade { to { --progress: 1 !IMPORTANT /* retain */; } }',
+			errors: [{messageId: 'no-ineffective-keyframe-declarations/important'}],
+		},
+		{
+			code: String.raw`@keyframes fade { to { --progress: 1 !impor\74 ant; } }`,
+			output: '@keyframes fade { to {  } }',
+			errors: [{messageId: 'no-ineffective-keyframe-declarations/important'}],
+		},
+		{
 			code: '@keyframes fade{to{animation-duration:2s;opacity:1}}',
 			output: '@keyframes fade{to{opacity:1}}',
 			errors: [{messageId: 'no-ineffective-keyframe-declarations/animation-control'}],
@@ -165,5 +192,6 @@ test.snapshot({
 	].map(code => ({code, languageOptions: {tolerant: true}})),
 	invalid: [
 		'@keyframes fade { calc(100%) { animation-duration: 2s; opacity: 1 !important; } to { animation-timing-function: ease; } }',
+		'@keyframes fade { to { animation-duration: ???; animation-timing-function: ???; opacity: ??? !important; } }',
 	].map(code => ({code, languageOptions: {tolerant: true}})),
 });

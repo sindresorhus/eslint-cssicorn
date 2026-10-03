@@ -104,9 +104,11 @@ This includes draft controls from [CSS Animations 2](https://drafts.csswg.org/cs
 
 ## Scope
 
-The rule supports standard `@keyframes` and its `-webkit-`, `-moz-`, and `-o-` variants. Property names are unprefixed; CSS identifier escapes and ASCII casing are recognized. Custom properties are allowed, but actual `!important` annotations on them are reported too. Strings containing `"!important"` are unaffected.
+The rule supports standard `@keyframes` and its `-webkit-`, `-moz-`, and `-o-` variants. The animation-property checks only cover unprefixed property names; CSS identifier escapes and ASCII casing are recognized. Custom properties are allowed, but actual `!important` annotations on them are reported too. Strings containing `"!important"` are unaffected.
 
 Easing is checked only when all selectors in the animation are ordinary `from`, `to`, or percentages between `0%` and `100%`. An animation containing named timeline ranges, calculated offsets, or unfamiliar selectors skips the easing check entirely. Its animation control properties and `!important` declarations are still checked.
+
+Easing is also skipped when multiple keyframe blocks include `to` or `100%`, including blocks with mixed selectors. Easing can affect how these [duplicate keyframes are combined](https://drafts.csswg.org/css-animations-2/#keyframes), so removing it can change the animation. Repeated selectors within a single block, such as `100%, to`, do not trigger this exception.
 
 The rule does not interpret the `animation` shorthand, detect every nonanimatable property, or extract CSS from JavaScript or HTML. It has no options.
 

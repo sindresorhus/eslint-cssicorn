@@ -92,9 +92,11 @@ const create = context => {
 		const keyframeOffsets = keyframes.map(rule => getKeyframeOffsets(rule));
 		// Named timeline ranges and unfamiliar selectors need timeline context to determine the final frame.
 		const hasOnlyOrdinaryOffsets = keyframeOffsets.every(offsets => offsets.length > 0 && offsets.every(offset => offset !== undefined));
+		// Easing can affect how duplicate terminal blocks are grouped, changing interpolation even before the final frame.
+		const hasSingleTerminalKeyframe = keyframeOffsets.filter(offsets => offsets.includes(100)).length === 1;
 
 		for (const [index, keyframe] of keyframes.entries()) {
-			const isTerminalKeyframe = hasOnlyOrdinaryOffsets && keyframeOffsets[index].every(offset => offset === 100);
+			const isTerminalKeyframe = hasOnlyOrdinaryOffsets && hasSingleTerminalKeyframe && keyframeOffsets[index].every(offset => offset === 100);
 			for (const declaration of keyframe.block.children) {
 				if (declaration.type !== 'Declaration') {
 					continue;
