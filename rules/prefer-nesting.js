@@ -66,7 +66,7 @@ const canUnwrapSelectorList = selectorList => selectorList.children.every(select
 const getCandidate = selector => {
 	const {children} = selector;
 	const leadingArguments = getIsSelectorList(children[0]);
-	if (leadingArguments && children.length > 1 && (isDescendantCombinator(children[1]) || children[1].type !== 'Combinator')) {
+	if (leadingArguments && children.length > 1) {
 		return {
 			node: children[0],
 			outerNodes: canUnwrapSelectorList(leadingArguments) ? leadingArguments.children : [children[0]],
@@ -82,14 +82,12 @@ const getCandidate = selector => {
 
 	// Unlike :is(), a nested selector list gives each branch its own specificity.
 	const specificities = trailingArguments.children.map(argument => getRuleSelectorSpecificity(argument, [0, 0, 0]));
-	if (specificities.some(specificity => compareSpecificity(specificity, specificities[0]) !== 0)) {
-		return;
-	}
+	const hasEqualSpecificity = specificities.every(specificity => compareSpecificity(specificity, specificities[0]) === 0);
 
 	return {
 		node: children.at(-1),
 		outerNodes: children.slice(0, -2),
-		innerNodes: canUnwrapSelectorList(trailingArguments) ? trailingArguments.children : [children.at(-1)],
+		innerNodes: hasEqualSpecificity && canUnwrapSelectorList(trailingArguments) ? trailingArguments.children : [children.at(-1)],
 		attached: false,
 	};
 };

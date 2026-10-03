@@ -24,15 +24,10 @@ test.snapshot({
 		'a :matches(.foo, .bar) {}',
 		String.raw`a :\69 s(.foo, .bar) {}`,
 		'a > :is(.foo, .bar) {}',
-		':is(.foo, .bar) > a {}',
-		':is(.foo, .bar) + a {}',
-		':is(.foo, .bar) ~ a {}',
-		'a :is(.foo, #bar) {}',
-		'a :is(.foo, button) {}',
-		'a :is(.foo, .bar.active) {}',
 		'a :is(.foo .bar, .baz .qux) {}',
 		':is(.foo .bar, .baz) a {}',
 		':is(.foo > .bar, .baz).active {}',
+		':is(.foo .bar, .baz) > a {}',
 		'a :is(.foo, :unknown) {}',
 		':is(.foo, :unknown) a {}',
 		'a :is(.foo, ::before) {}',
@@ -44,6 +39,7 @@ test.snapshot({
 		'.parent { & :is(.foo, .bar) {} }',
 		'.parent { :is(&.foo, &.bar) a {} }',
 		'.parent { :is(.foo, .bar):not(&) {} }',
+		'.parent { :is(.foo, .bar) > & {} }',
 		'.parent { :is(.foo:has(&), .bar) a {} }',
 		'.parent { :is(:is(:unknown(&), .foo), .bar) a {} }',
 		'@namespace url("http://www.w3.org/1999/xhtml"); a :is(.foo, .bar) {}',
@@ -97,6 +93,50 @@ test.snapshot({
 test({
 	valid: [],
 	invalid: [
+		...['>', '+', '~'].map(combinator => ({
+			code: `:is(.foo, .bar) ${combinator} a { color: red; }`,
+			output: `.foo, .bar { ${combinator} a { color: red; } }`,
+			errors: [{messageId: 'prefer-nesting'}],
+		})),
+		{
+			code: ':is(.foo, #bar) + a { color: red; }',
+			output: '.foo, #bar { + a { color: red; } }',
+			errors: 1,
+		},
+		{
+			code: ':is(.foo, :blank) ~ a { color: red; }',
+			output: ':is(.foo, :blank) { ~ a { color: red; } }',
+			errors: 1,
+		},
+		{
+			code: String.raw`:IS(.f\6f o, .bar)>a[data-x] { color: red; }`,
+			output: String.raw`.f\6f o, .bar { >a[data-x] { color: red; } }`,
+			errors: 1,
+		},
+		{
+			code: ':is(.foo, .bar) > a {\r\n  color: red;\r\n}',
+			output: '.foo, .bar {\r\n  > a {\r\n    color: red;\r\n  }\r\n}',
+			errors: 1,
+		},
+		{
+			code: ':is(.foo, .bar) /* keep */ > a { color: red; }',
+			errors: 1,
+		},
+		...['.foo, #bar', '.foo, button', '.foo, .bar.active', '.foo, :where(#bar)'].map(argumentsText => ({
+			code: `a :is(${argumentsText}) { color: red; }`,
+			output: `a { :is(${argumentsText}) { color: red; } }`,
+			errors: 1,
+		})),
+		{
+			code: String.raw`a :IS(.f\6f o, #bar) { color: red; }`,
+			output: String.raw`a { :IS(.f\6f o, #bar) { color: red; } }`,
+			errors: 1,
+		},
+		{
+			code: 'a :is(.foo, #bar) {\n\tcolor: red;\n}',
+			output: 'a {\n\t:is(.foo, #bar) {\n\t\tcolor: red;\n\t}\n}',
+			errors: 1,
+		},
 		{
 			code: 'a :is(.foo, .bar) { color: red; }',
 			output: 'a { .foo, .bar { color: red; } }',
@@ -206,6 +246,14 @@ nodeTest('nesting fixes settle across overlapping and repeated candidates', () =
 	};
 	const cases = [
 		{
+			code: ':is(.foo, .bar) > a :is(.baz, #qux) { color: red; }',
+			output: '.foo, .bar { > a { :is(.baz, #qux) { color: red; } } }',
+		},
+		{
+			code: '.parent, #parent { a :is(.foo, #bar) { color: red; & > b { color: blue; } } }',
+			output: '.parent, #parent { a { :is(.foo, #bar) { color: red; & > b { color: blue; } } } }',
+		},
+		{
 			code: 'a :is(.foo, .bar) { color: red; :is(.baz, .qux).active { color: blue; } background: white; }',
 			output: 'a { .foo, .bar { color: red; .baz, .qux { &.active { color: blue; } } background: white; } }',
 		},
@@ -250,6 +298,11 @@ nodeTest('nesting fixes work with the other nesting rules', () => {
 	assert.equal(equalSpecificity.output, 'a, button { &.active { color: red; } }');
 	assert.deepEqual(equalSpecificity.messages, []);
 	assert.equal(linter.verifyAndFix(equalSpecificity.output, config, {filename: 'test.css'}).fixed, false);
+
+	const trailingMixedSpecificity = linter.verifyAndFix('a :is(.foo, #bar) { color: red; }', config, {filename: 'test.css'});
+	assert.equal(trailingMixedSpecificity.output, 'a { :is(.foo, #bar) { color: red; } }');
+	assert.deepEqual(trailingMixedSpecificity.messages, []);
+	assert.equal(linter.verifyAndFix(trailingMixedSpecificity.output, config, {filename: 'test.css'}).fixed, false);
 
 	const mixedSpecificity = linter.verifyAndFix(':is(.foo, #bar) a { color: red; }', config, {filename: 'test.css'});
 	assert.equal(mixedSpecificity.output, '.foo, #bar { a { color: red; } }');
