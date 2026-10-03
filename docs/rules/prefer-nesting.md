@@ -9,7 +9,7 @@
 <!-- end auto-generated rule header -->
 <!-- Do not manually modify this header. Run: `npm run fix:eslint-docs` -->
 
-Prefer native CSS nesting when `:is()` groups selectors at the beginning of a selector or after a combinator at its end. This separates selector groups into parent and child rules without changing which elements match or the declaration order.
+Prefer native CSS nesting for `:is()` at the start of a selector or after its final combinator. Fixes preserve matching behavior, declaration order, selector escapes, and line endings.
 
 The fix keeps the `:is()` wrapper when needed to preserve specificity or forgiving selector-list behavior.
 
@@ -29,7 +29,7 @@ a {
 }
 ```
 
-For trailing `:is()` after child (`>`), next-sibling (`+`), or subsequent-sibling (`~`) combinators, the fix moves the combinator and the entire `:is()` into the nested rule:
+After `>`, `+`, or `~`, trailing `:is()` remains wrapped:
 
 ```css
 /* ❌ */
@@ -47,19 +47,19 @@ a {
 
 ```css
 /* ❌ */
-:is(.foo, .bar) a[data-x] {
+:is(.foo, .bar) a {
 	color: red;
 }
 
 /* ✅ */
 .foo, .bar {
-	a[data-x] {
+	a {
 		color: red;
 	}
 }
 ```
 
-Leading `:is()` also supports child (`>`), next-sibling (`+`), and subsequent-sibling (`~`) combinators:
+Leading `:is()` also supports `>`, `+`, and `~`:
 
 ```css
 /* ❌ */
@@ -103,7 +103,7 @@ a, button {
 }
 ```
 
-When arguments contain pseudo-classes, attribute selector flags, namespace syntax, or invalid ID spellings such as `#123`, the fix keeps the `:is()` wrapper. Its [forgiving selector list](https://drafts.csswg.org/selectors/#forgiving-selector) lets valid branches continue matching when another branch is unsupported or invalid. Unwrapping these arguments into a regular selector list could invalidate the entire rule.
+Arguments with pseudo-classes, attribute flags, namespace syntax, or invalid IDs such as `#123` stay inside `:is()`. This preserves its [forgiving selector list](https://drafts.csswg.org/selectors/#forgiving-selector), so valid branches still match when others are unsupported or invalid.
 
 ```css
 /* ❌ */
@@ -121,7 +121,7 @@ a {
 
 ## Specificity
 
-For a trailing `:is()` after a descendant combinator, arguments are unwrapped only when they have equal specificity. Otherwise, the fix keeps `:is()` so all matching branches retain the maximum specificity of the argument list.
+After a descendant combinator, trailing `:is()` is unwrapped only when its arguments have equal specificity. Otherwise, it stays wrapped to preserve their maximum specificity.
 
 ```css
 /* ❌ */
@@ -137,20 +137,19 @@ a {
 }
 ```
 
-A leading `:is()` can have mixed specificity. The nesting selector takes the maximum specificity of its parent selector list, just like `:is()`, so `.foo, #bar { a {} }` preserves the specificity of `:is(.foo, #bar) a {}`. This result is reported by [`no-nesting-with-mixed-specificity`](./no-nesting-with-mixed-specificity.md), which is also enabled in the recommended config. Disable that rule for intentional mixed-specificity nesting if you want to use this transformation.
+A leading `:is()` can have mixed specificity: nesting preserves its maximum specificity. The resulting parent selector list can trigger [`no-nesting-with-mixed-specificity`](./no-nesting-with-mixed-specificity.md), also enabled in the recommended config. Disable that rule for intentional mixed-specificity nesting.
 
 ## Limitations
 
-The rule only checks rules with one selector and at least two compound `:is()` arguments. It ignores complex arguments such as `.foo .bar`, selectors that already contain `&`, single-argument or standalone `:is()`, other pseudo-classes, and patterns such as `a:is(.foo, .bar)` or `a :is(.foo, .bar) b`. It does not merge neighboring rules or their generated parent wrappers.
+Requires one selector and at least two compound `:is()` arguments. Skips complex arguments, existing `&`, standalone `:is()`, and patterns such as `a:is(.foo, .bar)` or `a :is(.foo, .bar) b`. Neighboring rules are not merged.
 
-Unrepresentable selectors and files containing `@namespace` are ignored. Pseudo-class names are case-insensitive, and selector escapes are preserved. Escaped `:is()` names are ignored because `@eslint/css` exposes their arguments as raw text rather than parsed selectors.
+Unsupported selectors, escaped `:is()` names, rules inside `@scope`, and files containing `@namespace` are ignored.
 
-Rules inside `@scope` are ignored because introducing a parent rule can change their implicit scoping anchor and which elements match.
+Reports without fixing when comments, escapes consuming line breaks, multiline raw values, or unclear indentation make rewriting unsafe. Fixes preserve nested blocks and reuse the existing body indentation.
 
-Autofix preserves declaration order, nested blocks, and line endings. Multiline fixes reuse the existing body indentation. The rule reports without fixing when the rule contains comments or line breaks consumed by CSS escapes, when reindentation could change multiline raw values, or when indentation cannot be inferred safely.
-
-Only standard CSS parsed by `@eslint/css` is supported. Enable this rule when your target browsers support native CSS nesting, or when your build transforms nesting for them.
+Only standard CSS parsed by `@eslint/css` is supported. Target browsers must support native nesting unless your build transforms it.
 
 ## Related rules
 
-Stylelint's [`relative-selector-nesting-notation`](https://stylelint.io/user-guide/rules/relative-selector-nesting-notation/) controls explicit versus implicit `&` notation. [`stylelint-use-nesting`](https://github.com/csstools/stylelint-use-nesting) merges neighboring rules into nesting. This rule specifically replaces structural uses of `:is()`.
+- Stylelint's [`relative-selector-nesting-notation`](https://stylelint.io/user-guide/rules/relative-selector-nesting-notation/): controls `&` notation.
+- [`stylelint-use-nesting`](https://github.com/csstools/stylelint-use-nesting): merges neighboring rules.
