@@ -3,13 +3,12 @@ import createCssicornContext from './cssicorn-context.js';
 import CssicornListeners from './cssicorn-listeners.js';
 
 /**
-@import * as ESLint from 'eslint';
+@import {CSSRuleDefinition} from '@eslint/css';
 @import {CssicornContext} from './cssicorn-context.js';
-@import {EslintListers, ListenerType, EslintListener} from './to-eslint-listener.js'
 */
 
 /**
-@typedef {ESLint.Rule.RuleModule['create']} EslintCreate
+@typedef {CSSRuleDefinition['create']} EslintCreate
 @typedef {(context: CssicornContext) => void} CssicornCreate
 */
 

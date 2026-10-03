@@ -2,21 +2,30 @@ import {forEachFixOrProblem} from './utilities.js';
 import toEslintProblem from './to-eslint-problem.js';
 
 /**
-@import * as ESLint from 'eslint';
-@import {CssicornContext} from './cssicorn-context.js'
-@import {CssicornProblems} from './to-eslint-problem.js'
+@import {CSSRuleVisitor} from '@eslint/css';
+@import {CssNodePlain} from '@eslint/css-tree';
+@import {CssRuleContext} from './cssicorn-context.js';
+@import {CssicornProblems} from './to-eslint-problem.js';
 */
 
 /**
-@typedef {ESLint.Rule.RuleListener} EslintListers
-@typedef {keyof EslintListers} ListenerType
-@typedef {EslintListers[ListenerType]} EslintListener
-@typedef {(...listenerArguments: Parameters<EslintListener>) => CssicornProblems} CssicornRuleListen
+@typedef {CSSRuleVisitor} EslintListeners
+@typedef {CssNodePlain['type']} ListenerType
 */
 
 /**
-@param {CssicornContext} context
-@param {CssicornRuleListen[]} listeners
+@template {ListenerType} [Type=ListenerType]
+@typedef {NonNullable<CSSRuleVisitor[Type]>} EslintListener
+*/
+
+/**
+@template {ListenerType} [Type=ListenerType]
+@typedef {(node: Parameters<EslintListener<Type>>[0], parent: Parameters<EslintListener<Type>>[1]) => CssicornProblems | void} CssicornListener
+*/
+
+/**
+@param {CssRuleContext} context
+@param {CssicornListener[]} listeners
 @returns {EslintListener}
 */
 export default function toEslintListener(context, listeners) {
@@ -28,11 +37,11 @@ export default function toEslintListener(context, listeners) {
 
 	/*
 	Declared with fixed arity rather than rest arguments, since this runs for every node visit of every rule and a per-call rest array is measurable.
-	Three parameters cover every ESLint listener signature, the widest being `onCodePathSegmentLoop(fromSegment, toSegment, node)`.
+	CSS listeners receive the node and its parent.
 	*/
-	return (first, second, third) => {
+	return (node, parent) => {
 		for (const listener of listeners) {
-			const cssicornProblems = listener(first, second, third);
+			const cssicornProblems = listener(node, parent);
 
 			// Listeners report nothing on the vast majority of nodes, so keep that path free of iterator allocation.
 			if (!cssicornProblems) {
