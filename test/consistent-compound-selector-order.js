@@ -227,4 +227,14 @@ nodeTest('nested fixes converge and are idempotent', () => {
 		assert.equal(result.fixed, true);
 		assert.deepEqual(linter.verifyAndFix(output, config), {output, messages: [], fixed: false});
 	}
+
+	const code = ':is(.foo#id/* keep */).bar {}';
+	const output = ':is(#id.foo/* keep */).bar {}';
+	const result = linter.verifyAndFix(code, config);
+	assert.equal(result.output, output);
+	assert.equal(result.fixed, true);
+	assert.equal(result.messages.length, 1);
+	assert.equal(result.messages[0].messageId, 'consistent-compound-selector-order');
+	assert.equal(result.messages[0].fix, undefined);
+	assert.deepEqual(linter.verifyAndFix(output, config), {...result, fixed: false});
 });
