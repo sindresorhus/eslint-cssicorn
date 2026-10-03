@@ -65,9 +65,3 @@ Compounds containing CSS Modules' `:local` or `:global`, unsupported nodes, or m
 /* ✅ */
 #save.button::before:hover {}
 ```
-
-## References
-
-- [Compound selectors](https://drafts.csswg.org/selectors/#compound)
-- [Pseudo-compound selectors](https://drafts.csswg.org/selectors/#pseudo-compound)
-- [Nesting selector](https://drafts.csswg.org/css-nesting-1/#nest-selector)
