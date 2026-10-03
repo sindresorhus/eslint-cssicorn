@@ -79,7 +79,7 @@ export default defineConfig([
 | [no-unscoped-nesting-selector](docs/rules/no-unscoped-nesting-selector.md)                   | Disallow unscoped CSS nesting selectors.                                                                     | ✅ ☑️ |    |    |
 | [no-useless-is](docs/rules/no-useless-is.md)                                                 | Disallow unnecessary `:is()` wrappers.                                                                       | ✅ ☑️ | 🔧 |    |
 | [no-zero-length-unit](docs/rules/no-zero-length-unit.md)                                     | Disallow units on zero CSS lengths.                                                                          | ✅    | 🔧 |    |
-| [prefer-clamp](docs/rules/prefer-clamp.md)                                                   | Prefer `clamp()` over nested `min()` and `max()`.                                                            | ✅    | 🔧 |    |
+| [prefer-clamp](docs/rules/prefer-clamp.md)                                                   | Prefer `clamp()` over nested `min()` and `max()`.                                                            | ✅ ☑️ | 🔧 |    |
 | [prefer-explicit-viewport-units](docs/rules/prefer-explicit-viewport-units.md)               | Prefer explicit viewport units.                                                                              | ✅    |    | 💡 |
 | [prefer-media-feature-range-syntax](docs/rules/prefer-media-feature-range-syntax.md)         | Prefer modern media feature range syntax.                                                                    | ✅    | 🔧 | 💡 |
 | [prefer-modern-syntax](docs/rules/prefer-modern-syntax.md)                                   | Prefer modern CSS color and pseudo-element syntax.                                                           | ✅    | 🔧 |    |
@@ -116,7 +116,7 @@ export default defineConfig([
 
 ### Unopinionated config
 
-This plugin exports an `unopinionated` config. It enables only the rules that catch bugs, without the style rules from the `recommended` config.
+This plugin exports an `unopinionated` config with bug checks and straightforward simplifications.
 
 ```js
 import cssicorn from 'eslint-cssicorn';

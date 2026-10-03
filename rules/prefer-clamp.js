@@ -229,7 +229,7 @@ const config = {
 		type: 'suggestion',
 		docs: {
 			description: 'Prefer `clamp()` over nested `min()` and `max()`.',
-			recommended: true,
+			recommended: 'unopinionated',
 		},
 		fixable: 'code',
 		schema: [],
