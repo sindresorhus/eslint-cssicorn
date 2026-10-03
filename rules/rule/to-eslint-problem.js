@@ -1,13 +1,20 @@
 import toEslintFixer from './to-eslint-rule-fixer.js';
 
 /**
-@import * as ESLint from 'eslint';
+@import {SuggestedEditBase, SuggestionMessage, ViolationReportBase, ViolationMessage, ViolationLocation} from '@eslint/core';
+@import {CssNodePlain} from '@eslint/css-tree';
+@import {CssRuleContext} from './cssicorn-context.js';
+@import {CssicornRuleFixer} from './to-eslint-rule-fixer.js';
 */
 
 /**
-@typedef {Parameters<ESLint.Rule.RuleContext['report']>[0]} EslintProblem
-@typedef {EslintProblem} CssicornProblem
-@typedef {EslintProblem | undefined | EslintProblem[] | IterableIterator<EslintProblem>} CssicornProblems
+@typedef {Parameters<CssRuleContext['report']>[0]} EslintProblem
+@typedef {Omit<SuggestedEditBase, 'fix'> & SuggestionMessage & {fix: CssicornRuleFixer}} CssicornSuggestion
+@typedef {Omit<ViolationReportBase, 'fix' | 'suggest'> & ViolationMessage & ViolationLocation<CssNodePlain> & {
+	fix?: CssicornRuleFixer
+	suggest?: CssicornSuggestion[]
+}} CssicornProblem
+@typedef {CssicornProblem | undefined | CssicornProblem[] | IterableIterator<CssicornProblem>} CssicornProblems
 */
 
 /**
@@ -15,14 +22,18 @@ import toEslintFixer from './to-eslint-rule-fixer.js';
 @returns {EslintProblem}
 */
 export default function toEslintProblem(cssicornProblem) {
-	const eslintProblem = {...cssicornProblem};
+	const {fix, suggest, ...problem} = cssicornProblem;
+	/**
+	@type {EslintProblem}
+	*/
+	const eslintProblem = problem;
 
-	if (cssicornProblem.fix) {
-		eslintProblem.fix = toEslintFixer(cssicornProblem.fix);
+	if (fix) {
+		eslintProblem.fix = toEslintFixer(fix);
 	}
 
-	if (Array.isArray(cssicornProblem.suggest)) {
-		eslintProblem.suggest = cssicornProblem.suggest.map(cssicornSuggest => ({
+	if (Array.isArray(suggest)) {
+		eslintProblem.suggest = suggest.map(cssicornSuggest => ({
 			...cssicornSuggest,
 			fix: toEslintFixer(cssicornSuggest.fix),
 			data: {

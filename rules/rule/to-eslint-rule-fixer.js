@@ -1,7 +1,8 @@
 import {forEachFixOrProblem} from './utilities.js';
 
 /**
-@import * as ESLint from 'eslint';
+@import {RuleFixer, RuleTextEdit, RuleTextEditor} from '@eslint/core';
+@import {CssNodePlain} from '@eslint/css-tree';
 */
 
 class FixAbortError extends Error {
@@ -15,27 +16,26 @@ const fixOptions = {
 };
 
 /**
-@typedef {ESLint.Rule.ReportFixer | undefined} EslintReportFixer
+@typedef {RuleTextEdit | undefined} EslintReportFixer
 @typedef {EslintReportFixer | IterableIterator<EslintReportFixer>} CssicornReportFixer
-@typedef {(fixer: ESLint.Rule.RuleFixer, options: typeof fixOptions) => CssicornReportFixer} CssicornRuleFixer
+@typedef {(fixer: RuleTextEditor<CssNodePlain>, options: typeof fixOptions) => CssicornReportFixer} CssicornRuleFixer
 */
 
 /**
 Convert Cssicorn style fix function to ESLint style fix function
 
 @param {CssicornRuleFixer} fix
-@returns {ESLint.Rule.RuleFixer}
+@returns {RuleFixer}
 */
 export default function toEslintRuleFixer(fix) {
 	/**
-	@param {CssicornReportFixer} fixer
+	@param {RuleTextEditor<CssNodePlain>} fixer
 	*/
 	return fixer => {
-		const cssicornReport = fix(fixer, fixOptions);
-
 		const eslintReport = [];
 
 		try {
+			const cssicornReport = fix(fixer, fixOptions);
 			forEachFixOrProblem(cssicornReport, eslintFix => {
 				eslintReport.push(eslintFix);
 			});
@@ -43,7 +43,7 @@ export default function toEslintRuleFixer(fix) {
 			return eslintReport;
 		} catch (error) {
 			if (error instanceof FixAbortError) {
-				return;
+				return [];
 			}
 
 			/* c8 ignore next */
