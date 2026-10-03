@@ -113,6 +113,13 @@ test({
 			}],
 		},
 		{
+			code: 'a { /* 🌈 */ --size: max(10px, min(5vw, 100px)); }',
+			output: 'a { /* 🌈 */ --size: clamp(10px, 5vw, 100px); }',
+			errors: [{
+				messageId: 'prefer-clamp', line: 1, column: 22, endLine: 1, endColumn: 48,
+			}],
+		},
+		{
 			code: 'a { width: max(/* low */ 10px /* minimum */, /* bound */ min(/* value */ 5vw /* preferred */, /* upper */ 100px /* maximum */) /* end */); }',
 			output: 'a { width: clamp(/* low */ 10px /* minimum */, /* bound */ /* value */ 5vw /* preferred */, /* upper */ 100px /* maximum */ /* end */); }',
 			errors: 1,
