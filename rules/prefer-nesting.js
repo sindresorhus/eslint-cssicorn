@@ -1,4 +1,4 @@
-import {find} from '@eslint/css-tree';
+import {find, lexer} from '@eslint/css-tree';
 import {
 	canBeRepresentedByNestingSelector,
 	canMatchSelector,
@@ -41,9 +41,12 @@ const getIsSelectorList = node => {
 // Keep uncertain selectors inside :is() to preserve its forgiving selector-list behavior.
 const canUnwrapSelectorList = selectorList => selectorList.children.every(selector => selector.children.every(node => {
 	switch (node.type) {
-		case 'ClassSelector':
-		case 'IdSelector': {
+		case 'ClassSelector': {
 			return true;
+		}
+
+		case 'IdSelector': {
+			return Boolean(lexer.matchType('ident', node.name).matched);
 		}
 
 		case 'TypeSelector': {

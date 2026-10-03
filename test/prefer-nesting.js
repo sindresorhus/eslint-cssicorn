@@ -103,8 +103,33 @@ test({
 			errors: [{messageId: 'prefer-nesting'}],
 		},
 		{
+			code: String.raw`a :is(.foo, .bar\61) { color: red; }`,
+			output: String.raw`a { .foo, .bar\61 { color: red; } }`,
+			errors: [{messageId: 'prefer-nesting'}],
+		},
+		{
 			code: ':is(.foo, #bar)::before { content: ""; }',
 			output: '.foo, #bar { &::before { content: ""; } }',
+			errors: 1,
+		},
+		{
+			code: ':is(.foo, #123) a { color: red; }',
+			output: ':is(.foo, #123) { a { color: red; } }',
+			errors: 1,
+		},
+		{
+			code: 'a :is(#123, #foo) { color: red; }',
+			output: 'a { :is(#123, #foo) { color: red; } }',
+			errors: 1,
+		},
+		{
+			code: ':is(.foo, #-1).active { color: red; }',
+			output: ':is(.foo, #-1) { &.active { color: red; } }',
+			errors: 1,
+		},
+		{
+			code: String.raw`:is(.foo, #\31 23) a { color: red; }`,
+			output: String.raw`.foo, #\31 23 { a { color: red; } }`,
 			errors: 1,
 		},
 		{

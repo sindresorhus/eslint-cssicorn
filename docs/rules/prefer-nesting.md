@@ -69,7 +69,7 @@ a, button {
 }
 ```
 
-When arguments contain pseudo-classes, attribute selector flags, or namespace syntax, the fix keeps the `:is()` wrapper. Its [forgiving selector list](https://drafts.csswg.org/selectors/#forgiving-selector) lets valid branches continue matching when another branch is unsupported or invalid. Unwrapping these arguments into a regular selector list could invalidate the entire rule.
+When arguments contain pseudo-classes, attribute selector flags, namespace syntax, or invalid ID spellings such as `#123`, the fix keeps the `:is()` wrapper. Its [forgiving selector list](https://drafts.csswg.org/selectors/#forgiving-selector) lets valid branches continue matching when another branch is unsupported or invalid. Unwrapping these arguments into a regular selector list could invalidate the entire rule.
 
 ```css
 /* ❌ */
