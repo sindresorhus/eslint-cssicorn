@@ -164,6 +164,11 @@ test({
 			errors: 2,
 		},
 		{
+			code: '@scope (.scope#root) to ([data-stop].limit#end) { .item#target {} }',
+			output: '@scope (#root.scope) to (#end.limit[data-stop]) { #target.item {} }',
+			errors: 3,
+		},
+		{
 			code: '.foo/* keep */#id {}',
 			errors: 1,
 		},
