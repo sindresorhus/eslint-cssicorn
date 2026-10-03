@@ -102,6 +102,16 @@ test('recommended config works with defineConfig', async () => {
 	assert.equal(result.messages.some(message => message.ruleId === 'cssicorn/no-zero-length-unit'), true);
 });
 
+test('unopinionated config reports unnecessary :is() wrappers', async () => {
+	const eslint = new ESLint({
+		baseConfig: eslintCssicorn.configs.unopinionated,
+		overrideConfigFile: true,
+	});
+
+	const [result] = await eslint.lintText(':is(.active) { color: red; }', {filePath: 'file.css'});
+	assert.equal(result.messages.some(message => message.ruleId === 'cssicorn/no-useless-is'), true);
+});
+
 test('Every rule has valid meta.type', () => {
 	const validTypes = ['problem', 'suggestion', 'layout'];
 
