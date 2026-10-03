@@ -1,6 +1,6 @@
 {
 	"name": "eslint-cssicorn",
-	"version": "0.0.1",
+	"version": "0.1.0",
 	"description": "Powerful ESLint rules for CSS",
 	"license": "MIT",
 	"repository": "github:sindresorhus/eslint-cssicorn",
