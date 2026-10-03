@@ -1,8 +1,9 @@
 import toEslintListener from './to-eslint-listener.js';
 
 /**
-@import {CssRuleContext} from './cssicorn-context.js';
-@import {EslintListeners, ListenerType, CssicornListener} from './to-eslint-listener.js';
+@import {CSSRuleVisitor} from '@eslint/css';
+@import {CssNodePlain} from '@eslint/css-tree';
+@import {CssRuleContext, CssicornRuleListener} from './cssicorn-context.js';
 */
 
 export default class CssicornListeners {
@@ -28,9 +29,9 @@ export default class CssicornListeners {
 	}
 
 	/**
-	@template {ListenerType} Type
-	@param {Type | Type[]} selectorOrSelectors
-	@param {CssicornListener<Type>} listener
+	@template {CssNodePlain['type']} NodeType
+	@param {NodeType | NodeType[]} selectorOrSelectors
+	@param {CssicornRuleListener<NodeType>} listener
 	*/
 	on(selectorOrSelectors, listener) {
 		const selectors = Array.isArray(selectorOrSelectors) ? selectorOrSelectors : [selectorOrSelectors];
@@ -38,9 +39,9 @@ export default class CssicornListeners {
 	}
 
 	/**
-	@template {ListenerType} Type
-	@param {Type | Type[]} selectorOrSelectors
-	@param {CssicornListener<Type>} listener
+	@template {CssNodePlain['type']} NodeType
+	@param {NodeType | NodeType[]} selectorOrSelectors
+	@param {CssicornRuleListener<NodeType>} listener
 	*/
 	onExit(selectorOrSelectors, listener) {
 		const selectors = Array.isArray(selectorOrSelectors) ? selectorOrSelectors : [selectorOrSelectors];
@@ -48,7 +49,7 @@ export default class CssicornListeners {
 	}
 
 	/**
-	@returns {EslintListeners}
+	@returns {CSSRuleVisitor}
 	*/
 	toEslintListeners() {
 		const eslintListeners = {};

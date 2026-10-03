@@ -1,20 +1,26 @@
 import toEslintFixer from './to-eslint-rule-fixer.js';
 
 /**
-@import {SuggestedEditBase, SuggestionMessage, ViolationReportBase, ViolationMessage, ViolationLocation} from '@eslint/core';
-@import {CssNodePlain} from '@eslint/css-tree';
 @import {CssRuleContext} from './cssicorn-context.js';
 @import {CssicornRuleFixer} from './to-eslint-rule-fixer.js';
 */
 
 /**
 @typedef {Parameters<CssRuleContext['report']>[0]} EslintProblem
-@typedef {Omit<SuggestedEditBase, 'fix'> & SuggestionMessage & {fix: CssicornRuleFixer}} CssicornSuggestion
-@typedef {Omit<ViolationReportBase, 'fix' | 'suggest'> & ViolationMessage & ViolationLocation<CssNodePlain> & {
-	fix?: CssicornRuleFixer
-	suggest?: CssicornSuggestion[]
-}} CssicornProblem
-@typedef {CssicornProblem | undefined | CssicornProblem[] | IterableIterator<CssicornProblem>} CssicornProblems
+*/
+
+/**
+@template {NonNullable<EslintProblem['suggest']>[number]} [Suggestion=NonNullable<EslintProblem['suggest']>[number]]
+@typedef {Suggestion extends unknown ? Omit<Suggestion, 'fix'> & {fix: CssicornRuleFixer} : never} CssicornSuggestion
+*/
+
+/**
+@template {EslintProblem} [Problem=EslintProblem]
+@typedef {Problem extends unknown ? Omit<Problem, 'fix' | 'suggest'> & {fix?: CssicornRuleFixer, suggest?: CssicornSuggestion[]} : never} CssicornProblem
+*/
+
+/**
+@typedef {CssicornProblem | void | Iterable<CssicornProblem | void>} CssicornProblems
 */
 
 /**

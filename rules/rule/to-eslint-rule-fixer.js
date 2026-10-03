@@ -1,8 +1,7 @@
 import {forEachFixOrProblem} from './utilities.js';
 
 /**
-@import {RuleFixer, RuleTextEdit, RuleTextEditor} from '@eslint/core';
-@import {CssNodePlain} from '@eslint/css-tree';
+@import {EslintProblem} from './to-eslint-problem.js';
 */
 
 class FixAbortError extends Error {
@@ -16,20 +15,22 @@ const fixOptions = {
 };
 
 /**
-@typedef {RuleTextEdit | undefined} EslintReportFixer
-@typedef {EslintReportFixer | IterableIterator<EslintReportFixer>} CssicornReportFixer
-@typedef {(fixer: RuleTextEditor<CssNodePlain>, options: typeof fixOptions) => CssicornReportFixer} CssicornRuleFixer
+@typedef {NonNullable<EslintProblem['fix']>} EslintRuleFixer
+@typedef {Parameters<EslintRuleFixer>[0]} CssicornFixer
+@typedef {ReturnType<CssicornFixer['replaceText']> | void} EslintReportFixer
+@typedef {EslintReportFixer | Iterable<EslintReportFixer>} CssicornReportFixer
+@typedef {(fixer: CssicornFixer, options: typeof fixOptions) => CssicornReportFixer} CssicornRuleFixer
 */
 
 /**
 Convert Cssicorn style fix function to ESLint style fix function
 
 @param {CssicornRuleFixer} fix
-@returns {RuleFixer}
+@returns {EslintRuleFixer}
 */
 export default function toEslintRuleFixer(fix) {
 	/**
-	@param {RuleTextEditor<CssNodePlain>} fixer
+	@param {CssicornFixer} fixer
 	*/
 	return fixer => {
 		const eslintReport = [];

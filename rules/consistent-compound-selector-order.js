@@ -2,7 +2,11 @@ import {hasCommentInRange, normalizeCssIdentifier, toLocation} from './utils/ind
 import {LEGACY_PSEUDO_ELEMENTS} from './shared/css-selector-specificity.js';
 
 /**
-@import * as ESLint from 'eslint';
+@import {SelectorPlain} from '@eslint/css-tree';
+@import {CssicornContext} from './rule/cssicorn-context.js';
+@import {CssicornRule} from './rule/to-eslint-rule.js';
+@import {CssicornProblem} from './rule/to-eslint-problem.js';
+@import {CssicornFixer} from './rule/to-eslint-rule-fixer.js';
 */
 
 const MESSAGE_ID = 'consistent-compound-selector-order';
@@ -21,6 +25,12 @@ const selectorOrder = new Map([
 	['PseudoClassSelector', 5],
 ]);
 
+/**
+@param {SelectorPlain['children']} children
+@param {SelectorPlain} selector
+@param {CssicornContext} context
+@returns {CssicornProblem | undefined}
+*/
 const getCompoundProblem = (children, selector, context) => {
 	if (children.some(child => child.type === 'PseudoClassSelector' && CSS_MODULES_PSEUDO_CLASSES.has(normalizeCssIdentifier(child.name)))) {
 		return;
@@ -58,6 +68,9 @@ const getCompoundProblem = (children, selector, context) => {
 
 	const compound = children.slice(0, endIndex);
 	const sorted = compound.toSorted((first, second) => selectorOrder.get(first.type) - selectorOrder.get(second.type));
+	/**
+	@type {[number, number]}
+	*/
 	const range = [sourceCode.getRange(compound[0])[0], sourceCode.getRange(compound.at(-1))[1]];
 
 	return {
@@ -65,7 +78,7 @@ const getCompoundProblem = (children, selector, context) => {
 		loc: toLocation(range, context),
 		messageId: MESSAGE_ID,
 		/**
-		@param {ESLint.Rule.RuleFixer} fixer
+		@param {CssicornFixer} fixer
 		*/
 		* fix(fixer, {abort}) {
 			if (hasCommentInRange(context, range)) {
@@ -78,7 +91,7 @@ const getCompoundProblem = (children, selector, context) => {
 };
 
 /**
-@param {ESLint.Rule.RuleContext} context
+@param {CssicornContext} context
 */
 const create = context => {
 	context.on('Selector', function * (selector) {
@@ -97,7 +110,7 @@ const create = context => {
 };
 
 /**
-@type {ESLint.Rule.RuleModule}
+@type {CssicornRule}
 */
 const config = {
 	create,

@@ -4,28 +4,16 @@ import toEslintProblem from './to-eslint-problem.js';
 /**
 @import {CSSRuleVisitor} from '@eslint/css';
 @import {CssNodePlain} from '@eslint/css-tree';
-@import {CssRuleContext} from './cssicorn-context.js';
-@import {CssicornProblems} from './to-eslint-problem.js';
+@import {CssRuleContext, CssicornRuleListener} from './cssicorn-context.js';
 */
 
 /**
-@typedef {CSSRuleVisitor} EslintListeners
-@typedef {CssNodePlain['type']} ListenerType
-*/
-
-/**
-@template {ListenerType} [Type=ListenerType]
-@typedef {NonNullable<CSSRuleVisitor[Type]>} EslintListener
-*/
-
-/**
-@template {ListenerType} [Type=ListenerType]
-@typedef {(node: Parameters<EslintListener<Type>>[0], parent: Parameters<EslintListener<Type>>[1]) => CssicornProblems | void} CssicornListener
+@typedef {NonNullable<CSSRuleVisitor[CssNodePlain['type']]>} EslintListener
 */
 
 /**
 @param {CssRuleContext} context
-@param {CssicornListener[]} listeners
+@param {CssicornRuleListener[]} listeners
 @returns {EslintListener}
 */
 export default function toEslintListener(context, listeners) {
