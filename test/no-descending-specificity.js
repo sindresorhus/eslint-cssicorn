@@ -144,6 +144,7 @@ test.snapshot({
 			}
 		`,
 		'@keyframes fade { from { color: red; } from:hover { color: blue; } }',
+		'@-webkit-keyframes fade { b to { color: red; } to { color: blue; } }',
 		'a:where(#dialog) { color: red; } a { color: blue; }',
 		'a:unknown { color: red; } a { color: blue; }',
 		'a:unknown, b a { color: red; } a { color: blue; }',

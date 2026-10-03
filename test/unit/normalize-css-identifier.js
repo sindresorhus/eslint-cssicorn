@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import normalizeCssIdentifier, {toAsciiLowerCase} from '../../rules/utils/normalize-css-identifier.js';
+import normalizeCssIdentifier, {decodeCssIdentifier, toAsciiLowerCase} from '../../rules/utils/normalize-css-identifier.js';
 
 test('decodes escapes and lowercases ASCII letters', () => {
 	assert.equal(normalizeCssIdentifier('COLOR'), 'color');
@@ -15,4 +15,10 @@ test('does not lowercase non-ASCII letters', () => {
 	assert.equal(normalizeCssIdentifier(`${kelvinSign}EYFRAMES`), `${kelvinSign}eyframes`);
 	assert.equal(normalizeCssIdentifier(String.raw`\212A eyframes`), `${kelvinSign}eyframes`);
 	assert.equal(toAsciiLowerCase('İTEM'), 'İtem');
+});
+
+test('decodes escapes without changing case', () => {
+	assert.equal(decodeCssIdentifier('Color'), 'Color');
+	assert.equal(decodeCssIdentifier(String.raw`\63 OLOR`), 'cOLOR');
+	assert.equal(decodeCssIdentifier(String.raw`\-\-Brand`), '--Brand');
 });

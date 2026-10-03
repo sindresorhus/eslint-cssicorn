@@ -5,6 +5,8 @@ import {
 	walk,
 } from '@eslint/css-tree';
 import {
+	decodeCssIdentifier,
+	getFeatureNameRange,
 	isCssModulesInteropDeclaration,
 	normalizeCssIdentifier,
 	toAsciiLowerCase,
@@ -23,7 +25,6 @@ const messages = {
 };
 
 const hexadecimalColorPattern = /^(?:[\da-f]{3,4}|[\da-f]{6}|[\da-f]{8})$/iu;
-const cssWhitespacePattern = /[\t\n\f\r ]/u;
 const queryFeatureKinds = new Set(['container', 'media']);
 const fontFeatureValueAtRules = new Set([
 	'annotation',
@@ -57,8 +58,7 @@ const camelCaseFunctionNames = new Map([
 	'translateZ',
 ].map(name => [toAsciiLowerCase(name), name]));
 
-const decodeIdentifier = value => ident.decode(value);
-const isCustomIdentifier = value => decodeIdentifier(value).startsWith('--');
+const isCustomIdentifier = value => decodeCssIdentifier(value).startsWith('--');
 
 function getProblem(node, range, {type, value, replacement}, context) {
 	return {
@@ -109,35 +109,13 @@ function getCanonicalFunctionName(name) {
 
 function getIdentifierProblem(node, range, type, context) {
 	const value = context.sourceCode.text.slice(...range);
-	const decodedValue = decodeIdentifier(value);
+	const decodedValue = decodeCssIdentifier(value);
 	const canonicalValue = type === 'function name' ? getCanonicalFunctionName(decodedValue) : toAsciiLowerCase(decodedValue);
 	if (decodedValue === canonicalValue) {
 		return;
 	}
 
 	return getProblem(node, range, {type, value, replacement: ident.encode(canonicalValue)}, context);
-}
-
-function getFeatureNameRange(node, sourceCode) {
-	const text = sourceCode.getText(node);
-	let index = 0;
-
-	while (index < text.length) {
-		if (text[index] === '(' || cssWhitespacePattern.test(text[index])) {
-			index++;
-			continue;
-		}
-
-		if (text.startsWith('/*', index)) {
-			index = text.indexOf('*/', index + 2) + 2;
-			continue;
-		}
-
-		break;
-	}
-
-	const [start] = sourceCode.getRange(node);
-	return [start + index, start + index + node.name.length];
 }
 
 function getDeclaration(node, sourceCode) {
@@ -243,7 +221,7 @@ function normalizeMatchNode(node) {
 		}
 
 		case 'Hash': {
-			node.value = decodeIdentifier(node.value);
+			node.value = decodeCssIdentifier(node.value);
 			break;
 		}
 
@@ -378,9 +356,13 @@ function isValueKeyword(node, declaration, sourceCode) {
 const create = context => {
 	const {sourceCode} = context;
 
+	// Check for a problem before checking the context, because that is much cheaper.
 	context.on('Declaration', node => {
+		const [start] = sourceCode.getRange(node);
+		const problem = getIdentifierProblem(node, [start, start + node.property.length], 'property', context);
 		if (
-			isInPreservedContext(node, context)
+			!problem
+			|| isInPreservedContext(node, context)
 			|| isCustomIdentifier(node.property)
 			|| isCssModulesInteropDeclaration(node, context)
 			|| isFontFeatureValueDefinition(node, sourceCode)
@@ -389,32 +371,37 @@ const create = context => {
 			return;
 		}
 
-		const [start] = sourceCode.getRange(node);
-		return getIdentifierProblem(node, [start, start + node.property.length], 'property', context);
+		return problem;
 	});
 
 	for (const nodeType of ['Atrule', 'AtKeyword']) {
 		context.on(nodeType, node => {
+			const [start] = sourceCode.getRange(node);
+			const problem = getIdentifierProblem(node, [start + 1, start + 1 + node.name.length], 'at-rule name', context);
 			if (
-				isInPreservedContext(node, context)
+				!problem
+				|| isInPreservedContext(node, context)
 				|| isCustomIdentifier(node.name)
 				|| normalizeCssIdentifier(node.name) === 'charset'
 			) {
 				return;
 			}
 
-			const [start] = sourceCode.getRange(node);
-			return getIdentifierProblem(node, [start + 1, start + 1 + node.name.length], 'at-rule name', context);
+			return problem;
 		});
 	}
 
 	context.on('Dimension', node => {
-		if (isInPreservedContext(node, context)) {
+		const [, end] = sourceCode.getRange(node);
+		const problem = getIdentifierProblem(node, [end - node.unit.length, end], 'unit', context);
+		if (
+			!problem
+			|| isInPreservedContext(node, context)
+		) {
 			return;
 		}
 
-		const [, end] = sourceCode.getRange(node);
-		return getIdentifierProblem(node, [end - node.unit.length, end], 'unit', context);
+		return problem;
 	});
 
 	for (const [nodeType, nameProperty] of [
@@ -423,8 +410,11 @@ const create = context => {
 	]) {
 		context.on(nodeType, node => {
 			const name = node[nameProperty];
+			const [start] = sourceCode.getRange(node);
+			const problem = getIdentifierProblem(node, [start, start + name.length], 'function name', context);
 			if (
-				isInPreservedContext(node, context)
+				!problem
+				|| isInPreservedContext(node, context)
 				|| isCustomIdentifier(name)
 				// Unknown function names can be case-sensitive, like PostCSS plugin functions.
 				|| !getKnownFunctionNames(sourceCode.lexer).has(normalizeCssIdentifier(name))
@@ -432,20 +422,23 @@ const create = context => {
 				return;
 			}
 
-			const [start] = sourceCode.getRange(node);
-			return getIdentifierProblem(node, [start, start + name.length], 'function name', context);
+			return problem;
 		});
 	}
 
 	context.on('Url', node => {
-		if (isInPreservedContext(node, context)) {
-			return;
-		}
-
 		const text = sourceCode.getText(node);
 		const nameLength = text.indexOf('(');
 		const [start] = sourceCode.getRange(node);
-		return getIdentifierProblem(node, [start, start + nameLength], 'function name', context);
+		const problem = getIdentifierProblem(node, [start, start + nameLength], 'function name', context);
+		if (
+			!problem
+			|| isInPreservedContext(node, context)
+		) {
+			return;
+		}
+
+		return problem;
 	});
 
 	for (const [nodeType, type, colonCount] of [
@@ -453,28 +446,35 @@ const create = context => {
 		['PseudoElementSelector', 'pseudo-element name', 2],
 	]) {
 		context.on(nodeType, node => {
+			const [start] = sourceCode.getRange(node);
+			const problem = getIdentifierProblem(node, [start + colonCount, start + colonCount + node.name.length], type, context);
 			if (
-				isInPreservedContext(node, context)
+				!problem
+				|| isInPreservedContext(node, context)
 				|| isCustomIdentifier(node.name)
 			) {
 				return;
 			}
 
-			const [start] = sourceCode.getRange(node);
-			return getIdentifierProblem(node, [start + colonCount, start + colonCount + node.name.length], type, context);
+			return problem;
 		});
 	}
 
 	context.on('Feature', node => {
+		if (!queryFeatureKinds.has(node.kind)) {
+			return;
+		}
+
+		const problem = getIdentifierProblem(node, getFeatureNameRange(node, context), `${node.kind} feature name`, context);
 		if (
-			isInPreservedContext(node, context)
-			|| !queryFeatureKinds.has(node.kind)
+			!problem
+			|| isInPreservedContext(node, context)
 			|| isCustomIdentifier(node.name)
 		) {
 			return;
 		}
 
-		return getIdentifierProblem(node, getFeatureNameRange(node, sourceCode), `${node.kind} feature name`, context);
+		return problem;
 	});
 
 	context.on('FeatureRange', function * (node) {
@@ -535,18 +535,15 @@ const create = context => {
 	});
 
 	context.on('Hash', node => {
-		if (isInPreservedContext(node, context)) {
-			return;
-		}
-
 		const [start, end] = sourceCode.getRange(node);
 		const range = [start + 1, end];
 		const value = sourceCode.text.slice(...range);
-		const decodedValue = decodeIdentifier(value);
+		const decodedValue = decodeCssIdentifier(value);
 		const replacement = toAsciiLowerCase(decodedValue);
 		if (
-			!hexadecimalColorPattern.test(decodedValue)
-			|| decodedValue === replacement
+			decodedValue === replacement
+			|| !hexadecimalColorPattern.test(decodedValue)
+			|| isInPreservedContext(node, context)
 		) {
 			return;
 		}

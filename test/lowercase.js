@@ -58,6 +58,7 @@ test.snapshot({
 		// CSS Modules interop blocks are read by JavaScript as exact strings.
 		':export { Width: 10px; Color: Red; breakpoint: 768PX; accent: #ABC; shadow: RGB(0 0 0); }',
 		':import("./theme.css") { Color: Red; breakpoint: 768PX; }',
+		':export { image: URL(a.png); }',
 		String.raw`:\65xport { Color: Red; }`,
 		// Function names that the CSS grammar does not know can be case-sensitive, like PostCSS functions.
 		'a { width: myFunc(1px); color: themeColor(x); }',

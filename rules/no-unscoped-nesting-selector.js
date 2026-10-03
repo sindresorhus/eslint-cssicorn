@@ -1,4 +1,5 @@
-import {normalizeCssIdentifier} from './utils/index.js';
+import {isStyleRule} from './shared/css-selector-specificity.js';
+import {isKeyframesAtRule, normalizeCssIdentifier} from './utils/index.js';
 
 const MESSAGE_ID = 'no-unscoped-nesting-selector';
 const messages = {
@@ -6,17 +7,6 @@ const messages = {
 };
 
 const isScopeAtRule = node => node.type === 'Atrule' && normalizeCssIdentifier(node.name) === 'scope';
-const isKeyframesAtRule = node => node?.type === 'Atrule' && /^(?:-(?:moz|o|webkit)-)?keyframes$/.test(normalizeCssIdentifier(node.name));
-
-const isStyleRule = (node, sourceCode) => {
-	if (node.type !== 'Rule') {
-		return false;
-	}
-
-	const block = sourceCode.getParent(node);
-	const atRule = sourceCode.getParent(block);
-	return !isKeyframesAtRule(atRule);
-};
 
 const isInScopeLimit = (node, sourceCode) => {
 	let selectorList;
@@ -37,14 +27,14 @@ const isInScopeLimit = (node, sourceCode) => {
 
 const getSelectorOwner = (node, sourceCode) => sourceCode.getAncestors(node).findLast(ancestor => ancestor.type === 'Rule' || ancestor.type === 'Atrule');
 
-const hasScopingRoot = (selectorOwner, sourceCode, scopingRootAtRules) => {
-	for (const ancestor of sourceCode.getAncestors(selectorOwner).toReversed()) {
+const hasScopingRoot = (selectorOwner, context, scopingRootAtRules) => {
+	for (const ancestor of context.sourceCode.getAncestors(selectorOwner).toReversed()) {
 		if (isKeyframesAtRule(ancestor)) {
 			return false;
 		}
 
 		if (
-			isStyleRule(ancestor, sourceCode)
+			isStyleRule(ancestor, context)
 			|| isScopeAtRule(ancestor)
 			|| (ancestor.type === 'Atrule' && scopingRootAtRules.has(normalizeCssIdentifier(ancestor.name)))
 		) {
@@ -86,9 +76,9 @@ const create = context => {
 		const selectorOwner = getSelectorOwner(node, sourceCode);
 		if (
 			!selectorOwner
-			|| (!isStyleRule(selectorOwner, sourceCode) && !isScopeAtRule(selectorOwner))
+			|| (!isStyleRule(selectorOwner, context) && !isScopeAtRule(selectorOwner))
 			|| (isScopeAtRule(selectorOwner) && isInScopeLimit(node, sourceCode))
-			|| hasScopingRoot(selectorOwner, sourceCode, scopingRootAtRules)
+			|| hasScopingRoot(selectorOwner, context, scopingRootAtRules)
 		) {
 			return;
 		}

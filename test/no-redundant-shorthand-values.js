@@ -38,6 +38,8 @@ test.snapshot({
 		'a { border-spacing: 1px 1px; }',
 		'a { background-repeat: repeat repeat; }',
 		'a { --margin: 1px 1px; }',
+		'a { margin: calc(first-valid(1px)) calc(first-valid(1px)); }',
+		'a { margin: calc(ident(--x) * 1px) calc(ident(--x) * 1px); }',
 		// CSS Modules interop blocks are read by JavaScript as exact strings.
 		':export { margin: 1px 1px; padding: 1px 2px 1px 2px; }',
 		':import("./theme.css") { margin: 1px 1px; }',

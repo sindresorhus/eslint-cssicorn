@@ -1,4 +1,5 @@
 import {ident, tokenize, tokenTypes} from '@eslint/css-tree';
+import {hasCommentInRange, toLocation} from './utils/index.js';
 
 /**
 @import * as ESLint from 'eslint';
@@ -30,7 +31,6 @@ const create = context => {
 		const [declarationStart] = sourceCode.getRange(declaration);
 		let annotationStartInDeclaration;
 		let identifierEndInDeclaration;
-		const commentRanges = [];
 		tokenize(declarationText, (type, start, end) => {
 			if (type === tokenTypes.Delim && declarationText[start] === '!') {
 				annotationStartInDeclaration = start;
@@ -45,10 +45,6 @@ const create = context => {
 			) {
 				identifierEndInDeclaration = end;
 			}
-
-			if (type === tokenTypes.Comment) {
-				commentRanges.push([start, end]);
-			}
 		});
 
 		if (declarationText.slice(annotationStartInDeclaration, identifierEndInDeclaration) === '!important') {
@@ -57,14 +53,11 @@ const create = context => {
 
 		const identifierEnd = declarationStart + identifierEndInDeclaration;
 		const annotationStart = declarationStart + annotationStartInDeclaration;
-		const hasCommentInAnnotation = commentRanges.some(([start, end]) => start >= annotationStartInDeclaration && end <= identifierEndInDeclaration);
+		const hasCommentInAnnotation = hasCommentInRange(context, [annotationStart, identifierEnd]);
 
 		return {
 			node: declaration,
-			loc: {
-				start: sourceCode.getLocFromIndex(annotationStart),
-				end: sourceCode.getLocFromIndex(identifierEnd),
-			},
+			loc: toLocation([annotationStart, identifierEnd], context),
 			messageId: MESSAGE_ID_ERROR,
 			suggest: hasCommentInAnnotation
 				? []

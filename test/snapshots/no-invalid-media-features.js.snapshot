@@ -230,6 +230,20 @@ Message:
 
 `;
 
+exports[`invalid(24): @media (　　unknown-feature) {} 1`] = `
+
+  1 | @media (　　unknown-feature) {}
+
+`;
+
+exports[`invalid(24): @media (　　unknown-feature) {} 2`] = `
+
+Message:
+> 1 | @media (　　unknown-feature) {}
+    |         ^^^^^^^^^^^^^^^^^ Unknown media feature \`　　unknown-feature\`.
+
+`;
+
 exports[`invalid(3): @media (/* before */ unknown-feature /* name */: 10px) {} 1`] = `
 
   1 | @media (/* before */ unknown-feature /* name */: 10px) {}

@@ -1,5 +1,12 @@
 import {getVendorPrefix, shorthandProperties, shorthandToAffectedProperties} from './shared/css-shorthand-properties.js';
-import {isCssModulesInteropDeclaration} from './utils/index.js';
+import {
+	getSingleValueIdentifier,
+	hasCommentInRange,
+	hasSubstitutionOrRandomFunction,
+	isCssModulesInteropDeclaration,
+	isCssWideKeyword,
+	normalizeCssIdentifier,
+} from './utils/index.js';
 
 /**
 @import * as ESLint from 'eslint';
@@ -10,8 +17,6 @@ const messages = {
 	[MESSAGE_ID]: 'Use the `{{shorthand}}` shorthand instead of its longhand properties.',
 };
 
-const cssWideKeywords = new Set(['initial', 'inherit', 'unset', 'revert', 'revert-layer', 'revert-rule']);
-const substitutionFunctions = new Set(['attr', 'env', 'first-valid', 'ident', 'if', 'inherit', 'random', 'random-item', 'var']);
 const slashShorthands = new Set(['grid-area', 'grid-column', 'grid-row']);
 const pairShorthands = new Set([
 	'border-block-color',
@@ -53,32 +58,9 @@ const additionalAffectedProperties = new Map([
 const getValue = (declaration, sourceCode) => sourceCode.getText(declaration.value).trim();
 
 const getCssWideKeyword = declaration => {
-	const children = [...declaration.value.children];
-	if (children.length !== 1 || children[0].type !== 'Identifier') {
-		return;
-	}
-
-	const keyword = children[0].name.toLowerCase();
-	return cssWideKeywords.has(keyword) ? keyword : undefined;
-};
-
-const hasSubstitutionFunction = value => {
-	const nodes = [value];
-	while (nodes.length > 0) {
-		const target = nodes.pop();
-		if (
-			target.type === 'Function'
-			&& (substitutionFunctions.has(target.name.toLowerCase()) || target.name.startsWith('--'))
-		) {
-			return true;
-		}
-
-		if (target.children) {
-			nodes.push(...target.children);
-		}
-	}
-
-	return false;
+	const identifier = getSingleValueIdentifier(declaration);
+	const keyword = identifier && normalizeCssIdentifier(identifier.name);
+	return isCssWideKeyword(keyword) ? keyword : undefined;
 };
 
 const getValueParts = (value, sourceCode) => [...value.children].map(node => sourceCode.getText(node).trim());
@@ -385,7 +367,7 @@ const getLogicalPropertyMapping = property => {
 
 const getAffectedProperties = property => new Set([property, ...(shorthandToAffectedProperties.get(property) ?? []), ...(additionalAffectedProperties.get(property) ?? [])]);
 
-const propertyAffectsComponent = (property, component) => {
+const isComponentAffectedByProperty = (property, component) => {
 	const affectedProperties = getAffectedProperties(property);
 	const componentProperties = getAffectedProperties(component);
 	const propertyMappings = [...affectedProperties].map(property => getLogicalPropertyMapping(property)).filter(Boolean);
@@ -398,6 +380,29 @@ const propertyAffectsComponent = (property, component) => {
 		const componentMapping = getLogicalPropertyMapping(affectedProperty);
 		return componentMapping && propertyMappings.some(mapping => mapping.group === componentMapping.group && mapping.mapping !== componentMapping.mapping);
 	});
+};
+
+// This runs for every declaration, shorthand, and component, and the result only depends on the property names. The property names come from the linted code, so limit the cache size for long-running processes, like editors.
+const propertyAffectsComponentCache = new Map();
+const maximumPropertyAffectsComponentCacheSize = 1000;
+const propertyAffectsComponent = (property, component) => {
+	let componentCache = propertyAffectsComponentCache.get(property);
+	if (!componentCache) {
+		if (propertyAffectsComponentCache.size >= maximumPropertyAffectsComponentCacheSize) {
+			propertyAffectsComponentCache.clear();
+		}
+
+		componentCache = new Map();
+		propertyAffectsComponentCache.set(property, componentCache);
+	}
+
+	let result = componentCache.get(component);
+	if (result === undefined) {
+		result = isComponentAffectedByProperty(property, component);
+		componentCache.set(component, result);
+	}
+
+	return result;
 };
 
 const getCandidates = (children, {shorthand, definition, catalogIndex}, sourceCode) => {
@@ -458,6 +463,11 @@ const getCandidates = (children, {shorthand, definition, catalogIndex}, sourceCo
 			continue;
 		}
 
+		// Custom properties never affect a shorthand or its components.
+		if (child.property.startsWith('--')) {
+			continue;
+		}
+
 		const property = child.property.toLowerCase();
 		const childVendorPrefix = getVendorPrefix(property);
 		const unprefixedProperty = property.slice(childVendorPrefix.length);
@@ -504,7 +514,7 @@ const getCandidates = (children, {shorthand, definition, catalogIndex}, sourceCo
 				resetStates.clear();
 				const keyword = getCssWideKeyword(child);
 				if (
-					!hasSubstitutionFunction(child.value)
+					!hasSubstitutionOrRandomFunction(child.value)
 					&& !sourceCode.lexer.matchProperty(shorthand, child.value).error
 					&& (!['animation', 'columns'].includes(shorthand) || keyword)
 				) {
@@ -537,7 +547,7 @@ const getCandidateValue = (candidate, sourceCode) => {
 
 	for (const [index, declaration] of candidate.declarations.entries()) {
 		if (
-			hasSubstitutionFunction(declaration.value)
+			hasSubstitutionOrRandomFunction(declaration.value)
 			|| sourceCode.lexer.matchProperty(candidate.components[index], declaration.value).error
 		) {
 			return;
@@ -547,7 +557,7 @@ const getCandidateValue = (candidate, sourceCode) => {
 	const value = serializeShorthand(candidate.shorthand, candidate.declarations, sourceCode);
 	if (
 		!value
-		|| candidate.resetStates.some(({keyword}) => keyword !== (cssWideKeywords.has(value) ? value : 'initial'))
+		|| candidate.resetStates.some(({keyword}) => keyword !== (isCssWideKeyword(value) ? value : 'initial'))
 		|| sourceCode.lexer.matchProperty(candidate.shorthand, value).error
 	) {
 		return;
@@ -556,7 +566,8 @@ const getCandidateValue = (candidate, sourceCode) => {
 	return value;
 };
 
-const getFix = (candidate, block, comments, sourceCode) => {
+const getFix = (candidate, block, context) => {
+	const {sourceCode} = context;
 	const declarationIndices = candidate.sourceDeclarations.map(declaration => block.children.indexOf(declaration));
 	if (declarationIndices.some((index, arrayIndex) => arrayIndex > 0 && index !== declarationIndices[arrayIndex - 1] + 1)) {
 		return;
@@ -567,10 +578,7 @@ const getFix = (candidate, block, comments, sourceCode) => {
 	const [, declarationEnd] = sourceCode.getRange(lastDeclaration);
 	const trailingWhitespaceLength = sourceCode.getText(lastDeclaration).match(/[\t\n\f\r ]*$/u)[0].length;
 	const end = declarationEnd - trailingWhitespaceLength;
-	if (comments.some(comment => {
-		const [commentStart, commentEnd] = sourceCode.getRange(comment);
-		return commentStart < end && commentEnd > start;
-	})) {
+	if (hasCommentInRange(context, [start, end])) {
 		return;
 	}
 
@@ -585,18 +593,19 @@ const getFix = (candidate, block, comments, sourceCode) => {
 const create = context => {
 	const {sourceCode} = context;
 	const ignoredShorthands = new Set(context.options[0].ignoreShorthands);
-	const {comments} = sourceCode;
 
 	context.on('Block', function * (block) {
 		const firstDeclaration = block.children.find(child => child.type === 'Declaration');
 		if (
 			!firstDeclaration
 			|| isCssModulesInteropDeclaration(firstDeclaration, context)
+			// Tolerant mode keeps invalid values as `Raw` nodes, which cannot be analyzed.
+			|| block.children.some(child => child.type === 'Declaration' && child.value.type === 'Raw' && !child.property.startsWith('--'))
 		) {
 			return;
 		}
 
-		const parent = sourceCode.getAncestors(block).at(-1);
+		const parent = sourceCode.getParent(block);
 		if (parent?.type === 'Atrule') {
 			const atRule = sourceCode.lexer.getAtrule(parent.name.toLowerCase());
 			if (!atRule || atRule.descriptors !== null) {
@@ -604,11 +613,17 @@ const create = context => {
 			}
 		}
 
+		const properties = new Set(block.children.filter(child => child.type === 'Declaration').map(child => child.property.toLowerCase()));
 		const candidates = [];
 		let catalogIndex = 0;
 		for (const [shorthand, definition] of shorthandProperties) {
 			// These shorthands need dedicated serializers for slash-separated values and comma-separated ranges.
-			if (!ignoredShorthands.has(shorthand) && !['mask-border', 'animation-range'].includes(shorthand)) {
+			if (
+				!ignoredShorthands.has(shorthand)
+				&& !['mask-border', 'animation-range'].includes(shorthand)
+				// A candidate needs every component, so skip the shorthand early.
+				&& definition.components.every(component => properties.has(component))
+			) {
 				candidates.push(...getCandidates(block.children, {shorthand, definition, catalogIndex}, sourceCode));
 			}
 
@@ -634,7 +649,7 @@ const create = context => {
 				node: candidate.sourceDeclarations.at(-1),
 				messageId: MESSAGE_ID,
 				data: {shorthand: candidate.shorthand},
-				fix: getFix(candidate, block, comments, sourceCode),
+				fix: getFix(candidate, block, context),
 			};
 		}
 	});

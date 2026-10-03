@@ -1,5 +1,5 @@
 import {ident} from '@eslint/css-tree';
-import {normalizeCssIdentifier} from './utils/index.js';
+import {getCommaSeparatedGroups, isKeyframesAtRule, normalizeCssIdentifier} from './utils/index.js';
 
 const MESSAGE_ID = 'no-unknown-animations';
 const messages = {
@@ -21,8 +21,6 @@ const animationShorthandComponents = [
 	{property: 'animation-play-state', type: 'single-animation-play-state'},
 	{property: 'animation-timeline', type: 'single-animation-timeline'},
 ];
-
-const keyframesNamePattern = /^(?:-(?:moz|o|webkit)-)?keyframes$/u;
 
 // The lexer does not consistently recognize escaped keyword, function, or unit spellings.
 const getCanonicalLexerNode = node => {
@@ -64,21 +62,6 @@ const isAnimationNameNode = (node, property, lexer) => {
 	return Boolean(matchResult.matched && matchResult.isType(canonicalNode, 'keyframes-name'));
 };
 
-const getCommaSeparatedGroups = value => {
-	const groups = [[]];
-
-	for (const node of value.children) {
-		if (node.type === 'Operator' && node.value === ',') {
-			groups.push([]);
-			continue;
-		}
-
-		groups.at(-1).push(node);
-	}
-
-	return groups;
-};
-
 const isShorthandComponentNode = (node, component, matchResult) => component.type
 	? matchResult.isType(node, component.type)
 	: matchResult.isProperty(node, component.property);
@@ -118,11 +101,11 @@ const getGroupAnimationNameNodes = (nodes, property, value, lexer) => {
 };
 
 const getAnimationNameNodes = (declaration, property, lexer) => getCommaSeparatedGroups(declaration.value)
-	.flatMap(nodes => getGroupAnimationNameNodes(nodes, property, declaration.value, lexer));
+	.flatMap(({nodes}) => getGroupAnimationNameNodes(nodes, property, declaration.value, lexer));
 
 const getKeyframesName = (atRule, lexer) => {
 	if (
-		!keyframesNamePattern.test(normalizeCssIdentifier(atRule.name))
+		!isKeyframesAtRule(atRule)
 		|| atRule.prelude?.type !== 'AtrulePrelude'
 		|| atRule.block?.type !== 'Block'
 		|| atRule.prelude.children.length !== 1

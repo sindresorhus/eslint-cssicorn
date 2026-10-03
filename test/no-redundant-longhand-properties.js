@@ -45,6 +45,8 @@ testRule.snapshot({
 		'a { margin-top: env(safe-area-inset-top); margin-right: 2px; margin-bottom: 3px; margin-left: 4px; }',
 		'a { margin-top: inherit(--spacing); margin-right: 2px; margin-bottom: 3px; margin-left: 4px; }',
 		'a { margin-top: --spacing(); margin-right: 2px; margin-bottom: 3px; margin-left: 4px; }',
+		String.raw`a { margin-top: calc(v\61r(--top)); margin-right: 2px; margin-bottom: 3px; margin-left: 4px; }`,
+		String.raw`a { margin-top: calc(r\61ndom(1px, 2px)); margin-right: 2px; margin-bottom: 3px; margin-left: 4px; }`,
 		'a { margin-top: 1px; margin-top: 2px; margin-right: 3px; margin-bottom: 4px; margin-left: 5px; }',
 		'a { margin-top: 1px; margin: 2px; margin-right: 3px; margin-bottom: 4px; margin-left: 5px; }',
 		'a { margin-top: 1px; margin-right: 2px; margin-inline-start: 5px; margin-bottom: 3px; margin-left: 4px; }',
@@ -286,11 +288,21 @@ testRule({
 			code: 'a { transition-behavior: normal; transition-property: opacity; transition-duration: 1s; transition-timing-function: ease; transition-delay: 0s; }',
 			options: [{ignoreShorthands: ['transition']}],
 		},
+		// Tolerant mode keeps invalid values as `Raw` nodes without children.
+		{
+			code: 'a { overflow: .; overflow-x: auto; overflow-y: auto; }',
+			languageOptions: {tolerant: true},
+		},
 	],
 	invalid: [
 		{
 			code: 'a { padding-top: 1px; padding-right: 2px; padding-bottom: 3px; padding-left: 4px; }',
 			output: 'a { padding: 1px 2px 3px 4px; }',
+			errors: 1,
+		},
+		{
+			code: 'a { --gap: 1px; margin-top: 1px; margin-right: 2px; margin-bottom: 3px; margin-left: 4px; }',
+			output: 'a { --gap: 1px; margin: 1px 2px 3px 4px; }',
 			errors: 1,
 		},
 		{
@@ -894,6 +906,11 @@ testRule({
 		},
 		{
 			code: 'a { border-image: inherit; border-width: inherit; border-style: inherit; border-color: inherit; }',
+			output: 'a { border: inherit; }',
+			errors: 1,
+		},
+		{
+			code: String.raw`a { border-image: \69nherit; border-width: inherit; border-style: inherit; border-color: inherit; }`,
 			output: 'a { border: inherit; }',
 			errors: 1,
 		},

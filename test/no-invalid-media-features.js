@@ -116,5 +116,7 @@ test.snapshot({
 		'@media (device-posture: flat) {}',
 		'@media (shape: square) {}',
 		'@media (red < width < blue) {}',
+		// U+3000 is not CSS whitespace, so it is part of the feature name.
+		'@media (\u3000\u3000unknown-feature) {}',
 	],
 });

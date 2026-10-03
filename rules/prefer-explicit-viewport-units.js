@@ -1,4 +1,4 @@
-import {isCssModulesInteropDeclaration} from './utils/index.js';
+import {isCssModulesInteropDeclaration, normalizeCssIdentifier} from './utils/index.js';
 
 const MESSAGE_ID_ERROR = 'prefer-explicit-viewport-units/error';
 const MESSAGE_ID_SUGGESTION = 'prefer-explicit-viewport-units/suggestion';
@@ -42,7 +42,7 @@ const isSizeDeclaration = (node, context) => {
 	while (currentNode) {
 		if (currentNode.type === 'Declaration') {
 			return sourceCode.getParent(currentNode).type === 'Block'
-				&& sizeProperties.has(currentNode.property.toLowerCase())
+				&& sizeProperties.has(normalizeCssIdentifier(currentNode.property))
 				&& !isCssModulesInteropDeclaration(currentNode, context);
 		}
 
@@ -61,7 +61,7 @@ const create = context => {
 	const [{unit: preferredUnit}] = context.options;
 
 	context.on('Dimension', node => {
-		const unit = node.unit.toLowerCase();
+		const unit = normalizeCssIdentifier(node.unit);
 		if (
 			(unit !== 'vh' && unit !== 'vw')
 			|| Number(node.value) !== 100

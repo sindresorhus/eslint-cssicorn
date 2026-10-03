@@ -1,5 +1,11 @@
 import {parse, walk} from '@eslint/css-tree';
-import {isCssModulesInteropDeclaration, normalizeCssIdentifier, toLocation} from './utils/index.js';
+import {LEGACY_PSEUDO_ELEMENTS} from './shared/css-selector-specificity.js';
+import {
+	isCssModulesInteropDeclaration,
+	isSubstitutionFunction,
+	normalizeCssIdentifier,
+	toLocation,
+} from './utils/index.js';
 
 const MESSAGE_ID_COLOR = 'prefer-modern-syntax/color';
 const MESSAGE_ID_ALPHA = 'prefer-modern-syntax/alpha';
@@ -12,13 +18,12 @@ const messages = {
 
 const legacyColorFunctions = new Set(['rgb', 'rgba', 'hsl', 'hsla']);
 const colorFunctionsWithAlpha = new Set(['rgb', 'rgba', 'hsl', 'hsla', 'hwb', 'lab', 'lch', 'oklab', 'oklch', 'color']);
-const legacyPseudoElements = new Set(['before', 'after', 'first-line', 'first-letter']);
-const substitutionFunctions = new Set(['attr', 'env', 'first-valid', 'if', 'inherit', 'random-item', 'var']);
+// Matches the start of every function in `colorFunctionsWithAlpha` (`lab(` and `lch(` also match `oklab(` and `oklch(`), and backslashes because a name can be escaped.
+const colorFunctionPattern = /(?:rgba?|hsla?|hwb|lab|lch|color)\(|\\/iv;
 const decimalPattern = /^(?<sign>[+\-]?)(?<integer>\d*)(?:\.(?<fraction>\d+))?$/v;
 
 const getRange = (node, offset, sourceCode) => sourceCode.getRange(node).map(index => index + offset);
 const hasLinebreak = text => text.includes('\n') || text.includes('\r') || text.includes('\f');
-const isSubstitutionFunction = node => node.type === 'Function' && (node.name.startsWith('--') || substitutionFunctions.has(normalizeCssIdentifier(node.name)));
 const hasKnownColorComponents = (children, commas, slash) => (
 	(commas.length === 2 || commas.length === 3)
 	&& !slash
@@ -167,18 +172,25 @@ function getColorProblem(node, offset, context, reportNode = node) {
 */
 const create = context => {
 	context.on('Function', node => {
+		const problem = getColorProblem(node, 0, context);
+		if (!problem) {
+			return;
+		}
+
 		const declaration = context.sourceCode.getAncestors(node).findLast(ancestor => ancestor.type === 'Declaration');
 		if (declaration && isCssModulesInteropDeclaration(declaration, context)) {
 			return;
 		}
 
-		return getColorProblem(node, 0, context);
+		return problem;
 	});
 
 	context.on('Declaration', declaration => {
 		if (
 			!declaration.property.startsWith('--')
 			|| declaration.value.type !== 'Raw'
+			// Skip parsing values that cannot contain a color function.
+			|| !colorFunctionPattern.test(declaration.value.value)
 			|| isCssModulesInteropDeclaration(declaration, context)
 		) {
 			return;
@@ -216,7 +228,7 @@ const create = context => {
 
 	context.on('PseudoClassSelector', node => {
 		const name = normalizeCssIdentifier(node.name);
-		if (!legacyPseudoElements.has(name)) {
+		if (!LEGACY_PSEUDO_ELEMENTS.has(name)) {
 			return;
 		}
 

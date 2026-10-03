@@ -1,6 +1,6 @@
 import {ident} from '@eslint/css-tree';
 import standardPseudoSelectors from './shared/standard-pseudo-selectors.js';
-import {toAsciiLowerCase} from './utils/index.js';
+import {normalizeCssIdentifier} from './utils/index.js';
 
 /**
 @import * as ESLint from 'eslint';
@@ -13,7 +13,7 @@ const messages = {
 
 const getPseudoSelectorKey = pseudoSelector => {
 	const colonCount = pseudoSelector.startsWith('::') ? 2 : 1;
-	return `${colonCount}:${toAsciiLowerCase(ident.decode(pseudoSelector.slice(colonCount)))}`;
+	return `${colonCount}:${normalizeCssIdentifier(pseudoSelector.slice(colonCount))}`;
 };
 
 // Build tools remove these before the browser sees the CSS.

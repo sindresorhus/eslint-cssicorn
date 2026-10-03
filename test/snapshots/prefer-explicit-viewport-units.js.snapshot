@@ -340,3 +340,31 @@ Suggestion 1/1: Replace \`100vh\` with \`100dvh\`.:
   1 | @supports (height: 100dvh) { .element { height: 100dvh; } }
 
 `;
+
+exports[`invalid(9): .escaped { w\\idth: 100vh; height: 100v\\68; } 1`] = `
+
+  1 | .escaped { w\\idth: 100vh; height: 100v\\68; }
+
+`;
+
+exports[`invalid(9): .escaped { w\\idth: 100vh; height: 100v\\68; } 2`] = `
+
+Message:
+> 1 | .escaped { w\\idth: 100vh; height: 100v\\68; }
+    |                    ^^^^^ Prefer \`100dvh\` over \`100vh\`.
+
+Suggestion 1/1: Replace \`100vh\` with \`100dvh\`.:
+  1 | .escaped { w\\idth: 100dvh; height: 100v\\68; }
+
+`;
+
+exports[`invalid(9): .escaped { w\\idth: 100vh; height: 100v\\68; } 3`] = `
+
+Message:
+> 1 | .escaped { w\\idth: 100vh; height: 100v\\68; }
+    |                                   ^^^^^^^ Prefer \`100dvh\` over \`100v\\68\`.
+
+Suggestion 1/1: Replace \`100v\\68\` with \`100dvh\`.:
+  1 | .escaped { w\\idth: 100vh; height: 100dvh; }
+
+`;

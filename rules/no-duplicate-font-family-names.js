@@ -1,7 +1,10 @@
 import {ident} from '@eslint/css-tree/utils';
+import {hasAncestorStyleRule} from './shared/css-selector-specificity.js';
 import {
+	getCommaSeparatedGroups,
 	hasCommentInRange,
 	isCssModulesInteropDeclaration,
+	isCssWideKeyword,
 	normalizeCssIdentifier,
 	toLocation,
 } from './utils/index.js';
@@ -40,16 +43,10 @@ const reservedFontFamilyNames = new Set([
 	'caption',
 	'default',
 	'icon',
-	'inherit',
-	'initial',
 	'menu',
 	'message-box',
-	'revert',
-	'revert-layer',
-	'revert-rule',
 	'small-caption',
 	'status-bar',
-	'unset',
 ]);
 
 const formatFontFamilyName = name => JSON.stringify(name)
@@ -58,27 +55,6 @@ const formatFontFamilyName = name => JSON.stringify(name)
 		/[\p{Control}\p{Format}\p{Line_Separator}\p{Paragraph_Separator}]/gu,
 		character => String.raw`\u{${character.codePointAt(0).toString(16)}}`,
 	);
-
-const getCommaSeparatedGroups = value => {
-	const groups = [];
-	let nodes = [];
-	let previousComma;
-
-	for (const node of value.children) {
-		if (node.type === 'Operator' && node.value === ',') {
-			groups.push({nodes, previousComma, nextComma: node});
-			nodes = [];
-			previousComma = node;
-			continue;
-		}
-
-		nodes.push(node);
-	}
-
-	groups.push({nodes, previousComma, nextComma: undefined});
-
-	return groups;
-};
 
 const getGenericFunctionName = node => {
 	if (
@@ -112,7 +88,7 @@ const getFontFamily = nodes => {
 
 	const identifierNames = nodes.map(node => ident.decode(node.name));
 	const normalizedIdentifierNames = identifierNames.map(name => name.toLowerCase());
-	if (normalizedIdentifierNames.some(name => reservedFontFamilyNames.has(name) || (nodes.length > 1 && genericFontFamilyNames.has(name)))) {
+	if (normalizedIdentifierNames.some(name => isCssWideKeyword(name) || reservedFontFamilyNames.has(name) || (nodes.length > 1 && genericFontFamilyNames.has(name)))) {
 		return;
 	}
 
@@ -137,21 +113,6 @@ const getFontShorthandGroups = (value, matchResult) => {
 	}));
 };
 
-const isInRule = (node, sourceCode) => {
-	const parent = sourceCode.getParent(node);
-	if (parent?.type !== 'Block') {
-		return false;
-	}
-
-	for (let ancestor = parent; ancestor; ancestor = sourceCode.getParent(ancestor)) {
-		if (ancestor.type === 'Rule') {
-			return true;
-		}
-	}
-
-	return false;
-};
-
 /**
 @param {import('eslint').Rule.RuleContext} context
 */
@@ -165,7 +126,10 @@ const create = context => {
 		}
 
 		if (
-			!isInRule(declaration, sourceCode)
+			// Tolerant mode keeps invalid values as `Raw` nodes, which cannot be analyzed.
+			declaration.value.type === 'Raw'
+			|| sourceCode.getParent(declaration)?.type !== 'Block'
+			|| !hasAncestorStyleRule(declaration, context)
 			|| isCssModulesInteropDeclaration(declaration, context)
 		) {
 			return;

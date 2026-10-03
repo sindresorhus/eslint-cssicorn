@@ -1,5 +1,5 @@
 import {generate, ident} from '@eslint/css-tree';
-import {toAsciiLowerCase} from './utils/index.js';
+import {hasCommentInRange, toAsciiLowerCase} from './utils/index.js';
 
 const MESSAGE_ID_ERROR = 'no-duplicate-properties/error';
 const MESSAGE_ID_SUGGESTION = 'no-duplicate-properties/suggestion';
@@ -86,23 +86,6 @@ const containsOnlyHorizontalWhitespace = (text, start, end) => {
 	return true;
 };
 
-const hasCommentInRange = (commentRanges, [start, end]) => {
-	let lowerIndex = 0;
-	let upperIndex = commentRanges.length;
-
-	while (lowerIndex < upperIndex) {
-		const middleIndex = Math.floor((lowerIndex + upperIndex) / 2);
-		if (commentRanges[middleIndex][0] < start) {
-			lowerIndex = middleIndex + 1;
-		} else {
-			upperIndex = middleIndex;
-		}
-	}
-
-	const commentRange = commentRanges[lowerIndex];
-	return Boolean(commentRange && commentRange[0] < end && commentRange[1] <= end);
-};
-
 const wouldRetargetDisableNextLine = (location, removalRange, text, disableNextLineTargetLines) =>
 	disableNextLineTargetLines.has(location.start.line)
 	&& location.start.line !== location.end.line
@@ -164,7 +147,6 @@ const getDeclarationRemovalRange = (declaration, sourceCode, lineBounds, disable
 const create = context => {
 	const {sourceCode} = context;
 	const lineBounds = new Map();
-	const commentRanges = (sourceCode.comments ?? []).map(comment => sourceCode.getRange(comment));
 	const disableNextLineTargetLines = new Set();
 	for (const directive of sourceCode.getDisableDirectives().directives) {
 		if (directive.type === 'disable-next-line') {
@@ -194,7 +176,7 @@ const create = context => {
 
 			const declarationLocation = sourceCode.getLoc(declaration);
 			const removalRange = getDeclarationRemovalRange(declaration, sourceCode, lineBounds, disableNextLineTargetLines);
-			const omitSuggestion = hasCommentInRange(commentRanges, removalRange)
+			const omitSuggestion = hasCommentInRange(context, removalRange)
 				|| wouldRetargetDisableNextLine(declarationLocation, removalRange, sourceCode.text, disableNextLineTargetLines);
 			yield {
 				node: declaration,

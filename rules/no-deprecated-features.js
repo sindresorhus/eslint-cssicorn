@@ -4,7 +4,12 @@ import {
 	tokenize,
 	tokenTypes,
 } from '@eslint/css-tree';
-import {isCssModulesInteropDeclaration, normalizeCssIdentifier, toLocation} from './utils/index.js';
+import {
+	getSingleValueIdentifier,
+	isCssModulesInteropDeclaration,
+	normalizeCssIdentifier,
+	toLocation,
+} from './utils/index.js';
 
 const MESSAGE_ID_ERROR = 'no-deprecated-features/error';
 const MESSAGE_ID_SUGGESTION = 'no-deprecated-features/suggestion';
@@ -445,18 +450,6 @@ function * getValueIdentifiers(node, shouldInspectColorFunctions) {
 		yield * getValueIdentifiers(child, shouldInspectColorFunctions);
 	}
 }
-
-const getSingleValueIdentifier = declaration => {
-	if (
-		declaration.value.type !== 'Value'
-		|| declaration.value.children.length !== 1
-		|| declaration.value.children.at(0).type !== 'Identifier'
-	) {
-		return;
-	}
-
-	return declaration.value.children.at(0);
-};
 
 const canParseDeclarationReplacement = (declaration, range, replacement, context) => {
 	const {sourceCode} = context;

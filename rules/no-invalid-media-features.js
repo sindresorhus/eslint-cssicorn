@@ -1,5 +1,5 @@
 import {ident, keyword} from '@eslint/css-tree';
-import {normalizeCssIdentifier} from './utils/index.js';
+import {getFeatureNameRange, normalizeCssIdentifier, toLocation} from './utils/index.js';
 
 const MESSAGE_ID_UNKNOWN = 'no-invalid-media-features/unknown';
 const MESSAGE_ID_INVALID_VALUE = 'no-invalid-media-features/invalid-value';
@@ -135,36 +135,10 @@ function getValueWithEnvironmentPlaceholders(sourceCode, node, syntax) {
 	return value;
 }
 
-function getFeatureNameLocation(node, sourceCode) {
-	const nodeText = sourceCode.getText(node);
-	let index = 0;
-
-	while (index < nodeText.length) {
-		if (nodeText[index] === '(' || nodeText[index].trim() === '') {
-			index++;
-			continue;
-		}
-
-		if (nodeText.startsWith('/*', index)) {
-			index = nodeText.indexOf('*/', index + 2) + 2;
-			continue;
-		}
-
-		break;
-	}
-
-	const startOffset = sourceCode.getLoc(node).start.offset + index;
-
-	return {
-		start: sourceCode.getLocFromIndex(startOffset),
-		end: sourceCode.getLocFromIndex(startOffset + node.name.length),
-	};
-}
-
-function getUnknownFeatureProblem(node, name, sourceCode) {
+function getUnknownFeatureProblem(node, name, context) {
 	return {
 		node,
-		loc: node.type === 'Feature' ? getFeatureNameLocation(node, sourceCode) : sourceCode.getLoc(node),
+		loc: node.type === 'Feature' ? toLocation(getFeatureNameRange(node, context), context) : context.sourceCode.getLoc(node),
 		messageId: MESSAGE_ID_UNKNOWN,
 		data: {name},
 	};
@@ -214,7 +188,7 @@ const create = context => {
 
 		const syntax = mediaFeatureSyntaxes.get(getFeatureNameDescriptor(node.name).name);
 		if (!syntax) {
-			return getUnknownFeatureProblem(node, node.name, sourceCode);
+			return getUnknownFeatureProblem(node, node.name, context);
 		}
 
 		if (node.value) {
@@ -238,7 +212,7 @@ const create = context => {
 
 		const syntax = mediaFeatureSyntaxes.get(getFeatureNameDescriptor(nameNode.name).name);
 		if (!syntax) {
-			yield getUnknownFeatureProblem(nameNode, nameNode.name, sourceCode);
+			yield getUnknownFeatureProblem(nameNode, nameNode.name, context);
 			return;
 		}
 

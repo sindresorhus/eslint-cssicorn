@@ -32,6 +32,7 @@ test.snapshot({
 		'.scientific { height: 1e2vh; }',
 		'.fallback { height: 100vh; height: 100dvh; }',
 		'@supports (height: 100dvh) { .element { height: 100vh; } }',
+		String.raw`.escaped { w\idth: 100vh; height: 100v\68; }`,
 	],
 });
 

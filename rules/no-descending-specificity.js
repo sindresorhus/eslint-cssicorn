@@ -18,7 +18,7 @@ import {
 	hasScopeAncestor,
 	LEGACY_PSEUDO_ELEMENTS,
 } from './shared/css-selector-specificity.js';
-import {normalizeCssIdentifier} from './utils/index.js';
+import {getAtRuleContextPart, isKeyframesAtRule, normalizeCssIdentifier} from './utils/index.js';
 
 const MESSAGE_ID = 'no-descending-specificity';
 const messages = {
@@ -31,28 +31,15 @@ const UNSUPPORTED_PSEUDO_CLASSES = new Set([
 	'root',
 	'scope',
 ]);
-const keyframesNamePattern = /^(?:-(?:o|moz|webkit)-)?keyframes$/u;
 const MAXIMUM_TERMINAL_KEYS = 64;
 const MAXIMUM_TERMINAL_KEY_LENGTH = 1024;
 const MAXIMUM_TERMINAL_KEY_ASSOCIATIONS = 256;
-
-const getAtRuleContextPart = (atRule, sourceCode) => {
-	const name = normalizeCssIdentifier(atRule.name);
-	if (name === 'layer' && !atRule.prelude) {
-		return ['anonymous-layer', sourceCode.getRange(atRule)[0]];
-	}
-
-	return ['at-rule', name, atRule.prelude ? generate(atRule.prelude) : ''];
-};
 
 const isInKeyframes = (rule, sourceCode) => {
 	let ancestor = sourceCode.getParent(rule);
 
 	while (ancestor) {
-		if (
-			ancestor.type === 'Atrule'
-			&& keyframesNamePattern.test(normalizeCssIdentifier(ancestor.name))
-		) {
+		if (isKeyframesAtRule(ancestor)) {
 			return true;
 		}
 
@@ -86,6 +73,11 @@ const isPseudoSelectorWithNestingSelector = node => (node.type === 'PseudoClassS
 	&& Boolean(find(node, descendant => descendant.type === 'NestingSelector'));
 
 const hasNamespaceSeparator = name => {
+	// Avoid tokenizing the common case.
+	if (!name.includes('|')) {
+		return false;
+	}
+
 	let hasSeparator = false;
 	tokenize(name, (type, start) => {
 		hasSeparator ||= type === tokenTypes.Delim && name[start] === '|';
@@ -317,7 +309,10 @@ const addEntry = (analysis, record, entriesByTerminalKey) => {
 	const {property, important} = record;
 	const entry = {
 		rule: record.rule,
-		selector: analysis.selectorText,
+		// Only built when a problem is reported.
+		get selector() {
+			return analysis.selectorText;
+		},
 		line: analysis.line,
 		specificity: analysis.specificity,
 	};
@@ -362,7 +357,7 @@ const create = context => {
 		const parent = sourceCode.getParent(node);
 		let identifier = parent ? getAtRuleContextIdentifier(parent) : 0;
 		if (node.type === 'Atrule') {
-			const key = JSON.stringify([identifier, getAtRuleContextPart(node, sourceCode)]);
+			const key = JSON.stringify([identifier, getAtRuleContextPart(node, context)]);
 			let nestedIdentifier = contextIdentifierByKey.get(key);
 			if (nestedIdentifier === undefined) {
 				nestedIdentifier = contextIdentifierByKey.size + 1;

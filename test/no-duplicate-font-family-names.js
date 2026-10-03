@@ -63,6 +63,11 @@ test.snapshot({
 		// CSS Modules interop blocks are read by JavaScript as exact strings.
 		':export { font-family: Arial, Arial, sans-serif; }',
 		':import("./theme.css") { font-family: Arial, Arial; }',
+		// Tolerant mode keeps invalid values as `Raw` nodes without children.
+		{
+			code: 'a { font-family: Arial, Ari|al; }',
+			languageOptions: {tolerant: true},
+		},
 	],
 	invalid: [
 		'a { font-family: Arial, Arial, sans-serif; }',

@@ -1,5 +1,5 @@
 import {find, tokenize, tokenTypes} from '@eslint/css-tree';
-import {normalizeCssIdentifier} from '../utils/index.js';
+import {isKeyframesAtRule, normalizeCssIdentifier} from '../utils/index.js';
 import {functionalPseudoSelectors, nonFunctionalPseudoSelectors} from './standard-pseudo-selectors.js';
 
 const ZERO_SPECIFICITY = [0, 0, 0];
@@ -326,13 +326,23 @@ const getRuleSpecificities = (rule, nestingSpecificity) => {
 		.map(selector => getRuleSelectorSpecificity(selector, nestingSpecificity));
 };
 
+// Keyframe selectors, like `from`, are rules but not style rules.
+const isStyleRule = (node, context) => {
+	if (node.type !== 'Rule') {
+		return false;
+	}
+
+	const {sourceCode} = context;
+	return !isKeyframesAtRule(sourceCode.getParent(sourceCode.getParent(node)));
+};
+
 const getParentStyleRule = (rule, context) => {
 	const {sourceCode} = context;
 	let ancestor = sourceCode.getParent(rule);
 
 	while (ancestor) {
 		if (ancestor.type === 'Rule') {
-			return ancestor;
+			return isStyleRule(ancestor, context) ? ancestor : undefined;
 		}
 
 		if (
@@ -390,5 +400,6 @@ export {
 	hasAncestorStyleRule,
 	hasLeadingCombinator,
 	hasScopeAncestor,
+	isStyleRule,
 	LEGACY_PSEUDO_ELEMENTS,
 };

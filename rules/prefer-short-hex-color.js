@@ -42,6 +42,11 @@ const create = context => {
 		}
 
 		const valueText = sourceCode.getText(declaration.value);
+		// Avoid tokenizing values without a hexadecimal color.
+		if (!valueText.includes('#')) {
+			return;
+		}
+
 		const [valueStart] = sourceCode.getRange(declaration.value);
 		const problems = [];
 		const nonColorFunctionStack = [];

@@ -1,5 +1,5 @@
 import {ident, tokenize, tokenTypes} from '@eslint/css-tree';
-import {normalizeCssIdentifier, toLocation} from './utils/index.js';
+import {decodeCssIdentifier, normalizeCssIdentifier, toLocation} from './utils/index.js';
 
 /**
 @import * as ESLint from 'eslint';
@@ -17,7 +17,7 @@ const create = context => {
 	const {sourceCode} = context;
 
 	context.on('Declaration', declaration => {
-		const property = ident.decode(declaration.property);
+		const property = decodeCssIdentifier(declaration.property);
 		if (
 			!property.startsWith('--')
 			|| sourceCode.getParent(declaration)?.type !== 'Block'
@@ -26,6 +26,14 @@ const create = context => {
 		}
 
 		const text = sourceCode.getText(declaration.value);
+		// A self-reference contains the property name, unless it is escaped.
+		if (
+			!text.includes(property)
+			&& !text.includes('\\')
+		) {
+			return;
+		}
+
 		const [offset] = sourceCode.getRange(declaration.value);
 		const tokens = [];
 		// Custom-property values and var() fallbacks can be opaque Raw nodes.

@@ -1,5 +1,10 @@
 import {generate} from '@eslint/css-tree';
-import {hasCommentInRange, normalizeCssIdentifier} from './utils/index.js';
+import {
+	getAtRuleContextPart,
+	hasCommentInRange,
+	isKeyframesAtRule,
+	normalizeCssIdentifier,
+} from './utils/index.js';
 import {LEGACY_PSEUDO_ELEMENTS} from './shared/css-selector-specificity.js';
 
 /**
@@ -12,8 +17,6 @@ const messages = {
 	[DUPLICATE_SELECTOR]: 'This selector duplicates the selector on line {{line}}.',
 	[DUPLICATE_SELECTOR_LIST]: 'This selector list duplicates the selector list on line {{line}}.',
 };
-
-const keyframesNamePattern = /^(?:-(?:o|moz|webkit)-)?keyframes$/iu;
 
 // `:after` is a legacy alias of `::after`
 const normalizeLegacyPseudoElement = node => {
@@ -67,39 +70,27 @@ const getDuplicateSelectorsFix = (rule, duplicates, sourceCode) => {
 	return fixer => fixer.replaceText(rule.prelude, replacement);
 };
 
-const getContextPart = (node, sourceCode) => {
-	if (node.type === 'Rule') {
-		return ['rule', generate(node.prelude)];
-	}
-
-	const name = normalizeCssIdentifier(node.name);
-	if (name === 'layer' && !node.prelude) {
-		return ['anonymous-layer', sourceCode.getRange(node)[0]];
-	}
-
-	return ['at-rule', name, node.prelude ? generate(node.prelude) : ''];
-};
-
-const getContextKey = (rule, sourceCode) => {
-	const context = [];
+const getContextKey = (rule, context) => {
+	const {sourceCode} = context;
+	const parts = [];
 	let node = sourceCode.getParent(rule);
 
 	while (node) {
 		if (node.type === 'Atrule') {
-			// `@\6b eyframes` is the same at-rule as `@keyframes`
-			if (keyframesNamePattern.test(normalizeCssIdentifier(node.name))) {
+			// Keyframe selectors, like `from`, are not style rules.
+			if (isKeyframesAtRule(node)) {
 				return;
 			}
 
-			context.push(getContextPart(node, sourceCode));
+			parts.push(getAtRuleContextPart(node, context));
 		} else if (node.type === 'Rule') {
-			context.push(getContextPart(node, sourceCode));
+			parts.push(['rule', generate(node.prelude)]);
 		}
 
 		node = sourceCode.getParent(node);
 	}
 
-	return JSON.stringify(context.toReversed());
+	return JSON.stringify(parts.toReversed());
 };
 
 /**
@@ -114,7 +105,7 @@ const create = context => {
 			return;
 		}
 
-		const contextKey = getContextKey(rule, sourceCode);
+		const contextKey = getContextKey(rule, context);
 		if (contextKey === undefined) {
 			return;
 		}

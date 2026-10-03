@@ -1,3 +1,4 @@
+import {getParentStyleRule, LEGACY_PSEUDO_ELEMENTS} from './shared/css-selector-specificity.js';
 import {normalizeCssIdentifier} from './utils/index.js';
 
 /**
@@ -8,20 +9,6 @@ const MESSAGE_ID = 'no-redundant-nested-style-rules';
 const messages = {
 	[MESSAGE_ID]: 'Remove the redundant nested `&` style rule.',
 };
-
-const legacyPseudoElements = new Set([
-	'after',
-	'before',
-	'first-letter',
-	'first-line',
-]);
-
-const transparentAtRules = new Set([
-	'container',
-	'layer',
-	'media',
-	'supports',
-]);
 
 const trimCssWhitespace = string => string.replaceAll(/^[\t\n\f\r ]+|[\t\n\f\r ]+$/gu, '');
 
@@ -36,37 +23,12 @@ const isNestingSelectorOnly = node => {
 		&& selector.children.at(0).type === 'NestingSelector';
 };
 
-const getParentStyleRule = (node, sourceCode) => {
-	let parent = sourceCode.getParent(node);
-
-	while (parent) {
-		if (
-			parent.type === 'Atrule'
-			&& !transparentAtRules.has(normalizeCssIdentifier(parent.name))
-		) {
-			return;
-		}
-
-		if (parent.type === 'Rule') {
-			const block = sourceCode.getParent(parent);
-			const owner = sourceCode.getParent(block);
-			if (owner?.type === 'Atrule' && /(?:^|-)keyframes$/u.test(normalizeCssIdentifier(owner.name))) {
-				return;
-			}
-
-			return parent;
-		}
-
-		parent = sourceCode.getParent(parent);
-	}
-};
-
 const canFlattenInto = rule => {
 	const selector = getSingleSelector(rule);
 	return selector !== undefined
 		&& selector.children.every(node =>
 			node.type !== 'PseudoElementSelector'
-			&& !(node.type === 'PseudoClassSelector' && legacyPseudoElements.has(normalizeCssIdentifier(node.name))));
+			&& !(node.type === 'PseudoClassSelector' && LEGACY_PSEUDO_ELEMENTS.has(normalizeCssIdentifier(node.name))));
 };
 
 const getLineBreak = string => string.match(/\r\n|[\n\f\r]/u)?.[0] ?? '\n';
@@ -235,7 +197,7 @@ const create = context => {
 			return;
 		}
 
-		const parentStyleRule = getParentStyleRule(node, sourceCode);
+		const parentStyleRule = getParentStyleRule(node, context);
 		if (!parentStyleRule || !canFlattenInto(parentStyleRule)) {
 			return;
 		}

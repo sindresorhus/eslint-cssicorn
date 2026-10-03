@@ -1,6 +1,11 @@
 import {generate} from '@eslint/css-tree';
 import {getVendorPrefix} from './shared/css-shorthand-properties.js';
-import {hasCommentInRange, isCssModulesInteropDeclaration, normalizeCssIdentifier} from './utils/index.js';
+import {
+	hasCommentInRange,
+	hasSubstitutionOrRandomFunction,
+	isCssModulesInteropDeclaration,
+	normalizeCssIdentifier,
+} from './utils/index.js';
 
 const MESSAGE_ID = 'no-redundant-shorthand-values';
 const messages = {
@@ -46,27 +51,6 @@ const placeProperties = new Set([
 	'place-items',
 	'place-self',
 ]);
-
-const nonRepeatableFunctionNames = new Set([
-	'attr',
-	'env',
-	'if',
-	'inherit',
-	'random',
-	'random-item',
-	'var',
-]);
-
-const hasNonRepeatableFunction = node => {
-	if (node.type === 'Function') {
-		const functionName = normalizeCssIdentifier(node.name);
-		if (functionName.startsWith('--') || nonRepeatableFunctionNames.has(functionName)) {
-			return true;
-		}
-	}
-
-	return node.children?.some(child => hasNonRepeatableFunction(child)) ?? false;
-};
 
 const getValueKey = node => {
 	switch (node.type) {
@@ -233,7 +217,7 @@ const create = context => {
 		}
 
 		if (
-			hasNonRepeatableFunction(value)
+			hasSubstitutionOrRandomFunction(value)
 			|| !sourceCode.lexer.matchProperty(property, value).matched
 		) {
 			return;
