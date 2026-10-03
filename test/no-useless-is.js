@@ -194,6 +194,9 @@ test('fixes converge with other selector rules', () => {
 		[':is(:is(.foo)) {}', '.foo {}'],
 		[String.raw`:\69 s(:is(.foo)) {}`, '.foo {}'],
 		[':IS(.foo):BEFORE { color: RED; }', '.foo::before { color: red; }'],
+		[':is(:where(.foo, #bar)) {}', ':where(.foo, #bar) {}'],
+		[':is(.foo, :is(.bar)) {}', ':is(.foo, .bar) {}'],
+		[':is(:has(:is(.foo))) {}', ':is(:has(.foo)) {}'],
 	]) {
 		const first = linter.verifyAndFix(code, config, {filename: 'test.css'});
 		assert.equal(first.fixed, true);
