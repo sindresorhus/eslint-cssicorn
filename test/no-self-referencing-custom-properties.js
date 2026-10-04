@@ -47,6 +47,7 @@ test.snapshot({
 		'a { --a: "var(--b)" /* var(--b) */ url("var(--b)"); --b: var(--a); }',
 		'a { --a: var(--base, --b); --b: var(--a); }',
 		'a { --a: var(--b extra); --b: var(--a); }',
+		'a { --a: var(--b) var(--c); --b: var(--c); --c: 1px; }',
 	],
 	invalid: [
 		'a { --one: var(--two); --two: var(--one); }',
@@ -109,6 +110,40 @@ test({
 		},
 	],
 	invalid: [
+		{
+			name: 'large cyclic custom-property chain',
+			code: ':root {' + Array.from({length: 5000}, (_, index) => `--property-${index}: var(--property-${(index + 1) % 5000});`).join('') + '}',
+			errors: 5000,
+		},
+		{
+			code: 'a { --a: var(--b); --b: var(--a); --c: var(--a) var(--d); --d: var(--c); --incoming: var(--c); }',
+			errors: [
+				{
+					messageId: 'no-self-referencing-custom-properties/cycle', data: {property: '--a'}, column: 14, endColumn: 17,
+				},
+				{
+					messageId: 'no-self-referencing-custom-properties/cycle', data: {property: '--b'}, column: 29, endColumn: 32,
+				},
+				{
+					messageId: 'no-self-referencing-custom-properties/cycle', data: {property: '--c'}, column: 53, endColumn: 56,
+				},
+				{
+					messageId: 'no-self-referencing-custom-properties/cycle', data: {property: '--d'}, column: 68, endColumn: 71,
+				},
+			],
+		},
+		{
+			code: 'a { --a: var(--b) !important; --a: var(--a); --b: var(--a); }',
+			errors: [
+				{messageId: 'no-self-referencing-custom-properties/cycle', data: {property: '--a'}},
+				{messageId: 'no-self-referencing-custom-properties', data: {property: '--a'}},
+				{messageId: 'no-self-referencing-custom-properties/cycle', data: {property: '--b'}},
+			],
+		},
+		{
+			code: 'a { --a: var(--b); --b: var(--a); --a: var(--a); }',
+			errors: [{messageId: 'no-self-referencing-custom-properties', data: {property: '--a'}}],
+		},
 		{
 			code: 'a { --a: var(--external) var(--b); --b: var(--a); --external: 1px; }',
 			errors: [

@@ -75,4 +75,6 @@ Custom-property names are case-sensitive, so `--spacing: var(--SPACING)` is allo
 
 Each block is analyzed independently. The rule does not detect cycles spanning separate rules or nested blocks, resolve inheritance or the cascade across blocks, or account for registered-property semantics.
 
+The analysis is syntactic, so declarations ignored by browsers, such as `!important` declarations in keyframes, are still analyzed.
+
 Dynamic property names such as `var(var(--alias))` are not resolved. Literal references contribute to cycles even in unused fallbacks or conditional branches, so a reported declaration may still be valid under the [current CSS draft](https://drafts.csswg.org/css-variables-2/#using-variables) (see [web-platform tests](https://github.com/web-platform-tests/wpt/blob/master/css/css-variables/variable-cycles.html)).

@@ -52,8 +52,8 @@ const getReferences = (declaration, sourceCode) => {
 
 const getCyclicComponents = declarations => {
 	const states = new Map();
-	const stack = [];
-	const frames = [];
+	const componentStack = [];
+	const traversalStack = [];
 	const components = [];
 
 	// Tarjan's algorithm finds cycles without reporting properties that merely depend on one.
@@ -67,8 +67,8 @@ const getCyclicComponents = declarations => {
 			references: declarations.get(property).references.values(),
 		};
 		states.set(property, state);
-		stack.push(property);
-		frames.push(state);
+		componentStack.push(property);
+		traversalStack.push(state);
 	};
 
 	for (const property of declarations.keys()) {
@@ -77,8 +77,8 @@ const getCyclicComponents = declarations => {
 		}
 
 		enter(property);
-		while (frames.length > 0) {
-			const state = frames.at(-1);
+		while (traversalStack.length > 0) {
+			const state = traversalStack.at(-1);
 			const {value: reference, done} = state.references.next();
 			if (!done) {
 				if (!declarations.has(reference.property)) {
@@ -95,8 +95,8 @@ const getCyclicComponents = declarations => {
 				continue;
 			}
 
-			frames.pop();
-			const parentState = frames.at(-1);
+			traversalStack.pop();
+			const parentState = traversalStack.at(-1);
 			if (parentState) {
 				parentState.lowLink = Math.min(parentState.lowLink, state.lowLink);
 			}
@@ -108,7 +108,7 @@ const getCyclicComponents = declarations => {
 			const component = new Set();
 			let member;
 			do {
-				member = stack.pop();
+				member = componentStack.pop();
 				states.get(member).onStack = false;
 				component.add(member);
 			} while (member !== state.property);
