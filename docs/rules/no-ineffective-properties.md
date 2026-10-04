@@ -77,6 +77,28 @@ a {
 /* ❌ */
 a {
 	display: flex;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+/* ✅ */
+a {
+	display: flex;
+}
+
+a > span {
+	display: block;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+```
+
+Flex and grid containers are not block containers. Apply ellipsis to the block container holding the text, which can still be a flex or grid item.
+
+```css
+/* ❌ */
+a {
+	display: flex;
 	column-count: 3;
 }
 
@@ -151,16 +173,16 @@ a {
 - Flex alignment: `align-content` has no effect with explicit `nowrap` in `flex-wrap` or `flex-flow`. Use `align-items` to align items, or enable wrapping when you intend to align flex lines. Wrapping containers are allowed even when their content currently fits on one line. Omitted wrapping is not assumed to be `nowrap`, even in a `flex-flow` shorthand.
 - Insets: `top`, `right`, `bottom`, `left`, `inset`, `inset-block`, `inset-inline`, and their logical longhands have no effect with explicit `position: static`.
 - Floats: `float: left`, `right`, `inline-start`, or `inline-end` has no effect with explicit `position: absolute` or `fixed`. `float: none` is allowed.
-- Text overflow: `text-overflow: ellipsis`, `clip ellipsis`, `ellipsis clip`, or `ellipsis ellipsis` has no effect with explicit `overflow: visible` or `overflow: visible visible`. Ellipsis needs clipped inline overflow; this rule does not require `white-space: nowrap`, a width, or a height. Strings, `fade`, and `fade()` are not checked.
+- Text overflow: `text-overflow: ellipsis`, `clip ellipsis`, `ellipsis clip`, or `ellipsis ellipsis` has no effect with an element's own explicit flex or grid display mode, or with explicit `overflow: visible` or `overflow: visible visible`. Ellipsis needs a block container and clipped inline overflow; this rule does not require `white-space: nowrap`, a width, or a height. Strings, `fade`, and `fade()` are not checked.
 
 ## Scope
 
 - Supported: Style declaration blocks, including nested style rules and conditional blocks, CSS escapes, ASCII casing, `!important`, and legacy and modern display notation, such as `inline-flex` and `inline flex`.
 - Skipped controls: Missing, malformed, unknown, vendor-prefixed, CSS-wide, or unresolved values. Display checks also ignore `none` and `contents`.
-- Skipped ambiguities: Duplicate `display` or `position` declarations, multiple wrapping declarations including `flex-flow`/`flex-wrap` combinations, and multiple overflow declarations including physical and logical longhands.
+- Skipped ambiguities: Duplicate `display` or `position` declarations, multiple wrapping declarations including `flex-flow`/`flex-wrap` combinations, and multiple overflow declarations including physical and logical longhands. Ambiguity skips only the check that depends on that controller.
 - Skipped declarations: Target values containing CSS-wide keywords or unresolved substitutions, custom properties, item properties, gaps, and other alignment properties that need additional context.
 - Skipped blocks: Blocks containing `all`, plus keyframe, descriptor, and CSS Modules `:export`/`:import()` blocks.
-- Local context: Only direct declarations in the same block are compared. Text overflow is checked only against the `overflow` shorthand, without inferring writing mode or cross-axis computed values. Another selector, condition, or state can override the local context; disable the rule on declarations intentionally retained for those contexts.
+- Local context: Only direct declarations in the same block are compared. Overflow checks use only the `overflow` shorthand, without inferring writing mode or cross-axis computed values. Another selector, condition, or state can override the local context; disable the rule on declarations intentionally retained for those contexts.
 
 For example, repeated display declarations may be intentional fallbacks, so this rule skips the display check:
 

@@ -20,6 +20,7 @@ const MESSAGE_ID_STATIC = 'no-ineffective-properties/static';
 const MESSAGE_ID_OVERFLOW = 'no-ineffective-properties/overflow';
 const MESSAGE_ID_MULTICOL = 'no-ineffective-properties/multicol';
 const MESSAGE_ID_FLOAT = 'no-ineffective-properties/float';
+const MESSAGE_ID_TEXT_OVERFLOW_DISPLAY = 'no-ineffective-properties/text-overflow-display';
 const messages = {
 	[MESSAGE_ID_DISPLAY]: '`{{property}}` has no effect with `display: {{display}}`. It requires a {{layout}} container.',
 	[MESSAGE_ID_NOWRAP]: '`align-content` has no effect on a flex container with `nowrap`. Consider `align-items` or enabling wrapping.',
@@ -27,6 +28,7 @@ const messages = {
 	[MESSAGE_ID_OVERFLOW]: '`text-overflow: {{value}}` has no effect with `overflow: visible`. Ellipsis requires clipped inline overflow.',
 	[MESSAGE_ID_MULTICOL]: '`{{property}}` has no effect with `display: {{display}}`. Multicol properties require a block container.',
 	[MESSAGE_ID_FLOAT]: '`float: {{value}}` has no effect with `position: {{position}}`. Absolutely positioned elements cannot float.',
+	[MESSAGE_ID_TEXT_OVERFLOW_DISPLAY]: '`text-overflow: {{value}}` has no effect with `display: {{display}}`. Apply it to a block container holding the text.',
 };
 
 const flexProperties = new Set(['flex-direction', 'flex-wrap', 'flex-flow']);
@@ -125,6 +127,13 @@ const getDisplayProblem = (node, property, {display, hasVisibleDisplay, isFlex, 
 
 	if (multicolProperties.has(property) && (isFlex || isGrid)) {
 		return {node, messageId: MESSAGE_ID_MULTICOL, data: {property, display}};
+	}
+
+	if (property === 'text-overflow' && (isFlex || isGrid)) {
+		const value = getEllipsisValue(node.value);
+		if (value) {
+			return {node, messageId: MESSAGE_ID_TEXT_OVERFLOW_DISPLAY, data: {value, display}};
+		}
 	}
 };
 
