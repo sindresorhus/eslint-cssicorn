@@ -267,7 +267,7 @@ const getMergedReplacement = (parentRule, relatedRules, context) => {
 	const parentText = sourceCode.getText(parentRule);
 	const isMultiline = /[\n\f\r]/u.test(parentText);
 	const parentFormatting = isMultiline ? getIndentation(parentRule, sourceCode) : undefined;
-	let replacement = parentText.slice(0, -1).replace(/[\t\n\f\r ]+$/u, '');
+	let replacement = parentText.slice(0, -1);
 	for (const {rule, inner} of relatedRules) {
 		const childIsMultiline = /[\n\f\r]/u.test(sourceCode.getText(rule));
 		const childFormatting = childIsMultiline ? getIndentation(rule, sourceCode) : undefined;
