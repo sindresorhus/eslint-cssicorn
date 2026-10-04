@@ -11,7 +11,7 @@
 
 An initial `@layer` statement documents the intended order of sibling layers. Later statements cannot reorder layers that have already been declared, so contradicting that statement can hide a mistaken assumption about the cascade. See [CSS layer ordering](https://drafts.csswg.org/css-cascade-5/#layer-order).
 
-This rule checks later statements against the initial statement in each layer scope. Subsets and repeated names are allowed. Layer blocks and named imports may appear in any order.
+This rule checks later statements against the initial statement in each layer scope. Subsets and repeated names are allowed. Only the first occurrence of each sibling counts, including siblings reached through dotted names. Layer blocks and named imports may appear in any order.
 
 The initial statement must precede other layer declarations or imports in its scope and must be outside conditional or other grouping rules. A scope without an initial statement is left unchecked. Single-name statements also establish a contract; later statements do not extend it.
 
@@ -52,6 +52,18 @@ Layer blocks do not need to follow the statement's order:
 
 @layer theme {}
 @layer reset {}
+```
+
+An earlier conditional declaration also prevents a later statement from establishing a contract:
+
+```css
+@media screen {
+	@layer theme;
+}
+
+/* This scope is unchecked because a layer was already declared. */
+@layer base, theme;
+@layer theme, base;
 ```
 
 ## Options

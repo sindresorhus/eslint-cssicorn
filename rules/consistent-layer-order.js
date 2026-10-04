@@ -1,9 +1,17 @@
+// @ts-check
 import {tokenize, tokenTypes} from '@eslint/css-tree';
 import {decodeCssIdentifier, hasCommentInRange, normalizeCssIdentifier} from './utils/index.js';
 
 /**
 @import {CssicornContext} from './rule/cssicorn-context.js';
 @import {CssicornRule} from './rule/to-eslint-rule.js';
+@import {AtrulePlain, AtrulePreludePlain, CssNodePlain, Layer} from '@eslint/css-tree';
+*/
+
+/**
+@typedef {{children: Map<string, LayerScope>, order: Map<string, number> | undefined, eligible: boolean}} LayerScope
+@typedef {{node: Layer, ranks: (number | undefined)[], scope: LayerScope, undeclaredName: string | undefined}} LayerReference
+@typedef {Map<string, {rank: number | undefined, node: Layer}>} LayerGroup
 */
 
 const MESSAGE_ID = 'consistent-layer-order';
@@ -15,13 +23,20 @@ const messages = {
 
 /**
 Create the state for one group of sibling layers.
+
+@returns {LayerScope}
 */
 const createScope = () => ({children: new Map(), order: undefined, eligible: true});
 
 /**
 Get the decoded segments of a layer name without treating escaped dots as separators.
+
+@param {string} name
 */
 const getLayerSegments = name => {
+	/**
+	@type {string[]}
+	*/
 	const segments = [];
 	tokenize(name, (type, start, end) => {
 		if (type === tokenTypes.Ident) {
@@ -33,6 +48,10 @@ const getLayerSegments = name => {
 
 /**
 Get parsed layer references from a layer rule or a named layer import.
+
+@param {AtrulePlain} atRule
+@param {string} name
+@returns {Layer[]}
 */
 const getLayerNodes = (atRule, name) => {
 	if (atRule.prelude?.type !== 'AtrulePrelude') {
@@ -46,19 +65,22 @@ const getLayerNodes = (atRule, name) => {
 
 	const layerFunction = atRule.prelude.children.at(1);
 	if (
-		layerFunction?.type === 'Function'
-		&& normalizeCssIdentifier(layerFunction.name) === 'layer'
-		&& layerFunction.children.length === 1
-		&& layerFunction.children.at(0).type === 'Layer'
+		layerFunction?.type !== 'Function'
+		|| normalizeCssIdentifier(layerFunction.name) !== 'layer'
+		|| layerFunction.children.length !== 1
 	) {
-		return layerFunction.children;
+		return [];
 	}
 
-	return [];
+	const layer = layerFunction.children.at(0);
+	return layer?.type === 'Layer' ? [layer] : [];
 };
 
 /**
 Compare references by their sibling ranks, keeping ancestors before descendants.
+
+@param {LayerReference & {ranks: number[]}} first
+@param {LayerReference & {ranks: number[]}} second
 */
 const compareLayerReferences = (first, second) => {
 	for (let index = 0; index < Math.min(first.ranks.length, second.ranks.length); index++) {
@@ -73,6 +95,11 @@ const compareLayerReferences = (first, second) => {
 
 /**
 Resolve a reference and collect the first occurrence of each sibling in its statement.
+
+@param {Layer} node
+@param {LayerScope} parentScope
+@param {Map<LayerScope, LayerGroup>} groups
+@returns {LayerReference}
 */
 const getLayerReference = (node, parentScope, groups) => {
 	const segments = getLayerSegments(node.name);
@@ -113,6 +140,8 @@ const getLayerReference = (node, parentScope, groups) => {
 
 /**
 Get the first pair of known siblings that contradicts their initial order.
+
+@param {LayerGroup} group
 */
 const getGroupInversion = group => {
 	let previous;
@@ -121,7 +150,7 @@ const getGroupInversion = group => {
 			continue;
 		}
 
-		if (previous && entry.rank < previous.rank) {
+		if (previous?.rank !== undefined && entry.rank < previous.rank) {
 			return {earlier: entry.node.name, later: previous.node.name};
 		}
 
@@ -134,8 +163,11 @@ const getGroupInversion = group => {
 */
 const create = context => {
 	const {sourceCode} = context;
-	const {checkUndeclaredLayers} = context.options[0];
+	const {checkUndeclaredLayers} = /** @type {{checkUndeclaredLayers: boolean}} */ (context.options[0]);
 	const rootScope = createScope();
+	/**
+	@type {WeakMap<CssNodePlain, LayerScope>}
+	*/
 	const blockScopes = new WeakMap();
 
 	context.on('Atrule', function * (atRule) {
@@ -166,7 +198,13 @@ const create = context => {
 		const isUnconditional = ancestors.every(node => node.type === 'StyleSheet'
 			|| node.type === 'Block'
 			|| (node.type === 'Atrule' && normalizeCssIdentifier(node.name) === 'layer'));
+		/**
+		@type {Map<LayerScope, LayerGroup>}
+		*/
 		const groups = new Map();
+		/**
+		@type {LayerReference[]}
+		*/
 		const references = [];
 
 		for (const node of nodes) {
@@ -200,7 +238,7 @@ const create = context => {
 		}
 
 		yield {
-			node: atRule.prelude,
+			node: /** @type {AtrulePreludePlain} */ (atRule.prelude),
 			messageId: MESSAGE_ID,
 			data: inversion,
 			* fix(fixer, {abort}) {
@@ -208,7 +246,8 @@ const create = context => {
 					abort();
 				}
 
-				const sorted = references.toSorted(compareLayerReferences);
+				const rankedReferences = /** @type {(LayerReference & {ranks: number[]})[]} */ (references);
+				const sorted = rankedReferences.toSorted(compareLayerReferences);
 				for (const [index, {node}] of references.entries()) {
 					if (node !== sorted[index].node) {
 						yield fixer.replaceText(node, sourceCode.getText(sorted[index].node));

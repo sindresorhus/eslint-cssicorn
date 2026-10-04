@@ -1,6 +1,10 @@
+import assert from 'node:assert/strict';
+import nodeTest from 'node:test';
+import css from '@eslint/css';
+import {Linter} from 'eslint';
 import {getTester} from './utils/test.js';
 
-const {test} = getTester(import.meta);
+const {test, rule} = getTester(import.meta);
 
 test.snapshot({
 	valid: [
@@ -132,6 +136,29 @@ test({
 		code: '@layer base, theme; @layer theme.components, theme.base, base;',
 		errors: [{messageId: 'consistent-layer-order', data: {earlier: 'base', later: 'theme.components'}}],
 	}],
+});
+
+nodeTest('an unfixable parent inversion still establishes the child contract', () => {
+	const linter = new Linter();
+	const config = {
+		language: 'css/css',
+		plugins: {css, test: {rules: {order: rule}}},
+		rules: {'test/order': 'error'},
+	};
+	const code = '@layer base, theme; @layer theme.components, theme.base, base; @layer theme { @layer base, components; }';
+	const output = '@layer base, theme; @layer theme.components, theme.base, base; @layer theme { @layer components, base; }';
+	const messages = linter.verify(code, config);
+	assert.equal(messages.length, 2);
+	assert.equal(messages[0].messageId, 'consistent-layer-order');
+	assert.equal(messages[0].fix, undefined);
+	assert.equal(messages[1].messageId, 'consistent-layer-order');
+	assert.ok(messages[1].fix);
+
+	const result = linter.verifyAndFix(code, config);
+	assert.equal(result.output, output);
+	assert.equal(result.fixed, true);
+	assert.deepEqual(result.messages, [messages[0]]);
+	assert.deepEqual(linter.verifyAndFix(output, config), {...result, fixed: false});
 });
 
 test.snapshot({

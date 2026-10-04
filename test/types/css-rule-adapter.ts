@@ -8,6 +8,7 @@ import CssicornListeners from '../../rules/rule/cssicorn-listeners.js';
 import toEslintCreate from '../../rules/rule/to-eslint-create.js';
 import toEslintRule from '../../rules/rule/to-eslint-rule.js';
 import selectorOrderRule from '../../rules/consistent-compound-selector-order.js';
+import layerOrderRule from '../../rules/consistent-layer-order.js';
 
 declare const context: CssicornContext;
 declare const selector: SelectorPlain;
@@ -78,6 +79,7 @@ const listener: CssicornRuleListener<'Selector'> = node => ({node, messageId: 'o
 context.on('Selector', listener);
 fixer.replaceText(selector, '#id.foo');
 const rule: CssicornRule = selectorOrderRule;
+const layerRule: CssicornRule = layerOrderRule;
 const adapted: CSSRuleDefinition = toEslintRule('order', rule);
 const create: CSSRuleDefinition['create'] = toEslintCreate(rule.create);
 declare const eslintContext: Parameters<CSSRuleDefinition['create']>[0];
