@@ -1,0 +1,635 @@
+exports[`invalid(1): a { width: max(min(5vw, 100px), 10px); } 1`] = `
+
+  1 | a { width: max(min(5vw, 100px), 10px); }
+
+`;
+
+exports[`invalid(1): a { width: max(min(5vw, 100px), 10px); } 2`] = `
+
+Message:
+> 1 | a { width: max(min(5vw, 100px), 10px); }
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^ Prefer \`clamp()\` over nested \`min()\` and \`max()\`.
+
+Output:
+  1 | a { width: clamp(10px, 5vw, 100px); }
+
+`;
+
+exports[`invalid(10): a { width: max(10px, min(max(2px, min(3vw, 20px)), 100px)); } 1`] = `
+
+  1 | a { width: max(10px, min(max(2px, min(3vw, 20px)), 100px)); }
+
+`;
+
+exports[`invalid(10): a { width: max(10px, min(max(2px, min(3vw, 20px)), 100px)); } 2`] = `
+
+Message:
+> 1 | a { width: max(10px, min(max(2px, min(3vw, 20px)), 100px)); }
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Prefer \`clamp()\` over nested \`min()\` and \`max()\`.
+
+Output:
+  1 | a { width: clamp(10px, max(2px, min(3vw, 20px)), 100px); }
+
+`;
+
+exports[`invalid(10): a { width: max(10px, min(max(2px, min(3vw, 20px)), 100px)); } 3`] = `
+
+Message:
+> 1 | a { width: max(10px, min(max(2px, min(3vw, 20px)), 100px)); }
+    |                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Prefer \`clamp()\` over nested \`min()\` and \`max()\`.
+
+Output:
+  1 | a { width: max(10px, clamp(2px, min(3vw, 20px), 100px)); }
+
+`;
+
+exports[`invalid(10): a { width: max(10px, min(max(2px, min(3vw, 20px)), 100px)); } 4`] = `
+
+Message:
+> 1 | a { width: max(10px, min(max(2px, min(3vw, 20px)), 100px)); }
+    |                          ^^^^^^^^^^^^^^^^^^^^^^^^ Prefer \`clamp()\` over nested \`min()\` and \`max()\`.
+
+Output:
+  1 | a { width: max(10px, min(clamp(2px, 3vw, 20px), 100px)); }
+
+`;
+
+exports[`invalid(11): a { width: max(10px, min(5vw, 100px)); height: max(1rem, min(5vh, 10rem)); } 1`] = `
+
+  1 | a { width: max(10px, min(5vw, 100px)); height: max(1rem, min(5vh, 10rem)); }
+
+`;
+
+exports[`invalid(11): a { width: max(10px, min(5vw, 100px)); height: max(1rem, min(5vh, 10rem)); } 2`] = `
+
+Message:
+> 1 | a { width: max(10px, min(5vw, 100px)); height: max(1rem, min(5vh, 10rem)); }
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^ Prefer \`clamp()\` over nested \`min()\` and \`max()\`.
+
+Output:
+  1 | a { width: clamp(10px, 5vw, 100px); height: max(1rem, min(5vh, 10rem)); }
+
+`;
+
+exports[`invalid(11): a { width: max(10px, min(5vw, 100px)); height: max(1rem, min(5vh, 10rem)); } 3`] = `
+
+Message:
+> 1 | a { width: max(10px, min(5vw, 100px)); height: max(1rem, min(5vh, 10rem)); }
+    |                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^ Prefer \`clamp()\` over nested \`min()\` and \`max()\`.
+
+Output:
+  1 | a { width: max(10px, min(5vw, 100px)); height: clamp(1rem, 5vh, 10rem); }
+
+`;
+
+exports[`invalid(12): a { --size: max(10px, min(5vw, 100px)) !important; } 1`] = `
+
+  1 | a { --size: max(10px, min(5vw, 100px)) !important; }
+
+`;
+
+exports[`invalid(12): a { --size: max(10px, min(5vw, 100px)) !important; } 2`] = `
+
+Message:
+> 1 | a { --size: max(10px, min(5vw, 100px)) !important; }
+    |             ^^^^^^^^^^^^^^^^^^^^^^^^^^ Prefer \`clamp()\` over nested \`min()\` and \`max()\`.
+
+Output:
+  1 | a { --size: clamp(10px, 5vw, 100px) !important; }
+
+`;
+
+exports[`invalid(13): a { --size: min(100px, max(10px, 5vw)); } 1`] = `
+
+  1 | a { --size: min(100px, max(10px, 5vw)); }
+
+`;
+
+exports[`invalid(13): a { --size: min(100px, max(10px, 5vw)); } 2`] = `
+
+Message:
+> 1 | a { --size: min(100px, max(10px, 5vw)); }
+    |             ^^^^^^^^^^^^^^^^^^^^^^^^^^ Prefer \`clamp()\` over nested \`min()\` and \`max()\`.
+
+Output:
+  1 | a { --size: clamp(10px, 5vw, 100px); }
+
+`;
+
+exports[`invalid(14): a { --size: calc(1px + max(10px, min(5vw, 100px))); } 1`] = `
+
+  1 | a { --size: calc(1px + max(10px, min(5vw, 100px))); }
+
+`;
+
+exports[`invalid(14): a { --size: calc(1px + max(10px, min(5vw, 100px))); } 2`] = `
+
+Message:
+> 1 | a { --size: calc(1px + max(10px, min(5vw, 100px))); }
+    |                        ^^^^^^^^^^^^^^^^^^^^^^^^^^ Prefer \`clamp()\` over nested \`min()\` and \`max()\`.
+
+Output:
+  1 | a { --size: calc(1px + clamp(10px, 5vw, 100px)); }
+
+`;
+
+exports[`invalid(15): a { --size: max(/* low */ 10px, min(/* value */ 5vw, 100px /* high */)); } 1`] = `
+
+  1 | a { --size: max(/* low */ 10px, min(/* value */ 5vw, 100px /* high */)); }
+
+`;
+
+exports[`invalid(15): a { --size: max(/* low */ 10px, min(/* value */ 5vw, 100px /* high */)); } 2`] = `
+
+Message:
+> 1 | a { --size: max(/* low */ 10px, min(/* value */ 5vw, 100px /* high */)); }
+    |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Prefer \`clamp()\` over nested \`min()\` and \`max()\`.
+
+Output:
+  1 | a { --size: clamp(/* low */ 10px, /* value */ 5vw, 100px /* high */); }
+
+`;
+
+exports[`invalid(16): a { width: min(100px, max(10px, 5vw)); } 1`] = `
+
+  1 | a { width: min(100px, max(10px, 5vw)); }
+
+`;
+
+exports[`invalid(16): a { width: min(100px, max(10px, 5vw)); } 2`] = `
+
+Message:
+> 1 | a { width: min(100px, max(10px, 5vw)); }
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^ Prefer \`clamp()\` over nested \`min()\` and \`max()\`.
+
+Output:
+  1 | a { width: clamp(10px, 5vw, 100px); }
+
+`;
+
+exports[`invalid(17): a { width: min(max(10px, 5vw), 100px); } 1`] = `
+
+  1 | a { width: min(max(10px, 5vw), 100px); }
+
+`;
+
+exports[`invalid(17): a { width: min(max(10px, 5vw), 100px); } 2`] = `
+
+Message:
+> 1 | a { width: min(max(10px, 5vw), 100px); }
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^ Prefer \`clamp()\` over nested \`min()\` and \`max()\`.
+
+Output:
+  1 | a { width: clamp(10px, 5vw, 100px); }
+
+`;
+
+exports[`invalid(18): a { width: min(100px, max(5vw, 10px)); } 1`] = `
+
+  1 | a { width: min(100px, max(5vw, 10px)); }
+
+`;
+
+exports[`invalid(18): a { width: min(100px, max(5vw, 10px)); } 2`] = `
+
+Message:
+> 1 | a { width: min(100px, max(5vw, 10px)); }
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^ Prefer \`clamp()\` over nested \`min()\` and \`max()\`.
+
+Output:
+  1 | a { width: clamp(10px, 5vw, 100px); }
+
+`;
+
+exports[`invalid(19): a { width: min(max(5vw, 10px), 100px); } 1`] = `
+
+  1 | a { width: min(max(5vw, 10px), 100px); }
+
+`;
+
+exports[`invalid(19): a { width: min(max(5vw, 10px), 100px); } 2`] = `
+
+Message:
+> 1 | a { width: min(max(5vw, 10px), 100px); }
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^ Prefer \`clamp()\` over nested \`min()\` and \`max()\`.
+
+Output:
+  1 | a { width: clamp(10px, 5vw, 100px); }
+
+`;
+
+exports[`invalid(2): a { width: max(10px, min(100px, 5vw)); } 1`] = `
+
+  1 | a { width: max(10px, min(100px, 5vw)); }
+
+`;
+
+exports[`invalid(2): a { width: max(10px, min(100px, 5vw)); } 2`] = `
+
+Message:
+> 1 | a { width: max(10px, min(100px, 5vw)); }
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^ Prefer \`clamp()\` over nested \`min()\` and \`max()\`.
+
+Output:
+  1 | a { width: clamp(10px, 100px, 5vw); }
+
+`;
+
+exports[`invalid(20): a { width: min(10px, max(10px, 5vw)); } 1`] = `
+
+  1 | a { width: min(10px, max(10px, 5vw)); }
+
+`;
+
+exports[`invalid(20): a { width: min(10px, max(10px, 5vw)); } 2`] = `
+
+Message:
+> 1 | a { width: min(10px, max(10px, 5vw)); }
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^ Prefer \`clamp()\` over nested \`min()\` and \`max()\`.
+
+Output:
+  1 | a { width: clamp(10px, 5vw, 10px); }
+
+`;
+
+exports[`invalid(21): a { left: min(-10px, max(-100px, 5vw)); } 1`] = `
+
+  1 | a { left: min(-10px, max(-100px, 5vw)); }
+
+`;
+
+exports[`invalid(21): a { left: min(-10px, max(-100px, 5vw)); } 2`] = `
+
+Message:
+> 1 | a { left: min(-10px, max(-100px, 5vw)); }
+    |           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Prefer \`clamp()\` over nested \`min()\` and \`max()\`.
+
+Output:
+  1 | a { left: clamp(-100px, 5vw, -10px); }
+
+`;
+
+exports[`invalid(22): a { opacity: min(1, max(0, .5)); } 1`] = `
+
+  1 | a { opacity: min(1, max(0, .5)); }
+
+`;
+
+exports[`invalid(22): a { opacity: min(1, max(0, .5)); } 2`] = `
+
+Message:
+> 1 | a { opacity: min(1, max(0, .5)); }
+    |              ^^^^^^^^^^^^^^^^^^ Prefer \`clamp()\` over nested \`min()\` and \`max()\`.
+
+Output:
+  1 | a { opacity: clamp(0, .5, 1); }
+
+`;
+
+exports[`invalid(23): a { opacity: min(0, max(-0, .5)); } 1`] = `
+
+  1 | a { opacity: min(0, max(-0, .5)); }
+
+`;
+
+exports[`invalid(23): a { opacity: min(0, max(-0, .5)); } 2`] = `
+
+Message:
+> 1 | a { opacity: min(0, max(-0, .5)); }
+    |              ^^^^^^^^^^^^^^^^^^^ Prefer \`clamp()\` over nested \`min()\` and \`max()\`.
+
+Output:
+  1 | a { opacity: clamp(-0, .5, 0); }
+
+`;
+
+exports[`invalid(24): a { transition-duration: min(100ms, max(10ms, 5ms)); } 1`] = `
+
+  1 | a { transition-duration: min(100ms, max(10ms, 5ms)); }
+
+`;
+
+exports[`invalid(24): a { transition-duration: min(100ms, max(10ms, 5ms)); } 2`] = `
+
+Message:
+> 1 | a { transition-duration: min(100ms, max(10ms, 5ms)); }
+    |                          ^^^^^^^^^^^^^^^^^^^^^^^^^^ Prefer \`clamp()\` over nested \`min()\` and \`max()\`.
+
+Output:
+  1 | a { transition-duration: clamp(10ms, 5ms, 100ms); }
+
+`;
+
+exports[`invalid(25): a { width: min(10rem, max(1rem, 5vw)); } 1`] = `
+
+  1 | a { width: min(10rem, max(1rem, 5vw)); }
+
+`;
+
+exports[`invalid(25): a { width: min(10rem, max(1rem, 5vw)); } 2`] = `
+
+Message:
+> 1 | a { width: min(10rem, max(1rem, 5vw)); }
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^ Prefer \`clamp()\` over nested \`min()\` and \`max()\`.
+
+Output:
+  1 | a { width: clamp(1rem, 5vw, 10rem); }
+
+`;
+
+exports[`invalid(26): a { width: MIN(100P\\58, MAX(10px, 5vw)); } 1`] = `
+
+  1 | a { width: MIN(100P\\58, MAX(10px, 5vw)); }
+
+`;
+
+exports[`invalid(26): a { width: MIN(100P\\58, MAX(10px, 5vw)); } 2`] = `
+
+Message:
+> 1 | a { width: MIN(100P\\58, MAX(10px, 5vw)); }
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Prefer \`clamp()\` over nested \`min()\` and \`max()\`.
+
+Output:
+  1 | a { width: clamp(10px, 5vw, 100P\\58); }
+
+`;
+
+exports[`invalid(27): a { opacity: min(1e0, max(+1e-1, .5)); } 1`] = `
+
+  1 | a { opacity: min(1e0, max(+1e-1, .5)); }
+
+`;
+
+exports[`invalid(27): a { opacity: min(1e0, max(+1e-1, .5)); } 2`] = `
+
+Message:
+> 1 | a { opacity: min(1e0, max(+1e-1, .5)); }
+    |              ^^^^^^^^^^^^^^^^^^^^^^^^ Prefer \`clamp()\` over nested \`min()\` and \`max()\`.
+
+Output:
+  1 | a { opacity: clamp(+1e-1, .5, 1e0); }
+
+`;
+
+exports[`invalid(28): a { width: max(min(5vw /* value */, 100px), 10px); } 1`] = `
+
+  1 | a { width: max(min(5vw /* value */, 100px), 10px); }
+
+`;
+
+exports[`invalid(28): a { width: max(min(5vw /* value */, 100px), 10px); } 2`] = `
+
+Message:
+> 1 | a { width: max(min(5vw /* value */, 100px), 10px); }
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Prefer \`clamp()\` over nested \`min()\` and \`max()\`.
+
+`;
+
+exports[`invalid(29): a { width: min(100px, max(10px /* low */, 5vw)); } 1`] = `
+
+  1 | a { width: min(100px, max(10px /* low */, 5vw)); }
+
+`;
+
+exports[`invalid(29): a { width: min(100px, max(10px /* low */, 5vw)); } 2`] = `
+
+Message:
+> 1 | a { width: min(100px, max(10px /* low */, 5vw)); }
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Prefer \`clamp()\` over nested \`min()\` and \`max()\`.
+
+`;
+
+exports[`invalid(3): a { width: max(100px, min(5vw, 10px)); } 1`] = `
+
+  1 | a { width: max(100px, min(5vw, 10px)); }
+
+`;
+
+exports[`invalid(3): a { width: max(100px, min(5vw, 10px)); } 2`] = `
+
+Message:
+> 1 | a { width: max(100px, min(5vw, 10px)); }
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^ Prefer \`clamp()\` over nested \`min()\` and \`max()\`.
+
+Output:
+  1 | a { width: clamp(100px, 5vw, 10px); }
+
+`;
+
+exports[`invalid(30): a { --size: min(100px, max(/* low */ 10px, 5vw)); } 1`] = `
+
+  1 | a { --size: min(100px, max(/* low */ 10px, 5vw)); }
+
+`;
+
+exports[`invalid(30): a { --size: min(100px, max(/* low */ 10px, 5vw)); } 2`] = `
+
+Message:
+> 1 | a { --size: min(100px, max(/* low */ 10px, 5vw)); }
+    |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Prefer \`clamp()\` over nested \`min()\` and \`max()\`.
+
+`;
+
+exports[`invalid(31): @media (width > 100px) { a { width: max(10px, min(5vw, 100px)); } } 1`] = `
+
+  1 | @media (width > 100px) { a { width: max(10px, min(5vw, 100px)); } }
+
+`;
+
+exports[`invalid(31): @media (width > 100px) { a { width: max(10px, min(5vw, 100px)); } } 2`] = `
+
+Message:
+> 1 | @media (width > 100px) { a { width: max(10px, min(5vw, 100px)); } }
+    |                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^ Prefer \`clamp()\` over nested \`min()\` and \`max()\`.
+
+Output:
+  1 | @media (width > 100px) { a { width: clamp(10px, 5vw, 100px); } }
+
+`;
+
+exports[`invalid(32): @supports (display: grid) { a { width: max(10px, min(5vw, 100px)); } } 1`] = `
+
+  1 | @supports (display: grid) { a { width: max(10px, min(5vw, 100px)); } }
+
+`;
+
+exports[`invalid(32): @supports (display: grid) { a { width: max(10px, min(5vw, 100px)); } } 2`] = `
+
+Message:
+> 1 | @supports (display: grid) { a { width: max(10px, min(5vw, 100px)); } }
+    |                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^ Prefer \`clamp()\` over nested \`min()\` and \`max()\`.
+
+Output:
+  1 | @supports (display: grid) { a { width: clamp(10px, 5vw, 100px); } }
+
+`;
+
+exports[`invalid(33): @container (width > 100px) { a { width: max(10px, min(5vw, 100px)); } } 1`] = `
+
+  1 | @container (width > 100px) { a { width: max(10px, min(5vw, 100px)); } }
+
+`;
+
+exports[`invalid(33): @container (width > 100px) { a { width: max(10px, min(5vw, 100px)); } } 2`] = `
+
+Message:
+> 1 | @container (width > 100px) { a { width: max(10px, min(5vw, 100px)); } }
+    |                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^ Prefer \`clamp()\` over nested \`min()\` and \`max()\`.
+
+Output:
+  1 | @container (width > 100px) { a { width: clamp(10px, 5vw, 100px); } }
+
+`;
+
+exports[`invalid(34): @layer components { a { width: max(10px, min(5vw, 100px)); } } 1`] = `
+
+  1 | @layer components { a { width: max(10px, min(5vw, 100px)); } }
+
+`;
+
+exports[`invalid(34): @layer components { a { width: max(10px, min(5vw, 100px)); } } 2`] = `
+
+Message:
+> 1 | @layer components { a { width: max(10px, min(5vw, 100px)); } }
+    |                                ^^^^^^^^^^^^^^^^^^^^^^^^^^ Prefer \`clamp()\` over nested \`min()\` and \`max()\`.
+
+Output:
+  1 | @layer components { a { width: clamp(10px, 5vw, 100px); } }
+
+`;
+
+exports[`invalid(35): @scope (.card) { a { width: max(10px, min(5vw, 100px)); } } 1`] = `
+
+  1 | @scope (.card) { a { width: max(10px, min(5vw, 100px)); } }
+
+`;
+
+exports[`invalid(35): @scope (.card) { a { width: max(10px, min(5vw, 100px)); } } 2`] = `
+
+Message:
+> 1 | @scope (.card) { a { width: max(10px, min(5vw, 100px)); } }
+    |                             ^^^^^^^^^^^^^^^^^^^^^^^^^^ Prefer \`clamp()\` over nested \`min()\` and \`max()\`.
+
+Output:
+  1 | @scope (.card) { a { width: clamp(10px, 5vw, 100px); } }
+
+`;
+
+exports[`invalid(36): a { & .child { width: max(10px, min(5vw, 100px)); } } 1`] = `
+
+  1 | a { & .child { width: max(10px, min(5vw, 100px)); } }
+
+`;
+
+exports[`invalid(36): a { & .child { width: max(10px, min(5vw, 100px)); } } 2`] = `
+
+Message:
+> 1 | a { & .child { width: max(10px, min(5vw, 100px)); } }
+    |                       ^^^^^^^^^^^^^^^^^^^^^^^^^^ Prefer \`clamp()\` over nested \`min()\` and \`max()\`.
+
+Output:
+  1 | a { & .child { width: clamp(10px, 5vw, 100px); } }
+
+`;
+
+exports[`invalid(4): a { width: max(10% + 1px, min(5vw * 2, 100px - 1px)); } 1`] = `
+
+  1 | a { width: max(10% + 1px, min(5vw * 2, 100px - 1px)); }
+
+`;
+
+exports[`invalid(4): a { width: max(10% + 1px, min(5vw * 2, 100px - 1px)); } 2`] = `
+
+Message:
+> 1 | a { width: max(10% + 1px, min(5vw * 2, 100px - 1px)); }
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Prefer \`clamp()\` over nested \`min()\` and \`max()\`.
+
+Output:
+  1 | a { width: clamp(10% + 1px, 5vw * 2, 100px - 1px); }
+
+`;
+
+exports[`invalid(5): a { width: calc(1px + max(10px, min(5vw, 100px))); } 1`] = `
+
+  1 | a { width: calc(1px + max(10px, min(5vw, 100px))); }
+
+`;
+
+exports[`invalid(5): a { width: calc(1px + max(10px, min(5vw, 100px))); } 2`] = `
+
+Message:
+> 1 | a { width: calc(1px + max(10px, min(5vw, 100px))); }
+    |                       ^^^^^^^^^^^^^^^^^^^^^^^^^^ Prefer \`clamp()\` over nested \`min()\` and \`max()\`.
+
+Output:
+  1 | a { width: calc(1px + clamp(10px, 5vw, 100px)); }
+
+`;
+
+exports[`invalid(6): a { transform: translateX(max(10px, min(5vw, 100px))); } 1`] = `
+
+  1 | a { transform: translateX(max(10px, min(5vw, 100px))); }
+
+`;
+
+exports[`invalid(6): a { transform: translateX(max(10px, min(5vw, 100px))); } 2`] = `
+
+Message:
+> 1 | a { transform: translateX(max(10px, min(5vw, 100px))); }
+    |                           ^^^^^^^^^^^^^^^^^^^^^^^^^^ Prefer \`clamp()\` over nested \`min()\` and \`max()\`.
+
+Output:
+  1 | a { transform: translateX(clamp(10px, 5vw, 100px)); }
+
+`;
+
+exports[`invalid(7): a { WIDTH: MAX(10px, MIN(5vw, 100px)) !important; } 1`] = `
+
+  1 | a { WIDTH: MAX(10px, MIN(5vw, 100px)) !important; }
+
+`;
+
+exports[`invalid(7): a { WIDTH: MAX(10px, MIN(5vw, 100px)) !important; } 2`] = `
+
+Message:
+> 1 | a { WIDTH: MAX(10px, MIN(5vw, 100px)) !important; }
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^ Prefer \`clamp()\` over nested \`min()\` and \`max()\`.
+
+Output:
+  1 | a { WIDTH: clamp(10px, 5vw, 100px) !important; }
+
+`;
+
+exports[`invalid(8): a { width: m\\61 x(10p\\78, m\\69 n(5vw, 100p\\78)); } 1`] = `
+
+  1 | a { width: m\\61 x(10p\\78, m\\69 n(5vw, 100p\\78)); }
+
+`;
+
+exports[`invalid(8): a { width: m\\61 x(10p\\78, m\\69 n(5vw, 100p\\78)); } 2`] = `
+
+Message:
+> 1 | a { width: m\\61 x(10p\\78, m\\69 n(5vw, 100p\\78)); }
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Prefer \`clamp()\` over nested \`min()\` and \`max()\`.
+
+Output:
+  1 | a { width: clamp(10p\\78, 5vw, 100p\\78); }
+
+`;
+
+exports[`invalid(9): a { width: max(10px, min(calc(5vw + 1px), 100px)); } 1`] = `
+
+  1 | a { width: max(10px, min(calc(5vw + 1px), 100px)); }
+
+`;
+
+exports[`invalid(9): a { width: max(10px, min(calc(5vw + 1px), 100px)); } 2`] = `
+
+Message:
+> 1 | a { width: max(10px, min(calc(5vw + 1px), 100px)); }
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Prefer \`clamp()\` over nested \`min()\` and \`max()\`.
+
+Output:
+  1 | a { width: clamp(10px, calc(5vw + 1px), 100px); }
+
+`;
