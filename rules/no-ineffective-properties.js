@@ -1,6 +1,7 @@
 import {
 	getSingleValueIdentifier,
 	hasSubstitutionOrRandomFunction,
+	isCssModulesInteropDeclaration,
 	isCssWideKeyword,
 	isKeyframesAtRule,
 	normalizeCssIdentifier,
@@ -38,12 +39,17 @@ const getControllingValue = (declarationsByProperty, properties, sourceCode) => 
 	}
 
 	const [{node, property}] = declarations;
-	if (node.value.type !== 'Value' || node.value.children.length === 0 || node.value.children.some(child => child.type !== 'Identifier' || normalizeCssIdentifier(child.name).startsWith('-'))) {
+	if (node.value.type !== 'Value' || node.value.children.length === 0 || node.value.children.some(child => child.type !== 'Identifier')) {
 		return;
 	}
 
-	const value = node.value.children.map(child => normalizeCssIdentifier(child.name)).join(' ');
-	if (isCssWideKeyword(value) || sourceCode.lexer.matchProperty(property, value).error) {
+	const normalizedValue = {
+		...node.value,
+		children: node.value.children.map(child => ({...child, name: normalizeCssIdentifier(child.name)})),
+	};
+	// Validate AST nodes so escaped whitespace inside an identifier cannot become extra tokens.
+	const value = normalizedValue.children.map(child => child.name).join(' ');
+	if (normalizedValue.children.some(child => child.name.startsWith('-')) || isCssWideKeyword(value) || sourceCode.lexer.matchProperty(property, normalizedValue).error) {
 		return;
 	}
 
@@ -79,8 +85,8 @@ const getDeclarationProblem = (node, property, {display, hasVisibleDisplay, isFl
 		return;
 	}
 
-	const layout = flexProperties.has(property) ? 'flex' : 'grid';
 	if (hasVisibleDisplay && ((flexProperties.has(property) && !isFlex) || (gridProperties.has(property) && !isGrid))) {
+		const layout = flexProperties.has(property) ? 'flex' : 'grid';
 		return {node, messageId: MESSAGE_ID_DISPLAY, data: {property, display, layout}};
 	}
 
@@ -108,6 +114,7 @@ const create = context => {
 		if (
 			declarations.every(({property}) => !targetProperties.has(property))
 			|| declarations.some(({property}) => property === 'all')
+			|| isCssModulesInteropDeclaration(declarations[0].node, context)
 			|| !isStyleBlock(block, sourceCode)
 		) {
 			return;

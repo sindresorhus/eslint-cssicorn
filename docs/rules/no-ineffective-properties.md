@@ -89,7 +89,7 @@ Each check is skipped when its controlling declarations are ambiguous: multiple 
 
 Missing, malformed, or unresolved controlling values do not trigger checks. Display checks ignore unknown or vendor-prefixed modes and `display: none` or `contents`. Target declarations containing CSS-wide keywords or unresolved substitutions are skipped. Invalid CSS is handled on a best-effort basis rather than validated by this rule.
 
-Omitted wrapping is not assumed to be `nowrap`, even in a `flex-flow` shorthand. Item properties, gaps, and other alignment properties are not checked, since their behavior needs additional context. Custom properties, keyframes, and descriptor blocks are excluded.
+Omitted wrapping is not assumed to be `nowrap`, even in a `flex-flow` shorthand. Item properties, gaps, and other alignment properties are not checked, since their behavior needs additional context. Custom properties, keyframes, and descriptor blocks are excluded. CSS Modules `:export` and `:import()` blocks contain literal values rather than styles and are also excluded.
 
 Final-keyframe easing is covered separately by [`no-ineffective-keyframe-declarations`](./no-ineffective-keyframe-declarations.md).
 

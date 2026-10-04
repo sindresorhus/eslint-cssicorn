@@ -1012,6 +1012,20 @@ Message:
 
 `;
 
+exports[`invalid(69): a { display: inline\\2d flex; grid-auto-flow: column; } 1`] = `
+
+  1 | a { display: inline\\2d flex; grid-auto-flow: column; }
+
+`;
+
+exports[`invalid(69): a { display: inline\\2d flex; grid-auto-flow: column; } 2`] = `
+
+Message:
+> 1 | a { display: inline\\2d flex; grid-auto-flow: column; }
+    |                              ^^^^^^^^^^^^^^^^^^^^^^ \`grid-auto-flow\` has no effect with \`display: inline-flex\`. It requires a grid container.
+
+`;
+
 exports[`invalid(7): a { display: flex; grid-template-rows: 100px 100px; } 1`] = `
 
   1 | a { display: flex; grid-template-rows: 100px 100px; }
@@ -1023,6 +1037,62 @@ exports[`invalid(7): a { display: flex; grid-template-rows: 100px 100px; } 2`] =
 Message:
 > 1 | a { display: flex; grid-template-rows: 100px 100px; }
     |                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`grid-template-rows\` has no effect with \`display: flex\`. It requires a grid container.
+
+`;
+
+exports[`invalid(70): a { @container (width > 1px) { display: flex; grid-template-columns: 1fr; } } 1`] = `
+
+  1 | a { @container (width > 1px) { display: flex; grid-template-columns: 1fr; } }
+
+`;
+
+exports[`invalid(70): a { @container (width > 1px) { display: flex; grid-template-columns: 1fr; } } 2`] = `
+
+Message:
+> 1 | a { @container (width > 1px) { display: flex; grid-template-columns: 1fr; } }
+    |                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^ \`grid-template-columns\` has no effect with \`display: flex\`. It requires a grid container.
+
+`;
+
+exports[`invalid(71): a { @layer example { display: flex; grid-template-columns: 1fr; } } 1`] = `
+
+  1 | a { @layer example { display: flex; grid-template-columns: 1fr; } }
+
+`;
+
+exports[`invalid(71): a { @layer example { display: flex; grid-template-columns: 1fr; } } 2`] = `
+
+Message:
+> 1 | a { @layer example { display: flex; grid-template-columns: 1fr; } }
+    |                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^ \`grid-template-columns\` has no effect with \`display: flex\`. It requires a grid container.
+
+`;
+
+exports[`invalid(72): a { @scope (.example) { display: flex; grid-template-columns: 1fr; } } 1`] = `
+
+  1 | a { @scope (.example) { display: flex; grid-template-columns: 1fr; } }
+
+`;
+
+exports[`invalid(72): a { @scope (.example) { display: flex; grid-template-columns: 1fr; } } 2`] = `
+
+Message:
+> 1 | a { @scope (.example) { display: flex; grid-template-columns: 1fr; } }
+    |                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^ \`grid-template-columns\` has no effect with \`display: flex\`. It requires a grid container.
+
+`;
+
+exports[`invalid(73): a { @starting-style { display: flex; grid-template-columns: 1fr; } } 1`] = `
+
+  1 | a { @starting-style { display: flex; grid-template-columns: 1fr; } }
+
+`;
+
+exports[`invalid(73): a { @starting-style { display: flex; grid-template-columns: 1fr; } } 2`] = `
+
+Message:
+> 1 | a { @starting-style { display: flex; grid-template-columns: 1fr; } }
+    |                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^ \`grid-template-columns\` has no effect with \`display: flex\`. It requires a grid container.
 
 `;
 
