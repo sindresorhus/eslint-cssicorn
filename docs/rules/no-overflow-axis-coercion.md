@@ -81,18 +81,6 @@ Logical overflow axes are supported too:
 
 ## Limitations
 
-The rule resolves declaration order, `!important`, and shorthand overrides within each individual style block. It requires explicit, known values for both axes. It does not combine separate rules or parent and nested blocks, resolve custom properties, or infer values from the full cascade.
+The rule requires explicit, known values for both axes within one style block, respecting declaration order, `!important`, and shorthand overrides. It skips mixed physical/logical axes and does not resolve the full cascade or substitutions such as `var()`.
 
-A lone declaration such as `overflow-x: hidden` is intentionally ignored, even though an otherwise unset opposite axis defaults to `visible`. Blocks mixing physical and logical overflow longhands, including `overflow` alongside logical longhands, are also ignored because resolving their interaction requires writing-mode context.
-
-Winning CSS-wide keywords, substitution functions, and `all` resets make the affected axes unknown. Invalid literal values do not override earlier valid declarations. Keyframes, descriptor blocks, and CSS Modules `:import`/`:export` blocks are ignored.
-
-The rule does not report `clip` paired with scrollable values. Older browsers compute `clip` to `hidden` in this combination, but the latest specification preserves `clip` to support single-axis scrolling. Browser behavior is transitioning, so this rule focuses on the unchanged `visible`-to-`auto` behavior.
-
-This rule has no autofix or suggestions because the appropriate change depends on whether clipping, scrolling, or visible overflow was intended.
-
-## References
-
-- [CSS Overflow: Overflow properties](https://drafts.csswg.org/css-overflow-3/#overflow-properties)
-- [CSS Positioned Layout: Sticky positioning](https://drafts.csswg.org/css-position-3/#sticky-pos)
-- [Chrome: Single-axis scroll containers](https://developer.chrome.com/blog/single-axis-scroll-containers-ready-for-testing)
+`clip` paired with scrollable values is ignored because its browser behavior is changing. The rule provides no fixes or suggestions because the intended overflow behavior is ambiguous.
