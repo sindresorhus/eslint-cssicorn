@@ -111,6 +111,28 @@ test({
 	],
 	invalid: [
 		{
+			code: 'a { --a: {value: [var(--b)]}; --b: var(--a); }',
+			errors: [
+				{messageId: 'no-self-referencing-custom-properties/cycle', data: {property: '--a'}},
+				{messageId: 'no-self-referencing-custom-properties/cycle', data: {property: '--b'}},
+			],
+		},
+		{
+			code: 'a { --a: if(supports(--b: var(--b)): 1px; else: 2px); --b: var(--a); }',
+			errors: [
+				{messageId: 'no-self-referencing-custom-properties/cycle', data: {property: '--a'}},
+				{messageId: 'no-self-referencing-custom-properties/cycle', data: {property: '--b'}},
+			],
+		},
+		{
+			code: 'a {\n\t/* eslint-disable-next-line */\n\t--a: var(--b);\n\t--b: var(--a);\n}',
+			errors: [{
+				messageId: 'no-self-referencing-custom-properties/cycle',
+				data: {property: '--b'},
+				line: 4,
+			}],
+		},
+		{
 			name: 'large cyclic custom-property chain',
 			code: ':root {' + Array.from({length: 5000}, (_, index) => `--property-${index}: var(--property-${(index + 1) % 5000});`).join('') + '}',
 			errors: 5000,

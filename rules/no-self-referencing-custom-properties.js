@@ -67,7 +67,7 @@ const getCyclicComponents = declarations => {
 			references: declarations.get(property).references.values(),
 		};
 		states.set(property, state);
-		componentStack.push(property);
+		componentStack.push(state);
 		traversalStack.push(state);
 	};
 
@@ -109,9 +109,9 @@ const getCyclicComponents = declarations => {
 			let member;
 			do {
 				member = componentStack.pop();
-				states.get(member).onStack = false;
-				component.add(member);
-			} while (member !== state.property);
+				member.onStack = false;
+				component.add(member.property);
+			} while (member !== state);
 
 			if (component.size > 1) {
 				components.push(component);

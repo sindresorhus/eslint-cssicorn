@@ -69,7 +69,7 @@ For indirect cycles, the rule uses the winning declaration of each custom proper
 }
 ```
 
-Custom-property names are case-sensitive, so `--spacing: var(--SPACING)` is allowed. The rule ignores strings, comments, URL text, support tests, and container-query conditions. It does not extract CSS from JavaScript.
+Custom-property names are case-sensitive, so `--spacing: var(--SPACING)` is allowed. The rule ignores strings, comments, URL text, and at-rule preludes. Literal references inside `if()` conditions are still analyzed. It does not extract CSS from JavaScript.
 
 ## Limitations
 
