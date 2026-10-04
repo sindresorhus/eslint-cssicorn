@@ -141,15 +141,8 @@ A leading `:is()` can have mixed specificity: nesting preserves its maximum spec
 
 ## Limitations
 
-Requires one selector and at least two compound `:is()` arguments. Skips complex arguments, existing `&`, standalone `:is()`, and patterns such as `a:is(.foo, .bar)` or `a :is(.foo, .bar) b`. Neighboring rules are not merged.
+Checks one selector with at least two compound `:is()` arguments. Skips existing `&`, standalone or middle-position `:is()`, escaped `:is()` names, `@scope`, and files with `@namespace`.
 
-Unsupported selectors, escaped `:is()` names, rules inside `@scope`, and files containing `@namespace` are ignored.
-
-Reports without fixing when comments, escapes consuming line breaks, multiline raw values, or unclear indentation make rewriting unsafe. Fixes preserve nested blocks and reuse the existing body indentation.
+Reports without fixing when comments or whitespace cannot be preserved safely.
 
 Only standard CSS parsed by `@eslint/css` is supported. Target browsers must support native nesting unless your build transforms it.
-
-## Related rules
-
-- Stylelint's [`relative-selector-nesting-notation`](https://stylelint.io/user-guide/rules/relative-selector-nesting-notation/): controls `&` notation.
-- [`stylelint-use-nesting`](https://github.com/csstools/stylelint-use-nesting): merges neighboring rules.
