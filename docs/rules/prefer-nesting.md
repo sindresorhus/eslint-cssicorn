@@ -1,6 +1,6 @@
 # prefer-nesting
 
-📝 Prefer CSS nesting over structural uses of `:is()`.
+📝 Prefer CSS nesting for related rules and selector groups.
 
 💼🚫 This rule is enabled in the ✅ `recommended` [config](https://github.com/sindresorhus/eslint-cssicorn#recommended-config). This rule is _disabled_ in the ☑️ `unopinionated` [config](https://github.com/sindresorhus/eslint-cssicorn#recommended-config).
 
@@ -9,11 +9,37 @@
 <!-- end auto-generated rule header -->
 <!-- Do not manually modify this header. Run: `npm run fix:eslint-docs` -->
 
-Prefer native CSS nesting for `:is()` at the start of a selector or after its final combinator. Fixes preserve matching behavior, declaration order, selector escapes, and line endings.
+Prefer native CSS nesting for adjacent rules that repeat a parent selector, and for `:is()` at the start of a selector or after its final combinator. Fixes preserve matching behavior, declaration order, selector escapes, and line endings.
 
 The fix keeps the `:is()` wrapper when needed to preserve specificity or forgiving selector-list behavior.
 
 ## Examples
+
+Related rules are nested inside their immediately preceding parent, using explicit `&` and preserving their order:
+
+```css
+/* ❌ */
+.card {
+	color: red;
+}
+.card .title {
+	font-weight: bold;
+}
+.card:hover {
+	color: blue;
+}
+
+/* ✅ */
+.card {
+	color: red;
+	& .title {
+		font-weight: bold;
+	}
+	&:hover {
+		color: blue;
+	}
+}
+```
 
 ```css
 /* ❌ */
@@ -53,7 +79,7 @@ a {
 
 /* ✅ */
 .foo, .bar {
-	a {
+	& a {
 		color: red;
 	}
 }
@@ -141,8 +167,10 @@ A leading `:is()` can have mixed specificity: nesting preserves its maximum spec
 
 ## Limitations
 
-Checks one selector with at least two compound `:is()` arguments. Skips existing `&`, standalone or middle-position `:is()`, escaped `:is()` names, `@scope`, and files with `@namespace`.
+Checks one selector per rule. Related-rule merging requires an exact compound parent prefix made of type, class, ID, or unflagged attribute selectors. The `:is()` conversion requires at least two compound arguments.
 
-Reports without fixing when comments or whitespace cannot be preserved safely.
+Skips existing `&` in selectors, escaped `:is()` names, `@scope`, and files with `@namespace`. Rules are never moved across unrelated rules or at-rules.
+
+Reports without fixing when comments, missing declaration terminators, or incompatible formatting make merging unsafe.
 
 Only standard CSS parsed by `@eslint/css` is supported. Target browsers must support native nesting unless your build transforms it.

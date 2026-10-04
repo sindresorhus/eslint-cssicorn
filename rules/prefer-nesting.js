@@ -11,12 +11,16 @@ import {
 import {hasCommentInRange, normalizeCssIdentifier} from './utils/index.js';
 
 /**
-@import * as ESLint from 'eslint';
+@import {CssicornContext} from './rule/cssicorn-context.js';
+@import {CssicornRule} from './rule/to-eslint-rule.js';
+@import {CssicornRuleFixer} from './rule/to-eslint-rule-fixer.js';
 */
 
 const MESSAGE_ID = 'prefer-nesting';
+const MESSAGE_ID_RELATED_RULES = 'prefer-nesting/related-rules';
 const messages = {
 	[MESSAGE_ID]: 'Prefer CSS nesting over `:is()`.',
+	[MESSAGE_ID_RELATED_RULES]: 'Prefer CSS nesting for related rules.',
 };
 
 const isDescendantCombinator = node => node?.type === 'Combinator' && node.name === ' ';
@@ -67,11 +71,20 @@ const getCandidate = selector => {
 	const {children} = selector;
 	const leadingArguments = getIsSelectorList(children[0]);
 	if (leadingArguments && children.length > 1) {
+		const innerNodes = children.slice(isDescendantCombinator(children[1]) ? 2 : 1);
+		let prefix = '';
+		if (children[1].type !== 'Combinator') {
+			prefix = '&';
+		} else if (innerNodes[0].type === 'TypeSelector') {
+			// Explicit nesting avoids interpreting a leading type selector as a declaration.
+			prefix = '& ';
+		}
+
 		return {
 			node: children[0],
 			outerNodes: canUnwrapSelectorList(leadingArguments) ? leadingArguments.children : [children[0]],
-			innerNodes: children.slice(isDescendantCombinator(children[1]) ? 2 : 1),
-			attached: children[1].type !== 'Combinator',
+			innerNodes,
+			prefix,
 		};
 	}
 
@@ -92,25 +105,36 @@ const getCandidate = selector => {
 		node: children.at(-1),
 		outerNodes: children.slice(0, -2),
 		innerNodes,
-		attached: false,
+		prefix: '',
 	};
 };
 
 const getNodesText = (nodes, sourceCode) => sourceCode.text.slice(sourceCode.getRange(nodes[0])[0], sourceCode.getRange(nodes.at(-1))[1]);
 
-const getReplacement = (rule, candidate, context) => {
+const getIndentation = (rule, sourceCode) => {
+	const [ruleStart] = sourceCode.getRange(rule);
+	const indentation = sourceCode.text.slice(ruleStart - sourceCode.getLoc(rule).start.column + 1, ruleStart);
+	const content = sourceCode.getText(rule.block).slice(1, -1);
+	const bodyIndentation = content.match(/(?:\r\n|[\n\f\r])([\t ]*)[^\t\n\f\r ]/u)?.[1];
+	if (!/^[\t ]*$/u.test(indentation) || !bodyIndentation?.startsWith(indentation) || bodyIndentation.length <= indentation.length) {
+		return;
+	}
+
+	return {indentation, indentationStep: bodyIndentation.slice(indentation.length)};
+};
+
+const getNestedContent = (rule, candidate, context) => {
 	const {sourceCode} = context;
 	const ruleText = sourceCode.getText(rule);
 	if (hasCommentInRange(context, sourceCode.getRange(rule)) || /\\[\da-f]{0,6}[\n\f\r]/iu.test(ruleText)) {
 		return;
 	}
 
-	const outer = getNodesText(candidate.outerNodes, sourceCode);
-	const inner = `${candidate.attached ? '&' : ''}${getNodesText(candidate.innerNodes, sourceCode)}`;
+	const inner = `${candidate.prefix}${getNodesText(candidate.innerNodes, sourceCode)}`;
 	const block = sourceCode.getText(rule.block);
 	const lineBreak = ruleText.match(/\r\n|[\n\f\r]/u)?.[0];
 	if (!lineBreak) {
-		return `${outer} { ${inner} ${block} }`;
+		return ` ${inner} ${block} `;
 	}
 
 	// Reindenting raw values can change their text, including custom property values.
@@ -118,27 +142,144 @@ const getReplacement = (rule, candidate, context) => {
 		return;
 	}
 
-	const [ruleStart] = sourceCode.getRange(rule);
-	const indentation = sourceCode.text.slice(ruleStart - sourceCode.getLoc(rule).start.column + 1, ruleStart);
-	const content = block.slice(1, -1);
-	const bodyIndentation = content.match(/(?:\r\n|[\n\f\r])([\t ]*)[^\t\n\f\r ]/u)?.[1];
-	if (!/^[\t ]*$/u.test(indentation) || !bodyIndentation?.startsWith(indentation) || bodyIndentation.length <= indentation.length) {
+	const formatting = getIndentation(rule, sourceCode);
+	if (!formatting) {
 		return;
 	}
 
-	const indentationStep = bodyIndentation.slice(indentation.length);
+	const {indentation, indentationStep} = formatting;
 	const indentedBlock = block.replaceAll(/(\r\n|[\n\f\r])(?=[\t ]*[^\t\n\f\r ])/gu, lineBreak => lineBreak + indentationStep);
-	return `${outer} {${lineBreak}${indentation}${indentationStep}${inner} ${indentedBlock}${lineBreak}${indentation}}`;
+	return `${lineBreak}${indentation}${indentationStep}${inner} ${indentedBlock}${lineBreak}${indentation}`;
+};
+
+const getSingleSelector = rule => rule?.type === 'Rule' && rule.prelude?.type === 'SelectorList' && rule.prelude.children.length === 1
+	? rule.prelude.children.at(0)
+	: undefined;
+
+const getRelatedCandidate = (parentSelector, rule, sourceCode) => {
+	const selector = getSingleSelector(rule);
+	const parentNodes = parentSelector.children;
+	if (
+		!selector
+		|| selector.children.length <= parentNodes.length
+		|| parentNodes.some((node, index) => !(node.type === selector.children[index].type && sourceCode.getText(node) === sourceCode.getText(selector.children[index])))
+		|| !canMatchSelector(selector)
+		|| find(selector, node => node.type === 'NestingSelector' || node.type === 'Raw')
+	) {
+		return;
+	}
+
+	const suffix = selector.children[parentNodes.length];
+	return {
+		innerNodes: selector.children.slice(parentNodes.length + (isDescendantCombinator(suffix) ? 1 : 0)),
+		prefix: suffix.type === 'Combinator' ? '& ' : '&',
+	};
+};
+
+const getMergedReplacement = (parentRule, relatedRules, context) => {
+	const {sourceCode} = context;
+	const range = [sourceCode.getRange(parentRule)[0], sourceCode.getRange(relatedRules.at(-1).rule)[1]];
+	if (hasCommentInRange(context, range)) {
+		return;
+	}
+
+	const lastChild = parentRule.block.children.at(-1);
+	if (lastChild && !lastChild.block) {
+		if (lastChild.type !== 'Declaration') {
+			return;
+		}
+
+		const terminator = sourceCode.text.slice(sourceCode.getRange(lastChild)[1], sourceCode.getRange(parentRule.block)[1] - 1);
+		if (!terminator.trimStart().startsWith(';')) {
+			return;
+		}
+	}
+
+	const parentText = sourceCode.getText(parentRule);
+	const isMultiline = /[\n\f\r]/u.test(parentText);
+	const parentFormatting = isMultiline ? getIndentation(parentRule, sourceCode) : undefined;
+	let replacement = parentText.slice(0, -1).replace(/[\t\n\f\r ]+$/u, '');
+	for (const {rule, candidate} of relatedRules) {
+		const childIsMultiline = /[\n\f\r]/u.test(sourceCode.getText(rule));
+		const childFormatting = childIsMultiline ? getIndentation(rule, sourceCode) : undefined;
+		if (
+			isMultiline !== childIsMultiline
+			|| (isMultiline && (
+				!parentFormatting
+				|| !childFormatting
+				|| parentFormatting.indentation !== childFormatting.indentation
+				|| parentFormatting.indentationStep !== childFormatting.indentationStep
+			))
+		) {
+			return;
+		}
+
+		const content = getNestedContent(rule, candidate, context);
+		if (content === undefined) {
+			return;
+		}
+
+		replacement = replacement.replace(/[\t\n\f\r ]+$/u, '') + content;
+	}
+
+	return `${replacement}}`;
+};
+
+const getRelatedRules = (children, startIndex, parentSelector, sourceCode) => {
+	const relatedRules = [];
+	for (let index = startIndex; index < children.length; index++) {
+		const rule = children[index];
+		const candidate = getRelatedCandidate(parentSelector, rule, sourceCode);
+		if (!candidate) {
+			break;
+		}
+
+		relatedRules.push({rule, candidate});
+	}
+
+	return relatedRules;
 };
 
 /**
-@param {ESLint.Rule.RuleContext} context
+@param {CssicornContext} context
 */
 const create = context => {
 	const {sourceCode} = context;
 	if (sourceCode.ast.children.some(node => node.type === 'Atrule' && normalizeCssIdentifier(node.name) === 'namespace')) {
 		return;
 	}
+
+	context.on(['StyleSheet', 'Block'], function * (container) {
+		for (let index = 0; index < container.children.length - 1; index++) {
+			const parentRule = container.children[index];
+			const parentSelector = getSingleSelector(parentRule);
+			if (
+				!parentSelector
+				|| !canUnwrapSelectorList(parentRule.prelude)
+				|| !canBeRepresentedByNestingSelector(parentSelector, false)
+				|| !isStyleRule(parentRule, context)
+				|| hasScopeAncestor(parentRule, context)
+			) {
+				continue;
+			}
+
+			const relatedRules = getRelatedRules(container.children, index + 1, parentSelector, sourceCode);
+			if (relatedRules.length === 0) {
+				continue;
+			}
+
+			const replacement = getMergedReplacement(parentRule, relatedRules, context);
+			yield {
+				node: relatedRules[0].rule.prelude,
+				messageId: MESSAGE_ID_RELATED_RULES,
+				/**
+				@param {Parameters<CssicornRuleFixer>[0]} fixer
+				*/
+				fix: replacement === undefined ? undefined : fixer => fixer.replaceTextRange([sourceCode.getRange(parentRule)[0], sourceCode.getRange(relatedRules.at(-1).rule)[1]], replacement),
+			};
+			index += relatedRules.length;
+		}
+	});
 
 	context.on('Rule', rule => {
 		if (rule.prelude?.type !== 'SelectorList' || rule.prelude.children.length !== 1 || !isStyleRule(rule, context)) {
@@ -151,12 +292,13 @@ const create = context => {
 			return;
 		}
 
-		const replacement = getReplacement(rule, candidate, context);
+		const content = getNestedContent(rule, candidate, context);
+		const replacement = content === undefined ? undefined : `${getNodesText(candidate.outerNodes, sourceCode)} {${content}}`;
 		return {
 			node: candidate.node,
 			messageId: MESSAGE_ID,
 			/**
-			@param {ESLint.Rule.RuleFixer} fixer
+			@param {Parameters<CssicornRuleFixer>[0]} fixer
 			*/
 			fix: replacement === undefined ? undefined : fixer => fixer.replaceText(rule, replacement),
 		};
@@ -164,14 +306,14 @@ const create = context => {
 };
 
 /**
-@type {ESLint.Rule.RuleModule}
+@type {CssicornRule}
 */
 const config = {
 	create,
 	meta: {
 		type: 'suggestion',
 		docs: {
-			description: 'Prefer CSS nesting over structural uses of `:is()`.',
+			description: 'Prefer CSS nesting for related rules and selector groups.',
 			recommended: true,
 		},
 		fixable: 'code',

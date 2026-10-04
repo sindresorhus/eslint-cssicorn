@@ -88,7 +88,7 @@ export default defineConfig([
 | [prefer-explicit-viewport-units](docs/rules/prefer-explicit-viewport-units.md)               | Prefer explicit viewport units.                                                                              | ✅    |    | 💡 |
 | [prefer-media-feature-range-syntax](docs/rules/prefer-media-feature-range-syntax.md)         | Prefer modern media feature range syntax.                                                                    | ✅    | 🔧 | 💡 |
 | [prefer-modern-syntax](docs/rules/prefer-modern-syntax.md)                                   | Prefer modern CSS color and pseudo-element syntax.                                                           | ✅    | 🔧 |    |
-| [prefer-nesting](docs/rules/prefer-nesting.md)                                               | Prefer CSS nesting over structural uses of `:is()`.                                                          | ✅    | 🔧 |    |
+| [prefer-nesting](docs/rules/prefer-nesting.md)                                               | Prefer CSS nesting for related rules and selector groups.                                                    | ✅    | 🔧 |    |
 | [prefer-short-hex-color](docs/rules/prefer-short-hex-color.md)                               | Prefer short hexadecimal color notation.                                                                     | ✅    | 🔧 |    |
 | [require-property-descriptors](docs/rules/require-property-descriptors.md)                   | Require descriptors in CSS `@property` rules.                                                                | ✅ ☑️ |    |    |
 

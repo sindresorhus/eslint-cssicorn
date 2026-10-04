@@ -130,7 +130,7 @@ Message:
     | ^^^^^^^^^^^^^^^ Prefer CSS nesting over \`:is()\`.
 
 Output:
-  1 | .foo, .bar { a > b + c { color: red; } }
+  1 | .foo, .bar { & a > b + c { color: red; } }
 
 `;
 
@@ -198,7 +198,7 @@ Message:
     | ^^^^^^^^^^^^^^^ Prefer CSS nesting over \`:is()\`.
 
 Output:
-  1 | .foo, .bar { a[data-x] {} }
+  1 | .foo, .bar { & a[data-x] {} }
 
 `;
 
@@ -249,7 +249,7 @@ Message:
     |           ^^^^^^^^^^^^^^^ Prefer CSS nesting over \`:is()\`.
 
 Output:
-  1 | .parent { .foo, .bar { a { color: red; } } }
+  1 | .parent { .foo, .bar { & a { color: red; } } }
 
 `;
 
@@ -538,7 +538,7 @@ Message:
 
 Output:
   1 | .foo, .bar {
-  2 | 	a {
+  2 | 	& a {
   3 | 		color: red;
   4 |
   5 | 		& > b {
@@ -653,7 +653,7 @@ Message:
     | ^^^^^^^^^^^^^^^ Prefer CSS nesting over \`:is()\`.
 
 Output:
-  1 | .foo, #bar { a {} }
+  1 | .foo, #bar { & a {} }
 
 `;
 

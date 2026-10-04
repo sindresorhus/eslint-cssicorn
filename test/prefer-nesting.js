@@ -7,6 +7,116 @@ import {getTester} from './utils/test.js';
 
 const {test} = getTester(import.meta);
 
+test({
+	valid: [
+		'.card {} .card {}',
+		'.card {} .cardinal {}',
+		'.card {} .card-other {}',
+		'.card {} .other {} .card .title {}',
+		'.card .title {} .card {}',
+		'.card, .other {} .card .title {}',
+		'.card {} .card .title, .card .body {}',
+		'.page .card {} .page .card .title {}',
+		'.card:hover {} .card:hover .title {}',
+		'.card::before {} .card::before.active {}',
+		'.card {} .card .title:unknown {}',
+		'.outer { .card {} & .card .title {} }',
+		'.outer { .card {} .card:has(&) {} }',
+		'.outer { .card {} --value: red; .card .title {} }',
+		'.card {} @media (width > 0px) { .card .title {} }',
+		'@scope (.outer) { .card {} .card .title {} }',
+		'@namespace url("http://www.w3.org/1999/xhtml"); .card {} .card .title {}',
+		'[x="a" i] {} [x="a" i] .title {}',
+		String.raw`.c\61 rd {} .card .title {}`,
+	],
+	invalid: [
+		{
+			code: '.message { color: red; } .message a:not(.button) { color: blue; }',
+			output: '.message { color: red; & a:not(.button) { color: blue; } }',
+			errors: 1,
+		},
+		{
+			code: 'BUTTON { COLOR: RED; } BUTTON:hover { COLOR: BLUE; }',
+			output: 'BUTTON { COLOR: RED; &:hover { COLOR: BLUE; } }',
+			errors: 1,
+		},
+		{
+			code: ':is(.foo, .bar) a:not(.button) { color: blue; }',
+			output: '.foo, .bar { & a:not(.button) { color: blue; } }',
+			errors: 1,
+		},
+		{
+			code: '.card { color: red; } .card .title { color: blue; }',
+			output: '.card { color: red; & .title { color: blue; } }',
+			errors: [{messageId: 'prefer-nesting/related-rules'}],
+		},
+		...['>', '+', '~'].map(combinator => ({
+			code: `a { color: red; } a ${combinator} b { color: blue; }`,
+			output: `a { color: red; & ${combinator} b { color: blue; } }`,
+			errors: 1,
+		})),
+		...['.active', ':hover', '::before'].map(suffix => ({
+			code: `.card { color: red; } .card${suffix} { color: blue; }`,
+			output: `.card { color: red; &${suffix} { color: blue; } }`,
+			errors: 1,
+		})),
+		{
+			code: '[data-x].card { color: red; } [data-x].card .title { color: blue !important; }',
+			output: '[data-x].card { color: red; & .title { color: blue !important; } }',
+			errors: 1,
+		},
+		{
+			code: String.raw`.f\6f o { color: red; } .f\6f o .b\61 r { color: blue; }`,
+			output: String.raw`.f\6f o { color: red; & .b\61 r { color: blue; } }`,
+			errors: 1,
+		},
+		{
+			code: '.card { color: red; } .card .title { color: blue; & > b { color: green; } }',
+			output: '.card { color: red; & .title { color: blue; & > b { color: green; } } }',
+			errors: 1,
+		},
+		{
+			code: '.card { & > a { color: red; } } .card .title { color: blue; }',
+			output: '.card { & > a { color: red; } & .title { color: blue; } }',
+			errors: 1,
+		},
+		{
+			code: '.card {} .card .title { color: blue; } .card .body { color: green; }',
+			output: '.card { & .title { color: blue; } & .body { color: green; } }',
+			errors: 1,
+		},
+		{
+			code: '.outer, #outer { .card { color: red; } .card .title { color: blue; } }',
+			output: '.outer, #outer { .card { color: red; & .title { color: blue; } } }',
+			errors: 1,
+		},
+		...['media (width > 0px)', 'supports (display: grid)', 'container (width > 0px)', 'layer theme'].map(atRule => ({
+			code: `@${atRule} { .card { color: red; } .card .title { color: blue; } }`,
+			output: `@${atRule} { .card { color: red; & .title { color: blue; } } }`,
+			errors: 1,
+		})),
+		{
+			code: '.card {\n\tcolor: red;\n}\n\n.card .title {\n\tcolor: blue;\n}',
+			output: '.card {\n\tcolor: red;\n\t& .title {\n\t\tcolor: blue;\n\t}\n}',
+			errors: 1,
+		},
+		{
+			code: '.card {\r\n  color: red;\r\n}\r\n.card .title {\r\n  color: blue;\r\n}',
+			output: '.card {\r\n  color: red;\r\n  & .title {\r\n    color: blue;\r\n  }\r\n}',
+			errors: 1,
+		},
+		...[
+			'.card { color: red } .card .title { color: blue; }',
+			String.raw`.card { --value: red\; } .card .title { color: blue; }`,
+			'.card { color: red; /* keep */ } .card .title { color: blue; }',
+			'.card { color: red; } /* keep */ .card .title { color: blue; }',
+			'.card { color: red; } .card .title { color: blue; /* keep */ }',
+			'.card {\n  color: red;\n}\n.card .title {\n    color: blue;\n}',
+			'.card {\n\tcolor: red;\n}\n.card .title {\n\t--value: a\n\t\tb;\n}',
+		].map(code => ({code, errors: 1})),
+	],
+});
+
 test.snapshot({
 	valid: [
 		'a { color: red; }',
@@ -190,7 +300,7 @@ test({
 		},
 		{
 			code: ':is(.foo, #123) a { color: red; }',
-			output: ':is(.foo, #123) { a { color: red; } }',
+			output: ':is(.foo, #123) { & a { color: red; } }',
 			errors: 1,
 		},
 		{
@@ -205,7 +315,7 @@ test({
 		},
 		{
 			code: String.raw`:is(.foo, #\31 23) a { color: red; }`,
-			output: String.raw`.foo, #\31 23 { a { color: red; } }`,
+			output: String.raw`.foo, #\31 23 { & a { color: red; } }`,
 			errors: 1,
 		},
 		{
@@ -238,7 +348,7 @@ test({
 		},
 		{
 			code: ':is(.foo, :blank) a { color: red; }',
-			output: ':is(.foo, :blank) { a { color: red; } }',
+			output: ':is(.foo, :blank) { & a { color: red; } }',
 			errors: 1,
 		},
 		{
@@ -248,7 +358,7 @@ test({
 		},
 		{
 			code: ':is(.foo, [x="a" s]) a { color: red; }',
-			output: ':is(.foo, [x="a" s]) { a { color: red; } }',
+			output: ':is(.foo, [x="a" s]) { & a { color: red; } }',
 			errors: 1,
 		},
 		{
@@ -258,7 +368,7 @@ test({
 		},
 		{
 			code: ':is(foo|b, c) a { color: red; }',
-			output: ':is(foo|b, c) { a { color: red; } }',
+			output: ':is(foo|b, c) { & a { color: red; } }',
 			errors: 1,
 		},
 		{
@@ -311,7 +421,7 @@ nodeTest('nesting fixes settle across overlapping and repeated candidates', () =
 		},
 		{
 			code: ':is(.foo, :blank) a :is(.bar, :blank) { color: red; }',
-			output: ':is(.foo, :blank) { a { :is(.bar, :blank) { color: red; } } }',
+			output: ':is(.foo, :blank) { & a :is(.bar, :blank) { color: red; } }',
 		},
 	];
 
@@ -325,6 +435,35 @@ nodeTest('nesting fixes settle across overlapping and repeated candidates', () =
 			messages: [],
 			output,
 		});
+	}
+});
+
+nodeTest('related rule fixes settle with selector groups and long adjacent runs', () => {
+	const linter = new Linter();
+	const config = {
+		...plugin.configs.recommended,
+		rules: {'cssicorn/prefer-nesting': 'error', 'cssicorn/no-useless-is': 'error'},
+	};
+	const cases = [
+		{
+			code: '.card { color: red; } .card .title { color: blue; } .card .title > a { color: green; }',
+			output: '.card { color: red; & .title { color: blue; } & .title > a { color: green; } }',
+		},
+		{
+			code: '.card { color: red; } .card :is(.foo, :is(.bar)) { color: blue; }',
+			output: '.card { color: red; & :is(.foo, .bar) { color: blue; } }',
+		},
+		{
+			code: `.card {} ${Array.from({length: 20}, (_, index) => `.card .child-${index} { color: red; }`).join(' ')}`,
+			output: `.card { ${Array.from({length: 20}, (_, index) => `& .child-${index} { color: red; }`).join(' ')} }`,
+		},
+	];
+	for (const {code, output} of cases) {
+		const result = linter.verifyAndFix(code, config, {filename: 'test.css'});
+		assert.equal(result.fixed, true);
+		assert.equal(result.output, output);
+		assert.deepEqual(result.messages, []);
+		assert.equal(linter.verifyAndFix(output, config, {filename: 'test.css'}).fixed, false);
 	}
 });
 
@@ -342,6 +481,11 @@ nodeTest('nesting fixes work with the other nesting rules', () => {
 			'cssicorn/no-nesting-with-mixed-specificity': 'error',
 		},
 	};
+	const relatedRules = linter.verifyAndFix('.card { color: red; } .card .title { color: blue; }', config, {filename: 'test.css'});
+	assert.equal(relatedRules.output, '.card { color: red; & .title { color: blue; } }');
+	assert.deepEqual(relatedRules.messages, []);
+	assert.equal(linter.verifyAndFix(relatedRules.output, config, {filename: 'test.css'}).fixed, false);
+
 	const equalSpecificity = linter.verifyAndFix(':is(a, button).active { color: red; }', config, {filename: 'test.css'});
 	assert.equal(equalSpecificity.output, 'a, button { &.active { color: red; } }');
 	assert.deepEqual(equalSpecificity.messages, []);
@@ -358,6 +502,6 @@ nodeTest('nesting fixes work with the other nesting rules', () => {
 	assert.equal(linter.verifyAndFix(trailingCombinator.output, config, {filename: 'test.css'}).fixed, false);
 
 	const mixedSpecificity = linter.verifyAndFix(':is(.foo, #bar) a { color: red; }', config, {filename: 'test.css'});
-	assert.equal(mixedSpecificity.output, '.foo, #bar { a { color: red; } }');
+	assert.equal(mixedSpecificity.output, '.foo, #bar { & a { color: red; } }');
 	assert.deepEqual(mixedSpecificity.messages.map(message => message.ruleId), ['cssicorn/no-nesting-with-mixed-specificity']);
 });
