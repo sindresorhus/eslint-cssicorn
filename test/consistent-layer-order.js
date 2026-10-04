@@ -135,6 +135,13 @@ test({
 		// This statement establishes the child order, so it is reported without a fix.
 		code: '@layer base, theme; @layer theme.components, theme.base, base;',
 		errors: [{messageId: 'consistent-layer-order', data: {earlier: 'base', later: 'theme.components'}}],
+	}, {
+		code: '@layer base, theme; @layer extra; @layer extra {}',
+		options: [{checkUndeclaredLayers: true}],
+		errors: [
+			{messageId: 'consistent-layer-order/undeclared', data: {name: 'extra'}},
+			{messageId: 'consistent-layer-order/undeclared', data: {name: 'extra'}},
+		],
 	}],
 });
 
