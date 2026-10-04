@@ -47,6 +47,8 @@ test.snapshot({
 		'a { display: flex inline; flex-direction: column; }',
 		'a { display: grid block; grid-template-columns: 1fr 1fr; }',
 		String.raw`a { display: inline\20 flex; grid-template-columns: 1fr; }`,
+		String.raw`a { display: flex\5c 9; flex-direction: column; grid-template-columns: 1fr; }`,
+		String.raw`a { display: flex\9; grid-template-columns: 1fr; }`,
 		'a { display: block; display: flex; grid-template-columns: 1fr 1fr; flex-wrap: wrap; }',
 		'a { display: flex !important; display: grid; grid-auto-flow: column; }',
 		'a { display: flex; display: flex; grid-auto-flow: column; }',
@@ -55,6 +57,7 @@ test.snapshot({
 		'a { display: block; flex-direction: initial; grid-template-columns: revert-layer; }',
 		'a { display: flex; grid-template-columns: var(--tracks); }',
 		'a { display: flex; grid-template-columns: repeat(2, var(--tracks)); }',
+		'a { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }',
 		'a { display: flex; flex: 1; flex-basis: 0; flex-grow: 1; flex-shrink: 1; order: 1; grid-area: header; grid-row: 1; grid-column: 2; }',
 		'a { display: block; align-self: center; justify-self: end; }',
 		'a { display: block; gap: 1em; row-gap: 1em; column-gap: 1em; grid-gap: 1em; }',
@@ -86,6 +89,7 @@ test.snapshot({
 		'a { overflow: visible; overflow-inline: hidden; text-overflow: ellipsis; }',
 		'a { overflow: visible; overflow-block: hidden; text-overflow: ellipsis; }',
 		'a { overflow-x: visible; overflow-y: hidden; text-overflow: ellipsis; }',
+		'a { overflow-x: visible; overflow-y: visible; text-overflow: ellipsis; }',
 		'a { overflow: visible hidden; text-overflow: ellipsis; }',
 		String.raw`a { overflow: visible\20 visible; text-overflow: ellipsis; }`,
 		'a { overflow: inherit; text-overflow: ellipsis; }',
@@ -158,12 +162,25 @@ test.snapshot({
 		'a { display: var(--layout); position: static; top: 20px; }',
 		String.raw`a { display: inline\2d flex; grid-auto-flow: column; }`,
 		...['container (width > 1px)', 'layer example', 'scope (.example)', 'starting-style'].map(atRule => `a { @${atRule} { display: flex; grid-template-columns: 1fr; } }`),
+		'a { display: flex; grid-template-columns: repeat(2, minmax(0, 1fr)); }',
+		'a { position: static; top: calc(1rem + 2px); }',
 	],
 });
 
 test({
 	valid: [],
 	invalid: [
+		{
+			code: 'a { display: none; grid-template-columns: 1fr; position: static; top: 20px; overflow: visible; text-overflow: ellipsis; }',
+			errors: [
+				{messageId: 'no-ineffective-properties/static'},
+				{messageId: 'no-ineffective-properties/overflow'},
+			],
+		},
+		{
+			code: 'a { display: flex; grid-template-columns: 1fr; } b { display: grid; grid-template-columns: 1fr; }',
+			errors: [{messageId: 'no-ineffective-properties/display', data: {property: 'grid-template-columns', display: 'flex', layout: 'grid'}}],
+		},
 		{
 			code: 'a { display: grid; flex-wrap: nowrap; align-content: center; }',
 			errors: [{messageId: 'no-ineffective-properties/display', data: {property: 'flex-wrap', display: 'grid', layout: 'flex'}}],

@@ -1096,6 +1096,34 @@ Message:
 
 `;
 
+exports[`invalid(74): a { display: flex; grid-template-columns: repeat(2, minmax(0, 1fr)); } 1`] = `
+
+  1 | a { display: flex; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+`;
+
+exports[`invalid(74): a { display: flex; grid-template-columns: repeat(2, minmax(0, 1fr)); } 2`] = `
+
+Message:
+> 1 | a { display: flex; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    |                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`grid-template-columns\` has no effect with \`display: flex\`. It requires a grid container.
+
+`;
+
+exports[`invalid(75): a { position: static; top: calc(1rem + 2px); } 1`] = `
+
+  1 | a { position: static; top: calc(1rem + 2px); }
+
+`;
+
+exports[`invalid(75): a { position: static; top: calc(1rem + 2px); } 2`] = `
+
+Message:
+> 1 | a { position: static; top: calc(1rem + 2px); }
+    |                       ^^^^^^^^^^^^^^^^^^^^^ \`top\` has no effect with \`position: static\`. Insets require a positioned element.
+
+`;
+
 exports[`invalid(8): a { display: flex; grid-template-areas: \"header header\"; } 1`] = `
 
   1 | a { display: flex; grid-template-areas: "header header"; }

@@ -43,13 +43,14 @@ const getControllingValue = (declarationsByProperty, properties, sourceCode) => 
 		return;
 	}
 
-	const normalizedValue = {
-		...node.value,
-		children: node.value.children.map(child => ({...child, name: normalizeCssIdentifier(child.name)})),
-	};
-	// Validate AST nodes so escaped whitespace inside an identifier cannot become extra tokens.
-	const value = normalizedValue.children.map(child => child.name).join(' ');
-	if (normalizedValue.children.some(child => child.name.startsWith('-')) || isCssWideKeyword(value) || sourceCode.lexer.matchProperty(property, normalizedValue).error) {
+	const keywords = node.value.children.map(child => normalizeCssIdentifier(child.name));
+	// Only ordinary ASCII keywords are supported, so joining decoded names cannot introduce extra tokens or escape syntax.
+	if (keywords.some(keyword => !/^[a-z][-a-z]*$/u.test(keyword))) {
+		return;
+	}
+
+	const value = keywords.join(' ');
+	if (isCssWideKeyword(value) || sourceCode.lexer.matchProperty(property, value).error) {
 		return;
 	}
 
@@ -137,12 +138,12 @@ const create = context => {
 		};
 
 		for (const {node, property} of declarations) {
-			if (!targetProperties.has(property) || node.value.type !== 'Value' || hasSubstitutionOrRandomFunction(node.value)) {
+			if (!targetProperties.has(property) || node.value.type !== 'Value') {
 				continue;
 			}
 
 			const problem = getDeclarationProblem(node, property, controls);
-			if (problem) {
+			if (problem && !hasSubstitutionOrRandomFunction(node.value)) {
 				yield problem;
 			}
 		}
