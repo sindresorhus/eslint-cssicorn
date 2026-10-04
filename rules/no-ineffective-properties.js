@@ -8,6 +8,8 @@ import {
 } from './utils/index.js';
 
 /**
+@import {BlockPlain, DeclarationPlain, Raw, ValuePlain} from '@eslint/css-tree';
+@import {CSSSourceCode} from '@eslint/css';
 @import {CssicornContext} from './rule/cssicorn-context.js';
 @import {CssicornRule} from './rule/to-eslint-rule.js';
 */
@@ -16,21 +18,31 @@ const MESSAGE_ID_DISPLAY = 'no-ineffective-properties/display';
 const MESSAGE_ID_NOWRAP = 'no-ineffective-properties/nowrap';
 const MESSAGE_ID_STATIC = 'no-ineffective-properties/static';
 const MESSAGE_ID_OVERFLOW = 'no-ineffective-properties/overflow';
+const MESSAGE_ID_MULTICOL = 'no-ineffective-properties/multicol';
+const MESSAGE_ID_FLOAT = 'no-ineffective-properties/float';
 const messages = {
 	[MESSAGE_ID_DISPLAY]: '`{{property}}` has no effect with `display: {{display}}`. It requires a {{layout}} container.',
 	[MESSAGE_ID_NOWRAP]: '`align-content` has no effect on a flex container with `nowrap`. Consider `align-items` or enabling wrapping.',
 	[MESSAGE_ID_STATIC]: '`{{property}}` has no effect with `position: static`. Insets require a positioned element.',
-	[MESSAGE_ID_OVERFLOW]: '`text-overflow: ellipsis` has no effect with `overflow: visible`. Ellipsis requires clipped inline overflow.',
+	[MESSAGE_ID_OVERFLOW]: '`text-overflow: {{value}}` has no effect with `overflow: visible`. Ellipsis requires clipped inline overflow.',
+	[MESSAGE_ID_MULTICOL]: '`{{property}}` has no effect with `display: {{display}}`. Multicol properties require a block container.',
+	[MESSAGE_ID_FLOAT]: '`float: {{value}}` has no effect with `position: {{position}}`. Absolutely positioned elements cannot float.',
 };
 
 const flexProperties = new Set(['flex-direction', 'flex-wrap', 'flex-flow']);
 const gridProperties = new Set(['grid', 'grid-template', 'grid-template-columns', 'grid-template-rows', 'grid-template-areas', 'grid-auto-columns', 'grid-auto-rows', 'grid-auto-flow']);
 const insetProperties = new Set(['top', 'right', 'bottom', 'left', 'inset', 'inset-block', 'inset-inline', 'inset-block-start', 'inset-block-end', 'inset-inline-start', 'inset-inline-end']);
-const targetProperties = new Set([...flexProperties, ...gridProperties, ...insetProperties, 'align-content', 'text-overflow']);
+const multicolProperties = new Set(['columns', 'column-count', 'column-width']);
+const floatValues = new Set(['left', 'right', 'inline-start', 'inline-end']);
+const targetProperties = new Set([...flexProperties, ...gridProperties, ...insetProperties, ...multicolProperties, 'align-content', 'text-overflow', 'float']);
 const overflowProperties = ['overflow', 'overflow-x', 'overflow-y', 'overflow-inline', 'overflow-block'];
 
 /**
 Get a validated keyword value only when exactly one declaration controls the property or shorthand group. Multiple declarations may be intentional fallbacks.
+
+@param {Map<string, {node: DeclarationPlain, property: string}[]>} declarationsByProperty
+@param {string[]} properties
+@param {CSSSourceCode} sourceCode
 */
 const getControllingValue = (declarationsByProperty, properties, sourceCode) => {
 	const declarations = properties.flatMap(property => declarationsByProperty.get(property) ?? []);
@@ -39,11 +51,11 @@ const getControllingValue = (declarationsByProperty, properties, sourceCode) => 
 	}
 
 	const [{node, property}] = declarations;
-	if (node.value.type !== 'Value' || node.value.children.length === 0 || node.value.children.some(child => child.type !== 'Identifier')) {
+	if (node.value.type !== 'Value' || node.value.children.length === 0) {
 		return;
 	}
 
-	const keywords = node.value.children.map(child => normalizeCssIdentifier(child.name));
+	const keywords = node.value.children.map(child => child.type === 'Identifier' ? normalizeCssIdentifier(child.name) : '');
 	// Only ordinary ASCII keywords are supported, so joining decoded names cannot introduce extra tokens or escape syntax.
 	if (keywords.some(keyword => !/^[a-z][-a-z]*$/u.test(keyword))) {
 		return;
@@ -59,6 +71,9 @@ const getControllingValue = (declarationsByProperty, properties, sourceCode) => 
 
 /**
 Check whether a block contains style declarations, excluding keyframes and descriptors.
+
+@param {BlockPlain} block
+@param {CSSSourceCode} sourceCode
 */
 const isStyleBlock = (block, sourceCode) => {
 	const parent = sourceCode.getParent(block);
@@ -77,20 +92,62 @@ const isStyleBlock = (block, sourceCode) => {
 };
 
 /**
-Get the problem for a declaration given the explicit layout controls in its block.
+Get a validated one- or two-keyword text-overflow value that includes ellipsis.
+
+@param {ValuePlain | Raw} value
+@returns {string | undefined}
 */
-const getDeclarationProblem = (node, property, {display, hasVisibleDisplay, isFlex, isGrid, hasExplicitNowrap, position, hasVisibleOverflow}) => {
+const getEllipsisValue = value => {
+	if (value.type !== 'Value' || value.children.length > 2) {
+		return;
+	}
+
+	const keywords = value.children.map(child => child.type === 'Identifier' ? normalizeCssIdentifier(child.name) : undefined);
+	if (!keywords.includes('ellipsis') || keywords.some(keyword => keyword !== 'clip' && keyword !== 'ellipsis')) {
+		return;
+	}
+
+	return keywords.join(' ');
+};
+
+/**
+Get the problem for a container property given the explicit display in its block.
+
+@param {DeclarationPlain} node
+@param {string} property
+@param {{display: string | undefined, hasVisibleDisplay: boolean, isFlex: boolean, isGrid: boolean}} controls
+*/
+const getDisplayProblem = (node, property, {display, hasVisibleDisplay, isFlex, isGrid}) => {
+	if (hasVisibleDisplay && ((flexProperties.has(property) && !isFlex) || (gridProperties.has(property) && !isGrid))) {
+		const layout = flexProperties.has(property) ? 'flex' : 'grid';
+		return {node, messageId: MESSAGE_ID_DISPLAY, data: {property, display, layout}};
+	}
+
+	if (multicolProperties.has(property) && (isFlex || isGrid)) {
+		return {node, messageId: MESSAGE_ID_MULTICOL, data: {property, display}};
+	}
+};
+
+/**
+Get the problem for a declaration given the explicit layout controls in its block.
+
+@param {DeclarationPlain} node
+@param {string} property
+@param {{display: string | undefined, hasVisibleDisplay: boolean, isFlex: boolean, isGrid: boolean, hasExplicitNowrap: boolean, position: string | undefined, hasVisibleOverflow: boolean}} controls
+*/
+const getDeclarationProblem = (node, property, controls) => {
 	const identifier = getSingleValueIdentifier(node);
 	const keyword = identifier ? normalizeCssIdentifier(identifier.name) : undefined;
 	if (isCssWideKeyword(keyword)) {
 		return;
 	}
 
-	if (hasVisibleDisplay && ((flexProperties.has(property) && !isFlex) || (gridProperties.has(property) && !isGrid))) {
-		const layout = flexProperties.has(property) ? 'flex' : 'grid';
-		return {node, messageId: MESSAGE_ID_DISPLAY, data: {property, display, layout}};
+	const displayProblem = getDisplayProblem(node, property, controls);
+	if (displayProblem) {
+		return displayProblem;
 	}
 
+	const {hasExplicitNowrap, position, hasVisibleOverflow} = controls;
 	if (property === 'align-content' && hasExplicitNowrap) {
 		return {node, messageId: MESSAGE_ID_NOWRAP};
 	}
@@ -99,8 +156,15 @@ const getDeclarationProblem = (node, property, {display, hasVisibleDisplay, isFl
 		return {node, messageId: MESSAGE_ID_STATIC, data: {property}};
 	}
 
-	if (property === 'text-overflow' && keyword === 'ellipsis' && hasVisibleOverflow) {
-		return {node, messageId: MESSAGE_ID_OVERFLOW};
+	if (property === 'float' && (position === 'absolute' || position === 'fixed') && floatValues.has(keyword)) {
+		return {node, messageId: MESSAGE_ID_FLOAT, data: {value: keyword, position}};
+	}
+
+	if (property === 'text-overflow' && hasVisibleOverflow) {
+		const value = getEllipsisValue(node.value);
+		if (value) {
+			return {node, messageId: MESSAGE_ID_OVERFLOW, data: {value}};
+		}
 	}
 };
 

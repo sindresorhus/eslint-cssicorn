@@ -73,23 +73,106 @@ a {
 }
 ```
 
+```css
+/* ❌ */
+a {
+	display: flex;
+	column-count: 3;
+}
+
+/* ✅ */
+a {
+	display: block;
+	column-count: 3;
+}
+```
+
+```css
+/* ❌ */
+a {
+	display: grid;
+	columns: 15rem 3;
+}
+
+/* ✅ */
+a {
+	display: block;
+	columns: 15rem 3;
+}
+```
+
+```css
+/* ❌ */
+a {
+	position: absolute;
+	float: left;
+}
+
+/* ✅ */
+a {
+	position: static;
+	float: left;
+}
+```
+
+```css
+/* ❌ */
+a {
+	position: fixed;
+	float: inline-start;
+}
+
+/* ✅ */
+a {
+	position: static;
+	float: inline-start;
+}
+```
+
+```css
+/* ❌ */
+a {
+	text-overflow: clip ellipsis;
+	overflow: visible;
+}
+
+/* ✅ */
+a {
+	text-overflow: clip ellipsis;
+	overflow: hidden;
+}
+```
+
 ## Checked properties
 
 - Flex containers: `flex-direction`, `flex-wrap`, and `flex-flow` require a flex display mode.
 - Grid containers: `grid`, `grid-template`, `grid-template-columns`, `grid-template-rows`, `grid-template-areas`, `grid-auto-columns`, `grid-auto-rows`, and `grid-auto-flow` require a grid display mode.
-- Flex alignment: `align-content` has no effect with explicit `nowrap` in `flex-wrap` or `flex-flow`. Use `align-items` to align items, or enable wrapping when you intend to align flex lines. Wrapping containers are allowed even when their content currently fits on one line.
+- Multi-column layout: `columns`, `column-count`, and `column-width` have no effect on an element with its own explicit flex or grid display mode. Flex and grid items can still use multi-column layout for their contents.
+- Flex alignment: `align-content` has no effect with explicit `nowrap` in `flex-wrap` or `flex-flow`. Use `align-items` to align items, or enable wrapping when you intend to align flex lines. Wrapping containers are allowed even when their content currently fits on one line. Omitted wrapping is not assumed to be `nowrap`, even in a `flex-flow` shorthand.
 - Insets: `top`, `right`, `bottom`, `left`, `inset`, `inset-block`, `inset-inline`, and their logical longhands have no effect with explicit `position: static`.
-- Text overflow: `text-overflow: ellipsis` has no effect with explicit `overflow: visible` or `overflow: visible visible`. Ellipsis needs clipped inline overflow; this rule does not require `white-space: nowrap`, a width, or a height.
+- Floats: `float: left`, `right`, `inline-start`, or `inline-end` has no effect with explicit `position: absolute` or `fixed`. `float: none` is allowed.
+- Text overflow: `text-overflow: ellipsis`, `clip ellipsis`, `ellipsis clip`, or `ellipsis ellipsis` has no effect with explicit `overflow: visible` or `overflow: visible visible`. Ellipsis needs clipped inline overflow; this rule does not require `white-space: nowrap`, a width, or a height. Strings, `fade`, and `fade()` are not checked.
 
 ## Scope
 
-Only declarations in the same block are compared. Supports nested style rules and nested conditional blocks, CSS escapes, ASCII casing, `!important`, and both legacy and modern display notation, such as `inline-flex` and `inline flex`. Another selector, condition, or state can override the local context; disable the rule on declarations intentionally retained for those contexts.
+- Supported: Style declaration blocks, including nested style rules and conditional blocks, CSS escapes, ASCII casing, `!important`, and legacy and modern display notation, such as `inline-flex` and `inline flex`.
+- Skipped controls: Missing, malformed, unknown, vendor-prefixed, CSS-wide, or unresolved values. Display checks also ignore `none` and `contents`.
+- Skipped ambiguities: Duplicate `display` or `position` declarations, multiple wrapping declarations including `flex-flow`/`flex-wrap` combinations, and multiple overflow declarations including physical and logical longhands.
+- Skipped declarations: Target values containing CSS-wide keywords or unresolved substitutions, custom properties, item properties, gaps, and other alignment properties that need additional context.
+- Skipped blocks: Blocks containing `all`, plus keyframe, descriptor, and CSS Modules `:export`/`:import()` blocks.
+- Local context: Only direct declarations in the same block are compared. Text overflow is checked only against the `overflow` shorthand, without inferring writing mode or cross-axis computed values. Another selector, condition, or state can override the local context; disable the rule on declarations intentionally retained for those contexts.
 
-Each check is skipped when its controlling declarations are ambiguous: multiple `display` or `position` declarations, multiple wrapping declarations including `flex-flow`/`flex-wrap` combinations, or multiple overflow declarations including physical and logical longhands. Text overflow is only checked against the `overflow` shorthand, so writing mode and cross-axis computed values do not need to be inferred. A block containing `all` is skipped entirely.
+For example, repeated display declarations may be intentional fallbacks, so this rule skips the display check:
 
-Missing, malformed, or unresolved controlling values do not trigger checks. Display checks ignore unknown or vendor-prefixed modes and `display: none` or `contents`. Target declarations containing CSS-wide keywords or unresolved substitutions are skipped. Invalid CSS is handled on a best-effort basis rather than validated by this rule.
+```css
+a {
+	display: block;
+	display: flex;
+	grid-template-columns: 1fr 1fr;
+}
+```
 
-Omitted wrapping is not assumed to be `nowrap`, even in a `flex-flow` shorthand. Item properties, gaps, and other alignment properties are not checked, since their behavior needs additional context. Custom properties, keyframes, and descriptor blocks are excluded. CSS Modules `:export` and `:import()` blocks contain literal values rather than styles and are also excluded.
+Invalid CSS is handled on a best-effort basis rather than validated by this rule. Use [`css/no-invalid-properties`](https://github.com/eslint/css/blob/main/docs/rules/no-invalid-properties.md) to check property names and value grammar. CSS Modules interop blocks contain literal values rather than styles.
 
 Final-keyframe easing is covered separately by [`no-ineffective-keyframe-declarations`](./no-ineffective-keyframe-declarations.md).
 
@@ -97,6 +180,9 @@ Final-keyframe easing is covered separately by [`no-ineffective-keyframe-declara
 
 - [Flex container properties and alignment](https://drafts.csswg.org/css-flexbox-1/)
 - [Grid container properties](https://drafts.csswg.org/css-grid-1/)
+- [Multi-column layout](https://drafts.csswg.org/css-multicol-1/#the-multi-column-model)
 - [Display notation](https://drafts.csswg.org/css-display-3/#the-display-properties)
 - [Positioning and insets](https://drafts.csswg.org/css-position-3/#insets)
+- [Floats and absolute positioning](https://drafts.csswg.org/css2/#floats)
 - [Text overflow](https://drafts.csswg.org/css-overflow-3/#text-overflow)
+- [Two-value text overflow](https://drafts.csswg.org/css-overflow-4/#text-overflow)

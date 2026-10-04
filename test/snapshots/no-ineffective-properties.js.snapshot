@@ -26,6 +26,34 @@ Message:
 
 `;
 
+exports[`invalid(100): a { overflow: visible; text-overflow: \\65 llipsis c\\6c ip; } 1`] = `
+
+  1 | a { overflow: visible; text-overflow: \\65 llipsis c\\6c ip; }
+
+`;
+
+exports[`invalid(100): a { overflow: visible; text-overflow: \\65 llipsis c\\6c ip; } 2`] = `
+
+Message:
+> 1 | a { overflow: visible; text-overflow: \\65 llipsis c\\6c ip; }
+    |                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`text-overflow: ellipsis clip\` has no effect with \`overflow: visible\`. Ellipsis requires clipped inline overflow.
+
+`;
+
+exports[`invalid(101): a { overflow: visible visible; text-overflow: clip /* marker */ ellipsis; writing-mode: vertical-rl; } 1`] = `
+
+  1 | a { overflow: visible visible; text-overflow: clip /* marker */ ellipsis; writing-mode: vertical-rl; }
+
+`;
+
+exports[`invalid(101): a { overflow: visible visible; text-overflow: clip /* marker */ ellipsis; writing-mode: vertical-rl; } 2`] = `
+
+Message:
+> 1 | a { overflow: visible visible; text-overflow: clip /* marker */ ellipsis; writing-mode: vertical-rl; }
+    |                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`text-overflow: clip ellipsis\` has no effect with \`overflow: visible\`. Ellipsis requires clipped inline overflow.
+
+`;
+
 exports[`invalid(11): a { display: flex; grid-auto-flow: column dense; } 1`] = `
 
   1 | a { display: flex; grid-auto-flow: column dense; }
@@ -1124,6 +1152,62 @@ Message:
 
 `;
 
+exports[`invalid(76): a { display: flex; columns: 12rem 2; } 1`] = `
+
+  1 | a { display: flex; columns: 12rem 2; }
+
+`;
+
+exports[`invalid(76): a { display: flex; columns: 12rem 2; } 2`] = `
+
+Message:
+> 1 | a { display: flex; columns: 12rem 2; }
+    |                    ^^^^^^^^^^^^^^^^ \`columns\` has no effect with \`display: flex\`. Multicol properties require a block container.
+
+`;
+
+exports[`invalid(77): a { display: grid; columns: 12rem 2; } 1`] = `
+
+  1 | a { display: grid; columns: 12rem 2; }
+
+`;
+
+exports[`invalid(77): a { display: grid; columns: 12rem 2; } 2`] = `
+
+Message:
+> 1 | a { display: grid; columns: 12rem 2; }
+    |                    ^^^^^^^^^^^^^^^^ \`columns\` has no effect with \`display: grid\`. Multicol properties require a block container.
+
+`;
+
+exports[`invalid(78): a { display: flex; column-count: 3; } 1`] = `
+
+  1 | a { display: flex; column-count: 3; }
+
+`;
+
+exports[`invalid(78): a { display: flex; column-count: 3; } 2`] = `
+
+Message:
+> 1 | a { display: flex; column-count: 3; }
+    |                    ^^^^^^^^^^^^^^^ \`column-count\` has no effect with \`display: flex\`. Multicol properties require a block container.
+
+`;
+
+exports[`invalid(79): a { display: grid; column-count: 3; } 1`] = `
+
+  1 | a { display: grid; column-count: 3; }
+
+`;
+
+exports[`invalid(79): a { display: grid; column-count: 3; } 2`] = `
+
+Message:
+> 1 | a { display: grid; column-count: 3; }
+    |                    ^^^^^^^^^^^^^^^ \`column-count\` has no effect with \`display: grid\`. Multicol properties require a block container.
+
+`;
+
 exports[`invalid(8): a { display: flex; grid-template-areas: \"header header\"; } 1`] = `
 
   1 | a { display: flex; grid-template-areas: "header header"; }
@@ -1138,6 +1222,154 @@ Message:
 
 `;
 
+exports[`invalid(80): a { display: flex; column-width: 12rem; } 1`] = `
+
+  1 | a { display: flex; column-width: 12rem; }
+
+`;
+
+exports[`invalid(80): a { display: flex; column-width: 12rem; } 2`] = `
+
+Message:
+> 1 | a { display: flex; column-width: 12rem; }
+    |                    ^^^^^^^^^^^^^^^^^^^ \`column-width\` has no effect with \`display: flex\`. Multicol properties require a block container.
+
+`;
+
+exports[`invalid(81): a { display: grid; column-width: 12rem; } 1`] = `
+
+  1 | a { display: grid; column-width: 12rem; }
+
+`;
+
+exports[`invalid(81): a { display: grid; column-width: 12rem; } 2`] = `
+
+Message:
+> 1 | a { display: grid; column-width: 12rem; }
+    |                    ^^^^^^^^^^^^^^^^^^^ \`column-width\` has no effect with \`display: grid\`. Multicol properties require a block container.
+
+`;
+
+exports[`invalid(82): a { display: inline-flex; column-count: 2; } 1`] = `
+
+  1 | a { display: inline-flex; column-count: 2; }
+
+`;
+
+exports[`invalid(82): a { display: inline-flex; column-count: 2; } 2`] = `
+
+Message:
+> 1 | a { display: inline-flex; column-count: 2; }
+    |                           ^^^^^^^^^^^^^^^ \`column-count\` has no effect with \`display: inline-flex\`. Multicol properties require a block container.
+
+`;
+
+exports[`invalid(83): a { display: inline grid; columns: 2; } 1`] = `
+
+  1 | a { display: inline grid; columns: 2; }
+
+`;
+
+exports[`invalid(83): a { display: inline grid; columns: 2; } 2`] = `
+
+Message:
+> 1 | a { display: inline grid; columns: 2; }
+    |                           ^^^^^^^^^^ \`columns\` has no effect with \`display: inline grid\`. Multicol properties require a block container.
+
+`;
+
+exports[`invalid(84): a { COLUMN-WIDTH: 12rem !important; DISPLAY: FLEX; } 1`] = `
+
+  1 | a { COLUMN-WIDTH: 12rem !important; DISPLAY: FLEX; }
+
+`;
+
+exports[`invalid(84): a { COLUMN-WIDTH: 12rem !important; DISPLAY: FLEX; } 2`] = `
+
+Message:
+> 1 | a { COLUMN-WIDTH: 12rem !important; DISPLAY: FLEX; }
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`column-width\` has no effect with \`display: flex\`. Multicol properties require a block container.
+
+`;
+
+exports[`invalid(85): a { display: \\67 rid; column-\\63 ount: 2; } 1`] = `
+
+  1 | a { display: \\67 rid; column-\\63 ount: 2; }
+
+`;
+
+exports[`invalid(85): a { display: \\67 rid; column-\\63 ount: 2; } 2`] = `
+
+Message:
+> 1 | a { display: \\67 rid; column-\\63 ount: 2; }
+    |                       ^^^^^^^^^^^^^^^^^^ \`column-count\` has no effect with \`display: grid\`. Multicol properties require a block container.
+
+`;
+
+exports[`invalid(86): a { display: flex; @supports (display: grid) { display: grid; columns: 2; } } 1`] = `
+
+  1 | a { display: flex; @supports (display: grid) { display: grid; columns: 2; } }
+
+`;
+
+exports[`invalid(86): a { display: flex; @supports (display: grid) { display: grid; columns: 2; } } 2`] = `
+
+Message:
+> 1 | a { display: flex; @supports (display: grid) { display: grid; columns: 2; } }
+    |                                                               ^^^^^^^^^^ \`columns\` has no effect with \`display: grid\`. Multicol properties require a block container.
+
+`;
+
+exports[`invalid(87): a { display: flex; position: absolute; float: left; column-width: 12rem; } 1`] = `
+
+  1 | a { display: flex; position: absolute; float: left; column-width: 12rem; }
+
+`;
+
+exports[`invalid(87): a { display: flex; position: absolute; float: left; column-width: 12rem; } 2`] = `
+
+Message:
+> 1 | a { display: flex; position: absolute; float: left; column-width: 12rem; }
+    |                                        ^^^^^^^^^^^ \`float: left\` has no effect with \`position: absolute\`. Absolutely positioned elements cannot float.
+
+`;
+
+exports[`invalid(87): a { display: flex; position: absolute; float: left; column-width: 12rem; } 3`] = `
+
+Message:
+> 1 | a { display: flex; position: absolute; float: left; column-width: 12rem; }
+    |                                                     ^^^^^^^^^^^^^^^^^^^ \`column-width\` has no effect with \`display: flex\`. Multicol properties require a block container.
+
+`;
+
+exports[`invalid(88): a { position: absolute; float: left; } 1`] = `
+
+  1 | a { position: absolute; float: left; }
+
+`;
+
+exports[`invalid(88): a { position: absolute; float: left; } 2`] = `
+
+Message:
+> 1 | a { position: absolute; float: left; }
+    |                         ^^^^^^^^^^^ \`float: left\` has no effect with \`position: absolute\`. Absolutely positioned elements cannot float.
+
+`;
+
+exports[`invalid(89): a { position: absolute; float: right; } 1`] = `
+
+  1 | a { position: absolute; float: right; }
+
+`;
+
+exports[`invalid(89): a { position: absolute; float: right; } 2`] = `
+
+Message:
+> 1 | a { position: absolute; float: right; }
+    |                         ^^^^^^^^^^^^ \`float: right\` has no effect with \`position: absolute\`. Absolutely positioned elements cannot float.
+
+`;
+
 exports[`invalid(9): a { display: flex; grid-auto-columns: 100px; } 1`] = `
 
   1 | a { display: flex; grid-auto-columns: 100px; }
@@ -1149,5 +1381,145 @@ exports[`invalid(9): a { display: flex; grid-auto-columns: 100px; } 2`] = `
 Message:
 > 1 | a { display: flex; grid-auto-columns: 100px; }
     |                    ^^^^^^^^^^^^^^^^^^^^^^^^ \`grid-auto-columns\` has no effect with \`display: flex\`. It requires a grid container.
+
+`;
+
+exports[`invalid(90): a { position: absolute; float: inline-start; } 1`] = `
+
+  1 | a { position: absolute; float: inline-start; }
+
+`;
+
+exports[`invalid(90): a { position: absolute; float: inline-start; } 2`] = `
+
+Message:
+> 1 | a { position: absolute; float: inline-start; }
+    |                         ^^^^^^^^^^^^^^^^^^^ \`float: inline-start\` has no effect with \`position: absolute\`. Absolutely positioned elements cannot float.
+
+`;
+
+exports[`invalid(91): a { position: absolute; float: inline-end; } 1`] = `
+
+  1 | a { position: absolute; float: inline-end; }
+
+`;
+
+exports[`invalid(91): a { position: absolute; float: inline-end; } 2`] = `
+
+Message:
+> 1 | a { position: absolute; float: inline-end; }
+    |                         ^^^^^^^^^^^^^^^^^ \`float: inline-end\` has no effect with \`position: absolute\`. Absolutely positioned elements cannot float.
+
+`;
+
+exports[`invalid(92): a { float: right; position: fixed; } 1`] = `
+
+  1 | a { float: right; position: fixed; }
+
+`;
+
+exports[`invalid(92): a { float: right; position: fixed; } 2`] = `
+
+Message:
+> 1 | a { float: right; position: fixed; }
+    |     ^^^^^^^^^^^^ \`float: right\` has no effect with \`position: fixed\`. Absolutely positioned elements cannot float.
+
+`;
+
+exports[`invalid(93): a { POSITION: FIXED; FLOAT: INLINE-END !important; } 1`] = `
+
+  1 | a { POSITION: FIXED; FLOAT: INLINE-END !important; }
+
+`;
+
+exports[`invalid(93): a { POSITION: FIXED; FLOAT: INLINE-END !important; } 2`] = `
+
+Message:
+> 1 | a { POSITION: FIXED; FLOAT: INLINE-END !important; }
+    |                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`float: inline-end\` has no effect with \`position: fixed\`. Absolutely positioned elements cannot float.
+
+`;
+
+exports[`invalid(94): a { position: a\\62 solute; \\66 loat: \\6c eft; } 1`] = `
+
+  1 | a { position: a\\62 solute; \\66 loat: \\6c eft; }
+
+`;
+
+exports[`invalid(94): a { position: a\\62 solute; \\66 loat: \\6c eft; } 2`] = `
+
+Message:
+> 1 | a { position: a\\62 solute; \\66 loat: \\6c eft; }
+    |                            ^^^^^^^^^^^^^^^^^ \`float: left\` has no effect with \`position: absolute\`. Absolutely positioned elements cannot float.
+
+`;
+
+exports[`invalid(95): a { @media (width > 1px) { position: fixed; float: /* side */ left; } } 1`] = `
+
+  1 | a { @media (width > 1px) { position: fixed; float: /* side */ left; } }
+
+`;
+
+exports[`invalid(95): a { @media (width > 1px) { position: fixed; float: /* side */ left; } } 2`] = `
+
+Message:
+> 1 | a { @media (width > 1px) { position: fixed; float: /* side */ left; } }
+    |                                             ^^^^^^^^^^^^^^^^^^^^^^ \`float: left\` has no effect with \`position: fixed\`. Absolutely positioned elements cannot float.
+
+`;
+
+exports[`invalid(96): a { overflow: visible; text-overflow: clip ellipsis; } 1`] = `
+
+  1 | a { overflow: visible; text-overflow: clip ellipsis; }
+
+`;
+
+exports[`invalid(96): a { overflow: visible; text-overflow: clip ellipsis; } 2`] = `
+
+Message:
+> 1 | a { overflow: visible; text-overflow: clip ellipsis; }
+    |                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`text-overflow: clip ellipsis\` has no effect with \`overflow: visible\`. Ellipsis requires clipped inline overflow.
+
+`;
+
+exports[`invalid(97): a { overflow: visible; text-overflow: ellipsis clip; } 1`] = `
+
+  1 | a { overflow: visible; text-overflow: ellipsis clip; }
+
+`;
+
+exports[`invalid(97): a { overflow: visible; text-overflow: ellipsis clip; } 2`] = `
+
+Message:
+> 1 | a { overflow: visible; text-overflow: ellipsis clip; }
+    |                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`text-overflow: ellipsis clip\` has no effect with \`overflow: visible\`. Ellipsis requires clipped inline overflow.
+
+`;
+
+exports[`invalid(98): a { overflow: visible; text-overflow: ellipsis ellipsis; } 1`] = `
+
+  1 | a { overflow: visible; text-overflow: ellipsis ellipsis; }
+
+`;
+
+exports[`invalid(98): a { overflow: visible; text-overflow: ellipsis ellipsis; } 2`] = `
+
+Message:
+> 1 | a { overflow: visible; text-overflow: ellipsis ellipsis; }
+    |                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`text-overflow: ellipsis ellipsis\` has no effect with \`overflow: visible\`. Ellipsis requires clipped inline overflow.
+
+`;
+
+exports[`invalid(99): a { TEXT-OVERFLOW: CLIP ELLIPSIS !important; OVERFLOW: VISIBLE; } 1`] = `
+
+  1 | a { TEXT-OVERFLOW: CLIP ELLIPSIS !important; OVERFLOW: VISIBLE; }
+
+`;
+
+exports[`invalid(99): a { TEXT-OVERFLOW: CLIP ELLIPSIS !important; OVERFLOW: VISIBLE; } 2`] = `
+
+Message:
+> 1 | a { TEXT-OVERFLOW: CLIP ELLIPSIS !important; OVERFLOW: VISIBLE; }
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`text-overflow: clip ellipsis\` has no effect with \`overflow: visible\`. Ellipsis requires clipped inline overflow.
 
 `;
