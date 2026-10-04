@@ -60,6 +60,7 @@ test.snapshot({
 		'a { overflow: hidden visible !important; overflow: var(--overflow) !important; }',
 		'a { overflow-block: hidden; overflow-inline: visible; all: unset; }',
 		'a { all: unset !important; overflow-block: hidden !important; overflow-inline: visible; }',
+		'a { overflow: hidden visible; overflow: --overflow(); }',
 	],
 	invalid: [
 		'a { overflow-x: hidden; overflow-y: visible; }',
