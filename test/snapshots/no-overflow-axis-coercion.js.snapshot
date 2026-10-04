@@ -544,6 +544,62 @@ Message:
 
 `;
 
+exports[`invalid(44): a { overflow: hidden visible !\\69 mportant; overflow: auto; } 1`] = `
+
+  1 | a { overflow: hidden visible !\\69 mportant; overflow: auto; }
+
+`;
+
+exports[`invalid(44): a { overflow: hidden visible !\\69 mportant; overflow: auto; } 2`] = `
+
+Message:
+> 1 | a { overflow: hidden visible !\\69 mportant; overflow: auto; }
+    |                      ^^^^^^^ \`overflow-y: visible\` computes to \`auto\` because \`overflow-x\` is \`hidden\`. Result: \`overflow-x: hidden\` and \`overflow-y: auto\`.
+
+`;
+
+exports[`invalid(45): a { overflow: hidden visible !IMPORTANT; overflow: auto; } 1`] = `
+
+  1 | a { overflow: hidden visible !IMPORTANT; overflow: auto; }
+
+`;
+
+exports[`invalid(45): a { overflow: hidden visible !IMPORTANT; overflow: auto; } 2`] = `
+
+Message:
+> 1 | a { overflow: hidden visible !IMPORTANT; overflow: auto; }
+    |                      ^^^^^^^ \`overflow-y: visible\` computes to \`auto\` because \`overflow-x\` is \`hidden\`. Result: \`overflow-x: hidden\` and \`overflow-y: auto\`.
+
+`;
+
+exports[`invalid(46): a { all: unset !important; overflow-block: hidden !important; overflow-inline: visible !important; } 1`] = `
+
+  1 | a { all: unset !important; overflow-block: hidden !important; overflow-inline: visible !important; }
+
+`;
+
+exports[`invalid(46): a { all: unset !important; overflow-block: hidden !important; overflow-inline: visible !important; } 2`] = `
+
+Message:
+> 1 | a { all: unset !important; overflow-block: hidden !important; overflow-inline: visible !important; }
+    |                                                                                ^^^^^^^ \`overflow-inline: visible\` computes to \`auto\` because \`overflow-block\` is \`hidden\`. Result: \`overflow-block: hidden\` and \`overflow-inline: auto\`.
+
+`;
+
+exports[`invalid(47): a { overflow: var(--overflow); overflow-x: hidden; overflow-y: visible; } 1`] = `
+
+  1 | a { overflow: var(--overflow); overflow-x: hidden; overflow-y: visible; }
+
+`;
+
+exports[`invalid(47): a { overflow: var(--overflow); overflow-x: hidden; overflow-y: visible; } 2`] = `
+
+Message:
+> 1 | a { overflow: var(--overflow); overflow-x: hidden; overflow-y: visible; }
+    |                                                                ^^^^^^^ \`overflow-y: visible\` computes to \`auto\` because \`overflow-x\` is \`hidden\`. Result: \`overflow-x: hidden\` and \`overflow-y: auto\`.
+
+`;
+
 exports[`invalid(5): a { overflow: visible hidden; } 1`] = `
 
   1 | a { overflow: visible hidden; }

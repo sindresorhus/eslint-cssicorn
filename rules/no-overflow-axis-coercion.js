@@ -3,7 +3,6 @@ import {
 	hasSubstitutionOrRandomFunction,
 	isCssModulesInteropDeclaration,
 	isCssWideKeyword,
-	isKeyframesAtRule,
 	normalizeCssIdentifier,
 } from './utils/index.js';
 
@@ -64,7 +63,6 @@ const getOverflowValues = (declaration, property) => {
 const isStyleBlock = (block, sourceCode) => {
 	const ancestors = sourceCode.getAncestors(block);
 	return ancestors.some(node => node.type === 'Rule')
-		&& ancestors.every(node => !isKeyframesAtRule(node))
 		&& ancestors.every(node => node.type !== 'Atrule' || groupAtRules.has(normalizeCssIdentifier(node.name)));
 };
 

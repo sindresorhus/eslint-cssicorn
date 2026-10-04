@@ -55,6 +55,11 @@ test.snapshot({
 			code: 'a { overflow: .; overflow-x: hidden; overflow-y: .; }',
 			languageOptions: {tolerant: true},
 		},
+		String.raw`a { overflow: hidden !\69 mportant; overflow-y: visible; }`,
+		String.raw`a { overflow: hidden visible; overflow-y: v\61 r(--overflow); }`,
+		'a { overflow: hidden visible !important; overflow: var(--overflow) !important; }',
+		'a { overflow-block: hidden; overflow-inline: visible; all: unset; }',
+		'a { all: unset !important; overflow-block: hidden !important; overflow-inline: visible; }',
 	],
 	invalid: [
 		'a { overflow-x: hidden; overflow-y: visible; }',
@@ -100,6 +105,10 @@ test.snapshot({
 		'a { @starting-style { overflow: hidden visible; } }',
 		'a { overflow: hidden visible; & b { overflow: visible auto; } }',
 		'a {\r\n  overflow-x: hidden;\r\n  overflow-y: visible;\r\n}',
+		String.raw`a { overflow: hidden visible !\69 mportant; overflow: auto; }`,
+		'a { overflow: hidden visible !IMPORTANT; overflow: auto; }',
+		'a { all: unset !important; overflow-block: hidden !important; overflow-inline: visible !important; }',
+		'a { overflow: var(--overflow); overflow-x: hidden; overflow-y: visible; }',
 	],
 });
 
