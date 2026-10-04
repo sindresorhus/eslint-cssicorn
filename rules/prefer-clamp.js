@@ -36,15 +36,29 @@ const isNone = argument => argument.nodes.length === 1
 	&& normalizeCssIdentifier(argument.nodes[0].name) === 'none';
 
 /**
+Get a single node, looking through calc() and parentheses without evaluating arithmetic.
+*/
+function getUnwrappedNode(nodes) {
+	while (nodes.length === 1) {
+		const [node] = nodes;
+		if (node.type !== 'Parentheses' && !(node.type === 'Function' && normalizeCssIdentifier(node.name) === 'calc')) {
+			return node;
+		}
+
+		nodes = [...node.children];
+	}
+}
+
+/**
 Check literal bounds without resolving units or percentages. Percentages can have a negative reference size, which reverses their order.
 */
 function areOrderedBounds(minimum, maximum) {
-	if (minimum.nodes.length !== 1 || maximum.nodes.length !== 1) {
+	const minimumNode = getUnwrappedNode(minimum.nodes);
+	const maximumNode = getUnwrappedNode(maximum.nodes);
+	if (!minimumNode || !maximumNode) {
 		return false;
 	}
 
-	const [minimumNode] = minimum.nodes;
-	const [maximumNode] = maximum.nodes;
 	if (
 		minimumNode.type !== maximumNode.type
 		|| (minimumNode.type !== 'Number' && minimumNode.type !== 'Dimension')

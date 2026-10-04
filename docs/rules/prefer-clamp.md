@@ -25,7 +25,7 @@ The outer arguments may appear in either order. Inner arguments retain their sou
 
 ## Reverse nesting
 
-`min(MAX, max(MIN, VALUE))` is converted only when the bounds are finite literals with matching units, or both unitless, and `MIN ≤ MAX`. The first qualifying inner argument becomes the minimum.
+`min(MAX, max(MIN, VALUE))` is converted only when the bounds are finite literals with matching units, or both unitless, and `MIN ≤ MAX`. Literals may be wrapped in `calc()` or parentheses. The first qualifying inner argument becomes the minimum.
 
 ```css
 /* ❌ */
@@ -35,7 +35,7 @@ a { width: min(100px, max(10px, 5vw)); }
 a { width: clamp(10px, 5vw, 100px); }
 ```
 
-Conflicting, calculated, mixed-unit, and percentage bounds are ignored. Unlike `clamp()`, reverse nesting lets the maximum win when bounds conflict. Percentages can resolve against a negative reference size.
+Conflicting, arithmetic, mixed-unit, and percentage bounds are ignored. Unlike `clamp()`, reverse nesting lets the maximum win when bounds conflict. Percentages can resolve against a negative reference size.
 
 ## Limitations
 
