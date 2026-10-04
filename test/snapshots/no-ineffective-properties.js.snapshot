@@ -194,6 +194,132 @@ Message:
 
 `;
 
+exports[`invalid(111): a { display: table; border-collapse: collapse; border-spacing: 8px; } 1`] = `
+
+  1 | a { display: table; border-collapse: collapse; border-spacing: 8px; }
+
+`;
+
+exports[`invalid(111): a { display: table; border-collapse: collapse; border-spacing: 8px; } 2`] = `
+
+Message:
+> 1 | a { display: table; border-collapse: collapse; border-spacing: 8px; }
+    |                                                ^^^^^^^^^^^^^^^^^^^ \`border-spacing\` has no effect on this table with \`border-collapse: collapse\`. Use \`border-collapse: separate\` for spacing between cells.
+
+`;
+
+exports[`invalid(112): a { display: inline-table; border-collapse: collapse; border-spacing: 8px; } 1`] = `
+
+  1 | a { display: inline-table; border-collapse: collapse; border-spacing: 8px; }
+
+`;
+
+exports[`invalid(112): a { display: inline-table; border-collapse: collapse; border-spacing: 8px; } 2`] = `
+
+Message:
+> 1 | a { display: inline-table; border-collapse: collapse; border-spacing: 8px; }
+    |                                                       ^^^^^^^^^^^^^^^^^^^ \`border-spacing\` has no effect on this table with \`border-collapse: collapse\`. Use \`border-collapse: separate\` for spacing between cells.
+
+`;
+
+exports[`invalid(113): a { display: block table; border-collapse: collapse; border-spacing: 8px; } 1`] = `
+
+  1 | a { display: block table; border-collapse: collapse; border-spacing: 8px; }
+
+`;
+
+exports[`invalid(113): a { display: block table; border-collapse: collapse; border-spacing: 8px; } 2`] = `
+
+Message:
+> 1 | a { display: block table; border-collapse: collapse; border-spacing: 8px; }
+    |                                                      ^^^^^^^^^^^^^^^^^^^ \`border-spacing\` has no effect on this table with \`border-collapse: collapse\`. Use \`border-collapse: separate\` for spacing between cells.
+
+`;
+
+exports[`invalid(114): a { display: inline table; border-collapse: collapse; border-spacing: 8px; } 1`] = `
+
+  1 | a { display: inline table; border-collapse: collapse; border-spacing: 8px; }
+
+`;
+
+exports[`invalid(114): a { display: inline table; border-collapse: collapse; border-spacing: 8px; } 2`] = `
+
+Message:
+> 1 | a { display: inline table; border-collapse: collapse; border-spacing: 8px; }
+    |                                                       ^^^^^^^^^^^^^^^^^^^ \`border-spacing\` has no effect on this table with \`border-collapse: collapse\`. Use \`border-collapse: separate\` for spacing between cells.
+
+`;
+
+exports[`invalid(115): a { display: table block; border-collapse: collapse; border-spacing: 8px; } 1`] = `
+
+  1 | a { display: table block; border-collapse: collapse; border-spacing: 8px; }
+
+`;
+
+exports[`invalid(115): a { display: table block; border-collapse: collapse; border-spacing: 8px; } 2`] = `
+
+Message:
+> 1 | a { display: table block; border-collapse: collapse; border-spacing: 8px; }
+    |                                                      ^^^^^^^^^^^^^^^^^^^ \`border-spacing\` has no effect on this table with \`border-collapse: collapse\`. Use \`border-collapse: separate\` for spacing between cells.
+
+`;
+
+exports[`invalid(116): a { display: table inline; border-collapse: collapse; border-spacing: 8px; } 1`] = `
+
+  1 | a { display: table inline; border-collapse: collapse; border-spacing: 8px; }
+
+`;
+
+exports[`invalid(116): a { display: table inline; border-collapse: collapse; border-spacing: 8px; } 2`] = `
+
+Message:
+> 1 | a { display: table inline; border-collapse: collapse; border-spacing: 8px; }
+    |                                                       ^^^^^^^^^^^^^^^^^^^ \`border-spacing\` has no effect on this table with \`border-collapse: collapse\`. Use \`border-collapse: separate\` for spacing between cells.
+
+`;
+
+exports[`invalid(117): a { border-spacing: 8px 12px !important; border-collapse: collapse; display: table; } 1`] = `
+
+  1 | a { border-spacing: 8px 12px !important; border-collapse: collapse; display: table; }
+
+`;
+
+exports[`invalid(117): a { border-spacing: 8px 12px !important; border-collapse: collapse; display: table; } 2`] = `
+
+Message:
+> 1 | a { border-spacing: 8px 12px !important; border-collapse: collapse; display: table; }
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`border-spacing\` has no effect on this table with \`border-collapse: collapse\`. Use \`border-collapse: separate\` for spacing between cells.
+
+`;
+
+exports[`invalid(118): a { DISPLAY: INLINE-TABLE; BORDER-COLLAPSE: COLLAPSE; BORDER-SPACING: 8px; } 1`] = `
+
+  1 | a { DISPLAY: INLINE-TABLE; BORDER-COLLAPSE: COLLAPSE; BORDER-SPACING: 8px; }
+
+`;
+
+exports[`invalid(118): a { DISPLAY: INLINE-TABLE; BORDER-COLLAPSE: COLLAPSE; BORDER-SPACING: 8px; } 2`] = `
+
+Message:
+> 1 | a { DISPLAY: INLINE-TABLE; BORDER-COLLAPSE: COLLAPSE; BORDER-SPACING: 8px; }
+    |                                                       ^^^^^^^^^^^^^^^^^^^ \`border-spacing\` has no effect on this table with \`border-collapse: collapse\`. Use \`border-collapse: separate\` for spacing between cells.
+
+`;
+
+exports[`invalid(119): a { display: \\74 able; border-\\63 ollapse: c\\6f llapse; border-spa\\63 ing: 8px; } 1`] = `
+
+  1 | a { display: \\74 able; border-\\63 ollapse: c\\6f llapse; border-spa\\63 ing: 8px; }
+
+`;
+
+exports[`invalid(119): a { display: \\74 able; border-\\63 ollapse: c\\6f llapse; border-spa\\63 ing: 8px; } 2`] = `
+
+Message:
+> 1 | a { display: \\74 able; border-\\63 ollapse: c\\6f llapse; border-spa\\63 ing: 8px; }
+    |                                                         ^^^^^^^^^^^^^^^^^^^^^^ \`border-spacing\` has no effect on this table with \`border-collapse: collapse\`. Use \`border-collapse: separate\` for spacing between cells.
+
+`;
+
 exports[`invalid(12): a { position: static; top: 20px; } 1`] = `
 
   1 | a { position: static; top: 20px; }
@@ -205,6 +331,34 @@ exports[`invalid(12): a { position: static; top: 20px; } 2`] = `
 Message:
 > 1 | a { position: static; top: 20px; }
     |                       ^^^^^^^^^ \`top\` has no effect with \`position: static\`. Insets require a positioned element.
+
+`;
+
+exports[`invalid(120): a { display: table; border-collapse: /* borders */ collapse; border-spacing: /* cells */ calc(1rem + 2px); } 1`] = `
+
+  1 | a { display: table; border-collapse: /* borders */ collapse; border-spacing: /* cells */ calc(1rem + 2px); }
+
+`;
+
+exports[`invalid(120): a { display: table; border-collapse: /* borders */ collapse; border-spacing: /* cells */ calc(1rem + 2px); } 2`] = `
+
+Message:
+> 1 | a { display: table; border-collapse: /* borders */ collapse; border-spacing: /* cells */ calc(1rem + 2px); }
+    |                                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`border-spacing\` has no effect on this table with \`border-collapse: collapse\`. Use \`border-collapse: separate\` for spacing between cells.
+
+`;
+
+exports[`invalid(121): a { @supports (display: table) { display: table; border-collapse: collapse; border-spacing: 8px; } } 1`] = `
+
+  1 | a { @supports (display: table) { display: table; border-collapse: collapse; border-spacing: 8px; } }
+
+`;
+
+exports[`invalid(121): a { @supports (display: table) { display: table; border-collapse: collapse; border-spacing: 8px; } } 2`] = `
+
+Message:
+> 1 | a { @supports (display: table) { display: table; border-collapse: collapse; border-spacing: 8px; } }
+    |                                                                             ^^^^^^^^^^^^^^^^^^^ \`border-spacing\` has no effect on this table with \`border-collapse: collapse\`. Use \`border-collapse: separate\` for spacing between cells.
 
 `;
 

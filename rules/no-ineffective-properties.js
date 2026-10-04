@@ -21,6 +21,7 @@ const MESSAGE_ID_OVERFLOW = 'no-ineffective-properties/overflow';
 const MESSAGE_ID_MULTICOL = 'no-ineffective-properties/multicol';
 const MESSAGE_ID_FLOAT = 'no-ineffective-properties/float';
 const MESSAGE_ID_TEXT_OVERFLOW_DISPLAY = 'no-ineffective-properties/text-overflow-display';
+const MESSAGE_ID_TABLE_SPACING = 'no-ineffective-properties/table-spacing';
 const messages = {
 	[MESSAGE_ID_DISPLAY]: '`{{property}}` has no effect with `display: {{display}}`. It requires a {{layout}} container.',
 	[MESSAGE_ID_NOWRAP]: '`align-content` has no effect on a flex container with `nowrap`. Consider `align-items` or enabling wrapping.',
@@ -29,6 +30,7 @@ const messages = {
 	[MESSAGE_ID_MULTICOL]: '`{{property}}` has no effect with `display: {{display}}`. Multicol properties require a block container.',
 	[MESSAGE_ID_FLOAT]: '`float: {{value}}` has no effect with `position: {{position}}`. Absolutely positioned elements cannot float.',
 	[MESSAGE_ID_TEXT_OVERFLOW_DISPLAY]: '`text-overflow: {{value}}` has no effect with `display: {{display}}`. Apply it to a block container holding the text.',
+	[MESSAGE_ID_TABLE_SPACING]: '`border-spacing` has no effect on this table with `border-collapse: collapse`. Use `border-collapse: separate` for spacing between cells.',
 };
 
 const flexProperties = new Set(['flex-direction', 'flex-wrap', 'flex-flow']);
@@ -36,7 +38,7 @@ const gridProperties = new Set(['grid', 'grid-template', 'grid-template-columns'
 const insetProperties = new Set(['top', 'right', 'bottom', 'left', 'inset', 'inset-block', 'inset-inline', 'inset-block-start', 'inset-block-end', 'inset-inline-start', 'inset-inline-end']);
 const multicolProperties = new Set(['columns', 'column-count', 'column-width']);
 const floatValues = new Set(['left', 'right', 'inline-start', 'inline-end']);
-const targetProperties = new Set([...flexProperties, ...gridProperties, ...insetProperties, ...multicolProperties, 'align-content', 'text-overflow', 'float']);
+const targetProperties = new Set([...flexProperties, ...gridProperties, ...insetProperties, ...multicolProperties, 'align-content', 'text-overflow', 'float', 'border-spacing']);
 const overflowProperties = ['overflow', 'overflow-x', 'overflow-y', 'overflow-inline', 'overflow-block'];
 
 /**
@@ -113,13 +115,13 @@ const getEllipsisValue = value => {
 };
 
 /**
-Get the problem for a container property given the explicit display in its block.
+Get the problem for a container property given the explicit layout controls in its block.
 
 @param {DeclarationPlain} node
 @param {string} property
-@param {{display: string | undefined, hasVisibleDisplay: boolean, isFlex: boolean, isGrid: boolean}} controls
+@param {{display: string | undefined, hasVisibleDisplay: boolean, isFlex: boolean, isGrid: boolean, hasCollapsedTable: boolean}} controls
 */
-const getDisplayProblem = (node, property, {display, hasVisibleDisplay, isFlex, isGrid}) => {
+const getContainerProblem = (node, property, {display, hasVisibleDisplay, isFlex, isGrid, hasCollapsedTable}) => {
 	if (hasVisibleDisplay && ((flexProperties.has(property) && !isFlex) || (gridProperties.has(property) && !isGrid))) {
 		const layout = flexProperties.has(property) ? 'flex' : 'grid';
 		return {node, messageId: MESSAGE_ID_DISPLAY, data: {property, display, layout}};
@@ -128,6 +130,10 @@ const getDisplayProblem = (node, property, {display, hasVisibleDisplay, isFlex, 
 	if (multicolProperties.has(property) && (isFlex || isGrid)) {
 		return {node, messageId: MESSAGE_ID_MULTICOL, data: {property, display}};
 	}
+
+	if (property === 'border-spacing' && hasCollapsedTable) {
+		return {node, messageId: MESSAGE_ID_TABLE_SPACING};
+	}
 };
 
 /**
@@ -135,7 +141,7 @@ Get the problem for a declaration given the explicit layout controls in its bloc
 
 @param {DeclarationPlain} node
 @param {string} property
-@param {{display: string | undefined, hasVisibleDisplay: boolean, isFlex: boolean, isGrid: boolean, hasExplicitNowrap: boolean, position: string | undefined, hasVisibleOverflow: boolean}} controls
+@param {{display: string | undefined, hasVisibleDisplay: boolean, isFlex: boolean, isGrid: boolean, hasCollapsedTable: boolean, hasExplicitNowrap: boolean, position: string | undefined, hasVisibleOverflow: boolean}} controls
 */
 const getDeclarationProblem = (node, property, controls) => {
 	const identifier = getSingleValueIdentifier(node);
@@ -144,9 +150,9 @@ const getDeclarationProblem = (node, property, controls) => {
 		return;
 	}
 
-	const displayProblem = getDisplayProblem(node, property, controls);
-	if (displayProblem) {
-		return displayProblem;
+	const containerProblem = getContainerProblem(node, property, controls);
+	if (containerProblem) {
+		return containerProblem;
 	}
 
 	const {display, isFlex, isGrid, hasExplicitNowrap, position, hasVisibleOverflow} = controls;
@@ -177,6 +183,31 @@ const getDeclarationProblem = (node, property, controls) => {
 };
 
 /**
+Get the explicit layout controls for a declaration block.
+
+@param {Map<string, {node: DeclarationPlain, property: string}[]>} declarationsByProperty
+@param {CSSSourceCode} sourceCode
+*/
+const getLayoutControls = (declarationsByProperty, sourceCode) => {
+	const display = getControllingValue(declarationsByProperty, ['display'], sourceCode);
+	const hasVisibleDisplay = display !== undefined && display !== 'none' && display !== 'contents';
+	const isFlex = hasVisibleDisplay && (display === 'inline-flex' || display.split(' ').includes('flex'));
+	const isGrid = hasVisibleDisplay && (display === 'inline-grid' || display.split(' ').includes('grid'));
+	const wrapping = isFlex ? getControllingValue(declarationsByProperty, ['flex-wrap', 'flex-flow'], sourceCode) : undefined;
+	const hasExplicitNowrap = wrapping?.split(' ').includes('nowrap') === true;
+	const position = getControllingValue(declarationsByProperty, ['position'], sourceCode);
+	const overflow = getControllingValue(declarationsByProperty, overflowProperties, sourceCode);
+	// Only the shorthand establishes both axes without needing writing-mode or computed-value inference.
+	const hasVisibleOverflow = declarationsByProperty.has('overflow') && (overflow === 'visible' || overflow === 'visible visible');
+	const hasCollapsedTable = (display === 'inline-table' || display?.split(' ').includes('table') === true)
+		&& getControllingValue(declarationsByProperty, ['border-collapse'], sourceCode) === 'collapse';
+
+	return {
+		display, hasVisibleDisplay, isFlex, isGrid, hasCollapsedTable, hasExplicitNowrap, position, hasVisibleOverflow,
+	};
+};
+
+/**
 @param {CssicornContext} context
 */
 const create = context => {
@@ -194,20 +225,7 @@ const create = context => {
 		}
 
 		const declarationsByProperty = Map.groupBy(declarations, ({property}) => property);
-		const display = getControllingValue(declarationsByProperty, ['display'], sourceCode);
-		const hasVisibleDisplay = display !== undefined && display !== 'none' && display !== 'contents';
-		const isFlex = hasVisibleDisplay && (display === 'inline-flex' || display.split(' ').includes('flex'));
-		const isGrid = hasVisibleDisplay && (display === 'inline-grid' || display.split(' ').includes('grid'));
-		const wrapping = isFlex ? getControllingValue(declarationsByProperty, ['flex-wrap', 'flex-flow'], sourceCode) : undefined;
-		const hasExplicitNowrap = wrapping?.split(' ').includes('nowrap') === true;
-		const position = getControllingValue(declarationsByProperty, ['position'], sourceCode);
-		const overflow = getControllingValue(declarationsByProperty, overflowProperties, sourceCode);
-		// Only the shorthand establishes both axes without needing writing-mode or computed-value inference.
-		const hasVisibleOverflow = declarationsByProperty.has('overflow') && (overflow === 'visible' || overflow === 'visible visible');
-
-		const controls = {
-			display, hasVisibleDisplay, isFlex, isGrid, hasExplicitNowrap, position, hasVisibleOverflow,
-		};
+		const controls = getLayoutControls(declarationsByProperty, sourceCode);
 
 		for (const {node, property} of declarations) {
 			if (!targetProperties.has(property) || node.value.type !== 'Value') {

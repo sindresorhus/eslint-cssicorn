@@ -165,6 +165,22 @@ a {
 }
 ```
 
+```css
+/* ❌ */
+a {
+	display: table;
+	border-collapse: collapse;
+	border-spacing: 8px;
+}
+
+/* ✅ */
+a {
+	display: table;
+	border-collapse: separate;
+	border-spacing: 8px;
+}
+```
+
 ## Checked properties
 
 - Flex containers: `flex-direction`, `flex-wrap`, and `flex-flow` require a flex display mode.
@@ -174,12 +190,13 @@ a {
 - Insets: `top`, `right`, `bottom`, `left`, `inset`, `inset-block`, `inset-inline`, and their logical longhands have no effect with explicit `position: static`.
 - Floats: `float: left`, `right`, `inline-start`, or `inline-end` has no effect with explicit `position: absolute` or `fixed`. `float: none` is allowed.
 - Text overflow: `text-overflow: ellipsis`, `clip ellipsis`, `ellipsis clip`, or `ellipsis ellipsis` has no effect with an element's own explicit flex or grid display mode, or with explicit `overflow: visible` or `overflow: visible visible`. Ellipsis needs a block container and clipped inline overflow; this rule does not require `white-space: nowrap`, a width, or a height. Strings, `fade`, and `fade()` are not checked.
+- Table spacing: `border-spacing` has no effect on a table with explicit table display and `border-collapse: collapse`. Use `border-collapse: separate` for spacing between cells. Both legacy and modern display notation are supported, such as `inline-table` and `inline table`. `border-spacing` is inherited and can still affect a descendant table with separate borders; disable the rule when intentionally supplying inherited spacing. Rounded borders are not checked because browsers can still apply them to backgrounds or clipping in collapsed mode.
 
 ## Scope
 
 - Supported: Style declaration blocks, including nested style rules and conditional blocks, CSS escapes, ASCII casing, `!important`, and legacy and modern display notation, such as `inline-flex` and `inline flex`.
 - Skipped controls: Missing, malformed, unknown, vendor-prefixed, CSS-wide, or unresolved values. Display checks also ignore `none` and `contents`.
-- Skipped ambiguities: Duplicate `display` or `position` declarations, multiple wrapping declarations including `flex-flow`/`flex-wrap` combinations, and multiple overflow declarations including physical and logical longhands. Ambiguity skips only the check that depends on that controller.
+- Skipped ambiguities: Duplicate `display`, `position`, or `border-collapse` declarations, multiple wrapping declarations including `flex-flow`/`flex-wrap` combinations, and multiple overflow declarations including physical and logical longhands. Ambiguity skips only the check that depends on that controller.
 - Skipped declarations: Target values containing CSS-wide keywords or unresolved substitutions, custom properties, item properties, gaps, and other alignment properties that need additional context.
 - Skipped blocks: Blocks containing `all`, plus keyframe, descriptor, and CSS Modules `:export`/`:import()` blocks.
 - Local context: Only direct declarations in the same block are compared. Overflow checks use only the `overflow` shorthand, without inferring writing mode or cross-axis computed values. Another selector, condition, or state can override the local context; disable the rule on declarations intentionally retained for those contexts.
@@ -196,7 +213,9 @@ a {
 
 Invalid CSS is handled on a best-effort basis rather than validated by this rule. Use [`css/no-invalid-properties`](https://github.com/eslint/css/blob/main/docs/rules/no-invalid-properties.md) to check property names and value grammar. CSS Modules interop blocks contain literal values rather than styles.
 
-Final-keyframe easing is covered separately by [`no-ineffective-keyframe-declarations`](./no-ineffective-keyframe-declarations.md).
+Ignored animation controls and final-keyframe easing are covered separately by [`no-ineffective-keyframe-declarations`](./no-ineffective-keyframe-declarations.md).
+
+Scroll-container controls and `resize` are not checked because root-element propagation and replaced-element exceptions require context beyond these declarations. The rule also does not analyze layer order, excess list values, or missing sticky-position insets.
 
 ## Resources
 
@@ -208,3 +227,4 @@ Final-keyframe easing is covered separately by [`no-ineffective-keyframe-declara
 - [Floats and absolute positioning](https://drafts.csswg.org/css2/#floats)
 - [Text overflow](https://drafts.csswg.org/css-overflow-3/#text-overflow)
 - [Two-value text overflow](https://drafts.csswg.org/css-overflow-4/#text-overflow)
+- [Collapsed table spacing](https://drafts.csswg.org/css-tables-3/#collapsed-style-overrides)
