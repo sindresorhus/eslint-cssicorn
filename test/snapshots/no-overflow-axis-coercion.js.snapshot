@@ -1,0 +1,615 @@
+exports[`invalid(1): a { overflow-x: hidden; overflow-y: visible; } 1`] = `
+
+  1 | a { overflow-x: hidden; overflow-y: visible; }
+
+`;
+
+exports[`invalid(1): a { overflow-x: hidden; overflow-y: visible; } 2`] = `
+
+Message:
+> 1 | a { overflow-x: hidden; overflow-y: visible; }
+    |                                     ^^^^^^^ \`overflow-y: visible\` computes to \`auto\` because \`overflow-x\` is \`hidden\`. Result: \`overflow-x: hidden\` and \`overflow-y: auto\`.
+
+`;
+
+exports[`invalid(10): a { overflow-block: hidden; overflow-inline: visible; } 1`] = `
+
+  1 | a { overflow-block: hidden; overflow-inline: visible; }
+
+`;
+
+exports[`invalid(10): a { overflow-block: hidden; overflow-inline: visible; } 2`] = `
+
+Message:
+> 1 | a { overflow-block: hidden; overflow-inline: visible; }
+    |                                              ^^^^^^^ \`overflow-inline: visible\` computes to \`auto\` because \`overflow-block\` is \`hidden\`. Result: \`overflow-block: hidden\` and \`overflow-inline: auto\`.
+
+`;
+
+exports[`invalid(11): a { overflow-inline: auto; overflow-block: visible; } 1`] = `
+
+  1 | a { overflow-inline: auto; overflow-block: visible; }
+
+`;
+
+exports[`invalid(11): a { overflow-inline: auto; overflow-block: visible; } 2`] = `
+
+Message:
+> 1 | a { overflow-inline: auto; overflow-block: visible; }
+    |                                            ^^^^^^^ \`overflow-block: visible\` computes to \`auto\` because \`overflow-inline\` is \`auto\`. Result: \`overflow-block: auto\` and \`overflow-inline: auto\`.
+
+`;
+
+exports[`invalid(12): a { writing-mode: vertical-rl; overflow-block: visible; overflow-inline: scroll; } 1`] = `
+
+  1 | a { writing-mode: vertical-rl; overflow-block: visible; overflow-inline: scroll; }
+
+`;
+
+exports[`invalid(12): a { writing-mode: vertical-rl; overflow-block: visible; overflow-inline: scroll; } 2`] = `
+
+Message:
+> 1 | a { writing-mode: vertical-rl; overflow-block: visible; overflow-inline: scroll; }
+    |                                                ^^^^^^^ \`overflow-block: visible\` computes to \`auto\` because \`overflow-inline\` is \`scroll\`. Result: \`overflow-block: auto\` and \`overflow-inline: scroll\`.
+
+`;
+
+exports[`invalid(13): a { OVERFLOW-X: HIDDEN; OVERFLOW-Y: VISIBLE; } 1`] = `
+
+  1 | a { OVERFLOW-X: HIDDEN; OVERFLOW-Y: VISIBLE; }
+
+`;
+
+exports[`invalid(13): a { OVERFLOW-X: HIDDEN; OVERFLOW-Y: VISIBLE; } 2`] = `
+
+Message:
+> 1 | a { OVERFLOW-X: HIDDEN; OVERFLOW-Y: VISIBLE; }
+    |                                     ^^^^^^^ \`overflow-y: visible\` computes to \`auto\` because \`overflow-x\` is \`hidden\`. Result: \`overflow-x: hidden\` and \`overflow-y: auto\`.
+
+`;
+
+exports[`invalid(14): a { \\6f verflow-x: h\\69 dden; overflow-y: \\76 isible; } 1`] = `
+
+  1 | a { \\6f verflow-x: h\\69 dden; overflow-y: \\76 isible; }
+
+`;
+
+exports[`invalid(14): a { \\6f verflow-x: h\\69 dden; overflow-y: \\76 isible; } 2`] = `
+
+Message:
+> 1 | a { \\6f verflow-x: h\\69 dden; overflow-y: \\76 isible; }
+    |                                           ^^^^^^^^^^ \`overflow-y: visible\` computes to \`auto\` because \`overflow-x\` is \`hidden\`. Result: \`overflow-x: hidden\` and \`overflow-y: auto\`.
+
+`;
+
+exports[`invalid(15): a { \\6f verflow: visible \\73 croll; } 1`] = `
+
+  1 | a { \\6f verflow: visible \\73 croll; }
+
+`;
+
+exports[`invalid(15): a { \\6f verflow: visible \\73 croll; } 2`] = `
+
+Message:
+> 1 | a { \\6f verflow: visible \\73 croll; }
+    |                  ^^^^^^^ \`overflow-x: visible\` computes to \`auto\` because \`overflow-y\` is \`scroll\`. Result: \`overflow-x: auto\` and \`overflow-y: scroll\`.
+
+`;
+
+exports[`invalid(16): a { overflow: /* before */ hidden /* between */ visible /* after */ !important; } 1`] = `
+
+  1 | a { overflow: /* before */ hidden /* between */ visible /* after */ !important; }
+
+`;
+
+exports[`invalid(16): a { overflow: /* before */ hidden /* between */ visible /* after */ !important; } 2`] = `
+
+Message:
+> 1 | a { overflow: /* before */ hidden /* between */ visible /* after */ !important; }
+    |                                                 ^^^^^^^ \`overflow-y: visible\` computes to \`auto\` because \`overflow-x\` is \`hidden\`. Result: \`overflow-x: hidden\` and \`overflow-y: auto\`.
+
+`;
+
+exports[`invalid(17): a { overflow-x: hidden; color: red; overflow-y: /* keep */ visible; } 1`] = `
+
+  1 | a { overflow-x: hidden; color: red; overflow-y: /* keep */ visible; }
+
+`;
+
+exports[`invalid(17): a { overflow-x: hidden; color: red; overflow-y: /* keep */ visible; } 2`] = `
+
+Message:
+> 1 | a { overflow-x: hidden; color: red; overflow-y: /* keep */ visible; }
+    |                                                            ^^^^^^^ \`overflow-y: visible\` computes to \`auto\` because \`overflow-x\` is \`hidden\`. Result: \`overflow-x: hidden\` and \`overflow-y: auto\`.
+
+`;
+
+exports[`invalid(18): a { overflow: visible; overflow-x: hidden; } 1`] = `
+
+  1 | a { overflow: visible; overflow-x: hidden; }
+
+`;
+
+exports[`invalid(18): a { overflow: visible; overflow-x: hidden; } 2`] = `
+
+Message:
+> 1 | a { overflow: visible; overflow-x: hidden; }
+    |               ^^^^^^^ \`overflow-y: visible\` computes to \`auto\` because \`overflow-x\` is \`hidden\`. Result: \`overflow-x: hidden\` and \`overflow-y: auto\`.
+
+`;
+
+exports[`invalid(19): a { overflow: hidden; overflow-y: visible; } 1`] = `
+
+  1 | a { overflow: hidden; overflow-y: visible; }
+
+`;
+
+exports[`invalid(19): a { overflow: hidden; overflow-y: visible; } 2`] = `
+
+Message:
+> 1 | a { overflow: hidden; overflow-y: visible; }
+    |                                   ^^^^^^^ \`overflow-y: visible\` computes to \`auto\` because \`overflow-x\` is \`hidden\`. Result: \`overflow-x: hidden\` and \`overflow-y: auto\`.
+
+`;
+
+exports[`invalid(2): a { overflow-y: visible; overflow-x: hidden; } 1`] = `
+
+  1 | a { overflow-y: visible; overflow-x: hidden; }
+
+`;
+
+exports[`invalid(2): a { overflow-y: visible; overflow-x: hidden; } 2`] = `
+
+Message:
+> 1 | a { overflow-y: visible; overflow-x: hidden; }
+    |                 ^^^^^^^ \`overflow-y: visible\` computes to \`auto\` because \`overflow-x\` is \`hidden\`. Result: \`overflow-x: hidden\` and \`overflow-y: auto\`.
+
+`;
+
+exports[`invalid(20): a { overflow: auto; overflow-x: visible; } 1`] = `
+
+  1 | a { overflow: auto; overflow-x: visible; }
+
+`;
+
+exports[`invalid(20): a { overflow: auto; overflow-x: visible; } 2`] = `
+
+Message:
+> 1 | a { overflow: auto; overflow-x: visible; }
+    |                                 ^^^^^^^ \`overflow-x: visible\` computes to \`auto\` because \`overflow-y\` is \`auto\`. Result: \`overflow-x: auto\` and \`overflow-y: auto\`.
+
+`;
+
+exports[`invalid(21): a { overflow-x: hidden; overflow-y: auto; overflow-y: visible; } 1`] = `
+
+  1 | a { overflow-x: hidden; overflow-y: auto; overflow-y: visible; }
+
+`;
+
+exports[`invalid(21): a { overflow-x: hidden; overflow-y: auto; overflow-y: visible; } 2`] = `
+
+Message:
+> 1 | a { overflow-x: hidden; overflow-y: auto; overflow-y: visible; }
+    |                                                       ^^^^^^^ \`overflow-y: visible\` computes to \`auto\` because \`overflow-x\` is \`hidden\`. Result: \`overflow-x: hidden\` and \`overflow-y: auto\`.
+
+`;
+
+exports[`invalid(22): a { overflow: hidden visible !important; overflow: hidden; } 1`] = `
+
+  1 | a { overflow: hidden visible !important; overflow: hidden; }
+
+`;
+
+exports[`invalid(22): a { overflow: hidden visible !important; overflow: hidden; } 2`] = `
+
+Message:
+> 1 | a { overflow: hidden visible !important; overflow: hidden; }
+    |                      ^^^^^^^ \`overflow-y: visible\` computes to \`auto\` because \`overflow-x\` is \`hidden\`. Result: \`overflow-x: hidden\` and \`overflow-y: auto\`.
+
+`;
+
+exports[`invalid(23): a { overflow-x: hidden; overflow-y: visible !important; overflow-y: auto; } 1`] = `
+
+  1 | a { overflow-x: hidden; overflow-y: visible !important; overflow-y: auto; }
+
+`;
+
+exports[`invalid(23): a { overflow-x: hidden; overflow-y: visible !important; overflow-y: auto; } 2`] = `
+
+Message:
+> 1 | a { overflow-x: hidden; overflow-y: visible !important; overflow-y: auto; }
+    |                                     ^^^^^^^ \`overflow-y: visible\` computes to \`auto\` because \`overflow-x\` is \`hidden\`. Result: \`overflow-x: hidden\` and \`overflow-y: auto\`.
+
+`;
+
+exports[`invalid(24): a { overflow-y: auto; overflow: hidden visible !important; } 1`] = `
+
+  1 | a { overflow-y: auto; overflow: hidden visible !important; }
+
+`;
+
+exports[`invalid(24): a { overflow-y: auto; overflow: hidden visible !important; } 2`] = `
+
+Message:
+> 1 | a { overflow-y: auto; overflow: hidden visible !important; }
+    |                                        ^^^^^^^ \`overflow-y: visible\` computes to \`auto\` because \`overflow-x\` is \`hidden\`. Result: \`overflow-x: hidden\` and \`overflow-y: auto\`.
+
+`;
+
+exports[`invalid(25): a { overflow: auto !important; overflow-x: visible !important; } 1`] = `
+
+  1 | a { overflow: auto !important; overflow-x: visible !important; }
+
+`;
+
+exports[`invalid(25): a { overflow: auto !important; overflow-x: visible !important; } 2`] = `
+
+Message:
+> 1 | a { overflow: auto !important; overflow-x: visible !important; }
+    |                                            ^^^^^^^ \`overflow-x: visible\` computes to \`auto\` because \`overflow-y\` is \`auto\`. Result: \`overflow-x: auto\` and \`overflow-y: auto\`.
+
+`;
+
+exports[`invalid(26): a { overflow: hidden visible !important; overflow: auto !important; overflow: hidden visible !important; } 1`] = `
+
+  1 | a { overflow: hidden visible !important; overflow: auto !important; overflow: hidden visible !important; }
+
+`;
+
+exports[`invalid(26): a { overflow: hidden visible !important; overflow: auto !important; overflow: hidden visible !important; } 2`] = `
+
+Message:
+> 1 | a { overflow: hidden visible !important; overflow: auto !important; overflow: hidden visible !important; }
+    |                                                                                      ^^^^^^^ \`overflow-y: visible\` computes to \`auto\` because \`overflow-x\` is \`hidden\`. Result: \`overflow-x: hidden\` and \`overflow-y: auto\`.
+
+`;
+
+exports[`invalid(27): a { overflow: hidden visible !important; overflow: var(--overflow); } 1`] = `
+
+  1 | a { overflow: hidden visible !important; overflow: var(--overflow); }
+
+`;
+
+exports[`invalid(27): a { overflow: hidden visible !important; overflow: var(--overflow); } 2`] = `
+
+Message:
+> 1 | a { overflow: hidden visible !important; overflow: var(--overflow); }
+    |                      ^^^^^^^ \`overflow-y: visible\` computes to \`auto\` because \`overflow-x\` is \`hidden\`. Result: \`overflow-x: hidden\` and \`overflow-y: auto\`.
+
+`;
+
+exports[`invalid(28): a { overflow: hidden visible !important; all: unset; } 1`] = `
+
+  1 | a { overflow: hidden visible !important; all: unset; }
+
+`;
+
+exports[`invalid(28): a { overflow: hidden visible !important; all: unset; } 2`] = `
+
+Message:
+> 1 | a { overflow: hidden visible !important; all: unset; }
+    |                      ^^^^^^^ \`overflow-y: visible\` computes to \`auto\` because \`overflow-x\` is \`hidden\`. Result: \`overflow-x: hidden\` and \`overflow-y: auto\`.
+
+`;
+
+exports[`invalid(29): a { all: unset; overflow: hidden visible; } 1`] = `
+
+  1 | a { all: unset; overflow: hidden visible; }
+
+`;
+
+exports[`invalid(29): a { all: unset; overflow: hidden visible; } 2`] = `
+
+Message:
+> 1 | a { all: unset; overflow: hidden visible; }
+    |                                  ^^^^^^^ \`overflow-y: visible\` computes to \`auto\` because \`overflow-x\` is \`hidden\`. Result: \`overflow-x: hidden\` and \`overflow-y: auto\`.
+
+`;
+
+exports[`invalid(3): a { overflow-y: hidden; overflow-x: visible; } 1`] = `
+
+  1 | a { overflow-y: hidden; overflow-x: visible; }
+
+`;
+
+exports[`invalid(3): a { overflow-y: hidden; overflow-x: visible; } 2`] = `
+
+Message:
+> 1 | a { overflow-y: hidden; overflow-x: visible; }
+    |                                     ^^^^^^^ \`overflow-x: visible\` computes to \`auto\` because \`overflow-y\` is \`hidden\`. Result: \`overflow-x: auto\` and \`overflow-y: hidden\`.
+
+`;
+
+exports[`invalid(30): a { overflow: hidden visible; all: unset; overflow-x: hidden; overflow-y: visible; } 1`] = `
+
+  1 | a { overflow: hidden visible; all: unset; overflow-x: hidden; overflow-y: visible; }
+
+`;
+
+exports[`invalid(30): a { overflow: hidden visible; all: unset; overflow-x: hidden; overflow-y: visible; } 2`] = `
+
+Message:
+> 1 | a { overflow: hidden visible; all: unset; overflow-x: hidden; overflow-y: visible; }
+    |                                                                           ^^^^^^^ \`overflow-y: visible\` computes to \`auto\` because \`overflow-x\` is \`hidden\`. Result: \`overflow-x: hidden\` and \`overflow-y: auto\`.
+
+`;
+
+exports[`invalid(31): a { overflow: hidden visible; overflow: invalid; } 1`] = `
+
+  1 | a { overflow: hidden visible; overflow: invalid; }
+
+`;
+
+exports[`invalid(31): a { overflow: hidden visible; overflow: invalid; } 2`] = `
+
+Message:
+> 1 | a { overflow: hidden visible; overflow: invalid; }
+    |                      ^^^^^^^ \`overflow-y: visible\` computes to \`auto\` because \`overflow-x\` is \`hidden\`. Result: \`overflow-x: hidden\` and \`overflow-y: auto\`.
+
+`;
+
+exports[`invalid(32): a { overflow-x: hidden; overflow-y: visible; overflow-y: \"auto\"; } 1`] = `
+
+  1 | a { overflow-x: hidden; overflow-y: visible; overflow-y: "auto"; }
+
+`;
+
+exports[`invalid(32): a { overflow-x: hidden; overflow-y: visible; overflow-y: \"auto\"; } 2`] = `
+
+Message:
+> 1 | a { overflow-x: hidden; overflow-y: visible; overflow-y: "auto"; }
+    |                                     ^^^^^^^ \`overflow-y: visible\` computes to \`auto\` because \`overflow-x\` is \`hidden\`. Result: \`overflow-x: hidden\` and \`overflow-y: auto\`.
+
+`;
+
+exports[`invalid(33): a { overflow: hidden visible; overflow-x: visible hidden; } 1`] = `
+
+  1 | a { overflow: hidden visible; overflow-x: visible hidden; }
+
+`;
+
+exports[`invalid(33): a { overflow: hidden visible; overflow-x: visible hidden; } 2`] = `
+
+Message:
+> 1 | a { overflow: hidden visible; overflow-x: visible hidden; }
+    |                      ^^^^^^^ \`overflow-y: visible\` computes to \`auto\` because \`overflow-x\` is \`hidden\`. Result: \`overflow-x: hidden\` and \`overflow-y: auto\`.
+
+`;
+
+exports[`invalid(34): a { overflow: hidden visible; overflow: hidden visible auto; } 1`] = `
+
+  1 | a { overflow: hidden visible; overflow: hidden visible auto; }
+
+`;
+
+exports[`invalid(34): a { overflow: hidden visible; overflow: hidden visible auto; } 2`] = `
+
+Message:
+> 1 | a { overflow: hidden visible; overflow: hidden visible auto; }
+    |                      ^^^^^^^ \`overflow-y: visible\` computes to \`auto\` because \`overflow-x\` is \`hidden\`. Result: \`overflow-x: hidden\` and \`overflow-y: auto\`.
+
+`;
+
+exports[`invalid(35): a { overflow: hidden visible; all: auto; } 1`] = `
+
+  1 | a { overflow: hidden visible; all: auto; }
+
+`;
+
+exports[`invalid(35): a { overflow: hidden visible; all: auto; } 2`] = `
+
+Message:
+> 1 | a { overflow: hidden visible; all: auto; }
+    |                      ^^^^^^^ \`overflow-y: visible\` computes to \`auto\` because \`overflow-x\` is \`hidden\`. Result: \`overflow-x: hidden\` and \`overflow-y: auto\`.
+
+`;
+
+exports[`invalid(36): a { & b { overflow: hidden visible; } } 1`] = `
+
+  1 | a { & b { overflow: hidden visible; } }
+
+`;
+
+exports[`invalid(36): a { & b { overflow: hidden visible; } } 2`] = `
+
+Message:
+> 1 | a { & b { overflow: hidden visible; } }
+    |                            ^^^^^^^ \`overflow-y: visible\` computes to \`auto\` because \`overflow-x\` is \`hidden\`. Result: \`overflow-x: hidden\` and \`overflow-y: auto\`.
+
+`;
+
+exports[`invalid(37): @media (width > 0px) { a { overflow: hidden visible; } } 1`] = `
+
+  1 | @media (width > 0px) { a { overflow: hidden visible; } }
+
+`;
+
+exports[`invalid(37): @media (width > 0px) { a { overflow: hidden visible; } } 2`] = `
+
+Message:
+> 1 | @media (width > 0px) { a { overflow: hidden visible; } }
+    |                                             ^^^^^^^ \`overflow-y: visible\` computes to \`auto\` because \`overflow-x\` is \`hidden\`. Result: \`overflow-x: hidden\` and \`overflow-y: auto\`.
+
+`;
+
+exports[`invalid(38): a { @supports (display: grid) { overflow-x: hidden; overflow-y: visible; } } 1`] = `
+
+  1 | a { @supports (display: grid) { overflow-x: hidden; overflow-y: visible; } }
+
+`;
+
+exports[`invalid(38): a { @supports (display: grid) { overflow-x: hidden; overflow-y: visible; } } 2`] = `
+
+Message:
+> 1 | a { @supports (display: grid) { overflow-x: hidden; overflow-y: visible; } }
+    |                                                                 ^^^^^^^ \`overflow-y: visible\` computes to \`auto\` because \`overflow-x\` is \`hidden\`. Result: \`overflow-x: hidden\` and \`overflow-y: auto\`.
+
+`;
+
+exports[`invalid(39): a { @container (width > 0px) { overflow: visible auto; } } 1`] = `
+
+  1 | a { @container (width > 0px) { overflow: visible auto; } }
+
+`;
+
+exports[`invalid(39): a { @container (width > 0px) { overflow: visible auto; } } 2`] = `
+
+Message:
+> 1 | a { @container (width > 0px) { overflow: visible auto; } }
+    |                                          ^^^^^^^ \`overflow-x: visible\` computes to \`auto\` because \`overflow-y\` is \`auto\`. Result: \`overflow-x: auto\` and \`overflow-y: auto\`.
+
+`;
+
+exports[`invalid(4): a { overflow: hidden visible; } 1`] = `
+
+  1 | a { overflow: hidden visible; }
+
+`;
+
+exports[`invalid(4): a { overflow: hidden visible; } 2`] = `
+
+Message:
+> 1 | a { overflow: hidden visible; }
+    |                      ^^^^^^^ \`overflow-y: visible\` computes to \`auto\` because \`overflow-x\` is \`hidden\`. Result: \`overflow-x: hidden\` and \`overflow-y: auto\`.
+
+`;
+
+exports[`invalid(40): @layer theme { @scope (.card) { a { overflow: hidden visible; } } } 1`] = `
+
+  1 | @layer theme { @scope (.card) { a { overflow: hidden visible; } } }
+
+`;
+
+exports[`invalid(40): @layer theme { @scope (.card) { a { overflow: hidden visible; } } } 2`] = `
+
+Message:
+> 1 | @layer theme { @scope (.card) { a { overflow: hidden visible; } } }
+    |                                                      ^^^^^^^ \`overflow-y: visible\` computes to \`auto\` because \`overflow-x\` is \`hidden\`. Result: \`overflow-x: hidden\` and \`overflow-y: auto\`.
+
+`;
+
+exports[`invalid(41): a { @starting-style { overflow: hidden visible; } } 1`] = `
+
+  1 | a { @starting-style { overflow: hidden visible; } }
+
+`;
+
+exports[`invalid(41): a { @starting-style { overflow: hidden visible; } } 2`] = `
+
+Message:
+> 1 | a { @starting-style { overflow: hidden visible; } }
+    |                                        ^^^^^^^ \`overflow-y: visible\` computes to \`auto\` because \`overflow-x\` is \`hidden\`. Result: \`overflow-x: hidden\` and \`overflow-y: auto\`.
+
+`;
+
+exports[`invalid(42): a { overflow: hidden visible; & b { overflow: visible auto; } } 1`] = `
+
+  1 | a { overflow: hidden visible; & b { overflow: visible auto; } }
+
+`;
+
+exports[`invalid(42): a { overflow: hidden visible; & b { overflow: visible auto; } } 2`] = `
+
+Message:
+> 1 | a { overflow: hidden visible; & b { overflow: visible auto; } }
+    |                      ^^^^^^^ \`overflow-y: visible\` computes to \`auto\` because \`overflow-x\` is \`hidden\`. Result: \`overflow-x: hidden\` and \`overflow-y: auto\`.
+
+`;
+
+exports[`invalid(42): a { overflow: hidden visible; & b { overflow: visible auto; } } 3`] = `
+
+Message:
+> 1 | a { overflow: hidden visible; & b { overflow: visible auto; } }
+    |                                               ^^^^^^^ \`overflow-x: visible\` computes to \`auto\` because \`overflow-y\` is \`auto\`. Result: \`overflow-x: auto\` and \`overflow-y: auto\`.
+
+`;
+
+exports[`invalid(43): a {\r\n  overflow-x: hidden;\r\n  overflow-y: visible;\r\n} 1`] = `
+
+  1 | a {
+  2 |   overflow-x: hidden;
+  3 |   overflow-y: visible;
+  4 | }
+
+`;
+
+exports[`invalid(43): a {\r\n  overflow-x: hidden;\r\n  overflow-y: visible;\r\n} 2`] = `
+
+Message:
+  1 | a {
+  2 |   overflow-x: hidden;
+> 3 |   overflow-y: visible;
+    |               ^^^^^^^ \`overflow-y: visible\` computes to \`auto\` because \`overflow-x\` is \`hidden\`. Result: \`overflow-x: hidden\` and \`overflow-y: auto\`.
+  4 | }
+
+`;
+
+exports[`invalid(5): a { overflow: visible hidden; } 1`] = `
+
+  1 | a { overflow: visible hidden; }
+
+`;
+
+exports[`invalid(5): a { overflow: visible hidden; } 2`] = `
+
+Message:
+> 1 | a { overflow: visible hidden; }
+    |               ^^^^^^^ \`overflow-x: visible\` computes to \`auto\` because \`overflow-y\` is \`hidden\`. Result: \`overflow-x: auto\` and \`overflow-y: hidden\`.
+
+`;
+
+exports[`invalid(6): a { overflow: auto visible; } 1`] = `
+
+  1 | a { overflow: auto visible; }
+
+`;
+
+exports[`invalid(6): a { overflow: auto visible; } 2`] = `
+
+Message:
+> 1 | a { overflow: auto visible; }
+    |                    ^^^^^^^ \`overflow-y: visible\` computes to \`auto\` because \`overflow-x\` is \`auto\`. Result: \`overflow-x: auto\` and \`overflow-y: auto\`.
+
+`;
+
+exports[`invalid(7): a { overflow: visible scroll; } 1`] = `
+
+  1 | a { overflow: visible scroll; }
+
+`;
+
+exports[`invalid(7): a { overflow: visible scroll; } 2`] = `
+
+Message:
+> 1 | a { overflow: visible scroll; }
+    |               ^^^^^^^ \`overflow-x: visible\` computes to \`auto\` because \`overflow-y\` is \`scroll\`. Result: \`overflow-x: auto\` and \`overflow-y: scroll\`.
+
+`;
+
+exports[`invalid(8): a { overflow: overlay visible; } 1`] = `
+
+  1 | a { overflow: overlay visible; }
+
+`;
+
+exports[`invalid(8): a { overflow: overlay visible; } 2`] = `
+
+Message:
+> 1 | a { overflow: overlay visible; }
+    |                       ^^^^^^^ \`overflow-y: visible\` computes to \`auto\` because \`overflow-x\` is \`overlay\`. Result: \`overflow-x: auto\` and \`overflow-y: auto\`.
+
+`;
+
+exports[`invalid(9): a { overflow-x: visible; overflow-y: overlay; } 1`] = `
+
+  1 | a { overflow-x: visible; overflow-y: overlay; }
+
+`;
+
+exports[`invalid(9): a { overflow-x: visible; overflow-y: overlay; } 2`] = `
+
+Message:
+> 1 | a { overflow-x: visible; overflow-y: overlay; }
+    |                 ^^^^^^^ \`overflow-x: visible\` computes to \`auto\` because \`overflow-y\` is \`overlay\`. Result: \`overflow-x: auto\` and \`overflow-y: auto\`.
+
+`;
