@@ -128,13 +128,6 @@ const getDisplayProblem = (node, property, {display, hasVisibleDisplay, isFlex, 
 	if (multicolProperties.has(property) && (isFlex || isGrid)) {
 		return {node, messageId: MESSAGE_ID_MULTICOL, data: {property, display}};
 	}
-
-	if (property === 'text-overflow' && (isFlex || isGrid)) {
-		const value = getEllipsisValue(node.value);
-		if (value) {
-			return {node, messageId: MESSAGE_ID_TEXT_OVERFLOW_DISPLAY, data: {value, display}};
-		}
-	}
 };
 
 /**
@@ -156,7 +149,7 @@ const getDeclarationProblem = (node, property, controls) => {
 		return displayProblem;
 	}
 
-	const {hasExplicitNowrap, position, hasVisibleOverflow} = controls;
+	const {display, isFlex, isGrid, hasExplicitNowrap, position, hasVisibleOverflow} = controls;
 	if (property === 'align-content' && hasExplicitNowrap) {
 		return {node, messageId: MESSAGE_ID_NOWRAP};
 	}
@@ -169,11 +162,17 @@ const getDeclarationProblem = (node, property, controls) => {
 		return {node, messageId: MESSAGE_ID_FLOAT, data: {value: keyword, position}};
 	}
 
-	if (property === 'text-overflow' && hasVisibleOverflow) {
+	if (property === 'text-overflow' && (isFlex || isGrid || hasVisibleOverflow)) {
 		const value = getEllipsisValue(node.value);
-		if (value) {
-			return {node, messageId: MESSAGE_ID_OVERFLOW, data: {value}};
+		if (!value) {
+			return;
 		}
+
+		if (isFlex || isGrid) {
+			return {node, messageId: MESSAGE_ID_TEXT_OVERFLOW_DISPLAY, data: {value, display}};
+		}
+
+		return {node, messageId: MESSAGE_ID_OVERFLOW, data: {value}};
 	}
 };
 

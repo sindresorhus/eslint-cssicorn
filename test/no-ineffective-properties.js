@@ -149,6 +149,7 @@ test.snapshot({
 		'a { display: flex; text-overflow: var(--marker); }',
 		'a { display: grid; text-overflow: inherit; }',
 		'a { display: flex; text-overflow: clip; }',
+		'a { display: flex; overflow: visible; text-overflow: clip; }',
 		'a { display: grid; text-overflow: "…" ellipsis; }',
 		'a { display: flex; text-overflow: ellipsis fade(1rem); }',
 		'a { all: unset; display: flex; text-overflow: ellipsis; }',
