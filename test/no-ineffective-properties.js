@@ -171,6 +171,14 @@ test({
 	valid: [],
 	invalid: [
 		{
+			code: 'a { position: static; top: calc(1rem + env(safe-area-inset-top)); left: 20px; }',
+			errors: [{messageId: 'no-ineffective-properties/static', data: {property: 'left'}}],
+		},
+		{
+			code: 'a { display: flex; flex-wrap: var(--wrapping); align-content: center; grid-auto-flow: column; }',
+			errors: [{messageId: 'no-ineffective-properties/display', data: {property: 'grid-auto-flow', display: 'flex', layout: 'grid'}}],
+		},
+		{
 			code: 'a { display: none; grid-template-columns: 1fr; position: static; top: 20px; overflow: visible; text-overflow: ellipsis; }',
 			errors: [
 				{messageId: 'no-ineffective-properties/static'},
