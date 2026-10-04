@@ -4,6 +4,7 @@ import {
 	hasCommentInRange,
 	hasSubstitutionOrRandomFunction,
 	isCssModulesInteropDeclaration,
+	isSubstitutionFunction,
 	normalizeCssIdentifier,
 	toLocation,
 } from './utils/index.js';
@@ -33,6 +34,29 @@ function getTwoArguments(node) {
 const isNone = argument => argument.nodes.length === 1
 	&& argument.nodes[0].type === 'Identifier'
 	&& normalizeCssIdentifier(argument.nodes[0].name) === 'none';
+
+/**
+Check for substitutions outside retained calc() wrappers, which could change argument counts or introduce none bounds.
+*/
+function hasUnwrappedSubstitution(node) {
+	const nodes = [node];
+	while (nodes.length > 0) {
+		const target = nodes.pop();
+		if (isSubstitutionFunction(target)) {
+			return true;
+		}
+
+		if (target.type === 'Function' && normalizeCssIdentifier(target.name) === 'calc') {
+			continue;
+		}
+
+		if (target.children) {
+			nodes.push(...target.children);
+		}
+	}
+
+	return false;
+}
 
 /**
 Check literal bounds without resolving units or percentages. Percentages can have a negative reference size, which reverses their order.
@@ -98,7 +122,13 @@ function getClampProblem(node, context, reportNode = node) {
 	const [nestedArgument] = nestedArguments;
 	const [innerNode] = nestedArgument.nodes;
 	const innerArguments = getTwoArguments(innerNode);
-	if (!innerArguments || hasSubstitutionOrRandomFunction(node)) {
+	if (!innerArguments) {
+		return;
+	}
+
+	// Keeping argument order preserves random() indices, including random calls introduced by substitutions inside calc().
+	const preservesOrder = name === 'max' && nestedArgument === outerArguments[1];
+	if (preservesOrder ? hasUnwrappedSubstitution(node) : hasSubstitutionOrRandomFunction(node)) {
 		return;
 	}
 
@@ -121,7 +151,6 @@ function getClampProblem(node, context, reportNode = node) {
 
 	const range = sourceCode.getRange(node);
 	const innerRange = sourceCode.getRange(innerNode);
-	const preservesOrder = name === 'max' && nestedArgument === outerArguments[1];
 	const problem = {
 		node: reportNode,
 		loc: toLocation(range, context),

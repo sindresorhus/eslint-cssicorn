@@ -40,5 +40,5 @@ Conflicting, calculated, mixed-unit, and percentage bounds are ignored. Unlike `
 ## Limitations
 
 - Checks declaration values, including custom properties. Both functions must have exactly two arguments.
-- Ignores expressions containing substitutions (such as `var()`) or `random()`.
+- Supports `calc()`-wrapped substitutions and `random()` only when argument order is preserved. Other substitutions are ignored.
 - Expressions requiring argument reordering are not autofixed if they contain comments.

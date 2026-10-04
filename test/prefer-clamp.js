@@ -42,10 +42,17 @@ test.snapshot({
 		'a { width: max(10px, min(var(--value, 5vw, 10vw), 100px)); }',
 		'a { width: max(10px, min(5vw, env(safe-area-inset-top))); }',
 		'a { width: max(10px, min(attr(data-width px), 100px)); }',
-		'a { width: max(10px, min(calc(var(--width)), 100px)); }',
 		'a { width: max(10px, min(--value(), 100px)); }',
-		'a { width: max(10px, min(random(1px, 100px), 100px)); }',
-		String.raw`a { width: max(10px, min(R\41 NDOM(1px, 100px), 100px)); }`,
+		'a { width: max(10px, min(abs(var(--width)), 100px)); }',
+		'a { width: max(10px, min(random(var(--minimum), 100px), 100px)); }',
+		'a { width: max(calc(var(--minimum)), min(var(--width), 100px)); }',
+		'a { width: max(min(calc(var(--width)), 100px), 10px); }',
+		'a { width: min(100px, max(10px, calc(var(--width)))); }',
+		'a { width: max(min(random(1px, 100px), 100px), 10px); }',
+		'a { width: min(100px, max(10px, random(1px, 100px))); }',
+		'a { width: max(min(calc(random(1px, 100px)), 100px), 10px); }',
+		'a { width: min(100px, max(10px, calc(random(1px, 100px)))); }',
+		'a { width: max(none, min(random(1px, 100px), 100px)); }',
 		'a { --width: max(var(--minimum), min(5vw, 100px)); }',
 		'a { --width: "max(10px, min(5vw, 100px))"; --image: url("max(10px, min(5vw, 100px))"); }',
 		'a { content: "max(10px, min(5vw, 100px))"; background: url("max(10px, min(5vw, 100px))"); }',
@@ -98,6 +105,51 @@ test.snapshot({
 test({
 	valid: [],
 	invalid: [
+		{
+			code: 'a { width: max(10px, min(calc(var(--width)), 100px)); }',
+			output: 'a { width: clamp(10px, calc(var(--width)), 100px); }',
+			errors: 1,
+		},
+		{
+			code: 'a { width: max(calc(var(--minimum)), min(calc(var(--width, 5vw, 10vw)), calc(env(safe-area-inset-top)))); }',
+			output: 'a { width: clamp(calc(var(--minimum)), calc(var(--width, 5vw, 10vw)), calc(env(safe-area-inset-top))); }',
+			errors: 1,
+		},
+		{
+			code: 'a { width: max(10px, min(calc(attr(data-width px) * 2), 100px)); }',
+			output: 'a { width: clamp(10px, calc(attr(data-width px) * 2), 100px); }',
+			errors: 1,
+		},
+		{
+			code: 'a { width: max(10px, min(calc(--width()), 100px)); }',
+			output: 'a { width: clamp(10px, calc(--width()), 100px); }',
+			errors: 1,
+		},
+		{
+			code: 'a { width: max(10px, min(random(1px, 100px), 100px)); }',
+			output: 'a { width: clamp(10px, random(1px, 100px), 100px); }',
+			errors: 1,
+		},
+		{
+			code: String.raw`a { width: max(10px, min(R\41 NDOM(1px, 100px), 100px)); }`,
+			output: String.raw`a { width: clamp(10px, R\41 NDOM(1px, 100px), 100px); }`,
+			errors: 1,
+		},
+		{
+			code: 'a { width: calc(random(1px, 2px) + max(random(3px, 4px), min(random(5px, 6px), random(7px, 8px))) + random(9px, 10px)); }',
+			output: 'a { width: calc(random(1px, 2px) + clamp(random(3px, 4px), random(5px, 6px), random(7px, 8px)) + random(9px, 10px)); }',
+			errors: 1,
+		},
+		{
+			code: 'a { width: max(10px, min(calc(random(1px, 100px) + var(--gap)), 100px)); }',
+			output: 'a { width: clamp(10px, calc(random(1px, 100px) + var(--gap)), 100px); }',
+			errors: 1,
+		},
+		{
+			code: 'a {\r\n  --size: ' + String.raw`MAX(/* lower */ 10px,MIN(C\41 LC(var(--width, 5vw, 10vw)) /* value */,100px));` + '\r\n}',
+			output: 'a {\r\n  --size: ' + String.raw`clamp(/* lower */ 10px,C\41 LC(var(--width, 5vw, 10vw)) /* value */,100px);` + '\r\n}',
+			errors: 1,
+		},
 		{
 			code: 'a { width: max(10px, min(5vw, 100px)); }',
 			output: 'a { width: clamp(10px, 5vw, 100px); }',
@@ -188,10 +240,15 @@ nodeTest('overlapping fixes converge and remain stable', () => {
 		rules: {'cssicorn/prefer-clamp': 'error'},
 	};
 	for (const property of ['width', '--size']) {
-		const code = `a { ${property}: max(10px, min(max(2px, min(3vw, 20px)), 100px)); }`;
-		const result = linter.verifyAndFix(code, config, {filename: 'example.css'});
-		assert.equal(result.output, `a { ${property}: clamp(10px, clamp(2px, 3vw, 20px), 100px); }`);
-		assert.deepEqual(result.messages, []);
-		assert.equal(linter.verifyAndFix(result.output, config, {filename: 'example.css'}).fixed, false);
+		for (const [value, expectedValue] of [
+			['max(10px, min(max(2px, min(3vw, 20px)), 100px))', 'clamp(10px, clamp(2px, 3vw, 20px), 100px)'],
+			['max(10px, min(max(2px, min(calc(var(--size)), random(10px, 20px))), 100px))', 'clamp(10px, clamp(2px, calc(var(--size)), random(10px, 20px)), 100px)'],
+		]) {
+			const code = `a { ${property}: ${value}; }`;
+			const result = linter.verifyAndFix(code, config, {filename: 'example.css'});
+			assert.equal(result.output, `a { ${property}: ${expectedValue}; }`);
+			assert.deepEqual(result.messages, []);
+			assert.equal(linter.verifyAndFix(result.output, config, {filename: 'example.css'}).fixed, false);
+		}
 	}
 });
