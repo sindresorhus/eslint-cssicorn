@@ -19,6 +19,20 @@ const gridProperties = [
 ];
 const insetProperties = ['top', 'right', 'bottom', 'left', 'inset', 'inset-block', 'inset-inline', 'inset-block-start', 'inset-block-end', 'inset-inline-start', 'inset-inline-end'];
 const multicolProperties = [['columns', '12rem 2'], ['column-count', '3'], ['column-width', '12rem']];
+const paddingProperties = [
+	'padding',
+	'padding-top',
+	'padding-right',
+	'padding-bottom',
+	'padding-left',
+	'padding-block',
+	'padding-inline',
+	'padding-block-start',
+	'padding-block-end',
+	'padding-inline-start',
+	'padding-inline-end',
+];
+const clearValues = ['left', 'right', 'both', 'inline-start', 'inline-end'];
 
 test.snapshot({
 	valid: [
@@ -178,6 +192,36 @@ test.snapshot({
 		'a { overflow: clip; scroll-snap-type: y mandatory; scroll-padding: 1rem; }',
 		'a { overflow: visible; resize: both; }',
 		'a { position: sticky; inset: auto; }',
+		...paddingProperties.map(property => `a { display: table; border-collapse: separate; ${property}: 8px; }`),
+		'a { display: table-cell; border-collapse: collapse; padding: 8px; }',
+		'a { display: block; border-collapse: collapse; padding-inline: 8px; }',
+		'a { border-collapse: collapse; padding: 8px; }',
+		'a { display: table; border-collapse: collapse; border-collapse: separate; padding: 8px; }',
+		'a { display: table; display: block; border-collapse: collapse; padding: 8px; }',
+		'a { display: table; border-collapse: collapse; padding: var(--spacing); padding-inline-start: revert; }',
+		'a { all: unset; display: table; border-collapse: collapse; padding: 8px; }',
+		...clearValues.map(value => `a { position: static; clear: ${value}; }`),
+		'a { position: relative; clear: both; }',
+		'a { position: sticky; clear: left; }',
+		'a { clear: both; }',
+		'a { position: absolute; clear: none; }',
+		'a { position: fixed; clear: inherit; }',
+		'a { position: absolute; clear: var(--side); }',
+		'a { position: fixed; clear: imaginary; }',
+		'a { position: absolute; position: relative; clear: both; }',
+		'a { perspective-origin: left; }',
+		...['400px', '0px', 'var(--depth)', 'inherit', 'unset', 'revert-layer', 'imaginary', 'none none'].map(value => `a { perspective: ${value}; perspective-origin: left; }`),
+		'a { perspective: none; perspective: 400px; perspective-origin: left; }',
+		'a { perspective: none; perspective-origin: var(--origin); }',
+		'a { perspective: none; perspective-origin: inherit; }',
+		'a { all: unset; perspective: none; perspective-origin: left; }',
+		'a { perspective: none; & b { perspective-origin: left; } }',
+		'a { perspective: none; @supports (perspective: 400px) { perspective-origin: left; } }',
+		':export { position: fixed; clear: both; perspective: none; perspective-origin: left; }',
+		'@keyframes layout { to { display: table; border-collapse: collapse; padding: 8px; position: absolute; clear: both; perspective: none; perspective-origin: left; } }',
+		'@font-face { perspective: none; perspective-origin: left; }',
+		'a { display: flex; justify-items: center; }',
+		'a { float: none; initial-letter: 2; shape-outside: circle(); shape-margin: 8px; }',
 	],
 	invalid: [
 		...flexProperties.map(([property, value]) => `a { display: grid; ${property}: ${value}; }`),
@@ -259,6 +303,25 @@ test.snapshot({
 		String.raw`a { display: \74 able; border-\63 ollapse: c\6f llapse; border-spa\63 ing: 8px; }`,
 		'a { display: table; border-collapse: /* borders */ collapse; border-spacing: /* cells */ calc(1rem + 2px); }',
 		'a { @supports (display: table) { display: table; border-collapse: collapse; border-spacing: 8px; } }',
+		...paddingProperties.map(property => `a { display: table; border-collapse: collapse; ${property}: 8px; }`),
+		'a { display: inline-table; border-collapse: collapse; padding: 8px 12px; }',
+		'a { display: inline table; border-collapse: collapse; padding-inline: 8px 12px; writing-mode: vertical-rl; }',
+		'a { PADDING-BLOCK: 8px !important; DISPLAY: TABLE; BORDER-COLLAPSE: COLLAPSE; }',
+		String.raw`a { display: table; border-collapse: collapse; pa\64 ding-inline-end: 8px; }`,
+		'a { display: table; border-collapse: collapse; padding: /* inset */ calc(1rem + 2px); }',
+		'a { @media (width > 1px) { display: table; border-collapse: collapse; padding: 8px; } }',
+		...clearValues.map(value => `a { position: absolute; clear: ${value}; }`),
+		'a { clear: both; position: fixed !important; }',
+		'a { POSITION: ABSOLUTE; CLEAR: INLINE-END; }',
+		String.raw`a { position: f\69 xed; cl\65 ar: b\6f th; }`,
+		'a { @supports (position: fixed) { position: fixed; clear: /* floats */ left; } }',
+		'a { perspective: none; perspective-origin: left; }',
+		'a { perspective-origin: 20% 30%; perspective: none !important; }',
+		'a { PERSPECTIVE: NONE; PERSPECTIVE-ORIGIN: LEFT TOP; }',
+		String.raw`a { perspe\63 tive: n\6f ne; perspective-orig\69 n: left; }`,
+		'a { perspective: /* depth */ none; perspective-origin: /* viewpoint */ calc(50% + 1px) center; }',
+		'a { perspective: none; transform: perspective(400px) rotateY(20deg); perspective-origin: left; }',
+		'a { @container (width > 1px) { perspective: none; perspective-origin: left; } }',
 	],
 });
 
@@ -306,6 +369,10 @@ test({
 		{
 			code: 'a { display: table; border-collapse: collapse; border-collapse: separate; border-spacing: 8px; flex-direction: column; }',
 			errors: [{messageId: 'no-ineffective-properties/display', data: {property: 'flex-direction', display: 'table', layout: 'flex'}}],
+		},
+		{
+			code: 'a { perspective: none; perspective: 400px; perspective-origin: left; position: fixed; clear: both; }',
+			errors: [{messageId: 'no-ineffective-properties/clear', data: {value: 'both', position: 'fixed'}}],
 		},
 		{
 			code: 'a { display: flex; grid-template-columns: 1fr 1fr; flex-wrap: nowrap; align-content: center; position: static; top: 20px; overflow: visible; text-overflow: ellipsis; }',

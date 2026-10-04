@@ -181,6 +181,53 @@ a {
 }
 ```
 
+```css
+/* ❌ */
+a {
+	position: absolute;
+	clear: both;
+}
+
+/* ✅ */
+a {
+	position: static;
+	clear: both;
+}
+```
+
+```css
+/* ❌ */
+a {
+	display: table;
+	border-collapse: collapse;
+	padding-inline: 8px;
+}
+
+/* ✅ */
+a {
+	display: table;
+	border-collapse: collapse;
+}
+
+a > tbody > tr > td {
+	padding-inline: 8px;
+}
+```
+
+```css
+/* ❌ */
+a {
+	perspective: none;
+	perspective-origin: left top;
+}
+
+/* ✅ */
+a {
+	perspective: 400px;
+	perspective-origin: left top;
+}
+```
+
 ## Checked properties
 
 - Flex containers: `flex-direction`, `flex-wrap`, and `flex-flow` require a flex display mode.
@@ -189,14 +236,17 @@ a {
 - Flex alignment: `align-content` has no effect with explicit `nowrap` in `flex-wrap` or `flex-flow`. Use `align-items` to align items, or enable wrapping when you intend to align flex lines. Wrapping containers are allowed even when their content currently fits on one line. Omitted wrapping is not assumed to be `nowrap`, even in a `flex-flow` shorthand.
 - Insets: `top`, `right`, `bottom`, `left`, `inset`, `inset-block`, `inset-inline`, and their logical longhands have no effect with explicit `position: static`.
 - Floats: `float: left`, `right`, `inline-start`, or `inline-end` has no effect with explicit `position: absolute` or `fixed`. `float: none` is allowed.
+- Clearance: `clear: left`, `right`, `both`, `inline-start`, or `inline-end` has no effect with explicit `position: absolute` or `fixed`. Absolutely positioned elements do not participate in normal flow. `clear: none` is allowed.
+- Perspective origin: `perspective-origin` has no effect with explicit `perspective: none`. A `perspective()` transform function does not use this property. An explicit perspective distance, including `0px`, is allowed.
 - Text overflow: `text-overflow: ellipsis`, `clip ellipsis`, `ellipsis clip`, or `ellipsis ellipsis` has no effect with an element's own explicit flex or grid display mode, or with explicit `overflow: visible` or `overflow: visible visible`. Ellipsis needs a block container and clipped inline overflow; this rule does not require `white-space: nowrap`, a width, or a height. Strings, `fade`, and `fade()` are not checked.
 - Table spacing: `border-spacing` has no effect on a table with explicit table display and `border-collapse: collapse`. Use `border-collapse: separate` for spacing between cells. Both legacy and modern display notation are supported, such as `inline-table` and `inline table`. `border-spacing` is inherited and can still affect a descendant table with separate borders; disable the rule when intentionally supplying inherited spacing. Rounded borders are not checked because browsers can still apply them to backgrounds or clipping in collapsed mode.
+- Table padding: `padding`, its physical and logical longhands, `padding-block`, and `padding-inline` have no effect on a table with explicit table display and `border-collapse: collapse`. Apply padding to cells or use separate borders. Padding on table cells is allowed, including in collapsed tables.
 
 ## Scope
 
 - Supported: Style declaration blocks, including nested style rules and conditional blocks, CSS escapes, ASCII casing, `!important`, and legacy and modern display notation, such as `inline-flex` and `inline flex`.
 - Skipped controls: Missing, malformed, unknown, vendor-prefixed, CSS-wide, or unresolved values. Display checks also ignore `none` and `contents`.
-- Skipped ambiguities: Duplicate `display`, `position`, or `border-collapse` declarations, multiple wrapping declarations including `flex-flow`/`flex-wrap` combinations, and multiple overflow declarations including physical and logical longhands. Ambiguity skips only the check that depends on that controller.
+- Skipped ambiguities: Duplicate `display`, `position`, `perspective`, or `border-collapse` declarations, multiple wrapping declarations including `flex-flow`/`flex-wrap` combinations, and multiple overflow declarations including physical and logical longhands. Ambiguity skips only the check that depends on that controller.
 - Skipped declarations: Target values containing CSS-wide keywords or unresolved substitutions, custom properties, item properties, gaps, and other alignment properties that need additional context.
 - Skipped blocks: Blocks containing `all`, plus keyframe, descriptor, and CSS Modules `:export`/`:import()` blocks.
 - Local context: Only direct declarations in the same block are compared. Overflow checks use only the `overflow` shorthand, without inferring writing mode or cross-axis computed values. Another selector, condition, or state can override the local context; disable the rule on declarations intentionally retained for those contexts.
@@ -227,4 +277,6 @@ Scroll-container controls and `resize` are not checked because root-element prop
 - [Floats and absolute positioning](https://drafts.csswg.org/css2/#floats)
 - [Text overflow](https://drafts.csswg.org/css-overflow-3/#text-overflow)
 - [Two-value text overflow](https://drafts.csswg.org/css-overflow-4/#text-overflow)
-- [Collapsed table spacing](https://drafts.csswg.org/css-tables-3/#collapsed-style-overrides)
+- [Clearance and normal flow](https://drafts.csswg.org/css2/#flow-control)
+- [Perspective origin](https://drafts.csswg.org/css-transforms-2/#perspective-origin-property)
+- [Collapsed table spacing and padding](https://drafts.csswg.org/css-tables-3/#collapsed-style-overrides)

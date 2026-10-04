@@ -22,6 +22,9 @@ const MESSAGE_ID_MULTICOL = 'no-ineffective-properties/multicol';
 const MESSAGE_ID_FLOAT = 'no-ineffective-properties/float';
 const MESSAGE_ID_TEXT_OVERFLOW_DISPLAY = 'no-ineffective-properties/text-overflow-display';
 const MESSAGE_ID_TABLE_SPACING = 'no-ineffective-properties/table-spacing';
+const MESSAGE_ID_TABLE_PADDING = 'no-ineffective-properties/table-padding';
+const MESSAGE_ID_CLEAR = 'no-ineffective-properties/clear';
+const MESSAGE_ID_PERSPECTIVE = 'no-ineffective-properties/perspective';
 const messages = {
 	[MESSAGE_ID_DISPLAY]: '`{{property}}` has no effect with `display: {{display}}`. It requires a {{layout}} container.',
 	[MESSAGE_ID_NOWRAP]: '`align-content` has no effect on a flex container with `nowrap`. Consider `align-items` or enabling wrapping.',
@@ -31,14 +34,43 @@ const messages = {
 	[MESSAGE_ID_FLOAT]: '`float: {{value}}` has no effect with `position: {{position}}`. Absolutely positioned elements cannot float.',
 	[MESSAGE_ID_TEXT_OVERFLOW_DISPLAY]: '`text-overflow: {{value}}` has no effect with `display: {{display}}`. Apply it to a block container holding the text.',
 	[MESSAGE_ID_TABLE_SPACING]: '`border-spacing` has no effect on this table with `border-collapse: collapse`. Use `border-collapse: separate` for spacing between cells.',
+	[MESSAGE_ID_TABLE_PADDING]: '`{{property}}` has no effect on this table with `border-collapse: collapse`. Apply padding to table cells or use separate borders.',
+	[MESSAGE_ID_CLEAR]: '`clear: {{value}}` has no effect with `position: {{position}}`. Absolutely positioned elements do not participate in normal flow.',
+	[MESSAGE_ID_PERSPECTIVE]: '`perspective-origin` has no effect with `perspective: none`. Set a perspective distance to use this origin.',
 };
 
 const flexProperties = new Set(['flex-direction', 'flex-wrap', 'flex-flow']);
 const gridProperties = new Set(['grid', 'grid-template', 'grid-template-columns', 'grid-template-rows', 'grid-template-areas', 'grid-auto-columns', 'grid-auto-rows', 'grid-auto-flow']);
 const insetProperties = new Set(['top', 'right', 'bottom', 'left', 'inset', 'inset-block', 'inset-inline', 'inset-block-start', 'inset-block-end', 'inset-inline-start', 'inset-inline-end']);
+const paddingProperties = new Set([
+	'padding',
+	'padding-top',
+	'padding-right',
+	'padding-bottom',
+	'padding-left',
+	'padding-block',
+	'padding-inline',
+	'padding-block-start',
+	'padding-block-end',
+	'padding-inline-start',
+	'padding-inline-end',
+]);
 const multicolProperties = new Set(['columns', 'column-count', 'column-width']);
 const floatValues = new Set(['left', 'right', 'inline-start', 'inline-end']);
-const targetProperties = new Set([...flexProperties, ...gridProperties, ...insetProperties, ...multicolProperties, 'align-content', 'text-overflow', 'float', 'border-spacing']);
+const clearValues = new Set([...floatValues, 'both']);
+const targetProperties = new Set([
+	...flexProperties,
+	...gridProperties,
+	...insetProperties,
+	...paddingProperties,
+	...multicolProperties,
+	'align-content',
+	'text-overflow',
+	'float',
+	'clear',
+	'border-spacing',
+	'perspective-origin',
+]);
 const overflowProperties = ['overflow', 'overflow-x', 'overflow-y', 'overflow-inline', 'overflow-block'];
 
 /**
@@ -119,7 +151,7 @@ Get the problem for a container property given the explicit layout controls in i
 
 @param {DeclarationPlain} node
 @param {string} property
-@param {{display: string | undefined, hasVisibleDisplay: boolean, isFlex: boolean, isGrid: boolean, hasCollapsedTable: boolean}} controls
+@param {ReturnType<typeof getLayoutControls>} controls
 */
 const getContainerProblem = (node, property, {display, hasVisibleDisplay, isFlex, isGrid, hasCollapsedTable}) => {
 	if (hasVisibleDisplay && ((flexProperties.has(property) && !isFlex) || (gridProperties.has(property) && !isGrid))) {
@@ -134,6 +166,36 @@ const getContainerProblem = (node, property, {display, hasVisibleDisplay, isFlex
 	if (property === 'border-spacing' && hasCollapsedTable) {
 		return {node, messageId: MESSAGE_ID_TABLE_SPACING};
 	}
+
+	if (paddingProperties.has(property) && hasCollapsedTable) {
+		return {node, messageId: MESSAGE_ID_TABLE_PADDING, data: {property}};
+	}
+};
+
+/**
+Get the problem for a property given the explicit position in its block.
+
+@param {DeclarationPlain} node
+@param {string} property
+@param {string | undefined} keyword
+@param {ReturnType<typeof getLayoutControls>} controls
+*/
+const getPositionProblem = (node, property, keyword, {position}) => {
+	if (insetProperties.has(property) && position === 'static') {
+		return {node, messageId: MESSAGE_ID_STATIC, data: {property}};
+	}
+
+	if ((position !== 'absolute' && position !== 'fixed') || keyword === undefined) {
+		return;
+	}
+
+	if (property === 'float' && floatValues.has(keyword)) {
+		return {node, messageId: MESSAGE_ID_FLOAT, data: {value: keyword, position}};
+	}
+
+	if (property === 'clear' && clearValues.has(keyword)) {
+		return {node, messageId: MESSAGE_ID_CLEAR, data: {value: keyword, position}};
+	}
 };
 
 /**
@@ -141,7 +203,7 @@ Get the problem for a declaration given the explicit layout controls in its bloc
 
 @param {DeclarationPlain} node
 @param {string} property
-@param {{display: string | undefined, hasVisibleDisplay: boolean, isFlex: boolean, isGrid: boolean, hasCollapsedTable: boolean, hasExplicitNowrap: boolean, position: string | undefined, hasVisibleOverflow: boolean}} controls
+@param {ReturnType<typeof getLayoutControls>} controls
 */
 const getDeclarationProblem = (node, property, controls) => {
 	const identifier = getSingleValueIdentifier(node);
@@ -155,17 +217,18 @@ const getDeclarationProblem = (node, property, controls) => {
 		return containerProblem;
 	}
 
-	const {display, isFlex, isGrid, hasExplicitNowrap, position, hasVisibleOverflow} = controls;
+	const {display, isFlex, isGrid, hasExplicitNowrap, hasVisibleOverflow, hasNoPerspective} = controls;
 	if (property === 'align-content' && hasExplicitNowrap) {
 		return {node, messageId: MESSAGE_ID_NOWRAP};
 	}
 
-	if (insetProperties.has(property) && position === 'static') {
-		return {node, messageId: MESSAGE_ID_STATIC, data: {property}};
+	const positionProblem = getPositionProblem(node, property, keyword, controls);
+	if (positionProblem) {
+		return positionProblem;
 	}
 
-	if (property === 'float' && (position === 'absolute' || position === 'fixed') && floatValues.has(keyword)) {
-		return {node, messageId: MESSAGE_ID_FLOAT, data: {value: keyword, position}};
+	if (property === 'perspective-origin' && hasNoPerspective) {
+		return {node, messageId: MESSAGE_ID_PERSPECTIVE};
 	}
 
 	if (property === 'text-overflow' && (isFlex || isGrid || hasVisibleOverflow)) {
@@ -201,9 +264,10 @@ const getLayoutControls = (declarationsByProperty, sourceCode) => {
 	const hasVisibleOverflow = declarationsByProperty.has('overflow') && (overflow === 'visible' || overflow === 'visible visible');
 	const hasCollapsedTable = (display === 'inline-table' || display?.split(' ').includes('table') === true)
 		&& getControllingValue(declarationsByProperty, ['border-collapse'], sourceCode) === 'collapse';
+	const hasNoPerspective = getControllingValue(declarationsByProperty, ['perspective'], sourceCode) === 'none';
 
 	return {
-		display, hasVisibleDisplay, isFlex, isGrid, hasCollapsedTable, hasExplicitNowrap, position, hasVisibleOverflow,
+		display, hasVisibleDisplay, isFlex, isGrid, hasCollapsedTable, hasExplicitNowrap, position, hasVisibleOverflow, hasNoPerspective,
 	};
 };
 

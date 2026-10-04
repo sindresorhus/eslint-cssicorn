@@ -362,6 +362,118 @@ Message:
 
 `;
 
+exports[`invalid(122): a { display: table; border-collapse: collapse; padding: 8px; } 1`] = `
+
+  1 | a { display: table; border-collapse: collapse; padding: 8px; }
+
+`;
+
+exports[`invalid(122): a { display: table; border-collapse: collapse; padding: 8px; } 2`] = `
+
+Message:
+> 1 | a { display: table; border-collapse: collapse; padding: 8px; }
+    |                                                ^^^^^^^^^^^^ \`padding\` has no effect on this table with \`border-collapse: collapse\`. Apply padding to table cells or use separate borders.
+
+`;
+
+exports[`invalid(123): a { display: table; border-collapse: collapse; padding-top: 8px; } 1`] = `
+
+  1 | a { display: table; border-collapse: collapse; padding-top: 8px; }
+
+`;
+
+exports[`invalid(123): a { display: table; border-collapse: collapse; padding-top: 8px; } 2`] = `
+
+Message:
+> 1 | a { display: table; border-collapse: collapse; padding-top: 8px; }
+    |                                                ^^^^^^^^^^^^^^^^ \`padding-top\` has no effect on this table with \`border-collapse: collapse\`. Apply padding to table cells or use separate borders.
+
+`;
+
+exports[`invalid(124): a { display: table; border-collapse: collapse; padding-right: 8px; } 1`] = `
+
+  1 | a { display: table; border-collapse: collapse; padding-right: 8px; }
+
+`;
+
+exports[`invalid(124): a { display: table; border-collapse: collapse; padding-right: 8px; } 2`] = `
+
+Message:
+> 1 | a { display: table; border-collapse: collapse; padding-right: 8px; }
+    |                                                ^^^^^^^^^^^^^^^^^^ \`padding-right\` has no effect on this table with \`border-collapse: collapse\`. Apply padding to table cells or use separate borders.
+
+`;
+
+exports[`invalid(125): a { display: table; border-collapse: collapse; padding-bottom: 8px; } 1`] = `
+
+  1 | a { display: table; border-collapse: collapse; padding-bottom: 8px; }
+
+`;
+
+exports[`invalid(125): a { display: table; border-collapse: collapse; padding-bottom: 8px; } 2`] = `
+
+Message:
+> 1 | a { display: table; border-collapse: collapse; padding-bottom: 8px; }
+    |                                                ^^^^^^^^^^^^^^^^^^^ \`padding-bottom\` has no effect on this table with \`border-collapse: collapse\`. Apply padding to table cells or use separate borders.
+
+`;
+
+exports[`invalid(126): a { display: table; border-collapse: collapse; padding-left: 8px; } 1`] = `
+
+  1 | a { display: table; border-collapse: collapse; padding-left: 8px; }
+
+`;
+
+exports[`invalid(126): a { display: table; border-collapse: collapse; padding-left: 8px; } 2`] = `
+
+Message:
+> 1 | a { display: table; border-collapse: collapse; padding-left: 8px; }
+    |                                                ^^^^^^^^^^^^^^^^^ \`padding-left\` has no effect on this table with \`border-collapse: collapse\`. Apply padding to table cells or use separate borders.
+
+`;
+
+exports[`invalid(127): a { display: table; border-collapse: collapse; padding-block: 8px; } 1`] = `
+
+  1 | a { display: table; border-collapse: collapse; padding-block: 8px; }
+
+`;
+
+exports[`invalid(127): a { display: table; border-collapse: collapse; padding-block: 8px; } 2`] = `
+
+Message:
+> 1 | a { display: table; border-collapse: collapse; padding-block: 8px; }
+    |                                                ^^^^^^^^^^^^^^^^^^ \`padding-block\` has no effect on this table with \`border-collapse: collapse\`. Apply padding to table cells or use separate borders.
+
+`;
+
+exports[`invalid(128): a { display: table; border-collapse: collapse; padding-inline: 8px; } 1`] = `
+
+  1 | a { display: table; border-collapse: collapse; padding-inline: 8px; }
+
+`;
+
+exports[`invalid(128): a { display: table; border-collapse: collapse; padding-inline: 8px; } 2`] = `
+
+Message:
+> 1 | a { display: table; border-collapse: collapse; padding-inline: 8px; }
+    |                                                ^^^^^^^^^^^^^^^^^^^ \`padding-inline\` has no effect on this table with \`border-collapse: collapse\`. Apply padding to table cells or use separate borders.
+
+`;
+
+exports[`invalid(129): a { display: table; border-collapse: collapse; padding-block-start: 8px; } 1`] = `
+
+  1 | a { display: table; border-collapse: collapse; padding-block-start: 8px; }
+
+`;
+
+exports[`invalid(129): a { display: table; border-collapse: collapse; padding-block-start: 8px; } 2`] = `
+
+Message:
+> 1 | a { display: table; border-collapse: collapse; padding-block-start: 8px; }
+    |                                                ^^^^^^^^^^^^^^^^^^^^^^^^ \`padding-block-start\` has no effect on this table with \`border-collapse: collapse\`. Apply padding to table cells or use separate borders.
+
+`;
+
 exports[`invalid(13): a { position: static; right: 20px; } 1`] = `
 
   1 | a { position: static; right: 20px; }
@@ -373,6 +485,146 @@ exports[`invalid(13): a { position: static; right: 20px; } 2`] = `
 Message:
 > 1 | a { position: static; right: 20px; }
     |                       ^^^^^^^^^^^ \`right\` has no effect with \`position: static\`. Insets require a positioned element.
+
+`;
+
+exports[`invalid(130): a { display: table; border-collapse: collapse; padding-block-end: 8px; } 1`] = `
+
+  1 | a { display: table; border-collapse: collapse; padding-block-end: 8px; }
+
+`;
+
+exports[`invalid(130): a { display: table; border-collapse: collapse; padding-block-end: 8px; } 2`] = `
+
+Message:
+> 1 | a { display: table; border-collapse: collapse; padding-block-end: 8px; }
+    |                                                ^^^^^^^^^^^^^^^^^^^^^^ \`padding-block-end\` has no effect on this table with \`border-collapse: collapse\`. Apply padding to table cells or use separate borders.
+
+`;
+
+exports[`invalid(131): a { display: table; border-collapse: collapse; padding-inline-start: 8px; } 1`] = `
+
+  1 | a { display: table; border-collapse: collapse; padding-inline-start: 8px; }
+
+`;
+
+exports[`invalid(131): a { display: table; border-collapse: collapse; padding-inline-start: 8px; } 2`] = `
+
+Message:
+> 1 | a { display: table; border-collapse: collapse; padding-inline-start: 8px; }
+    |                                                ^^^^^^^^^^^^^^^^^^^^^^^^^ \`padding-inline-start\` has no effect on this table with \`border-collapse: collapse\`. Apply padding to table cells or use separate borders.
+
+`;
+
+exports[`invalid(132): a { display: table; border-collapse: collapse; padding-inline-end: 8px; } 1`] = `
+
+  1 | a { display: table; border-collapse: collapse; padding-inline-end: 8px; }
+
+`;
+
+exports[`invalid(132): a { display: table; border-collapse: collapse; padding-inline-end: 8px; } 2`] = `
+
+Message:
+> 1 | a { display: table; border-collapse: collapse; padding-inline-end: 8px; }
+    |                                                ^^^^^^^^^^^^^^^^^^^^^^^ \`padding-inline-end\` has no effect on this table with \`border-collapse: collapse\`. Apply padding to table cells or use separate borders.
+
+`;
+
+exports[`invalid(133): a { display: inline-table; border-collapse: collapse; padding: 8px 12px; } 1`] = `
+
+  1 | a { display: inline-table; border-collapse: collapse; padding: 8px 12px; }
+
+`;
+
+exports[`invalid(133): a { display: inline-table; border-collapse: collapse; padding: 8px 12px; } 2`] = `
+
+Message:
+> 1 | a { display: inline-table; border-collapse: collapse; padding: 8px 12px; }
+    |                                                       ^^^^^^^^^^^^^^^^^ \`padding\` has no effect on this table with \`border-collapse: collapse\`. Apply padding to table cells or use separate borders.
+
+`;
+
+exports[`invalid(134): a { display: inline table; border-collapse: collapse; padding-inline: 8px 12px; writing-mode: vertical-rl; } 1`] = `
+
+  1 | a { display: inline table; border-collapse: collapse; padding-inline: 8px 12px; writing-mode: vertical-rl; }
+
+`;
+
+exports[`invalid(134): a { display: inline table; border-collapse: collapse; padding-inline: 8px 12px; writing-mode: vertical-rl; } 2`] = `
+
+Message:
+> 1 | a { display: inline table; border-collapse: collapse; padding-inline: 8px 12px; writing-mode: vertical-rl; }
+    |                                                       ^^^^^^^^^^^^^^^^^^^^^^^^ \`padding-inline\` has no effect on this table with \`border-collapse: collapse\`. Apply padding to table cells or use separate borders.
+
+`;
+
+exports[`invalid(135): a { PADDING-BLOCK: 8px !important; DISPLAY: TABLE; BORDER-COLLAPSE: COLLAPSE; } 1`] = `
+
+  1 | a { PADDING-BLOCK: 8px !important; DISPLAY: TABLE; BORDER-COLLAPSE: COLLAPSE; }
+
+`;
+
+exports[`invalid(135): a { PADDING-BLOCK: 8px !important; DISPLAY: TABLE; BORDER-COLLAPSE: COLLAPSE; } 2`] = `
+
+Message:
+> 1 | a { PADDING-BLOCK: 8px !important; DISPLAY: TABLE; BORDER-COLLAPSE: COLLAPSE; }
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`padding-block\` has no effect on this table with \`border-collapse: collapse\`. Apply padding to table cells or use separate borders.
+
+`;
+
+exports[`invalid(136): a { display: table; border-collapse: collapse; pa\\64 ding-inline-end: 8px; } 1`] = `
+
+  1 | a { display: table; border-collapse: collapse; pa\\64 ding-inline-end: 8px; }
+
+`;
+
+exports[`invalid(136): a { display: table; border-collapse: collapse; pa\\64 ding-inline-end: 8px; } 2`] = `
+
+Message:
+> 1 | a { display: table; border-collapse: collapse; pa\\64 ding-inline-end: 8px; }
+    |                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^ \`padding-inline-end\` has no effect on this table with \`border-collapse: collapse\`. Apply padding to table cells or use separate borders.
+
+`;
+
+exports[`invalid(137): a { display: table; border-collapse: collapse; padding: /* inset */ calc(1rem + 2px); } 1`] = `
+
+  1 | a { display: table; border-collapse: collapse; padding: /* inset */ calc(1rem + 2px); }
+
+`;
+
+exports[`invalid(137): a { display: table; border-collapse: collapse; padding: /* inset */ calc(1rem + 2px); } 2`] = `
+
+Message:
+> 1 | a { display: table; border-collapse: collapse; padding: /* inset */ calc(1rem + 2px); }
+    |                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`padding\` has no effect on this table with \`border-collapse: collapse\`. Apply padding to table cells or use separate borders.
+
+`;
+
+exports[`invalid(138): a { @media (width > 1px) { display: table; border-collapse: collapse; padding: 8px; } } 1`] = `
+
+  1 | a { @media (width > 1px) { display: table; border-collapse: collapse; padding: 8px; } }
+
+`;
+
+exports[`invalid(138): a { @media (width > 1px) { display: table; border-collapse: collapse; padding: 8px; } } 2`] = `
+
+Message:
+> 1 | a { @media (width > 1px) { display: table; border-collapse: collapse; padding: 8px; } }
+    |                                                                       ^^^^^^^^^^^^ \`padding\` has no effect on this table with \`border-collapse: collapse\`. Apply padding to table cells or use separate borders.
+
+`;
+
+exports[`invalid(139): a { position: absolute; clear: left; } 1`] = `
+
+  1 | a { position: absolute; clear: left; }
+
+`;
+
+exports[`invalid(139): a { position: absolute; clear: left; } 2`] = `
+
+Message:
+> 1 | a { position: absolute; clear: left; }
+    |                         ^^^^^^^^^^^ \`clear: left\` has no effect with \`position: absolute\`. Absolutely positioned elements do not participate in normal flow.
 
 `;
 
@@ -390,6 +642,146 @@ Message:
 
 `;
 
+exports[`invalid(140): a { position: absolute; clear: right; } 1`] = `
+
+  1 | a { position: absolute; clear: right; }
+
+`;
+
+exports[`invalid(140): a { position: absolute; clear: right; } 2`] = `
+
+Message:
+> 1 | a { position: absolute; clear: right; }
+    |                         ^^^^^^^^^^^^ \`clear: right\` has no effect with \`position: absolute\`. Absolutely positioned elements do not participate in normal flow.
+
+`;
+
+exports[`invalid(141): a { position: absolute; clear: both; } 1`] = `
+
+  1 | a { position: absolute; clear: both; }
+
+`;
+
+exports[`invalid(141): a { position: absolute; clear: both; } 2`] = `
+
+Message:
+> 1 | a { position: absolute; clear: both; }
+    |                         ^^^^^^^^^^^ \`clear: both\` has no effect with \`position: absolute\`. Absolutely positioned elements do not participate in normal flow.
+
+`;
+
+exports[`invalid(142): a { position: absolute; clear: inline-start; } 1`] = `
+
+  1 | a { position: absolute; clear: inline-start; }
+
+`;
+
+exports[`invalid(142): a { position: absolute; clear: inline-start; } 2`] = `
+
+Message:
+> 1 | a { position: absolute; clear: inline-start; }
+    |                         ^^^^^^^^^^^^^^^^^^^ \`clear: inline-start\` has no effect with \`position: absolute\`. Absolutely positioned elements do not participate in normal flow.
+
+`;
+
+exports[`invalid(143): a { position: absolute; clear: inline-end; } 1`] = `
+
+  1 | a { position: absolute; clear: inline-end; }
+
+`;
+
+exports[`invalid(143): a { position: absolute; clear: inline-end; } 2`] = `
+
+Message:
+> 1 | a { position: absolute; clear: inline-end; }
+    |                         ^^^^^^^^^^^^^^^^^ \`clear: inline-end\` has no effect with \`position: absolute\`. Absolutely positioned elements do not participate in normal flow.
+
+`;
+
+exports[`invalid(144): a { clear: both; position: fixed !important; } 1`] = `
+
+  1 | a { clear: both; position: fixed !important; }
+
+`;
+
+exports[`invalid(144): a { clear: both; position: fixed !important; } 2`] = `
+
+Message:
+> 1 | a { clear: both; position: fixed !important; }
+    |     ^^^^^^^^^^^ \`clear: both\` has no effect with \`position: fixed\`. Absolutely positioned elements do not participate in normal flow.
+
+`;
+
+exports[`invalid(145): a { POSITION: ABSOLUTE; CLEAR: INLINE-END; } 1`] = `
+
+  1 | a { POSITION: ABSOLUTE; CLEAR: INLINE-END; }
+
+`;
+
+exports[`invalid(145): a { POSITION: ABSOLUTE; CLEAR: INLINE-END; } 2`] = `
+
+Message:
+> 1 | a { POSITION: ABSOLUTE; CLEAR: INLINE-END; }
+    |                         ^^^^^^^^^^^^^^^^^ \`clear: inline-end\` has no effect with \`position: absolute\`. Absolutely positioned elements do not participate in normal flow.
+
+`;
+
+exports[`invalid(146): a { position: f\\69 xed; cl\\65 ar: b\\6f th; } 1`] = `
+
+  1 | a { position: f\\69 xed; cl\\65 ar: b\\6f th; }
+
+`;
+
+exports[`invalid(146): a { position: f\\69 xed; cl\\65 ar: b\\6f th; } 2`] = `
+
+Message:
+> 1 | a { position: f\\69 xed; cl\\65 ar: b\\6f th; }
+    |                         ^^^^^^^^^^^^^^^^^ \`clear: both\` has no effect with \`position: fixed\`. Absolutely positioned elements do not participate in normal flow.
+
+`;
+
+exports[`invalid(147): a { @supports (position: fixed) { position: fixed; clear: /* floats */ left; } } 1`] = `
+
+  1 | a { @supports (position: fixed) { position: fixed; clear: /* floats */ left; } }
+
+`;
+
+exports[`invalid(147): a { @supports (position: fixed) { position: fixed; clear: /* floats */ left; } } 2`] = `
+
+Message:
+> 1 | a { @supports (position: fixed) { position: fixed; clear: /* floats */ left; } }
+    |                                                    ^^^^^^^^^^^^^^^^^^^^^^^^ \`clear: left\` has no effect with \`position: fixed\`. Absolutely positioned elements do not participate in normal flow.
+
+`;
+
+exports[`invalid(148): a { perspective: none; perspective-origin: left; } 1`] = `
+
+  1 | a { perspective: none; perspective-origin: left; }
+
+`;
+
+exports[`invalid(148): a { perspective: none; perspective-origin: left; } 2`] = `
+
+Message:
+> 1 | a { perspective: none; perspective-origin: left; }
+    |                        ^^^^^^^^^^^^^^^^^^^^^^^^ \`perspective-origin\` has no effect with \`perspective: none\`. Set a perspective distance to use this origin.
+
+`;
+
+exports[`invalid(149): a { perspective-origin: 20% 30%; perspective: none !important; } 1`] = `
+
+  1 | a { perspective-origin: 20% 30%; perspective: none !important; }
+
+`;
+
+exports[`invalid(149): a { perspective-origin: 20% 30%; perspective: none !important; } 2`] = `
+
+Message:
+> 1 | a { perspective-origin: 20% 30%; perspective: none !important; }
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`perspective-origin\` has no effect with \`perspective: none\`. Set a perspective distance to use this origin.
+
+`;
+
 exports[`invalid(15): a { position: static; left: 20px; } 1`] = `
 
   1 | a { position: static; left: 20px; }
@@ -401,6 +793,76 @@ exports[`invalid(15): a { position: static; left: 20px; } 2`] = `
 Message:
 > 1 | a { position: static; left: 20px; }
     |                       ^^^^^^^^^^ \`left\` has no effect with \`position: static\`. Insets require a positioned element.
+
+`;
+
+exports[`invalid(150): a { PERSPECTIVE: NONE; PERSPECTIVE-ORIGIN: LEFT TOP; } 1`] = `
+
+  1 | a { PERSPECTIVE: NONE; PERSPECTIVE-ORIGIN: LEFT TOP; }
+
+`;
+
+exports[`invalid(150): a { PERSPECTIVE: NONE; PERSPECTIVE-ORIGIN: LEFT TOP; } 2`] = `
+
+Message:
+> 1 | a { PERSPECTIVE: NONE; PERSPECTIVE-ORIGIN: LEFT TOP; }
+    |                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`perspective-origin\` has no effect with \`perspective: none\`. Set a perspective distance to use this origin.
+
+`;
+
+exports[`invalid(151): a { perspe\\63 tive: n\\6f ne; perspective-orig\\69 n: left; } 1`] = `
+
+  1 | a { perspe\\63 tive: n\\6f ne; perspective-orig\\69 n: left; }
+
+`;
+
+exports[`invalid(151): a { perspe\\63 tive: n\\6f ne; perspective-orig\\69 n: left; } 2`] = `
+
+Message:
+> 1 | a { perspe\\63 tive: n\\6f ne; perspective-orig\\69 n: left; }
+    |                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`perspective-origin\` has no effect with \`perspective: none\`. Set a perspective distance to use this origin.
+
+`;
+
+exports[`invalid(152): a { perspective: /* depth */ none; perspective-origin: /* viewpoint */ calc(50% + 1px) center; } 1`] = `
+
+  1 | a { perspective: /* depth */ none; perspective-origin: /* viewpoint */ calc(50% + 1px) center; }
+
+`;
+
+exports[`invalid(152): a { perspective: /* depth */ none; perspective-origin: /* viewpoint */ calc(50% + 1px) center; } 2`] = `
+
+Message:
+> 1 | a { perspective: /* depth */ none; perspective-origin: /* viewpoint */ calc(50% + 1px) center; }
+    |                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`perspective-origin\` has no effect with \`perspective: none\`. Set a perspective distance to use this origin.
+
+`;
+
+exports[`invalid(153): a { perspective: none; transform: perspective(400px) rotateY(20deg); perspective-origin: left; } 1`] = `
+
+  1 | a { perspective: none; transform: perspective(400px) rotateY(20deg); perspective-origin: left; }
+
+`;
+
+exports[`invalid(153): a { perspective: none; transform: perspective(400px) rotateY(20deg); perspective-origin: left; } 2`] = `
+
+Message:
+> 1 | a { perspective: none; transform: perspective(400px) rotateY(20deg); perspective-origin: left; }
+    |                                                                      ^^^^^^^^^^^^^^^^^^^^^^^^ \`perspective-origin\` has no effect with \`perspective: none\`. Set a perspective distance to use this origin.
+
+`;
+
+exports[`invalid(154): a { @container (width > 1px) { perspective: none; perspective-origin: left; } } 1`] = `
+
+  1 | a { @container (width > 1px) { perspective: none; perspective-origin: left; } }
+
+`;
+
+exports[`invalid(154): a { @container (width > 1px) { perspective: none; perspective-origin: left; } } 2`] = `
+
+Message:
+> 1 | a { @container (width > 1px) { perspective: none; perspective-origin: left; } }
+    |                                                   ^^^^^^^^^^^^^^^^^^^^^^^^ \`perspective-origin\` has no effect with \`perspective: none\`. Set a perspective distance to use this origin.
 
 `;
 
