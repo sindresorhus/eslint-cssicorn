@@ -135,7 +135,10 @@ test({
 		{
 			name: 'large cyclic custom-property chain',
 			code: ':root {' + Array.from({length: 5000}, (_, index) => `--property-${index}: var(--property-${(index + 1) % 5000});`).join('') + '}',
-			errors: 5000,
+			errors: Array.from({length: 5000}, (_, index) => ({
+				messageId: 'no-self-referencing-custom-properties/cycle',
+				data: {property: `--property-${index}`},
+			})),
 		},
 		{
 			code: 'a { --a: var(--b); --b: var(--a); --c: var(--a) var(--d); --d: var(--c); --incoming: var(--c); }',
