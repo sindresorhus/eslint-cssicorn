@@ -43,8 +43,12 @@ test.snapshot({
 		'a { width: max(10px, min(5vw, env(safe-area-inset-top))); }',
 		'a { width: max(10px, min(attr(data-width px), 100px)); }',
 		'a { width: max(10px, min(--value(), 100px)); }',
-		'a { width: max(10px, min(abs(var(--width)), 100px)); }',
-		'a { width: max(10px, min(random(var(--minimum), 100px), 100px)); }',
+		'a { width: max(10px, min(abs(var(--width)) + var(--offset), 100px)); }',
+		'a { width: max(10px, min(--width(abs(var(--width))), 100px)); }',
+		String.raw`a { width: max(10px, min(v\61 r(--width), 100px)); }`,
+		'a { width: max(min(abs(var(--width)), 100px), 10px); }',
+		'a { width: min(100px, max(10px, abs(var(--width)))); }',
+		'a { width: max(min((var(--width)), 100px), 10px); }',
 		'a { width: max(calc(var(--minimum)), min(var(--width), 100px)); }',
 		'a { width: max(min(calc(var(--width)), 100px), 10px); }',
 		'a { width: min(100px, max(10px, calc(var(--width)))); }',
@@ -105,6 +109,46 @@ test.snapshot({
 test({
 	valid: [],
 	invalid: [
+		{
+			code: 'a { width: max(10px, min(abs(var(--width)), 100px)); }',
+			output: 'a { width: clamp(10px, abs(var(--width)), 100px); }',
+			errors: 1,
+		},
+		{
+			code: 'a { width: max(10px, min(random(var(--minimum), 100px), 100px)); }',
+			output: 'a { width: clamp(10px, random(var(--minimum), 100px), 100px); }',
+			errors: 1,
+		},
+		{
+			code: 'a { width: max(10px, min((var(--width, 5px, 10px)), 100px)); }',
+			output: 'a { width: clamp(10px, (var(--width, 5px, 10px)), 100px); }',
+			errors: 1,
+		},
+		{
+			code: 'a { width: max(abs(var(--minimum)), min(round(nearest, env(safe-area-inset-top), 1px), abs(attr(data-width px)))); }',
+			output: 'a { width: clamp(abs(var(--minimum)), round(nearest, env(safe-area-inset-top), 1px), abs(attr(data-width px))); }',
+			errors: 1,
+		},
+		{
+			code: 'a { width: max(10px, min(min(var(--widths), 50px), 100px)); }',
+			output: 'a { width: clamp(10px, min(var(--widths), 50px), 100px); }',
+			errors: 1,
+		},
+		{
+			code: 'a { width: max(10px, min(abs(--width()), 100px)); }',
+			output: 'a { width: clamp(10px, abs(--width()), 100px); }',
+			errors: 1,
+		},
+		{
+			code: 'a { width: max(10px, min(sin(var(--angle)) * 100px + (var(--offset)), 100px)); }',
+			output: 'a { width: clamp(10px, sin(var(--angle)) * 100px + (var(--offset)), 100px); }',
+			errors: 1,
+		},
+		{
+			code: 'a {\r\n  --size: ' + String.raw`MAX(10px,MIN(A\42 S(/* value */ var(--width)),100px));` + '\r\n}',
+			output: 'a {\r\n  --size: ' + String.raw`clamp(10px,A\42 S(/* value */ var(--width)),100px);` + '\r\n}',
+			errors: 1,
+		},
 		{
 			code: 'a { width: max(10px, min(calc(var(--width)), 100px)); }',
 			output: 'a { width: clamp(10px, calc(var(--width)), 100px); }',
@@ -243,6 +287,7 @@ nodeTest('overlapping fixes converge and remain stable', () => {
 		for (const [value, expectedValue] of [
 			['max(10px, min(max(2px, min(3vw, 20px)), 100px))', 'clamp(10px, clamp(2px, 3vw, 20px), 100px)'],
 			['max(10px, min(max(2px, min(calc(var(--size)), random(10px, 20px))), 100px))', 'clamp(10px, clamp(2px, calc(var(--size)), random(10px, 20px)), 100px)'],
+			['max(10px, min(max(2px, min(abs(var(--size)), random(10px, 20px))), 100px))', 'clamp(10px, clamp(2px, abs(var(--size)), random(10px, 20px)), 100px)'],
 		]) {
 			const code = `a { ${property}: ${value}; }`;
 			const result = linter.verifyAndFix(code, config, {filename: 'example.css'});

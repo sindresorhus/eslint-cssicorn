@@ -36,29 +36,6 @@ const isNone = argument => argument.nodes.length === 1
 	&& normalizeCssIdentifier(argument.nodes[0].name) === 'none';
 
 /**
-Check for substitutions outside retained calc() wrappers, which could change argument counts or introduce none bounds.
-*/
-function hasUnwrappedSubstitution(node) {
-	const nodes = [node];
-	while (nodes.length > 0) {
-		const target = nodes.pop();
-		if (isSubstitutionFunction(target)) {
-			return true;
-		}
-
-		if (target.type === 'Function' && normalizeCssIdentifier(target.name) === 'calc') {
-			continue;
-		}
-
-		if (target.children) {
-			nodes.push(...target.children);
-		}
-	}
-
-	return false;
-}
-
-/**
 Check literal bounds without resolving units or percentages. Percentages can have a negative reference size, which reverses their order.
 */
 function areOrderedBounds(minimum, maximum) {
@@ -126,11 +103,8 @@ function getClampProblem(node, context, reportNode = node) {
 		return;
 	}
 
-	// Keeping argument order preserves random() indices, including random calls introduced by substitutions inside calc().
+	// Keeping argument order preserves random() indices, including random calls introduced by substitutions.
 	const preservesOrder = name === 'max' && nestedArgument === outerArguments[1];
-	if (preservesOrder ? hasUnwrappedSubstitution(node) : hasSubstitutionOrRandomFunction(node)) {
-		return;
-	}
 
 	const bound = outerArguments.find(argument => argument !== nestedArgument);
 	let clampArguments;
@@ -147,6 +121,11 @@ function getClampProblem(node, context, reportNode = node) {
 		}
 
 		clampArguments = [minimum, innerArguments.find(argument => argument !== minimum), bound];
+	}
+
+	// Substitutions inside retained functions and parentheses cannot change argument counts or introduce none bounds.
+	if (preservesOrder ? clampArguments.some(argument => argument.nodes.some(target => isSubstitutionFunction(target))) : hasSubstitutionOrRandomFunction(node)) {
+		return;
 	}
 
 	const range = sourceCode.getRange(node);
