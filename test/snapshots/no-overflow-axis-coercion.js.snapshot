@@ -600,6 +600,34 @@ Message:
 
 `;
 
+exports[`invalid(48): @MEDIA (width > 0px) { a { overflow: hidden visible; } } 1`] = `
+
+  1 | @MEDIA (width > 0px) { a { overflow: hidden visible; } }
+
+`;
+
+exports[`invalid(48): @MEDIA (width > 0px) { a { overflow: hidden visible; } } 2`] = `
+
+Message:
+> 1 | @MEDIA (width > 0px) { a { overflow: hidden visible; } }
+    |                                             ^^^^^^^ \`overflow-y: visible\` computes to \`auto\` because \`overflow-x\` is \`hidden\`. Result: \`overflow-x: hidden\` and \`overflow-y: auto\`.
+
+`;
+
+exports[`invalid(49): a { overflow: auto; & b { color: red; } overflow: hidden visible; } 1`] = `
+
+  1 | a { overflow: auto; & b { color: red; } overflow: hidden visible; }
+
+`;
+
+exports[`invalid(49): a { overflow: auto; & b { color: red; } overflow: hidden visible; } 2`] = `
+
+Message:
+> 1 | a { overflow: auto; & b { color: red; } overflow: hidden visible; }
+    |                                                          ^^^^^^^ \`overflow-y: visible\` computes to \`auto\` because \`overflow-x\` is \`hidden\`. Result: \`overflow-x: hidden\` and \`overflow-y: auto\`.
+
+`;
+
 exports[`invalid(5): a { overflow: visible hidden; } 1`] = `
 
   1 | a { overflow: visible hidden; }

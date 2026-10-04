@@ -41,6 +41,7 @@ test.snapshot({
 		'a { overflow: hidden; overflow-inline: visible; }',
 		'a { overflow-x: hidden; } b { overflow-y: visible; }',
 		'a { overflow-x: hidden; & b { overflow-y: visible; } }',
+		'a { overflow: hidden visible; & b { color: red; } overflow: auto; }',
 		'a { overflow-x: hidden; @media (width > 0px) { overflow-y: visible; } }',
 		'a { --overflow: hidden visible; content: "overflow: hidden visible"; background: url("hidden-visible"); }',
 		'a { -webkit-overflow-x: hidden; overflow-y: visible; }',
@@ -110,6 +111,8 @@ test.snapshot({
 		'a { overflow: hidden visible !IMPORTANT; overflow: auto; }',
 		'a { all: unset !important; overflow-block: hidden !important; overflow-inline: visible !important; }',
 		'a { overflow: var(--overflow); overflow-x: hidden; overflow-y: visible; }',
+		'@MEDIA (width > 0px) { a { overflow: hidden visible; } }',
+		'a { overflow: auto; & b { color: red; } overflow: hidden visible; }',
 	],
 });
 

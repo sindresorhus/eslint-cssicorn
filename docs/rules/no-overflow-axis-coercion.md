@@ -61,6 +61,8 @@ Use `clip` with `visible` when you intend to clip one axis while letting content
 
 Unlike `hidden`, `clip` forbids programmatic scrolling and does not establish a formatting context. If you also need a formatting context, consider `display: flow-root`.
 
+With `clip` on one axis and `visible` on the other, `border-radius` does not round the overflow clipping edge.
+
 Logical overflow axes are supported too:
 
 ```css
