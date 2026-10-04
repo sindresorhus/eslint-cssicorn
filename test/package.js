@@ -168,6 +168,8 @@ test('Plugin should have metadata', () => {
 
 // Rules that cannot work well in normal projects. Every other rule belongs in `recommended`.
 const RULES_NOT_RECOMMENDED = new Set([
+	// Enforces file-local layer contracts that may not describe modular stylesheet architecture.
+	'consistent-layer-order',
 	// Only sees `@keyframes` in the same file.
 	'no-unknown-animations',
 	// Enforces a source order convention, and intentional "specific before general" ordering is common.
