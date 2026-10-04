@@ -1,0 +1,1305 @@
+exports[`invalid(1): a { transition: opactiy 200ms; } 1`] = `
+
+  1 | a { transition: opactiy 200ms; }
+
+`;
+
+exports[`invalid(1): a { transition: opactiy 200ms; } 2`] = `
+
+Message:
+> 1 | a { transition: opactiy 200ms; }
+    |                 ^^^^^^^ Unknown property reference 'opactiy' in 'transition'.
+
+`;
+
+exports[`invalid(10): a { transition-property: ease-in; } 1`] = `
+
+  1 | a { transition-property: ease-in; }
+
+`;
+
+exports[`invalid(10): a { transition-property: ease-in; } 2`] = `
+
+Message:
+> 1 | a { transition-property: ease-in; }
+    |                          ^^^^^^^ Unknown property reference 'ease-in' in 'transition-property'.
+
+`;
+
+exports[`invalid(11): a { transition-property: ease-out; } 1`] = `
+
+  1 | a { transition-property: ease-out; }
+
+`;
+
+exports[`invalid(11): a { transition-property: ease-out; } 2`] = `
+
+Message:
+> 1 | a { transition-property: ease-out; }
+    |                          ^^^^^^^^ Unknown property reference 'ease-out' in 'transition-property'.
+
+`;
+
+exports[`invalid(12): a { transition-property: ease-in-out; } 1`] = `
+
+  1 | a { transition-property: ease-in-out; }
+
+`;
+
+exports[`invalid(12): a { transition-property: ease-in-out; } 2`] = `
+
+Message:
+> 1 | a { transition-property: ease-in-out; }
+    |                          ^^^^^^^^^^^ Unknown property reference 'ease-in-out' in 'transition-property'.
+
+`;
+
+exports[`invalid(13): a { transition-property: step-start; } 1`] = `
+
+  1 | a { transition-property: step-start; }
+
+`;
+
+exports[`invalid(13): a { transition-property: step-start; } 2`] = `
+
+Message:
+> 1 | a { transition-property: step-start; }
+    |                          ^^^^^^^^^^ Unknown property reference 'step-start' in 'transition-property'.
+
+`;
+
+exports[`invalid(14): a { transition-property: step-end; } 1`] = `
+
+  1 | a { transition-property: step-end; }
+
+`;
+
+exports[`invalid(14): a { transition-property: step-end; } 2`] = `
+
+Message:
+> 1 | a { transition-property: step-end; }
+    |                          ^^^^^^^^ Unknown property reference 'step-end' in 'transition-property'.
+
+`;
+
+exports[`invalid(15): a { transition: auto 1s, scroll-position 1s, contents 1s; } 1`] = `
+
+  1 | a { transition: auto 1s, scroll-position 1s, contents 1s; }
+
+`;
+
+exports[`invalid(15): a { transition: auto 1s, scroll-position 1s, contents 1s; } 2`] = `
+
+Message:
+> 1 | a { transition: auto 1s, scroll-position 1s, contents 1s; }
+    |                 ^^^^ Unknown property reference 'auto' in 'transition'.
+
+`;
+
+exports[`invalid(15): a { transition: auto 1s, scroll-position 1s, contents 1s; } 3`] = `
+
+Message:
+> 1 | a { transition: auto 1s, scroll-position 1s, contents 1s; }
+    |                          ^^^^^^^^^^^^^^^ Unknown property reference 'scroll-position' in 'transition'.
+
+`;
+
+exports[`invalid(15): a { transition: auto 1s, scroll-position 1s, contents 1s; } 4`] = `
+
+Message:
+> 1 | a { transition: auto 1s, scroll-position 1s, contents 1s; }
+    |                                              ^^^^^^^^ Unknown property reference 'contents' in 'transition'.
+
+`;
+
+exports[`invalid(16): a { will-change: ease, normal, allow-discrete; } 1`] = `
+
+  1 | a { will-change: ease, normal, allow-discrete; }
+
+`;
+
+exports[`invalid(16): a { will-change: ease, normal, allow-discrete; } 2`] = `
+
+Message:
+> 1 | a { will-change: ease, normal, allow-discrete; }
+    |                  ^^^^ Unknown property reference 'ease' in 'will-change'.
+
+`;
+
+exports[`invalid(16): a { will-change: ease, normal, allow-discrete; } 3`] = `
+
+Message:
+> 1 | a { will-change: ease, normal, allow-discrete; }
+    |                        ^^^^^^ Unknown property reference 'normal' in 'will-change'.
+
+`;
+
+exports[`invalid(16): a { will-change: ease, normal, allow-discrete; } 4`] = `
+
+Message:
+> 1 | a { will-change: ease, normal, allow-discrete; }
+    |                                ^^^^^^^^^^^^^^ Unknown property reference 'allow-discrete' in 'will-change'.
+
+`;
+
+exports[`invalid(17): a { will-change: ease-in; } 1`] = `
+
+  1 | a { will-change: ease-in; }
+
+`;
+
+exports[`invalid(17): a { will-change: ease-in; } 2`] = `
+
+Message:
+> 1 | a { will-change: ease-in; }
+    |                  ^^^^^^^ Unknown property reference 'ease-in' in 'will-change'.
+
+`;
+
+exports[`invalid(18): a { will-change: ease-out; } 1`] = `
+
+  1 | a { will-change: ease-out; }
+
+`;
+
+exports[`invalid(18): a { will-change: ease-out; } 2`] = `
+
+Message:
+> 1 | a { will-change: ease-out; }
+    |                  ^^^^^^^^ Unknown property reference 'ease-out' in 'will-change'.
+
+`;
+
+exports[`invalid(19): a { will-change: ease-in-out; } 1`] = `
+
+  1 | a { will-change: ease-in-out; }
+
+`;
+
+exports[`invalid(19): a { will-change: ease-in-out; } 2`] = `
+
+Message:
+> 1 | a { will-change: ease-in-out; }
+    |                  ^^^^^^^^^^^ Unknown property reference 'ease-in-out' in 'will-change'.
+
+`;
+
+exports[`invalid(2): a { transition-property: opactiy; } 1`] = `
+
+  1 | a { transition-property: opactiy; }
+
+`;
+
+exports[`invalid(2): a { transition-property: opactiy; } 2`] = `
+
+Message:
+> 1 | a { transition-property: opactiy; }
+    |                          ^^^^^^^ Unknown property reference 'opactiy' in 'transition-property'.
+
+`;
+
+exports[`invalid(20): a { will-change: linear; } 1`] = `
+
+  1 | a { will-change: linear; }
+
+`;
+
+exports[`invalid(20): a { will-change: linear; } 2`] = `
+
+Message:
+> 1 | a { will-change: linear; }
+    |                  ^^^^^^ Unknown property reference 'linear' in 'will-change'.
+
+`;
+
+exports[`invalid(21): a { will-change: step-start; } 1`] = `
+
+  1 | a { will-change: step-start; }
+
+`;
+
+exports[`invalid(21): a { will-change: step-start; } 2`] = `
+
+Message:
+> 1 | a { will-change: step-start; }
+    |                  ^^^^^^^^^^ Unknown property reference 'step-start' in 'will-change'.
+
+`;
+
+exports[`invalid(22): a { will-change: step-end; } 1`] = `
+
+  1 | a { will-change: step-end; }
+
+`;
+
+exports[`invalid(22): a { will-change: step-end; } 2`] = `
+
+Message:
+> 1 | a { will-change: step-end; }
+    |                  ^^^^^^^^ Unknown property reference 'step-end' in 'will-change'.
+
+`;
+
+exports[`invalid(23): a { will-change: none; } 1`] = `
+
+  1 | a { will-change: none; }
+
+`;
+
+exports[`invalid(23): a { will-change: none; } 2`] = `
+
+Message:
+> 1 | a { will-change: none; }
+    |                  ^^^^ Property reference 'none' is not allowed in 'will-change'.
+
+`;
+
+exports[`invalid(24): a { will-change: all; } 1`] = `
+
+  1 | a { will-change: all; }
+
+`;
+
+exports[`invalid(24): a { will-change: all; } 2`] = `
+
+Message:
+> 1 | a { will-change: all; }
+    |                  ^^^ Property reference 'all' is not allowed in 'will-change'.
+
+`;
+
+exports[`invalid(25): a { will-change: will-change; } 1`] = `
+
+  1 | a { will-change: will-change; }
+
+`;
+
+exports[`invalid(25): a { will-change: will-change; } 2`] = `
+
+Message:
+> 1 | a { will-change: will-change; }
+    |                  ^^^^^^^^^^^ Property reference 'will-change' is not allowed in 'will-change'.
+
+`;
+
+exports[`invalid(26): a { will-change: opacity, all, none, will-change; } 1`] = `
+
+  1 | a { will-change: opacity, all, none, will-change; }
+
+`;
+
+exports[`invalid(26): a { will-change: opacity, all, none, will-change; } 2`] = `
+
+Message:
+> 1 | a { will-change: opacity, all, none, will-change; }
+    |                           ^^^ Property reference 'all' is not allowed in 'will-change'.
+
+`;
+
+exports[`invalid(26): a { will-change: opacity, all, none, will-change; } 3`] = `
+
+Message:
+> 1 | a { will-change: opacity, all, none, will-change; }
+    |                                ^^^^ Property reference 'none' is not allowed in 'will-change'.
+
+`;
+
+exports[`invalid(26): a { will-change: opacity, all, none, will-change; } 4`] = `
+
+Message:
+> 1 | a { will-change: opacity, all, none, will-change; }
+    |                                      ^^^^^^^^^^^ Property reference 'will-change' is not allowed in 'will-change'.
+
+`;
+
+exports[`invalid(27): a { transition: default 1s; transition-property: default; will-change: default; } 1`] = `
+
+  1 | a { transition: default 1s; transition-property: default; will-change: default; }
+
+`;
+
+exports[`invalid(27): a { transition: default 1s; transition-property: default; will-change: default; } 2`] = `
+
+Message:
+> 1 | a { transition: default 1s; transition-property: default; will-change: default; }
+    |                 ^^^^^^^ Property reference 'default' is not allowed in 'transition'.
+
+`;
+
+exports[`invalid(27): a { transition: default 1s; transition-property: default; will-change: default; } 3`] = `
+
+Message:
+> 1 | a { transition: default 1s; transition-property: default; will-change: default; }
+    |                                                  ^^^^^^^ Property reference 'default' is not allowed in 'transition-property'.
+
+`;
+
+exports[`invalid(27): a { transition: default 1s; transition-property: default; will-change: default; } 4`] = `
+
+Message:
+> 1 | a { transition: default 1s; transition-property: default; will-change: default; }
+    |                                                                        ^^^^^^^ Property reference 'default' is not allowed in 'will-change'.
+
+`;
+
+exports[`invalid(28): a { transition: inherit 1s; transition-property: opacity, inherit; will-change: inherit, color; } 1`] = `
+
+  1 | a { transition: inherit 1s; transition-property: opacity, inherit; will-change: inherit, color; }
+
+`;
+
+exports[`invalid(28): a { transition: inherit 1s; transition-property: opacity, inherit; will-change: inherit, color; } 2`] = `
+
+Message:
+> 1 | a { transition: inherit 1s; transition-property: opacity, inherit; will-change: inherit, color; }
+    |                 ^^^^^^^ Property reference 'inherit' is not allowed in 'transition'.
+
+`;
+
+exports[`invalid(28): a { transition: inherit 1s; transition-property: opacity, inherit; will-change: inherit, color; } 3`] = `
+
+Message:
+> 1 | a { transition: inherit 1s; transition-property: opacity, inherit; will-change: inherit, color; }
+    |                                                           ^^^^^^^ Property reference 'inherit' is not allowed in 'transition-property'.
+
+`;
+
+exports[`invalid(28): a { transition: inherit 1s; transition-property: opacity, inherit; will-change: inherit, color; } 4`] = `
+
+Message:
+> 1 | a { transition: inherit 1s; transition-property: opacity, inherit; will-change: inherit, color; }
+    |                                                                                 ^^^^^^^ Property reference 'inherit' is not allowed in 'will-change'.
+
+`;
+
+exports[`invalid(29): a { transition: initial 1s; transition-property: opacity, initial; will-change: initial, color; } 1`] = `
+
+  1 | a { transition: initial 1s; transition-property: opacity, initial; will-change: initial, color; }
+
+`;
+
+exports[`invalid(29): a { transition: initial 1s; transition-property: opacity, initial; will-change: initial, color; } 2`] = `
+
+Message:
+> 1 | a { transition: initial 1s; transition-property: opacity, initial; will-change: initial, color; }
+    |                 ^^^^^^^ Property reference 'initial' is not allowed in 'transition'.
+
+`;
+
+exports[`invalid(29): a { transition: initial 1s; transition-property: opacity, initial; will-change: initial, color; } 3`] = `
+
+Message:
+> 1 | a { transition: initial 1s; transition-property: opacity, initial; will-change: initial, color; }
+    |                                                           ^^^^^^^ Property reference 'initial' is not allowed in 'transition-property'.
+
+`;
+
+exports[`invalid(29): a { transition: initial 1s; transition-property: opacity, initial; will-change: initial, color; } 4`] = `
+
+Message:
+> 1 | a { transition: initial 1s; transition-property: opacity, initial; will-change: initial, color; }
+    |                                                                                 ^^^^^^^ Property reference 'initial' is not allowed in 'will-change'.
+
+`;
+
+exports[`invalid(3): a { will-change: transfrom; } 1`] = `
+
+  1 | a { will-change: transfrom; }
+
+`;
+
+exports[`invalid(3): a { will-change: transfrom; } 2`] = `
+
+Message:
+> 1 | a { will-change: transfrom; }
+    |                  ^^^^^^^^^ Unknown property reference 'transfrom' in 'will-change'.
+
+`;
+
+exports[`invalid(30): a { transition: unset 1s; transition-property: opacity, unset; will-change: unset, color; } 1`] = `
+
+  1 | a { transition: unset 1s; transition-property: opacity, unset; will-change: unset, color; }
+
+`;
+
+exports[`invalid(30): a { transition: unset 1s; transition-property: opacity, unset; will-change: unset, color; } 2`] = `
+
+Message:
+> 1 | a { transition: unset 1s; transition-property: opacity, unset; will-change: unset, color; }
+    |                 ^^^^^ Property reference 'unset' is not allowed in 'transition'.
+
+`;
+
+exports[`invalid(30): a { transition: unset 1s; transition-property: opacity, unset; will-change: unset, color; } 3`] = `
+
+Message:
+> 1 | a { transition: unset 1s; transition-property: opacity, unset; will-change: unset, color; }
+    |                                                         ^^^^^ Property reference 'unset' is not allowed in 'transition-property'.
+
+`;
+
+exports[`invalid(30): a { transition: unset 1s; transition-property: opacity, unset; will-change: unset, color; } 4`] = `
+
+Message:
+> 1 | a { transition: unset 1s; transition-property: opacity, unset; will-change: unset, color; }
+    |                                                                             ^^^^^ Property reference 'unset' is not allowed in 'will-change'.
+
+`;
+
+exports[`invalid(31): a { transition: revert 1s; transition-property: opacity, revert; will-change: revert, color; } 1`] = `
+
+  1 | a { transition: revert 1s; transition-property: opacity, revert; will-change: revert, color; }
+
+`;
+
+exports[`invalid(31): a { transition: revert 1s; transition-property: opacity, revert; will-change: revert, color; } 2`] = `
+
+Message:
+> 1 | a { transition: revert 1s; transition-property: opacity, revert; will-change: revert, color; }
+    |                 ^^^^^^ Property reference 'revert' is not allowed in 'transition'.
+
+`;
+
+exports[`invalid(31): a { transition: revert 1s; transition-property: opacity, revert; will-change: revert, color; } 3`] = `
+
+Message:
+> 1 | a { transition: revert 1s; transition-property: opacity, revert; will-change: revert, color; }
+    |                                                          ^^^^^^ Property reference 'revert' is not allowed in 'transition-property'.
+
+`;
+
+exports[`invalid(31): a { transition: revert 1s; transition-property: opacity, revert; will-change: revert, color; } 4`] = `
+
+Message:
+> 1 | a { transition: revert 1s; transition-property: opacity, revert; will-change: revert, color; }
+    |                                                                               ^^^^^^ Property reference 'revert' is not allowed in 'will-change'.
+
+`;
+
+exports[`invalid(32): a { transition: revert-layer 1s; transition-property: opacity, revert-layer; will-change: revert-layer, color; } 1`] = `
+
+  1 | a { transition: revert-layer 1s; transition-property: opacity, revert-layer; will-change: revert-layer, color; }
+
+`;
+
+exports[`invalid(32): a { transition: revert-layer 1s; transition-property: opacity, revert-layer; will-change: revert-layer, color; } 2`] = `
+
+Message:
+> 1 | a { transition: revert-layer 1s; transition-property: opacity, revert-layer; will-change: revert-layer, color; }
+    |                 ^^^^^^^^^^^^ Property reference 'revert-layer' is not allowed in 'transition'.
+
+`;
+
+exports[`invalid(32): a { transition: revert-layer 1s; transition-property: opacity, revert-layer; will-change: revert-layer, color; } 3`] = `
+
+Message:
+> 1 | a { transition: revert-layer 1s; transition-property: opacity, revert-layer; will-change: revert-layer, color; }
+    |                                                                ^^^^^^^^^^^^ Property reference 'revert-layer' is not allowed in 'transition-property'.
+
+`;
+
+exports[`invalid(32): a { transition: revert-layer 1s; transition-property: opacity, revert-layer; will-change: revert-layer, color; } 4`] = `
+
+Message:
+> 1 | a { transition: revert-layer 1s; transition-property: opacity, revert-layer; will-change: revert-layer, color; }
+    |                                                                                           ^^^^^^^^^^^^ Property reference 'revert-layer' is not allowed in 'will-change'.
+
+`;
+
+exports[`invalid(33): a { transition: revert-rule 1s; transition-property: opacity, revert-rule; will-change: revert-rule, color; } 1`] = `
+
+  1 | a { transition: revert-rule 1s; transition-property: opacity, revert-rule; will-change: revert-rule, color; }
+
+`;
+
+exports[`invalid(33): a { transition: revert-rule 1s; transition-property: opacity, revert-rule; will-change: revert-rule, color; } 2`] = `
+
+Message:
+> 1 | a { transition: revert-rule 1s; transition-property: opacity, revert-rule; will-change: revert-rule, color; }
+    |                 ^^^^^^^^^^^ Property reference 'revert-rule' is not allowed in 'transition'.
+
+`;
+
+exports[`invalid(33): a { transition: revert-rule 1s; transition-property: opacity, revert-rule; will-change: revert-rule, color; } 3`] = `
+
+Message:
+> 1 | a { transition: revert-rule 1s; transition-property: opacity, revert-rule; will-change: revert-rule, color; }
+    |                                                               ^^^^^^^^^^^ Property reference 'revert-rule' is not allowed in 'transition-property'.
+
+`;
+
+exports[`invalid(33): a { transition: revert-rule 1s; transition-property: opacity, revert-rule; will-change: revert-rule, color; } 4`] = `
+
+Message:
+> 1 | a { transition: revert-rule 1s; transition-property: opacity, revert-rule; will-change: revert-rule, color; }
+    |                                                                                         ^^^^^^^^^^^ Property reference 'revert-rule' is not allowed in 'will-change'.
+
+`;
+
+exports[`invalid(34): a { TRANSITION: OPACTIY 200ms; WILL-CHANGE: ALL; } 1`] = `
+
+  1 | a { TRANSITION: OPACTIY 200ms; WILL-CHANGE: ALL; }
+
+`;
+
+exports[`invalid(34): a { TRANSITION: OPACTIY 200ms; WILL-CHANGE: ALL; } 2`] = `
+
+Message:
+> 1 | a { TRANSITION: OPACTIY 200ms; WILL-CHANGE: ALL; }
+    |                 ^^^^^^^ Unknown property reference 'OPACTIY' in 'transition'.
+
+`;
+
+exports[`invalid(34): a { TRANSITION: OPACTIY 200ms; WILL-CHANGE: ALL; } 3`] = `
+
+Message:
+> 1 | a { TRANSITION: OPACTIY 200ms; WILL-CHANGE: ALL; }
+    |                                             ^^^ Property reference 'ALL' is not allowed in 'will-change'.
+
+`;
+
+exports[`invalid(35): a { tr\\61 nsition: opact\\69 y 200ms; will-change: \\61 ll; } 1`] = `
+
+  1 | a { tr\\61 nsition: opact\\69 y 200ms; will-change: \\61 ll; }
+
+`;
+
+exports[`invalid(35): a { tr\\61 nsition: opact\\69 y 200ms; will-change: \\61 ll; } 2`] = `
+
+Message:
+> 1 | a { tr\\61 nsition: opact\\69 y 200ms; will-change: \\61 ll; }
+    |                    ^^^^^^^^^^ Unknown property reference 'opact\\69 y' in 'transition'.
+
+`;
+
+exports[`invalid(35): a { tr\\61 nsition: opact\\69 y 200ms; will-change: \\61 ll; } 3`] = `
+
+Message:
+> 1 | a { tr\\61 nsition: opact\\69 y 200ms; will-change: \\61 ll; }
+    |                                                   ^^^^^^ Property reference '\\61 ll' is not allowed in 'will-change'.
+
+`;
+
+exports[`invalid(36): a { transition-property: opacity, \\69 nherit; } 1`] = `
+
+  1 | a { transition-property: opacity, \\69 nherit; }
+
+`;
+
+exports[`invalid(36): a { transition-property: opacity, \\69 nherit; } 2`] = `
+
+Message:
+> 1 | a { transition-property: opacity, \\69 nherit; }
+    |                                   ^^^^^^^^^^ Property reference '\\69 nherit' is not allowed in 'transition-property'.
+
+`;
+
+exports[`invalid(37): a { TRANSITION-PROPERTY: D\\45 FAULT; WILL-CHANGE: N\\4f NE, WILL\\2d CHANGE; } 1`] = `
+
+  1 | a { TRANSITION-PROPERTY: D\\45 FAULT; WILL-CHANGE: N\\4f NE, WILL\\2d CHANGE; }
+
+`;
+
+exports[`invalid(37): a { TRANSITION-PROPERTY: D\\45 FAULT; WILL-CHANGE: N\\4f NE, WILL\\2d CHANGE; } 2`] = `
+
+Message:
+> 1 | a { TRANSITION-PROPERTY: D\\45 FAULT; WILL-CHANGE: N\\4f NE, WILL\\2d CHANGE; }
+    |                          ^^^^^^^^^^ Property reference 'D\\45 FAULT' is not allowed in 'transition-property'.
+
+`;
+
+exports[`invalid(37): a { TRANSITION-PROPERTY: D\\45 FAULT; WILL-CHANGE: N\\4f NE, WILL\\2d CHANGE; } 3`] = `
+
+Message:
+> 1 | a { TRANSITION-PROPERTY: D\\45 FAULT; WILL-CHANGE: N\\4f NE, WILL\\2d CHANGE; }
+    |                                                   ^^^^^^^ Property reference 'N\\4f NE' is not allowed in 'will-change'.
+
+`;
+
+exports[`invalid(37): a { TRANSITION-PROPERTY: D\\45 FAULT; WILL-CHANGE: N\\4f NE, WILL\\2d CHANGE; } 4`] = `
+
+Message:
+> 1 | a { TRANSITION-PROPERTY: D\\45 FAULT; WILL-CHANGE: N\\4f NE, WILL\\2d CHANGE; }
+    |                                                            ^^^^^^^^^^^^^^ Property reference 'WILL\\2d CHANGE' is not allowed in 'will-change'.
+
+`;
+
+exports[`invalid(38): a { transition: inherit /* keep */ 1s; transition-property: /* keep */ unset, var(--name); will-change: var(--name), revert-layer; } 1`] = `
+
+  1 | a { transition: inherit /* keep */ 1s; transition-property: /* keep */ unset, var(--name); will-change: var(--name), revert-layer; }
+
+`;
+
+exports[`invalid(38): a { transition: inherit /* keep */ 1s; transition-property: /* keep */ unset, var(--name); will-change: var(--name), revert-layer; } 2`] = `
+
+Message:
+> 1 | a { transition: inherit /* keep */ 1s; transition-property: /* keep */ unset, var(--name); will-change: var(--name), revert-layer; }
+    |                 ^^^^^^^ Property reference 'inherit' is not allowed in 'transition'.
+
+`;
+
+exports[`invalid(38): a { transition: inherit /* keep */ 1s; transition-property: /* keep */ unset, var(--name); will-change: var(--name), revert-layer; } 3`] = `
+
+Message:
+> 1 | a { transition: inherit /* keep */ 1s; transition-property: /* keep */ unset, var(--name); will-change: var(--name), revert-layer; }
+    |                                                                        ^^^^^ Property reference 'unset' is not allowed in 'transition-property'.
+
+`;
+
+exports[`invalid(38): a { transition: inherit /* keep */ 1s; transition-property: /* keep */ unset, var(--name); will-change: var(--name), revert-layer; } 4`] = `
+
+Message:
+> 1 | a { transition: inherit /* keep */ 1s; transition-property: /* keep */ unset, var(--name); will-change: var(--name), revert-layer; }
+    |                                                                                                                      ^^^^^^^^^^^^ Property reference 'revert-layer' is not allowed in 'will-change'.
+
+`;
+
+exports[`invalid(39): a { -w\\65 bkit-transition: opactiy 200ms; -MOZ-transition-property: transfrom; } 1`] = `
+
+  1 | a { -w\\65 bkit-transition: opactiy 200ms; -MOZ-transition-property: transfrom; }
+
+`;
+
+exports[`invalid(39): a { -w\\65 bkit-transition: opactiy 200ms; -MOZ-transition-property: transfrom; } 2`] = `
+
+Message:
+> 1 | a { -w\\65 bkit-transition: opactiy 200ms; -MOZ-transition-property: transfrom; }
+    |                            ^^^^^^^ Unknown property reference 'opactiy' in 'transition'.
+
+`;
+
+exports[`invalid(39): a { -w\\65 bkit-transition: opactiy 200ms; -MOZ-transition-property: transfrom; } 3`] = `
+
+Message:
+> 1 | a { -w\\65 bkit-transition: opactiy 200ms; -MOZ-transition-property: transfrom; }
+    |                                                                     ^^^^^^^^^ Unknown property reference 'transfrom' in 'transition-property'.
+
+`;
+
+exports[`invalid(4): a { transition-property: opacity, transfrom, colr; } 1`] = `
+
+  1 | a { transition-property: opacity, transfrom, colr; }
+
+`;
+
+exports[`invalid(4): a { transition-property: opacity, transfrom, colr; } 2`] = `
+
+Message:
+> 1 | a { transition-property: opacity, transfrom, colr; }
+    |                                   ^^^^^^^^^ Unknown property reference 'transfrom' in 'transition-property'.
+
+`;
+
+exports[`invalid(4): a { transition-property: opacity, transfrom, colr; } 3`] = `
+
+Message:
+> 1 | a { transition-property: opacity, transfrom, colr; }
+    |                                              ^^^^ Unknown property reference 'colr' in 'transition-property'.
+
+`;
+
+exports[`invalid(40): a { -WEBKIT-WILL-CHANGE: transfrom; will\\2d change: opactiy; transition\\2d property: colr; } 1`] = `
+
+  1 | a { -WEBKIT-WILL-CHANGE: transfrom; will\\2d change: opactiy; transition\\2d property: colr; }
+
+`;
+
+exports[`invalid(40): a { -WEBKIT-WILL-CHANGE: transfrom; will\\2d change: opactiy; transition\\2d property: colr; } 2`] = `
+
+Message:
+> 1 | a { -WEBKIT-WILL-CHANGE: transfrom; will\\2d change: opactiy; transition\\2d property: colr; }
+    |                          ^^^^^^^^^ Unknown property reference 'transfrom' in 'will-change'.
+
+`;
+
+exports[`invalid(40): a { -WEBKIT-WILL-CHANGE: transfrom; will\\2d change: opactiy; transition\\2d property: colr; } 3`] = `
+
+Message:
+> 1 | a { -WEBKIT-WILL-CHANGE: transfrom; will\\2d change: opactiy; transition\\2d property: colr; }
+    |                                                     ^^^^^^^ Unknown property reference 'opactiy' in 'will-change'.
+
+`;
+
+exports[`invalid(40): a { -WEBKIT-WILL-CHANGE: transfrom; will\\2d change: opactiy; transition\\2d property: colr; } 4`] = `
+
+Message:
+> 1 | a { -WEBKIT-WILL-CHANGE: transfrom; will\\2d change: opactiy; transition\\2d property: colr; }
+    |                                                                                      ^^^^ Unknown property reference 'colr' in 'transition-property'.
+
+`;
+
+exports[`invalid(41): a { will-change: İnset, marKer, blocK-size, _opacity; } 1`] = `
+
+  1 | a { will-change: İnset, marKer, blocK-size, _opacity; }
+
+`;
+
+exports[`invalid(41): a { will-change: İnset, marKer, blocK-size, _opacity; } 2`] = `
+
+Message:
+> 1 | a { will-change: İnset, marKer, blocK-size, _opacity; }
+    |                  ^^^^^ Unknown property reference 'İnset' in 'will-change'.
+
+`;
+
+exports[`invalid(41): a { will-change: İnset, marKer, blocK-size, _opacity; } 3`] = `
+
+Message:
+> 1 | a { will-change: İnset, marKer, blocK-size, _opacity; }
+    |                         ^^^^^^ Unknown property reference 'marKer' in 'will-change'.
+
+`;
+
+exports[`invalid(41): a { will-change: İnset, marKer, blocK-size, _opacity; } 4`] = `
+
+Message:
+> 1 | a { will-change: İnset, marKer, blocK-size, _opacity; }
+    |                                 ^^^^^^^^^^ Unknown property reference 'blocK-size' in 'will-change'.
+
+`;
+
+exports[`invalid(41): a { will-change: İnset, marKer, blocK-size, _opacity; } 5`] = `
+
+Message:
+> 1 | a { will-change: İnset, marKer, blocK-size, _opacity; }
+    |                                             ^^^^^^^^ Unknown property reference '_opacity' in 'will-change'.
+
+`;
+
+exports[`invalid(42): a { transition-property: constructor, __proto__; } 1`] = `
+
+  1 | a { transition-property: constructor, __proto__; }
+
+`;
+
+exports[`invalid(42): a { transition-property: constructor, __proto__; } 2`] = `
+
+Message:
+> 1 | a { transition-property: constructor, __proto__; }
+    |                          ^^^^^^^^^^^ Unknown property reference 'constructor' in 'transition-property'.
+
+`;
+
+exports[`invalid(42): a { transition-property: constructor, __proto__; } 3`] = `
+
+Message:
+> 1 | a { transition-property: constructor, __proto__; }
+    |                                       ^^^^^^^^^ Unknown property reference '__proto__' in 'transition-property'.
+
+`;
+
+exports[`invalid(43): a { transition-property: opacityy, opacity-unknown, -transfrom; } 1`] = `
+
+  1 | a { transition-property: opacityy, opacity-unknown, -transfrom; }
+
+`;
+
+exports[`invalid(43): a { transition-property: opacityy, opacity-unknown, -transfrom; } 2`] = `
+
+Message:
+> 1 | a { transition-property: opacityy, opacity-unknown, -transfrom; }
+    |                          ^^^^^^^^ Unknown property reference 'opacityy' in 'transition-property'.
+
+`;
+
+exports[`invalid(43): a { transition-property: opacityy, opacity-unknown, -transfrom; } 3`] = `
+
+Message:
+> 1 | a { transition-property: opacityy, opacity-unknown, -transfrom; }
+    |                                    ^^^^^^^^^^^^^^^ Unknown property reference 'opacity-unknown' in 'transition-property'.
+
+`;
+
+exports[`invalid(43): a { transition-property: opacityy, opacity-unknown, -transfrom; } 4`] = `
+
+Message:
+> 1 | a { transition-property: opacityy, opacity-unknown, -transfrom; }
+    |                                                     ^^^^^^^^^^ Unknown property reference '-transfrom' in 'transition-property'.
+
+`;
+
+exports[`invalid(44): a { transition: /* before */ opactiy /* after */ 1s !important; } 1`] = `
+
+  1 | a { transition: /* before */ opactiy /* after */ 1s !important; }
+
+`;
+
+exports[`invalid(44): a { transition: /* before */ opactiy /* after */ 1s !important; } 2`] = `
+
+Message:
+> 1 | a { transition: /* before */ opactiy /* after */ 1s !important; }
+    |                              ^^^^^^^ Unknown property reference 'opactiy' in 'transition'.
+
+`;
+
+exports[`invalid(45): a { transition: \"opactiy\", transfrom 1s url(\"colr\") custom(default); } 1`] = `
+
+  1 | a { transition: "opactiy", transfrom 1s url("colr") custom(default); }
+
+`;
+
+exports[`invalid(45): a { transition: \"opactiy\", transfrom 1s url(\"colr\") custom(default); } 2`] = `
+
+Message:
+> 1 | a { transition: "opactiy", transfrom 1s url("colr") custom(default); }
+    |                            ^^^^^^^^^ Unknown property reference 'transfrom' in 'transition'.
+
+`;
+
+exports[`invalid(46): a { will-change: --progress, -webkit-transform, transfrom, --default, default; } 1`] = `
+
+  1 | a { will-change: --progress, -webkit-transform, transfrom, --default, default; }
+
+`;
+
+exports[`invalid(46): a { will-change: --progress, -webkit-transform, transfrom, --default, default; } 2`] = `
+
+Message:
+> 1 | a { will-change: --progress, -webkit-transform, transfrom, --default, default; }
+    |                                                 ^^^^^^^^^ Unknown property reference 'transfrom' in 'will-change'.
+
+`;
+
+exports[`invalid(46): a { will-change: --progress, -webkit-transform, transfrom, --default, default; } 3`] = `
+
+Message:
+> 1 | a { will-change: --progress, -webkit-transform, transfrom, --default, default; }
+    |                                                                       ^^^^^^^ Property reference 'default' is not allowed in 'will-change'.
+
+`;
+
+exports[`invalid(47): a { transition-property: opacity /* transfrom */, colr; } 1`] = `
+
+  1 | a { transition-property: opacity /* transfrom */, colr; }
+
+`;
+
+exports[`invalid(47): a { transition-property: opacity /* transfrom */, colr; } 2`] = `
+
+Message:
+> 1 | a { transition-property: opacity /* transfrom */, colr; }
+    |                                                   ^^^^ Unknown property reference 'colr' in 'transition-property'.
+
+`;
+
+exports[`invalid(48): a { & > b { transition: opactiy 1s; } } 1`] = `
+
+  1 | a { & > b { transition: opactiy 1s; } }
+
+`;
+
+exports[`invalid(48): a { & > b { transition: opactiy 1s; } } 2`] = `
+
+Message:
+> 1 | a { & > b { transition: opactiy 1s; } }
+    |                         ^^^^^^^ Unknown property reference 'opactiy' in 'transition'.
+
+`;
+
+exports[`invalid(49): @media (width > 1px) { a { will-change: transfrom; } } 1`] = `
+
+  1 | @media (width > 1px) { a { will-change: transfrom; } }
+
+`;
+
+exports[`invalid(49): @media (width > 1px) { a { will-change: transfrom; } } 2`] = `
+
+Message:
+> 1 | @media (width > 1px) { a { will-change: transfrom; } }
+    |                                         ^^^^^^^^^ Unknown property reference 'transfrom' in 'will-change'.
+
+`;
+
+exports[`invalid(5): a { will-change: scroll-position, transfrom, contents, opactiy; } 1`] = `
+
+  1 | a { will-change: scroll-position, transfrom, contents, opactiy; }
+
+`;
+
+exports[`invalid(5): a { will-change: scroll-position, transfrom, contents, opactiy; } 2`] = `
+
+Message:
+> 1 | a { will-change: scroll-position, transfrom, contents, opactiy; }
+    |                                   ^^^^^^^^^ Unknown property reference 'transfrom' in 'will-change'.
+
+`;
+
+exports[`invalid(5): a { will-change: scroll-position, transfrom, contents, opactiy; } 3`] = `
+
+Message:
+> 1 | a { will-change: scroll-position, transfrom, contents, opactiy; }
+    |                                                        ^^^^^^^ Unknown property reference 'opactiy' in 'will-change'.
+
+`;
+
+exports[`invalid(50): @supports (transition: opactiy 1s) { a { transition: opactiy 1s; } } 1`] = `
+
+  1 | @supports (transition: opactiy 1s) { a { transition: opactiy 1s; } }
+
+`;
+
+exports[`invalid(50): @supports (transition: opactiy 1s) { a { transition: opactiy 1s; } } 2`] = `
+
+Message:
+> 1 | @supports (transition: opactiy 1s) { a { transition: opactiy 1s; } }
+    |                                                      ^^^^^^^ Unknown property reference 'opactiy' in 'transition'.
+
+`;
+
+exports[`invalid(51): @container (width > 1px) { a { transition-property: opactiy; } } 1`] = `
+
+  1 | @container (width > 1px) { a { transition-property: opactiy; } }
+
+`;
+
+exports[`invalid(51): @container (width > 1px) { a { transition-property: opactiy; } } 2`] = `
+
+Message:
+> 1 | @container (width > 1px) { a { transition-property: opactiy; } }
+    |                                                     ^^^^^^^ Unknown property reference 'opactiy' in 'transition-property'.
+
+`;
+
+exports[`invalid(52): @layer components { a { will-change: transfrom; } } 1`] = `
+
+  1 | @layer components { a { will-change: transfrom; } }
+
+`;
+
+exports[`invalid(52): @layer components { a { will-change: transfrom; } } 2`] = `
+
+Message:
+> 1 | @layer components { a { will-change: transfrom; } }
+    |                                      ^^^^^^^^^ Unknown property reference 'transfrom' in 'will-change'.
+
+`;
+
+exports[`invalid(53): @scope (.card) { a { transition: opactiy 1s; } } 1`] = `
+
+  1 | @scope (.card) { a { transition: opactiy 1s; } }
+
+`;
+
+exports[`invalid(53): @scope (.card) { a { transition: opactiy 1s; } } 2`] = `
+
+Message:
+> 1 | @scope (.card) { a { transition: opactiy 1s; } }
+    |                                  ^^^^^^^ Unknown property reference 'opactiy' in 'transition'.
+
+`;
+
+exports[`invalid(54): a { @starting-style { will-change: transfrom; } } 1`] = `
+
+  1 | a { @starting-style { will-change: transfrom; } }
+
+`;
+
+exports[`invalid(54): a { @starting-style { will-change: transfrom; } } 2`] = `
+
+Message:
+> 1 | a { @starting-style { will-change: transfrom; } }
+    |                                    ^^^^^^^^^ Unknown property reference 'transfrom' in 'will-change'.
+
+`;
+
+exports[`invalid(55): @supports (will-change: transfrom) { a { will-change: transfrom; } } 1`] = `
+
+  1 | @supports (will-change: transfrom) { a { will-change: transfrom; } }
+
+`;
+
+exports[`invalid(55): @supports (will-change: transfrom) { a { will-change: transfrom; } } 2`] = `
+
+Message:
+> 1 | @supports (will-change: transfrom) { a { will-change: transfrom; } }
+    |                                                       ^^^^^^^^^ Unknown property reference 'transfrom' in 'will-change'.
+
+`;
+
+exports[`invalid(56): @container style(transition-property: opactiy) { a { transition-property: opactiy; } } 1`] = `
+
+  1 | @container style(transition-property: opactiy) { a { transition-property: opactiy; } }
+
+`;
+
+exports[`invalid(56): @container style(transition-property: opactiy) { a { transition-property: opactiy; } } 2`] = `
+
+Message:
+> 1 | @container style(transition-property: opactiy) { a { transition-property: opactiy; } }
+    |                                                                           ^^^^^^^ Unknown property reference 'opactiy' in 'transition-property'.
+
+`;
+
+exports[`invalid(57): @keyframes fade { from { transition-property: opactiy; } to { will-change: transfrom; } } 1`] = `
+
+  1 | @keyframes fade { from { transition-property: opactiy; } to { will-change: transfrom; } }
+
+`;
+
+exports[`invalid(57): @keyframes fade { from { transition-property: opactiy; } to { will-change: transfrom; } } 2`] = `
+
+Message:
+> 1 | @keyframes fade { from { transition-property: opactiy; } to { will-change: transfrom; } }
+    |                                               ^^^^^^^ Unknown property reference 'opactiy' in 'transition-property'.
+
+`;
+
+exports[`invalid(57): @keyframes fade { from { transition-property: opactiy; } to { will-change: transfrom; } } 3`] = `
+
+Message:
+> 1 | @keyframes fade { from { transition-property: opactiy; } to { will-change: transfrom; } }
+    |                                                                            ^^^^^^^^^ Unknown property reference 'transfrom' in 'will-change'.
+
+`;
+
+exports[`invalid(58): @-webkit-keyframes fade { 50% { transition: opactiy 1s; } } 1`] = `
+
+  1 | @-webkit-keyframes fade { 50% { transition: opactiy 1s; } }
+
+`;
+
+exports[`invalid(58): @-webkit-keyframes fade { 50% { transition: opactiy 1s; } } 2`] = `
+
+Message:
+> 1 | @-webkit-keyframes fade { 50% { transition: opactiy 1s; } }
+    |                                             ^^^^^^^ Unknown property reference 'opactiy' in 'transition'.
+
+`;
+
+exports[`invalid(59): :root { transition: opactiy 1s; } .card:export { will-change: transfrom; } 1`] = `
+
+  1 | :root { transition: opactiy 1s; } .card:export { will-change: transfrom; }
+
+`;
+
+exports[`invalid(59): :root { transition: opactiy 1s; } .card:export { will-change: transfrom; } 2`] = `
+
+Message:
+> 1 | :root { transition: opactiy 1s; } .card:export { will-change: transfrom; }
+    |                     ^^^^^^^ Unknown property reference 'opactiy' in 'transition'.
+
+`;
+
+exports[`invalid(59): :root { transition: opactiy 1s; } .card:export { will-change: transfrom; } 3`] = `
+
+Message:
+> 1 | :root { transition: opactiy 1s; } .card:export { will-change: transfrom; }
+    |                                                               ^^^^^^^^^ Unknown property reference 'transfrom' in 'will-change'.
+
+`;
+
+exports[`invalid(6): a { transition: 200ms ease opactiy, transfrom 1s steps(2, end) -200ms allow-discrete; } 1`] = `
+
+  1 | a { transition: 200ms ease opactiy, transfrom 1s steps(2, end) -200ms allow-discrete; }
+
+`;
+
+exports[`invalid(6): a { transition: 200ms ease opactiy, transfrom 1s steps(2, end) -200ms allow-discrete; } 2`] = `
+
+Message:
+> 1 | a { transition: 200ms ease opactiy, transfrom 1s steps(2, end) -200ms allow-discrete; }
+    |                            ^^^^^^^ Unknown property reference 'opactiy' in 'transition'.
+
+`;
+
+exports[`invalid(6): a { transition: 200ms ease opactiy, transfrom 1s steps(2, end) -200ms allow-discrete; } 3`] = `
+
+Message:
+> 1 | a { transition: 200ms ease opactiy, transfrom 1s steps(2, end) -200ms allow-discrete; }
+    |                                     ^^^^^^^^^ Unknown property reference 'transfrom' in 'transition'.
+
+`;
+
+exports[`invalid(60): :export, .card { transition-property: opactiy; } 1`] = `
+
+  1 | :export, .card { transition-property: opactiy; }
+
+`;
+
+exports[`invalid(60): :export, .card { transition-property: opactiy; } 2`] = `
+
+Message:
+> 1 | :export, .card { transition-property: opactiy; }
+    |                                       ^^^^^^^ Unknown property reference 'opactiy' in 'transition-property'.
+
+`;
+
+exports[`invalid(61): @media print { :export { transition: opactiy 1s; } a { transition: opactiy 1s; } } 1`] = `
+
+  1 | @media print { :export { transition: opactiy 1s; } a { transition: opactiy 1s; } }
+
+`;
+
+exports[`invalid(61): @media print { :export { transition: opactiy 1s; } a { transition: opactiy 1s; } } 2`] = `
+
+Message:
+> 1 | @media print { :export { transition: opactiy 1s; } a { transition: opactiy 1s; } }
+    |                                                                    ^^^^^^^ Unknown property reference 'opactiy' in 'transition'.
+
+`;
+
+exports[`invalid(62): a { transition: future-property 1s, future-proprety 1s; will-change: future-property, future-proprety; } 1`] = `
+
+  1 | a { transition: future-property 1s, future-proprety 1s; will-change: future-property, future-proprety; }
+
+`;
+
+exports[`invalid(62): a { transition: future-property 1s, future-proprety 1s; will-change: future-property, future-proprety; } 2`] = `
+
+Message:
+> 1 | a { transition: future-property 1s, future-proprety 1s; will-change: future-property, future-proprety; }
+    |                                     ^^^^^^^^^^^^^^^ Unknown property reference 'future-proprety' in 'transition'.
+
+`;
+
+exports[`invalid(62): a { transition: future-property 1s, future-proprety 1s; will-change: future-property, future-proprety; } 3`] = `
+
+Message:
+> 1 | a { transition: future-property 1s, future-proprety 1s; will-change: future-property, future-proprety; }
+    |                                                                                       ^^^^^^^^^^^^^^^ Unknown property reference 'future-proprety' in 'will-change'.
+
+`;
+
+exports[`invalid(63): a { transition: default 1s; will-change: all, none, will-change; } 1`] = `
+
+  1 | a { transition: default 1s; will-change: all, none, will-change; }
+
+`;
+
+exports[`invalid(63): a { transition: default 1s; will-change: all, none, will-change; } 2`] = `
+
+Message:
+> 1 | a { transition: default 1s; will-change: all, none, will-change; }
+    |                 ^^^^^^^ Property reference 'default' is not allowed in 'transition'.
+
+`;
+
+exports[`invalid(63): a { transition: default 1s; will-change: all, none, will-change; } 3`] = `
+
+Message:
+> 1 | a { transition: default 1s; will-change: all, none, will-change; }
+    |                                          ^^^ Property reference 'all' is not allowed in 'will-change'.
+
+`;
+
+exports[`invalid(63): a { transition: default 1s; will-change: all, none, will-change; } 4`] = `
+
+Message:
+> 1 | a { transition: default 1s; will-change: all, none, will-change; }
+    |                                               ^^^^ Property reference 'none' is not allowed in 'will-change'.
+
+`;
+
+exports[`invalid(63): a { transition: default 1s; will-change: all, none, will-change; } 5`] = `
+
+Message:
+> 1 | a { transition: default 1s; will-change: all, none, will-change; }
+    |                                                     ^^^^^^^^^^^ Property reference 'will-change' is not allowed in 'will-change'.
+
+`;
+
+exports[`invalid(7): a { transition: opactiy var(--time); transition-property: var(--name), transfrom; will-change: var(--features), colr; } 1`] = `
+
+  1 | a { transition: opactiy var(--time); transition-property: var(--name), transfrom; will-change: var(--features), colr; }
+
+`;
+
+exports[`invalid(7): a { transition: opactiy var(--time); transition-property: var(--name), transfrom; will-change: var(--features), colr; } 2`] = `
+
+Message:
+> 1 | a { transition: opactiy var(--time); transition-property: var(--name), transfrom; will-change: var(--features), colr; }
+    |                 ^^^^^^^ Unknown property reference 'opactiy' in 'transition'.
+
+`;
+
+exports[`invalid(7): a { transition: opactiy var(--time); transition-property: var(--name), transfrom; will-change: var(--features), colr; } 3`] = `
+
+Message:
+> 1 | a { transition: opactiy var(--time); transition-property: var(--name), transfrom; will-change: var(--features), colr; }
+    |                                                                        ^^^^^^^^^ Unknown property reference 'transfrom' in 'transition-property'.
+
+`;
+
+exports[`invalid(7): a { transition: opactiy var(--time); transition-property: var(--name), transfrom; will-change: var(--features), colr; } 4`] = `
+
+Message:
+> 1 | a { transition: opactiy var(--time); transition-property: var(--name), transfrom; will-change: var(--features), colr; }
+    |                                                                                                                 ^^^^ Unknown property reference 'colr' in 'will-change'.
+
+`;
+
+exports[`invalid(8): a { transition: var(--transition), opactiy 1s; } 1`] = `
+
+  1 | a { transition: var(--transition), opactiy 1s; }
+
+`;
+
+exports[`invalid(8): a { transition: var(--transition), opactiy 1s; } 2`] = `
+
+Message:
+> 1 | a { transition: var(--transition), opactiy 1s; }
+    |                                    ^^^^^^^ Unknown property reference 'opactiy' in 'transition'.
+
+`;
+
+exports[`invalid(9): a { transition-property: ease, linear, normal, allow-discrete, auto, scroll-position, contents; } 1`] = `
+
+  1 | a { transition-property: ease, linear, normal, allow-discrete, auto, scroll-position, contents; }
+
+`;
+
+exports[`invalid(9): a { transition-property: ease, linear, normal, allow-discrete, auto, scroll-position, contents; } 2`] = `
+
+Message:
+> 1 | a { transition-property: ease, linear, normal, allow-discrete, auto, scroll-position, contents; }
+    |                          ^^^^ Unknown property reference 'ease' in 'transition-property'.
+
+`;
+
+exports[`invalid(9): a { transition-property: ease, linear, normal, allow-discrete, auto, scroll-position, contents; } 3`] = `
+
+Message:
+> 1 | a { transition-property: ease, linear, normal, allow-discrete, auto, scroll-position, contents; }
+    |                                ^^^^^^ Unknown property reference 'linear' in 'transition-property'.
+
+`;
+
+exports[`invalid(9): a { transition-property: ease, linear, normal, allow-discrete, auto, scroll-position, contents; } 4`] = `
+
+Message:
+> 1 | a { transition-property: ease, linear, normal, allow-discrete, auto, scroll-position, contents; }
+    |                                        ^^^^^^ Unknown property reference 'normal' in 'transition-property'.
+
+`;
+
+exports[`invalid(9): a { transition-property: ease, linear, normal, allow-discrete, auto, scroll-position, contents; } 5`] = `
+
+Message:
+> 1 | a { transition-property: ease, linear, normal, allow-discrete, auto, scroll-position, contents; }
+    |                                                ^^^^^^^^^^^^^^ Unknown property reference 'allow-discrete' in 'transition-property'.
+
+`;
+
+exports[`invalid(9): a { transition-property: ease, linear, normal, allow-discrete, auto, scroll-position, contents; } 6`] = `
+
+Message:
+> 1 | a { transition-property: ease, linear, normal, allow-discrete, auto, scroll-position, contents; }
+    |                                                                ^^^^ Unknown property reference 'auto' in 'transition-property'.
+
+`;
+
+exports[`invalid(9): a { transition-property: ease, linear, normal, allow-discrete, auto, scroll-position, contents; } 7`] = `
+
+Message:
+> 1 | a { transition-property: ease, linear, normal, allow-discrete, auto, scroll-position, contents; }
+    |                                                                      ^^^^^^^^^^^^^^^ Unknown property reference 'scroll-position' in 'transition-property'.
+
+`;
+
+exports[`invalid(9): a { transition-property: ease, linear, normal, allow-discrete, auto, scroll-position, contents; } 8`] = `
+
+Message:
+> 1 | a { transition-property: ease, linear, normal, allow-discrete, auto, scroll-position, contents; }
+    |                                                                                       ^^^^^^^^ Unknown property reference 'contents' in 'transition-property'.
+
+`;
