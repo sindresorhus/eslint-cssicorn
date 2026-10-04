@@ -715,6 +715,18 @@ test({
 			code: 'a { view-timeline-name: none; view-timeline: --view x; view-timeline-inset: 10%; animation-name: none; animation-composition: add; }',
 			errors: [{messageId: 'no-ineffective-properties/animation'}],
 		},
+		{
+			code: 'a { animation-name: none; animation-duration: calc(1s * random(1, 2)); animation-delay: 1s; }',
+			errors: [{messageId: 'no-ineffective-properties/animation', data: {property: 'animation-delay'}}],
+		},
+		{
+			code: 'a { mask-image: none; mask-size: --mask-size(); mask-position: center; }',
+			errors: [{messageId: 'no-ineffective-properties/mask-image', data: {property: 'mask-position'}}],
+		},
+		{
+			code: String.raw`a { perspective: none; perspective-origin: \69 nherit; shape-outside: none; shape-image-threshold: 0.5; }`,
+			errors: [{messageId: 'no-ineffective-properties/shape-image-threshold'}],
+		},
 	],
 });
 

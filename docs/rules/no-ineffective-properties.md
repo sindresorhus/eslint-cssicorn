@@ -429,7 +429,7 @@ a {
 - Skipped controls: Missing, malformed, unknown, vendor-prefixed, CSS-wide, or unresolved values. Display checks also ignore `none` and `contents`.
 - Skipped ambiguities: Multiple declarations that control the same effect, including shorthand/longhand combinations such as `flex-flow`/`flex-wrap`, `border`/`border-image-source`, or `text-decoration`/`text-decoration-line`, recognized `-webkit-` aliases, and combinations of physical and logical overflow declarations. Ambiguity skips only the check that depends on that controller.
 - Disabled effects: Image, animation, transition, and named timeline checks require a single explicit `none` value in their controlling longhand. Controller lists, values implied by shorthands, and prefixed source declarations alone are skipped.
-- Skipped declarations: Target values containing CSS-wide keywords or unresolved substitutions, custom properties, item properties, gaps, and other alignment properties that need additional context.
+- Skipped declarations: Target values containing CSS-wide keywords, unresolved substitutions (including custom functions), or `random()`, plus custom properties, item properties, gaps, and other alignment properties that need additional context.
 - Skipped blocks: Blocks containing `all`, plus keyframe, descriptor, and CSS Modules `:export`/`:import()` blocks.
 - Local context: Only direct declarations in the same block are compared. Overflow checks use only the `overflow` shorthand, without inferring writing mode or cross-axis computed values. Another selector, condition, or state can override the local context; disable the rule on declarations intentionally retained for those contexts.
 
