@@ -299,6 +299,48 @@ a {
 }
 ```
 
+```css
+/* ❌ */
+a {
+	background-image: none;
+	background-size: cover;
+}
+
+/* ✅ */
+a {
+	background-image: url("background.svg");
+	background-size: cover;
+}
+```
+
+```css
+/* ❌ */
+a {
+	border-image-source: none;
+	border-image-slice: 30;
+}
+
+/* ✅ */
+a {
+	border-image-source: url("border.svg");
+	border-image-slice: 30;
+}
+```
+
+```css
+/* ❌ */
+a {
+	mask-image: none;
+	mask-position: center;
+}
+
+/* ✅ */
+a {
+	mask-image: url("mask.svg");
+	mask-position: center;
+}
+```
+
 ## Checked properties
 
 - Flex containers: `flex-direction`, `flex-wrap`, and `flex-flow` require a flex display mode.
@@ -313,6 +355,9 @@ a {
 - Motion paths: `offset-distance`, `offset-rotate`, and `offset-anchor` have no effect with explicit `offset-path: none`. Omitted paths and paths implied by the `offset` shorthand are not checked. `offset-position` is not checked.
 - Shape image threshold: `shape-image-threshold` has no effect with explicit `shape-outside: none`. It extracts a shape from an image’s alpha channel. `shape-margin` is allowed because it can still expand an initial-letter outline when `shape-outside` is `none`.
 - Text decoration: `text-decoration-color`, `text-decoration-style`, and `text-decoration-thickness` have no effect with explicit `text-decoration-line: none`. These properties style decorations originating on the element, and do not restyle lines propagated from ancestors. Inherited underline controls such as `text-underline-offset` and `text-decoration-skip-ink` are allowed. Omitted lines and lines implied by the `text-decoration` shorthand are not checked.
+- Background images: `background-position`, `background-position-x`, `background-position-y`, `background-size`, `background-repeat`, and `background-origin` have no effect with explicit `background-image: none`. `background-color`, `background-clip`, and `background-attachment` are allowed because they can still affect the background color.
+- Border images: `border-image-slice`, `border-image-width`, `border-image-outset`, and `border-image-repeat` have no effect with explicit `border-image-source: none`. Ordinary border widths, styles, and colors are allowed.
+- Mask images: `mask-position`, `mask-size`, `mask-repeat`, `mask-origin`, `mask-clip`, `mask-mode`, and `mask-composite` have no effect with explicit `mask-image: none`. Mask borders are independent and are not checked.
 - Table layout: `table-layout` has no effect with an explicit non-table display mode. Other table controls such as `border-collapse` and `caption-side` are allowed because they can inherit into descendant tables.
 - Text overflow: `text-overflow: ellipsis`, `clip ellipsis`, `ellipsis clip`, or `ellipsis ellipsis` has no effect with an element's own explicit flex or grid display mode, or with explicit `overflow: visible` or `overflow: visible visible`. Ellipsis needs a block container and clipped inline overflow; this rule does not require `white-space: nowrap`, a width, or a height. Strings, `fade`, and `fade()` are not checked.
 - Table spacing: `border-spacing` has no effect on a table with explicit table display and `border-collapse: collapse`. Use `border-collapse: separate` for spacing between cells. Both legacy and modern display notation are supported, such as `inline-table` and `inline table`. `border-spacing` is inherited and can still affect a descendant table with separate borders; disable the rule when intentionally supplying inherited spacing. Rounded borders are not checked because browsers can still apply them to backgrounds or clipping in collapsed mode.
@@ -322,7 +367,8 @@ a {
 
 - Supported: Style declaration blocks, including nested style rules and conditional blocks, CSS escapes, ASCII casing, `!important`, and legacy and modern display notation, such as `inline-flex` and `inline flex`.
 - Skipped controls: Missing, malformed, unknown, vendor-prefixed, CSS-wide, or unresolved values. Display checks also ignore `none` and `contents`.
-- Skipped ambiguities: Duplicate `display`, `position`, `perspective`, `border-collapse`, `offset-path`, `shape-outside`, or `text-decoration-line` declarations, `offset`/`offset-path` or `text-decoration`/`text-decoration-line` combinations, multiple wrapping declarations including `flex-flow`/`flex-wrap` combinations, and multiple overflow declarations including physical and logical longhands. Ambiguity skips only the check that depends on that controller.
+- Skipped ambiguities: Multiple declarations for a controlling property, including shorthand/longhand combinations such as `flex-flow`/`flex-wrap`, `offset`/`offset-path`, or `text-decoration`/`text-decoration-line`, and multiple overflow declarations including physical and logical longhands. Image checks also skip resetting shorthands (`background`, `border-image`, `border`, or `mask`) and source overrides through `-webkit-border-image`, `-webkit-mask-image`, or `-webkit-mask`. Ambiguity skips only the check that depends on that controller.
+- Image sources: Only explicit single `none` values in `background-image`, `border-image-source`, and `mask-image` are checked. Image lists, sources implied by shorthands, and prefixed source declarations alone are skipped.
 - Skipped declarations: Target values containing CSS-wide keywords or unresolved substitutions, custom properties, item properties, gaps, and other alignment properties that need additional context.
 - Skipped blocks: Blocks containing `all`, plus keyframe, descriptor, and CSS Modules `:export`/`:import()` blocks.
 - Local context: Only direct declarations in the same block are compared. Overflow checks use only the `overflow` shorthand, without inferring writing mode or cross-axis computed values. Another selector, condition, or state can override the local context; disable the rule on declarations intentionally retained for those contexts.
@@ -336,6 +382,8 @@ a {
 	grid-template-columns: 1fr 1fr;
 }
 ```
+
+Browser adjustments, such as top-layer positioning for dialogs and popovers, are not inferred. Disable the rule where those adjustments make a reported declaration effective.
 
 Invalid CSS is handled on a best-effort basis rather than validated by this rule. Use [`css/no-invalid-properties`](https://github.com/eslint/css/blob/main/docs/rules/no-invalid-properties.md) to check property names and value grammar. CSS Modules interop blocks contain literal values rather than styles.
 
@@ -363,3 +411,8 @@ Scroll-container controls and `resize` are not checked because root-element prop
 - [Initial-letter wrapping](https://drafts.csswg.org/css-inline-3/#initial-letter-wrap)
 - [Text decoration color and style](https://drafts.csswg.org/css-text-decor-3/#text-decoration-color-property)
 - [Text decoration thickness](https://drafts.csswg.org/css-text-decor-4/#text-decoration-thickness-property)
+- [Background images and border images](https://drafts.csswg.org/css-backgrounds-3/)
+- [Background position longhands](https://drafts.csswg.org/css-backgrounds-4/#background-position-longhands)
+- [Mask images](https://drafts.csswg.org/css-masking/#the-mask-image)
+- [Prefixed masking aliases](https://compat.spec.whatwg.org/#css-simple-aliases)
+- [Top-layer positioning](https://drafts.csswg.org/css-position-4/#top-styling)

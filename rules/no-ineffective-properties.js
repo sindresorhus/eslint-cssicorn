@@ -29,6 +29,9 @@ const MESSAGE_ID_COLUMN_SPAN = 'no-ineffective-properties/column-span';
 const MESSAGE_ID_MOTION = 'no-ineffective-properties/motion';
 const MESSAGE_ID_SHAPE_IMAGE_THRESHOLD = 'no-ineffective-properties/shape-image-threshold';
 const MESSAGE_ID_DECORATION = 'no-ineffective-properties/decoration';
+const MESSAGE_ID_BACKGROUND_IMAGE = 'no-ineffective-properties/background-image';
+const MESSAGE_ID_BORDER_IMAGE = 'no-ineffective-properties/border-image';
+const MESSAGE_ID_MASK_IMAGE = 'no-ineffective-properties/mask-image';
 const messages = {
 	[MESSAGE_ID_DISPLAY]: '`{{property}}` has no effect with `display: {{display}}`. It requires a {{layout}} container.',
 	[MESSAGE_ID_NOWRAP]: '`align-content` has no effect on a flex container with `nowrap`. Consider `align-items` or enabling wrapping.',
@@ -45,6 +48,9 @@ const messages = {
 	[MESSAGE_ID_MOTION]: '`{{property}}` has no effect with `offset-path: none`. Set an offset path to use this property.',
 	[MESSAGE_ID_SHAPE_IMAGE_THRESHOLD]: '`shape-image-threshold` has no effect with `shape-outside: none`. It defines the alpha threshold for an image-based shape.',
 	[MESSAGE_ID_DECORATION]: '`{{property}}` has no effect with `text-decoration-line: none`. Enable a text decoration line on this element.',
+	[MESSAGE_ID_BACKGROUND_IMAGE]: '`{{property}}` has no effect with `background-image: none`. Set a background image to use this property.',
+	[MESSAGE_ID_BORDER_IMAGE]: '`{{property}}` has no effect with `border-image-source: none`. Set a border image to use this property.',
+	[MESSAGE_ID_MASK_IMAGE]: '`{{property}}` has no effect with `mask-image: none`. Set a mask image to use this property.',
 };
 
 const flexProperties = new Set(['flex-direction', 'flex-wrap', 'flex-flow']);
@@ -64,8 +70,28 @@ const paddingProperties = new Set([
 	'padding-inline-end',
 ]);
 const multicolProperties = new Set(['columns', 'column-count', 'column-width', 'column-fill']);
-const motionProperties = new Set(['offset-distance', 'offset-rotate', 'offset-anchor']);
-const decorationProperties = new Set(['text-decoration-color', 'text-decoration-style', 'text-decoration-thickness']);
+// The first controller must be explicit. Other controllers can override or reset it.
+const inactivePropertyGroups = [
+	{properties: ['perspective-origin'], controllingProperties: ['perspective'], messageId: MESSAGE_ID_PERSPECTIVE},
+	{properties: ['offset-distance', 'offset-rotate', 'offset-anchor'], controllingProperties: ['offset-path', 'offset'], messageId: MESSAGE_ID_MOTION},
+	{properties: ['shape-image-threshold'], controllingProperties: ['shape-outside'], messageId: MESSAGE_ID_SHAPE_IMAGE_THRESHOLD},
+	{properties: ['text-decoration-color', 'text-decoration-style', 'text-decoration-thickness'], controllingProperties: ['text-decoration-line', 'text-decoration'], messageId: MESSAGE_ID_DECORATION},
+	{
+		properties: ['background-position', 'background-position-x', 'background-position-y', 'background-size', 'background-repeat', 'background-origin'],
+		controllingProperties: ['background-image', 'background'],
+		messageId: MESSAGE_ID_BACKGROUND_IMAGE,
+	},
+	{
+		properties: ['border-image-slice', 'border-image-width', 'border-image-outset', 'border-image-repeat'],
+		controllingProperties: ['border-image-source', 'border-image', 'border', '-webkit-border-image'],
+		messageId: MESSAGE_ID_BORDER_IMAGE,
+	},
+	{
+		properties: ['mask-position', 'mask-size', 'mask-repeat', 'mask-origin', 'mask-clip', 'mask-mode', 'mask-composite'],
+		controllingProperties: ['mask-image', 'mask', '-webkit-mask-image', '-webkit-mask'],
+		messageId: MESSAGE_ID_MASK_IMAGE,
+	},
+];
 const floatValues = new Set(['left', 'right', 'inline-start', 'inline-end']);
 const clearValues = new Set([...floatValues, 'both']);
 const targetProperties = new Set([
@@ -74,17 +100,14 @@ const targetProperties = new Set([
 	...insetProperties,
 	...paddingProperties,
 	...multicolProperties,
-	...motionProperties,
-	...decorationProperties,
+	...inactivePropertyGroups.flatMap(({properties}) => properties),
 	'align-content',
 	'text-overflow',
 	'float',
 	'clear',
 	'border-spacing',
-	'perspective-origin',
 	'table-layout',
 	'column-span',
-	'shape-image-threshold',
 ]);
 const overflowProperties = ['overflow', 'overflow-x', 'overflow-y', 'overflow-inline', 'overflow-block'];
 
@@ -224,21 +247,10 @@ Get the problem for a property whose effect is explicitly disabled in its block.
 @param {string} property
 @param {ReturnType<typeof getBlockControls>} controls
 */
-const getInactiveEffectProblem = (node, property, {hasNoPerspective, hasNoOffsetPath, hasNoShapeOutside, hasNoDecorationLine}) => {
-	if (property === 'perspective-origin' && hasNoPerspective) {
-		return {node, messageId: MESSAGE_ID_PERSPECTIVE};
-	}
-
-	if (motionProperties.has(property) && hasNoOffsetPath) {
-		return {node, messageId: MESSAGE_ID_MOTION, data: {property}};
-	}
-
-	if (property === 'shape-image-threshold' && hasNoShapeOutside) {
-		return {node, messageId: MESSAGE_ID_SHAPE_IMAGE_THRESHOLD};
-	}
-
-	if (decorationProperties.has(property) && hasNoDecorationLine) {
-		return {node, messageId: MESSAGE_ID_DECORATION, data: {property}};
+const getInactiveEffectProblem = (node, property, {inactiveProperties}) => {
+	const messageId = inactiveProperties.get(property);
+	if (messageId) {
+		return {node, messageId, data: {property}};
 	}
 };
 
@@ -309,11 +321,19 @@ const getBlockControls = (declarationsByProperty, sourceCode) => {
 	// Only the shorthand establishes both axes without needing writing-mode or computed-value inference.
 	const hasVisibleOverflow = declarationsByProperty.has('overflow') && (overflow === 'visible' || overflow === 'visible visible');
 	const hasCollapsedTable = isTable && getControllingValue(declarationsByProperty, ['border-collapse'], sourceCode) === 'collapse';
-	const hasNoPerspective = getControllingValue(declarationsByProperty, ['perspective'], sourceCode) === 'none';
-	const hasNoOffsetPath = declarationsByProperty.has('offset-path') && getControllingValue(declarationsByProperty, ['offset-path', 'offset'], sourceCode) === 'none';
-	const hasNoShapeOutside = getControllingValue(declarationsByProperty, ['shape-outside'], sourceCode) === 'none';
-	const hasNoDecorationLine = declarationsByProperty.has('text-decoration-line')
-		&& getControllingValue(declarationsByProperty, ['text-decoration-line', 'text-decoration'], sourceCode) === 'none';
+	/**
+	@type {Map<string, string>}
+	*/
+	const inactiveProperties = new Map();
+	for (const {properties, controllingProperties, messageId} of inactivePropertyGroups) {
+		if (!declarationsByProperty.has(controllingProperties[0]) || getControllingValue(declarationsByProperty, controllingProperties, sourceCode) !== 'none') {
+			continue;
+		}
+
+		for (const property of properties) {
+			inactiveProperties.set(property, messageId);
+		}
+	}
 
 	return {
 		display,
@@ -325,10 +345,7 @@ const getBlockControls = (declarationsByProperty, sourceCode) => {
 		hasExplicitNowrap,
 		position,
 		hasVisibleOverflow,
-		hasNoPerspective,
-		hasNoOffsetPath,
-		hasNoShapeOutside,
-		hasNoDecorationLine,
+		inactiveProperties,
 	};
 };
 

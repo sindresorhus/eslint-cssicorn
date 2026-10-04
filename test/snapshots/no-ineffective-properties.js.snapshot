@@ -1,3 +1,17 @@
+exports[`invalid(1): a { background-image: none; background-position: center; } 1`] = `
+
+  1 | a { background-image: none; background-position: center; }
+
+`;
+
+exports[`invalid(1): a { background-image: none; background-position: center; } 2`] = `
+
+Message:
+> 1 | a { background-image: none; background-position: center; }
+    |                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`background-position\` has no effect with \`background-image: none\`. Set a background image to use this property.
+
+`;
+
 exports[`invalid(1): a { display: grid; flex-direction: column; } 1`] = `
 
   1 | a { display: grid; flex-direction: column; }
@@ -9,6 +23,20 @@ exports[`invalid(1): a { display: grid; flex-direction: column; } 2`] = `
 Message:
 > 1 | a { display: grid; flex-direction: column; }
     |                    ^^^^^^^^^^^^^^^^^^^^^^ \`flex-direction\` has no effect with \`display: grid\`. It requires a flex container.
+
+`;
+
+exports[`invalid(10): a { border-image-source: none; border-image-repeat: round; } 1`] = `
+
+  1 | a { border-image-source: none; border-image-repeat: round; }
+
+`;
+
+exports[`invalid(10): a { border-image-source: none; border-image-repeat: round; } 2`] = `
+
+Message:
+> 1 | a { border-image-source: none; border-image-repeat: round; }
+    |                                ^^^^^^^^^^^^^^^^^^^^^^^^^^ \`border-image-repeat\` has no effect with \`border-image-source: none\`. Set a border image to use this property.
 
 `;
 
@@ -180,6 +208,20 @@ Message:
 
 `;
 
+exports[`invalid(11): a { mask-image: none; mask-position: center; } 1`] = `
+
+  1 | a { mask-image: none; mask-position: center; }
+
+`;
+
+exports[`invalid(11): a { mask-image: none; mask-position: center; } 2`] = `
+
+Message:
+> 1 | a { mask-image: none; mask-position: center; }
+    |                       ^^^^^^^^^^^^^^^^^^^^^ \`mask-position\` has no effect with \`mask-image: none\`. Set a mask image to use this property.
+
+`;
+
 exports[`invalid(110): a { TEXT-OVERFLOW: CLIP ELLIPSIS !important; DISPLAY: GRID; } 1`] = `
 
   1 | a { TEXT-OVERFLOW: CLIP ELLIPSIS !important; DISPLAY: GRID; }
@@ -317,6 +359,20 @@ exports[`invalid(119): a { border-spacing: 8px 12px !important; border-collapse:
 Message:
 > 1 | a { border-spacing: 8px 12px !important; border-collapse: collapse; display: table; }
     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`border-spacing\` has no effect on this table with \`border-collapse: collapse\`. Use \`border-collapse: separate\` for spacing between cells.
+
+`;
+
+exports[`invalid(12): a { mask-image: none; mask-size: contain; } 1`] = `
+
+  1 | a { mask-image: none; mask-size: contain; }
+
+`;
+
+exports[`invalid(12): a { mask-image: none; mask-size: contain; } 2`] = `
+
+Message:
+> 1 | a { mask-image: none; mask-size: contain; }
+    |                       ^^^^^^^^^^^^^^^^^^ \`mask-size\` has no effect with \`mask-image: none\`. Set a mask image to use this property.
 
 `;
 
@@ -474,6 +530,20 @@ Message:
 
 `;
 
+exports[`invalid(13): a { mask-image: none; mask-repeat: no-repeat; } 1`] = `
+
+  1 | a { mask-image: none; mask-repeat: no-repeat; }
+
+`;
+
+exports[`invalid(13): a { mask-image: none; mask-repeat: no-repeat; } 2`] = `
+
+Message:
+> 1 | a { mask-image: none; mask-repeat: no-repeat; }
+    |                       ^^^^^^^^^^^^^^^^^^^^^^ \`mask-repeat\` has no effect with \`mask-image: none\`. Set a mask image to use this property.
+
+`;
+
 exports[`invalid(13): a { position: static; right: 20px; } 1`] = `
 
   1 | a { position: static; right: 20px; }
@@ -625,6 +695,20 @@ exports[`invalid(139): a { display: table; border-collapse: collapse; padding: /
 Message:
 > 1 | a { display: table; border-collapse: collapse; padding: /* inset */ calc(1rem + 2px); }
     |                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`padding\` has no effect on this table with \`border-collapse: collapse\`. Apply padding to table cells or use separate borders.
+
+`;
+
+exports[`invalid(14): a { mask-image: none; mask-origin: content-box; } 1`] = `
+
+  1 | a { mask-image: none; mask-origin: content-box; }
+
+`;
+
+exports[`invalid(14): a { mask-image: none; mask-origin: content-box; } 2`] = `
+
+Message:
+> 1 | a { mask-image: none; mask-origin: content-box; }
+    |                       ^^^^^^^^^^^^^^^^^^^^^^^^ \`mask-origin\` has no effect with \`mask-image: none\`. Set a mask image to use this property.
 
 `;
 
@@ -782,6 +866,20 @@ Message:
 
 `;
 
+exports[`invalid(15): a { mask-image: none; mask-clip: content-box; } 1`] = `
+
+  1 | a { mask-image: none; mask-clip: content-box; }
+
+`;
+
+exports[`invalid(15): a { mask-image: none; mask-clip: content-box; } 2`] = `
+
+Message:
+> 1 | a { mask-image: none; mask-clip: content-box; }
+    |                       ^^^^^^^^^^^^^^^^^^^^^^ \`mask-clip\` has no effect with \`mask-image: none\`. Set a mask image to use this property.
+
+`;
+
 exports[`invalid(15): a { position: static; left: 20px; } 1`] = `
 
   1 | a { position: static; left: 20px; }
@@ -933,6 +1031,20 @@ exports[`invalid(159): a { display: inline-block; table-layout: fixed; } 2`] = `
 Message:
 > 1 | a { display: inline-block; table-layout: fixed; }
     |                            ^^^^^^^^^^^^^^^^^^^ \`table-layout\` has no effect with \`display: inline-block\`. It requires a table container.
+
+`;
+
+exports[`invalid(16): a { mask-image: none; mask-mode: luminance; } 1`] = `
+
+  1 | a { mask-image: none; mask-mode: luminance; }
+
+`;
+
+exports[`invalid(16): a { mask-image: none; mask-mode: luminance; } 2`] = `
+
+Message:
+> 1 | a { mask-image: none; mask-mode: luminance; }
+    |                       ^^^^^^^^^^^^^^^^^^^^ \`mask-mode\` has no effect with \`mask-image: none\`. Set a mask image to use this property.
 
 `;
 
@@ -1090,6 +1202,20 @@ Message:
 
 `;
 
+exports[`invalid(17): a { mask-image: none; mask-composite: intersect; } 1`] = `
+
+  1 | a { mask-image: none; mask-composite: intersect; }
+
+`;
+
+exports[`invalid(17): a { mask-image: none; mask-composite: intersect; } 2`] = `
+
+Message:
+> 1 | a { mask-image: none; mask-composite: intersect; }
+    |                       ^^^^^^^^^^^^^^^^^^^^^^^^^ \`mask-composite\` has no effect with \`mask-image: none\`. Set a mask image to use this property.
+
+`;
+
 exports[`invalid(17): a { position: static; inset-block: 20px; } 1`] = `
 
   1 | a { position: static; inset-block: 20px; }
@@ -1241,6 +1367,20 @@ exports[`invalid(179): a { offset-\\70 ath: n\\6f ne; offset-anc\\68 or: left; }
 Message:
 > 1 | a { offset-\\70 ath: n\\6f ne; offset-anc\\68 or: left; }
     |                              ^^^^^^^^^^^^^^^^^^^^^^ \`offset-anchor\` has no effect with \`offset-path: none\`. Set an offset path to use this property.
+
+`;
+
+exports[`invalid(18): a { BACKGROUND-SIZE: COVER !important; BACKGROUND-IMAGE: NONE; } 1`] = `
+
+  1 | a { BACKGROUND-SIZE: COVER !important; BACKGROUND-IMAGE: NONE; }
+
+`;
+
+exports[`invalid(18): a { BACKGROUND-SIZE: COVER !important; BACKGROUND-IMAGE: NONE; } 2`] = `
+
+Message:
+> 1 | a { BACKGROUND-SIZE: COVER !important; BACKGROUND-IMAGE: NONE; }
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`background-size\` has no effect with \`background-image: none\`. Set a background image to use this property.
 
 `;
 
@@ -1398,6 +1538,20 @@ Message:
 
 `;
 
+exports[`invalid(19): a { BORDER-IMAGE-OUTSET: 8px !important; BORDER-IMAGE-SOURCE: NONE; } 1`] = `
+
+  1 | a { BORDER-IMAGE-OUTSET: 8px !important; BORDER-IMAGE-SOURCE: NONE; }
+
+`;
+
+exports[`invalid(19): a { BORDER-IMAGE-OUTSET: 8px !important; BORDER-IMAGE-SOURCE: NONE; } 2`] = `
+
+Message:
+> 1 | a { BORDER-IMAGE-OUTSET: 8px !important; BORDER-IMAGE-SOURCE: NONE; }
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`border-image-outset\` has no effect with \`border-image-source: none\`. Set a border image to use this property.
+
+`;
+
 exports[`invalid(19): a { position: static; inset-block-start: 20px; } 1`] = `
 
   1 | a { position: static; inset-block-start: 20px; }
@@ -1440,6 +1594,20 @@ Message:
 
 `;
 
+exports[`invalid(2): a { background-image: none; background-position-x: 20%; } 1`] = `
+
+  1 | a { background-image: none; background-position-x: 20%; }
+
+`;
+
+exports[`invalid(2): a { background-image: none; background-position-x: 20%; } 2`] = `
+
+Message:
+> 1 | a { background-image: none; background-position-x: 20%; }
+    |                             ^^^^^^^^^^^^^^^^^^^^^^^^^^ \`background-position-x\` has no effect with \`background-image: none\`. Set a background image to use this property.
+
+`;
+
 exports[`invalid(2): a { display: grid; flex-wrap: wrap; } 1`] = `
 
   1 | a { display: grid; flex-wrap: wrap; }
@@ -1451,6 +1619,20 @@ exports[`invalid(2): a { display: grid; flex-wrap: wrap; } 2`] = `
 Message:
 > 1 | a { display: grid; flex-wrap: wrap; }
     |                    ^^^^^^^^^^^^^^^ \`flex-wrap\` has no effect with \`display: grid\`. It requires a flex container.
+
+`;
+
+exports[`invalid(20): a { MASK-COMPOSITE: INTERSECT !important; MASK-IMAGE: NONE; } 1`] = `
+
+  1 | a { MASK-COMPOSITE: INTERSECT !important; MASK-IMAGE: NONE; }
+
+`;
+
+exports[`invalid(20): a { MASK-COMPOSITE: INTERSECT !important; MASK-IMAGE: NONE; } 2`] = `
+
+Message:
+> 1 | a { MASK-COMPOSITE: INTERSECT !important; MASK-IMAGE: NONE; }
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`mask-composite\` has no effect with \`mask-image: none\`. Set a mask image to use this property.
 
 `;
 
@@ -1468,6 +1650,20 @@ Message:
 
 `;
 
+exports[`invalid(21): a { background-\\69 mage: n\\6f ne; background-posi\\74 ion-x: 20%; } 1`] = `
+
+  1 | a { background-\\69 mage: n\\6f ne; background-posi\\74 ion-x: 20%; }
+
+`;
+
+exports[`invalid(21): a { background-\\69 mage: n\\6f ne; background-posi\\74 ion-x: 20%; } 2`] = `
+
+Message:
+> 1 | a { background-\\69 mage: n\\6f ne; background-posi\\74 ion-x: 20%; }
+    |                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`background-position-x\` has no effect with \`background-image: none\`. Set a background image to use this property.
+
+`;
+
 exports[`invalid(21): a { position: static; inset-inline-start: 20px; } 1`] = `
 
   1 | a { position: static; inset-inline-start: 20px; }
@@ -1479,6 +1675,20 @@ exports[`invalid(21): a { position: static; inset-inline-start: 20px; } 2`] = `
 Message:
 > 1 | a { position: static; inset-inline-start: 20px; }
     |                       ^^^^^^^^^^^^^^^^^^^^^^^^ \`inset-inline-start\` has no effect with \`position: static\`. Insets require a positioned element.
+
+`;
+
+exports[`invalid(22): a { border-image-sour\\63 e: n\\6f ne; border-image-sli\\63 e: 30 fill; } 1`] = `
+
+  1 | a { border-image-sour\\63 e: n\\6f ne; border-image-sli\\63 e: 30 fill; }
+
+`;
+
+exports[`invalid(22): a { border-image-sour\\63 e: n\\6f ne; border-image-sli\\63 e: 30 fill; } 2`] = `
+
+Message:
+> 1 | a { border-image-sour\\63 e: n\\6f ne; border-image-sli\\63 e: 30 fill; }
+    |                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`border-image-slice\` has no effect with \`border-image-source: none\`. Set a border image to use this property.
 
 `;
 
@@ -1518,6 +1728,34 @@ Message:
 
 `;
 
+exports[`invalid(23): a { mask-\\69 mage: n\\6f ne; mask-ori\\67 in: content-box; } 1`] = `
+
+  1 | a { mask-\\69 mage: n\\6f ne; mask-ori\\67 in: content-box; }
+
+`;
+
+exports[`invalid(23): a { mask-\\69 mage: n\\6f ne; mask-ori\\67 in: content-box; } 2`] = `
+
+Message:
+> 1 | a { mask-\\69 mage: n\\6f ne; mask-ori\\67 in: content-box; }
+    |                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`mask-origin\` has no effect with \`mask-image: none\`. Set a mask image to use this property.
+
+`;
+
+exports[`invalid(24): a { background-image: /* image */ none; background-position: /* placement */ calc(50% + 1px) center; background-color: red; } 1`] = `
+
+  1 | a { background-image: /* image */ none; background-position: /* placement */ calc(50% + 1px) center; background-color: red; }
+
+`;
+
+exports[`invalid(24): a { background-image: /* image */ none; background-position: /* placement */ calc(50% + 1px) center; background-color: red; } 2`] = `
+
+Message:
+> 1 | a { background-image: /* image */ none; background-position: /* placement */ calc(50% + 1px) center; background-color: red; }
+    |                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`background-position\` has no effect with \`background-image: none\`. Set a background image to use this property.
+
+`;
+
 exports[`invalid(24): a { display: inline; flex-direction: column; grid-template-columns: 1fr 1fr; } 1`] = `
 
   1 | a { display: inline; flex-direction: column; grid-template-columns: 1fr 1fr; }
@@ -1537,6 +1775,20 @@ exports[`invalid(24): a { display: inline; flex-direction: column; grid-template
 Message:
 > 1 | a { display: inline; flex-direction: column; grid-template-columns: 1fr 1fr; }
     |                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`grid-template-columns\` has no effect with \`display: inline\`. It requires a grid container.
+
+`;
+
+exports[`invalid(25): a { border-image-source: /* source */ none; border-image-width: /* edges */ 2; border-left: 4px solid red; } 1`] = `
+
+  1 | a { border-image-source: /* source */ none; border-image-width: /* edges */ 2; border-left: 4px solid red; }
+
+`;
+
+exports[`invalid(25): a { border-image-source: /* source */ none; border-image-width: /* edges */ 2; border-left: 4px solid red; } 2`] = `
+
+Message:
+> 1 | a { border-image-source: /* source */ none; border-image-width: /* edges */ 2; border-left: 4px solid red; }
+    |                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`border-image-width\` has no effect with \`border-image-source: none\`. Set a border image to use this property.
 
 `;
 
@@ -1584,6 +1836,34 @@ Message:
 
 `;
 
+exports[`invalid(26): a { mask-image: /* image */ none; mask-position: /* placement */ calc(50% + 1px) center; } 1`] = `
+
+  1 | a { mask-image: /* image */ none; mask-position: /* placement */ calc(50% + 1px) center; }
+
+`;
+
+exports[`invalid(26): a { mask-image: /* image */ none; mask-position: /* placement */ calc(50% + 1px) center; } 2`] = `
+
+Message:
+> 1 | a { mask-image: /* image */ none; mask-position: /* placement */ calc(50% + 1px) center; }
+    |                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`mask-position\` has no effect with \`mask-image: none\`. Set a mask image to use this property.
+
+`;
+
+exports[`invalid(27): a { @media (width > 1px) { background-image: none; background-origin: content-box; } } 1`] = `
+
+  1 | a { @media (width > 1px) { background-image: none; background-origin: content-box; } }
+
+`;
+
+exports[`invalid(27): a { @media (width > 1px) { background-image: none; background-origin: content-box; } } 2`] = `
+
+Message:
+> 1 | a { @media (width > 1px) { background-image: none; background-origin: content-box; } }
+    |                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`background-origin\` has no effect with \`background-image: none\`. Set a background image to use this property.
+
+`;
+
 exports[`invalid(27): a { display: flow-root; flex-direction: column; grid-template-columns: 1fr 1fr; } 1`] = `
 
   1 | a { display: flow-root; flex-direction: column; grid-template-columns: 1fr 1fr; }
@@ -1603,6 +1883,20 @@ exports[`invalid(27): a { display: flow-root; flex-direction: column; grid-templ
 Message:
 > 1 | a { display: flow-root; flex-direction: column; grid-template-columns: 1fr 1fr; }
     |                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`grid-template-columns\` has no effect with \`display: flow-root\`. It requires a grid container.
+
+`;
+
+exports[`invalid(28): a { & b { border-image-source: none; border-image-repeat: round; } } 1`] = `
+
+  1 | a { & b { border-image-source: none; border-image-repeat: round; } }
+
+`;
+
+exports[`invalid(28): a { & b { border-image-source: none; border-image-repeat: round; } } 2`] = `
+
+Message:
+> 1 | a { & b { border-image-source: none; border-image-repeat: round; } }
+    |                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^ \`border-image-repeat\` has no effect with \`border-image-source: none\`. Set a border image to use this property.
 
 `;
 
@@ -1628,6 +1922,20 @@ Message:
 
 `;
 
+exports[`invalid(29): a { @supports (mask-image: none) { mask-image: none; mask-mode: luminance; } } 1`] = `
+
+  1 | a { @supports (mask-image: none) { mask-image: none; mask-mode: luminance; } }
+
+`;
+
+exports[`invalid(29): a { @supports (mask-image: none) { mask-image: none; mask-mode: luminance; } } 2`] = `
+
+Message:
+> 1 | a { @supports (mask-image: none) { mask-image: none; mask-mode: luminance; } }
+    |                                                      ^^^^^^^^^^^^^^^^^^^^ \`mask-mode\` has no effect with \`mask-image: none\`. Set a mask image to use this property.
+
+`;
+
 exports[`invalid(29): a { display: inline-table; flex-direction: column; grid-template-columns: 1fr 1fr; } 1`] = `
 
   1 | a { display: inline-table; flex-direction: column; grid-template-columns: 1fr 1fr; }
@@ -1647,6 +1955,20 @@ exports[`invalid(29): a { display: inline-table; flex-direction: column; grid-te
 Message:
 > 1 | a { display: inline-table; flex-direction: column; grid-template-columns: 1fr 1fr; }
     |                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`grid-template-columns\` has no effect with \`display: inline-table\`. It requires a grid container.
+
+`;
+
+exports[`invalid(3): a { background-image: none; background-position-y: 30%; } 1`] = `
+
+  1 | a { background-image: none; background-position-y: 30%; }
+
+`;
+
+exports[`invalid(3): a { background-image: none; background-position-y: 30%; } 2`] = `
+
+Message:
+> 1 | a { background-image: none; background-position-y: 30%; }
+    |                             ^^^^^^^^^^^^^^^^^^^^^^^^^^ \`background-position-y\` has no effect with \`background-image: none\`. Set a background image to use this property.
 
 `;
 
@@ -1686,6 +2008,20 @@ Message:
 
 `;
 
+exports[`invalid(30): a { mask-image: none; mask-border-source: url(\"image.svg\"); mask-clip: content-box; } 1`] = `
+
+  1 | a { mask-image: none; mask-border-source: url("image.svg"); mask-clip: content-box; }
+
+`;
+
+exports[`invalid(30): a { mask-image: none; mask-border-source: url(\"image.svg\"); mask-clip: content-box; } 2`] = `
+
+Message:
+> 1 | a { mask-image: none; mask-border-source: url("image.svg"); mask-clip: content-box; }
+    |                                                             ^^^^^^^^^^^^^^^^^^^^^^ \`mask-clip\` has no effect with \`mask-image: none\`. Set a mask image to use this property.
+
+`;
+
 exports[`invalid(31): a { display: table-row; flex-direction: column; grid-template-columns: 1fr 1fr; } 1`] = `
 
   1 | a { display: table-row; flex-direction: column; grid-template-columns: 1fr 1fr; }
@@ -1708,6 +2044,20 @@ Message:
 
 `;
 
+exports[`invalid(31): a { mask-image: none; -webkit-mask-box-image-source: url(\"image.svg\"); mask-composite: intersect; } 1`] = `
+
+  1 | a { mask-image: none; -webkit-mask-box-image-source: url("image.svg"); mask-composite: intersect; }
+
+`;
+
+exports[`invalid(31): a { mask-image: none; -webkit-mask-box-image-source: url(\"image.svg\"); mask-composite: intersect; } 2`] = `
+
+Message:
+> 1 | a { mask-image: none; -webkit-mask-box-image-source: url("image.svg"); mask-composite: intersect; }
+    |                                                                        ^^^^^^^^^^^^^^^^^^^^^^^^^ \`mask-composite\` has no effect with \`mask-image: none\`. Set a mask image to use this property.
+
+`;
+
 exports[`invalid(32): a { display: ruby; flex-direction: column; grid-template-columns: 1fr 1fr; } 1`] = `
 
   1 | a { display: ruby; flex-direction: column; grid-template-columns: 1fr 1fr; }
@@ -1727,6 +2077,34 @@ exports[`invalid(32): a { display: ruby; flex-direction: column; grid-template-c
 Message:
 > 1 | a { display: ruby; flex-direction: column; grid-template-columns: 1fr 1fr; }
     |                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`grid-template-columns\` has no effect with \`display: ruby\`. It requires a grid container.
+
+`;
+
+exports[`invalid(32): html { background-image: none; background-repeat: no-repeat; } body { background-image: url(\"image.svg\"); } 1`] = `
+
+  1 | html { background-image: none; background-repeat: no-repeat; } body { background-image: url("image.svg"); }
+
+`;
+
+exports[`invalid(32): html { background-image: none; background-repeat: no-repeat; } body { background-image: url(\"image.svg\"); } 2`] = `
+
+Message:
+> 1 | html { background-image: none; background-repeat: no-repeat; } body { background-image: url("image.svg"); }
+    |                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`background-repeat\` has no effect with \`background-image: none\`. Set a background image to use this property.
+
+`;
+
+exports[`invalid(33): a { background-image: none; background-size: cover, contain; } 1`] = `
+
+  1 | a { background-image: none; background-size: cover, contain; }
+
+`;
+
+exports[`invalid(33): a { background-image: none; background-size: cover, contain; } 2`] = `
+
+Message:
+> 1 | a { background-image: none; background-size: cover, contain; }
+    |                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`background-size\` has no effect with \`background-image: none\`. Set a background image to use this property.
 
 `;
 
@@ -1771,6 +2149,20 @@ exports[`invalid(34): a { display: inline flow-root; flex-direction: column; gri
 Message:
 > 1 | a { display: inline flow-root; flex-direction: column; grid-template-columns: 1fr 1fr; }
     |                                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`grid-template-columns\` has no effect with \`display: inline flow-root\`. It requires a grid container.
+
+`;
+
+exports[`invalid(34): a { mask-image: none; mask-position: left top, right bottom; } 1`] = `
+
+  1 | a { mask-image: none; mask-position: left top, right bottom; }
+
+`;
+
+exports[`invalid(34): a { mask-image: none; mask-position: left top, right bottom; } 2`] = `
+
+Message:
+> 1 | a { mask-image: none; mask-position: left top, right bottom; }
+    |                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`mask-position\` has no effect with \`mask-image: none\`. Set a mask image to use this property.
 
 `;
 
@@ -1849,6 +2241,20 @@ exports[`invalid(39): a { display: grid block; flex-direction: column; } 2`] = `
 Message:
 > 1 | a { display: grid block; flex-direction: column; }
     |                          ^^^^^^^^^^^^^^^^^^^^^^ \`flex-direction\` has no effect with \`display: grid block\`. It requires a flex container.
+
+`;
+
+exports[`invalid(4): a { background-image: none; background-size: cover; } 1`] = `
+
+  1 | a { background-image: none; background-size: cover; }
+
+`;
+
+exports[`invalid(4): a { background-image: none; background-size: cover; } 2`] = `
+
+Message:
+> 1 | a { background-image: none; background-size: cover; }
+    |                             ^^^^^^^^^^^^^^^^^^^^^^ \`background-size\` has no effect with \`background-image: none\`. Set a background image to use this property.
 
 `;
 
@@ -2006,6 +2412,20 @@ Message:
 
 `;
 
+exports[`invalid(5): a { background-image: none; background-repeat: no-repeat; } 1`] = `
+
+  1 | a { background-image: none; background-repeat: no-repeat; }
+
+`;
+
+exports[`invalid(5): a { background-image: none; background-repeat: no-repeat; } 2`] = `
+
+Message:
+> 1 | a { background-image: none; background-repeat: no-repeat; }
+    |                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`background-repeat\` has no effect with \`background-image: none\`. Set a background image to use this property.
+
+`;
+
 exports[`invalid(5): a { display: flex; grid-template: 100px / 1fr 1fr; } 1`] = `
 
   1 | a { display: flex; grid-template: 100px / 1fr 1fr; }
@@ -2157,6 +2577,20 @@ exports[`invalid(59): a { overflow: visible; text-overflow: ellipsis; writing-mo
 Message:
 > 1 | a { overflow: visible; text-overflow: ellipsis; writing-mode: vertical-rl; }
     |                        ^^^^^^^^^^^^^^^^^^^^^^^ \`text-overflow: ellipsis\` has no effect with \`overflow: visible\`. Ellipsis requires clipped inline overflow.
+
+`;
+
+exports[`invalid(6): a { background-image: none; background-origin: content-box; } 1`] = `
+
+  1 | a { background-image: none; background-origin: content-box; }
+
+`;
+
+exports[`invalid(6): a { background-image: none; background-origin: content-box; } 2`] = `
+
+Message:
+> 1 | a { background-image: none; background-origin: content-box; }
+    |                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`background-origin\` has no effect with \`background-image: none\`. Set a background image to use this property.
 
 `;
 
@@ -2314,6 +2748,20 @@ Message:
 
 `;
 
+exports[`invalid(7): a { border-image-source: none; border-image-slice: 30 fill; } 1`] = `
+
+  1 | a { border-image-source: none; border-image-slice: 30 fill; }
+
+`;
+
+exports[`invalid(7): a { border-image-source: none; border-image-slice: 30 fill; } 2`] = `
+
+Message:
+> 1 | a { border-image-source: none; border-image-slice: 30 fill; }
+    |                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`border-image-slice\` has no effect with \`border-image-source: none\`. Set a border image to use this property.
+
+`;
+
 exports[`invalid(7): a { display: flex; grid-template-rows: 100px 100px; } 1`] = `
 
   1 | a { display: flex; grid-template-rows: 100px 100px; }
@@ -2465,6 +2913,20 @@ exports[`invalid(79): a { display: grid; column-count: 3; } 2`] = `
 Message:
 > 1 | a { display: grid; column-count: 3; }
     |                    ^^^^^^^^^^^^^^^ \`column-count\` has no effect with \`display: grid\`. Multicol properties require a block container.
+
+`;
+
+exports[`invalid(8): a { border-image-source: none; border-image-width: 2; } 1`] = `
+
+  1 | a { border-image-source: none; border-image-width: 2; }
+
+`;
+
+exports[`invalid(8): a { border-image-source: none; border-image-width: 2; } 2`] = `
+
+Message:
+> 1 | a { border-image-source: none; border-image-width: 2; }
+    |                                ^^^^^^^^^^^^^^^^^^^^^ \`border-image-width\` has no effect with \`border-image-source: none\`. Set a border image to use this property.
 
 `;
 
@@ -2627,6 +3089,20 @@ exports[`invalid(89): a { display: flex; position: absolute; float: left; column
 Message:
 > 1 | a { display: flex; position: absolute; float: left; column-width: 12rem; }
     |                                                     ^^^^^^^^^^^^^^^^^^^ \`column-width\` has no effect with \`display: flex\`. Multicol properties require a block container.
+
+`;
+
+exports[`invalid(9): a { border-image-source: none; border-image-outset: 8px; } 1`] = `
+
+  1 | a { border-image-source: none; border-image-outset: 8px; }
+
+`;
+
+exports[`invalid(9): a { border-image-source: none; border-image-outset: 8px; } 2`] = `
+
+Message:
+> 1 | a { border-image-source: none; border-image-outset: 8px; }
+    |                                ^^^^^^^^^^^^^^^^^^^^^^^^ \`border-image-outset\` has no effect with \`border-image-source: none\`. Set a border image to use this property.
 
 `;
 
