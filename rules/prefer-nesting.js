@@ -23,7 +23,24 @@ const messages = {
 	[MESSAGE_ID_RELATED_RULES]: 'Prefer CSS nesting for related rules.',
 };
 
-const STATE_PSEUDO_CLASSES = new Set(['hover', 'active', 'focus', 'focus-visible', 'focus-within', 'checked', 'disabled', 'enabled']);
+const STATE_PSEUDO_CLASSES = new Set([
+	'hover',
+	'active',
+	'focus',
+	'focus-visible',
+	'focus-within',
+	'checked',
+	'disabled',
+	'enabled',
+	'valid',
+	'invalid',
+	'required',
+	'optional',
+	'read-only',
+	'read-write',
+	'indeterminate',
+	'placeholder-shown',
+]);
 
 const isDescendantCombinator = node => node?.type === 'Combinator' && node.name === ' ';
 
@@ -71,11 +88,17 @@ const canUnwrapSelectorNode = node => {
 
 const canUnwrapSelectorList = selectorList => selectorList.children.every(selector => selector.children.every(node => canUnwrapSelectorNode(node)));
 
-const isRelatedParent = selector => selector.children.every(node => canUnwrapSelectorNode(node) || (
-	node.type === 'PseudoClassSelector'
-	&& !node.children
-	&& STATE_PSEUDO_CLASSES.has(normalizeCssIdentifier(node.name))
-));
+const isRelatedParent = selector => selector.children.every(node => {
+	if (node.type === 'AttributeSelector') {
+		return !node.name.name.includes('|') && (!node.flags || ['i', 's'].includes(normalizeCssIdentifier(node.flags)));
+	}
+
+	return canUnwrapSelectorNode(node) || (
+		node.type === 'PseudoClassSelector'
+		&& !node.children
+		&& STATE_PSEUDO_CLASSES.has(normalizeCssIdentifier(node.name))
+	);
+});
 
 const getCandidate = selector => {
 	const {children} = selector;

@@ -41,7 +41,7 @@ Related rules are nested inside their immediately preceding parent, using explic
 }
 ```
 
-State pseudo-classes can also be part of the parent selector:
+Parents can include `:hover`, `:active`, `:focus`, `:focus-visible`, `:focus-within`, `:checked`, `:disabled`, `:enabled`, `:valid`, `:invalid`, `:required`, `:optional`, `:read-only`, `:read-write`, `:indeterminate`, or `:placeholder-shown`:
 
 ```css
 /* ❌ */
@@ -209,7 +209,7 @@ A leading `:is()` can have mixed specificity: nesting preserves its maximum spec
 
 ## Limitations
 
-Merging requires one compound parent selector, repeated exactly in every child selector. Parents support type, class, ID, unflagged attributes, and `:hover`, `:active`, `:focus`, `:focus-visible`, `:focus-within`, `:checked`, `:disabled`, or `:enabled`. The `:is()` conversion requires one selector with at least two compound arguments.
+Merging requires one compound parent selector, repeated exactly in every child selector. Parents support type, class, ID, attribute selectors (including `i` and `s` flags), and the state pseudo-classes listed above. The `:is()` conversion requires one selector with at least two compound arguments.
 
 Skips existing `&` in selectors, escaped `:is()` names, `@scope`, and files with `@namespace`. Rules are never moved across unrelated rules or conditional blocks.
 

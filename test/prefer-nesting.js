@@ -24,7 +24,6 @@ test({
 		'.card {} @media (width > 0px) { .card .title {} }',
 		'@scope (.outer) { .card {} .card .title {} }',
 		'@namespace url("http://www.w3.org/1999/xhtml"); .card {} .card .title {}',
-		'[x="a" i] {} [x="a" i] .title {}',
 		String.raw`.c\61 rd {} .card .title {}`,
 	],
 	invalid: [
@@ -153,7 +152,24 @@ test({
 			output: '.card {\n\tcolor: red;\n\t& .title,\n\t& .body {\n\t\tcolor: blue;\n\t}\n}',
 			errors: 1,
 		},
-		...['hover', 'active', 'focus', 'focus-visible', 'focus-within', 'checked', 'disabled', 'enabled'].map(pseudoClass => ({
+		...[
+			'hover',
+			'active',
+			'focus',
+			'focus-visible',
+			'focus-within',
+			'checked',
+			'disabled',
+			'enabled',
+			'valid',
+			'invalid',
+			'required',
+			'optional',
+			'read-only',
+			'read-write',
+			'indeterminate',
+			'placeholder-shown',
+		].map(pseudoClass => ({
 			code: `.card:${pseudoClass} { color: red; } .card:${pseudoClass} .title { color: blue; }`,
 			output: `.card:${pseudoClass} { color: red; & .title { color: blue; } }`,
 			errors: 1,
@@ -211,6 +227,72 @@ test({
 			'.card {\n\tcolor: red;\n}\n@media (width > 0px) {\n    .card {\n        color: blue;\n    }\n}',
 			'.card {\n\tcolor: red;\n}\n@media (width > 0px) {\n\t.card {\n\t\t--value: a\n\t\t\tb;\n\t}\n}',
 		].map(code => ({code, errors: 1})),
+	],
+});
+
+test({
+	valid: [
+		'[data-kind="CARD" i] {} [data-kind="CARD" s] .title {}',
+		'[data-kind="CARD" i] {} [data-kind="card" i] .title {}',
+		'[data-kind="CARD" x] {} [data-kind="CARD" x] .title {}',
+		'[ns|kind="CARD" i] {} [ns|kind="CARD" i] .title {}',
+		'@namespace url("http://www.w3.org/1999/xhtml"); [data-kind="CARD" i] {} [data-kind="CARD" i] .title {}',
+	],
+	invalid: [
+		...['i', 's', 'I', 'S'].map(flag => ({
+			code: `[data-kind="CARD" ${flag}] { color: red; } [data-kind="CARD" ${flag}] .title { color: blue; }`,
+			output: `[data-kind="CARD" ${flag}] { color: red; & .title { color: blue; } }`,
+			errors: 1,
+		})),
+		{
+			code: String.raw`[data-kind="CARD" \69] { color: red; } [data-kind="CARD" \69] .title { color: blue; }`,
+			output: String.raw`[data-kind="CARD" \69] { color: red; & .title { color: blue; } }`,
+			errors: 1,
+		},
+		{
+			code: String.raw`form:\49 NVALID { color: red; } form:\49 NVALID .message { color: blue; }`,
+			output: String.raw`form:\49 NVALID { color: red; & .message { color: blue; } }`,
+			errors: 1,
+		},
+		{
+			code: 'input:REQUIRED { color: red; } input:REQUIRED + .hint { color: blue; }',
+			output: 'input:REQUIRED { color: red; & + .hint { color: blue; } }',
+			errors: 1,
+		},
+		{
+			code: '[data-kind="CARD" i]:invalid { color: red; } [data-kind="CARD" i]:invalid .title, [data-kind="CARD" i]:invalid::before { color: blue; }',
+			output: '[data-kind="CARD" i]:invalid { color: red; & .title, &::before { color: blue; } }',
+			errors: 1,
+		},
+		{
+			code: '[data-kind="CARD" s] { color: red; } @media (width > 0px) { [data-kind="CARD" s] { color: blue; } }',
+			output: '[data-kind="CARD" s] { color: red; @media (width > 0px) { color: blue; } }',
+			errors: 1,
+		},
+		{
+			code: 'form:invalid { color: red; } @supports (display: grid) { form:invalid { color: blue; } }',
+			output: 'form:invalid { color: red; @supports (display: grid) { color: blue; } }',
+			errors: 1,
+		},
+		{
+			code: '.outer { [data-kind="CARD" i] { color: red; } [data-kind="CARD" i] .title { color: blue; } }',
+			output: '.outer { [data-kind="CARD" i] { color: red; & .title { color: blue; } } }',
+			errors: 1,
+		},
+		{
+			code: '[data-kind="CARD" i] {\r\n  color: red;\r\n}\r\n[data-kind="CARD" i] .title {\r\n  color: blue;\r\n}',
+			output: '[data-kind="CARD" i] {\r\n  color: red;\r\n  & .title {\r\n    color: blue;\r\n  }\r\n}',
+			errors: 1,
+		},
+		{
+			code: '[data-kind="CARD" i] { color: red; } [data-kind="CARD" i] .title { color: blue; /* keep */ }',
+			errors: 1,
+		},
+		{
+			code: ':is([data-kind="CARD" i], .card) .title { color: blue; }',
+			output: ':is([data-kind="CARD" i], .card) { .title { color: blue; } }',
+			errors: 1,
+		},
 	],
 });
 
@@ -586,6 +668,8 @@ nodeTest('nesting fixes work with the other nesting rules', () => {
 	for (const code of [
 		'.card { color: red; } .card .title, .card > #body { color: blue; }',
 		'.card:hover { color: red; } .card:hover .title { color: blue; }',
+		'[data-kind="CARD" i] { color: red; } [data-kind="CARD" i] .title { color: blue; }',
+		'form:invalid { color: red; } @media (width > 0px) { form:invalid { color: blue; } }',
 		'.card { color: red; } @media (width > 0px) { .card { color: blue; } }',
 		'.card { color: red; } @supports (display: grid) { .card { color: blue; } }',
 	]) {
