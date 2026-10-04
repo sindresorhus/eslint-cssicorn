@@ -717,3 +717,58 @@ test({
 		},
 	],
 });
+
+test({
+	valid: [
+		'a { display: flex; flex-wrap: nowrap; -webkit-flex-wrap: wrap; align-content: center; }',
+		'a { display: flex; -webkit-flex-flow: row wrap !important; flex-wrap: nowrap; align-content: center; }',
+		'a { display: flex; flex-flow: row nowrap; -webkit-flex-wrap: wrap; align-content: center; }',
+		'a { display: flex; flex-flow: nowrap; -webkit-flex-flow: wrap; align-content: center; }',
+		'a { DISPLAY: FLEX; FLEX-WRAP: NOWRAP; -WEBKIT-FLEX-WRAP: WRAP; ALIGN-CONTENT: CENTER; }',
+		String.raw`a { display: flex; flex-wrap: nowrap; -webkit-flex-\66 low: wrap; align-content: center; }`,
+		'a { display: flex; -webkit-flex-wrap: nowrap; align-content: center; }',
+		'a { display: flex; -webkit-flex-flow: nowrap; align-content: center; }',
+		'a { perspective: none; -webkit-perspective: 400px; perspective-origin: left; }',
+		'a { -webkit-perspective: 400px !important; perspective: none; perspective-origin: left; }',
+		'a { PERSPECTIVE: NONE; -WEBKIT-PERSPECTIVE: 400px; PERSPECTIVE-ORIGIN: LEFT; }',
+		String.raw`a { perspective: none; -webkit-perspe\63 tive: 400px; perspective-origin: left; }`,
+		'a { -webkit-perspective: none; perspective-origin: left; }',
+	],
+	invalid: [
+		{
+			code: 'a { display: flex; flex-wrap: nowrap; -webkit-flex-wrap: wrap; align-content: center; grid-auto-flow: column; }',
+			errors: [{messageId: 'no-ineffective-properties/display'}],
+		},
+		{
+			code: 'a { perspective: none; -webkit-perspective: 400px; perspective-origin: left; position: fixed; clear: both; }',
+			errors: [{messageId: 'no-ineffective-properties/clear'}],
+		},
+	],
+});
+
+test({
+	valid: [
+		'a { float: left; shape-outside: none; -webkit-shape-outside: url("shape.png"); shape-image-threshold: 0.5; }',
+		'a { -webkit-shape-outside: url("shape.png") !important; shape-outside: none; shape-image-threshold: 0.5; }',
+		'a { SHAPE-OUTSIDE: NONE; -WEBKIT-SHAPE-OUTSIDE: url("shape.png"); SHAPE-IMAGE-THRESHOLD: 0.5; }',
+		String.raw`a { shape-outside: none; -webkit-shape-outs\69 de: url("shape.png"); shape-image-threshold: 0.5; }`,
+		'a { -webkit-shape-outside: none; shape-image-threshold: 0.5; }',
+		'a { text-decoration-line: none; -webkit-text-decoration-line: underline; text-decoration-color: red; }',
+		'a { -webkit-text-decoration: underline !important; text-decoration-line: none; text-decoration-thickness: 3px; }',
+		'a { text-decoration-line: none; -webkit-text-decoration: underline; text-decoration-style: wavy; }',
+		'a { -WEBKIT-TEXT-DECORATION-LINE: UNDERLINE; TEXT-DECORATION-LINE: NONE; TEXT-DECORATION-COLOR: RED; }',
+		String.raw`a { text-decoration-line: none; -webkit-text-decorati\6f n: underline; text-decoration-color: red; }`,
+		'a { -webkit-text-decoration-line: none; text-decoration-color: red; }',
+		'a { -webkit-text-decoration: none; text-decoration-thickness: 3px; }',
+	],
+	invalid: [
+		{
+			code: 'a { shape-outside: none; -webkit-shape-outside: url("shape.png"); shape-image-threshold: 0.5; text-decoration-line: none; text-decoration-color: red; }',
+			errors: [{messageId: 'no-ineffective-properties/decoration'}],
+		},
+		{
+			code: 'a { text-decoration-line: none; -webkit-text-decoration: underline; text-decoration-color: red; offset-path: none; offset-distance: 50%; }',
+			errors: [{messageId: 'no-ineffective-properties/motion'}],
+		},
+	],
+});

@@ -427,7 +427,7 @@ a {
 
 - Supported: Style declaration blocks, including nested style rules and conditional blocks, CSS escapes, ASCII casing, `!important`, and legacy and modern display notation, such as `inline-flex` and `inline flex`.
 - Skipped controls: Missing, malformed, unknown, vendor-prefixed, CSS-wide, or unresolved values. Display checks also ignore `none` and `contents`.
-- Skipped ambiguities: Multiple declarations for a controlling property, including shorthand/longhand combinations such as `flex-flow`/`flex-wrap`, `offset`/`offset-path`, or `text-decoration`/`text-decoration-line`, and multiple overflow declarations including physical and logical longhands. Image checks also skip resetting shorthands (`background`, `border-image`, `border`, or `mask`) and source overrides through `-webkit-border-image`, `-webkit-mask-image`, or `-webkit-mask`. Animation and transition checks skip their shorthands and `-webkit-` source aliases; named timeline checks skip their `scroll-timeline` or `view-timeline` shorthands. Ambiguity skips only the check that depends on that controller.
+- Skipped ambiguities: Multiple declarations that control the same effect, including shorthand/longhand combinations such as `flex-flow`/`flex-wrap`, `border`/`border-image-source`, or `text-decoration`/`text-decoration-line`, recognized `-webkit-` aliases, and combinations of physical and logical overflow declarations. Ambiguity skips only the check that depends on that controller.
 - Disabled effects: Image, animation, transition, and named timeline checks require a single explicit `none` value in their controlling longhand. Controller lists, values implied by shorthands, and prefixed source declarations alone are skipped.
 - Skipped declarations: Target values containing CSS-wide keywords or unresolved substitutions, custom properties, item properties, gaps, and other alignment properties that need additional context.
 - Skipped blocks: Blocks containing `all`, plus keyframe, descriptor, and CSS Modules `:export`/`:import()` blocks.
@@ -474,7 +474,7 @@ Scroll snap controls and `resize` are not checked because root-element propagati
 - [Background images and border images](https://drafts.csswg.org/css-backgrounds-3/)
 - [Background position longhands](https://drafts.csswg.org/css-backgrounds-4/#background-position-longhands)
 - [Mask images](https://drafts.csswg.org/css-masking/#the-mask-image)
-- [Prefixed masking aliases](https://compat.spec.whatwg.org/#css-simple-aliases)
+- [Prefixed property aliases](https://compat.spec.whatwg.org/#css-simple-aliases)
 - [Top-layer positioning](https://drafts.csswg.org/css-position-4/#top-styling)
 - [Animation names and controls](https://www.w3.org/TR/css-animations-1/#animation-name)
 - [Animation composition](https://drafts.csswg.org/css-animations-2/#animation-composition)

@@ -80,10 +80,14 @@ const paddingProperties = new Set([
 const multicolProperties = new Set(['columns', 'column-count', 'column-width', 'column-fill']);
 // The first controller must be explicit. Other controllers can override or reset it.
 const inactivePropertyGroups = [
-	{properties: ['perspective-origin'], controllingProperties: ['perspective'], messageId: MESSAGE_ID_PERSPECTIVE},
+	{properties: ['perspective-origin'], controllingProperties: ['perspective', '-webkit-perspective'], messageId: MESSAGE_ID_PERSPECTIVE},
 	{properties: ['offset-distance', 'offset-rotate', 'offset-anchor'], controllingProperties: ['offset-path', 'offset'], messageId: MESSAGE_ID_MOTION},
-	{properties: ['shape-image-threshold'], controllingProperties: ['shape-outside'], messageId: MESSAGE_ID_SHAPE_IMAGE_THRESHOLD},
-	{properties: ['text-decoration-color', 'text-decoration-style', 'text-decoration-thickness'], controllingProperties: ['text-decoration-line', 'text-decoration'], messageId: MESSAGE_ID_DECORATION},
+	{properties: ['shape-image-threshold'], controllingProperties: ['shape-outside', '-webkit-shape-outside'], messageId: MESSAGE_ID_SHAPE_IMAGE_THRESHOLD},
+	{
+		properties: ['text-decoration-color', 'text-decoration-style', 'text-decoration-thickness'],
+		controllingProperties: ['text-decoration-line', 'text-decoration', '-webkit-text-decoration-line', '-webkit-text-decoration'],
+		messageId: MESSAGE_ID_DECORATION,
+	},
 	{
 		properties: ['background-position', 'background-position-x', 'background-position-y', 'background-size', 'background-repeat', 'background-origin'],
 		controllingProperties: ['background-image', 'background'],
@@ -145,7 +149,7 @@ const targetProperties = new Set([
 const overflowProperties = ['overflow', 'overflow-x', 'overflow-y', 'overflow-inline', 'overflow-block'];
 
 /**
-Get a validated keyword value only when exactly one declaration controls the property or shorthand group. Multiple declarations may be intentional fallbacks.
+Get a validated keyword value from a single unprefixed controlling declaration. Multiple declarations in the property or shorthand group may be intentional fallbacks.
 
 @param {Map<string, {node: DeclarationPlain, property: string}[]>} declarationsByProperty
 @param {string[]} properties
@@ -158,7 +162,7 @@ const getControllingValue = (declarationsByProperty, properties, sourceCode) => 
 	}
 
 	const [{node, property}] = declarations;
-	if (node.value.type !== 'Value' || node.value.children.length === 0) {
+	if (property.startsWith('-') || node.value.type !== 'Value' || node.value.children.length === 0) {
 		return;
 	}
 
@@ -347,7 +351,7 @@ const getBlockControls = (declarationsByProperty, sourceCode) => {
 	const isFlex = hasVisibleDisplay && (display === 'inline-flex' || display.split(' ').includes('flex'));
 	const isGrid = hasVisibleDisplay && (display === 'inline-grid' || display.split(' ').includes('grid'));
 	const isTable = hasVisibleDisplay && (display === 'inline-table' || display.split(' ').includes('table'));
-	const wrapping = isFlex ? getControllingValue(declarationsByProperty, ['flex-wrap', 'flex-flow'], sourceCode) : undefined;
+	const wrapping = isFlex ? getControllingValue(declarationsByProperty, ['flex-wrap', 'flex-flow', '-webkit-flex-wrap', '-webkit-flex-flow'], sourceCode) : undefined;
 	const hasExplicitNowrap = wrapping?.split(' ').includes('nowrap') === true;
 	const position = getControllingValue(declarationsByProperty, ['position'], sourceCode);
 	const overflow = getControllingValue(declarationsByProperty, overflowProperties, sourceCode);
