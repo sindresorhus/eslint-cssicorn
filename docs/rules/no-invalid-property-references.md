@@ -71,7 +71,7 @@ Standard property names are matched ASCII case-insensitively, including escaped 
 
 - Custom-property references, such as `--progress`, and vendor-prefixed references, such as `-webkit-transform`, are ignored. Vendor-prefixed declarations, such as `-webkit-transition`, are checked.
 - Only literal identifiers at the top level of a declaration value are checked. Function arguments, including `var()` fallbacks, strings, URLs, and values supplied by build tools are not resolved. Literal references alongside functions are still checked.
-- Support-query declarations, descriptor blocks, CSS Modules `:export` and `:import()` declarations, and unparsed values are ignored.
+- Support-query declarations, descriptor blocks recognized by the lexer, CSS Modules `:export` and `:import()` declarations, and unparsed values are ignored.
 - General value-grammar validation is left to `css/no-invalid-properties`. For example, this rule does not report `will-change: auto, opacity` or `transition-property: none, opacity`.
 - Transition shorthand keywords are always exempt. Unusual repeated-keyword forms such as `transition: ease ease 1s` are not disambiguated to determine whether one keyword occupies the property-name slot.
 

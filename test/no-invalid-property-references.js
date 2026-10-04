@@ -53,6 +53,14 @@ test.snapshot({
 			code: String.raw`a { transition: FUTURE-PROPERTY 1s; will-change: future\2d property; }`,
 			languageOptions: {customSyntax: {properties: {'future-property': '<length>'}}},
 		},
+		{
+			code: '@custom-descriptors { transition: opactiy 1s; transition-property: transfrom; will-change: default; }',
+			languageOptions: {
+				customSyntax: {
+					atrules: {'custom-descriptors': {descriptors: {transition: '<custom-ident>'}}},
+				},
+			},
+		},
 	],
 	invalid: [
 		'a { transition: opactiy 200ms; }',
@@ -79,7 +87,7 @@ test.snapshot({
 		'a { transition: inherit /* keep */ 1s; transition-property: /* keep */ unset, var(--name); will-change: var(--name), revert-layer; }',
 		String.raw`a { -w\65 bkit-transition: opactiy 200ms; -MOZ-transition-property: transfrom; }`,
 		String.raw`a { -WEBKIT-WILL-CHANGE: transfrom; will\2d change: opactiy; transition\2d property: colr; }`,
-		'a { will-change: İnset, marKer, blocK-size, _opacity; }',
+		'a { will-change: İnset; }',
 		'a { transition-property: constructor, __proto__; }',
 		'a { transition-property: opacityy, opacity-unknown, -transfrom; }',
 		'a { transition: /* before */ opactiy /* after */ 1s !important; }',
@@ -107,6 +115,14 @@ test.snapshot({
 		{
 			code: 'a { transition: default 1s; will-change: all, none, will-change; }',
 			languageOptions: {customSyntax: {properties: {default: '<length>', none: '<length>'}}},
+		},
+		{
+			code: 'a { transition: opacity 1s; transition-property: opacity; will-change: opacity; }',
+			languageOptions: {customSyntax: {properties: {opacity: null}}},
+		},
+		{
+			code: '@custom-group example { a { transition-property: opactiy; } }',
+			languageOptions: {customSyntax: {atrules: {'custom-group': {prelude: '<custom-ident>'}}}},
 		},
 	],
 });

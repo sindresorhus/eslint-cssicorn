@@ -41,7 +41,7 @@ function getPropertyReferenceProblem(node, property, value, lexer) {
 
 	// Some forbidden references are known properties, like `all` and `will-change`.
 	const isForbidden = name === 'default' || isWideKeyword || (property === 'will-change' && forbiddenWillChangeReferences.has(name));
-	// GetProperty() also accepts declaration hacks and folds non-ASCII letters.
+	// `lexer.getProperty()` also accepts declaration hacks and folds non-ASCII letters.
 	if (!isForbidden && (exemptIdentifiersByProperty.get(property).has(name) || Object.hasOwn(lexer.properties, name))) {
 		return;
 	}
@@ -60,18 +60,18 @@ const create = context => {
 	const {sourceCode} = context;
 	const {lexer} = sourceCode;
 
-	context.on('Declaration', function * (declaration) {
+	context.on('Declaration', function * (declaration, parent) {
 		const property = keyword(normalizeCssIdentifier(declaration.property)).basename;
 		if (
 			!exemptIdentifiersByProperty.has(property)
 			|| declaration.value.type !== 'Value'
-			|| sourceCode.getParent(declaration)?.type !== 'Block'
+			|| parent?.type !== 'Block'
 			|| isCssModulesInteropDeclaration(declaration, context)
 		) {
 			return;
 		}
 
-		const owner = sourceCode.getParent(sourceCode.getParent(declaration));
+		const owner = sourceCode.getParent(parent);
 		if (owner?.type === 'Atrule' && lexer.getAtrule(normalizeCssIdentifier(owner.name))?.descriptors) {
 			return;
 		}
