@@ -163,6 +163,24 @@ Output:
 
 `;
 
+exports[`invalid(13): @layer theme.base, theme.components; @import \"theme.css\" layer(theme.buttons.icons) supports(display: grid) screen; 1`] = `
+
+Options:
+- checkUndeclaredLayers: true
+
+Code:
+  1 | @layer theme.base, theme.components; @import "theme.css" layer(theme.buttons.icons) supports(display: grid) screen;
+
+`;
+
+exports[`invalid(13): @layer theme.base, theme.components; @import \"theme.css\" layer(theme.buttons.icons) supports(display: grid) screen; 2`] = `
+
+Message:
+> 1 | @layer theme.base, theme.components; @import "theme.css" layer(theme.buttons.icons) supports(display: grid) screen;
+    |                                                                ^^^^^^^^^^^^^^^^^^^ Layer \`theme.buttons\` is not declared in the initial layer order.
+
+`;
+
 exports[`invalid(14): @layer theme { @layer base, components; } @layer theme { @layer components, base; } 1`] = `
 
   1 | @layer theme { @layer base, components; } @layer theme { @layer components, base; }

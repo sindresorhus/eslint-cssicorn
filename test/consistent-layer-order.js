@@ -16,6 +16,7 @@ test.snapshot({
 		'@layer theme {} @layer reset {}',
 		'@layer theme {} @layer reset, theme; @layer theme, reset;',
 		'@import "theme.css" layer(theme); @layer reset, theme; @layer theme, reset;',
+		'@import "theme.css" layer(theme.base); @layer theme.components, theme.base; @layer theme.base, theme.components;',
 		'@import "theme.css" layer; @layer reset, theme; @layer theme, reset;',
 		'@import "theme.css"; @layer reset, theme; @layer theme, reset;',
 		'@layer {} @layer reset, theme; @layer theme, reset;',
@@ -23,7 +24,9 @@ test.snapshot({
 		'@media screen { @layer reset, theme; @layer theme, reset; }',
 		'@supports (display: grid) { @layer reset, theme; } @layer theme, reset; @layer reset, theme;',
 		'@layer theme { @layer components {} @layer base, components; @layer components, base; }',
+		'@layer theme { @media screen { @layer base {} } } @layer theme { @layer components, base; @layer base, components; }',
 		'@layer theme { @layer base, components; } @layer other { @layer components, base; }',
+		'@layer theme.base, theme.components, reset.components, reset.base; @layer theme { @layer base, components; } @layer reset { @layer components, base; }',
 		'@layer { @layer base, components; } @layer { @layer components, base; }',
 		'@layer theme.base, theme.components; @layer theme { @layer base, components; }',
 		'@layer theme.base, reset, theme.components; @layer theme.base, theme, reset, theme.components;',
@@ -97,6 +100,7 @@ test.snapshot({
 		{code: '@layer base, theme; @media screen { @layer themes {} }', options: [{checkUndeclaredLayers: true}]},
 		{code: String.raw`@layer foo\.bar, foo.bar; @layer foo.baz {}`, options: [{checkUndeclaredLayers: true}]},
 		{code: '@layer base, theme; @layer theme, unknown, base;', options: [{checkUndeclaredLayers: true}]},
+		{code: '@layer theme.base, theme.components; @import "theme.css" layer(theme.buttons.icons) supports(display: grid) screen;', options: [{checkUndeclaredLayers: true}]},
 	],
 });
 
@@ -107,6 +111,22 @@ test({
 		code: '@layer reset, base, theme; @layer theme, base;',
 		errors: [{messageId: 'consistent-layer-order', data: {earlier: 'base', later: 'theme'}}],
 		output: '@layer reset, base, theme; @layer base, theme;',
+	}, {
+		code: '@layer theme.base, theme.components, reset.base, reset.components; @layer reset.components, theme.components, reset.base, theme.base;',
+		errors: [{messageId: 'consistent-layer-order', data: {earlier: 'theme.components', later: 'reset.components'}}],
+		output: '@layer theme.base, theme.components, reset.base, reset.components; @layer theme.base, theme.components, reset.base, reset.components;',
+	}, {
+		code: '@layer theme.base, theme.components; @layer theme.components, theme, theme.base, theme.components;',
+		errors: [{messageId: 'consistent-layer-order', data: {earlier: 'theme.base', later: 'theme.components'}}],
+		output: '@layer theme.base, theme.components; @layer theme, theme.base, theme.components, theme.components;',
+	}, {
+		code: '@layer base, theme;\r\n@media screen {\r\n    @layer theme,\r\n        \\62 ase;\r\n}',
+		errors: [{messageId: 'consistent-layer-order', data: {earlier: String.raw`\62 ase`, later: 'theme'}}],
+		output: '@layer base, theme;\r\n@media screen {\r\n    @layer \\62 ase,\r\n        theme;\r\n}',
+	}, {
+		// This statement establishes the child order, so it is reported without a fix.
+		code: '@layer base, theme; @layer theme.components, theme.base, base;',
+		errors: [{messageId: 'consistent-layer-order', data: {earlier: 'base', later: 'theme.components'}}],
 	}],
 });
 
