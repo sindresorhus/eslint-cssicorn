@@ -59,6 +59,7 @@ export default defineConfig([
 
 | Name                                                                                         | Description                                                                                                  | 💼   | 🔧 | 💡 |
 | :------------------------------------------------------------------------------------------- | :----------------------------------------------------------------------------------------------------------- | :--- | :- | :- |
+| [consistent-compound-selector-order](docs/rules/consistent-compound-selector-order.md)       | Enforce consistent ordering of compound selector components.                                                 | ✅    | 🔧 |    |
 | [lowercase](docs/rules/lowercase.md)                                                         | Enforce lowercase CSS syntax.                                                                                | ✅    | 🔧 |    |
 | [no-declarations-after-nested-rules](docs/rules/no-declarations-after-nested-rules.md)       | Disallow declarations after nested rules.                                                                    | ✅ ☑️ |    |    |
 | [no-deprecated-features](docs/rules/no-deprecated-features.md)                               | Disallow deprecated CSS features.                                                                            | ✅    | 🔧 | 💡 |

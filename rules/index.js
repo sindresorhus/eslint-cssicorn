@@ -1,5 +1,6 @@
 // Generated file, DO NOT edit
 
+export {default as 'consistent-compound-selector-order'} from './consistent-compound-selector-order.js';
 export {default as lowercase} from './lowercase.js';
 export {default as 'no-declarations-after-nested-rules'} from './no-declarations-after-nested-rules.js';
 export {default as 'no-deprecated-features'} from './no-deprecated-features.js';

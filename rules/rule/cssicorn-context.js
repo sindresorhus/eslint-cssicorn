@@ -1,12 +1,21 @@
 /**
-@import {CSSRuleDefinition} from '@eslint/css';
+@import {CSSRuleDefinition, CSSRuleVisitor} from '@eslint/css';
+@import {CssNodePlain} from '@eslint/css-tree';
 @import CssicornListeners from './cssicorn-listeners.js';
-@import {ListenerType, CssicornListener} from './to-eslint-listener.js';
+@import {CssicornProblems} from './to-eslint-problem.js';
 */
 
 /**
 @typedef {Parameters<CSSRuleDefinition['create']>[0]} CssRuleContext
-@typedef {<Type extends ListenerType>(type: Type | Type[], listener: CssicornListener<Type>) => void} CssicornRuleListen
+*/
+
+/**
+@template {CssNodePlain['type']} [NodeType=CssNodePlain['type']]
+@typedef {(node: Parameters<NonNullable<CSSRuleVisitor[NodeType]>>[0], parent: Parameters<NonNullable<CSSRuleVisitor[NodeType]>>[1]) => CssicornProblems} CssicornRuleListener
+*/
+
+/**
+@typedef {<NodeType extends CssNodePlain['type']>(type: NodeType | NodeType[], listener: CssicornRuleListener<NodeType>) => void} CssicornRuleListen
 @typedef {CssRuleContext & {
 	on: CssicornRuleListen
 	onExit: CssicornRuleListen

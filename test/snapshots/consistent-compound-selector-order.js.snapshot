@@ -1,0 +1,866 @@
+exports[`invalid(1): .foo#a {} 1`] = `
+
+  1 | .foo#a {}
+
+`;
+
+exports[`invalid(1): .foo#a {} 2`] = `
+
+Message:
+> 1 | .foo#a {}
+    | ^^^^^^ Use consistent ordering for compound selector components.
+
+Output:
+  1 | #a.foo {}
+
+`;
+
+exports[`invalid(10): .foo#a[data-x]:hover::before {} 1`] = `
+
+  1 | .foo#a[data-x]:hover::before {}
+
+`;
+
+exports[`invalid(10): .foo#a[data-x]:hover::before {} 2`] = `
+
+Message:
+> 1 | .foo#a[data-x]:hover::before {}
+    | ^^^^^^^^^^^^^^^^^^^^ Use consistent ordering for compound selector components.
+
+Output:
+  1 | #a.foo[data-x]:hover::before {}
+
+`;
+
+exports[`invalid(11): :is(a, button).rgh-own-conversation {} 1`] = `
+
+  1 | :is(a, button).rgh-own-conversation {}
+
+`;
+
+exports[`invalid(11): :is(a, button).rgh-own-conversation {} 2`] = `
+
+Message:
+> 1 | :is(a, button).rgh-own-conversation {}
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Use consistent ordering for compound selector components.
+
+Output:
+  1 | .rgh-own-conversation:is(a, button) {}
+
+`;
+
+exports[`invalid(12): [data-x]:not(.disabled):hover.foo#id {} 1`] = `
+
+  1 | [data-x]:not(.disabled):hover.foo#id {}
+
+`;
+
+exports[`invalid(12): [data-x]:not(.disabled):hover.foo#id {} 2`] = `
+
+Message:
+> 1 | [data-x]:not(.disabled):hover.foo#id {}
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Use consistent ordering for compound selector components.
+
+Output:
+  1 | #id.foo[data-x]:not(.disabled):hover {}
+
+`;
+
+exports[`invalid(13): a[data-x]:hover.foo#id {} 1`] = `
+
+  1 | a[data-x]:hover.foo#id {}
+
+`;
+
+exports[`invalid(13): a[data-x]:hover.foo#id {} 2`] = `
+
+Message:
+> 1 | a[data-x]:hover.foo#id {}
+    | ^^^^^^^^^^^^^^^^^^^^^^ Use consistent ordering for compound selector components.
+
+Output:
+  1 | a#id.foo[data-x]:hover {}
+
+`;
+
+exports[`invalid(14): a[data-z].z[data-a].a#z#a:hover:focus {} 1`] = `
+
+  1 | a[data-z].z[data-a].a#z#a:hover:focus {}
+
+`;
+
+exports[`invalid(14): a[data-z].z[data-a].a#z#a:hover:focus {} 2`] = `
+
+Message:
+> 1 | a[data-z].z[data-a].a#z#a:hover:focus {}
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Use consistent ordering for compound selector components.
+
+Output:
+  1 | a#z#a.z.a[data-z][data-a]:hover:focus {}
+
+`;
+
+exports[`invalid(15): div.foo&#id {} 1`] = `
+
+  1 | div.foo&#id {}
+
+`;
+
+exports[`invalid(15): div.foo&#id {} 2`] = `
+
+Message:
+> 1 | div.foo&#id {}
+    | ^^^^^^^^^^^ Use consistent ordering for compound selector components.
+
+Output:
+  1 | div&#id.foo {}
+
+`;
+
+exports[`invalid(16): svg|a.foo#id {} 1`] = `
+
+  1 | svg|a.foo#id {}
+
+`;
+
+exports[`invalid(16): svg|a.foo#id {} 2`] = `
+
+Message:
+> 1 | svg|a.foo#id {}
+    | ^^^^^^^^^^^^ Use consistent ordering for compound selector components.
+
+Output:
+  1 | svg|a#id.foo {}
+
+`;
+
+exports[`invalid(17): *|*.foo#id {} 1`] = `
+
+  1 | *|*.foo#id {}
+
+`;
+
+exports[`invalid(17): *|*.foo#id {} 2`] = `
+
+Message:
+> 1 | *|*.foo#id {}
+    | ^^^^^^^^^^ Use consistent ordering for compound selector components.
+
+Output:
+  1 | *|*#id.foo {}
+
+`;
+
+exports[`invalid(18): .\\66 oo#\\69 d {} 1`] = `
+
+  1 | .\\66 oo#\\69 d {}
+
+`;
+
+exports[`invalid(18): .\\66 oo#\\69 d {} 2`] = `
+
+Message:
+> 1 | .\\66 oo#\\69 d {}
+    | ^^^^^^^^^^^^^ Use consistent ordering for compound selector components.
+
+Output:
+  1 | #\\69 d.\\66 oo {}
+
+`;
+
+exports[`invalid(19): .foo\\61 #id {} 1`] = `
+
+  1 | .foo\\61 #id {}
+
+`;
+
+exports[`invalid(19): .foo\\61 #id {} 2`] = `
+
+Message:
+> 1 | .foo\\61 #id {}
+    | ^^^^^^^^^^^ Use consistent ordering for compound selector components.
+
+Output:
+  1 | #id.foo\\61  {}
+
+`;
+
+exports[`invalid(2): [data-x]#foo {} 1`] = `
+
+  1 | [data-x]#foo {}
+
+`;
+
+exports[`invalid(2): [data-x]#foo {} 2`] = `
+
+Message:
+> 1 | [data-x]#foo {}
+    | ^^^^^^^^^^^^ Use consistent ordering for compound selector components.
+
+Output:
+  1 | #foo[data-x] {}
+
+`;
+
+exports[`invalid(20): :HOVER[DATA-X].Foo#ID {} 1`] = `
+
+  1 | :HOVER[DATA-X].Foo#ID {}
+
+`;
+
+exports[`invalid(20): :HOVER[DATA-X].Foo#ID {} 2`] = `
+
+Message:
+> 1 | :HOVER[DATA-X].Foo#ID {}
+    | ^^^^^^^^^^^^^^^^^^^^^ Use consistent ordering for compound selector components.
+
+Output:
+  1 | #ID.Foo[DATA-X]:HOVER {}
+
+`;
+
+exports[`invalid(21): :-webkit-any(a, button).foo {} 1`] = `
+
+  1 | :-webkit-any(a, button).foo {}
+
+`;
+
+exports[`invalid(21): :-webkit-any(a, button).foo {} 2`] = `
+
+Message:
+> 1 | :-webkit-any(a, button).foo {}
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^ Use consistent ordering for compound selector components.
+
+Output:
+  1 | .foo:-webkit-any(a, button) {}
+
+`;
+
+exports[`invalid(22): .foo#id::before:hover {} 1`] = `
+
+  1 | .foo#id::before:hover {}
+
+`;
+
+exports[`invalid(22): .foo#id::before:hover {} 2`] = `
+
+Message:
+> 1 | .foo#id::before:hover {}
+    | ^^^^^^^ Use consistent ordering for compound selector components.
+
+Output:
+  1 | #id.foo::before:hover {}
+
+`;
+
+exports[`invalid(23): .foo#id::before::marker {} 1`] = `
+
+  1 | .foo#id::before::marker {}
+
+`;
+
+exports[`invalid(23): .foo#id::before::marker {} 2`] = `
+
+Message:
+> 1 | .foo#id::before::marker {}
+    | ^^^^^^^ Use consistent ordering for compound selector components.
+
+Output:
+  1 | #id.foo::before::marker {}
+
+`;
+
+exports[`invalid(24): .foo#id:BEFORE:hover {} 1`] = `
+
+  1 | .foo#id:BEFORE:hover {}
+
+`;
+
+exports[`invalid(24): .foo#id:BEFORE:hover {} 2`] = `
+
+Message:
+> 1 | .foo#id:BEFORE:hover {}
+    | ^^^^^^^ Use consistent ordering for compound selector components.
+
+Output:
+  1 | #id.foo:BEFORE:hover {}
+
+`;
+
+exports[`invalid(25): .foo#id:\\62 efore:hover {} 1`] = `
+
+  1 | .foo#id:\\62 efore:hover {}
+
+`;
+
+exports[`invalid(25): .foo#id:\\62 efore:hover {} 2`] = `
+
+Message:
+> 1 | .foo#id:\\62 efore:hover {}
+    | ^^^^^^^ Use consistent ordering for compound selector components.
+
+Output:
+  1 | #id.foo:\\62 efore:hover {}
+
+`;
+
+exports[`invalid(26): .foo#id ::part(button):hover {} 1`] = `
+
+  1 | .foo#id ::part(button):hover {}
+
+`;
+
+exports[`invalid(26): .foo#id ::part(button):hover {} 2`] = `
+
+Message:
+> 1 | .foo#id ::part(button):hover {}
+    | ^^^^^^^ Use consistent ordering for compound selector components.
+
+Output:
+  1 | #id.foo ::part(button):hover {}
+
+`;
+
+exports[`invalid(27): .foo#id > .bar#other + [data-x].baz ~ :hover.qux {} 1`] = `
+
+  1 | .foo#id > .bar#other + [data-x].baz ~ :hover.qux {}
+
+`;
+
+exports[`invalid(27): .foo#id > .bar#other + [data-x].baz ~ :hover.qux {} 2`] = `
+
+Message:
+> 1 | .foo#id > .bar#other + [data-x].baz ~ :hover.qux {}
+    | ^^^^^^^ Use consistent ordering for compound selector components.
+
+Output:
+  1 | #id.foo > .bar#other + [data-x].baz ~ :hover.qux {}
+
+`;
+
+exports[`invalid(27): .foo#id > .bar#other + [data-x].baz ~ :hover.qux {} 3`] = `
+
+Message:
+> 1 | .foo#id > .bar#other + [data-x].baz ~ :hover.qux {}
+    |           ^^^^^^^^^^ Use consistent ordering for compound selector components.
+
+Output:
+  1 | .foo#id > #other.bar + [data-x].baz ~ :hover.qux {}
+
+`;
+
+exports[`invalid(27): .foo#id > .bar#other + [data-x].baz ~ :hover.qux {} 4`] = `
+
+Message:
+> 1 | .foo#id > .bar#other + [data-x].baz ~ :hover.qux {}
+    |                        ^^^^^^^^^^^^ Use consistent ordering for compound selector components.
+
+Output:
+  1 | .foo#id > .bar#other + .baz[data-x] ~ :hover.qux {}
+
+`;
+
+exports[`invalid(27): .foo#id > .bar#other + [data-x].baz ~ :hover.qux {} 5`] = `
+
+Message:
+> 1 | .foo#id > .bar#other + [data-x].baz ~ :hover.qux {}
+    |                                       ^^^^^^^^^^ Use consistent ordering for compound selector components.
+
+Output:
+  1 | .foo#id > .bar#other + [data-x].baz ~ .qux:hover {}
+
+`;
+
+exports[`invalid(28): .foo#id, [data-x].bar {} 1`] = `
+
+  1 | .foo#id, [data-x].bar {}
+
+`;
+
+exports[`invalid(28): .foo#id, [data-x].bar {} 2`] = `
+
+Message:
+> 1 | .foo#id, [data-x].bar {}
+    | ^^^^^^^ Use consistent ordering for compound selector components.
+
+Output:
+  1 | #id.foo, [data-x].bar {}
+
+`;
+
+exports[`invalid(28): .foo#id, [data-x].bar {} 3`] = `
+
+Message:
+> 1 | .foo#id, [data-x].bar {}
+    |          ^^^^^^^^^^^^ Use consistent ordering for compound selector components.
+
+Output:
+  1 | .foo#id, .bar[data-x] {}
+
+`;
+
+exports[`invalid(29): :is(.foo#id, [data-x].bar) {} 1`] = `
+
+  1 | :is(.foo#id, [data-x].bar) {}
+
+`;
+
+exports[`invalid(29): :is(.foo#id, [data-x].bar) {} 2`] = `
+
+Message:
+> 1 | :is(.foo#id, [data-x].bar) {}
+    |     ^^^^^^^ Use consistent ordering for compound selector components.
+
+Output:
+  1 | :is(#id.foo, [data-x].bar) {}
+
+`;
+
+exports[`invalid(29): :is(.foo#id, [data-x].bar) {} 3`] = `
+
+Message:
+> 1 | :is(.foo#id, [data-x].bar) {}
+    |              ^^^^^^^^^^^^ Use consistent ordering for compound selector components.
+
+Output:
+  1 | :is(.foo#id, .bar[data-x]) {}
+
+`;
+
+exports[`invalid(3): [data-x].foo {} 1`] = `
+
+  1 | [data-x].foo {}
+
+`;
+
+exports[`invalid(3): [data-x].foo {} 2`] = `
+
+Message:
+> 1 | [data-x].foo {}
+    | ^^^^^^^^^^^^ Use consistent ordering for compound selector components.
+
+Output:
+  1 | .foo[data-x] {}
+
+`;
+
+exports[`invalid(30): :not(.foo#id) {} 1`] = `
+
+  1 | :not(.foo#id) {}
+
+`;
+
+exports[`invalid(30): :not(.foo#id) {} 2`] = `
+
+Message:
+> 1 | :not(.foo#id) {}
+    |      ^^^^^^^ Use consistent ordering for compound selector components.
+
+Output:
+  1 | :not(#id.foo) {}
+
+`;
+
+exports[`invalid(31): :where(.foo#id) {} 1`] = `
+
+  1 | :where(.foo#id) {}
+
+`;
+
+exports[`invalid(31): :where(.foo#id) {} 2`] = `
+
+Message:
+> 1 | :where(.foo#id) {}
+    |        ^^^^^^^ Use consistent ordering for compound selector components.
+
+Output:
+  1 | :where(#id.foo) {}
+
+`;
+
+exports[`invalid(32): :has(> .foo#id) {} 1`] = `
+
+  1 | :has(> .foo#id) {}
+
+`;
+
+exports[`invalid(32): :has(> .foo#id) {} 2`] = `
+
+Message:
+> 1 | :has(> .foo#id) {}
+    |        ^^^^^^^ Use consistent ordering for compound selector components.
+
+Output:
+  1 | :has(> #id.foo) {}
+
+`;
+
+exports[`invalid(33): :nth-child(2n of .foo#id) {} 1`] = `
+
+  1 | :nth-child(2n of .foo#id) {}
+
+`;
+
+exports[`invalid(33): :nth-child(2n of .foo#id) {} 2`] = `
+
+Message:
+> 1 | :nth-child(2n of .foo#id) {}
+    |                  ^^^^^^^ Use consistent ordering for compound selector components.
+
+Output:
+  1 | :nth-child(2n of #id.foo) {}
+
+`;
+
+exports[`invalid(34): :nth-last-child(odd of [data-x].foo) {} 1`] = `
+
+  1 | :nth-last-child(odd of [data-x].foo) {}
+
+`;
+
+exports[`invalid(34): :nth-last-child(odd of [data-x].foo) {} 2`] = `
+
+Message:
+> 1 | :nth-last-child(odd of [data-x].foo) {}
+    |                        ^^^^^^^^^^^^ Use consistent ordering for compound selector components.
+
+Output:
+  1 | :nth-last-child(odd of .foo[data-x]) {}
+
+`;
+
+exports[`invalid(35): ::slotted(.foo#id) {} 1`] = `
+
+  1 | ::slotted(.foo#id) {}
+
+`;
+
+exports[`invalid(35): ::slotted(.foo#id) {} 2`] = `
+
+Message:
+> 1 | ::slotted(.foo#id) {}
+    |           ^^^^^^^ Use consistent ordering for compound selector components.
+
+Output:
+  1 | ::slotted(#id.foo) {}
+
+`;
+
+exports[`invalid(36): :host(.foo#id) {} 1`] = `
+
+  1 | :host(.foo#id) {}
+
+`;
+
+exports[`invalid(36): :host(.foo#id) {} 2`] = `
+
+Message:
+> 1 | :host(.foo#id) {}
+    |       ^^^^^^^ Use consistent ordering for compound selector components.
+
+Output:
+  1 | :host(#id.foo) {}
+
+`;
+
+exports[`invalid(37): [title=\"/* text */\"].foo#id {} 1`] = `
+
+  1 | [title="/* text */"].foo#id {}
+
+`;
+
+exports[`invalid(37): [title=\"/* text */\"].foo#id {} 2`] = `
+
+Message:
+> 1 | [title="/* text */"].foo#id {}
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^ Use consistent ordering for compound selector components.
+
+Output:
+  1 | #id.foo[title="/* text */"] {}
+
+`;
+
+exports[`invalid(38): .foo/* keep */#id {} 1`] = `
+
+  1 | .foo/* keep */#id {}
+
+`;
+
+exports[`invalid(38): .foo/* keep */#id {} 2`] = `
+
+Message:
+> 1 | .foo/* keep */#id {}
+    | ^^^^^^^^^^^^^^^^^ Use consistent ordering for compound selector components.
+
+`;
+
+exports[`invalid(39): [data-x/* keep */].foo#id {} 1`] = `
+
+  1 | [data-x/* keep */].foo#id {}
+
+`;
+
+exports[`invalid(39): [data-x/* keep */].foo#id {} 2`] = `
+
+Message:
+> 1 | [data-x/* keep */].foo#id {}
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^ Use consistent ordering for compound selector components.
+
+`;
+
+exports[`invalid(4): :hover[data-x] {} 1`] = `
+
+  1 | :hover[data-x] {}
+
+`;
+
+exports[`invalid(4): :hover[data-x] {} 2`] = `
+
+Message:
+> 1 | :hover[data-x] {}
+    | ^^^^^^^^^^^^^^ Use consistent ordering for compound selector components.
+
+Output:
+  1 | [data-x]:hover {}
+
+`;
+
+exports[`invalid(40): :is(.foo/* keep */)#id {} 1`] = `
+
+  1 | :is(.foo/* keep */)#id {}
+
+`;
+
+exports[`invalid(40): :is(.foo/* keep */)#id {} 2`] = `
+
+Message:
+> 1 | :is(.foo/* keep */)#id {}
+    | ^^^^^^^^^^^^^^^^^^^^^^ Use consistent ordering for compound selector components.
+
+`;
+
+exports[`invalid(41): a { :hover.foo&#id { color: red !important; } } 1`] = `
+
+  1 | a { :hover.foo&#id { color: red !important; } }
+
+`;
+
+exports[`invalid(41): a { :hover.foo&#id { color: red !important; } } 2`] = `
+
+Message:
+> 1 | a { :hover.foo&#id { color: red !important; } }
+    |     ^^^^^^^^^^^^^^ Use consistent ordering for compound selector components.
+
+Output:
+  1 | a { &#id.foo:hover { color: red !important; } }
+
+`;
+
+exports[`invalid(42): @media (width > 0px) { .foo#id {} } 1`] = `
+
+  1 | @media (width > 0px) { .foo#id {} }
+
+`;
+
+exports[`invalid(42): @media (width > 0px) { .foo#id {} } 2`] = `
+
+Message:
+> 1 | @media (width > 0px) { .foo#id {} }
+    |                        ^^^^^^^ Use consistent ordering for compound selector components.
+
+Output:
+  1 | @media (width > 0px) { #id.foo {} }
+
+`;
+
+exports[`invalid(43): @supports (display: grid) { .foo#id {} } 1`] = `
+
+  1 | @supports (display: grid) { .foo#id {} }
+
+`;
+
+exports[`invalid(43): @supports (display: grid) { .foo#id {} } 2`] = `
+
+Message:
+> 1 | @supports (display: grid) { .foo#id {} }
+    |                             ^^^^^^^ Use consistent ordering for compound selector components.
+
+Output:
+  1 | @supports (display: grid) { #id.foo {} }
+
+`;
+
+exports[`invalid(44): @container (width > 0px) { .foo#id {} } 1`] = `
+
+  1 | @container (width > 0px) { .foo#id {} }
+
+`;
+
+exports[`invalid(44): @container (width > 0px) { .foo#id {} } 2`] = `
+
+Message:
+> 1 | @container (width > 0px) { .foo#id {} }
+    |                            ^^^^^^^ Use consistent ordering for compound selector components.
+
+Output:
+  1 | @container (width > 0px) { #id.foo {} }
+
+`;
+
+exports[`invalid(45): @layer theme { .foo#id {} } 1`] = `
+
+  1 | @layer theme { .foo#id {} }
+
+`;
+
+exports[`invalid(45): @layer theme { .foo#id {} } 2`] = `
+
+Message:
+> 1 | @layer theme { .foo#id {} }
+    |                ^^^^^^^ Use consistent ordering for compound selector components.
+
+Output:
+  1 | @layer theme { #id.foo {} }
+
+`;
+
+exports[`invalid(46): @scope (.foo#id) { .bar#other {} } 1`] = `
+
+  1 | @scope (.foo#id) { .bar#other {} }
+
+`;
+
+exports[`invalid(46): @scope (.foo#id) { .bar#other {} } 2`] = `
+
+Message:
+> 1 | @scope (.foo#id) { .bar#other {} }
+    |         ^^^^^^^ Use consistent ordering for compound selector components.
+
+Output:
+  1 | @scope (#id.foo) { .bar#other {} }
+
+`;
+
+exports[`invalid(46): @scope (.foo#id) { .bar#other {} } 3`] = `
+
+Message:
+> 1 | @scope (.foo#id) { .bar#other {} }
+    |                    ^^^^^^^^^^ Use consistent ordering for compound selector components.
+
+Output:
+  1 | @scope (.foo#id) { #other.bar {} }
+
+`;
+
+exports[`invalid(47): @supports selector(.foo#id) { .bar#other {} } 1`] = `
+
+  1 | @supports selector(.foo#id) { .bar#other {} }
+
+`;
+
+exports[`invalid(47): @supports selector(.foo#id) { .bar#other {} } 2`] = `
+
+Message:
+> 1 | @supports selector(.foo#id) { .bar#other {} }
+    |                    ^^^^^^^ Use consistent ordering for compound selector components.
+
+Output:
+  1 | @supports selector(#id.foo) { .bar#other {} }
+
+`;
+
+exports[`invalid(47): @supports selector(.foo#id) { .bar#other {} } 3`] = `
+
+Message:
+> 1 | @supports selector(.foo#id) { .bar#other {} }
+    |                               ^^^^^^^^^^ Use consistent ordering for compound selector components.
+
+Output:
+  1 | @supports selector(.foo#id) { #other.bar {} }
+
+`;
+
+exports[`invalid(5): :hover.foo {} 1`] = `
+
+  1 | :hover.foo {}
+
+`;
+
+exports[`invalid(5): :hover.foo {} 2`] = `
+
+Message:
+> 1 | :hover.foo {}
+    | ^^^^^^^^^^ Use consistent ordering for compound selector components.
+
+Output:
+  1 | .foo:hover {}
+
+`;
+
+exports[`invalid(6): #id& {} 1`] = `
+
+  1 | #id& {}
+
+`;
+
+exports[`invalid(6): #id& {} 2`] = `
+
+Message:
+> 1 | #id& {}
+    | ^^^^ Use consistent ordering for compound selector components.
+
+Output:
+  1 | &#id {}
+
+`;
+
+exports[`invalid(7): .foo& {} 1`] = `
+
+  1 | .foo& {}
+
+`;
+
+exports[`invalid(7): .foo& {} 2`] = `
+
+Message:
+> 1 | .foo& {}
+    | ^^^^^ Use consistent ordering for compound selector components.
+
+Output:
+  1 | &.foo {}
+
+`;
+
+exports[`invalid(8): :hover& {} 1`] = `
+
+  1 | :hover& {}
+
+`;
+
+exports[`invalid(8): :hover& {} 2`] = `
+
+Message:
+> 1 | :hover& {}
+    | ^^^^^^^ Use consistent ordering for compound selector components.
+
+Output:
+  1 | &:hover {}
+
+`;
+
+exports[`invalid(9): .foo&&#id {} 1`] = `
+
+  1 | .foo&&#id {}
+
+`;
+
+exports[`invalid(9): .foo&&#id {} 2`] = `
+
+Message:
+> 1 | .foo&&#id {}
+    | ^^^^^^^^^ Use consistent ordering for compound selector components.
+
+Output:
+  1 | &&#id.foo {}
+
+`;
