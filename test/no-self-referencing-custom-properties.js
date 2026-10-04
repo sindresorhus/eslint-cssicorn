@@ -25,7 +25,6 @@ test.snapshot({
 		'a { --spacing: var(--spa/**/cing); }',
 		'a { --spacing: var(--other, "var(--spacing)" url("var(--spacing)")); }',
 		'a { spacing: var(--spacing); }',
-		'a { --one: var(--two); --two: var(--one); }',
 		'a { --alias: --spacing; --spacing: var(var(--alias)); }',
 		':root { --spacing: 1px; } a { --component-spacing: var(--spacing); }',
 		'@supports (--spacing: var(--spacing)) {}',
@@ -33,8 +32,47 @@ test.snapshot({
 		'@import "x.css" supports(--spacing: var(--spacing));',
 		'@property --spacing { syntax: "*"; inherits: false; initial-value: 1px; }',
 		String.raw`a { --spacing: var(--sp\61 cing-extra); }`,
+		'a { --a: var(--b); --b: var(--c); --c: 1px; }',
+		'a { --a: var(--b); --b: var(--external); }',
+		'a { --a: var(--b); --B: var(--a); }',
+		'a { --café: var(--b); --b: var(--cafe\u0301); }',
+		'a { --a: var(--b); } b { --b: var(--a); }',
+		'a { --a: var(--b); & b { --b: var(--a); } }',
+		'a { --a: var(--b); @media (width > 1px) { --b: var(--a); } }',
+		'a { --a: var(--b); --b: var(--a); --b: 1px; }',
+		'a { --a: 1px !important; --a: var(--b); --b: var(--a); }',
+		'a { --a: var(--b); --a: 1px !important; --b: var(--a); }',
+		'a { --a: var(--b) !important; --a: 1px !important; --b: var(--a); }',
+		String.raw`a { --a: var(--b); --b: var(--a); --\62: 1px; }`,
+		'a { --a: "var(--b)" /* var(--b) */ url("var(--b)"); --b: var(--a); }',
+		'a { --a: var(--base, --b); --b: var(--a); }',
+		'a { --a: var(--b extra); --b: var(--a); }',
 	],
 	invalid: [
+		'a { --one: var(--two); --two: var(--one); }',
+		'a { --b: var(--a); --a: var(--b); }',
+		'a { --a: var(--b); --b: var(--c); --c: var(--a); }',
+		'a { --a: var(--base, var(--b)); --b: var(--a); }',
+		'a { --base: 1px; --a: var(--base, calc(var(--other, var(--b)) + 1px)); --b: var(--a); }',
+		'a { --a: var(--b) var(--c); --b: var(--a); --c: var(--b); }',
+		'a { --a: var(--b); --b: var(--a); --c: var(--d); --d: var(--c); }',
+		'a { --a: var(--b) !important; --a: 1px; --b: var(--a); }',
+		'a { --a: 1px; --a: var(--b) !important; --b: var(--a); }',
+		'a { --a: 1px !important; --a: var(--b) !important; --b: var(--a); }',
+		'a { --a: var(--b) !IMPORTANT; --a: 1px; --b: var(--a); }',
+		String.raw`a { --a: var(--b) !\69mportant; --a: 1px; --b: var(--a); }`,
+		String.raw`a { --\61: V\41R(--\62); --b: var(--a); }`,
+		'a { --間隔: var(--色); --色: var(--間隔); }',
+		'a { --a: var(/* before */ --b /* after */); --b: var(--a); }',
+		'a { --a: var(--b) var(--b); --b: var(--a); }',
+		'a { & > b { --a: var(--b); --b: var(--a); } }',
+		'@media (width > 1px) { a { --a: var(--b); --b: var(--a); } }',
+		'@supports (color: red) { a { --a: var(--b); --b: var(--a); } }',
+		'@container (width > 1px) { a { --a: var(--b); --b: var(--a); } }',
+		'@layer base { a { --a: var(--b); --b: var(--a); } }',
+		'@scope (.component) { a { --a: var(--b); --b: var(--a); } }',
+		'@keyframes grow { to { --a: var(--b); --b: var(--a); } }',
+		'a { --a: if(style(--enabled: yes): 1px; else: var(--b)); --b: var(--a); }',
 		'a { --spacing: var(--spacing); }',
 		'a { --spacing: calc(var(--spacing) + 1px); }',
 		'a { --spacing: var(--spacing, 1px); }',
@@ -64,8 +102,65 @@ test.snapshot({
 });
 
 test({
-	valid: [],
+	valid: [
+		{
+			name: 'large acyclic custom-property chain',
+			code: ':root {' + Array.from({length: 5000}, (_, index) => `--property-${index}: var(--property-${index + 1});`).join('') + '--property-5000: 1px; }',
+		},
+	],
 	invalid: [
+		{
+			code: 'a { --a: var(--external) var(--b); --b: var(--a); --external: 1px; }',
+			errors: [
+				{
+					messageId: 'no-self-referencing-custom-properties/cycle', data: {property: '--a'}, column: 30, endColumn: 33,
+				},
+				{
+					messageId: 'no-self-referencing-custom-properties/cycle', data: {property: '--b'}, column: 45, endColumn: 48,
+				},
+			],
+		},
+		{
+			code: 'a { --incoming: var(--a); --a: var(--b); --b: var(--a); }',
+			errors: [
+				{
+					messageId: 'no-self-referencing-custom-properties/cycle', data: {property: '--a'}, column: 36, endColumn: 39,
+				},
+				{
+					messageId: 'no-self-referencing-custom-properties/cycle', data: {property: '--b'}, column: 51, endColumn: 54,
+				},
+			],
+		},
+		{
+			code: 'a { --a: var(--b) var(--a); --b: var(--a); }',
+			errors: [
+				{
+					messageId: 'no-self-referencing-custom-properties', data: {property: '--a'}, column: 23, endColumn: 26,
+				},
+				{
+					messageId: 'no-self-referencing-custom-properties/cycle', data: {property: '--b'}, column: 38, endColumn: 41,
+				},
+			],
+		},
+		{
+			code: 'a { --a: var(--a); --a: 1px; --b: var(--a); }',
+			errors: [{messageId: 'no-self-referencing-custom-properties', data: {property: '--a'}}],
+		},
+		{
+			code: 'a { --incoming: var(--a); --a: var(--a); }',
+			errors: [{messageId: 'no-self-referencing-custom-properties', data: {property: '--a'}}],
+		},
+		{
+			code: 'a {\r\n  --a: var(\r\n    /* keep */ --b\r\n  );\r\n  --b: var(--a);\r\n}',
+			errors: [
+				{
+					messageId: 'no-self-referencing-custom-properties/cycle', data: {property: '--a'}, line: 3, column: 16, endLine: 3, endColumn: 19,
+				},
+				{
+					messageId: 'no-self-referencing-custom-properties/cycle', data: {property: '--b'}, line: 5, column: 12, endLine: 5, endColumn: 15,
+				},
+			],
+		},
 		{
 			code: 'a { --spacing: var(var(--spacing)); }',
 			errors: [{
