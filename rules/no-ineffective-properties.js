@@ -25,6 +25,10 @@ const MESSAGE_ID_TABLE_SPACING = 'no-ineffective-properties/table-spacing';
 const MESSAGE_ID_TABLE_PADDING = 'no-ineffective-properties/table-padding';
 const MESSAGE_ID_CLEAR = 'no-ineffective-properties/clear';
 const MESSAGE_ID_PERSPECTIVE = 'no-ineffective-properties/perspective';
+const MESSAGE_ID_COLUMN_SPAN = 'no-ineffective-properties/column-span';
+const MESSAGE_ID_MOTION = 'no-ineffective-properties/motion';
+const MESSAGE_ID_SHAPE_IMAGE_THRESHOLD = 'no-ineffective-properties/shape-image-threshold';
+const MESSAGE_ID_DECORATION = 'no-ineffective-properties/decoration';
 const messages = {
 	[MESSAGE_ID_DISPLAY]: '`{{property}}` has no effect with `display: {{display}}`. It requires a {{layout}} container.',
 	[MESSAGE_ID_NOWRAP]: '`align-content` has no effect on a flex container with `nowrap`. Consider `align-items` or enabling wrapping.',
@@ -37,6 +41,10 @@ const messages = {
 	[MESSAGE_ID_TABLE_PADDING]: '`{{property}}` has no effect on this table with `border-collapse: collapse`. Apply padding to table cells or use separate borders.',
 	[MESSAGE_ID_CLEAR]: '`clear: {{value}}` has no effect with `position: {{position}}`. Absolutely positioned elements do not participate in normal flow.',
 	[MESSAGE_ID_PERSPECTIVE]: '`perspective-origin` has no effect with `perspective: none`. Set a perspective distance to use this origin.',
+	[MESSAGE_ID_COLUMN_SPAN]: '`column-span: all` has no effect with `position: {{position}}`. Only in-flow elements can span columns.',
+	[MESSAGE_ID_MOTION]: '`{{property}}` has no effect with `offset-path: none`. Set an offset path to use this property.',
+	[MESSAGE_ID_SHAPE_IMAGE_THRESHOLD]: '`shape-image-threshold` has no effect with `shape-outside: none`. It defines the alpha threshold for an image-based shape.',
+	[MESSAGE_ID_DECORATION]: '`{{property}}` has no effect with `text-decoration-line: none`. Enable a text decoration line on this element.',
 };
 
 const flexProperties = new Set(['flex-direction', 'flex-wrap', 'flex-flow']);
@@ -55,7 +63,9 @@ const paddingProperties = new Set([
 	'padding-inline-start',
 	'padding-inline-end',
 ]);
-const multicolProperties = new Set(['columns', 'column-count', 'column-width']);
+const multicolProperties = new Set(['columns', 'column-count', 'column-width', 'column-fill']);
+const motionProperties = new Set(['offset-distance', 'offset-rotate', 'offset-anchor']);
+const decorationProperties = new Set(['text-decoration-color', 'text-decoration-style', 'text-decoration-thickness']);
 const floatValues = new Set(['left', 'right', 'inline-start', 'inline-end']);
 const clearValues = new Set([...floatValues, 'both']);
 const targetProperties = new Set([
@@ -64,12 +74,17 @@ const targetProperties = new Set([
 	...insetProperties,
 	...paddingProperties,
 	...multicolProperties,
+	...motionProperties,
+	...decorationProperties,
 	'align-content',
 	'text-overflow',
 	'float',
 	'clear',
 	'border-spacing',
 	'perspective-origin',
+	'table-layout',
+	'column-span',
+	'shape-image-threshold',
 ]);
 const overflowProperties = ['overflow', 'overflow-x', 'overflow-y', 'overflow-inline', 'overflow-block'];
 
@@ -151,11 +166,11 @@ Get the problem for a container property given the explicit layout controls in i
 
 @param {DeclarationPlain} node
 @param {string} property
-@param {ReturnType<typeof getLayoutControls>} controls
+@param {ReturnType<typeof getBlockControls>} controls
 */
-const getContainerProblem = (node, property, {display, hasVisibleDisplay, isFlex, isGrid, hasCollapsedTable}) => {
-	if (hasVisibleDisplay && ((flexProperties.has(property) && !isFlex) || (gridProperties.has(property) && !isGrid))) {
-		const layout = flexProperties.has(property) ? 'flex' : 'grid';
+const getContainerProblem = (node, property, {display, hasVisibleDisplay, isFlex, isGrid, isTable, hasCollapsedTable}) => {
+	if (hasVisibleDisplay && ((flexProperties.has(property) && !isFlex) || (gridProperties.has(property) && !isGrid) || (property === 'table-layout' && !isTable))) {
+		const layout = flexProperties.has(property) ? 'flex' : (gridProperties.has(property) ? 'grid' : 'table');
 		return {node, messageId: MESSAGE_ID_DISPLAY, data: {property, display, layout}};
 	}
 
@@ -178,7 +193,7 @@ Get the problem for a property given the explicit position in its block.
 @param {DeclarationPlain} node
 @param {string} property
 @param {string | undefined} keyword
-@param {ReturnType<typeof getLayoutControls>} controls
+@param {ReturnType<typeof getBlockControls>} controls
 */
 const getPositionProblem = (node, property, keyword, {position}) => {
 	if (insetProperties.has(property) && position === 'static') {
@@ -196,14 +211,43 @@ const getPositionProblem = (node, property, keyword, {position}) => {
 	if (property === 'clear' && clearValues.has(keyword)) {
 		return {node, messageId: MESSAGE_ID_CLEAR, data: {value: keyword, position}};
 	}
+
+	if (property === 'column-span' && keyword === 'all') {
+		return {node, messageId: MESSAGE_ID_COLUMN_SPAN, data: {position}};
+	}
 };
 
 /**
-Get the problem for a declaration given the explicit layout controls in its block.
+Get the problem for a property whose effect is explicitly disabled in its block.
 
 @param {DeclarationPlain} node
 @param {string} property
-@param {ReturnType<typeof getLayoutControls>} controls
+@param {ReturnType<typeof getBlockControls>} controls
+*/
+const getInactiveEffectProblem = (node, property, {hasNoPerspective, hasNoOffsetPath, hasNoShapeOutside, hasNoDecorationLine}) => {
+	if (property === 'perspective-origin' && hasNoPerspective) {
+		return {node, messageId: MESSAGE_ID_PERSPECTIVE};
+	}
+
+	if (motionProperties.has(property) && hasNoOffsetPath) {
+		return {node, messageId: MESSAGE_ID_MOTION, data: {property}};
+	}
+
+	if (property === 'shape-image-threshold' && hasNoShapeOutside) {
+		return {node, messageId: MESSAGE_ID_SHAPE_IMAGE_THRESHOLD};
+	}
+
+	if (decorationProperties.has(property) && hasNoDecorationLine) {
+		return {node, messageId: MESSAGE_ID_DECORATION, data: {property}};
+	}
+};
+
+/**
+Get the problem for a declaration given the explicit controls in its block.
+
+@param {DeclarationPlain} node
+@param {string} property
+@param {ReturnType<typeof getBlockControls>} controls
 */
 const getDeclarationProblem = (node, property, controls) => {
 	const identifier = getSingleValueIdentifier(node);
@@ -217,7 +261,7 @@ const getDeclarationProblem = (node, property, controls) => {
 		return containerProblem;
 	}
 
-	const {display, isFlex, isGrid, hasExplicitNowrap, hasVisibleOverflow, hasNoPerspective} = controls;
+	const {display, isFlex, isGrid, hasExplicitNowrap, hasVisibleOverflow} = controls;
 	if (property === 'align-content' && hasExplicitNowrap) {
 		return {node, messageId: MESSAGE_ID_NOWRAP};
 	}
@@ -227,8 +271,9 @@ const getDeclarationProblem = (node, property, controls) => {
 		return positionProblem;
 	}
 
-	if (property === 'perspective-origin' && hasNoPerspective) {
-		return {node, messageId: MESSAGE_ID_PERSPECTIVE};
+	const inactiveEffectProblem = getInactiveEffectProblem(node, property, controls);
+	if (inactiveEffectProblem) {
+		return inactiveEffectProblem;
 	}
 
 	if (property === 'text-overflow' && (isFlex || isGrid || hasVisibleOverflow)) {
@@ -246,28 +291,44 @@ const getDeclarationProblem = (node, property, controls) => {
 };
 
 /**
-Get the explicit layout controls for a declaration block.
+Get the explicit controlling values for a declaration block.
 
 @param {Map<string, {node: DeclarationPlain, property: string}[]>} declarationsByProperty
 @param {CSSSourceCode} sourceCode
 */
-const getLayoutControls = (declarationsByProperty, sourceCode) => {
+const getBlockControls = (declarationsByProperty, sourceCode) => {
 	const display = getControllingValue(declarationsByProperty, ['display'], sourceCode);
 	const hasVisibleDisplay = display !== undefined && display !== 'none' && display !== 'contents';
 	const isFlex = hasVisibleDisplay && (display === 'inline-flex' || display.split(' ').includes('flex'));
 	const isGrid = hasVisibleDisplay && (display === 'inline-grid' || display.split(' ').includes('grid'));
+	const isTable = hasVisibleDisplay && (display === 'inline-table' || display.split(' ').includes('table'));
 	const wrapping = isFlex ? getControllingValue(declarationsByProperty, ['flex-wrap', 'flex-flow'], sourceCode) : undefined;
 	const hasExplicitNowrap = wrapping?.split(' ').includes('nowrap') === true;
 	const position = getControllingValue(declarationsByProperty, ['position'], sourceCode);
 	const overflow = getControllingValue(declarationsByProperty, overflowProperties, sourceCode);
 	// Only the shorthand establishes both axes without needing writing-mode or computed-value inference.
 	const hasVisibleOverflow = declarationsByProperty.has('overflow') && (overflow === 'visible' || overflow === 'visible visible');
-	const hasCollapsedTable = (display === 'inline-table' || display?.split(' ').includes('table') === true)
-		&& getControllingValue(declarationsByProperty, ['border-collapse'], sourceCode) === 'collapse';
+	const hasCollapsedTable = isTable && getControllingValue(declarationsByProperty, ['border-collapse'], sourceCode) === 'collapse';
 	const hasNoPerspective = getControllingValue(declarationsByProperty, ['perspective'], sourceCode) === 'none';
+	const hasNoOffsetPath = declarationsByProperty.has('offset-path') && getControllingValue(declarationsByProperty, ['offset-path', 'offset'], sourceCode) === 'none';
+	const hasNoShapeOutside = getControllingValue(declarationsByProperty, ['shape-outside'], sourceCode) === 'none';
+	const hasNoDecorationLine = declarationsByProperty.has('text-decoration-line')
+		&& getControllingValue(declarationsByProperty, ['text-decoration-line', 'text-decoration'], sourceCode) === 'none';
 
 	return {
-		display, hasVisibleDisplay, isFlex, isGrid, hasCollapsedTable, hasExplicitNowrap, position, hasVisibleOverflow, hasNoPerspective,
+		display,
+		hasVisibleDisplay,
+		isFlex,
+		isGrid,
+		isTable,
+		hasCollapsedTable,
+		hasExplicitNowrap,
+		position,
+		hasVisibleOverflow,
+		hasNoPerspective,
+		hasNoOffsetPath,
+		hasNoShapeOutside,
+		hasNoDecorationLine,
 	};
 };
 
@@ -289,7 +350,7 @@ const create = context => {
 		}
 
 		const declarationsByProperty = Map.groupBy(declarations, ({property}) => property);
-		const controls = getLayoutControls(declarationsByProperty, sourceCode);
+		const controls = getBlockControls(declarationsByProperty, sourceCode);
 
 		for (const {node, property} of declarations) {
 			if (!targetProperties.has(property) || node.value.type !== 'Value') {

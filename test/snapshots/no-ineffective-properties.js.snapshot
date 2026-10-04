@@ -26,13 +26,41 @@ Message:
 
 `;
 
-exports[`invalid(100): a { overflow: visible; text-overflow: \\65 llipsis c\\6c ip; } 1`] = `
+exports[`invalid(100): a { overflow: visible; text-overflow: ellipsis ellipsis; } 1`] = `
+
+  1 | a { overflow: visible; text-overflow: ellipsis ellipsis; }
+
+`;
+
+exports[`invalid(100): a { overflow: visible; text-overflow: ellipsis ellipsis; } 2`] = `
+
+Message:
+> 1 | a { overflow: visible; text-overflow: ellipsis ellipsis; }
+    |                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`text-overflow: ellipsis ellipsis\` has no effect with \`overflow: visible\`. Ellipsis requires clipped inline overflow.
+
+`;
+
+exports[`invalid(101): a { TEXT-OVERFLOW: CLIP ELLIPSIS !important; OVERFLOW: VISIBLE; } 1`] = `
+
+  1 | a { TEXT-OVERFLOW: CLIP ELLIPSIS !important; OVERFLOW: VISIBLE; }
+
+`;
+
+exports[`invalid(101): a { TEXT-OVERFLOW: CLIP ELLIPSIS !important; OVERFLOW: VISIBLE; } 2`] = `
+
+Message:
+> 1 | a { TEXT-OVERFLOW: CLIP ELLIPSIS !important; OVERFLOW: VISIBLE; }
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`text-overflow: clip ellipsis\` has no effect with \`overflow: visible\`. Ellipsis requires clipped inline overflow.
+
+`;
+
+exports[`invalid(102): a { overflow: visible; text-overflow: \\65 llipsis c\\6c ip; } 1`] = `
 
   1 | a { overflow: visible; text-overflow: \\65 llipsis c\\6c ip; }
 
 `;
 
-exports[`invalid(100): a { overflow: visible; text-overflow: \\65 llipsis c\\6c ip; } 2`] = `
+exports[`invalid(102): a { overflow: visible; text-overflow: \\65 llipsis c\\6c ip; } 2`] = `
 
 Message:
 > 1 | a { overflow: visible; text-overflow: \\65 llipsis c\\6c ip; }
@@ -40,13 +68,13 @@ Message:
 
 `;
 
-exports[`invalid(101): a { overflow: visible visible; text-overflow: clip /* marker */ ellipsis; writing-mode: vertical-rl; } 1`] = `
+exports[`invalid(103): a { overflow: visible visible; text-overflow: clip /* marker */ ellipsis; writing-mode: vertical-rl; } 1`] = `
 
   1 | a { overflow: visible visible; text-overflow: clip /* marker */ ellipsis; writing-mode: vertical-rl; }
 
 `;
 
-exports[`invalid(101): a { overflow: visible visible; text-overflow: clip /* marker */ ellipsis; writing-mode: vertical-rl; } 2`] = `
+exports[`invalid(103): a { overflow: visible visible; text-overflow: clip /* marker */ ellipsis; writing-mode: vertical-rl; } 2`] = `
 
 Message:
 > 1 | a { overflow: visible visible; text-overflow: clip /* marker */ ellipsis; writing-mode: vertical-rl; }
@@ -54,13 +82,13 @@ Message:
 
 `;
 
-exports[`invalid(102): a { display: flex; overflow: hidden; text-overflow: ellipsis; } 1`] = `
+exports[`invalid(104): a { display: flex; overflow: hidden; text-overflow: ellipsis; } 1`] = `
 
   1 | a { display: flex; overflow: hidden; text-overflow: ellipsis; }
 
 `;
 
-exports[`invalid(102): a { display: flex; overflow: hidden; text-overflow: ellipsis; } 2`] = `
+exports[`invalid(104): a { display: flex; overflow: hidden; text-overflow: ellipsis; } 2`] = `
 
 Message:
 > 1 | a { display: flex; overflow: hidden; text-overflow: ellipsis; }
@@ -68,13 +96,13 @@ Message:
 
 `;
 
-exports[`invalid(103): a { display: grid; overflow: hidden; text-overflow: ellipsis; } 1`] = `
+exports[`invalid(105): a { display: grid; overflow: hidden; text-overflow: ellipsis; } 1`] = `
 
   1 | a { display: grid; overflow: hidden; text-overflow: ellipsis; }
 
 `;
 
-exports[`invalid(103): a { display: grid; overflow: hidden; text-overflow: ellipsis; } 2`] = `
+exports[`invalid(105): a { display: grid; overflow: hidden; text-overflow: ellipsis; } 2`] = `
 
 Message:
 > 1 | a { display: grid; overflow: hidden; text-overflow: ellipsis; }
@@ -82,13 +110,13 @@ Message:
 
 `;
 
-exports[`invalid(104): a { display: inline-flex; overflow: hidden; text-overflow: ellipsis; } 1`] = `
+exports[`invalid(106): a { display: inline-flex; overflow: hidden; text-overflow: ellipsis; } 1`] = `
 
   1 | a { display: inline-flex; overflow: hidden; text-overflow: ellipsis; }
 
 `;
 
-exports[`invalid(104): a { display: inline-flex; overflow: hidden; text-overflow: ellipsis; } 2`] = `
+exports[`invalid(106): a { display: inline-flex; overflow: hidden; text-overflow: ellipsis; } 2`] = `
 
 Message:
 > 1 | a { display: inline-flex; overflow: hidden; text-overflow: ellipsis; }
@@ -96,13 +124,13 @@ Message:
 
 `;
 
-exports[`invalid(105): a { display: inline grid; overflow: hidden; text-overflow: ellipsis; } 1`] = `
+exports[`invalid(107): a { display: inline grid; overflow: hidden; text-overflow: ellipsis; } 1`] = `
 
   1 | a { display: inline grid; overflow: hidden; text-overflow: ellipsis; }
 
 `;
 
-exports[`invalid(105): a { display: inline grid; overflow: hidden; text-overflow: ellipsis; } 2`] = `
+exports[`invalid(107): a { display: inline grid; overflow: hidden; text-overflow: ellipsis; } 2`] = `
 
 Message:
 > 1 | a { display: inline grid; overflow: hidden; text-overflow: ellipsis; }
@@ -110,13 +138,13 @@ Message:
 
 `;
 
-exports[`invalid(106): a { display: grid; text-overflow: ellipsis clip; } 1`] = `
+exports[`invalid(108): a { display: grid; text-overflow: ellipsis clip; } 1`] = `
 
   1 | a { display: grid; text-overflow: ellipsis clip; }
 
 `;
 
-exports[`invalid(106): a { display: grid; text-overflow: ellipsis clip; } 2`] = `
+exports[`invalid(108): a { display: grid; text-overflow: ellipsis clip; } 2`] = `
 
 Message:
 > 1 | a { display: grid; text-overflow: ellipsis clip; }
@@ -124,45 +152,17 @@ Message:
 
 `;
 
-exports[`invalid(107): a { display: inline flex; text-overflow: ellipsis ellipsis; } 1`] = `
+exports[`invalid(109): a { display: inline flex; text-overflow: ellipsis ellipsis; } 1`] = `
 
   1 | a { display: inline flex; text-overflow: ellipsis ellipsis; }
 
 `;
 
-exports[`invalid(107): a { display: inline flex; text-overflow: ellipsis ellipsis; } 2`] = `
+exports[`invalid(109): a { display: inline flex; text-overflow: ellipsis ellipsis; } 2`] = `
 
 Message:
 > 1 | a { display: inline flex; text-overflow: ellipsis ellipsis; }
     |                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`text-overflow: ellipsis ellipsis\` has no effect with \`display: inline flex\`. Apply it to a block container holding the text.
-
-`;
-
-exports[`invalid(108): a { TEXT-OVERFLOW: CLIP ELLIPSIS !important; DISPLAY: GRID; } 1`] = `
-
-  1 | a { TEXT-OVERFLOW: CLIP ELLIPSIS !important; DISPLAY: GRID; }
-
-`;
-
-exports[`invalid(108): a { TEXT-OVERFLOW: CLIP ELLIPSIS !important; DISPLAY: GRID; } 2`] = `
-
-Message:
-> 1 | a { TEXT-OVERFLOW: CLIP ELLIPSIS !important; DISPLAY: GRID; }
-    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`text-overflow: clip ellipsis\` has no effect with \`display: grid\`. Apply it to a block container holding the text.
-
-`;
-
-exports[`invalid(109): a { display: \\67 rid; text-overflow: \\65 llipsis; } 1`] = `
-
-  1 | a { display: \\67 rid; text-overflow: \\65 llipsis; }
-
-`;
-
-exports[`invalid(109): a { display: \\67 rid; text-overflow: \\65 llipsis; } 2`] = `
-
-Message:
-> 1 | a { display: \\67 rid; text-overflow: \\65 llipsis; }
-    |                       ^^^^^^^^^^^^^^^^^^^^^^^^^^ \`text-overflow: ellipsis\` has no effect with \`display: grid\`. Apply it to a block container holding the text.
 
 `;
 
@@ -180,13 +180,41 @@ Message:
 
 `;
 
-exports[`invalid(110): a { @supports (display: flex) { display: flex; text-overflow: /* marker */ ellipsis; } } 1`] = `
+exports[`invalid(110): a { TEXT-OVERFLOW: CLIP ELLIPSIS !important; DISPLAY: GRID; } 1`] = `
+
+  1 | a { TEXT-OVERFLOW: CLIP ELLIPSIS !important; DISPLAY: GRID; }
+
+`;
+
+exports[`invalid(110): a { TEXT-OVERFLOW: CLIP ELLIPSIS !important; DISPLAY: GRID; } 2`] = `
+
+Message:
+> 1 | a { TEXT-OVERFLOW: CLIP ELLIPSIS !important; DISPLAY: GRID; }
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`text-overflow: clip ellipsis\` has no effect with \`display: grid\`. Apply it to a block container holding the text.
+
+`;
+
+exports[`invalid(111): a { display: \\67 rid; text-overflow: \\65 llipsis; } 1`] = `
+
+  1 | a { display: \\67 rid; text-overflow: \\65 llipsis; }
+
+`;
+
+exports[`invalid(111): a { display: \\67 rid; text-overflow: \\65 llipsis; } 2`] = `
+
+Message:
+> 1 | a { display: \\67 rid; text-overflow: \\65 llipsis; }
+    |                       ^^^^^^^^^^^^^^^^^^^^^^^^^^ \`text-overflow: ellipsis\` has no effect with \`display: grid\`. Apply it to a block container holding the text.
+
+`;
+
+exports[`invalid(112): a { @supports (display: flex) { display: flex; text-overflow: /* marker */ ellipsis; } } 1`] = `
 
   1 | a { @supports (display: flex) { display: flex; text-overflow: /* marker */ ellipsis; } }
 
 `;
 
-exports[`invalid(110): a { @supports (display: flex) { display: flex; text-overflow: /* marker */ ellipsis; } } 2`] = `
+exports[`invalid(112): a { @supports (display: flex) { display: flex; text-overflow: /* marker */ ellipsis; } } 2`] = `
 
 Message:
 > 1 | a { @supports (display: flex) { display: flex; text-overflow: /* marker */ ellipsis; } }
@@ -194,13 +222,13 @@ Message:
 
 `;
 
-exports[`invalid(111): a { display: table; border-collapse: collapse; border-spacing: 8px; } 1`] = `
+exports[`invalid(113): a { display: table; border-collapse: collapse; border-spacing: 8px; } 1`] = `
 
   1 | a { display: table; border-collapse: collapse; border-spacing: 8px; }
 
 `;
 
-exports[`invalid(111): a { display: table; border-collapse: collapse; border-spacing: 8px; } 2`] = `
+exports[`invalid(113): a { display: table; border-collapse: collapse; border-spacing: 8px; } 2`] = `
 
 Message:
 > 1 | a { display: table; border-collapse: collapse; border-spacing: 8px; }
@@ -208,13 +236,13 @@ Message:
 
 `;
 
-exports[`invalid(112): a { display: inline-table; border-collapse: collapse; border-spacing: 8px; } 1`] = `
+exports[`invalid(114): a { display: inline-table; border-collapse: collapse; border-spacing: 8px; } 1`] = `
 
   1 | a { display: inline-table; border-collapse: collapse; border-spacing: 8px; }
 
 `;
 
-exports[`invalid(112): a { display: inline-table; border-collapse: collapse; border-spacing: 8px; } 2`] = `
+exports[`invalid(114): a { display: inline-table; border-collapse: collapse; border-spacing: 8px; } 2`] = `
 
 Message:
 > 1 | a { display: inline-table; border-collapse: collapse; border-spacing: 8px; }
@@ -222,13 +250,13 @@ Message:
 
 `;
 
-exports[`invalid(113): a { display: block table; border-collapse: collapse; border-spacing: 8px; } 1`] = `
+exports[`invalid(115): a { display: block table; border-collapse: collapse; border-spacing: 8px; } 1`] = `
 
   1 | a { display: block table; border-collapse: collapse; border-spacing: 8px; }
 
 `;
 
-exports[`invalid(113): a { display: block table; border-collapse: collapse; border-spacing: 8px; } 2`] = `
+exports[`invalid(115): a { display: block table; border-collapse: collapse; border-spacing: 8px; } 2`] = `
 
 Message:
 > 1 | a { display: block table; border-collapse: collapse; border-spacing: 8px; }
@@ -236,13 +264,13 @@ Message:
 
 `;
 
-exports[`invalid(114): a { display: inline table; border-collapse: collapse; border-spacing: 8px; } 1`] = `
+exports[`invalid(116): a { display: inline table; border-collapse: collapse; border-spacing: 8px; } 1`] = `
 
   1 | a { display: inline table; border-collapse: collapse; border-spacing: 8px; }
 
 `;
 
-exports[`invalid(114): a { display: inline table; border-collapse: collapse; border-spacing: 8px; } 2`] = `
+exports[`invalid(116): a { display: inline table; border-collapse: collapse; border-spacing: 8px; } 2`] = `
 
 Message:
 > 1 | a { display: inline table; border-collapse: collapse; border-spacing: 8px; }
@@ -250,13 +278,13 @@ Message:
 
 `;
 
-exports[`invalid(115): a { display: table block; border-collapse: collapse; border-spacing: 8px; } 1`] = `
+exports[`invalid(117): a { display: table block; border-collapse: collapse; border-spacing: 8px; } 1`] = `
 
   1 | a { display: table block; border-collapse: collapse; border-spacing: 8px; }
 
 `;
 
-exports[`invalid(115): a { display: table block; border-collapse: collapse; border-spacing: 8px; } 2`] = `
+exports[`invalid(117): a { display: table block; border-collapse: collapse; border-spacing: 8px; } 2`] = `
 
 Message:
 > 1 | a { display: table block; border-collapse: collapse; border-spacing: 8px; }
@@ -264,13 +292,13 @@ Message:
 
 `;
 
-exports[`invalid(116): a { display: table inline; border-collapse: collapse; border-spacing: 8px; } 1`] = `
+exports[`invalid(118): a { display: table inline; border-collapse: collapse; border-spacing: 8px; } 1`] = `
 
   1 | a { display: table inline; border-collapse: collapse; border-spacing: 8px; }
 
 `;
 
-exports[`invalid(116): a { display: table inline; border-collapse: collapse; border-spacing: 8px; } 2`] = `
+exports[`invalid(118): a { display: table inline; border-collapse: collapse; border-spacing: 8px; } 2`] = `
 
 Message:
 > 1 | a { display: table inline; border-collapse: collapse; border-spacing: 8px; }
@@ -278,45 +306,17 @@ Message:
 
 `;
 
-exports[`invalid(117): a { border-spacing: 8px 12px !important; border-collapse: collapse; display: table; } 1`] = `
+exports[`invalid(119): a { border-spacing: 8px 12px !important; border-collapse: collapse; display: table; } 1`] = `
 
   1 | a { border-spacing: 8px 12px !important; border-collapse: collapse; display: table; }
 
 `;
 
-exports[`invalid(117): a { border-spacing: 8px 12px !important; border-collapse: collapse; display: table; } 2`] = `
+exports[`invalid(119): a { border-spacing: 8px 12px !important; border-collapse: collapse; display: table; } 2`] = `
 
 Message:
 > 1 | a { border-spacing: 8px 12px !important; border-collapse: collapse; display: table; }
     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`border-spacing\` has no effect on this table with \`border-collapse: collapse\`. Use \`border-collapse: separate\` for spacing between cells.
-
-`;
-
-exports[`invalid(118): a { DISPLAY: INLINE-TABLE; BORDER-COLLAPSE: COLLAPSE; BORDER-SPACING: 8px; } 1`] = `
-
-  1 | a { DISPLAY: INLINE-TABLE; BORDER-COLLAPSE: COLLAPSE; BORDER-SPACING: 8px; }
-
-`;
-
-exports[`invalid(118): a { DISPLAY: INLINE-TABLE; BORDER-COLLAPSE: COLLAPSE; BORDER-SPACING: 8px; } 2`] = `
-
-Message:
-> 1 | a { DISPLAY: INLINE-TABLE; BORDER-COLLAPSE: COLLAPSE; BORDER-SPACING: 8px; }
-    |                                                       ^^^^^^^^^^^^^^^^^^^ \`border-spacing\` has no effect on this table with \`border-collapse: collapse\`. Use \`border-collapse: separate\` for spacing between cells.
-
-`;
-
-exports[`invalid(119): a { display: \\74 able; border-\\63 ollapse: c\\6f llapse; border-spa\\63 ing: 8px; } 1`] = `
-
-  1 | a { display: \\74 able; border-\\63 ollapse: c\\6f llapse; border-spa\\63 ing: 8px; }
-
-`;
-
-exports[`invalid(119): a { display: \\74 able; border-\\63 ollapse: c\\6f llapse; border-spa\\63 ing: 8px; } 2`] = `
-
-Message:
-> 1 | a { display: \\74 able; border-\\63 ollapse: c\\6f llapse; border-spa\\63 ing: 8px; }
-    |                                                         ^^^^^^^^^^^^^^^^^^^^^^ \`border-spacing\` has no effect on this table with \`border-collapse: collapse\`. Use \`border-collapse: separate\` for spacing between cells.
 
 `;
 
@@ -334,13 +334,41 @@ Message:
 
 `;
 
-exports[`invalid(120): a { display: table; border-collapse: /* borders */ collapse; border-spacing: /* cells */ calc(1rem + 2px); } 1`] = `
+exports[`invalid(120): a { DISPLAY: INLINE-TABLE; BORDER-COLLAPSE: COLLAPSE; BORDER-SPACING: 8px; } 1`] = `
+
+  1 | a { DISPLAY: INLINE-TABLE; BORDER-COLLAPSE: COLLAPSE; BORDER-SPACING: 8px; }
+
+`;
+
+exports[`invalid(120): a { DISPLAY: INLINE-TABLE; BORDER-COLLAPSE: COLLAPSE; BORDER-SPACING: 8px; } 2`] = `
+
+Message:
+> 1 | a { DISPLAY: INLINE-TABLE; BORDER-COLLAPSE: COLLAPSE; BORDER-SPACING: 8px; }
+    |                                                       ^^^^^^^^^^^^^^^^^^^ \`border-spacing\` has no effect on this table with \`border-collapse: collapse\`. Use \`border-collapse: separate\` for spacing between cells.
+
+`;
+
+exports[`invalid(121): a { display: \\74 able; border-\\63 ollapse: c\\6f llapse; border-spa\\63 ing: 8px; } 1`] = `
+
+  1 | a { display: \\74 able; border-\\63 ollapse: c\\6f llapse; border-spa\\63 ing: 8px; }
+
+`;
+
+exports[`invalid(121): a { display: \\74 able; border-\\63 ollapse: c\\6f llapse; border-spa\\63 ing: 8px; } 2`] = `
+
+Message:
+> 1 | a { display: \\74 able; border-\\63 ollapse: c\\6f llapse; border-spa\\63 ing: 8px; }
+    |                                                         ^^^^^^^^^^^^^^^^^^^^^^ \`border-spacing\` has no effect on this table with \`border-collapse: collapse\`. Use \`border-collapse: separate\` for spacing between cells.
+
+`;
+
+exports[`invalid(122): a { display: table; border-collapse: /* borders */ collapse; border-spacing: /* cells */ calc(1rem + 2px); } 1`] = `
 
   1 | a { display: table; border-collapse: /* borders */ collapse; border-spacing: /* cells */ calc(1rem + 2px); }
 
 `;
 
-exports[`invalid(120): a { display: table; border-collapse: /* borders */ collapse; border-spacing: /* cells */ calc(1rem + 2px); } 2`] = `
+exports[`invalid(122): a { display: table; border-collapse: /* borders */ collapse; border-spacing: /* cells */ calc(1rem + 2px); } 2`] = `
 
 Message:
 > 1 | a { display: table; border-collapse: /* borders */ collapse; border-spacing: /* cells */ calc(1rem + 2px); }
@@ -348,13 +376,13 @@ Message:
 
 `;
 
-exports[`invalid(121): a { @supports (display: table) { display: table; border-collapse: collapse; border-spacing: 8px; } } 1`] = `
+exports[`invalid(123): a { @supports (display: table) { display: table; border-collapse: collapse; border-spacing: 8px; } } 1`] = `
 
   1 | a { @supports (display: table) { display: table; border-collapse: collapse; border-spacing: 8px; } }
 
 `;
 
-exports[`invalid(121): a { @supports (display: table) { display: table; border-collapse: collapse; border-spacing: 8px; } } 2`] = `
+exports[`invalid(123): a { @supports (display: table) { display: table; border-collapse: collapse; border-spacing: 8px; } } 2`] = `
 
 Message:
 > 1 | a { @supports (display: table) { display: table; border-collapse: collapse; border-spacing: 8px; } }
@@ -362,13 +390,13 @@ Message:
 
 `;
 
-exports[`invalid(122): a { display: table; border-collapse: collapse; padding: 8px; } 1`] = `
+exports[`invalid(124): a { display: table; border-collapse: collapse; padding: 8px; } 1`] = `
 
   1 | a { display: table; border-collapse: collapse; padding: 8px; }
 
 `;
 
-exports[`invalid(122): a { display: table; border-collapse: collapse; padding: 8px; } 2`] = `
+exports[`invalid(124): a { display: table; border-collapse: collapse; padding: 8px; } 2`] = `
 
 Message:
 > 1 | a { display: table; border-collapse: collapse; padding: 8px; }
@@ -376,13 +404,13 @@ Message:
 
 `;
 
-exports[`invalid(123): a { display: table; border-collapse: collapse; padding-top: 8px; } 1`] = `
+exports[`invalid(125): a { display: table; border-collapse: collapse; padding-top: 8px; } 1`] = `
 
   1 | a { display: table; border-collapse: collapse; padding-top: 8px; }
 
 `;
 
-exports[`invalid(123): a { display: table; border-collapse: collapse; padding-top: 8px; } 2`] = `
+exports[`invalid(125): a { display: table; border-collapse: collapse; padding-top: 8px; } 2`] = `
 
 Message:
 > 1 | a { display: table; border-collapse: collapse; padding-top: 8px; }
@@ -390,13 +418,13 @@ Message:
 
 `;
 
-exports[`invalid(124): a { display: table; border-collapse: collapse; padding-right: 8px; } 1`] = `
+exports[`invalid(126): a { display: table; border-collapse: collapse; padding-right: 8px; } 1`] = `
 
   1 | a { display: table; border-collapse: collapse; padding-right: 8px; }
 
 `;
 
-exports[`invalid(124): a { display: table; border-collapse: collapse; padding-right: 8px; } 2`] = `
+exports[`invalid(126): a { display: table; border-collapse: collapse; padding-right: 8px; } 2`] = `
 
 Message:
 > 1 | a { display: table; border-collapse: collapse; padding-right: 8px; }
@@ -404,13 +432,13 @@ Message:
 
 `;
 
-exports[`invalid(125): a { display: table; border-collapse: collapse; padding-bottom: 8px; } 1`] = `
+exports[`invalid(127): a { display: table; border-collapse: collapse; padding-bottom: 8px; } 1`] = `
 
   1 | a { display: table; border-collapse: collapse; padding-bottom: 8px; }
 
 `;
 
-exports[`invalid(125): a { display: table; border-collapse: collapse; padding-bottom: 8px; } 2`] = `
+exports[`invalid(127): a { display: table; border-collapse: collapse; padding-bottom: 8px; } 2`] = `
 
 Message:
 > 1 | a { display: table; border-collapse: collapse; padding-bottom: 8px; }
@@ -418,13 +446,13 @@ Message:
 
 `;
 
-exports[`invalid(126): a { display: table; border-collapse: collapse; padding-left: 8px; } 1`] = `
+exports[`invalid(128): a { display: table; border-collapse: collapse; padding-left: 8px; } 1`] = `
 
   1 | a { display: table; border-collapse: collapse; padding-left: 8px; }
 
 `;
 
-exports[`invalid(126): a { display: table; border-collapse: collapse; padding-left: 8px; } 2`] = `
+exports[`invalid(128): a { display: table; border-collapse: collapse; padding-left: 8px; } 2`] = `
 
 Message:
 > 1 | a { display: table; border-collapse: collapse; padding-left: 8px; }
@@ -432,45 +460,17 @@ Message:
 
 `;
 
-exports[`invalid(127): a { display: table; border-collapse: collapse; padding-block: 8px; } 1`] = `
+exports[`invalid(129): a { display: table; border-collapse: collapse; padding-block: 8px; } 1`] = `
 
   1 | a { display: table; border-collapse: collapse; padding-block: 8px; }
 
 `;
 
-exports[`invalid(127): a { display: table; border-collapse: collapse; padding-block: 8px; } 2`] = `
+exports[`invalid(129): a { display: table; border-collapse: collapse; padding-block: 8px; } 2`] = `
 
 Message:
 > 1 | a { display: table; border-collapse: collapse; padding-block: 8px; }
     |                                                ^^^^^^^^^^^^^^^^^^ \`padding-block\` has no effect on this table with \`border-collapse: collapse\`. Apply padding to table cells or use separate borders.
-
-`;
-
-exports[`invalid(128): a { display: table; border-collapse: collapse; padding-inline: 8px; } 1`] = `
-
-  1 | a { display: table; border-collapse: collapse; padding-inline: 8px; }
-
-`;
-
-exports[`invalid(128): a { display: table; border-collapse: collapse; padding-inline: 8px; } 2`] = `
-
-Message:
-> 1 | a { display: table; border-collapse: collapse; padding-inline: 8px; }
-    |                                                ^^^^^^^^^^^^^^^^^^^ \`padding-inline\` has no effect on this table with \`border-collapse: collapse\`. Apply padding to table cells or use separate borders.
-
-`;
-
-exports[`invalid(129): a { display: table; border-collapse: collapse; padding-block-start: 8px; } 1`] = `
-
-  1 | a { display: table; border-collapse: collapse; padding-block-start: 8px; }
-
-`;
-
-exports[`invalid(129): a { display: table; border-collapse: collapse; padding-block-start: 8px; } 2`] = `
-
-Message:
-> 1 | a { display: table; border-collapse: collapse; padding-block-start: 8px; }
-    |                                                ^^^^^^^^^^^^^^^^^^^^^^^^ \`padding-block-start\` has no effect on this table with \`border-collapse: collapse\`. Apply padding to table cells or use separate borders.
 
 `;
 
@@ -488,13 +488,41 @@ Message:
 
 `;
 
-exports[`invalid(130): a { display: table; border-collapse: collapse; padding-block-end: 8px; } 1`] = `
+exports[`invalid(130): a { display: table; border-collapse: collapse; padding-inline: 8px; } 1`] = `
+
+  1 | a { display: table; border-collapse: collapse; padding-inline: 8px; }
+
+`;
+
+exports[`invalid(130): a { display: table; border-collapse: collapse; padding-inline: 8px; } 2`] = `
+
+Message:
+> 1 | a { display: table; border-collapse: collapse; padding-inline: 8px; }
+    |                                                ^^^^^^^^^^^^^^^^^^^ \`padding-inline\` has no effect on this table with \`border-collapse: collapse\`. Apply padding to table cells or use separate borders.
+
+`;
+
+exports[`invalid(131): a { display: table; border-collapse: collapse; padding-block-start: 8px; } 1`] = `
+
+  1 | a { display: table; border-collapse: collapse; padding-block-start: 8px; }
+
+`;
+
+exports[`invalid(131): a { display: table; border-collapse: collapse; padding-block-start: 8px; } 2`] = `
+
+Message:
+> 1 | a { display: table; border-collapse: collapse; padding-block-start: 8px; }
+    |                                                ^^^^^^^^^^^^^^^^^^^^^^^^ \`padding-block-start\` has no effect on this table with \`border-collapse: collapse\`. Apply padding to table cells or use separate borders.
+
+`;
+
+exports[`invalid(132): a { display: table; border-collapse: collapse; padding-block-end: 8px; } 1`] = `
 
   1 | a { display: table; border-collapse: collapse; padding-block-end: 8px; }
 
 `;
 
-exports[`invalid(130): a { display: table; border-collapse: collapse; padding-block-end: 8px; } 2`] = `
+exports[`invalid(132): a { display: table; border-collapse: collapse; padding-block-end: 8px; } 2`] = `
 
 Message:
 > 1 | a { display: table; border-collapse: collapse; padding-block-end: 8px; }
@@ -502,13 +530,13 @@ Message:
 
 `;
 
-exports[`invalid(131): a { display: table; border-collapse: collapse; padding-inline-start: 8px; } 1`] = `
+exports[`invalid(133): a { display: table; border-collapse: collapse; padding-inline-start: 8px; } 1`] = `
 
   1 | a { display: table; border-collapse: collapse; padding-inline-start: 8px; }
 
 `;
 
-exports[`invalid(131): a { display: table; border-collapse: collapse; padding-inline-start: 8px; } 2`] = `
+exports[`invalid(133): a { display: table; border-collapse: collapse; padding-inline-start: 8px; } 2`] = `
 
 Message:
 > 1 | a { display: table; border-collapse: collapse; padding-inline-start: 8px; }
@@ -516,13 +544,13 @@ Message:
 
 `;
 
-exports[`invalid(132): a { display: table; border-collapse: collapse; padding-inline-end: 8px; } 1`] = `
+exports[`invalid(134): a { display: table; border-collapse: collapse; padding-inline-end: 8px; } 1`] = `
 
   1 | a { display: table; border-collapse: collapse; padding-inline-end: 8px; }
 
 `;
 
-exports[`invalid(132): a { display: table; border-collapse: collapse; padding-inline-end: 8px; } 2`] = `
+exports[`invalid(134): a { display: table; border-collapse: collapse; padding-inline-end: 8px; } 2`] = `
 
 Message:
 > 1 | a { display: table; border-collapse: collapse; padding-inline-end: 8px; }
@@ -530,13 +558,13 @@ Message:
 
 `;
 
-exports[`invalid(133): a { display: inline-table; border-collapse: collapse; padding: 8px 12px; } 1`] = `
+exports[`invalid(135): a { display: inline-table; border-collapse: collapse; padding: 8px 12px; } 1`] = `
 
   1 | a { display: inline-table; border-collapse: collapse; padding: 8px 12px; }
 
 `;
 
-exports[`invalid(133): a { display: inline-table; border-collapse: collapse; padding: 8px 12px; } 2`] = `
+exports[`invalid(135): a { display: inline-table; border-collapse: collapse; padding: 8px 12px; } 2`] = `
 
 Message:
 > 1 | a { display: inline-table; border-collapse: collapse; padding: 8px 12px; }
@@ -544,13 +572,13 @@ Message:
 
 `;
 
-exports[`invalid(134): a { display: inline table; border-collapse: collapse; padding-inline: 8px 12px; writing-mode: vertical-rl; } 1`] = `
+exports[`invalid(136): a { display: inline table; border-collapse: collapse; padding-inline: 8px 12px; writing-mode: vertical-rl; } 1`] = `
 
   1 | a { display: inline table; border-collapse: collapse; padding-inline: 8px 12px; writing-mode: vertical-rl; }
 
 `;
 
-exports[`invalid(134): a { display: inline table; border-collapse: collapse; padding-inline: 8px 12px; writing-mode: vertical-rl; } 2`] = `
+exports[`invalid(136): a { display: inline table; border-collapse: collapse; padding-inline: 8px 12px; writing-mode: vertical-rl; } 2`] = `
 
 Message:
 > 1 | a { display: inline table; border-collapse: collapse; padding-inline: 8px 12px; writing-mode: vertical-rl; }
@@ -558,13 +586,13 @@ Message:
 
 `;
 
-exports[`invalid(135): a { PADDING-BLOCK: 8px !important; DISPLAY: TABLE; BORDER-COLLAPSE: COLLAPSE; } 1`] = `
+exports[`invalid(137): a { PADDING-BLOCK: 8px !important; DISPLAY: TABLE; BORDER-COLLAPSE: COLLAPSE; } 1`] = `
 
   1 | a { PADDING-BLOCK: 8px !important; DISPLAY: TABLE; BORDER-COLLAPSE: COLLAPSE; }
 
 `;
 
-exports[`invalid(135): a { PADDING-BLOCK: 8px !important; DISPLAY: TABLE; BORDER-COLLAPSE: COLLAPSE; } 2`] = `
+exports[`invalid(137): a { PADDING-BLOCK: 8px !important; DISPLAY: TABLE; BORDER-COLLAPSE: COLLAPSE; } 2`] = `
 
 Message:
 > 1 | a { PADDING-BLOCK: 8px !important; DISPLAY: TABLE; BORDER-COLLAPSE: COLLAPSE; }
@@ -572,13 +600,13 @@ Message:
 
 `;
 
-exports[`invalid(136): a { display: table; border-collapse: collapse; pa\\64 ding-inline-end: 8px; } 1`] = `
+exports[`invalid(138): a { display: table; border-collapse: collapse; pa\\64 ding-inline-end: 8px; } 1`] = `
 
   1 | a { display: table; border-collapse: collapse; pa\\64 ding-inline-end: 8px; }
 
 `;
 
-exports[`invalid(136): a { display: table; border-collapse: collapse; pa\\64 ding-inline-end: 8px; } 2`] = `
+exports[`invalid(138): a { display: table; border-collapse: collapse; pa\\64 ding-inline-end: 8px; } 2`] = `
 
 Message:
 > 1 | a { display: table; border-collapse: collapse; pa\\64 ding-inline-end: 8px; }
@@ -586,45 +614,17 @@ Message:
 
 `;
 
-exports[`invalid(137): a { display: table; border-collapse: collapse; padding: /* inset */ calc(1rem + 2px); } 1`] = `
+exports[`invalid(139): a { display: table; border-collapse: collapse; padding: /* inset */ calc(1rem + 2px); } 1`] = `
 
   1 | a { display: table; border-collapse: collapse; padding: /* inset */ calc(1rem + 2px); }
 
 `;
 
-exports[`invalid(137): a { display: table; border-collapse: collapse; padding: /* inset */ calc(1rem + 2px); } 2`] = `
+exports[`invalid(139): a { display: table; border-collapse: collapse; padding: /* inset */ calc(1rem + 2px); } 2`] = `
 
 Message:
 > 1 | a { display: table; border-collapse: collapse; padding: /* inset */ calc(1rem + 2px); }
     |                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`padding\` has no effect on this table with \`border-collapse: collapse\`. Apply padding to table cells or use separate borders.
-
-`;
-
-exports[`invalid(138): a { @media (width > 1px) { display: table; border-collapse: collapse; padding: 8px; } } 1`] = `
-
-  1 | a { @media (width > 1px) { display: table; border-collapse: collapse; padding: 8px; } }
-
-`;
-
-exports[`invalid(138): a { @media (width > 1px) { display: table; border-collapse: collapse; padding: 8px; } } 2`] = `
-
-Message:
-> 1 | a { @media (width > 1px) { display: table; border-collapse: collapse; padding: 8px; } }
-    |                                                                       ^^^^^^^^^^^^ \`padding\` has no effect on this table with \`border-collapse: collapse\`. Apply padding to table cells or use separate borders.
-
-`;
-
-exports[`invalid(139): a { position: absolute; clear: left; } 1`] = `
-
-  1 | a { position: absolute; clear: left; }
-
-`;
-
-exports[`invalid(139): a { position: absolute; clear: left; } 2`] = `
-
-Message:
-> 1 | a { position: absolute; clear: left; }
-    |                         ^^^^^^^^^^^ \`clear: left\` has no effect with \`position: absolute\`. Absolutely positioned elements do not participate in normal flow.
 
 `;
 
@@ -642,13 +642,41 @@ Message:
 
 `;
 
-exports[`invalid(140): a { position: absolute; clear: right; } 1`] = `
+exports[`invalid(140): a { @media (width > 1px) { display: table; border-collapse: collapse; padding: 8px; } } 1`] = `
+
+  1 | a { @media (width > 1px) { display: table; border-collapse: collapse; padding: 8px; } }
+
+`;
+
+exports[`invalid(140): a { @media (width > 1px) { display: table; border-collapse: collapse; padding: 8px; } } 2`] = `
+
+Message:
+> 1 | a { @media (width > 1px) { display: table; border-collapse: collapse; padding: 8px; } }
+    |                                                                       ^^^^^^^^^^^^ \`padding\` has no effect on this table with \`border-collapse: collapse\`. Apply padding to table cells or use separate borders.
+
+`;
+
+exports[`invalid(141): a { position: absolute; clear: left; } 1`] = `
+
+  1 | a { position: absolute; clear: left; }
+
+`;
+
+exports[`invalid(141): a { position: absolute; clear: left; } 2`] = `
+
+Message:
+> 1 | a { position: absolute; clear: left; }
+    |                         ^^^^^^^^^^^ \`clear: left\` has no effect with \`position: absolute\`. Absolutely positioned elements do not participate in normal flow.
+
+`;
+
+exports[`invalid(142): a { position: absolute; clear: right; } 1`] = `
 
   1 | a { position: absolute; clear: right; }
 
 `;
 
-exports[`invalid(140): a { position: absolute; clear: right; } 2`] = `
+exports[`invalid(142): a { position: absolute; clear: right; } 2`] = `
 
 Message:
 > 1 | a { position: absolute; clear: right; }
@@ -656,13 +684,13 @@ Message:
 
 `;
 
-exports[`invalid(141): a { position: absolute; clear: both; } 1`] = `
+exports[`invalid(143): a { position: absolute; clear: both; } 1`] = `
 
   1 | a { position: absolute; clear: both; }
 
 `;
 
-exports[`invalid(141): a { position: absolute; clear: both; } 2`] = `
+exports[`invalid(143): a { position: absolute; clear: both; } 2`] = `
 
 Message:
 > 1 | a { position: absolute; clear: both; }
@@ -670,13 +698,13 @@ Message:
 
 `;
 
-exports[`invalid(142): a { position: absolute; clear: inline-start; } 1`] = `
+exports[`invalid(144): a { position: absolute; clear: inline-start; } 1`] = `
 
   1 | a { position: absolute; clear: inline-start; }
 
 `;
 
-exports[`invalid(142): a { position: absolute; clear: inline-start; } 2`] = `
+exports[`invalid(144): a { position: absolute; clear: inline-start; } 2`] = `
 
 Message:
 > 1 | a { position: absolute; clear: inline-start; }
@@ -684,13 +712,13 @@ Message:
 
 `;
 
-exports[`invalid(143): a { position: absolute; clear: inline-end; } 1`] = `
+exports[`invalid(145): a { position: absolute; clear: inline-end; } 1`] = `
 
   1 | a { position: absolute; clear: inline-end; }
 
 `;
 
-exports[`invalid(143): a { position: absolute; clear: inline-end; } 2`] = `
+exports[`invalid(145): a { position: absolute; clear: inline-end; } 2`] = `
 
 Message:
 > 1 | a { position: absolute; clear: inline-end; }
@@ -698,13 +726,13 @@ Message:
 
 `;
 
-exports[`invalid(144): a { clear: both; position: fixed !important; } 1`] = `
+exports[`invalid(146): a { clear: both; position: fixed !important; } 1`] = `
 
   1 | a { clear: both; position: fixed !important; }
 
 `;
 
-exports[`invalid(144): a { clear: both; position: fixed !important; } 2`] = `
+exports[`invalid(146): a { clear: both; position: fixed !important; } 2`] = `
 
 Message:
 > 1 | a { clear: both; position: fixed !important; }
@@ -712,13 +740,13 @@ Message:
 
 `;
 
-exports[`invalid(145): a { POSITION: ABSOLUTE; CLEAR: INLINE-END; } 1`] = `
+exports[`invalid(147): a { POSITION: ABSOLUTE; CLEAR: INLINE-END; } 1`] = `
 
   1 | a { POSITION: ABSOLUTE; CLEAR: INLINE-END; }
 
 `;
 
-exports[`invalid(145): a { POSITION: ABSOLUTE; CLEAR: INLINE-END; } 2`] = `
+exports[`invalid(147): a { POSITION: ABSOLUTE; CLEAR: INLINE-END; } 2`] = `
 
 Message:
 > 1 | a { POSITION: ABSOLUTE; CLEAR: INLINE-END; }
@@ -726,13 +754,13 @@ Message:
 
 `;
 
-exports[`invalid(146): a { position: f\\69 xed; cl\\65 ar: b\\6f th; } 1`] = `
+exports[`invalid(148): a { position: f\\69 xed; cl\\65 ar: b\\6f th; } 1`] = `
 
   1 | a { position: f\\69 xed; cl\\65 ar: b\\6f th; }
 
 `;
 
-exports[`invalid(146): a { position: f\\69 xed; cl\\65 ar: b\\6f th; } 2`] = `
+exports[`invalid(148): a { position: f\\69 xed; cl\\65 ar: b\\6f th; } 2`] = `
 
 Message:
 > 1 | a { position: f\\69 xed; cl\\65 ar: b\\6f th; }
@@ -740,45 +768,17 @@ Message:
 
 `;
 
-exports[`invalid(147): a { @supports (position: fixed) { position: fixed; clear: /* floats */ left; } } 1`] = `
+exports[`invalid(149): a { @supports (position: fixed) { position: fixed; clear: /* floats */ left; } } 1`] = `
 
   1 | a { @supports (position: fixed) { position: fixed; clear: /* floats */ left; } }
 
 `;
 
-exports[`invalid(147): a { @supports (position: fixed) { position: fixed; clear: /* floats */ left; } } 2`] = `
+exports[`invalid(149): a { @supports (position: fixed) { position: fixed; clear: /* floats */ left; } } 2`] = `
 
 Message:
 > 1 | a { @supports (position: fixed) { position: fixed; clear: /* floats */ left; } }
     |                                                    ^^^^^^^^^^^^^^^^^^^^^^^^ \`clear: left\` has no effect with \`position: fixed\`. Absolutely positioned elements do not participate in normal flow.
-
-`;
-
-exports[`invalid(148): a { perspective: none; perspective-origin: left; } 1`] = `
-
-  1 | a { perspective: none; perspective-origin: left; }
-
-`;
-
-exports[`invalid(148): a { perspective: none; perspective-origin: left; } 2`] = `
-
-Message:
-> 1 | a { perspective: none; perspective-origin: left; }
-    |                        ^^^^^^^^^^^^^^^^^^^^^^^^ \`perspective-origin\` has no effect with \`perspective: none\`. Set a perspective distance to use this origin.
-
-`;
-
-exports[`invalid(149): a { perspective-origin: 20% 30%; perspective: none !important; } 1`] = `
-
-  1 | a { perspective-origin: 20% 30%; perspective: none !important; }
-
-`;
-
-exports[`invalid(149): a { perspective-origin: 20% 30%; perspective: none !important; } 2`] = `
-
-Message:
-> 1 | a { perspective-origin: 20% 30%; perspective: none !important; }
-    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`perspective-origin\` has no effect with \`perspective: none\`. Set a perspective distance to use this origin.
 
 `;
 
@@ -796,13 +796,41 @@ Message:
 
 `;
 
-exports[`invalid(150): a { PERSPECTIVE: NONE; PERSPECTIVE-ORIGIN: LEFT TOP; } 1`] = `
+exports[`invalid(150): a { perspective: none; perspective-origin: left; } 1`] = `
+
+  1 | a { perspective: none; perspective-origin: left; }
+
+`;
+
+exports[`invalid(150): a { perspective: none; perspective-origin: left; } 2`] = `
+
+Message:
+> 1 | a { perspective: none; perspective-origin: left; }
+    |                        ^^^^^^^^^^^^^^^^^^^^^^^^ \`perspective-origin\` has no effect with \`perspective: none\`. Set a perspective distance to use this origin.
+
+`;
+
+exports[`invalid(151): a { perspective-origin: 20% 30%; perspective: none !important; } 1`] = `
+
+  1 | a { perspective-origin: 20% 30%; perspective: none !important; }
+
+`;
+
+exports[`invalid(151): a { perspective-origin: 20% 30%; perspective: none !important; } 2`] = `
+
+Message:
+> 1 | a { perspective-origin: 20% 30%; perspective: none !important; }
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`perspective-origin\` has no effect with \`perspective: none\`. Set a perspective distance to use this origin.
+
+`;
+
+exports[`invalid(152): a { PERSPECTIVE: NONE; PERSPECTIVE-ORIGIN: LEFT TOP; } 1`] = `
 
   1 | a { PERSPECTIVE: NONE; PERSPECTIVE-ORIGIN: LEFT TOP; }
 
 `;
 
-exports[`invalid(150): a { PERSPECTIVE: NONE; PERSPECTIVE-ORIGIN: LEFT TOP; } 2`] = `
+exports[`invalid(152): a { PERSPECTIVE: NONE; PERSPECTIVE-ORIGIN: LEFT TOP; } 2`] = `
 
 Message:
 > 1 | a { PERSPECTIVE: NONE; PERSPECTIVE-ORIGIN: LEFT TOP; }
@@ -810,13 +838,13 @@ Message:
 
 `;
 
-exports[`invalid(151): a { perspe\\63 tive: n\\6f ne; perspective-orig\\69 n: left; } 1`] = `
+exports[`invalid(153): a { perspe\\63 tive: n\\6f ne; perspective-orig\\69 n: left; } 1`] = `
 
   1 | a { perspe\\63 tive: n\\6f ne; perspective-orig\\69 n: left; }
 
 `;
 
-exports[`invalid(151): a { perspe\\63 tive: n\\6f ne; perspective-orig\\69 n: left; } 2`] = `
+exports[`invalid(153): a { perspe\\63 tive: n\\6f ne; perspective-orig\\69 n: left; } 2`] = `
 
 Message:
 > 1 | a { perspe\\63 tive: n\\6f ne; perspective-orig\\69 n: left; }
@@ -824,13 +852,13 @@ Message:
 
 `;
 
-exports[`invalid(152): a { perspective: /* depth */ none; perspective-origin: /* viewpoint */ calc(50% + 1px) center; } 1`] = `
+exports[`invalid(154): a { perspective: /* depth */ none; perspective-origin: /* viewpoint */ calc(50% + 1px) center; } 1`] = `
 
   1 | a { perspective: /* depth */ none; perspective-origin: /* viewpoint */ calc(50% + 1px) center; }
 
 `;
 
-exports[`invalid(152): a { perspective: /* depth */ none; perspective-origin: /* viewpoint */ calc(50% + 1px) center; } 2`] = `
+exports[`invalid(154): a { perspective: /* depth */ none; perspective-origin: /* viewpoint */ calc(50% + 1px) center; } 2`] = `
 
 Message:
 > 1 | a { perspective: /* depth */ none; perspective-origin: /* viewpoint */ calc(50% + 1px) center; }
@@ -838,13 +866,13 @@ Message:
 
 `;
 
-exports[`invalid(153): a { perspective: none; transform: perspective(400px) rotateY(20deg); perspective-origin: left; } 1`] = `
+exports[`invalid(155): a { perspective: none; transform: perspective(400px) rotateY(20deg); perspective-origin: left; } 1`] = `
 
   1 | a { perspective: none; transform: perspective(400px) rotateY(20deg); perspective-origin: left; }
 
 `;
 
-exports[`invalid(153): a { perspective: none; transform: perspective(400px) rotateY(20deg); perspective-origin: left; } 2`] = `
+exports[`invalid(155): a { perspective: none; transform: perspective(400px) rotateY(20deg); perspective-origin: left; } 2`] = `
 
 Message:
 > 1 | a { perspective: none; transform: perspective(400px) rotateY(20deg); perspective-origin: left; }
@@ -852,17 +880,59 @@ Message:
 
 `;
 
-exports[`invalid(154): a { @container (width > 1px) { perspective: none; perspective-origin: left; } } 1`] = `
+exports[`invalid(156): a { @container (width > 1px) { perspective: none; perspective-origin: left; } } 1`] = `
 
   1 | a { @container (width > 1px) { perspective: none; perspective-origin: left; } }
 
 `;
 
-exports[`invalid(154): a { @container (width > 1px) { perspective: none; perspective-origin: left; } } 2`] = `
+exports[`invalid(156): a { @container (width > 1px) { perspective: none; perspective-origin: left; } } 2`] = `
 
 Message:
 > 1 | a { @container (width > 1px) { perspective: none; perspective-origin: left; } }
     |                                                   ^^^^^^^^^^^^^^^^^^^^^^^^ \`perspective-origin\` has no effect with \`perspective: none\`. Set a perspective distance to use this origin.
+
+`;
+
+exports[`invalid(157): a { display: block; table-layout: fixed; } 1`] = `
+
+  1 | a { display: block; table-layout: fixed; }
+
+`;
+
+exports[`invalid(157): a { display: block; table-layout: fixed; } 2`] = `
+
+Message:
+> 1 | a { display: block; table-layout: fixed; }
+    |                     ^^^^^^^^^^^^^^^^^^^ \`table-layout\` has no effect with \`display: block\`. It requires a table container.
+
+`;
+
+exports[`invalid(158): a { display: inline; table-layout: fixed; } 1`] = `
+
+  1 | a { display: inline; table-layout: fixed; }
+
+`;
+
+exports[`invalid(158): a { display: inline; table-layout: fixed; } 2`] = `
+
+Message:
+> 1 | a { display: inline; table-layout: fixed; }
+    |                      ^^^^^^^^^^^^^^^^^^^ \`table-layout\` has no effect with \`display: inline\`. It requires a table container.
+
+`;
+
+exports[`invalid(159): a { display: inline-block; table-layout: fixed; } 1`] = `
+
+  1 | a { display: inline-block; table-layout: fixed; }
+
+`;
+
+exports[`invalid(159): a { display: inline-block; table-layout: fixed; } 2`] = `
+
+Message:
+> 1 | a { display: inline-block; table-layout: fixed; }
+    |                            ^^^^^^^^^^^^^^^^^^^ \`table-layout\` has no effect with \`display: inline-block\`. It requires a table container.
 
 `;
 
@@ -880,6 +950,146 @@ Message:
 
 `;
 
+exports[`invalid(160): a { display: flex; table-layout: fixed; } 1`] = `
+
+  1 | a { display: flex; table-layout: fixed; }
+
+`;
+
+exports[`invalid(160): a { display: flex; table-layout: fixed; } 2`] = `
+
+Message:
+> 1 | a { display: flex; table-layout: fixed; }
+    |                    ^^^^^^^^^^^^^^^^^^^ \`table-layout\` has no effect with \`display: flex\`. It requires a table container.
+
+`;
+
+exports[`invalid(161): a { display: inline-flex; table-layout: fixed; } 1`] = `
+
+  1 | a { display: inline-flex; table-layout: fixed; }
+
+`;
+
+exports[`invalid(161): a { display: inline-flex; table-layout: fixed; } 2`] = `
+
+Message:
+> 1 | a { display: inline-flex; table-layout: fixed; }
+    |                           ^^^^^^^^^^^^^^^^^^^ \`table-layout\` has no effect with \`display: inline-flex\`. It requires a table container.
+
+`;
+
+exports[`invalid(162): a { display: grid; table-layout: fixed; } 1`] = `
+
+  1 | a { display: grid; table-layout: fixed; }
+
+`;
+
+exports[`invalid(162): a { display: grid; table-layout: fixed; } 2`] = `
+
+Message:
+> 1 | a { display: grid; table-layout: fixed; }
+    |                    ^^^^^^^^^^^^^^^^^^^ \`table-layout\` has no effect with \`display: grid\`. It requires a table container.
+
+`;
+
+exports[`invalid(163): a { display: inline grid; table-layout: fixed; } 1`] = `
+
+  1 | a { display: inline grid; table-layout: fixed; }
+
+`;
+
+exports[`invalid(163): a { display: inline grid; table-layout: fixed; } 2`] = `
+
+Message:
+> 1 | a { display: inline grid; table-layout: fixed; }
+    |                           ^^^^^^^^^^^^^^^^^^^ \`table-layout\` has no effect with \`display: inline grid\`. It requires a table container.
+
+`;
+
+exports[`invalid(164): a { display: table-cell; table-layout: fixed; } 1`] = `
+
+  1 | a { display: table-cell; table-layout: fixed; }
+
+`;
+
+exports[`invalid(164): a { display: table-cell; table-layout: fixed; } 2`] = `
+
+Message:
+> 1 | a { display: table-cell; table-layout: fixed; }
+    |                          ^^^^^^^^^^^^^^^^^^^ \`table-layout\` has no effect with \`display: table-cell\`. It requires a table container.
+
+`;
+
+exports[`invalid(165): a { display: table-row; table-layout: fixed; } 1`] = `
+
+  1 | a { display: table-row; table-layout: fixed; }
+
+`;
+
+exports[`invalid(165): a { display: table-row; table-layout: fixed; } 2`] = `
+
+Message:
+> 1 | a { display: table-row; table-layout: fixed; }
+    |                         ^^^^^^^^^^^^^^^^^^^ \`table-layout\` has no effect with \`display: table-row\`. It requires a table container.
+
+`;
+
+exports[`invalid(166): a { display: ruby; table-layout: fixed; } 1`] = `
+
+  1 | a { display: ruby; table-layout: fixed; }
+
+`;
+
+exports[`invalid(166): a { display: ruby; table-layout: fixed; } 2`] = `
+
+Message:
+> 1 | a { display: ruby; table-layout: fixed; }
+    |                    ^^^^^^^^^^^^^^^^^^^ \`table-layout\` has no effect with \`display: ruby\`. It requires a table container.
+
+`;
+
+exports[`invalid(167): a { display: list-item; table-layout: fixed; } 1`] = `
+
+  1 | a { display: list-item; table-layout: fixed; }
+
+`;
+
+exports[`invalid(167): a { display: list-item; table-layout: fixed; } 2`] = `
+
+Message:
+> 1 | a { display: list-item; table-layout: fixed; }
+    |                         ^^^^^^^^^^^^^^^^^^^ \`table-layout\` has no effect with \`display: list-item\`. It requires a table container.
+
+`;
+
+exports[`invalid(168): a { TABLE-LAYOUT: FIXED !important; DISPLAY: INLINE FLEX; } 1`] = `
+
+  1 | a { TABLE-LAYOUT: FIXED !important; DISPLAY: INLINE FLEX; }
+
+`;
+
+exports[`invalid(168): a { TABLE-LAYOUT: FIXED !important; DISPLAY: INLINE FLEX; } 2`] = `
+
+Message:
+> 1 | a { TABLE-LAYOUT: FIXED !important; DISPLAY: INLINE FLEX; }
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`table-layout\` has no effect with \`display: inline flex\`. It requires a table container.
+
+`;
+
+exports[`invalid(169): a { display: \\67 rid; table-la\\79 out: fixed; } 1`] = `
+
+  1 | a { display: \\67 rid; table-la\\79 out: fixed; }
+
+`;
+
+exports[`invalid(169): a { display: \\67 rid; table-la\\79 out: fixed; } 2`] = `
+
+Message:
+> 1 | a { display: \\67 rid; table-la\\79 out: fixed; }
+    |                       ^^^^^^^^^^^^^^^^^^^^^^ \`table-layout\` has no effect with \`display: grid\`. It requires a table container.
+
+`;
+
 exports[`invalid(17): a { position: static; inset-block: 20px; } 1`] = `
 
   1 | a { position: static; inset-block: 20px; }
@@ -891,6 +1101,146 @@ exports[`invalid(17): a { position: static; inset-block: 20px; } 2`] = `
 Message:
 > 1 | a { position: static; inset-block: 20px; }
     |                       ^^^^^^^^^^^^^^^^^ \`inset-block\` has no effect with \`position: static\`. Insets require a positioned element.
+
+`;
+
+exports[`invalid(170): a { @media (width > 1px) { display: grid; table-layout: /* algorithm */ fixed; } } 1`] = `
+
+  1 | a { @media (width > 1px) { display: grid; table-layout: /* algorithm */ fixed; } }
+
+`;
+
+exports[`invalid(170): a { @media (width > 1px) { display: grid; table-layout: /* algorithm */ fixed; } } 2`] = `
+
+Message:
+> 1 | a { @media (width > 1px) { display: grid; table-layout: /* algorithm */ fixed; } }
+    |                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`table-layout\` has no effect with \`display: grid\`. It requires a table container.
+
+`;
+
+exports[`invalid(171): a { position: absolute; column-span: all; } 1`] = `
+
+  1 | a { position: absolute; column-span: all; }
+
+`;
+
+exports[`invalid(171): a { position: absolute; column-span: all; } 2`] = `
+
+Message:
+> 1 | a { position: absolute; column-span: all; }
+    |                         ^^^^^^^^^^^^^^^^ \`column-span: all\` has no effect with \`position: absolute\`. Only in-flow elements can span columns.
+
+`;
+
+exports[`invalid(172): a { column-span: all !important; position: fixed; } 1`] = `
+
+  1 | a { column-span: all !important; position: fixed; }
+
+`;
+
+exports[`invalid(172): a { column-span: all !important; position: fixed; } 2`] = `
+
+Message:
+> 1 | a { column-span: all !important; position: fixed; }
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`column-span: all\` has no effect with \`position: fixed\`. Only in-flow elements can span columns.
+
+`;
+
+exports[`invalid(173): a { POSITION: ABSOLUTE; column-\\73 pan: \\61 ll; } 1`] = `
+
+  1 | a { POSITION: ABSOLUTE; column-\\73 pan: \\61 ll; }
+
+`;
+
+exports[`invalid(173): a { POSITION: ABSOLUTE; column-\\73 pan: \\61 ll; } 2`] = `
+
+Message:
+> 1 | a { POSITION: ABSOLUTE; column-\\73 pan: \\61 ll; }
+    |                         ^^^^^^^^^^^^^^^^^^^^^^ \`column-span: all\` has no effect with \`position: absolute\`. Only in-flow elements can span columns.
+
+`;
+
+exports[`invalid(174): a { @supports (position: fixed) { position: fixed; column-span: /* columns */ all; } } 1`] = `
+
+  1 | a { @supports (position: fixed) { position: fixed; column-span: /* columns */ all; } }
+
+`;
+
+exports[`invalid(174): a { @supports (position: fixed) { position: fixed; column-span: /* columns */ all; } } 2`] = `
+
+Message:
+> 1 | a { @supports (position: fixed) { position: fixed; column-span: /* columns */ all; } }
+    |                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`column-span: all\` has no effect with \`position: fixed\`. Only in-flow elements can span columns.
+
+`;
+
+exports[`invalid(175): a { offset-path: none; offset-distance: 50%; } 1`] = `
+
+  1 | a { offset-path: none; offset-distance: 50%; }
+
+`;
+
+exports[`invalid(175): a { offset-path: none; offset-distance: 50%; } 2`] = `
+
+Message:
+> 1 | a { offset-path: none; offset-distance: 50%; }
+    |                        ^^^^^^^^^^^^^^^^^^^^ \`offset-distance\` has no effect with \`offset-path: none\`. Set an offset path to use this property.
+
+`;
+
+exports[`invalid(176): a { offset-path: none; offset-rotate: reverse 30deg; } 1`] = `
+
+  1 | a { offset-path: none; offset-rotate: reverse 30deg; }
+
+`;
+
+exports[`invalid(176): a { offset-path: none; offset-rotate: reverse 30deg; } 2`] = `
+
+Message:
+> 1 | a { offset-path: none; offset-rotate: reverse 30deg; }
+    |                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`offset-rotate\` has no effect with \`offset-path: none\`. Set an offset path to use this property.
+
+`;
+
+exports[`invalid(177): a { offset-path: none; offset-anchor: right bottom; } 1`] = `
+
+  1 | a { offset-path: none; offset-anchor: right bottom; }
+
+`;
+
+exports[`invalid(177): a { offset-path: none; offset-anchor: right bottom; } 2`] = `
+
+Message:
+> 1 | a { offset-path: none; offset-anchor: right bottom; }
+    |                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`offset-anchor\` has no effect with \`offset-path: none\`. Set an offset path to use this property.
+
+`;
+
+exports[`invalid(178): a { OFFSET-ROTATE: 30deg !important; OFFSET-PATH: NONE; } 1`] = `
+
+  1 | a { OFFSET-ROTATE: 30deg !important; OFFSET-PATH: NONE; }
+
+`;
+
+exports[`invalid(178): a { OFFSET-ROTATE: 30deg !important; OFFSET-PATH: NONE; } 2`] = `
+
+Message:
+> 1 | a { OFFSET-ROTATE: 30deg !important; OFFSET-PATH: NONE; }
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`offset-rotate\` has no effect with \`offset-path: none\`. Set an offset path to use this property.
+
+`;
+
+exports[`invalid(179): a { offset-\\70 ath: n\\6f ne; offset-anc\\68 or: left; } 1`] = `
+
+  1 | a { offset-\\70 ath: n\\6f ne; offset-anc\\68 or: left; }
+
+`;
+
+exports[`invalid(179): a { offset-\\70 ath: n\\6f ne; offset-anc\\68 or: left; } 2`] = `
+
+Message:
+> 1 | a { offset-\\70 ath: n\\6f ne; offset-anc\\68 or: left; }
+    |                              ^^^^^^^^^^^^^^^^^^^^^^ \`offset-anchor\` has no effect with \`offset-path: none\`. Set an offset path to use this property.
 
 `;
 
@@ -908,6 +1258,146 @@ Message:
 
 `;
 
+exports[`invalid(180): a { @supports (offset-path: none) { offset-path: /* path */ none; offset-distance: /* progress */ calc(50% + 1px); } } 1`] = `
+
+  1 | a { @supports (offset-path: none) { offset-path: /* path */ none; offset-distance: /* progress */ calc(50% + 1px); } }
+
+`;
+
+exports[`invalid(180): a { @supports (offset-path: none) { offset-path: /* path */ none; offset-distance: /* progress */ calc(50% + 1px); } } 2`] = `
+
+Message:
+> 1 | a { @supports (offset-path: none) { offset-path: /* path */ none; offset-distance: /* progress */ calc(50% + 1px); } }
+    |                                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`offset-distance\` has no effect with \`offset-path: none\`. Set an offset path to use this property.
+
+`;
+
+exports[`invalid(181): a { shape-outside: none; shape-image-threshold: 0.5; } 1`] = `
+
+  1 | a { shape-outside: none; shape-image-threshold: 0.5; }
+
+`;
+
+exports[`invalid(181): a { shape-outside: none; shape-image-threshold: 0.5; } 2`] = `
+
+Message:
+> 1 | a { shape-outside: none; shape-image-threshold: 0.5; }
+    |                          ^^^^^^^^^^^^^^^^^^^^^^^^^^ \`shape-image-threshold\` has no effect with \`shape-outside: none\`. It defines the alpha threshold for an image-based shape.
+
+`;
+
+exports[`invalid(182): a { SHAPE-IMAGE-THRESHOLD: 50% !important; SHAPE-OUTSIDE: NONE; } 1`] = `
+
+  1 | a { SHAPE-IMAGE-THRESHOLD: 50% !important; SHAPE-OUTSIDE: NONE; }
+
+`;
+
+exports[`invalid(182): a { SHAPE-IMAGE-THRESHOLD: 50% !important; SHAPE-OUTSIDE: NONE; } 2`] = `
+
+Message:
+> 1 | a { SHAPE-IMAGE-THRESHOLD: 50% !important; SHAPE-OUTSIDE: NONE; }
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`shape-image-threshold\` has no effect with \`shape-outside: none\`. It defines the alpha threshold for an image-based shape.
+
+`;
+
+exports[`invalid(183): a { shape-outs\\69 de: n\\6f ne; shape-image-thr\\65 shold: 0.5; } 1`] = `
+
+  1 | a { shape-outs\\69 de: n\\6f ne; shape-image-thr\\65 shold: 0.5; }
+
+`;
+
+exports[`invalid(183): a { shape-outs\\69 de: n\\6f ne; shape-image-thr\\65 shold: 0.5; } 2`] = `
+
+Message:
+> 1 | a { shape-outs\\69 de: n\\6f ne; shape-image-thr\\65 shold: 0.5; }
+    |                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`shape-image-threshold\` has no effect with \`shape-outside: none\`. It defines the alpha threshold for an image-based shape.
+
+`;
+
+exports[`invalid(184): a { @container (width > 1px) { shape-outside: none; shape-image-threshold: /* alpha */ 0.5; } } 1`] = `
+
+  1 | a { @container (width > 1px) { shape-outside: none; shape-image-threshold: /* alpha */ 0.5; } }
+
+`;
+
+exports[`invalid(184): a { @container (width > 1px) { shape-outside: none; shape-image-threshold: /* alpha */ 0.5; } } 2`] = `
+
+Message:
+> 1 | a { @container (width > 1px) { shape-outside: none; shape-image-threshold: /* alpha */ 0.5; } }
+    |                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`shape-image-threshold\` has no effect with \`shape-outside: none\`. It defines the alpha threshold for an image-based shape.
+
+`;
+
+exports[`invalid(185): a { text-decoration-line: none; text-decoration-color: red; } 1`] = `
+
+  1 | a { text-decoration-line: none; text-decoration-color: red; }
+
+`;
+
+exports[`invalid(185): a { text-decoration-line: none; text-decoration-color: red; } 2`] = `
+
+Message:
+> 1 | a { text-decoration-line: none; text-decoration-color: red; }
+    |                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^ \`text-decoration-color\` has no effect with \`text-decoration-line: none\`. Enable a text decoration line on this element.
+
+`;
+
+exports[`invalid(186): a { text-decoration-line: none; text-decoration-style: wavy; } 1`] = `
+
+  1 | a { text-decoration-line: none; text-decoration-style: wavy; }
+
+`;
+
+exports[`invalid(186): a { text-decoration-line: none; text-decoration-style: wavy; } 2`] = `
+
+Message:
+> 1 | a { text-decoration-line: none; text-decoration-style: wavy; }
+    |                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`text-decoration-style\` has no effect with \`text-decoration-line: none\`. Enable a text decoration line on this element.
+
+`;
+
+exports[`invalid(187): a { text-decoration-line: none; text-decoration-thickness: 3px; } 1`] = `
+
+  1 | a { text-decoration-line: none; text-decoration-thickness: 3px; }
+
+`;
+
+exports[`invalid(187): a { text-decoration-line: none; text-decoration-thickness: 3px; } 2`] = `
+
+Message:
+> 1 | a { text-decoration-line: none; text-decoration-thickness: 3px; }
+    |                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`text-decoration-thickness\` has no effect with \`text-decoration-line: none\`. Enable a text decoration line on this element.
+
+`;
+
+exports[`invalid(188): a { TEXT-DECORATION-COLOR: RED !important; TEXT-DECORATION-LINE: NONE; } 1`] = `
+
+  1 | a { TEXT-DECORATION-COLOR: RED !important; TEXT-DECORATION-LINE: NONE; }
+
+`;
+
+exports[`invalid(188): a { TEXT-DECORATION-COLOR: RED !important; TEXT-DECORATION-LINE: NONE; } 2`] = `
+
+Message:
+> 1 | a { TEXT-DECORATION-COLOR: RED !important; TEXT-DECORATION-LINE: NONE; }
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`text-decoration-color\` has no effect with \`text-decoration-line: none\`. Enable a text decoration line on this element.
+
+`;
+
+exports[`invalid(189): a { text-decoration-li\\6e e: n\\6f ne; text-decoration-thi\\63 kness: 3px; } 1`] = `
+
+  1 | a { text-decoration-li\\6e e: n\\6f ne; text-decoration-thi\\63 kness: 3px; }
+
+`;
+
+exports[`invalid(189): a { text-decoration-li\\6e e: n\\6f ne; text-decoration-thi\\63 kness: 3px; } 2`] = `
+
+Message:
+> 1 | a { text-decoration-li\\6e e: n\\6f ne; text-decoration-thi\\63 kness: 3px; }
+    |                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`text-decoration-thickness\` has no effect with \`text-decoration-line: none\`. Enable a text decoration line on this element.
+
+`;
+
 exports[`invalid(19): a { position: static; inset-block-start: 20px; } 1`] = `
 
   1 | a { position: static; inset-block-start: 20px; }
@@ -919,6 +1409,34 @@ exports[`invalid(19): a { position: static; inset-block-start: 20px; } 2`] = `
 Message:
 > 1 | a { position: static; inset-block-start: 20px; }
     |                       ^^^^^^^^^^^^^^^^^^^^^^^ \`inset-block-start\` has no effect with \`position: static\`. Insets require a positioned element.
+
+`;
+
+exports[`invalid(190): a { @media (width > 1px) { text-decoration-line: none; text-decoration-style: /* line */ wavy; } } 1`] = `
+
+  1 | a { @media (width > 1px) { text-decoration-line: none; text-decoration-style: /* line */ wavy; } }
+
+`;
+
+exports[`invalid(190): a { @media (width > 1px) { text-decoration-line: none; text-decoration-style: /* line */ wavy; } } 2`] = `
+
+Message:
+> 1 | a { @media (width > 1px) { text-decoration-line: none; text-decoration-style: /* line */ wavy; } }
+    |                                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`text-decoration-style\` has no effect with \`text-decoration-line: none\`. Enable a text decoration line on this element.
+
+`;
+
+exports[`invalid(191): a { text-decoration-line: underline; } a > span { text-decoration-line: none; text-decoration-color: red; } 1`] = `
+
+  1 | a { text-decoration-line: underline; } a > span { text-decoration-line: none; text-decoration-color: red; }
+
+`;
+
+exports[`invalid(191): a { text-decoration-line: underline; } a > span { text-decoration-line: none; text-decoration-color: red; } 2`] = `
+
+Message:
+> 1 | a { text-decoration-line: underline; } a > span { text-decoration-line: none; text-decoration-color: red; }
+    |                                                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^ \`text-decoration-color\` has no effect with \`text-decoration-line: none\`. Enable a text decoration line on this element.
 
 `;
 
@@ -1992,13 +2510,41 @@ Message:
 
 `;
 
-exports[`invalid(82): a { display: inline-flex; column-count: 2; } 1`] = `
+exports[`invalid(82): a { display: flex; column-fill: balance; } 1`] = `
+
+  1 | a { display: flex; column-fill: balance; }
+
+`;
+
+exports[`invalid(82): a { display: flex; column-fill: balance; } 2`] = `
+
+Message:
+> 1 | a { display: flex; column-fill: balance; }
+    |                    ^^^^^^^^^^^^^^^^^^^^ \`column-fill\` has no effect with \`display: flex\`. Multicol properties require a block container.
+
+`;
+
+exports[`invalid(83): a { display: grid; column-fill: balance; } 1`] = `
+
+  1 | a { display: grid; column-fill: balance; }
+
+`;
+
+exports[`invalid(83): a { display: grid; column-fill: balance; } 2`] = `
+
+Message:
+> 1 | a { display: grid; column-fill: balance; }
+    |                    ^^^^^^^^^^^^^^^^^^^^ \`column-fill\` has no effect with \`display: grid\`. Multicol properties require a block container.
+
+`;
+
+exports[`invalid(84): a { display: inline-flex; column-count: 2; } 1`] = `
 
   1 | a { display: inline-flex; column-count: 2; }
 
 `;
 
-exports[`invalid(82): a { display: inline-flex; column-count: 2; } 2`] = `
+exports[`invalid(84): a { display: inline-flex; column-count: 2; } 2`] = `
 
 Message:
 > 1 | a { display: inline-flex; column-count: 2; }
@@ -2006,13 +2552,13 @@ Message:
 
 `;
 
-exports[`invalid(83): a { display: inline grid; columns: 2; } 1`] = `
+exports[`invalid(85): a { display: inline grid; columns: 2; } 1`] = `
 
   1 | a { display: inline grid; columns: 2; }
 
 `;
 
-exports[`invalid(83): a { display: inline grid; columns: 2; } 2`] = `
+exports[`invalid(85): a { display: inline grid; columns: 2; } 2`] = `
 
 Message:
 > 1 | a { display: inline grid; columns: 2; }
@@ -2020,13 +2566,13 @@ Message:
 
 `;
 
-exports[`invalid(84): a { COLUMN-WIDTH: 12rem !important; DISPLAY: FLEX; } 1`] = `
+exports[`invalid(86): a { COLUMN-WIDTH: 12rem !important; DISPLAY: FLEX; } 1`] = `
 
   1 | a { COLUMN-WIDTH: 12rem !important; DISPLAY: FLEX; }
 
 `;
 
-exports[`invalid(84): a { COLUMN-WIDTH: 12rem !important; DISPLAY: FLEX; } 2`] = `
+exports[`invalid(86): a { COLUMN-WIDTH: 12rem !important; DISPLAY: FLEX; } 2`] = `
 
 Message:
 > 1 | a { COLUMN-WIDTH: 12rem !important; DISPLAY: FLEX; }
@@ -2034,13 +2580,13 @@ Message:
 
 `;
 
-exports[`invalid(85): a { display: \\67 rid; column-\\63 ount: 2; } 1`] = `
+exports[`invalid(87): a { display: \\67 rid; column-\\63 ount: 2; } 1`] = `
 
   1 | a { display: \\67 rid; column-\\63 ount: 2; }
 
 `;
 
-exports[`invalid(85): a { display: \\67 rid; column-\\63 ount: 2; } 2`] = `
+exports[`invalid(87): a { display: \\67 rid; column-\\63 ount: 2; } 2`] = `
 
 Message:
 > 1 | a { display: \\67 rid; column-\\63 ount: 2; }
@@ -2048,13 +2594,13 @@ Message:
 
 `;
 
-exports[`invalid(86): a { display: flex; @supports (display: grid) { display: grid; columns: 2; } } 1`] = `
+exports[`invalid(88): a { display: flex; @supports (display: grid) { display: grid; columns: 2; } } 1`] = `
 
   1 | a { display: flex; @supports (display: grid) { display: grid; columns: 2; } }
 
 `;
 
-exports[`invalid(86): a { display: flex; @supports (display: grid) { display: grid; columns: 2; } } 2`] = `
+exports[`invalid(88): a { display: flex; @supports (display: grid) { display: grid; columns: 2; } } 2`] = `
 
 Message:
 > 1 | a { display: flex; @supports (display: grid) { display: grid; columns: 2; } }
@@ -2062,13 +2608,13 @@ Message:
 
 `;
 
-exports[`invalid(87): a { display: flex; position: absolute; float: left; column-width: 12rem; } 1`] = `
+exports[`invalid(89): a { display: flex; position: absolute; float: left; column-width: 12rem; } 1`] = `
 
   1 | a { display: flex; position: absolute; float: left; column-width: 12rem; }
 
 `;
 
-exports[`invalid(87): a { display: flex; position: absolute; float: left; column-width: 12rem; } 2`] = `
+exports[`invalid(89): a { display: flex; position: absolute; float: left; column-width: 12rem; } 2`] = `
 
 Message:
 > 1 | a { display: flex; position: absolute; float: left; column-width: 12rem; }
@@ -2076,39 +2622,11 @@ Message:
 
 `;
 
-exports[`invalid(87): a { display: flex; position: absolute; float: left; column-width: 12rem; } 3`] = `
+exports[`invalid(89): a { display: flex; position: absolute; float: left; column-width: 12rem; } 3`] = `
 
 Message:
 > 1 | a { display: flex; position: absolute; float: left; column-width: 12rem; }
     |                                                     ^^^^^^^^^^^^^^^^^^^ \`column-width\` has no effect with \`display: flex\`. Multicol properties require a block container.
-
-`;
-
-exports[`invalid(88): a { position: absolute; float: left; } 1`] = `
-
-  1 | a { position: absolute; float: left; }
-
-`;
-
-exports[`invalid(88): a { position: absolute; float: left; } 2`] = `
-
-Message:
-> 1 | a { position: absolute; float: left; }
-    |                         ^^^^^^^^^^^ \`float: left\` has no effect with \`position: absolute\`. Absolutely positioned elements cannot float.
-
-`;
-
-exports[`invalid(89): a { position: absolute; float: right; } 1`] = `
-
-  1 | a { position: absolute; float: right; }
-
-`;
-
-exports[`invalid(89): a { position: absolute; float: right; } 2`] = `
-
-Message:
-> 1 | a { position: absolute; float: right; }
-    |                         ^^^^^^^^^^^^ \`float: right\` has no effect with \`position: absolute\`. Absolutely positioned elements cannot float.
 
 `;
 
@@ -2126,13 +2644,41 @@ Message:
 
 `;
 
-exports[`invalid(90): a { position: absolute; float: inline-start; } 1`] = `
+exports[`invalid(90): a { position: absolute; float: left; } 1`] = `
+
+  1 | a { position: absolute; float: left; }
+
+`;
+
+exports[`invalid(90): a { position: absolute; float: left; } 2`] = `
+
+Message:
+> 1 | a { position: absolute; float: left; }
+    |                         ^^^^^^^^^^^ \`float: left\` has no effect with \`position: absolute\`. Absolutely positioned elements cannot float.
+
+`;
+
+exports[`invalid(91): a { position: absolute; float: right; } 1`] = `
+
+  1 | a { position: absolute; float: right; }
+
+`;
+
+exports[`invalid(91): a { position: absolute; float: right; } 2`] = `
+
+Message:
+> 1 | a { position: absolute; float: right; }
+    |                         ^^^^^^^^^^^^ \`float: right\` has no effect with \`position: absolute\`. Absolutely positioned elements cannot float.
+
+`;
+
+exports[`invalid(92): a { position: absolute; float: inline-start; } 1`] = `
 
   1 | a { position: absolute; float: inline-start; }
 
 `;
 
-exports[`invalid(90): a { position: absolute; float: inline-start; } 2`] = `
+exports[`invalid(92): a { position: absolute; float: inline-start; } 2`] = `
 
 Message:
 > 1 | a { position: absolute; float: inline-start; }
@@ -2140,13 +2686,13 @@ Message:
 
 `;
 
-exports[`invalid(91): a { position: absolute; float: inline-end; } 1`] = `
+exports[`invalid(93): a { position: absolute; float: inline-end; } 1`] = `
 
   1 | a { position: absolute; float: inline-end; }
 
 `;
 
-exports[`invalid(91): a { position: absolute; float: inline-end; } 2`] = `
+exports[`invalid(93): a { position: absolute; float: inline-end; } 2`] = `
 
 Message:
 > 1 | a { position: absolute; float: inline-end; }
@@ -2154,13 +2700,13 @@ Message:
 
 `;
 
-exports[`invalid(92): a { float: right; position: fixed; } 1`] = `
+exports[`invalid(94): a { float: right; position: fixed; } 1`] = `
 
   1 | a { float: right; position: fixed; }
 
 `;
 
-exports[`invalid(92): a { float: right; position: fixed; } 2`] = `
+exports[`invalid(94): a { float: right; position: fixed; } 2`] = `
 
 Message:
 > 1 | a { float: right; position: fixed; }
@@ -2168,13 +2714,13 @@ Message:
 
 `;
 
-exports[`invalid(93): a { POSITION: FIXED; FLOAT: INLINE-END !important; } 1`] = `
+exports[`invalid(95): a { POSITION: FIXED; FLOAT: INLINE-END !important; } 1`] = `
 
   1 | a { POSITION: FIXED; FLOAT: INLINE-END !important; }
 
 `;
 
-exports[`invalid(93): a { POSITION: FIXED; FLOAT: INLINE-END !important; } 2`] = `
+exports[`invalid(95): a { POSITION: FIXED; FLOAT: INLINE-END !important; } 2`] = `
 
 Message:
 > 1 | a { POSITION: FIXED; FLOAT: INLINE-END !important; }
@@ -2182,13 +2728,13 @@ Message:
 
 `;
 
-exports[`invalid(94): a { position: a\\62 solute; \\66 loat: \\6c eft; } 1`] = `
+exports[`invalid(96): a { position: a\\62 solute; \\66 loat: \\6c eft; } 1`] = `
 
   1 | a { position: a\\62 solute; \\66 loat: \\6c eft; }
 
 `;
 
-exports[`invalid(94): a { position: a\\62 solute; \\66 loat: \\6c eft; } 2`] = `
+exports[`invalid(96): a { position: a\\62 solute; \\66 loat: \\6c eft; } 2`] = `
 
 Message:
 > 1 | a { position: a\\62 solute; \\66 loat: \\6c eft; }
@@ -2196,13 +2742,13 @@ Message:
 
 `;
 
-exports[`invalid(95): a { @media (width > 1px) { position: fixed; float: /* side */ left; } } 1`] = `
+exports[`invalid(97): a { @media (width > 1px) { position: fixed; float: /* side */ left; } } 1`] = `
 
   1 | a { @media (width > 1px) { position: fixed; float: /* side */ left; } }
 
 `;
 
-exports[`invalid(95): a { @media (width > 1px) { position: fixed; float: /* side */ left; } } 2`] = `
+exports[`invalid(97): a { @media (width > 1px) { position: fixed; float: /* side */ left; } } 2`] = `
 
 Message:
 > 1 | a { @media (width > 1px) { position: fixed; float: /* side */ left; } }
@@ -2210,13 +2756,13 @@ Message:
 
 `;
 
-exports[`invalid(96): a { overflow: visible; text-overflow: clip ellipsis; } 1`] = `
+exports[`invalid(98): a { overflow: visible; text-overflow: clip ellipsis; } 1`] = `
 
   1 | a { overflow: visible; text-overflow: clip ellipsis; }
 
 `;
 
-exports[`invalid(96): a { overflow: visible; text-overflow: clip ellipsis; } 2`] = `
+exports[`invalid(98): a { overflow: visible; text-overflow: clip ellipsis; } 2`] = `
 
 Message:
 > 1 | a { overflow: visible; text-overflow: clip ellipsis; }
@@ -2224,44 +2770,16 @@ Message:
 
 `;
 
-exports[`invalid(97): a { overflow: visible; text-overflow: ellipsis clip; } 1`] = `
+exports[`invalid(99): a { overflow: visible; text-overflow: ellipsis clip; } 1`] = `
 
   1 | a { overflow: visible; text-overflow: ellipsis clip; }
 
 `;
 
-exports[`invalid(97): a { overflow: visible; text-overflow: ellipsis clip; } 2`] = `
+exports[`invalid(99): a { overflow: visible; text-overflow: ellipsis clip; } 2`] = `
 
 Message:
 > 1 | a { overflow: visible; text-overflow: ellipsis clip; }
     |                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`text-overflow: ellipsis clip\` has no effect with \`overflow: visible\`. Ellipsis requires clipped inline overflow.
-
-`;
-
-exports[`invalid(98): a { overflow: visible; text-overflow: ellipsis ellipsis; } 1`] = `
-
-  1 | a { overflow: visible; text-overflow: ellipsis ellipsis; }
-
-`;
-
-exports[`invalid(98): a { overflow: visible; text-overflow: ellipsis ellipsis; } 2`] = `
-
-Message:
-> 1 | a { overflow: visible; text-overflow: ellipsis ellipsis; }
-    |                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`text-overflow: ellipsis ellipsis\` has no effect with \`overflow: visible\`. Ellipsis requires clipped inline overflow.
-
-`;
-
-exports[`invalid(99): a { TEXT-OVERFLOW: CLIP ELLIPSIS !important; OVERFLOW: VISIBLE; } 1`] = `
-
-  1 | a { TEXT-OVERFLOW: CLIP ELLIPSIS !important; OVERFLOW: VISIBLE; }
-
-`;
-
-exports[`invalid(99): a { TEXT-OVERFLOW: CLIP ELLIPSIS !important; OVERFLOW: VISIBLE; } 2`] = `
-
-Message:
-> 1 | a { TEXT-OVERFLOW: CLIP ELLIPSIS !important; OVERFLOW: VISIBLE; }
-    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`text-overflow: clip ellipsis\` has no effect with \`overflow: visible\`. Ellipsis requires clipped inline overflow.
 
 `;
