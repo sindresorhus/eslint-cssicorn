@@ -39,7 +39,6 @@ Conflicting, calculated, mixed-unit, and percentage bounds are ignored. Unlike `
 
 ## Limitations
 
-- Both functions must have exactly two nonempty arguments. The inner function must occupy an entire outer argument; forms with two opposite nested functions are ignored.
-- Checks declaration values, including custom properties and nested math. Ignores at-rule conditions, strings, URLs, and CSS Modules interoperability declarations.
-- Ignores candidates containing substitution functions (`var()`, `env()`, `attr()`, or custom functions), `random()`, or `none` bounds.
-- Fixes preserve comments, argument text, and line endings. Forms needing argument reordering are reported without a fix when they contain comments.
+- Checks declaration values, including custom properties. Both functions must have exactly two arguments.
+- Ignores expressions containing substitutions (such as `var()`) or `random()`.
+- Expressions requiring argument reordering are not autofixed if they contain comments.
