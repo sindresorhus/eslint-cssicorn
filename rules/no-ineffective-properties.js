@@ -1,0 +1,162 @@
+import {
+	getSingleValueIdentifier,
+	hasSubstitutionOrRandomFunction,
+	isCssWideKeyword,
+	isKeyframesAtRule,
+	normalizeCssIdentifier,
+} from './utils/index.js';
+
+/**
+@import {CssicornContext} from './rule/cssicorn-context.js';
+@import {CssicornRule} from './rule/to-eslint-rule.js';
+*/
+
+const MESSAGE_ID_DISPLAY = 'no-ineffective-properties/display';
+const MESSAGE_ID_NOWRAP = 'no-ineffective-properties/nowrap';
+const MESSAGE_ID_STATIC = 'no-ineffective-properties/static';
+const MESSAGE_ID_OVERFLOW = 'no-ineffective-properties/overflow';
+const messages = {
+	[MESSAGE_ID_DISPLAY]: '`{{property}}` has no effect with `display: {{display}}`. It requires a {{layout}} container.',
+	[MESSAGE_ID_NOWRAP]: '`align-content` has no effect on a flex container with `nowrap`. Consider `align-items` or enabling wrapping.',
+	[MESSAGE_ID_STATIC]: '`{{property}}` has no effect with `position: static`. Insets require a positioned element.',
+	[MESSAGE_ID_OVERFLOW]: '`text-overflow: ellipsis` has no effect with `overflow: visible`. Ellipsis requires clipped inline overflow.',
+};
+
+const flexProperties = new Set(['flex-direction', 'flex-wrap', 'flex-flow']);
+const gridProperties = new Set(['grid', 'grid-template', 'grid-template-columns', 'grid-template-rows', 'grid-template-areas', 'grid-auto-columns', 'grid-auto-rows', 'grid-auto-flow']);
+const insetProperties = new Set(['top', 'right', 'bottom', 'left', 'inset', 'inset-block', 'inset-inline', 'inset-block-start', 'inset-block-end', 'inset-inline-start', 'inset-inline-end']);
+const targetProperties = new Set([...flexProperties, ...gridProperties, ...insetProperties, 'align-content', 'text-overflow']);
+const overflowProperties = ['overflow', 'overflow-x', 'overflow-y', 'overflow-inline', 'overflow-block'];
+
+/**
+Get a validated keyword value only when exactly one declaration controls the property or shorthand group. Multiple declarations may be intentional fallbacks.
+*/
+const getControllingValue = (declarationsByProperty, properties, sourceCode) => {
+	const declarations = properties.flatMap(property => declarationsByProperty.get(property) ?? []);
+	if (declarations.length !== 1) {
+		return;
+	}
+
+	const [{node, property}] = declarations;
+	if (node.value.type !== 'Value' || node.value.children.length === 0 || node.value.children.some(child => child.type !== 'Identifier' || normalizeCssIdentifier(child.name).startsWith('-'))) {
+		return;
+	}
+
+	const value = node.value.children.map(child => normalizeCssIdentifier(child.name)).join(' ');
+	if (isCssWideKeyword(value) || sourceCode.lexer.matchProperty(property, value).error) {
+		return;
+	}
+
+	return value;
+};
+
+/**
+Check whether a block contains style declarations, excluding keyframes and descriptors.
+*/
+const isStyleBlock = (block, sourceCode) => {
+	const parent = sourceCode.getParent(block);
+	if (parent?.type === 'Atrule') {
+		const atRule = sourceCode.lexer.getAtrule(normalizeCssIdentifier(parent.name));
+		if (!atRule || atRule.descriptors !== null) {
+			return false;
+		}
+	} else if (parent?.type !== 'Rule') {
+		return false;
+	}
+
+	const ancestors = sourceCode.getAncestors(block);
+	return ancestors.some(node => node.type === 'Rule' && node.prelude?.type === 'SelectorList')
+		&& ancestors.every(node => !isKeyframesAtRule(node));
+};
+
+/**
+Get the problem for a declaration given the explicit layout controls in its block.
+*/
+const getDeclarationProblem = (node, property, {display, hasVisibleDisplay, isFlex, isGrid, hasExplicitNowrap, position, hasVisibleOverflow}) => {
+	const identifier = getSingleValueIdentifier(node);
+	const keyword = identifier ? normalizeCssIdentifier(identifier.name) : undefined;
+	if (isCssWideKeyword(keyword)) {
+		return;
+	}
+
+	const layout = flexProperties.has(property) ? 'flex' : 'grid';
+	if (hasVisibleDisplay && ((flexProperties.has(property) && !isFlex) || (gridProperties.has(property) && !isGrid))) {
+		return {node, messageId: MESSAGE_ID_DISPLAY, data: {property, display, layout}};
+	}
+
+	if (property === 'align-content' && hasExplicitNowrap) {
+		return {node, messageId: MESSAGE_ID_NOWRAP};
+	}
+
+	if (insetProperties.has(property) && position === 'static') {
+		return {node, messageId: MESSAGE_ID_STATIC, data: {property}};
+	}
+
+	if (property === 'text-overflow' && keyword === 'ellipsis' && hasVisibleOverflow) {
+		return {node, messageId: MESSAGE_ID_OVERFLOW};
+	}
+};
+
+/**
+@param {CssicornContext} context
+*/
+const create = context => {
+	const {sourceCode} = context;
+
+	context.on('Block', function * (block) {
+		const declarations = block.children.filter(node => node.type === 'Declaration').map(node => ({node, property: normalizeCssIdentifier(node.property)}));
+		if (
+			declarations.every(({property}) => !targetProperties.has(property))
+			|| declarations.some(({property}) => property === 'all')
+			|| !isStyleBlock(block, sourceCode)
+		) {
+			return;
+		}
+
+		const declarationsByProperty = Map.groupBy(declarations, ({property}) => property);
+		const display = getControllingValue(declarationsByProperty, ['display'], sourceCode);
+		const hasVisibleDisplay = display !== undefined && display !== 'none' && display !== 'contents';
+		const isFlex = hasVisibleDisplay && (display === 'inline-flex' || display.split(' ').includes('flex'));
+		const isGrid = hasVisibleDisplay && (display === 'inline-grid' || display.split(' ').includes('grid'));
+		const wrapping = isFlex ? getControllingValue(declarationsByProperty, ['flex-wrap', 'flex-flow'], sourceCode) : undefined;
+		const hasExplicitNowrap = wrapping?.split(' ').includes('nowrap') === true;
+		const position = getControllingValue(declarationsByProperty, ['position'], sourceCode);
+		const overflow = getControllingValue(declarationsByProperty, overflowProperties, sourceCode);
+		// Only the shorthand establishes both axes without needing writing-mode or computed-value inference.
+		const hasVisibleOverflow = declarationsByProperty.has('overflow') && (overflow === 'visible' || overflow === 'visible visible');
+
+		const controls = {
+			display, hasVisibleDisplay, isFlex, isGrid, hasExplicitNowrap, position, hasVisibleOverflow,
+		};
+
+		for (const {node, property} of declarations) {
+			if (!targetProperties.has(property) || node.value.type !== 'Value' || hasSubstitutionOrRandomFunction(node.value)) {
+				continue;
+			}
+
+			const problem = getDeclarationProblem(node, property, controls);
+			if (problem) {
+				yield problem;
+			}
+		}
+	});
+};
+
+/**
+@type {CssicornRule}
+*/
+const config = {
+	create,
+	meta: {
+		type: 'problem',
+		docs: {
+			description: 'Disallow properties that have no effect given other declarations in the same block.',
+			recommended: 'unopinionated',
+		},
+		schema: [],
+		messages,
+		languages: ['css/css'],
+	},
+};
+
+export default config;

@@ -8,6 +8,7 @@ export {default as 'no-duplicate-font-family-names'} from './no-duplicate-font-f
 export {default as 'no-duplicate-properties'} from './no-duplicate-properties.js';
 export {default as 'no-duplicate-selectors'} from './no-duplicate-selectors.js';
 export {default as 'no-ineffective-keyframe-declarations'} from './no-ineffective-keyframe-declarations.js';
+export {default as 'no-ineffective-properties'} from './no-ineffective-properties.js';
 export {default as 'no-invalid-media-features'} from './no-invalid-media-features.js';
 export {default as 'no-nesting-with-mixed-specificity'} from './no-nesting-with-mixed-specificity.js';
 export {default as 'no-redundant-longhand-properties'} from './no-redundant-longhand-properties.js';

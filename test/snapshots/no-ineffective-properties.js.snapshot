@@ -1,0 +1,1055 @@
+exports[`invalid(1): a { display: grid; flex-direction: column; } 1`] = `
+
+  1 | a { display: grid; flex-direction: column; }
+
+`;
+
+exports[`invalid(1): a { display: grid; flex-direction: column; } 2`] = `
+
+Message:
+> 1 | a { display: grid; flex-direction: column; }
+    |                    ^^^^^^^^^^^^^^^^^^^^^^ \`flex-direction\` has no effect with \`display: grid\`. It requires a flex container.
+
+`;
+
+exports[`invalid(10): a { display: flex; grid-auto-rows: 100px; } 1`] = `
+
+  1 | a { display: flex; grid-auto-rows: 100px; }
+
+`;
+
+exports[`invalid(10): a { display: flex; grid-auto-rows: 100px; } 2`] = `
+
+Message:
+> 1 | a { display: flex; grid-auto-rows: 100px; }
+    |                    ^^^^^^^^^^^^^^^^^^^^^ \`grid-auto-rows\` has no effect with \`display: flex\`. It requires a grid container.
+
+`;
+
+exports[`invalid(11): a { display: flex; grid-auto-flow: column dense; } 1`] = `
+
+  1 | a { display: flex; grid-auto-flow: column dense; }
+
+`;
+
+exports[`invalid(11): a { display: flex; grid-auto-flow: column dense; } 2`] = `
+
+Message:
+> 1 | a { display: flex; grid-auto-flow: column dense; }
+    |                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`grid-auto-flow\` has no effect with \`display: flex\`. It requires a grid container.
+
+`;
+
+exports[`invalid(12): a { position: static; top: 20px; } 1`] = `
+
+  1 | a { position: static; top: 20px; }
+
+`;
+
+exports[`invalid(12): a { position: static; top: 20px; } 2`] = `
+
+Message:
+> 1 | a { position: static; top: 20px; }
+    |                       ^^^^^^^^^ \`top\` has no effect with \`position: static\`. Insets require a positioned element.
+
+`;
+
+exports[`invalid(13): a { position: static; right: 20px; } 1`] = `
+
+  1 | a { position: static; right: 20px; }
+
+`;
+
+exports[`invalid(13): a { position: static; right: 20px; } 2`] = `
+
+Message:
+> 1 | a { position: static; right: 20px; }
+    |                       ^^^^^^^^^^^ \`right\` has no effect with \`position: static\`. Insets require a positioned element.
+
+`;
+
+exports[`invalid(14): a { position: static; bottom: 20px; } 1`] = `
+
+  1 | a { position: static; bottom: 20px; }
+
+`;
+
+exports[`invalid(14): a { position: static; bottom: 20px; } 2`] = `
+
+Message:
+> 1 | a { position: static; bottom: 20px; }
+    |                       ^^^^^^^^^^^^ \`bottom\` has no effect with \`position: static\`. Insets require a positioned element.
+
+`;
+
+exports[`invalid(15): a { position: static; left: 20px; } 1`] = `
+
+  1 | a { position: static; left: 20px; }
+
+`;
+
+exports[`invalid(15): a { position: static; left: 20px; } 2`] = `
+
+Message:
+> 1 | a { position: static; left: 20px; }
+    |                       ^^^^^^^^^^ \`left\` has no effect with \`position: static\`. Insets require a positioned element.
+
+`;
+
+exports[`invalid(16): a { position: static; inset: 20px; } 1`] = `
+
+  1 | a { position: static; inset: 20px; }
+
+`;
+
+exports[`invalid(16): a { position: static; inset: 20px; } 2`] = `
+
+Message:
+> 1 | a { position: static; inset: 20px; }
+    |                       ^^^^^^^^^^^ \`inset\` has no effect with \`position: static\`. Insets require a positioned element.
+
+`;
+
+exports[`invalid(17): a { position: static; inset-block: 20px; } 1`] = `
+
+  1 | a { position: static; inset-block: 20px; }
+
+`;
+
+exports[`invalid(17): a { position: static; inset-block: 20px; } 2`] = `
+
+Message:
+> 1 | a { position: static; inset-block: 20px; }
+    |                       ^^^^^^^^^^^^^^^^^ \`inset-block\` has no effect with \`position: static\`. Insets require a positioned element.
+
+`;
+
+exports[`invalid(18): a { position: static; inset-inline: 20px; } 1`] = `
+
+  1 | a { position: static; inset-inline: 20px; }
+
+`;
+
+exports[`invalid(18): a { position: static; inset-inline: 20px; } 2`] = `
+
+Message:
+> 1 | a { position: static; inset-inline: 20px; }
+    |                       ^^^^^^^^^^^^^^^^^^ \`inset-inline\` has no effect with \`position: static\`. Insets require a positioned element.
+
+`;
+
+exports[`invalid(19): a { position: static; inset-block-start: 20px; } 1`] = `
+
+  1 | a { position: static; inset-block-start: 20px; }
+
+`;
+
+exports[`invalid(19): a { position: static; inset-block-start: 20px; } 2`] = `
+
+Message:
+> 1 | a { position: static; inset-block-start: 20px; }
+    |                       ^^^^^^^^^^^^^^^^^^^^^^^ \`inset-block-start\` has no effect with \`position: static\`. Insets require a positioned element.
+
+`;
+
+exports[`invalid(2): a { display: grid; flex-wrap: wrap; } 1`] = `
+
+  1 | a { display: grid; flex-wrap: wrap; }
+
+`;
+
+exports[`invalid(2): a { display: grid; flex-wrap: wrap; } 2`] = `
+
+Message:
+> 1 | a { display: grid; flex-wrap: wrap; }
+    |                    ^^^^^^^^^^^^^^^ \`flex-wrap\` has no effect with \`display: grid\`. It requires a flex container.
+
+`;
+
+exports[`invalid(20): a { position: static; inset-block-end: 20px; } 1`] = `
+
+  1 | a { position: static; inset-block-end: 20px; }
+
+`;
+
+exports[`invalid(20): a { position: static; inset-block-end: 20px; } 2`] = `
+
+Message:
+> 1 | a { position: static; inset-block-end: 20px; }
+    |                       ^^^^^^^^^^^^^^^^^^^^^ \`inset-block-end\` has no effect with \`position: static\`. Insets require a positioned element.
+
+`;
+
+exports[`invalid(21): a { position: static; inset-inline-start: 20px; } 1`] = `
+
+  1 | a { position: static; inset-inline-start: 20px; }
+
+`;
+
+exports[`invalid(21): a { position: static; inset-inline-start: 20px; } 2`] = `
+
+Message:
+> 1 | a { position: static; inset-inline-start: 20px; }
+    |                       ^^^^^^^^^^^^^^^^^^^^^^^^ \`inset-inline-start\` has no effect with \`position: static\`. Insets require a positioned element.
+
+`;
+
+exports[`invalid(22): a { position: static; inset-inline-end: 20px; } 1`] = `
+
+  1 | a { position: static; inset-inline-end: 20px; }
+
+`;
+
+exports[`invalid(22): a { position: static; inset-inline-end: 20px; } 2`] = `
+
+Message:
+> 1 | a { position: static; inset-inline-end: 20px; }
+    |                       ^^^^^^^^^^^^^^^^^^^^^^ \`inset-inline-end\` has no effect with \`position: static\`. Insets require a positioned element.
+
+`;
+
+exports[`invalid(23): a { display: block; flex-direction: column; grid-template-columns: 1fr 1fr; } 1`] = `
+
+  1 | a { display: block; flex-direction: column; grid-template-columns: 1fr 1fr; }
+
+`;
+
+exports[`invalid(23): a { display: block; flex-direction: column; grid-template-columns: 1fr 1fr; } 2`] = `
+
+Message:
+> 1 | a { display: block; flex-direction: column; grid-template-columns: 1fr 1fr; }
+    |                     ^^^^^^^^^^^^^^^^^^^^^^ \`flex-direction\` has no effect with \`display: block\`. It requires a flex container.
+
+`;
+
+exports[`invalid(23): a { display: block; flex-direction: column; grid-template-columns: 1fr 1fr; } 3`] = `
+
+Message:
+> 1 | a { display: block; flex-direction: column; grid-template-columns: 1fr 1fr; }
+    |                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`grid-template-columns\` has no effect with \`display: block\`. It requires a grid container.
+
+`;
+
+exports[`invalid(24): a { display: inline; flex-direction: column; grid-template-columns: 1fr 1fr; } 1`] = `
+
+  1 | a { display: inline; flex-direction: column; grid-template-columns: 1fr 1fr; }
+
+`;
+
+exports[`invalid(24): a { display: inline; flex-direction: column; grid-template-columns: 1fr 1fr; } 2`] = `
+
+Message:
+> 1 | a { display: inline; flex-direction: column; grid-template-columns: 1fr 1fr; }
+    |                      ^^^^^^^^^^^^^^^^^^^^^^ \`flex-direction\` has no effect with \`display: inline\`. It requires a flex container.
+
+`;
+
+exports[`invalid(24): a { display: inline; flex-direction: column; grid-template-columns: 1fr 1fr; } 3`] = `
+
+Message:
+> 1 | a { display: inline; flex-direction: column; grid-template-columns: 1fr 1fr; }
+    |                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`grid-template-columns\` has no effect with \`display: inline\`. It requires a grid container.
+
+`;
+
+exports[`invalid(25): a { display: inline-block; flex-direction: column; grid-template-columns: 1fr 1fr; } 1`] = `
+
+  1 | a { display: inline-block; flex-direction: column; grid-template-columns: 1fr 1fr; }
+
+`;
+
+exports[`invalid(25): a { display: inline-block; flex-direction: column; grid-template-columns: 1fr 1fr; } 2`] = `
+
+Message:
+> 1 | a { display: inline-block; flex-direction: column; grid-template-columns: 1fr 1fr; }
+    |                            ^^^^^^^^^^^^^^^^^^^^^^ \`flex-direction\` has no effect with \`display: inline-block\`. It requires a flex container.
+
+`;
+
+exports[`invalid(25): a { display: inline-block; flex-direction: column; grid-template-columns: 1fr 1fr; } 3`] = `
+
+Message:
+> 1 | a { display: inline-block; flex-direction: column; grid-template-columns: 1fr 1fr; }
+    |                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`grid-template-columns\` has no effect with \`display: inline-block\`. It requires a grid container.
+
+`;
+
+exports[`invalid(26): a { display: flow; flex-direction: column; grid-template-columns: 1fr 1fr; } 1`] = `
+
+  1 | a { display: flow; flex-direction: column; grid-template-columns: 1fr 1fr; }
+
+`;
+
+exports[`invalid(26): a { display: flow; flex-direction: column; grid-template-columns: 1fr 1fr; } 2`] = `
+
+Message:
+> 1 | a { display: flow; flex-direction: column; grid-template-columns: 1fr 1fr; }
+    |                    ^^^^^^^^^^^^^^^^^^^^^^ \`flex-direction\` has no effect with \`display: flow\`. It requires a flex container.
+
+`;
+
+exports[`invalid(26): a { display: flow; flex-direction: column; grid-template-columns: 1fr 1fr; } 3`] = `
+
+Message:
+> 1 | a { display: flow; flex-direction: column; grid-template-columns: 1fr 1fr; }
+    |                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`grid-template-columns\` has no effect with \`display: flow\`. It requires a grid container.
+
+`;
+
+exports[`invalid(27): a { display: flow-root; flex-direction: column; grid-template-columns: 1fr 1fr; } 1`] = `
+
+  1 | a { display: flow-root; flex-direction: column; grid-template-columns: 1fr 1fr; }
+
+`;
+
+exports[`invalid(27): a { display: flow-root; flex-direction: column; grid-template-columns: 1fr 1fr; } 2`] = `
+
+Message:
+> 1 | a { display: flow-root; flex-direction: column; grid-template-columns: 1fr 1fr; }
+    |                         ^^^^^^^^^^^^^^^^^^^^^^ \`flex-direction\` has no effect with \`display: flow-root\`. It requires a flex container.
+
+`;
+
+exports[`invalid(27): a { display: flow-root; flex-direction: column; grid-template-columns: 1fr 1fr; } 3`] = `
+
+Message:
+> 1 | a { display: flow-root; flex-direction: column; grid-template-columns: 1fr 1fr; }
+    |                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`grid-template-columns\` has no effect with \`display: flow-root\`. It requires a grid container.
+
+`;
+
+exports[`invalid(28): a { display: table; flex-direction: column; grid-template-columns: 1fr 1fr; } 1`] = `
+
+  1 | a { display: table; flex-direction: column; grid-template-columns: 1fr 1fr; }
+
+`;
+
+exports[`invalid(28): a { display: table; flex-direction: column; grid-template-columns: 1fr 1fr; } 2`] = `
+
+Message:
+> 1 | a { display: table; flex-direction: column; grid-template-columns: 1fr 1fr; }
+    |                     ^^^^^^^^^^^^^^^^^^^^^^ \`flex-direction\` has no effect with \`display: table\`. It requires a flex container.
+
+`;
+
+exports[`invalid(28): a { display: table; flex-direction: column; grid-template-columns: 1fr 1fr; } 3`] = `
+
+Message:
+> 1 | a { display: table; flex-direction: column; grid-template-columns: 1fr 1fr; }
+    |                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`grid-template-columns\` has no effect with \`display: table\`. It requires a grid container.
+
+`;
+
+exports[`invalid(29): a { display: inline-table; flex-direction: column; grid-template-columns: 1fr 1fr; } 1`] = `
+
+  1 | a { display: inline-table; flex-direction: column; grid-template-columns: 1fr 1fr; }
+
+`;
+
+exports[`invalid(29): a { display: inline-table; flex-direction: column; grid-template-columns: 1fr 1fr; } 2`] = `
+
+Message:
+> 1 | a { display: inline-table; flex-direction: column; grid-template-columns: 1fr 1fr; }
+    |                            ^^^^^^^^^^^^^^^^^^^^^^ \`flex-direction\` has no effect with \`display: inline-table\`. It requires a flex container.
+
+`;
+
+exports[`invalid(29): a { display: inline-table; flex-direction: column; grid-template-columns: 1fr 1fr; } 3`] = `
+
+Message:
+> 1 | a { display: inline-table; flex-direction: column; grid-template-columns: 1fr 1fr; }
+    |                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`grid-template-columns\` has no effect with \`display: inline-table\`. It requires a grid container.
+
+`;
+
+exports[`invalid(3): a { display: grid; flex-flow: column wrap; } 1`] = `
+
+  1 | a { display: grid; flex-flow: column wrap; }
+
+`;
+
+exports[`invalid(3): a { display: grid; flex-flow: column wrap; } 2`] = `
+
+Message:
+> 1 | a { display: grid; flex-flow: column wrap; }
+    |                    ^^^^^^^^^^^^^^^^^^^^^^ \`flex-flow\` has no effect with \`display: grid\`. It requires a flex container.
+
+`;
+
+exports[`invalid(30): a { display: table-cell; flex-direction: column; grid-template-columns: 1fr 1fr; } 1`] = `
+
+  1 | a { display: table-cell; flex-direction: column; grid-template-columns: 1fr 1fr; }
+
+`;
+
+exports[`invalid(30): a { display: table-cell; flex-direction: column; grid-template-columns: 1fr 1fr; } 2`] = `
+
+Message:
+> 1 | a { display: table-cell; flex-direction: column; grid-template-columns: 1fr 1fr; }
+    |                          ^^^^^^^^^^^^^^^^^^^^^^ \`flex-direction\` has no effect with \`display: table-cell\`. It requires a flex container.
+
+`;
+
+exports[`invalid(30): a { display: table-cell; flex-direction: column; grid-template-columns: 1fr 1fr; } 3`] = `
+
+Message:
+> 1 | a { display: table-cell; flex-direction: column; grid-template-columns: 1fr 1fr; }
+    |                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`grid-template-columns\` has no effect with \`display: table-cell\`. It requires a grid container.
+
+`;
+
+exports[`invalid(31): a { display: table-row; flex-direction: column; grid-template-columns: 1fr 1fr; } 1`] = `
+
+  1 | a { display: table-row; flex-direction: column; grid-template-columns: 1fr 1fr; }
+
+`;
+
+exports[`invalid(31): a { display: table-row; flex-direction: column; grid-template-columns: 1fr 1fr; } 2`] = `
+
+Message:
+> 1 | a { display: table-row; flex-direction: column; grid-template-columns: 1fr 1fr; }
+    |                         ^^^^^^^^^^^^^^^^^^^^^^ \`flex-direction\` has no effect with \`display: table-row\`. It requires a flex container.
+
+`;
+
+exports[`invalid(31): a { display: table-row; flex-direction: column; grid-template-columns: 1fr 1fr; } 3`] = `
+
+Message:
+> 1 | a { display: table-row; flex-direction: column; grid-template-columns: 1fr 1fr; }
+    |                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`grid-template-columns\` has no effect with \`display: table-row\`. It requires a grid container.
+
+`;
+
+exports[`invalid(32): a { display: ruby; flex-direction: column; grid-template-columns: 1fr 1fr; } 1`] = `
+
+  1 | a { display: ruby; flex-direction: column; grid-template-columns: 1fr 1fr; }
+
+`;
+
+exports[`invalid(32): a { display: ruby; flex-direction: column; grid-template-columns: 1fr 1fr; } 2`] = `
+
+Message:
+> 1 | a { display: ruby; flex-direction: column; grid-template-columns: 1fr 1fr; }
+    |                    ^^^^^^^^^^^^^^^^^^^^^^ \`flex-direction\` has no effect with \`display: ruby\`. It requires a flex container.
+
+`;
+
+exports[`invalid(32): a { display: ruby; flex-direction: column; grid-template-columns: 1fr 1fr; } 3`] = `
+
+Message:
+> 1 | a { display: ruby; flex-direction: column; grid-template-columns: 1fr 1fr; }
+    |                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`grid-template-columns\` has no effect with \`display: ruby\`. It requires a grid container.
+
+`;
+
+exports[`invalid(33): a { display: list-item; flex-direction: column; grid-template-columns: 1fr 1fr; } 1`] = `
+
+  1 | a { display: list-item; flex-direction: column; grid-template-columns: 1fr 1fr; }
+
+`;
+
+exports[`invalid(33): a { display: list-item; flex-direction: column; grid-template-columns: 1fr 1fr; } 2`] = `
+
+Message:
+> 1 | a { display: list-item; flex-direction: column; grid-template-columns: 1fr 1fr; }
+    |                         ^^^^^^^^^^^^^^^^^^^^^^ \`flex-direction\` has no effect with \`display: list-item\`. It requires a flex container.
+
+`;
+
+exports[`invalid(33): a { display: list-item; flex-direction: column; grid-template-columns: 1fr 1fr; } 3`] = `
+
+Message:
+> 1 | a { display: list-item; flex-direction: column; grid-template-columns: 1fr 1fr; }
+    |                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`grid-template-columns\` has no effect with \`display: list-item\`. It requires a grid container.
+
+`;
+
+exports[`invalid(34): a { display: inline flow-root; flex-direction: column; grid-template-columns: 1fr 1fr; } 1`] = `
+
+  1 | a { display: inline flow-root; flex-direction: column; grid-template-columns: 1fr 1fr; }
+
+`;
+
+exports[`invalid(34): a { display: inline flow-root; flex-direction: column; grid-template-columns: 1fr 1fr; } 2`] = `
+
+Message:
+> 1 | a { display: inline flow-root; flex-direction: column; grid-template-columns: 1fr 1fr; }
+    |                                ^^^^^^^^^^^^^^^^^^^^^^ \`flex-direction\` has no effect with \`display: inline flow-root\`. It requires a flex container.
+
+`;
+
+exports[`invalid(34): a { display: inline flow-root; flex-direction: column; grid-template-columns: 1fr 1fr; } 3`] = `
+
+Message:
+> 1 | a { display: inline flow-root; flex-direction: column; grid-template-columns: 1fr 1fr; }
+    |                                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`grid-template-columns\` has no effect with \`display: inline flow-root\`. It requires a grid container.
+
+`;
+
+exports[`invalid(35): a { display: inline flow list-item; flex-direction: column; grid-template-columns: 1fr 1fr; } 1`] = `
+
+  1 | a { display: inline flow list-item; flex-direction: column; grid-template-columns: 1fr 1fr; }
+
+`;
+
+exports[`invalid(35): a { display: inline flow list-item; flex-direction: column; grid-template-columns: 1fr 1fr; } 2`] = `
+
+Message:
+> 1 | a { display: inline flow list-item; flex-direction: column; grid-template-columns: 1fr 1fr; }
+    |                                     ^^^^^^^^^^^^^^^^^^^^^^ \`flex-direction\` has no effect with \`display: inline flow list-item\`. It requires a flex container.
+
+`;
+
+exports[`invalid(35): a { display: inline flow list-item; flex-direction: column; grid-template-columns: 1fr 1fr; } 3`] = `
+
+Message:
+> 1 | a { display: inline flow list-item; flex-direction: column; grid-template-columns: 1fr 1fr; }
+    |                                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`grid-template-columns\` has no effect with \`display: inline flow list-item\`. It requires a grid container.
+
+`;
+
+exports[`invalid(36): a { display: inline-flex; grid-auto-flow: column; } 1`] = `
+
+  1 | a { display: inline-flex; grid-auto-flow: column; }
+
+`;
+
+exports[`invalid(36): a { display: inline-flex; grid-auto-flow: column; } 2`] = `
+
+Message:
+> 1 | a { display: inline-flex; grid-auto-flow: column; }
+    |                           ^^^^^^^^^^^^^^^^^^^^^^ \`grid-auto-flow\` has no effect with \`display: inline-flex\`. It requires a grid container.
+
+`;
+
+exports[`invalid(37): a { display: inline-grid; flex-wrap: wrap; } 1`] = `
+
+  1 | a { display: inline-grid; flex-wrap: wrap; }
+
+`;
+
+exports[`invalid(37): a { display: inline-grid; flex-wrap: wrap; } 2`] = `
+
+Message:
+> 1 | a { display: inline-grid; flex-wrap: wrap; }
+    |                           ^^^^^^^^^^^^^^^ \`flex-wrap\` has no effect with \`display: inline-grid\`. It requires a flex container.
+
+`;
+
+exports[`invalid(38): a { display: inline flex; grid-template-columns: 1fr 1fr; } 1`] = `
+
+  1 | a { display: inline flex; grid-template-columns: 1fr 1fr; }
+
+`;
+
+exports[`invalid(38): a { display: inline flex; grid-template-columns: 1fr 1fr; } 2`] = `
+
+Message:
+> 1 | a { display: inline flex; grid-template-columns: 1fr 1fr; }
+    |                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`grid-template-columns\` has no effect with \`display: inline flex\`. It requires a grid container.
+
+`;
+
+exports[`invalid(39): a { display: grid block; flex-direction: column; } 1`] = `
+
+  1 | a { display: grid block; flex-direction: column; }
+
+`;
+
+exports[`invalid(39): a { display: grid block; flex-direction: column; } 2`] = `
+
+Message:
+> 1 | a { display: grid block; flex-direction: column; }
+    |                          ^^^^^^^^^^^^^^^^^^^^^^ \`flex-direction\` has no effect with \`display: grid block\`. It requires a flex container.
+
+`;
+
+exports[`invalid(4): a { display: flex; grid: auto-flow / 1fr 1fr; } 1`] = `
+
+  1 | a { display: flex; grid: auto-flow / 1fr 1fr; }
+
+`;
+
+exports[`invalid(4): a { display: flex; grid: auto-flow / 1fr 1fr; } 2`] = `
+
+Message:
+> 1 | a { display: flex; grid: auto-flow / 1fr 1fr; }
+    |                    ^^^^^^^^^^^^^^^^^^^^^^^^^ \`grid\` has no effect with \`display: flex\`. It requires a grid container.
+
+`;
+
+exports[`invalid(40): a { grid-template-columns: 1fr 1fr; display: flex; } 1`] = `
+
+  1 | a { grid-template-columns: 1fr 1fr; display: flex; }
+
+`;
+
+exports[`invalid(40): a { grid-template-columns: 1fr 1fr; display: flex; } 2`] = `
+
+Message:
+> 1 | a { grid-template-columns: 1fr 1fr; display: flex; }
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`grid-template-columns\` has no effect with \`display: flex\`. It requires a grid container.
+
+`;
+
+exports[`invalid(41): a { display: FLEX; GRID-TEMPLATE-COLUMNS: 1fr 1fr !important; } 1`] = `
+
+  1 | a { display: FLEX; GRID-TEMPLATE-COLUMNS: 1fr 1fr !important; }
+
+`;
+
+exports[`invalid(41): a { display: FLEX; GRID-TEMPLATE-COLUMNS: 1fr 1fr !important; } 2`] = `
+
+Message:
+> 1 | a { display: FLEX; GRID-TEMPLATE-COLUMNS: 1fr 1fr !important; }
+    |                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`grid-template-columns\` has no effect with \`display: flex\`. It requires a grid container.
+
+`;
+
+exports[`invalid(42): a { display: /* layout */ flex !important; grid-template-columns: /* tracks */ 1fr 1fr; } 1`] = `
+
+  1 | a { display: /* layout */ flex !important; grid-template-columns: /* tracks */ 1fr 1fr; }
+
+`;
+
+exports[`invalid(42): a { display: /* layout */ flex !important; grid-template-columns: /* tracks */ 1fr 1fr; } 2`] = `
+
+Message:
+> 1 | a { display: /* layout */ flex !important; grid-template-columns: /* tracks */ 1fr 1fr; }
+    |                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`grid-template-columns\` has no effect with \`display: flex\`. It requires a grid container.
+
+`;
+
+exports[`invalid(43): a { \\64 isplay: \\66 lex; grid-template-\\63 olumns: 1fr 1fr; } 1`] = `
+
+  1 | a { \\64 isplay: \\66 lex; grid-template-\\63 olumns: 1fr 1fr; }
+
+`;
+
+exports[`invalid(43): a { \\64 isplay: \\66 lex; grid-template-\\63 olumns: 1fr 1fr; } 2`] = `
+
+Message:
+> 1 | a { \\64 isplay: \\66 lex; grid-template-\\63 olumns: 1fr 1fr; }
+    |                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`grid-template-columns\` has no effect with \`display: flex\`. It requires a grid container.
+
+`;
+
+exports[`invalid(44): a { display: flex; flex-wrap: nowrap; align-content: center; } 1`] = `
+
+  1 | a { display: flex; flex-wrap: nowrap; align-content: center; }
+
+`;
+
+exports[`invalid(44): a { display: flex; flex-wrap: nowrap; align-content: center; } 2`] = `
+
+Message:
+> 1 | a { display: flex; flex-wrap: nowrap; align-content: center; }
+    |                                       ^^^^^^^^^^^^^^^^^^^^^ \`align-content\` has no effect on a flex container with \`nowrap\`. Consider \`align-items\` or enabling wrapping.
+
+`;
+
+exports[`invalid(45): a { display: inline-flex; flex-flow: column nowrap; align-content: center; } 1`] = `
+
+  1 | a { display: inline-flex; flex-flow: column nowrap; align-content: center; }
+
+`;
+
+exports[`invalid(45): a { display: inline-flex; flex-flow: column nowrap; align-content: center; } 2`] = `
+
+Message:
+> 1 | a { display: inline-flex; flex-flow: column nowrap; align-content: center; }
+    |                                                     ^^^^^^^^^^^^^^^^^^^^^ \`align-content\` has no effect on a flex container with \`nowrap\`. Consider \`align-items\` or enabling wrapping.
+
+`;
+
+exports[`invalid(46): a { display: inline flex; flex-flow: nowrap row-reverse; align-content: space-between; } 1`] = `
+
+  1 | a { display: inline flex; flex-flow: nowrap row-reverse; align-content: space-between; }
+
+`;
+
+exports[`invalid(46): a { display: inline flex; flex-flow: nowrap row-reverse; align-content: space-between; } 2`] = `
+
+Message:
+> 1 | a { display: inline flex; flex-flow: nowrap row-reverse; align-content: space-between; }
+    |                                                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`align-content\` has no effect on a flex container with \`nowrap\`. Consider \`align-items\` or enabling wrapping.
+
+`;
+
+exports[`invalid(47): a { display: flex; flex-flow: nowrap; align-content: center; } 1`] = `
+
+  1 | a { display: flex; flex-flow: nowrap; align-content: center; }
+
+`;
+
+exports[`invalid(47): a { display: flex; flex-flow: nowrap; align-content: center; } 2`] = `
+
+Message:
+> 1 | a { display: flex; flex-flow: nowrap; align-content: center; }
+    |                                       ^^^^^^^^^^^^^^^^^^^^^ \`align-content\` has no effect on a flex container with \`nowrap\`. Consider \`align-items\` or enabling wrapping.
+
+`;
+
+exports[`invalid(48): a { align-content: center; flex-wrap: nowrap !important; display: flex; } 1`] = `
+
+  1 | a { align-content: center; flex-wrap: nowrap !important; display: flex; }
+
+`;
+
+exports[`invalid(48): a { align-content: center; flex-wrap: nowrap !important; display: flex; } 2`] = `
+
+Message:
+> 1 | a { align-content: center; flex-wrap: nowrap !important; display: flex; }
+    |     ^^^^^^^^^^^^^^^^^^^^^ \`align-content\` has no effect on a flex container with \`nowrap\`. Consider \`align-items\` or enabling wrapping.
+
+`;
+
+exports[`invalid(49): a { DISPLAY: FLEX; FLEX-WRAP: NOWRAP; ALIGN-CONTENT: CENTER; } 1`] = `
+
+  1 | a { DISPLAY: FLEX; FLEX-WRAP: NOWRAP; ALIGN-CONTENT: CENTER; }
+
+`;
+
+exports[`invalid(49): a { DISPLAY: FLEX; FLEX-WRAP: NOWRAP; ALIGN-CONTENT: CENTER; } 2`] = `
+
+Message:
+> 1 | a { DISPLAY: FLEX; FLEX-WRAP: NOWRAP; ALIGN-CONTENT: CENTER; }
+    |                                       ^^^^^^^^^^^^^^^^^^^^^ \`align-content\` has no effect on a flex container with \`nowrap\`. Consider \`align-items\` or enabling wrapping.
+
+`;
+
+exports[`invalid(5): a { display: flex; grid-template: 100px / 1fr 1fr; } 1`] = `
+
+  1 | a { display: flex; grid-template: 100px / 1fr 1fr; }
+
+`;
+
+exports[`invalid(5): a { display: flex; grid-template: 100px / 1fr 1fr; } 2`] = `
+
+Message:
+> 1 | a { display: flex; grid-template: 100px / 1fr 1fr; }
+    |                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`grid-template\` has no effect with \`display: flex\`. It requires a grid container.
+
+`;
+
+exports[`invalid(50): a { display: flex; flex-\\77 rap: no\\77 rap; align-\\63 ontent: center; } 1`] = `
+
+  1 | a { display: flex; flex-\\77 rap: no\\77 rap; align-\\63 ontent: center; }
+
+`;
+
+exports[`invalid(50): a { display: flex; flex-\\77 rap: no\\77 rap; align-\\63 ontent: center; } 2`] = `
+
+Message:
+> 1 | a { display: flex; flex-\\77 rap: no\\77 rap; align-\\63 ontent: center; }
+    |                                             ^^^^^^^^^^^^^^^^^^^^^^^^ \`align-content\` has no effect on a flex container with \`nowrap\`. Consider \`align-items\` or enabling wrapping.
+
+`;
+
+exports[`invalid(51): a { top: 20px; position: static !important; } 1`] = `
+
+  1 | a { top: 20px; position: static !important; }
+
+`;
+
+exports[`invalid(51): a { top: 20px; position: static !important; } 2`] = `
+
+Message:
+> 1 | a { top: 20px; position: static !important; }
+    |     ^^^^^^^^^ \`top\` has no effect with \`position: static\`. Insets require a positioned element.
+
+`;
+
+exports[`invalid(52): a { POSITION: STATIC; INSET-BLOCK: 20px !important; } 1`] = `
+
+  1 | a { POSITION: STATIC; INSET-BLOCK: 20px !important; }
+
+`;
+
+exports[`invalid(52): a { POSITION: STATIC; INSET-BLOCK: 20px !important; } 2`] = `
+
+Message:
+> 1 | a { POSITION: STATIC; INSET-BLOCK: 20px !important; }
+    |                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`inset-block\` has no effect with \`position: static\`. Insets require a positioned element.
+
+`;
+
+exports[`invalid(53): a { position: \\73 tatic; inset-\\69 nline: 20px; } 1`] = `
+
+  1 | a { position: \\73 tatic; inset-\\69 nline: 20px; }
+
+`;
+
+exports[`invalid(53): a { position: \\73 tatic; inset-\\69 nline: 20px; } 2`] = `
+
+Message:
+> 1 | a { position: \\73 tatic; inset-\\69 nline: 20px; }
+    |                          ^^^^^^^^^^^^^^^^^^^^^ \`inset-inline\` has no effect with \`position: static\`. Insets require a positioned element.
+
+`;
+
+exports[`invalid(54): a { position: static; inset: /* retain */ 20px; } 1`] = `
+
+  1 | a { position: static; inset: /* retain */ 20px; }
+
+`;
+
+exports[`invalid(54): a { position: static; inset: /* retain */ 20px; } 2`] = `
+
+Message:
+> 1 | a { position: static; inset: /* retain */ 20px; }
+    |                       ^^^^^^^^^^^^^^^^^^^^^^^^ \`inset\` has no effect with \`position: static\`. Insets require a positioned element.
+
+`;
+
+exports[`invalid(55): a { overflow: visible; text-overflow: ellipsis; } 1`] = `
+
+  1 | a { overflow: visible; text-overflow: ellipsis; }
+
+`;
+
+exports[`invalid(55): a { overflow: visible; text-overflow: ellipsis; } 2`] = `
+
+Message:
+> 1 | a { overflow: visible; text-overflow: ellipsis; }
+    |                        ^^^^^^^^^^^^^^^^^^^^^^^ \`text-overflow: ellipsis\` has no effect with \`overflow: visible\`. Ellipsis requires clipped inline overflow.
+
+`;
+
+exports[`invalid(56): a { overflow: visible visible; text-overflow: ellipsis; } 1`] = `
+
+  1 | a { overflow: visible visible; text-overflow: ellipsis; }
+
+`;
+
+exports[`invalid(56): a { overflow: visible visible; text-overflow: ellipsis; } 2`] = `
+
+Message:
+> 1 | a { overflow: visible visible; text-overflow: ellipsis; }
+    |                                ^^^^^^^^^^^^^^^^^^^^^^^ \`text-overflow: ellipsis\` has no effect with \`overflow: visible\`. Ellipsis requires clipped inline overflow.
+
+`;
+
+exports[`invalid(57): a { TEXT-OVERFLOW: ELLIPSIS; OVERFLOW: VISIBLE !important; } 1`] = `
+
+  1 | a { TEXT-OVERFLOW: ELLIPSIS; OVERFLOW: VISIBLE !important; }
+
+`;
+
+exports[`invalid(57): a { TEXT-OVERFLOW: ELLIPSIS; OVERFLOW: VISIBLE !important; } 2`] = `
+
+Message:
+> 1 | a { TEXT-OVERFLOW: ELLIPSIS; OVERFLOW: VISIBLE !important; }
+    |     ^^^^^^^^^^^^^^^^^^^^^^^ \`text-overflow: ellipsis\` has no effect with \`overflow: visible\`. Ellipsis requires clipped inline overflow.
+
+`;
+
+exports[`invalid(58): a { o\\76 erflow: \\76 isible; text-overflow: \\65 llipsis; } 1`] = `
+
+  1 | a { o\\76 erflow: \\76 isible; text-overflow: \\65 llipsis; }
+
+`;
+
+exports[`invalid(58): a { o\\76 erflow: \\76 isible; text-overflow: \\65 llipsis; } 2`] = `
+
+Message:
+> 1 | a { o\\76 erflow: \\76 isible; text-overflow: \\65 llipsis; }
+    |                              ^^^^^^^^^^^^^^^^^^^^^^^^^^ \`text-overflow: ellipsis\` has no effect with \`overflow: visible\`. Ellipsis requires clipped inline overflow.
+
+`;
+
+exports[`invalid(59): a { overflow: visible; text-overflow: ellipsis; writing-mode: vertical-rl; } 1`] = `
+
+  1 | a { overflow: visible; text-overflow: ellipsis; writing-mode: vertical-rl; }
+
+`;
+
+exports[`invalid(59): a { overflow: visible; text-overflow: ellipsis; writing-mode: vertical-rl; } 2`] = `
+
+Message:
+> 1 | a { overflow: visible; text-overflow: ellipsis; writing-mode: vertical-rl; }
+    |                        ^^^^^^^^^^^^^^^^^^^^^^^ \`text-overflow: ellipsis\` has no effect with \`overflow: visible\`. Ellipsis requires clipped inline overflow.
+
+`;
+
+exports[`invalid(6): a { display: flex; grid-template-columns: 1fr 1fr; } 1`] = `
+
+  1 | a { display: flex; grid-template-columns: 1fr 1fr; }
+
+`;
+
+exports[`invalid(6): a { display: flex; grid-template-columns: 1fr 1fr; } 2`] = `
+
+Message:
+> 1 | a { display: flex; grid-template-columns: 1fr 1fr; }
+    |                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`grid-template-columns\` has no effect with \`display: flex\`. It requires a grid container.
+
+`;
+
+exports[`invalid(60): a { display: flex; & b { display: grid; flex-direction: column; } } 1`] = `
+
+  1 | a { display: flex; & b { display: grid; flex-direction: column; } }
+
+`;
+
+exports[`invalid(60): a { display: flex; & b { display: grid; flex-direction: column; } } 2`] = `
+
+Message:
+> 1 | a { display: flex; & b { display: grid; flex-direction: column; } }
+    |                                         ^^^^^^^^^^^^^^^^^^^^^^ \`flex-direction\` has no effect with \`display: grid\`. It requires a flex container.
+
+`;
+
+exports[`invalid(61): a { @media (width > 1px) { display: flex; grid-template-columns: 1fr 1fr; } } 1`] = `
+
+  1 | a { @media (width > 1px) { display: flex; grid-template-columns: 1fr 1fr; } }
+
+`;
+
+exports[`invalid(61): a { @media (width > 1px) { display: flex; grid-template-columns: 1fr 1fr; } } 2`] = `
+
+Message:
+> 1 | a { @media (width > 1px) { display: flex; grid-template-columns: 1fr 1fr; } }
+    |                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`grid-template-columns\` has no effect with \`display: flex\`. It requires a grid container.
+
+`;
+
+exports[`invalid(62): @media (width > 1px) { a { position: static; top: 20px; } } 1`] = `
+
+  1 | @media (width > 1px) { a { position: static; top: 20px; } }
+
+`;
+
+exports[`invalid(62): @media (width > 1px) { a { position: static; top: 20px; } } 2`] = `
+
+Message:
+> 1 | @media (width > 1px) { a { position: static; top: 20px; } }
+    |                                              ^^^^^^^^^ \`top\` has no effect with \`position: static\`. Insets require a positioned element.
+
+`;
+
+exports[`invalid(63): @supports (display: grid) { a { position: static; top: 20px; } } 1`] = `
+
+  1 | @supports (display: grid) { a { position: static; top: 20px; } }
+
+`;
+
+exports[`invalid(63): @supports (display: grid) { a { position: static; top: 20px; } } 2`] = `
+
+Message:
+> 1 | @supports (display: grid) { a { position: static; top: 20px; } }
+    |                                                   ^^^^^^^^^ \`top\` has no effect with \`position: static\`. Insets require a positioned element.
+
+`;
+
+exports[`invalid(64): @container (width > 1px) { a { position: static; top: 20px; } } 1`] = `
+
+  1 | @container (width > 1px) { a { position: static; top: 20px; } }
+
+`;
+
+exports[`invalid(64): @container (width > 1px) { a { position: static; top: 20px; } } 2`] = `
+
+Message:
+> 1 | @container (width > 1px) { a { position: static; top: 20px; } }
+    |                                                  ^^^^^^^^^ \`top\` has no effect with \`position: static\`. Insets require a positioned element.
+
+`;
+
+exports[`invalid(65): @layer example { a { position: static; top: 20px; } } 1`] = `
+
+  1 | @layer example { a { position: static; top: 20px; } }
+
+`;
+
+exports[`invalid(65): @layer example { a { position: static; top: 20px; } } 2`] = `
+
+Message:
+> 1 | @layer example { a { position: static; top: 20px; } }
+    |                                        ^^^^^^^^^ \`top\` has no effect with \`position: static\`. Insets require a positioned element.
+
+`;
+
+exports[`invalid(66): @scope (.example) { a { position: static; top: 20px; } } 1`] = `
+
+  1 | @scope (.example) { a { position: static; top: 20px; } }
+
+`;
+
+exports[`invalid(66): @scope (.example) { a { position: static; top: 20px; } } 2`] = `
+
+Message:
+> 1 | @scope (.example) { a { position: static; top: 20px; } }
+    |                                           ^^^^^^^^^ \`top\` has no effect with \`position: static\`. Insets require a positioned element.
+
+`;
+
+exports[`invalid(67): a { @SUPPORTS (display: grid) { position: static; top: 20px; } } 1`] = `
+
+  1 | a { @SUPPORTS (display: grid) { position: static; top: 20px; } }
+
+`;
+
+exports[`invalid(67): a { @SUPPORTS (display: grid) { position: static; top: 20px; } } 2`] = `
+
+Message:
+> 1 | a { @SUPPORTS (display: grid) { position: static; top: 20px; } }
+    |                                                   ^^^^^^^^^ \`top\` has no effect with \`position: static\`. Insets require a positioned element.
+
+`;
+
+exports[`invalid(68): a { display: var(--layout); position: static; top: 20px; } 1`] = `
+
+  1 | a { display: var(--layout); position: static; top: 20px; }
+
+`;
+
+exports[`invalid(68): a { display: var(--layout); position: static; top: 20px; } 2`] = `
+
+Message:
+> 1 | a { display: var(--layout); position: static; top: 20px; }
+    |                                               ^^^^^^^^^ \`top\` has no effect with \`position: static\`. Insets require a positioned element.
+
+`;
+
+exports[`invalid(7): a { display: flex; grid-template-rows: 100px 100px; } 1`] = `
+
+  1 | a { display: flex; grid-template-rows: 100px 100px; }
+
+`;
+
+exports[`invalid(7): a { display: flex; grid-template-rows: 100px 100px; } 2`] = `
+
+Message:
+> 1 | a { display: flex; grid-template-rows: 100px 100px; }
+    |                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`grid-template-rows\` has no effect with \`display: flex\`. It requires a grid container.
+
+`;
+
+exports[`invalid(8): a { display: flex; grid-template-areas: \"header header\"; } 1`] = `
+
+  1 | a { display: flex; grid-template-areas: "header header"; }
+
+`;
+
+exports[`invalid(8): a { display: flex; grid-template-areas: \"header header\"; } 2`] = `
+
+Message:
+> 1 | a { display: flex; grid-template-areas: "header header"; }
+    |                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`grid-template-areas\` has no effect with \`display: flex\`. It requires a grid container.
+
+`;
+
+exports[`invalid(9): a { display: flex; grid-auto-columns: 100px; } 1`] = `
+
+  1 | a { display: flex; grid-auto-columns: 100px; }
+
+`;
+
+exports[`invalid(9): a { display: flex; grid-auto-columns: 100px; } 2`] = `
+
+Message:
+> 1 | a { display: flex; grid-auto-columns: 100px; }
+    |                    ^^^^^^^^^^^^^^^^^^^^^^^^ \`grid-auto-columns\` has no effect with \`display: flex\`. It requires a grid container.
+
+`;
