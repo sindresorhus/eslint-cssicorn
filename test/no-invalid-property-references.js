@@ -1,3 +1,7 @@
+import assert from 'node:assert/strict';
+import {test as nodeTest} from 'node:test';
+import {ESLint} from 'eslint';
+import plugin from '../index.js';
 import {getTester} from './utils/test.js';
 
 const {test} = getTester(import.meta);
@@ -124,7 +128,34 @@ test.snapshot({
 			code: '@custom-group example { a { transition-property: opactiy; } }',
 			languageOptions: {customSyntax: {atrules: {'custom-group': {prelude: '<custom-ident>'}}}},
 		},
+		'a { @media print { transition: opactiy 1s; } }',
+		'a { @supports (will-change: transfrom) { will-change: transfrom; } }',
+		'a { @container style(transition-property: colr) { transition-property: colr; } }',
 	],
+});
+
+nodeTest('property catalogs are isolated between files', async () => {
+	const eslint = new ESLint({
+		overrideConfigFile: true,
+		overrideConfig: [
+			{
+				...plugin.configs.unopinionated,
+				rules: {'cssicorn/no-invalid-property-references': 'error'},
+			},
+			{
+				files: ['future.css'],
+				languageOptions: {customSyntax: {properties: {'future-property': '<length>'}}},
+			},
+		],
+	});
+	const code = 'a { transition: future-property 1s; }';
+	const [customResult] = await eslint.lintText(code, {filePath: 'future.css'});
+	assert.deepEqual(customResult.messages, []);
+
+	const [standardResult] = await eslint.lintText(code, {filePath: 'standard.css'});
+	assert.equal(standardResult.messages.length, 1);
+	assert.equal(standardResult.messages[0].ruleId, 'cssicorn/no-invalid-property-references');
+	assert.equal(standardResult.messages[0].message, 'Unknown property reference \'future-property\' in \'transition\'.');
 });
 
 test({

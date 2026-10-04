@@ -1218,6 +1218,48 @@ Message:
 
 `;
 
+exports[`invalid(66): a { @media print { transition: opactiy 1s; } } 1`] = `
+
+  1 | a { @media print { transition: opactiy 1s; } }
+
+`;
+
+exports[`invalid(66): a { @media print { transition: opactiy 1s; } } 2`] = `
+
+Message:
+> 1 | a { @media print { transition: opactiy 1s; } }
+    |                                ^^^^^^^ Unknown property reference 'opactiy' in 'transition'.
+
+`;
+
+exports[`invalid(67): a { @supports (will-change: transfrom) { will-change: transfrom; } } 1`] = `
+
+  1 | a { @supports (will-change: transfrom) { will-change: transfrom; } }
+
+`;
+
+exports[`invalid(67): a { @supports (will-change: transfrom) { will-change: transfrom; } } 2`] = `
+
+Message:
+> 1 | a { @supports (will-change: transfrom) { will-change: transfrom; } }
+    |                                                       ^^^^^^^^^ Unknown property reference 'transfrom' in 'will-change'.
+
+`;
+
+exports[`invalid(68): a { @container style(transition-property: colr) { transition-property: colr; } } 1`] = `
+
+  1 | a { @container style(transition-property: colr) { transition-property: colr; } }
+
+`;
+
+exports[`invalid(68): a { @container style(transition-property: colr) { transition-property: colr; } } 2`] = `
+
+Message:
+> 1 | a { @container style(transition-property: colr) { transition-property: colr; } }
+    |                                                                        ^^^^ Unknown property reference 'colr' in 'transition-property'.
+
+`;
+
 exports[`invalid(7): a { transition: opactiy var(--time); transition-property: var(--name), transfrom; will-change: var(--features), colr; } 1`] = `
 
   1 | a { transition: opactiy var(--time); transition-property: var(--name), transfrom; will-change: var(--features), colr; }
