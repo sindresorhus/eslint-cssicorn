@@ -15,9 +15,7 @@ test({
 		'.card {} .other {} .card .title {}',
 		'.card .title {} .card {}',
 		'.card, .other {} .card .title {}',
-		'.card {} .card .title, .card .body {}',
 		'.page .card {} .page .card .title {}',
-		'.card:hover {} .card:hover .title {}',
 		'.card::before {} .card::before.active {}',
 		'.card {} .card .title:unknown {}',
 		'.outer { .card {} & .card .title {} }',
@@ -113,6 +111,105 @@ test({
 			'.card { color: red; } .card .title { color: blue; /* keep */ }',
 			'.card {\n  color: red;\n}\n.card .title {\n    color: blue;\n}',
 			'.card {\n\tcolor: red;\n}\n.card .title {\n\t--value: a\n\t\tb;\n}',
+		].map(code => ({code, errors: 1})),
+	],
+});
+
+test({
+	valid: [
+		'.card {} .card .title, .other .body {}',
+		'.card {} .card .title, .card {}',
+		'.card {} .card .title, .card:unknown {}',
+		'.outer { .card {} .card .title, & .card .body {} }',
+		'.card:scope {} .card:scope .title {}',
+		':host {} :host .title {}',
+		'.card:not(.disabled) {} .card:not(.disabled) .title {}',
+		'.card:unknown {} .card:unknown .title {}',
+		'.card {} @media (width > 0px) { .other {} }',
+		'.card {} @media (width > 0px) { .card {} .other {} }',
+		'.card {} @media (width > 0px) { .card, .other {} }',
+		'.card {} @media (width > 0px) { @supports (display: grid) { .card {} } }',
+		'.card {} @supports (display: grid) {}',
+		'.card {} @layer theme { .card {} }',
+		'.card {} @container (width > 0px) { .card {} }',
+		'.card {} .other {} @media (width > 0px) { .card {} }',
+		'@media (width > 0px) { .card {} } .card {}',
+		'@scope (.outer) { .card {} @media (width > 0px) { .card {} } }',
+		'.card::before {} @media (width > 0px) { .card::before {} }',
+	],
+	invalid: [
+		{
+			code: '.card { color: red; } .card .title, .card .body { color: blue; }',
+			output: '.card { color: red; & .title, & .body { color: blue; } }',
+			errors: [{messageId: 'prefer-nesting/related-rules'}],
+		},
+		{
+			code: '.card {} .card .title, .card > #body, .card:hover { color: blue; }',
+			output: '.card { & .title, & > #body, &:hover { color: blue; } }',
+			errors: 1,
+		},
+		{
+			code: '.card {\n\tcolor: red;\n}\n.card .title,\n.card .body {\n\tcolor: blue;\n}',
+			output: '.card {\n\tcolor: red;\n\t& .title,\n\t& .body {\n\t\tcolor: blue;\n\t}\n}',
+			errors: 1,
+		},
+		...['hover', 'active', 'focus', 'focus-visible', 'focus-within', 'checked', 'disabled', 'enabled'].map(pseudoClass => ({
+			code: `.card:${pseudoClass} { color: red; } .card:${pseudoClass} .title { color: blue; }`,
+			output: `.card:${pseudoClass} { color: red; & .title { color: blue; } }`,
+			errors: 1,
+		})),
+		{
+			code: String.raw`.card:\48 OVER { color: red; } .card:\48 OVER .title { color: blue; }`,
+			output: String.raw`.card:\48 OVER { color: red; & .title { color: blue; } }`,
+			errors: 1,
+		},
+		{
+			code: '.card:hover:focus {} .card:hover:focus .title, .card:hover:focus .body { color: blue; }',
+			output: '.card:hover:focus { & .title, & .body { color: blue; } }',
+			errors: 1,
+		},
+		...['media (width > 0px)', 'supports (display: grid)', 'supports selector(&)', 'MEDIA (width < 0px)'].map(atRule => ({
+			code: `.card { color: red; } @${atRule} { .card { color: blue; } }`,
+			output: `.card { color: red; @${atRule} { color: blue; } }`,
+			errors: 1,
+		})),
+		{
+			code: String.raw`.card { color: red; } @m\65 dia (color) { .card { color: blue; } }`,
+			output: String.raw`.card { color: red; @m\65 dia (color) { color: blue; } }`,
+			errors: 1,
+		},
+		{
+			code: '.card:hover { color: red; } @media (width > 0px) { .card:hover { color: blue; & > a { color: green; } } }',
+			output: '.card:hover { color: red; @media (width > 0px) { color: blue; & > a { color: green; } } }',
+			errors: 1,
+		},
+		{
+			code: '.card { color: red; } @media (width > 0px) { .card { color: blue; } } .card .title { color: green; } @supports (display: grid) { .card { display: grid; } }',
+			output: '.card { color: red; @media (width > 0px) { color: blue; } & .title { color: green; } @supports (display: grid) { display: grid; } }',
+			errors: 1,
+		},
+		{
+			code: '.outer, #outer { .card { color: red; } @media (width > 0px) { .card { color: blue !important; } } }',
+			output: '.outer, #outer { .card { color: red; @media (width > 0px) { color: blue !important; } } }',
+			errors: 1,
+		},
+		{
+			code: '.card {\n\tcolor: red;\n}\n@media (width > 0px) {\n\t.card {\n\t\tcolor: blue;\n\t}\n}',
+			output: '.card {\n\tcolor: red;\n\t@media (width > 0px) {\n\t\tcolor: blue;\n\t}\n}',
+			errors: 1,
+		},
+		{
+			code: '.card {\r\n  color: red;\r\n}\r\n@supports (display: grid) {\r\n  .card {\r\n    display: grid;\r\n  }\r\n}',
+			output: '.card {\r\n  color: red;\r\n  @supports (display: grid) {\r\n    display: grid;\r\n  }\r\n}',
+			errors: 1,
+		},
+		...[
+			'.card { color: red; } @media /* keep */ (width > 0px) { .card { color: blue; } }',
+			'.card { color: red; } @media (width > 0px) { /* keep */ .card { color: blue; } }',
+			'.card { color: red; } @media (width > 0px) { .card { color: blue; /* keep */ } }',
+			'.card { color: red } @media (width > 0px) { .card { color: blue; } }',
+			'.card {\n\tcolor: red;\n}\n@media (width > 0px) {\n    .card {\n        color: blue;\n    }\n}',
+			'.card {\n\tcolor: red;\n}\n@media (width > 0px) {\n\t.card {\n\t\t--value: a\n\t\t\tb;\n\t}\n}',
 		].map(code => ({code, errors: 1})),
 	],
 });
@@ -485,6 +582,18 @@ nodeTest('nesting fixes work with the other nesting rules', () => {
 	assert.equal(relatedRules.output, '.card { color: red; & .title { color: blue; } }');
 	assert.deepEqual(relatedRules.messages, []);
 	assert.equal(linter.verifyAndFix(relatedRules.output, config, {filename: 'test.css'}).fixed, false);
+
+	for (const code of [
+		'.card { color: red; } .card .title, .card > #body { color: blue; }',
+		'.card:hover { color: red; } .card:hover .title { color: blue; }',
+		'.card { color: red; } @media (width > 0px) { .card { color: blue; } }',
+		'.card { color: red; } @supports (display: grid) { .card { color: blue; } }',
+	]) {
+		const result = linter.verifyAndFix(code, config, {filename: 'test.css'});
+		assert.equal(result.fixed, true);
+		assert.deepEqual(result.messages, []);
+		assert.equal(linter.verifyAndFix(result.output, config, {filename: 'test.css'}).fixed, false);
+	}
 
 	const equalSpecificity = linter.verifyAndFix(':is(a, button).active { color: red; }', config, {filename: 'test.css'});
 	assert.equal(equalSpecificity.output, 'a, button { &.active { color: red; } }');

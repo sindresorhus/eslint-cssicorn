@@ -9,7 +9,7 @@
 <!-- end auto-generated rule header -->
 <!-- Do not manually modify this header. Run: `npm run fix:eslint-docs` -->
 
-Prefer native CSS nesting for adjacent rules that repeat a parent selector, and for `:is()` at the start of a selector or after its final combinator. Fixes preserve matching behavior, declaration order, selector escapes, and line endings.
+Prefer native CSS nesting for adjacent rules and conditional overrides that repeat a parent selector, and for `:is()` at the start of a selector or after its final combinator. Fixes preserve matching behavior, declaration order, selector escapes, and line endings.
 
 The fix keeps the `:is()` wrapper when needed to preserve specificity or forgiving selector-list behavior.
 
@@ -22,7 +22,7 @@ Related rules are nested inside their immediately preceding parent, using explic
 .card {
 	color: red;
 }
-.card .title {
+.card .title, .card .body {
 	font-weight: bold;
 }
 .card:hover {
@@ -32,10 +32,52 @@ Related rules are nested inside their immediately preceding parent, using explic
 /* ✅ */
 .card {
 	color: red;
-	& .title {
+	& .title, & .body {
 		font-weight: bold;
 	}
 	&:hover {
+		color: blue;
+	}
+}
+```
+
+State pseudo-classes can also be part of the parent selector:
+
+```css
+/* ❌ */
+.card:hover {
+	color: red;
+}
+.card:hover .title {
+	color: blue;
+}
+
+/* ✅ */
+.card:hover {
+	color: red;
+	& .title {
+		color: blue;
+	}
+}
+```
+
+An adjacent `@media` or `@supports` block containing only the same selector is nested inside its parent:
+
+```css
+/* ❌ */
+.card {
+	color: red;
+}
+@media (width > 600px) {
+	.card {
+		color: blue;
+	}
+}
+
+/* ✅ */
+.card {
+	color: red;
+	@media (width > 600px) {
 		color: blue;
 	}
 }
@@ -167,9 +209,9 @@ A leading `:is()` can have mixed specificity: nesting preserves its maximum spec
 
 ## Limitations
 
-Checks one selector per rule. Related-rule merging requires an exact compound parent prefix made of type, class, ID, or unflagged attribute selectors. The `:is()` conversion requires at least two compound arguments.
+Merging requires one compound parent selector, repeated exactly in every child selector. Parents support type, class, ID, unflagged attributes, and `:hover`, `:active`, `:focus`, `:focus-visible`, `:focus-within`, `:checked`, `:disabled`, or `:enabled`. The `:is()` conversion requires one selector with at least two compound arguments.
 
-Skips existing `&` in selectors, escaped `:is()` names, `@scope`, and files with `@namespace`. Rules are never moved across unrelated rules or at-rules.
+Skips existing `&` in selectors, escaped `:is()` names, `@scope`, and files with `@namespace`. Rules are never moved across unrelated rules or conditional blocks.
 
 Reports without fixing when comments, missing declaration terminators, or incompatible formatting make merging unsafe.
 
