@@ -120,6 +120,10 @@ test({
 		errors: [{messageId: 'consistent-layer-order', data: {earlier: 'theme.base', later: 'theme.components'}}],
 		output: '@layer theme.base, theme.components; @layer theme, theme.base, theme.components, theme.components;',
 	}, {
+		code: String.raw`@layer base, theme; @layer theme, \62 ase, base, \000062ase;`,
+		errors: [{messageId: 'consistent-layer-order', data: {earlier: String.raw`\62 ase`, later: 'theme'}}],
+		output: String.raw`@layer base, theme; @layer \62 ase, base, \000062ase, theme;`,
+	}, {
 		code: '@layer base, theme;\r\n@media screen {\r\n    @layer theme,\r\n        \\62 ase;\r\n}',
 		errors: [{messageId: 'consistent-layer-order', data: {earlier: String.raw`\62 ase`, later: 'theme'}}],
 		output: '@layer base, theme;\r\n@media screen {\r\n    @layer \\62 ase,\r\n        theme;\r\n}',
