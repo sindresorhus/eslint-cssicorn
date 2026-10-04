@@ -341,6 +341,62 @@ a {
 }
 ```
 
+```css
+/* ❌ */
+a {
+	animation-name: none;
+	animation-duration: 2s;
+}
+
+/* ✅ */
+a {
+	animation-name: fade;
+	animation-duration: 2s;
+}
+```
+
+```css
+/* ❌ */
+a {
+	transition-property: none;
+	transition-duration: 2s;
+}
+
+/* ✅ */
+a {
+	transition-property: opacity;
+	transition-duration: 2s;
+}
+```
+
+```css
+/* ❌ */
+a {
+	scroll-timeline-name: none;
+	scroll-timeline-axis: x;
+}
+
+/* ✅ */
+a {
+	scroll-timeline-name: --scroll;
+	scroll-timeline-axis: x;
+}
+```
+
+```css
+/* ❌ */
+a {
+	view-timeline-name: none;
+	view-timeline-inset: 10%;
+}
+
+/* ✅ */
+a {
+	view-timeline-name: --view;
+	view-timeline-inset: 10%;
+}
+```
+
 ## Checked properties
 
 - Flex containers: `flex-direction`, `flex-wrap`, and `flex-flow` require a flex display mode.
@@ -358,6 +414,10 @@ a {
 - Background images: `background-position`, `background-position-x`, `background-position-y`, `background-size`, `background-repeat`, and `background-origin` have no effect with explicit `background-image: none`. `background-color`, `background-clip`, and `background-attachment` are allowed because they can still affect the background color.
 - Border images: `border-image-slice`, `border-image-width`, `border-image-outset`, and `border-image-repeat` have no effect with explicit `border-image-source: none`. Ordinary border widths, styles, and colors are allowed.
 - Mask images: `mask-position`, `mask-size`, `mask-repeat`, `mask-origin`, `mask-clip`, `mask-mode`, and `mask-composite` have no effect with explicit `mask-image: none`. Mask borders are independent and are not checked.
+- Animations: `animation-duration`, `animation-delay`, `animation-timing-function`, `animation-iteration-count`, `animation-direction`, `animation-fill-mode`, `animation-play-state`, `animation-composition`, `animation-timeline`, `animation-range`, `animation-range-start`, and `animation-range-end` have no effect with explicit `animation-name: none`. This prevents animation generation even with a scroll-driven timeline. Quoted `"none"` names and animation name lists are not checked. Zero durations are allowed with active animation names because animations can still produce events or fill effects.
+- Transitions: `transition-duration`, `transition-delay`, `transition-timing-function`, and `transition-behavior` have no effect with explicit `transition-property: none`. This disables transitions for all properties, including discrete ones.
+- Named scroll timelines: `scroll-timeline-axis` has no effect with explicit `scroll-timeline-name: none`.
+- Named view timelines: `view-timeline-axis` and `view-timeline-inset` have no effect with explicit `view-timeline-name: none`. Named timeline controls do not configure anonymous `scroll()` or `view()` functions, which use their own arguments and defaults.
 - Table layout: `table-layout` has no effect with an explicit non-table display mode. Other table controls such as `border-collapse` and `caption-side` are allowed because they can inherit into descendant tables.
 - Text overflow: `text-overflow: ellipsis`, `clip ellipsis`, `ellipsis clip`, or `ellipsis ellipsis` has no effect with an element's own explicit flex or grid display mode, or with explicit `overflow: visible` or `overflow: visible visible`. Ellipsis needs a block container and clipped inline overflow; this rule does not require `white-space: nowrap`, a width, or a height. Strings, `fade`, and `fade()` are not checked.
 - Table spacing: `border-spacing` has no effect on a table with explicit table display and `border-collapse: collapse`. Use `border-collapse: separate` for spacing between cells. Both legacy and modern display notation are supported, such as `inline-table` and `inline table`. `border-spacing` is inherited and can still affect a descendant table with separate borders; disable the rule when intentionally supplying inherited spacing. Rounded borders are not checked because browsers can still apply them to backgrounds or clipping in collapsed mode.
@@ -367,8 +427,8 @@ a {
 
 - Supported: Style declaration blocks, including nested style rules and conditional blocks, CSS escapes, ASCII casing, `!important`, and legacy and modern display notation, such as `inline-flex` and `inline flex`.
 - Skipped controls: Missing, malformed, unknown, vendor-prefixed, CSS-wide, or unresolved values. Display checks also ignore `none` and `contents`.
-- Skipped ambiguities: Multiple declarations for a controlling property, including shorthand/longhand combinations such as `flex-flow`/`flex-wrap`, `offset`/`offset-path`, or `text-decoration`/`text-decoration-line`, and multiple overflow declarations including physical and logical longhands. Image checks also skip resetting shorthands (`background`, `border-image`, `border`, or `mask`) and source overrides through `-webkit-border-image`, `-webkit-mask-image`, or `-webkit-mask`. Ambiguity skips only the check that depends on that controller.
-- Image sources: Only explicit single `none` values in `background-image`, `border-image-source`, and `mask-image` are checked. Image lists, sources implied by shorthands, and prefixed source declarations alone are skipped.
+- Skipped ambiguities: Multiple declarations for a controlling property, including shorthand/longhand combinations such as `flex-flow`/`flex-wrap`, `offset`/`offset-path`, or `text-decoration`/`text-decoration-line`, and multiple overflow declarations including physical and logical longhands. Image checks also skip resetting shorthands (`background`, `border-image`, `border`, or `mask`) and source overrides through `-webkit-border-image`, `-webkit-mask-image`, or `-webkit-mask`. Animation and transition checks skip their shorthands and `-webkit-` source aliases; named timeline checks skip their `scroll-timeline` or `view-timeline` shorthands. Ambiguity skips only the check that depends on that controller.
+- Disabled effects: Image, animation, transition, and named timeline checks require a single explicit `none` value in their controlling longhand. Controller lists, values implied by shorthands, and prefixed source declarations alone are skipped.
 - Skipped declarations: Target values containing CSS-wide keywords or unresolved substitutions, custom properties, item properties, gaps, and other alignment properties that need additional context.
 - Skipped blocks: Blocks containing `all`, plus keyframe, descriptor, and CSS Modules `:export`/`:import()` blocks.
 - Local context: Only direct declarations in the same block are compared. Overflow checks use only the `overflow` shorthand, without inferring writing mode or cross-axis computed values. Another selector, condition, or state can override the local context; disable the rule on declarations intentionally retained for those contexts.
@@ -387,9 +447,9 @@ Browser adjustments, such as top-layer positioning for dialogs and popovers, are
 
 Invalid CSS is handled on a best-effort basis rather than validated by this rule. Use [`css/no-invalid-properties`](https://github.com/eslint/css/blob/main/docs/rules/no-invalid-properties.md) to check property names and value grammar. CSS Modules interop blocks contain literal values rather than styles.
 
-Ignored animation controls and final-keyframe easing are covered separately by [`no-ineffective-keyframe-declarations`](./no-ineffective-keyframe-declarations.md).
+Animation controls inside keyframes and final-keyframe easing are covered separately by [`no-ineffective-keyframe-declarations`](./no-ineffective-keyframe-declarations.md).
 
-Scroll-container controls and `resize` are not checked because root-element propagation and replaced-element exceptions require context beyond these declarations. The rule also does not analyze layer order, excess list values, or missing sticky-position insets. Padding and margins on internal table boxes are not checked because a flex or grid parent can blockify those boxes and make the properties effective.
+Scroll snap controls and `resize` are not checked because root-element propagation and replaced-element exceptions require context beyond these declarations. The rule also does not analyze layer order, excess list values, or missing sticky-position insets. Padding and margins on internal table boxes are not checked because a flex or grid parent can blockify those boxes and make the properties effective.
 
 ## Resources
 
@@ -416,3 +476,8 @@ Scroll-container controls and `resize` are not checked because root-element prop
 - [Mask images](https://drafts.csswg.org/css-masking/#the-mask-image)
 - [Prefixed masking aliases](https://compat.spec.whatwg.org/#css-simple-aliases)
 - [Top-layer positioning](https://drafts.csswg.org/css-position-4/#top-styling)
+- [Animation names and controls](https://www.w3.org/TR/css-animations-1/#animation-name)
+- [Animation composition](https://drafts.csswg.org/css-animations-2/#animation-composition)
+- [Transition properties and controls](https://www.w3.org/TR/css-transitions-1/#transition-property-property)
+- [Discrete transition behavior](https://drafts.csswg.org/css-transitions-2/#transition-behavior-property)
+- [Scroll-driven animations and named timelines](https://drafts.csswg.org/scroll-animations-1/)

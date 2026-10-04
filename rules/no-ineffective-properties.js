@@ -32,6 +32,10 @@ const MESSAGE_ID_DECORATION = 'no-ineffective-properties/decoration';
 const MESSAGE_ID_BACKGROUND_IMAGE = 'no-ineffective-properties/background-image';
 const MESSAGE_ID_BORDER_IMAGE = 'no-ineffective-properties/border-image';
 const MESSAGE_ID_MASK_IMAGE = 'no-ineffective-properties/mask-image';
+const MESSAGE_ID_ANIMATION = 'no-ineffective-properties/animation';
+const MESSAGE_ID_TRANSITION = 'no-ineffective-properties/transition';
+const MESSAGE_ID_SCROLL_TIMELINE = 'no-ineffective-properties/scroll-timeline';
+const MESSAGE_ID_VIEW_TIMELINE = 'no-ineffective-properties/view-timeline';
 const messages = {
 	[MESSAGE_ID_DISPLAY]: '`{{property}}` has no effect with `display: {{display}}`. It requires a {{layout}} container.',
 	[MESSAGE_ID_NOWRAP]: '`align-content` has no effect on a flex container with `nowrap`. Consider `align-items` or enabling wrapping.',
@@ -51,6 +55,10 @@ const messages = {
 	[MESSAGE_ID_BACKGROUND_IMAGE]: '`{{property}}` has no effect with `background-image: none`. Set a background image to use this property.',
 	[MESSAGE_ID_BORDER_IMAGE]: '`{{property}}` has no effect with `border-image-source: none`. Set a border image to use this property.',
 	[MESSAGE_ID_MASK_IMAGE]: '`{{property}}` has no effect with `mask-image: none`. Set a mask image to use this property.',
+	[MESSAGE_ID_ANIMATION]: '`{{property}}` has no effect with `animation-name: none`. Set an animation name to use this property.',
+	[MESSAGE_ID_TRANSITION]: '`{{property}}` has no effect with `transition-property: none`. Select at least one property to transition.',
+	[MESSAGE_ID_SCROLL_TIMELINE]: '`{{property}}` has no effect with `scroll-timeline-name: none`. Name a scroll timeline to use this property.',
+	[MESSAGE_ID_VIEW_TIMELINE]: '`{{property}}` has no effect with `view-timeline-name: none`. Name a view timeline to use this property.',
 };
 
 const flexProperties = new Set(['flex-direction', 'flex-wrap', 'flex-flow']);
@@ -91,6 +99,31 @@ const inactivePropertyGroups = [
 		controllingProperties: ['mask-image', 'mask', '-webkit-mask-image', '-webkit-mask'],
 		messageId: MESSAGE_ID_MASK_IMAGE,
 	},
+	{
+		properties: [
+			'animation-duration',
+			'animation-delay',
+			'animation-timing-function',
+			'animation-iteration-count',
+			'animation-direction',
+			'animation-fill-mode',
+			'animation-play-state',
+			'animation-composition',
+			'animation-timeline',
+			'animation-range',
+			'animation-range-start',
+			'animation-range-end',
+		],
+		controllingProperties: ['animation-name', 'animation', '-webkit-animation-name', '-webkit-animation'],
+		messageId: MESSAGE_ID_ANIMATION,
+	},
+	{
+		properties: ['transition-duration', 'transition-delay', 'transition-timing-function', 'transition-behavior'],
+		controllingProperties: ['transition-property', 'transition', '-webkit-transition-property', '-webkit-transition'],
+		messageId: MESSAGE_ID_TRANSITION,
+	},
+	{properties: ['scroll-timeline-axis'], controllingProperties: ['scroll-timeline-name', 'scroll-timeline'], messageId: MESSAGE_ID_SCROLL_TIMELINE},
+	{properties: ['view-timeline-axis', 'view-timeline-inset'], controllingProperties: ['view-timeline-name', 'view-timeline'], messageId: MESSAGE_ID_VIEW_TIMELINE},
 ];
 const floatValues = new Set(['left', 'right', 'inline-start', 'inline-end']);
 const clearValues = new Set([...floatValues, 'both']);

@@ -1,3 +1,17 @@
+exports[`invalid(1): a { animation-name: none; animation-duration: 2s; } 1`] = `
+
+  1 | a { animation-name: none; animation-duration: 2s; }
+
+`;
+
+exports[`invalid(1): a { animation-name: none; animation-duration: 2s; } 2`] = `
+
+Message:
+> 1 | a { animation-name: none; animation-duration: 2s; }
+    |                           ^^^^^^^^^^^^^^^^^^^^^^ \`animation-duration\` has no effect with \`animation-name: none\`. Set an animation name to use this property.
+
+`;
+
 exports[`invalid(1): a { background-image: none; background-position: center; } 1`] = `
 
   1 | a { background-image: none; background-position: center; }
@@ -23,6 +37,20 @@ exports[`invalid(1): a { display: grid; flex-direction: column; } 2`] = `
 Message:
 > 1 | a { display: grid; flex-direction: column; }
     |                    ^^^^^^^^^^^^^^^^^^^^^^ \`flex-direction\` has no effect with \`display: grid\`. It requires a flex container.
+
+`;
+
+exports[`invalid(10): a { animation-name: none; animation-range: entry 10% exit 90%; } 1`] = `
+
+  1 | a { animation-name: none; animation-range: entry 10% exit 90%; }
+
+`;
+
+exports[`invalid(10): a { animation-name: none; animation-range: entry 10% exit 90%; } 2`] = `
+
+Message:
+> 1 | a { animation-name: none; animation-range: entry 10% exit 90%; }
+    |                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`animation-range\` has no effect with \`animation-name: none\`. Set an animation name to use this property.
 
 `;
 
@@ -194,6 +222,20 @@ Message:
 
 `;
 
+exports[`invalid(11): a { animation-name: none; animation-range-start: entry 10%; } 1`] = `
+
+  1 | a { animation-name: none; animation-range-start: entry 10%; }
+
+`;
+
+exports[`invalid(11): a { animation-name: none; animation-range-start: entry 10%; } 2`] = `
+
+Message:
+> 1 | a { animation-name: none; animation-range-start: entry 10%; }
+    |                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`animation-range-start\` has no effect with \`animation-name: none\`. Set an animation name to use this property.
+
+`;
+
 exports[`invalid(11): a { display: flex; grid-auto-flow: column dense; } 1`] = `
 
   1 | a { display: flex; grid-auto-flow: column dense; }
@@ -359,6 +401,20 @@ exports[`invalid(119): a { border-spacing: 8px 12px !important; border-collapse:
 Message:
 > 1 | a { border-spacing: 8px 12px !important; border-collapse: collapse; display: table; }
     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`border-spacing\` has no effect on this table with \`border-collapse: collapse\`. Use \`border-collapse: separate\` for spacing between cells.
+
+`;
+
+exports[`invalid(12): a { animation-name: none; animation-range-end: exit 90%; } 1`] = `
+
+  1 | a { animation-name: none; animation-range-end: exit 90%; }
+
+`;
+
+exports[`invalid(12): a { animation-name: none; animation-range-end: exit 90%; } 2`] = `
+
+Message:
+> 1 | a { animation-name: none; animation-range-end: exit 90%; }
+    |                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`animation-range-end\` has no effect with \`animation-name: none\`. Set an animation name to use this property.
 
 `;
 
@@ -558,6 +614,20 @@ Message:
 
 `;
 
+exports[`invalid(13): a { transition-property: none; transition-duration: 2s; } 1`] = `
+
+  1 | a { transition-property: none; transition-duration: 2s; }
+
+`;
+
+exports[`invalid(13): a { transition-property: none; transition-duration: 2s; } 2`] = `
+
+Message:
+> 1 | a { transition-property: none; transition-duration: 2s; }
+    |                                ^^^^^^^^^^^^^^^^^^^^^^^ \`transition-duration\` has no effect with \`transition-property: none\`. Select at least one property to transition.
+
+`;
+
 exports[`invalid(130): a { display: table; border-collapse: collapse; padding-inline: 8px; } 1`] = `
 
   1 | a { display: table; border-collapse: collapse; padding-inline: 8px; }
@@ -723,6 +793,20 @@ exports[`invalid(14): a { position: static; bottom: 20px; } 2`] = `
 Message:
 > 1 | a { position: static; bottom: 20px; }
     |                       ^^^^^^^^^^^^ \`bottom\` has no effect with \`position: static\`. Insets require a positioned element.
+
+`;
+
+exports[`invalid(14): a { transition-property: none; transition-delay: -1s; } 1`] = `
+
+  1 | a { transition-property: none; transition-delay: -1s; }
+
+`;
+
+exports[`invalid(14): a { transition-property: none; transition-delay: -1s; } 2`] = `
+
+Message:
+> 1 | a { transition-property: none; transition-delay: -1s; }
+    |                                ^^^^^^^^^^^^^^^^^^^^^ \`transition-delay\` has no effect with \`transition-property: none\`. Select at least one property to transition.
 
 `;
 
@@ -894,6 +978,20 @@ Message:
 
 `;
 
+exports[`invalid(15): a { transition-property: none; transition-timing-function: cubic-bezier(0.1, 0.2, 0.3, 0.4); } 1`] = `
+
+  1 | a { transition-property: none; transition-timing-function: cubic-bezier(0.1, 0.2, 0.3, 0.4); }
+
+`;
+
+exports[`invalid(15): a { transition-property: none; transition-timing-function: cubic-bezier(0.1, 0.2, 0.3, 0.4); } 2`] = `
+
+Message:
+> 1 | a { transition-property: none; transition-timing-function: cubic-bezier(0.1, 0.2, 0.3, 0.4); }
+    |                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`transition-timing-function\` has no effect with \`transition-property: none\`. Select at least one property to transition.
+
+`;
+
 exports[`invalid(150): a { perspective: none; perspective-origin: left; } 1`] = `
 
   1 | a { perspective: none; perspective-origin: left; }
@@ -1059,6 +1157,20 @@ exports[`invalid(16): a { position: static; inset: 20px; } 2`] = `
 Message:
 > 1 | a { position: static; inset: 20px; }
     |                       ^^^^^^^^^^^ \`inset\` has no effect with \`position: static\`. Insets require a positioned element.
+
+`;
+
+exports[`invalid(16): a { transition-property: none; transition-behavior: allow-discrete; } 1`] = `
+
+  1 | a { transition-property: none; transition-behavior: allow-discrete; }
+
+`;
+
+exports[`invalid(16): a { transition-property: none; transition-behavior: allow-discrete; } 2`] = `
+
+Message:
+> 1 | a { transition-property: none; transition-behavior: allow-discrete; }
+    |                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`transition-behavior\` has no effect with \`transition-property: none\`. Select at least one property to transition.
 
 `;
 
@@ -1230,6 +1342,20 @@ Message:
 
 `;
 
+exports[`invalid(17): a { scroll-timeline-name: none; scroll-timeline-axis: x; } 1`] = `
+
+  1 | a { scroll-timeline-name: none; scroll-timeline-axis: x; }
+
+`;
+
+exports[`invalid(17): a { scroll-timeline-name: none; scroll-timeline-axis: x; } 2`] = `
+
+Message:
+> 1 | a { scroll-timeline-name: none; scroll-timeline-axis: x; }
+    |                                 ^^^^^^^^^^^^^^^^^^^^^^^ \`scroll-timeline-axis\` has no effect with \`scroll-timeline-name: none\`. Name a scroll timeline to use this property.
+
+`;
+
 exports[`invalid(170): a { @media (width > 1px) { display: grid; table-layout: /* algorithm */ fixed; } } 1`] = `
 
   1 | a { @media (width > 1px) { display: grid; table-layout: /* algorithm */ fixed; } }
@@ -1395,6 +1521,20 @@ exports[`invalid(18): a { position: static; inset-inline: 20px; } 2`] = `
 Message:
 > 1 | a { position: static; inset-inline: 20px; }
     |                       ^^^^^^^^^^^^^^^^^^ \`inset-inline\` has no effect with \`position: static\`. Insets require a positioned element.
+
+`;
+
+exports[`invalid(18): a { view-timeline-name: none; view-timeline-axis: inline; } 1`] = `
+
+  1 | a { view-timeline-name: none; view-timeline-axis: inline; }
+
+`;
+
+exports[`invalid(18): a { view-timeline-name: none; view-timeline-axis: inline; } 2`] = `
+
+Message:
+> 1 | a { view-timeline-name: none; view-timeline-axis: inline; }
+    |                               ^^^^^^^^^^^^^^^^^^^^^^^^^^ \`view-timeline-axis\` has no effect with \`view-timeline-name: none\`. Name a view timeline to use this property.
 
 `;
 
@@ -1566,6 +1706,20 @@ Message:
 
 `;
 
+exports[`invalid(19): a { view-timeline-name: none; view-timeline-inset: 10% 20%; } 1`] = `
+
+  1 | a { view-timeline-name: none; view-timeline-inset: 10% 20%; }
+
+`;
+
+exports[`invalid(19): a { view-timeline-name: none; view-timeline-inset: 10% 20%; } 2`] = `
+
+Message:
+> 1 | a { view-timeline-name: none; view-timeline-inset: 10% 20%; }
+    |                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`view-timeline-inset\` has no effect with \`view-timeline-name: none\`. Name a view timeline to use this property.
+
+`;
+
 exports[`invalid(190): a { @media (width > 1px) { text-decoration-line: none; text-decoration-style: /* line */ wavy; } } 1`] = `
 
   1 | a { @media (width > 1px) { text-decoration-line: none; text-decoration-style: /* line */ wavy; } }
@@ -1591,6 +1745,20 @@ exports[`invalid(191): a { text-decoration-line: underline; } a > span { text-de
 Message:
 > 1 | a { text-decoration-line: underline; } a > span { text-decoration-line: none; text-decoration-color: red; }
     |                                                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^ \`text-decoration-color\` has no effect with \`text-decoration-line: none\`. Enable a text decoration line on this element.
+
+`;
+
+exports[`invalid(2): a { animation-name: none; animation-delay: -1s; } 1`] = `
+
+  1 | a { animation-name: none; animation-delay: -1s; }
+
+`;
+
+exports[`invalid(2): a { animation-name: none; animation-delay: -1s; } 2`] = `
+
+Message:
+> 1 | a { animation-name: none; animation-delay: -1s; }
+    |                           ^^^^^^^^^^^^^^^^^^^^ \`animation-delay\` has no effect with \`animation-name: none\`. Set an animation name to use this property.
 
 `;
 
@@ -1622,6 +1790,20 @@ Message:
 
 `;
 
+exports[`invalid(20): a { ANIMATION-DURATION: 2s !important; ANIMATION-NAME: NONE; } 1`] = `
+
+  1 | a { ANIMATION-DURATION: 2s !important; ANIMATION-NAME: NONE; }
+
+`;
+
+exports[`invalid(20): a { ANIMATION-DURATION: 2s !important; ANIMATION-NAME: NONE; } 2`] = `
+
+Message:
+> 1 | a { ANIMATION-DURATION: 2s !important; ANIMATION-NAME: NONE; }
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`animation-duration\` has no effect with \`animation-name: none\`. Set an animation name to use this property.
+
+`;
+
 exports[`invalid(20): a { MASK-COMPOSITE: INTERSECT !important; MASK-IMAGE: NONE; } 1`] = `
 
   1 | a { MASK-COMPOSITE: INTERSECT !important; MASK-IMAGE: NONE; }
@@ -1647,6 +1829,20 @@ exports[`invalid(20): a { position: static; inset-block-end: 20px; } 2`] = `
 Message:
 > 1 | a { position: static; inset-block-end: 20px; }
     |                       ^^^^^^^^^^^^^^^^^^^^^ \`inset-block-end\` has no effect with \`position: static\`. Insets require a positioned element.
+
+`;
+
+exports[`invalid(21): a { TRANSITION-BEHAVIOR: ALLOW-DISCRETE !important; TRANSITION-PROPERTY: NONE; } 1`] = `
+
+  1 | a { TRANSITION-BEHAVIOR: ALLOW-DISCRETE !important; TRANSITION-PROPERTY: NONE; }
+
+`;
+
+exports[`invalid(21): a { TRANSITION-BEHAVIOR: ALLOW-DISCRETE !important; TRANSITION-PROPERTY: NONE; } 2`] = `
+
+Message:
+> 1 | a { TRANSITION-BEHAVIOR: ALLOW-DISCRETE !important; TRANSITION-PROPERTY: NONE; }
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`transition-behavior\` has no effect with \`transition-property: none\`. Select at least one property to transition.
 
 `;
 
@@ -1678,6 +1874,20 @@ Message:
 
 `;
 
+exports[`invalid(22): a { SCROLL-TIMELINE-AXIS: X !important; SCROLL-TIMELINE-NAME: NONE; } 1`] = `
+
+  1 | a { SCROLL-TIMELINE-AXIS: X !important; SCROLL-TIMELINE-NAME: NONE; }
+
+`;
+
+exports[`invalid(22): a { SCROLL-TIMELINE-AXIS: X !important; SCROLL-TIMELINE-NAME: NONE; } 2`] = `
+
+Message:
+> 1 | a { SCROLL-TIMELINE-AXIS: X !important; SCROLL-TIMELINE-NAME: NONE; }
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`scroll-timeline-axis\` has no effect with \`scroll-timeline-name: none\`. Name a scroll timeline to use this property.
+
+`;
+
 exports[`invalid(22): a { border-image-sour\\63 e: n\\6f ne; border-image-sli\\63 e: 30 fill; } 1`] = `
 
   1 | a { border-image-sour\\63 e: n\\6f ne; border-image-sli\\63 e: 30 fill; }
@@ -1703,6 +1913,20 @@ exports[`invalid(22): a { position: static; inset-inline-end: 20px; } 2`] = `
 Message:
 > 1 | a { position: static; inset-inline-end: 20px; }
     |                       ^^^^^^^^^^^^^^^^^^^^^^ \`inset-inline-end\` has no effect with \`position: static\`. Insets require a positioned element.
+
+`;
+
+exports[`invalid(23): a { VIEW-TIMELINE-INSET: 10% !important; VIEW-TIMELINE-NAME: NONE; } 1`] = `
+
+  1 | a { VIEW-TIMELINE-INSET: 10% !important; VIEW-TIMELINE-NAME: NONE; }
+
+`;
+
+exports[`invalid(23): a { VIEW-TIMELINE-INSET: 10% !important; VIEW-TIMELINE-NAME: NONE; } 2`] = `
+
+Message:
+> 1 | a { VIEW-TIMELINE-INSET: 10% !important; VIEW-TIMELINE-NAME: NONE; }
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`view-timeline-inset\` has no effect with \`view-timeline-name: none\`. Name a view timeline to use this property.
 
 `;
 
@@ -1739,6 +1963,20 @@ exports[`invalid(23): a { mask-\\69 mage: n\\6f ne; mask-ori\\67 in: content-box
 Message:
 > 1 | a { mask-\\69 mage: n\\6f ne; mask-ori\\67 in: content-box; }
     |                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`mask-origin\` has no effect with \`mask-image: none\`. Set a mask image to use this property.
+
+`;
+
+exports[`invalid(24): a { animation-n\\61 me: n\\6f ne; animation-dur\\61 tion: 2s; } 1`] = `
+
+  1 | a { animation-n\\61 me: n\\6f ne; animation-dur\\61 tion: 2s; }
+
+`;
+
+exports[`invalid(24): a { animation-n\\61 me: n\\6f ne; animation-dur\\61 tion: 2s; } 2`] = `
+
+Message:
+> 1 | a { animation-n\\61 me: n\\6f ne; animation-dur\\61 tion: 2s; }
+    |                                 ^^^^^^^^^^^^^^^^^^^^^^^^^ \`animation-duration\` has no effect with \`animation-name: none\`. Set an animation name to use this property.
 
 `;
 
@@ -1814,6 +2052,20 @@ Message:
 
 `;
 
+exports[`invalid(25): a { transition-prop\\65 rty: n\\6f ne; transition-del\\61 y: 1s; } 1`] = `
+
+  1 | a { transition-prop\\65 rty: n\\6f ne; transition-del\\61 y: 1s; }
+
+`;
+
+exports[`invalid(25): a { transition-prop\\65 rty: n\\6f ne; transition-del\\61 y: 1s; } 2`] = `
+
+Message:
+> 1 | a { transition-prop\\65 rty: n\\6f ne; transition-del\\61 y: 1s; }
+    |                                      ^^^^^^^^^^^^^^^^^^^^^^^ \`transition-delay\` has no effect with \`transition-property: none\`. Select at least one property to transition.
+
+`;
+
 exports[`invalid(26): a { display: flow; flex-direction: column; grid-template-columns: 1fr 1fr; } 1`] = `
 
   1 | a { display: flow; flex-direction: column; grid-template-columns: 1fr 1fr; }
@@ -1847,6 +2099,20 @@ exports[`invalid(26): a { mask-image: /* image */ none; mask-position: /* placem
 Message:
 > 1 | a { mask-image: /* image */ none; mask-position: /* placement */ calc(50% + 1px) center; }
     |                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`mask-position\` has no effect with \`mask-image: none\`. Set a mask image to use this property.
+
+`;
+
+exports[`invalid(26): a { scroll-timeline-n\\61 me: n\\6f ne; scroll-timeline-\\61 xis: x; } 1`] = `
+
+  1 | a { scroll-timeline-n\\61 me: n\\6f ne; scroll-timeline-\\61 xis: x; }
+
+`;
+
+exports[`invalid(26): a { scroll-timeline-n\\61 me: n\\6f ne; scroll-timeline-\\61 xis: x; } 2`] = `
+
+Message:
+> 1 | a { scroll-timeline-n\\61 me: n\\6f ne; scroll-timeline-\\61 xis: x; }
+    |                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^ \`scroll-timeline-axis\` has no effect with \`scroll-timeline-name: none\`. Name a scroll timeline to use this property.
 
 `;
 
@@ -1886,6 +2152,20 @@ Message:
 
 `;
 
+exports[`invalid(27): a { view-timeline-na\\6d e: n\\6f ne; view-timeline-ins\\65 t: 10%; } 1`] = `
+
+  1 | a { view-timeline-na\\6d e: n\\6f ne; view-timeline-ins\\65 t: 10%; }
+
+`;
+
+exports[`invalid(27): a { view-timeline-na\\6d e: n\\6f ne; view-timeline-ins\\65 t: 10%; } 2`] = `
+
+Message:
+> 1 | a { view-timeline-na\\6d e: n\\6f ne; view-timeline-ins\\65 t: 10%; }
+    |                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`view-timeline-inset\` has no effect with \`view-timeline-name: none\`. Name a view timeline to use this property.
+
+`;
+
 exports[`invalid(28): a { & b { border-image-source: none; border-image-repeat: round; } } 1`] = `
 
   1 | a { & b { border-image-source: none; border-image-repeat: round; } }
@@ -1897,6 +2177,20 @@ exports[`invalid(28): a { & b { border-image-source: none; border-image-repeat: 
 Message:
 > 1 | a { & b { border-image-source: none; border-image-repeat: round; } }
     |                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^ \`border-image-repeat\` has no effect with \`border-image-source: none\`. Set a border image to use this property.
+
+`;
+
+exports[`invalid(28): a { animation-name: /* disabled */ none; animation-timing-function: /* easing */ steps(4); } 1`] = `
+
+  1 | a { animation-name: /* disabled */ none; animation-timing-function: /* easing */ steps(4); }
+
+`;
+
+exports[`invalid(28): a { animation-name: /* disabled */ none; animation-timing-function: /* easing */ steps(4); } 2`] = `
+
+Message:
+> 1 | a { animation-name: /* disabled */ none; animation-timing-function: /* easing */ steps(4); }
+    |                                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`animation-timing-function\` has no effect with \`animation-name: none\`. Set an animation name to use this property.
 
 `;
 
@@ -1955,6 +2249,34 @@ exports[`invalid(29): a { display: inline-table; flex-direction: column; grid-te
 Message:
 > 1 | a { display: inline-table; flex-direction: column; grid-template-columns: 1fr 1fr; }
     |                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`grid-template-columns\` has no effect with \`display: inline-table\`. It requires a grid container.
+
+`;
+
+exports[`invalid(29): a { transition-property: /* disabled */ none; transition-duration: /* timing */ calc(1s + 1s); } 1`] = `
+
+  1 | a { transition-property: /* disabled */ none; transition-duration: /* timing */ calc(1s + 1s); }
+
+`;
+
+exports[`invalid(29): a { transition-property: /* disabled */ none; transition-duration: /* timing */ calc(1s + 1s); } 2`] = `
+
+Message:
+> 1 | a { transition-property: /* disabled */ none; transition-duration: /* timing */ calc(1s + 1s); }
+    |                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`transition-duration\` has no effect with \`transition-property: none\`. Select at least one property to transition.
+
+`;
+
+exports[`invalid(3): a { animation-name: none; animation-timing-function: steps(4, end); } 1`] = `
+
+  1 | a { animation-name: none; animation-timing-function: steps(4, end); }
+
+`;
+
+exports[`invalid(3): a { animation-name: none; animation-timing-function: steps(4, end); } 2`] = `
+
+Message:
+> 1 | a { animation-name: none; animation-timing-function: steps(4, end); }
+    |                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`animation-timing-function\` has no effect with \`animation-name: none\`. Set an animation name to use this property.
 
 `;
 
@@ -2022,6 +2344,20 @@ Message:
 
 `;
 
+exports[`invalid(30): a { scroll-timeline-name: /* disabled */ none; scroll-timeline-axis: /* direction */ x; } 1`] = `
+
+  1 | a { scroll-timeline-name: /* disabled */ none; scroll-timeline-axis: /* direction */ x; }
+
+`;
+
+exports[`invalid(30): a { scroll-timeline-name: /* disabled */ none; scroll-timeline-axis: /* direction */ x; } 2`] = `
+
+Message:
+> 1 | a { scroll-timeline-name: /* disabled */ none; scroll-timeline-axis: /* direction */ x; }
+    |                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`scroll-timeline-axis\` has no effect with \`scroll-timeline-name: none\`. Name a scroll timeline to use this property.
+
+`;
+
 exports[`invalid(31): a { display: table-row; flex-direction: column; grid-template-columns: 1fr 1fr; } 1`] = `
 
   1 | a { display: table-row; flex-direction: column; grid-template-columns: 1fr 1fr; }
@@ -2055,6 +2391,34 @@ exports[`invalid(31): a { mask-image: none; -webkit-mask-box-image-source: url(\
 Message:
 > 1 | a { mask-image: none; -webkit-mask-box-image-source: url("image.svg"); mask-composite: intersect; }
     |                                                                        ^^^^^^^^^^^^^^^^^^^^^^^^^ \`mask-composite\` has no effect with \`mask-image: none\`. Set a mask image to use this property.
+
+`;
+
+exports[`invalid(31): a { view-timeline-name: /* disabled */ none; view-timeline-inset: /* range */ calc(10% + 1px); } 1`] = `
+
+  1 | a { view-timeline-name: /* disabled */ none; view-timeline-inset: /* range */ calc(10% + 1px); }
+
+`;
+
+exports[`invalid(31): a { view-timeline-name: /* disabled */ none; view-timeline-inset: /* range */ calc(10% + 1px); } 2`] = `
+
+Message:
+> 1 | a { view-timeline-name: /* disabled */ none; view-timeline-inset: /* range */ calc(10% + 1px); }
+    |                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`view-timeline-inset\` has no effect with \`view-timeline-name: none\`. Name a view timeline to use this property.
+
+`;
+
+exports[`invalid(32): a { & b { animation-name: none; animation-fill-mode: forwards; } } 1`] = `
+
+  1 | a { & b { animation-name: none; animation-fill-mode: forwards; } }
+
+`;
+
+exports[`invalid(32): a { & b { animation-name: none; animation-fill-mode: forwards; } } 2`] = `
+
+Message:
+> 1 | a { & b { animation-name: none; animation-fill-mode: forwards; } }
+    |                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`animation-fill-mode\` has no effect with \`animation-name: none\`. Set an animation name to use this property.
 
 `;
 
@@ -2094,6 +2458,20 @@ Message:
 
 `;
 
+exports[`invalid(33): a { @media (width > 1px) { transition-property: none; transition-behavior: allow-discrete; } } 1`] = `
+
+  1 | a { @media (width > 1px) { transition-property: none; transition-behavior: allow-discrete; } }
+
+`;
+
+exports[`invalid(33): a { @media (width > 1px) { transition-property: none; transition-behavior: allow-discrete; } } 2`] = `
+
+Message:
+> 1 | a { @media (width > 1px) { transition-property: none; transition-behavior: allow-discrete; } }
+    |                                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`transition-behavior\` has no effect with \`transition-property: none\`. Select at least one property to transition.
+
+`;
+
 exports[`invalid(33): a { background-image: none; background-size: cover, contain; } 1`] = `
 
   1 | a { background-image: none; background-size: cover, contain; }
@@ -2127,6 +2505,20 @@ exports[`invalid(33): a { display: list-item; flex-direction: column; grid-templ
 Message:
 > 1 | a { display: list-item; flex-direction: column; grid-template-columns: 1fr 1fr; }
     |                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`grid-template-columns\` has no effect with \`display: list-item\`. It requires a grid container.
+
+`;
+
+exports[`invalid(34): a { @supports (scroll-timeline-name: none) { scroll-timeline-name: none; scroll-timeline-axis: x; } } 1`] = `
+
+  1 | a { @supports (scroll-timeline-name: none) { scroll-timeline-name: none; scroll-timeline-axis: x; } }
+
+`;
+
+exports[`invalid(34): a { @supports (scroll-timeline-name: none) { scroll-timeline-name: none; scroll-timeline-axis: x; } } 2`] = `
+
+Message:
+> 1 | a { @supports (scroll-timeline-name: none) { scroll-timeline-name: none; scroll-timeline-axis: x; } }
+    |                                                                          ^^^^^^^^^^^^^^^^^^^^^^^ \`scroll-timeline-axis\` has no effect with \`scroll-timeline-name: none\`. Name a scroll timeline to use this property.
 
 `;
 
@@ -2166,6 +2558,20 @@ Message:
 
 `;
 
+exports[`invalid(35): a { @container (width > 1px) { view-timeline-name: none; view-timeline-inset: 10%; } } 1`] = `
+
+  1 | a { @container (width > 1px) { view-timeline-name: none; view-timeline-inset: 10%; } }
+
+`;
+
+exports[`invalid(35): a { @container (width > 1px) { view-timeline-name: none; view-timeline-inset: 10%; } } 2`] = `
+
+Message:
+> 1 | a { @container (width > 1px) { view-timeline-name: none; view-timeline-inset: 10%; } }
+    |                                                          ^^^^^^^^^^^^^^^^^^^^^^^^ \`view-timeline-inset\` has no effect with \`view-timeline-name: none\`. Name a view timeline to use this property.
+
+`;
+
 exports[`invalid(35): a { display: inline flow list-item; flex-direction: column; grid-template-columns: 1fr 1fr; } 1`] = `
 
   1 | a { display: inline flow list-item; flex-direction: column; grid-template-columns: 1fr 1fr; }
@@ -2188,6 +2594,20 @@ Message:
 
 `;
 
+exports[`invalid(36): a { animation-name: fade; animation-timeline: scroll(self); scroll-timeline-name: none; scroll-timeline-axis: x; } 1`] = `
+
+  1 | a { animation-name: fade; animation-timeline: scroll(self); scroll-timeline-name: none; scroll-timeline-axis: x; }
+
+`;
+
+exports[`invalid(36): a { animation-name: fade; animation-timeline: scroll(self); scroll-timeline-name: none; scroll-timeline-axis: x; } 2`] = `
+
+Message:
+> 1 | a { animation-name: fade; animation-timeline: scroll(self); scroll-timeline-name: none; scroll-timeline-axis: x; }
+    |                                                                                         ^^^^^^^^^^^^^^^^^^^^^^^ \`scroll-timeline-axis\` has no effect with \`scroll-timeline-name: none\`. Name a scroll timeline to use this property.
+
+`;
+
 exports[`invalid(36): a { display: inline-flex; grid-auto-flow: column; } 1`] = `
 
   1 | a { display: inline-flex; grid-auto-flow: column; }
@@ -2202,6 +2622,20 @@ Message:
 
 `;
 
+exports[`invalid(37): a { animation-name: fade; animation-timeline: view(); view-timeline-name: none; view-timeline-inset: 10%; } 1`] = `
+
+  1 | a { animation-name: fade; animation-timeline: view(); view-timeline-name: none; view-timeline-inset: 10%; }
+
+`;
+
+exports[`invalid(37): a { animation-name: fade; animation-timeline: view(); view-timeline-name: none; view-timeline-inset: 10%; } 2`] = `
+
+Message:
+> 1 | a { animation-name: fade; animation-timeline: view(); view-timeline-name: none; view-timeline-inset: 10%; }
+    |                                                                                 ^^^^^^^^^^^^^^^^^^^^^^^^ \`view-timeline-inset\` has no effect with \`view-timeline-name: none\`. Name a view timeline to use this property.
+
+`;
+
 exports[`invalid(37): a { display: inline-grid; flex-wrap: wrap; } 1`] = `
 
   1 | a { display: inline-grid; flex-wrap: wrap; }
@@ -2213,6 +2647,20 @@ exports[`invalid(37): a { display: inline-grid; flex-wrap: wrap; } 2`] = `
 Message:
 > 1 | a { display: inline-grid; flex-wrap: wrap; }
     |                           ^^^^^^^^^^^^^^^ \`flex-wrap\` has no effect with \`display: inline-grid\`. It requires a flex container.
+
+`;
+
+exports[`invalid(38): a { animation-name: none; animation-duration: 1s, 2s; } 1`] = `
+
+  1 | a { animation-name: none; animation-duration: 1s, 2s; }
+
+`;
+
+exports[`invalid(38): a { animation-name: none; animation-duration: 1s, 2s; } 2`] = `
+
+Message:
+> 1 | a { animation-name: none; animation-duration: 1s, 2s; }
+    |                           ^^^^^^^^^^^^^^^^^^^^^^^^^^ \`animation-duration\` has no effect with \`animation-name: none\`. Set an animation name to use this property.
 
 `;
 
@@ -2241,6 +2689,34 @@ exports[`invalid(39): a { display: grid block; flex-direction: column; } 2`] = `
 Message:
 > 1 | a { display: grid block; flex-direction: column; }
     |                          ^^^^^^^^^^^^^^^^^^^^^^ \`flex-direction\` has no effect with \`display: grid block\`. It requires a flex container.
+
+`;
+
+exports[`invalid(39): a { transition-property: none; transition-delay: 1s, 2s; } 1`] = `
+
+  1 | a { transition-property: none; transition-delay: 1s, 2s; }
+
+`;
+
+exports[`invalid(39): a { transition-property: none; transition-delay: 1s, 2s; } 2`] = `
+
+Message:
+> 1 | a { transition-property: none; transition-delay: 1s, 2s; }
+    |                                ^^^^^^^^^^^^^^^^^^^^^^^^ \`transition-delay\` has no effect with \`transition-property: none\`. Select at least one property to transition.
+
+`;
+
+exports[`invalid(4): a { animation-name: none; animation-iteration-count: infinite; } 1`] = `
+
+  1 | a { animation-name: none; animation-iteration-count: infinite; }
+
+`;
+
+exports[`invalid(4): a { animation-name: none; animation-iteration-count: infinite; } 2`] = `
+
+Message:
+> 1 | a { animation-name: none; animation-iteration-count: infinite; }
+    |                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`animation-iteration-count\` has no effect with \`animation-name: none\`. Set an animation name to use this property.
 
 `;
 
@@ -2412,6 +2888,20 @@ Message:
 
 `;
 
+exports[`invalid(5): a { animation-name: none; animation-direction: alternate; } 1`] = `
+
+  1 | a { animation-name: none; animation-direction: alternate; }
+
+`;
+
+exports[`invalid(5): a { animation-name: none; animation-direction: alternate; } 2`] = `
+
+Message:
+> 1 | a { animation-name: none; animation-direction: alternate; }
+    |                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`animation-direction\` has no effect with \`animation-name: none\`. Set an animation name to use this property.
+
+`;
+
 exports[`invalid(5): a { background-image: none; background-repeat: no-repeat; } 1`] = `
 
   1 | a { background-image: none; background-repeat: no-repeat; }
@@ -2577,6 +3067,20 @@ exports[`invalid(59): a { overflow: visible; text-overflow: ellipsis; writing-mo
 Message:
 > 1 | a { overflow: visible; text-overflow: ellipsis; writing-mode: vertical-rl; }
     |                        ^^^^^^^^^^^^^^^^^^^^^^^ \`text-overflow: ellipsis\` has no effect with \`overflow: visible\`. Ellipsis requires clipped inline overflow.
+
+`;
+
+exports[`invalid(6): a { animation-name: none; animation-fill-mode: both; } 1`] = `
+
+  1 | a { animation-name: none; animation-fill-mode: both; }
+
+`;
+
+exports[`invalid(6): a { animation-name: none; animation-fill-mode: both; } 2`] = `
+
+Message:
+> 1 | a { animation-name: none; animation-fill-mode: both; }
+    |                           ^^^^^^^^^^^^^^^^^^^^^^^^^ \`animation-fill-mode\` has no effect with \`animation-name: none\`. Set an animation name to use this property.
 
 `;
 
@@ -2748,6 +3252,20 @@ Message:
 
 `;
 
+exports[`invalid(7): a { animation-name: none; animation-play-state: paused; } 1`] = `
+
+  1 | a { animation-name: none; animation-play-state: paused; }
+
+`;
+
+exports[`invalid(7): a { animation-name: none; animation-play-state: paused; } 2`] = `
+
+Message:
+> 1 | a { animation-name: none; animation-play-state: paused; }
+    |                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`animation-play-state\` has no effect with \`animation-name: none\`. Set an animation name to use this property.
+
+`;
+
 exports[`invalid(7): a { border-image-source: none; border-image-slice: 30 fill; } 1`] = `
 
   1 | a { border-image-source: none; border-image-slice: 30 fill; }
@@ -2913,6 +3431,20 @@ exports[`invalid(79): a { display: grid; column-count: 3; } 2`] = `
 Message:
 > 1 | a { display: grid; column-count: 3; }
     |                    ^^^^^^^^^^^^^^^ \`column-count\` has no effect with \`display: grid\`. Multicol properties require a block container.
+
+`;
+
+exports[`invalid(8): a { animation-name: none; animation-composition: add; } 1`] = `
+
+  1 | a { animation-name: none; animation-composition: add; }
+
+`;
+
+exports[`invalid(8): a { animation-name: none; animation-composition: add; } 2`] = `
+
+Message:
+> 1 | a { animation-name: none; animation-composition: add; }
+    |                           ^^^^^^^^^^^^^^^^^^^^^^^^^^ \`animation-composition\` has no effect with \`animation-name: none\`. Set an animation name to use this property.
 
 `;
 
@@ -3089,6 +3621,20 @@ exports[`invalid(89): a { display: flex; position: absolute; float: left; column
 Message:
 > 1 | a { display: flex; position: absolute; float: left; column-width: 12rem; }
     |                                                     ^^^^^^^^^^^^^^^^^^^ \`column-width\` has no effect with \`display: flex\`. Multicol properties require a block container.
+
+`;
+
+exports[`invalid(9): a { animation-name: none; animation-timeline: scroll(); } 1`] = `
+
+  1 | a { animation-name: none; animation-timeline: scroll(); }
+
+`;
+
+exports[`invalid(9): a { animation-name: none; animation-timeline: scroll(); } 2`] = `
+
+Message:
+> 1 | a { animation-name: none; animation-timeline: scroll(); }
+    |                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`animation-timeline\` has no effect with \`animation-name: none\`. Set an animation name to use this property.
 
 `;
 

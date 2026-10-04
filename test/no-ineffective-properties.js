@@ -585,3 +585,135 @@ test({
 		},
 	],
 });
+
+const animationProperties = [
+	['animation-duration', '2s'],
+	['animation-delay', '-1s'],
+	['animation-timing-function', 'steps(4, end)'],
+	['animation-iteration-count', 'infinite'],
+	['animation-direction', 'alternate'],
+	['animation-fill-mode', 'both'],
+	['animation-play-state', 'paused'],
+	['animation-composition', 'add'],
+	['animation-timeline', 'scroll()'],
+	['animation-range', 'entry 10% exit 90%'],
+	['animation-range-start', 'entry 10%'],
+	['animation-range-end', 'exit 90%'],
+];
+const transitionProperties = [
+	['transition-duration', '2s'],
+	['transition-delay', '-1s'],
+	['transition-timing-function', 'cubic-bezier(0.1, 0.2, 0.3, 0.4)'],
+	['transition-behavior', 'allow-discrete'],
+];
+const effectPropertyGroups = [
+	{control: 'animation-name', activeValue: 'fade', properties: animationProperties},
+	{control: 'transition-property', activeValue: 'opacity', properties: transitionProperties},
+	{control: 'scroll-timeline-name', activeValue: '--scroll', properties: [['scroll-timeline-axis', 'x']]},
+	{control: 'view-timeline-name', activeValue: '--view', properties: [['view-timeline-axis', 'inline'], ['view-timeline-inset', '10% 20%']]},
+];
+
+test.snapshot({
+	valid: [
+		...effectPropertyGroups.flatMap(({control, activeValue, properties}) => properties.map(([property, value]) => `a { ${control}: ${activeValue}; ${property}: ${value}; }`)),
+		...effectPropertyGroups.flatMap(({properties}) => properties.map(([property, value]) => `a { ${property}: ${value}; }`)),
+		...effectPropertyGroups.flatMap(({control, activeValue, properties}) => {
+			const [property, value] = properties[0];
+			return [
+				`a { ${control}: none; ${control}: ${activeValue}; ${property}: ${value}; }`,
+				`a { ${control}: ${activeValue} !important; ${control}: none; ${property}: ${value}; }`,
+				`a { ${control}: none; ${property}: var(--value); }`,
+				`a { ${control}: none; ${property}: inherit; }`,
+				`a { ${control}: none; ${property}: revert-layer; }`,
+				`a { all: unset; ${control}: none; ${property}: ${value}; }`,
+				`a { ${control}: none; & b { ${property}: ${value}; } }`,
+				`a { ${control}: none; @supports (display: block) { ${property}: ${value}; } }`,
+				`@keyframes motion { to { ${control}: none; ${property}: ${value}; } }`,
+				`@font-face { ${control}: none; ${property}: ${value}; }`,
+				`:export { ${control}: none; ${property}: ${value}; }`,
+			];
+		}),
+		...effectPropertyGroups.flatMap(({control, properties}) => {
+			const [property, value] = properties[0];
+			return [
+				'inherit',
+				'initial',
+				'unset',
+				'revert',
+				'revert-layer',
+				'var(--control)',
+				'none none',
+				'-webkit-none',
+			].map(controlValue => `a { ${control}: ${controlValue}; ${property}: ${value}; }`);
+		}),
+		'a { animation-name: none, fade; animation-duration: 2s; }',
+		'a { animation-name: none, none; animation-duration: 2s; }',
+		'a { animation-name: "none"; animation-duration: 2s; } @keyframes "none" { to { opacity: 0; } }',
+		'a { animation: none; animation-duration: 2s; }',
+		'a { animation-name: none; animation: fade 2s; animation-delay: 1s; }',
+		'a { animation: fade 2s !important; animation-name: none; animation-fill-mode: forwards; }',
+		'a { animation-name: none; -webkit-animation-name: fade; animation-duration: 2s; }',
+		'a { -webkit-animation-name: fade !important; animation-name: none; animation-composition: add; }',
+		'a { animation-name: none; -webkit-animation: fade 2s; animation-play-state: paused; }',
+		'a { -webkit-animation: fade 2s; animation-name: none; animation-range: entry exit; }',
+		'a { -webkit-animation-name: none; animation-duration: 2s; }',
+		'a { animation-name: none; animation-timing-function: linear(var(--stop), 1); }',
+		'a { transition-property: none, opacity; transition-duration: 2s; }',
+		'a { transition: none; transition-duration: 2s; }',
+		'a { transition-property: none; transition: opacity 2s; transition-delay: 1s; }',
+		'a { transition: opacity 2s !important; transition-property: none; transition-behavior: allow-discrete; }',
+		'a { transition-property: none; -webkit-transition-property: opacity; transition-duration: 2s; }',
+		'a { -webkit-transition-property: opacity !important; transition-property: none; transition-delay: 1s; }',
+		'a { transition-property: none; -webkit-transition: opacity 2s; transition-behavior: allow-discrete; }',
+		'a { -webkit-transition: opacity 2s; transition-property: none; transition-timing-function: ease; }',
+		'a { transition-property: opacity; transition-duration: 0s; transition-delay: 1s; }',
+		'a { animation-name: fade; animation-duration: 0s; animation-fill-mode: forwards; }',
+		'a { scroll-timeline-name: none, --scroll; scroll-timeline-axis: x; }',
+		'a { scroll-timeline: none; scroll-timeline-axis: x; }',
+		'a { scroll-timeline-name: none; scroll-timeline: --scroll x; scroll-timeline-axis: y; }',
+		'a { scroll-timeline: --scroll y; scroll-timeline-name: none; scroll-timeline-axis: x; }',
+		'a { view-timeline-name: none, --view; view-timeline-inset: 10%; }',
+		'a { view-timeline: none; view-timeline-inset: 10%; }',
+		'a { view-timeline-name: none; view-timeline: --view x; view-timeline-inset: 10%; }',
+		'a { view-timeline: --view y; view-timeline-name: none; view-timeline-axis: x; }',
+		'a { container-type: normal; container-name: example; }',
+		'a { --animation-name: none; animation-duration: 2s; --transition-property: none; transition-duration: 2s; }',
+	],
+	invalid: [
+		...effectPropertyGroups.flatMap(({control, properties}) => properties.map(([property, value]) => `a { ${control}: none; ${property}: ${value}; }`)),
+		'a { ANIMATION-DURATION: 2s !important; ANIMATION-NAME: NONE; }',
+		'a { TRANSITION-BEHAVIOR: ALLOW-DISCRETE !important; TRANSITION-PROPERTY: NONE; }',
+		'a { SCROLL-TIMELINE-AXIS: X !important; SCROLL-TIMELINE-NAME: NONE; }',
+		'a { VIEW-TIMELINE-INSET: 10% !important; VIEW-TIMELINE-NAME: NONE; }',
+		String.raw`a { animation-n\61 me: n\6f ne; animation-dur\61 tion: 2s; }`,
+		String.raw`a { transition-prop\65 rty: n\6f ne; transition-del\61 y: 1s; }`,
+		String.raw`a { scroll-timeline-n\61 me: n\6f ne; scroll-timeline-\61 xis: x; }`,
+		String.raw`a { view-timeline-na\6d e: n\6f ne; view-timeline-ins\65 t: 10%; }`,
+		'a { animation-name: /* disabled */ none; animation-timing-function: /* easing */ steps(4); }',
+		'a { transition-property: /* disabled */ none; transition-duration: /* timing */ calc(1s + 1s); }',
+		'a { scroll-timeline-name: /* disabled */ none; scroll-timeline-axis: /* direction */ x; }',
+		'a { view-timeline-name: /* disabled */ none; view-timeline-inset: /* range */ calc(10% + 1px); }',
+		'a { & b { animation-name: none; animation-fill-mode: forwards; } }',
+		'a { @media (width > 1px) { transition-property: none; transition-behavior: allow-discrete; } }',
+		'a { @supports (scroll-timeline-name: none) { scroll-timeline-name: none; scroll-timeline-axis: x; } }',
+		'a { @container (width > 1px) { view-timeline-name: none; view-timeline-inset: 10%; } }',
+		'a { animation-name: fade; animation-timeline: scroll(self); scroll-timeline-name: none; scroll-timeline-axis: x; }',
+		'a { animation-name: fade; animation-timeline: view(); view-timeline-name: none; view-timeline-inset: 10%; }',
+		'a { animation-name: none; animation-duration: 1s, 2s; }',
+		'a { transition-property: none; transition-delay: 1s, 2s; }',
+	],
+});
+
+test({
+	valid: [],
+	invalid: [
+		{
+			code: 'a { animation-name: none; animation: fade 2s; animation-duration: 2s; transition-property: none; transition-duration: 1s; scroll-timeline-name: none; scroll-timeline-axis: x; }',
+			errors: [{messageId: 'no-ineffective-properties/transition'}, {messageId: 'no-ineffective-properties/scroll-timeline'}],
+		},
+		{
+			code: 'a { view-timeline-name: none; view-timeline: --view x; view-timeline-inset: 10%; animation-name: none; animation-composition: add; }',
+			errors: [{messageId: 'no-ineffective-properties/animation'}],
+		},
+	],
+});
