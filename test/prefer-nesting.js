@@ -118,6 +118,7 @@ test({
 	valid: [
 		'.card {} .card .title, .other .body {}',
 		'.card {} .card .title, .card {}',
+		'.card.active {} .card.active .title, .card {}',
 		'.card {} .card .title, .card:unknown {}',
 		'.outer { .card {} .card .title, & .card .body {} }',
 		'.card:scope {} .card:scope .title {}',
@@ -212,6 +213,11 @@ test({
 		{
 			code: '.card {\n\tcolor: red;\n}\n@media (width > 0px) {\n\t.card {\n\t\tcolor: blue;\n\t}\n}',
 			output: '.card {\n\tcolor: red;\n\t@media (width > 0px) {\n\t\tcolor: blue;\n\t}\n}',
+			errors: 1,
+		},
+		{
+			code: '.card {\n\tcolor: red;\n}\n@media (color) {\n\t.card {\n\t\tcolor: blue;\n\t\t& .title {\n\t\t\tcolor: green;\n\t\t}\n\t}\n}',
+			output: '.card {\n\tcolor: red;\n\t@media (color) {\n\t\tcolor: blue;\n\t\t& .title {\n\t\t\tcolor: green;\n\t\t}\n\t}\n}',
 			errors: 1,
 		},
 		{
