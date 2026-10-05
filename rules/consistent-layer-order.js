@@ -267,7 +267,7 @@ const config = {
 		type: 'suggestion',
 		docs: {
 			description: 'Enforce consistent ordering of cascade layer statements.',
-			recommended: false,
+			recommended: true,
 		},
 		fixable: 'code',
 		schema: [{

@@ -2,7 +2,7 @@
 
 📝 Enforce consistent ordering of cascade layer statements.
 
-🚫 This rule is _disabled_ in the following [configs](https://github.com/sindresorhus/eslint-cssicorn#recommended-config): ✅ `recommended`, ☑️ `unopinionated`.
+💼🚫 This rule is enabled in the ✅ `recommended` [config](https://github.com/sindresorhus/eslint-cssicorn#recommended-config). This rule is _disabled_ in the ☑️ `unopinionated` [config](https://github.com/sindresorhus/eslint-cssicorn#recommended-config).
 
 🔧 This rule is automatically fixable by the [`--fix` CLI option](https://eslint.org/docs/latest/user-guide/command-line-interface#--fix).
 
@@ -14,8 +14,6 @@ An initial `@layer` statement establishes the intended sibling order. Later stat
 This rule checks later statements against that order in each scope. Subsets and repeated names are allowed; only each sibling's first occurrence counts, including dotted names. Layer blocks and named imports may appear in any order.
 
 The initial statement must precede other layer declarations or imports in its scope and may be nested only in `@layer` blocks. Single-name statements also establish a contract; later statements never extend it. Scopes without a contract are unchecked.
-
-The rule is opt-in because file-local contracts may not suit modular stylesheets.
 
 ## Examples
 

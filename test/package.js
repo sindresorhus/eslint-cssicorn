@@ -122,6 +122,19 @@ test('unopinionated config enables prefer-clamp', async () => {
 	assert.equal(result.messages.some(message => message.ruleId === 'cssicorn/prefer-clamp'), true);
 });
 
+// Checks file-local layer contracts while permitting later additions.
+test('recommended config enables consistent-layer-order with default options', async () => {
+	const eslint = new ESLint({
+		baseConfig: eslintCssicorn.configs.recommended,
+		overrideConfigFile: true,
+	});
+
+	const [result] = await eslint.lintText('@layer base, theme; @layer theme, base; @layer extra {}', {filePath: 'file.css'});
+	const messages = result.messages.filter(message => message.ruleId === 'cssicorn/consistent-layer-order');
+	assert.equal(messages.length, 1);
+	assert.equal(messages[0].messageId, 'consistent-layer-order');
+});
+
 test('Every rule has valid meta.type', () => {
 	const validTypes = ['problem', 'suggestion', 'layout'];
 
@@ -168,8 +181,6 @@ test('Plugin should have metadata', () => {
 
 // Rules that cannot work well in normal projects. Every other rule belongs in `recommended`.
 const RULES_NOT_RECOMMENDED = new Set([
-	// Enforces file-local layer contracts that may not describe modular stylesheet architecture.
-	'consistent-layer-order',
 	// Only sees `@keyframes` in the same file.
 	'no-unknown-animations',
 	// Enforces a source order convention, and intentional "specific before general" ordering is common.
