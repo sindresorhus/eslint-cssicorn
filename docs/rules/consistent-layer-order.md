@@ -77,7 +77,12 @@ Check statements, named blocks, and named imports for names absent from their sc
 
 ```js
 {
-	'cssicorn/consistent-layer-order': ['error', {checkUndeclaredLayers: true}],
+	'cssicorn/consistent-layer-order': [
+		'error',
+		{
+			checkUndeclaredLayers: true,
+		},
+	],
 }
 ```
 
