@@ -20,11 +20,11 @@ Orders each compound selector as follows:
 5. Attribute selectors (`[disabled]`)
 6. Pseudo-classes (`:hover`, `:not(...)`)
 
-Components of the same kind keep their order. Supports nesting, at-rules, and parsed selectors inside functional pseudos. Raw arguments, including those in `::cue()` and escaped `:is()` names, are ignored.
+Components of the same kind keep their order. Supports nesting, at-rules, and parsed functional pseudo arguments. Unparsed arguments, including `::cue()` and escaped `:is()`, are ignored.
 
 Ordering stops at the first pseudo-element, including legacy forms such as `:before`.
 
-Autofixes preserve casing, escapes, and formatting. Comments in the affected range prevent autofixing.
+Fixes preserve spelling and formatting; comments in the affected range prevent fixing.
 
 Compounds containing CSS Modules' `:local` or `:global`, unsupported nodes, or misplaced type selectors are ignored.
 
