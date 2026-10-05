@@ -9,11 +9,11 @@
 <!-- end auto-generated rule header -->
 <!-- Do not manually modify this header. Run: `npm run fix:eslint-docs` -->
 
-An initial `@layer` statement establishes the intended sibling order. Later statements cannot reorder existing layers. See [CSS layer ordering](https://drafts.csswg.org/css-cascade-5/#layer-order).
+Checks later `@layer` statements against the initial sibling order. Existing layers cannot be reordered. See [CSS layer ordering](https://drafts.csswg.org/css-cascade-5/#layer-order).
 
-This rule checks later statements against that order in each scope. Subsets and repeated names are allowed; only each sibling's first occurrence counts, including dotted names. Layer blocks and named imports may appear in any order.
+Subsets and repetitions are allowed; only each sibling's first occurrence counts, including dotted names. Blocks and named imports may appear in any order.
 
-The initial statement must precede other layer declarations or imports in its scope and may be nested only in `@layer` blocks. Single-name statements also establish a contract; later statements never extend it. Scopes without a contract are unchecked.
+The initial statement must precede other layer declarations or imports in its scope and may be nested only in `@layer` blocks. Single-name statements count; later statements never extend the contract. Scopes without a contract are unchecked.
 
 ## Examples
 
@@ -43,7 +43,7 @@ Nested layers have their own order. Dotted names and reopened blocks share the s
 }
 ```
 
-Layer blocks do not need to follow the statement's order:
+Blocks may appear in any order:
 
 ```css
 @layer reset, base, theme;
@@ -71,7 +71,7 @@ An earlier conditional declaration also prevents a contract:
 Type: `boolean`\
 Default: `false`
 
-Check statements, named blocks, and named imports for names absent from their scope's contract. This catches typos that silently create new layers. By default, undeclared names are ignored.
+Check statements, named blocks, and named imports for names absent from their scope's contract. This catches typos that silently create new layers.
 
 ```js
 {
@@ -94,18 +94,18 @@ Check statements, named blocks, and named imports for names absent from their sc
 @layer theme {}
 ```
 
-A parent contract permits any child names unless the child scope has its own contract: `@layer theme;` permits `@layer theme.components {}`. Names are case-sensitive; equivalent escapes match.
+Child names are unrestricted without a child contract: `@layer theme;` permits `@layer theme.components {}`. Names are case-sensitive; equivalent escapes match.
 
 ## Autofix
 
-Fixes reorder names only when every segment belongs to an earlier contract and the statement contains no comments. Original spellings and formatting are preserved. Undeclared names are never fixed.
+Fixes require an earlier contract for every name segment and no comments in the statement. Spelling and formatting are preserved; undeclared names are never fixed.
 
 ## Limitations
 
 - Checks only the current file; imported contents are not resolved.
 - Grouping rules other than `@layer` cannot establish contracts; their statements are still checked.
 - Anonymous blocks have independent scopes and are never undeclared-name errors.
-- Ignores layer syntax the parser leaves unparsed, including some escaped at-rule and import-function spellings.
+- Ignores unparsed syntax, including some escaped at-rule and import-function spellings.
 
 Use [`css/use-layers`](https://github.com/eslint/css/blob/main/docs/rules/use-layers.md) to require layers or a naming pattern.
 
