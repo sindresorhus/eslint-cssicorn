@@ -1,14 +1,15 @@
 import normalizeCssIdentifier from './normalize-css-identifier.js';
 
 /**
-@import * as ESLint from 'eslint';
+@import {DeclarationPlain} from '@eslint/css-tree';
+@import {CSSRuleDefinition} from '@eslint/css';
 */
 
 /**
 Check whether a declaration is inside a CSS Modules (ICSS) `:export` or `:import(…)` block. JavaScript reads these declarations as exact strings, so they must not be changed like CSS.
 
-@param {object} declaration - The `Declaration` node.
-@param {ESLint.Rule.RuleContext} context
+@param {DeclarationPlain} declaration - The `Declaration` node.
+@param {Parameters<CSSRuleDefinition['create']>[0]} context
 @returns {boolean}
 */
 export default function isCssModulesInteropDeclaration(declaration, context) {
@@ -24,7 +25,7 @@ export default function isCssModulesInteropDeclaration(declaration, context) {
 	}
 
 	const [selector] = rule.prelude.children;
-	if (selector.children.length !== 1) {
+	if (selector.type !== 'Selector' || selector.children.length !== 1) {
 		return false;
 	}
 
