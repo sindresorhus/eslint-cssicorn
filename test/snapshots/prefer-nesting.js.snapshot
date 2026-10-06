@@ -640,6 +640,91 @@ Message:
 
 `;
 
+exports[`invalid(41): a > :is(.foo .bar, .baz) {} 1`] = `
+
+  1 | a > :is(.foo .bar, .baz) {}
+
+`;
+
+exports[`invalid(41): a > :is(.foo .bar, .baz) {} 2`] = `
+
+Message:
+> 1 | a > :is(.foo .bar, .baz) {}
+    |     ^^^^^^^^^^^^^^^^^^^^ Prefer CSS nesting over \`:is()\`.
+
+Output:
+  1 | a { > :is(.foo .bar, .baz) {} }
+
+`;
+
+exports[`invalid(42): a :is(.foo .bar, .baz .qux) {} 1`] = `
+
+  1 | a :is(.foo .bar, .baz .qux) {}
+
+`;
+
+exports[`invalid(42): a :is(.foo .bar, .baz .qux) {} 2`] = `
+
+Message:
+> 1 | a :is(.foo .bar, .baz .qux) {}
+    |   ^^^^^^^^^^^^^^^^^^^^^^^^^ Prefer CSS nesting over \`:is()\`.
+
+Output:
+  1 | a { :is(.foo .bar, .baz .qux) {} }
+
+`;
+
+exports[`invalid(43): :is(.foo .bar, .baz) a {} 1`] = `
+
+  1 | :is(.foo .bar, .baz) a {}
+
+`;
+
+exports[`invalid(43): :is(.foo .bar, .baz) a {} 2`] = `
+
+Message:
+> 1 | :is(.foo .bar, .baz) a {}
+    | ^^^^^^^^^^^^^^^^^^^^ Prefer CSS nesting over \`:is()\`.
+
+Output:
+  1 | :is(.foo .bar, .baz) { & a {} }
+
+`;
+
+exports[`invalid(44): :is(.foo > .bar, .baz).active {} 1`] = `
+
+  1 | :is(.foo > .bar, .baz).active {}
+
+`;
+
+exports[`invalid(44): :is(.foo > .bar, .baz).active {} 2`] = `
+
+Message:
+> 1 | :is(.foo > .bar, .baz).active {}
+    | ^^^^^^^^^^^^^^^^^^^^^^ Prefer CSS nesting over \`:is()\`.
+
+Output:
+  1 | :is(.foo > .bar, .baz) { &.active {} }
+
+`;
+
+exports[`invalid(45): :is(.foo .bar, .baz) > a {} 1`] = `
+
+  1 | :is(.foo .bar, .baz) > a {}
+
+`;
+
+exports[`invalid(45): :is(.foo .bar, .baz) > a {} 2`] = `
+
+Message:
+> 1 | :is(.foo .bar, .baz) > a {}
+    | ^^^^^^^^^^^^^^^^^^^^ Prefer CSS nesting over \`:is()\`.
+
+Output:
+  1 | :is(.foo .bar, .baz) { > a {} }
+
+`;
+
 exports[`invalid(5): :is(.foo, #bar) a {} 1`] = `
 
   1 | :is(.foo, #bar) a {}

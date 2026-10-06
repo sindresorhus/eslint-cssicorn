@@ -23,7 +23,7 @@ const messages = {
 	[MESSAGE_ID_RELATED_RULES]: 'Prefer CSS nesting for related rules.',
 };
 
-const STATE_PSEUDO_CLASSES = new Set([
+const PARENT_PSEUDO_CLASSES = new Set([
 	'hover',
 	'active',
 	'focus',
@@ -40,6 +40,15 @@ const STATE_PSEUDO_CLASSES = new Set([
 	'read-write',
 	'indeterminate',
 	'placeholder-shown',
+	'first-child',
+	'last-child',
+	'only-child',
+	'first-of-type',
+	'last-of-type',
+	'only-of-type',
+	'empty',
+	'root',
+	'target',
 ]);
 
 const isDescendantCombinator = node => node?.type === 'Combinator' && node.name === ' ';
@@ -53,7 +62,7 @@ const getIsSelectorList = node => {
 	if (
 		argumentsList?.type !== 'SelectorList'
 		|| argumentsList.children.length < 2
-		|| argumentsList.children.some(selector => selector.children.some(child => child.type === 'Combinator') || !canBeRepresentedByNestingSelector(selector, false))
+		|| argumentsList.children.some(selector => !canBeRepresentedByNestingSelector(selector, false))
 	) {
 		return;
 	}
@@ -93,10 +102,10 @@ const isRelatedParent = selector => selector.children.every(node => {
 		return !node.name.name.includes('|') && (!node.flags || ['i', 's'].includes(normalizeCssIdentifier(node.flags)));
 	}
 
-	return canUnwrapSelectorNode(node) || (
+	return node.type === 'Combinator' || canUnwrapSelectorNode(node) || (
 		node.type === 'PseudoClassSelector'
 		&& !node.children
-		&& STATE_PSEUDO_CLASSES.has(normalizeCssIdentifier(node.name))
+		&& PARENT_PSEUDO_CLASSES.has(normalizeCssIdentifier(node.name))
 	);
 });
 
@@ -208,7 +217,10 @@ const getRelatedSelectorText = (parentSelector, selectorList, sourceCode) => {
 	for (const selector of selectorList.children) {
 		if (
 			selector.children.length <= parentNodes.length
-			|| parentNodes.some((node, index) => !(node.type === selector.children[index].type && sourceCode.getText(node) === sourceCode.getText(selector.children[index])))
+			|| parentNodes.some((node, index) => {
+				const childNode = selector.children[index];
+				return node.type !== childNode.type || (node.type === 'Combinator' ? node.name !== childNode.name : sourceCode.getText(node) !== sourceCode.getText(childNode));
+			})
 			|| !canMatchSelector(selector)
 			|| find(selector, node => node.type === 'NestingSelector' || node.type === 'Raw')
 		) {
@@ -231,7 +243,7 @@ const getRelatedHeader = (parentSelector, rule, sourceCode) => {
 
 	if (
 		rule.type !== 'Atrule'
-		|| !['media', 'supports'].includes(normalizeCssIdentifier(rule.name))
+		|| !['media', 'supports', 'container'].includes(normalizeCssIdentifier(rule.name))
 		|| rule.block?.children.length !== 1
 	) {
 		return;
@@ -239,6 +251,11 @@ const getRelatedHeader = (parentSelector, rule, sourceCode) => {
 
 	const selector = getSingleSelector(rule.block.children.at(0));
 	if (!selector || sourceCode.getText(selector) !== sourceCode.getText(parentSelector)) {
+		return;
+	}
+
+	// The parser cannot reliably parse nested rules inside a nested @container block.
+	if (normalizeCssIdentifier(rule.name) === 'container' && rule.block.children.at(0).block.children.some(node => node.type !== 'Declaration')) {
 		return;
 	}
 

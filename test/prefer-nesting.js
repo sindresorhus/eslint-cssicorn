@@ -9,13 +9,118 @@ const {test} = getTester(import.meta);
 
 test({
 	valid: [
+		'.page .card {} .other .page .card .title {}',
+		'.page .card {} .page .cardinal .title {}',
+		'.page > .card {} .page + .card .title {}',
+		'.page .card {} .page .card .title, .page .other .body {}',
+		'.outer { > .card {} > .card .title {} }',
+		'.outer { .page & .card {} .page & .card .title {} }',
+		'.page:scope .card {} .page:scope .card .title {}',
+		'@scope (.page) { .page .card {} .page .card .title {} }',
+		'.card {} @container (width > 0px) { .card { & .title {} } }',
+		'.card {} @container (width > 0px) { .card { @media (color) { color: blue; } } }',
+		'.card {} @container (width > 0px) { .card {} .other {} }',
+		'.card {} @container (width > 0px) { .card, .other {} }',
+		'.card {} @container (width > 0px) { .card .title {} }',
+		'@scope (.page) { .card {} @container (width > 0px) { .card {} } }',
+		':is(.foo > .bar, .baz) {}',
+		'a :is(.foo > .bar) {}',
+		'a :is(.foo > .bar, .baz).active {}',
+		'.outer { .target :is(.foo > &, .baz) {} }',
+		'a :is(.foo > :unknown, .baz) {}',
+	],
+	invalid: [
+		...['.page .card', '.page > .card', '.page + .card', '.page ~ .card'].map(parent => ({
+			code: `${parent} { color: red; } ${parent} .title, ${parent}:hover { color: blue; }`,
+			output: `${parent} { color: red; & .title, &:hover { color: blue; } }`,
+			errors: 1,
+		})),
+		{
+			code: '.page .card {} .page .card .title {}',
+			output: '.page .card { & .title {} }',
+			errors: 1,
+		},
+		{
+			code: '.page  .card {} .page .card .title {}',
+			output: '.page  .card { & .title {} }',
+			errors: 1,
+		},
+		{
+			code: '.outer, #outer { .page > .card { color: red; } .page > .card .title { color: blue; } }',
+			output: '.outer, #outer { .page > .card { color: red; & .title { color: blue; } } }',
+			errors: 1,
+		},
+		{
+			code: String.raw`.p\61 ge > .card { color: red; } .p\61 ge > .card::before { content: ""; }`,
+			output: String.raw`.p\61 ge > .card { color: red; &::before { content: ""; } }`,
+			errors: 1,
+		},
+		...['first-child', 'last-child', 'only-child', 'first-of-type', 'last-of-type', 'only-of-type', 'empty', 'root', 'target'].map(pseudoClass => ({
+			code: `.card:${pseudoClass} { color: red; } .card:${pseudoClass} + .hint { color: blue; }`,
+			output: `.card:${pseudoClass} { color: red; & + .hint { color: blue; } }`,
+			errors: 1,
+		})),
+		{
+			code: String.raw`.card:\46 IRST-CHILD { color: red; } .card:\46 IRST-CHILD .title { color: blue; }`,
+			output: String.raw`.card:\46 IRST-CHILD { color: red; & .title { color: blue; } }`,
+			errors: 1,
+		},
+		...['container (width > 0px)', 'container layout (width > 0px)', 'container style(--theme: dark)', 'CONTAINER (width < 0px)'].map(atRule => ({
+			code: `.card { color: red; } @${atRule} { .card { color: blue !important; } }`,
+			output: `.card { color: red; @${atRule} { color: blue !important; } }`,
+			errors: 1,
+		})),
+		{
+			code: '.card {} @container (width > 0px) { .card {} }',
+			output: '.card { @container (width > 0px) {} }',
+			errors: 1,
+		},
+		{
+			code: String.raw`.page > .card:LAST-CHILD { color: red; } @c\6f ntainer (color) { .page > .card:LAST-CHILD { --value: blue; } }`,
+			output: String.raw`.page > .card:LAST-CHILD { color: red; @c\6f ntainer (color) { --value: blue; } }`,
+			errors: 1,
+		},
+		{
+			code: '@media (width > 0px) { .page .card { color: red; } @container (width > 0px) { .page .card { color: blue; } } }',
+			output: '@media (width > 0px) { .page .card { color: red; @container (width > 0px) { color: blue; } } }',
+			errors: 1,
+		},
+		{
+			code: '.card {\r\n  color: red;\r\n}\r\n@container (width > 0px) {\r\n  .card {\r\n    color: blue;\r\n  }\r\n}',
+			output: '.card {\r\n  color: red;\r\n  @container (width > 0px) {\r\n    color: blue;\r\n  }\r\n}',
+			errors: 1,
+		},
+		...[
+			'.card { color: red; } @container (width > 0px) { .card { color: blue; /* keep */ } }',
+			'.page .card { color: red; } /* keep */ .page .card .title { color: blue; }',
+			'a :is(.foo > .bar, /* keep */ .baz) { color: red; }',
+		].map(code => ({code, errors: 1})),
+		{
+			code: 'a :is(.foo > .bar, #baz) { color: red; }',
+			output: 'a { :is(.foo > .bar, #baz) { color: red; } }',
+			errors: 1,
+		},
+		{
+			code: ':is(.foo + .bar, .baz).active { color: red; & .title { color: blue; } }',
+			output: ':is(.foo + .bar, .baz) { &.active { color: red; & .title { color: blue; } } }',
+			errors: 1,
+		},
+		{
+			code: '.outer, #outer { :is(.foo ~ .bar, .baz) a { color: red; } }',
+			output: '.outer, #outer { :is(.foo ~ .bar, .baz) { & a { color: red; } } }',
+			errors: 1,
+		},
+	],
+});
+
+test({
+	valid: [
 		'.card {} .card {}',
 		'.card {} .cardinal {}',
 		'.card {} .card-other {}',
 		'.card {} .other {} .card .title {}',
 		'.card .title {} .card {}',
 		'.card, .other {} .card .title {}',
-		'.page .card {} .page .card .title {}',
 		'.card::before {} .card::before.active {}',
 		'.card {} .card .title:unknown {}',
 		'.outer { .card {} & .card .title {} }',
@@ -131,7 +236,6 @@ test({
 		'.card {} @media (width > 0px) { @supports (display: grid) { .card {} } }',
 		'.card {} @supports (display: grid) {}',
 		'.card {} @layer theme { .card {} }',
-		'.card {} @container (width > 0px) { .card {} }',
 		'.card {} .other {} @media (width > 0px) { .card {} }',
 		'@media (width > 0px) { .card {} } .card {}',
 		'@scope (.outer) { .card {} @media (width > 0px) { .card {} } }',
@@ -319,12 +423,7 @@ test.snapshot({
 		'a :matches(.foo, .bar) {}',
 		String.raw`a :\69 s(.foo, .bar) {}`,
 		'a > :is(.foo) {}',
-		'a > :is(.foo .bar, .baz) {}',
 		'a > :is(.foo, .bar), b {}',
-		'a :is(.foo .bar, .baz .qux) {}',
-		':is(.foo .bar, .baz) a {}',
-		':is(.foo > .bar, .baz).active {}',
-		':is(.foo .bar, .baz) > a {}',
 		'a :is(.foo, :unknown) {}',
 		':is(.foo, :unknown) a {}',
 		'a :is(.foo, ::before) {}',
@@ -384,6 +483,11 @@ test.snapshot({
 		'a :is(.foo, .bar) {\n}',
 		'a :is(.foo, .bar) {\n\tcontent: "a\\\n\tb";\n}',
 		'a :is(.foo, .bar) {\n\t--value: a\n\t\tb;\n}',
+		'a > :is(.foo .bar, .baz) {}',
+		'a :is(.foo .bar, .baz .qux) {}',
+		':is(.foo .bar, .baz) a {}',
+		':is(.foo > .bar, .baz).active {}',
+		':is(.foo .bar, .baz) > a {}',
 	],
 });
 
@@ -672,6 +776,10 @@ nodeTest('nesting fixes work with the other nesting rules', () => {
 	assert.equal(linter.verifyAndFix(relatedRules.output, config, {filename: 'test.css'}).fixed, false);
 
 	for (const code of [
+		'.page .card { color: red; } .page .card .title { color: blue; }',
+		'.card:first-child { color: red; } .card:first-child + .hint { color: blue; }',
+		'.card { color: red; } @container (width > 0px) { .card { color: blue; } }',
+		'a :is(.foo > .bar, #baz) { color: red; }',
 		'.card { color: red; } .card .title, .card > #body { color: blue; }',
 		'.card:hover { color: red; } .card:hover .title { color: blue; }',
 		'[data-kind="CARD" i] { color: red; } [data-kind="CARD" i] .title { color: blue; }',
