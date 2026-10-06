@@ -9,11 +9,11 @@
 <!-- end auto-generated rule header -->
 <!-- Do not manually modify this header. Run: `npm run fix:eslint-docs` -->
 
-Prefer native CSS nesting for adjacent rules and conditional overrides that repeat a parent selector, and for leading or trailing `:is()` groups.
+Prefer native CSS nesting for adjacent rules and overrides that repeat a parent selector, and for leading or trailing `:is()` and `:where()` groups.
 
 ## Examples
 
-Nest adjacent rules under their shared parent, including complex selectors and state or structural pseudo-classes:
+Nest adjacent rules under their shared parent, including complex selectors and pseudo-classes such as `:hover`, `:not()`, `:has()`, and `:nth-child()`:
 
 ```css
 /* ❌ */
@@ -39,7 +39,7 @@ Nest adjacent rules under their shared parent, including complex selectors and s
 }
 ```
 
-Nest an adjacent `@media`, `@supports`, or `@container` block containing only the same selector. For `@container`, that rule must contain only declarations:
+Nest an adjacent `@media`, `@supports`, `@container`, or `@layer` block containing only the same selector. For `@container`, that rule must contain only declarations:
 
 ```css
 /* ❌ */
@@ -61,7 +61,7 @@ Nest an adjacent `@media`, `@supports`, or `@container` block containing only th
 }
 ```
 
-Convert trailing or leading `:is()` groups:
+Convert trailing or leading `:is()` and `:where()` groups:
 
 ```css
 /* ❌ */
@@ -79,12 +79,12 @@ a {
 
 ```css
 /* ❌ */
-:is(.foo, .bar) a {
+:where(.foo, #bar) a {
 	color: red;
 }
 
 /* ✅ */
-.foo, .bar {
+:where(.foo, #bar) {
 	& a {
 		color: red;
 	}
@@ -127,10 +127,12 @@ a {
 }
 ```
 
-Leading groups preserve their maximum specificity, even with mixed arguments. The result can trigger [`no-nesting-with-mixed-specificity`](./no-nesting-with-mixed-specificity.md); disable that rule for intentional mixed-specificity nesting.
+`:where()` always stays wrapped to preserve zero specificity.
+
+Leading `:is()` groups preserve their maximum specificity, even with mixed arguments. The result can trigger [`no-nesting-with-mixed-specificity`](./no-nesting-with-mixed-specificity.md); disable that rule for intentional mixed-specificity nesting.
 
 ## Limitations
 
-Merges only adjacent rules with one parent selector repeated exactly. `:is()` requires one outer selector and at least two arguments.
+Merges only adjacent rules with one parent selector repeated exactly. Selector-group conversions require one outer selector and at least two arguments.
 
-Skips existing `&` in selectors, escaped `:is()` names, `@scope`, and files with `@namespace`. Comments, missing semicolons, or unsafe formatting can prevent fixes.
+Skips existing `&`, escaped group names, opaque parent arguments, `@scope`, and files with `@namespace`. Comments, missing semicolons, or unsafe formatting can prevent fixes.

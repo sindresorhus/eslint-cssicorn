@@ -19,7 +19,7 @@ import {hasCommentInRange, normalizeCssIdentifier} from './utils/index.js';
 const MESSAGE_ID = 'prefer-nesting';
 const MESSAGE_ID_RELATED_RULES = 'prefer-nesting/related-rules';
 const messages = {
-	[MESSAGE_ID]: 'Prefer CSS nesting over `:is()`.',
+	[MESSAGE_ID]: 'Prefer CSS nesting over `:{{name}}()`.',
 	[MESSAGE_ID_RELATED_RULES]: 'Prefer CSS nesting for related rules.',
 };
 
@@ -51,10 +51,21 @@ const PARENT_PSEUDO_CLASSES = new Set([
 	'target',
 ]);
 
+const PARENT_FUNCTIONAL_PSEUDO_CLASSES = new Set([
+	'not',
+	'has',
+	'is',
+	'where',
+	'nth-child',
+	'nth-last-child',
+	'nth-of-type',
+	'nth-last-of-type',
+]);
+
 const isDescendantCombinator = node => node?.type === 'Combinator' && node.name === ' ';
 
-const getIsSelectorList = node => {
-	if (node?.type !== 'PseudoClassSelector' || normalizeCssIdentifier(node.name) !== 'is') {
+const getSelectorList = node => {
+	if (node?.type !== 'PseudoClassSelector' || !['is', 'where'].includes(normalizeCssIdentifier(node.name))) {
 		return;
 	}
 
@@ -104,14 +115,13 @@ const isRelatedParent = selector => selector.children.every(node => {
 
 	return node.type === 'Combinator' || canUnwrapSelectorNode(node) || (
 		node.type === 'PseudoClassSelector'
-		&& !node.children
-		&& PARENT_PSEUDO_CLASSES.has(normalizeCssIdentifier(node.name))
+		&& (node.children ? PARENT_FUNCTIONAL_PSEUDO_CLASSES : PARENT_PSEUDO_CLASSES).has(normalizeCssIdentifier(node.name))
 	);
-});
+}) && !find(selector, node => node.type === 'NestingSelector' || node.type === 'Raw');
 
 const getCandidate = selector => {
 	const {children} = selector;
-	const leadingArguments = getIsSelectorList(children[0]);
+	const leadingArguments = getSelectorList(children[0]);
 	if (leadingArguments && children.length > 1) {
 		const innerNodes = children.slice(isDescendantCombinator(children[1]) ? 2 : 1);
 		let prefix = '';
@@ -124,19 +134,19 @@ const getCandidate = selector => {
 
 		return {
 			node: children[0],
-			outerNodes: canUnwrapSelectorList(leadingArguments) ? leadingArguments.children : [children[0]],
+			outerNodes: normalizeCssIdentifier(children[0].name) === 'is' && canUnwrapSelectorList(leadingArguments) ? leadingArguments.children : [children[0]],
 			innerNodes,
 			prefix,
 		};
 	}
 
-	const trailingArguments = getIsSelectorList(children.at(-1));
+	const trailingArguments = getSelectorList(children.at(-1));
 	if (children.length < 3 || !trailingArguments || children.at(-2).type !== 'Combinator') {
 		return;
 	}
 
-	let innerNodes = children.slice(-2);
-	if (isDescendantCombinator(children.at(-2))) {
+	let innerNodes = isDescendantCombinator(children.at(-2)) ? [children.at(-1)] : children.slice(-2);
+	if (isDescendantCombinator(children.at(-2)) && normalizeCssIdentifier(children.at(-1).name) === 'is') {
 		// Unlike :is(), a nested selector list gives each branch its own specificity.
 		const specificities = trailingArguments.children.map(argument => getRuleSelectorSpecificity(argument, [0, 0, 0]));
 		const hasEqualSpecificity = specificities.every(specificity => compareSpecificity(specificity, specificities[0]) === 0);
@@ -243,7 +253,7 @@ const getRelatedHeader = (parentSelector, rule, sourceCode) => {
 
 	if (
 		rule.type !== 'Atrule'
-		|| !['media', 'supports', 'container'].includes(normalizeCssIdentifier(rule.name))
+		|| !['media', 'supports', 'container', 'layer'].includes(normalizeCssIdentifier(rule.name))
 		|| rule.block?.children.length !== 1
 	) {
 		return;
@@ -383,6 +393,7 @@ const create = context => {
 		return {
 			node: candidate.node,
 			messageId: MESSAGE_ID,
+			data: {name: normalizeCssIdentifier(candidate.node.name)},
 			/**
 			@param {Parameters<CssicornRuleFixer>[0]} fixer
 			*/
