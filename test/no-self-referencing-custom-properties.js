@@ -104,12 +104,27 @@ test.snapshot({
 
 test({
 	valid: [
+		'@keyframes grow { from { --a: var(--b); } to { --b: var(--a); } }',
 		{
 			name: 'large acyclic custom-property chain',
 			code: ':root {' + Array.from({length: 5000}, (_, index) => `--property-${index}: var(--property-${index + 1});`).join('') + '--property-5000: 1px; }',
 		},
 	],
 	invalid: [
+		{
+			code: 'a { @media (width > 1px) { --a: var(--b); --b: var(--a); } }',
+			errors: [
+				{messageId: 'no-self-referencing-custom-properties/cycle', data: {property: '--a'}},
+				{messageId: 'no-self-referencing-custom-properties/cycle', data: {property: '--b'}},
+			],
+		},
+		{
+			code: '@keyframes grow { to { --a: var(--b) !important; --b: var(--a); } }',
+			errors: [
+				{messageId: 'no-self-referencing-custom-properties/cycle', data: {property: '--a'}},
+				{messageId: 'no-self-referencing-custom-properties/cycle', data: {property: '--b'}},
+			],
+		},
 		{
 			code: 'a { --a: {value: [var(--b)]}; --b: var(--a); }',
 			errors: [

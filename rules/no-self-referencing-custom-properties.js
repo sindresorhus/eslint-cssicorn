@@ -2,7 +2,14 @@ import {tokenize, tokenTypes} from '@eslint/css-tree';
 import {decodeCssIdentifier, normalizeCssIdentifier, toLocation} from './utils/index.js';
 
 /**
-@import * as ESLint from 'eslint';
+@import {CSSSourceCode} from '@eslint/css';
+@import {DeclarationPlain} from '@eslint/css-tree';
+@import {CssicornContext} from './rule/cssicorn-context.js';
+@import {CssicornRule} from './rule/to-eslint-rule.js';
+
+@typedef {{property: string, sourceRange: [number, number]}} Reference
+@typedef {{declaration: DeclarationPlain, references: Reference[], selfReference: Reference | undefined, important: boolean}} CustomPropertyDeclaration
+@typedef {{property: string, index: number, lowLink: number, onStack: boolean, references: IterableIterator<Reference>}} TraversalState
 */
 
 const MESSAGE_ID = 'no-self-referencing-custom-properties';
@@ -12,7 +19,15 @@ const messages = {
 	[MESSAGE_ID_CYCLE]: 'Custom property `{{property}}` is part of a dependency cycle.',
 };
 
+/**
+@param {DeclarationPlain} declaration
+@param {CSSSourceCode} sourceCode
+@returns {Reference[]}
+*/
 const getReferences = (declaration, sourceCode) => {
+	/**
+	@type {Reference[]}
+	*/
 	const references = [];
 	const text = sourceCode.getText(declaration.value);
 	// A custom-property reference contains `--`, unless it is escaped.
@@ -21,6 +36,9 @@ const getReferences = (declaration, sourceCode) => {
 	}
 
 	const [offset] = sourceCode.getRange(declaration.value);
+	/**
+	@type {{type: number, start: number, end: number}[]}
+	*/
 	const tokens = [];
 	// Custom-property values and var() fallbacks can be opaque Raw nodes.
 	tokenize(text, (type, start, end) => {
@@ -50,14 +68,30 @@ const getReferences = (declaration, sourceCode) => {
 	return references;
 };
 
+/**
+@param {Map<string, CustomPropertyDeclaration>} declarations
+@returns {Set<string>[]}
+*/
 const getCyclicComponents = declarations => {
+	/**
+	@type {Map<string, TraversalState>}
+	*/
 	const states = new Map();
+	/**
+	@type {TraversalState[]}
+	*/
 	const componentStack = [];
+	/**
+	@type {TraversalState[]}
+	*/
 	const traversalStack = [];
 	const components = [];
 
 	// Tarjan's algorithm finds cycles without reporting properties that merely depend on one.
 	// Use an explicit traversal stack so long dependency chains cannot exhaust the call stack.
+	/**
+	@param {string} property
+	*/
 	const enter = property => {
 		const state = {
 			property,
@@ -123,12 +157,15 @@ const getCyclicComponents = declarations => {
 };
 
 /**
-@param {ESLint.Rule.RuleContext} context
+@param {CssicornContext} context
 */
 const create = context => {
 	const {sourceCode} = context;
 
 	context.on('Block', function * (block) {
+		/**
+		@type {Map<string, CustomPropertyDeclaration>}
+		*/
 		const declarations = new Map();
 		for (const declaration of block.children) {
 			if (declaration.type !== 'Declaration') {
@@ -180,7 +217,7 @@ const create = context => {
 };
 
 /**
-@type {ESLint.Rule.RuleModule}
+@type {CssicornRule}
 */
 const config = {
 	create,
