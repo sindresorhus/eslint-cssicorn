@@ -107,7 +107,7 @@ a, button {
 }
 ```
 
-Leading and trailing groups also support `>`, `+`, and `~`. Trailing groups after these combinators stay wrapped in `:is()`.
+Leading and trailing groups also support `>`, `+`, and `~`. Trailing groups after these combinators stay wrapped.
 
 ## Specificity
 
