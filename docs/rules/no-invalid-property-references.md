@@ -59,23 +59,21 @@ a { transition-property: inherit; }
 
 The following identifiers are exempt from property-name validation in their respective declarations:
 
-| Declaration | Keywords |
-| --- | --- |
-| `transition` | `all`, `none`, `ease`, `ease-in`, `ease-out`, `ease-in-out`, `linear`, `step-start`, `step-end`, `normal`, `allow-discrete` |
-| `transition-property` | `all`, `none` |
-| `will-change` | `auto`, `scroll-position`, `contents` |
+- `transition`: `all`, `none`, `ease`, `ease-in`, `ease-out`, `ease-in-out`, `linear`, `step-start`, `step-end`, `normal`, `allow-discrete`.
+- `transition-property`: `all`, `none`.
+- `will-change`: `auto`, `scroll-position`, `contents`.
 
 Standard property names are matched ASCII case-insensitively, including escaped spellings. Shorthand names and known properties that cannot be animated are allowed; the rule does not assess whether a transition or optimization will take effect.
 
 ## Limitations
 
-- Custom-property references, such as `--progress`, and vendor-prefixed references, such as `-webkit-transform`, are ignored. Vendor-prefixed declarations, such as `-webkit-transition`, are checked.
-- Only literal identifiers at the top level of a declaration value are checked. Function arguments, including `var()` fallbacks, strings, URLs, and values supplied by build tools are not resolved. Literal references alongside functions are still checked.
-- Support-query declarations, descriptor blocks recognized by the lexer, CSS Modules `:export` and `:import()` declarations, and unparsed values are ignored.
-- General value-grammar validation is left to `css/no-invalid-properties`. For example, this rule does not report `will-change: auto, opacity` or `transition-property: none, opacity`.
-- Transition shorthand keywords are always exempt. Unusual repeated-keyword forms such as `transition: ease ease 1s` are not disambiguated to determine whether one keyword occupies the property-name slot.
+- Ignores custom (`--progress`) and vendor-prefixed references (`-webkit-transform`). Vendor-prefixed declarations are checked.
+- Checks only top-level identifiers. Function arguments, strings, URLs, and build-tool values are not resolved.
+- Skips support queries, descriptor blocks known to the lexer, CSS Modules `:export`/`:import()` declarations, and unparsed values.
+- Leaves value grammar to `css/no-invalid-properties`.
+- Always exempts transition shorthand keywords, including repeated ones like `transition: ease ease 1s`.
 
-The rule has no autofix or suggestions because correcting or removing a reference requires knowing the author's intent.
+No autofix or suggestions: correcting a reference requires knowing the author's intent.
 
 ## Additional properties
 
