@@ -4,6 +4,13 @@ const {test} = getTester(import.meta);
 
 test.snapshot({
 	valid: [
+		'a { --a: var(--base, var(--b)); --b: var(--a); }',
+		'a { --base: 1px; --a: var(--base, calc(var(--other, var(--b)) + 1px)); --b: var(--a); }',
+		'a { --a: if(style(--enabled: yes): 1px; else: var(--b)); --b: var(--a); }',
+		'a { --spacing: var(--other, var(--spacing)); }',
+		'a { --other: 1px; --spacing: var(--other, var(--spacing)); }',
+		'a { --spacing: var(--other, calc(var(--base, var(--spacing)) + 1px)); }',
+		'a { --spacing: if(style(--enabled: yes): 1px; else: var(--spacing)); }',
 		'a { --spacing:; }',
 		'a { --spacing: /* var(--spacing) */; }',
 		'a { --spacing: 1px; }',
@@ -53,8 +60,6 @@ test.snapshot({
 		'a { --one: var(--two); --two: var(--one); }',
 		'a { --b: var(--a); --a: var(--b); }',
 		'a { --a: var(--b); --b: var(--c); --c: var(--a); }',
-		'a { --a: var(--base, var(--b)); --b: var(--a); }',
-		'a { --base: 1px; --a: var(--base, calc(var(--other, var(--b)) + 1px)); --b: var(--a); }',
 		'a { --a: var(--b) var(--c); --b: var(--a); --c: var(--b); }',
 		'a { --a: var(--b); --b: var(--a); --c: var(--d); --d: var(--c); }',
 		'a { --a: var(--b) !important; --a: 1px; --b: var(--a); }',
@@ -73,14 +78,10 @@ test.snapshot({
 		'@layer base { a { --a: var(--b); --b: var(--a); } }',
 		'@scope (.component) { a { --a: var(--b); --b: var(--a); } }',
 		'@keyframes grow { to { --a: var(--b); --b: var(--a); } }',
-		'a { --a: if(style(--enabled: yes): 1px; else: var(--b)); --b: var(--a); }',
 		'a { --spacing: var(--spacing); }',
 		'a { --spacing: calc(var(--spacing) + 1px); }',
 		'a { --spacing: var(--spacing, 1px); }',
 		'a { --spacing: var(--spacing,); }',
-		'a { --spacing: var(--other, var(--spacing)); }',
-		'a { --other: 1px; --spacing: var(--other, var(--spacing)); }',
-		'a { --spacing: var(--other, calc(var(--base, var(--spacing)) + 1px)); }',
 		'a { --spacing: var(--spacing) var(--spacing, var(--spacing)); }',
 		'a { --spacing: var(--spacing); --color: var(--color); }',
 		'a { --spacing: VAR(--spacing); }',
@@ -91,7 +92,6 @@ test.snapshot({
 		'@keyframes grow { to { --spacing: var(--spacing); } }',
 		'@supports (--spacing: var(--spacing)) { a { --spacing: var(--spacing); } }',
 		'@container style(--spacing: var(--spacing)) { a { --spacing: var(--spacing); } }',
-		'a { --spacing: if(style(--enabled: yes): 1px; else: var(--spacing)); }',
 		'a { --spacing: {value: [var(--spacing)]}; }',
 		String.raw`a { --spacing: v\61r(--spacing); }`,
 		String.raw`a { --sp\61 cing: var(--spacing); }`,
@@ -104,6 +104,26 @@ test.snapshot({
 
 test({
 	valid: [
+		'a { --a: if(supports(--b: var(--b)): 1px; else: 2px); --b: var(--a); }',
+		'a { --base:; --a: var(--base, var(--b)); --b: var(--a); }',
+		'a { --base: calc(initial); --spacing: var(--base, var(--spacing)); }',
+		'a { --base: /* empty */; --spacing: var(--base, var(--spacing)); }',
+		'a { --a: var(--base, var(--b)); --b: var(--a); --base: 1px; }',
+		'a { --base: var(--value); --a: var(--base, var(--b)); --b: var(--a); --value: 1px; }',
+		'a { --invalid: initial; --base: var(--invalid,); --a: var(--base, var(--a)); }',
+		'a { --base: env(safe-area-inset-top, var(--base)); --a: var(--base, var(--a)); }',
+		'a { --base: attr(data-spacing type(<length>), var(--base)); --a: var(--base, var(--a)); }',
+		'a { --base: first-valid(1px, var(--base)); --a: var(--base, var(--a)); }',
+		'a { --base: --theme(var(--base)); --a: var(--base, var(--a)); }',
+		String.raw`a { --base: I\46(style(--enabled: yes): var(--base); else: 1px); --a: var(--base, var(--a)); }`,
+		'a { --base: initial; --base: 1px !important; --a: var(--base, var(--b)); --b: var(--a); }',
+		'a { --base: initial; --spacing: var(--base, var(--value, var(--spacing))); --value: 1px; }',
+		'a { --base: var(--external); --a: var(--base, var(--b)); --b: var(--a); }',
+		'a { --base: inherit; --a: var(--base, var(--b)); --b: var(--a); }',
+		'a { --base: unset; --a: var(--base, var(--b)); --b: var(--a); }',
+		'a { --base: revert-layer; --a: var(--base, var(--b)); --b: var(--a); }',
+		'a { --base: if(style(--enabled: yes): initial; else: 1px); --a: var(--base, var(--b)); --b: var(--a); }',
+		'a { --base: 1px; --spacing: var(--base, var(--spacing)); --spacing: 2px; }',
 		'@keyframes grow { from { --a: var(--b); } to { --b: var(--a); } }',
 		{
 			name: 'large acyclic custom-property chain',
@@ -111,6 +131,91 @@ test({
 		},
 	],
 	invalid: [
+		{
+			code: 'a { --b: var(--b) var(--d); --c: var(--b); --d: var(--c, 1px) 1px 1px; }',
+			errors: [{messageId: 'no-self-referencing-custom-properties', data: {property: '--b'}}],
+		},
+		{
+			code: 'a { --d: var(--c, 1px) 1px 1px; --c: var(--b); --b: var(--b) var(--d); }',
+			errors: [{messageId: 'no-self-referencing-custom-properties', data: {property: '--b'}}],
+		},
+		{
+			code: 'a { --a: var(--a, var(--b)); --b: var(--a, 1px); --c: var(--b, var(--c)); }',
+			errors: [{messageId: 'no-self-referencing-custom-properties', data: {property: '--a'}}],
+		},
+		{
+			code: 'a { --d: var(--c, var(--d)); --c: var(--b, 1px); --b: var(--a); --a: var(--b) var(--c); }',
+			errors: [
+				{messageId: 'no-self-referencing-custom-properties/cycle', data: {property: '--b'}},
+				{messageId: 'no-self-referencing-custom-properties/cycle', data: {property: '--a'}},
+			],
+		},
+		{
+			code: 'a { --invalid: initial; --empty:; --base: var(--invalid, initial) var(--empty); --a: var(--base, var(--a)); }',
+			errors: [{messageId: 'no-self-referencing-custom-properties', data: {property: '--a'}}],
+		},
+		{
+			code: 'a { --a: var(--external) var(--b); --b: var(--a); }',
+			errors: [
+				{messageId: 'no-self-referencing-custom-properties/cycle', data: {property: '--a'}},
+				{messageId: 'no-self-referencing-custom-properties/cycle', data: {property: '--b'}},
+			],
+		},
+		{
+			code: 'a { --a: if(style(--enabled: yes): 1px; else: 2px) var(--b); --b: var(--a); }',
+			errors: [
+				{messageId: 'no-self-referencing-custom-properties/cycle', data: {property: '--a'}},
+				{messageId: 'no-self-referencing-custom-properties/cycle', data: {property: '--b'}},
+			],
+		},
+		{
+			code: 'a { --invalid: initial; --base: var(--invalid, initial); --a: var(--base, var(--a)); }',
+			errors: [{messageId: 'no-self-referencing-custom-properties', data: {property: '--a'}}],
+		},
+		{
+			code: 'a { --a: var(--b) var(--c); --b: var(--a); --c: var(--b, 1px); --d: var(--c, var(--d)); }',
+			errors: [
+				{messageId: 'no-self-referencing-custom-properties/cycle', data: {property: '--a'}},
+				{messageId: 'no-self-referencing-custom-properties/cycle', data: {property: '--b'}},
+			],
+		},
+		{
+			code: 'a { --base: initial; --a: var(--base, var(--b)); --b: var(--a); }',
+			errors: [
+				{messageId: 'no-self-referencing-custom-properties/cycle', data: {property: '--a'}},
+				{messageId: 'no-self-referencing-custom-properties/cycle', data: {property: '--b'}},
+			],
+		},
+		{
+			code: String.raw`a { --base: \49NITIAL; --spacing: var(--base, var(--spacing)); }`,
+			errors: [{messageId: 'no-self-referencing-custom-properties', data: {property: '--spacing'}}],
+		},
+		{
+			code: 'a { --base: initial !important; --base: 1px; --a: var(--base, var(--b)); --b: var(--a); }',
+			errors: [
+				{messageId: 'no-self-referencing-custom-properties/cycle', data: {property: '--a'}},
+				{messageId: 'no-self-referencing-custom-properties/cycle', data: {property: '--b'}},
+			],
+		},
+		{
+			code: 'a { --base: initial; --other: initial; --spacing: var(--base, calc(var(--other, var(--spacing)) + 1px)); }',
+			errors: [{messageId: 'no-self-referencing-custom-properties', data: {property: '--spacing'}}],
+		},
+		{
+			code: 'a { --a: var(--b, 1px); --b: var(--a, 2px); --incoming: var(--a, var(--incoming)); }',
+			errors: [
+				{messageId: 'no-self-referencing-custom-properties/cycle', data: {property: '--a'}},
+				{messageId: 'no-self-referencing-custom-properties/cycle', data: {property: '--b'}},
+				{messageId: 'no-self-referencing-custom-properties', data: {property: '--incoming'}},
+			],
+		},
+		{
+			code: 'a { --a: var(--b, 1px); --b: var(--a, 2px); --incoming: var(--a, 3px); --consumer: var(--incoming, var(--consumer)); }',
+			errors: [
+				{messageId: 'no-self-referencing-custom-properties/cycle', data: {property: '--a'}},
+				{messageId: 'no-self-referencing-custom-properties/cycle', data: {property: '--b'}},
+			],
+		},
 		{
 			code: 'a { --a: var(--b); all: initial; --b: var(--a); }',
 			errors: [
@@ -134,13 +239,6 @@ test({
 		},
 		{
 			code: 'a { --a: {value: [var(--b)]}; --b: var(--a); }',
-			errors: [
-				{messageId: 'no-self-referencing-custom-properties/cycle', data: {property: '--a'}},
-				{messageId: 'no-self-referencing-custom-properties/cycle', data: {property: '--b'}},
-			],
-		},
-		{
-			code: 'a { --a: if(supports(--b: var(--b)): 1px; else: 2px); --b: var(--a); }',
 			errors: [
 				{messageId: 'no-self-referencing-custom-properties/cycle', data: {property: '--a'}},
 				{messageId: 'no-self-referencing-custom-properties/cycle', data: {property: '--b'}},
