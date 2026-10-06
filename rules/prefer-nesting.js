@@ -188,15 +188,14 @@ const getIndentation = (rule, sourceCode) => {
 	return {indentation, indentationStep: bodyIndentation.slice(indentation.length)};
 };
 
-const getNestedContent = (rule, inner, context) => {
+const getNestedContent = ({rule, inner, blockNode = rule.block, blockText}, context) => {
 	const {sourceCode} = context;
 	const ruleText = sourceCode.getText(rule);
 	if (hasCommentInRange(context, sourceCode.getRange(rule)) || /\\[\da-f]{0,6}[\n\f\r]/iu.test(ruleText)) {
 		return;
 	}
 
-	const blockNode = rule.type === 'Atrule' ? rule.block.children.at(0).block : rule.block;
-	const block = sourceCode.getText(blockNode);
+	const block = blockText ?? sourceCode.getText(blockNode);
 	const lineBreak = ruleText.match(/\r\n|[\n\f\r]/u)?.[0];
 	if (!lineBreak) {
 		return ` ${inner} ${block} `;
@@ -221,13 +220,41 @@ const getNestedContent = (rule, inner, context) => {
 	}
 
 	const indentedInner = inner.replaceAll(/(\r\n|[\n\f\r])(?=[\t ]*[^\t\n\f\r ])/gu, lineBreak => lineBreak + indentationStep);
-	const indentedBlock = rule.type === 'Atrule' ? block : block.replaceAll(/(\r\n|[\n\f\r])(?=[\t ]*[^\t\n\f\r ])/gu, lineBreak => lineBreak + indentationStep);
+	const indentedBlock = blockNode === rule.block ? block.replaceAll(/(\r\n|[\n\f\r])(?=[\t ]*[^\t\n\f\r ])/gu, lineBreak => lineBreak + indentationStep) : block;
 	return `${lineBreak}${indentation}${indentationStep}${indentedInner} ${indentedBlock}${lineBreak}${indentation}`;
 };
 
 const getSingleSelector = rule => rule?.type === 'Rule' && rule.prelude?.type === 'SelectorList' && rule.prelude.children.length === 1
 	? rule.prelude.children.at(0)
 	: undefined;
+
+const isSameSelectorNode = (first, second, sourceCode) => first.type === second.type && (first.type === 'Combinator'
+	? first.name === second.name
+	: sourceCode.getText(first) === sourceCode.getText(second));
+
+const getSharedParent = (first, second, sourceCode) => {
+	if (!second) {
+		return;
+	}
+
+	const children = [];
+	for (let index = 0; index < Math.min(first.children.length, second.children.length); index++) {
+		if (!isSameSelectorNode(first.children[index], second.children[index], sourceCode)) {
+			break;
+		}
+
+		children.push(first.children[index]);
+	}
+
+	if (children.at(-1)?.type === 'Combinator') {
+		children.pop();
+	}
+
+	const selector = {type: 'Selector', children};
+	if (children.length > 0 && children.length < first.children.length && children.length < second.children.length && isRelatedParent(selector) && canBeRepresentedByNestingSelector(selector, false)) {
+		return selector;
+	}
+};
 
 const getRelatedSelectorText = (parentSelector, selectorList, sourceCode) => {
 	if (selectorList?.type !== 'SelectorList') {
@@ -240,10 +267,7 @@ const getRelatedSelectorText = (parentSelector, selectorList, sourceCode) => {
 	for (const selector of selectorList.children) {
 		if (
 			selector.children.length <= parentNodes.length
-			|| parentNodes.some((node, index) => {
-				const childNode = selector.children[index];
-				return node.type !== childNode.type || (node.type === 'Combinator' ? node.name !== childNode.name : sourceCode.getText(node) !== sourceCode.getText(childNode));
-			})
+			|| parentNodes.some((node, index) => !isSameSelectorNode(node, selector.children[index], sourceCode))
 			|| !canMatchSelector(selector)
 			|| find(selector, node => node.type === 'NestingSelector' || node.type === 'Raw')
 		) {
@@ -259,40 +283,58 @@ const getRelatedSelectorText = (parentSelector, selectorList, sourceCode) => {
 	return result || undefined;
 };
 
-const getRelatedHeader = (parentSelector, rule, sourceCode) => {
+const getRelatedRule = (parentSelector, rule, sourceCode) => {
 	if (rule.type === 'Rule') {
-		return getRelatedSelectorText(parentSelector, rule.prelude, sourceCode);
+		const inner = getRelatedSelectorText(parentSelector, rule.prelude, sourceCode);
+		return inner === undefined ? undefined : {rule, inner};
 	}
 
-	if (
-		rule.type !== 'Atrule'
-		|| !['media', 'supports', 'container', 'layer'].includes(normalizeCssIdentifier(rule.name))
-		|| rule.block?.children.length !== 1
-	) {
+	if (rule.type !== 'Atrule' || rule.block?.children.length !== 1) {
 		return;
 	}
 
-	const selector = getSingleSelector(rule.block.children.at(0));
-	if (!selector || sourceCode.getText(selector) !== sourceCode.getText(parentSelector)) {
+	const name = normalizeCssIdentifier(rule.name);
+	if (!['media', 'supports', 'container', 'layer', 'starting-style'].includes(name)) {
 		return;
 	}
 
-	// The parser cannot reliably parse nested rules inside a nested @container block.
-	if (normalizeCssIdentifier(rule.name) === 'container' && rule.block.children.at(0).block.children.some(node => node.type !== 'Declaration')) {
+	const childRule = rule.block.children.at(0);
+	const selector = getSingleSelector(childRule);
+	const inner = sourceCode.text.slice(sourceCode.getRange(rule)[0], sourceCode.getRange(rule.block)[0]).trimEnd();
+	if (selector && sourceCode.getText(selector) === getNodesText(parentSelector.children, sourceCode)) {
+		// Nested @container, @supports, and @starting-style blocks must remain declaration-only for the parser.
+		if (['container', 'supports', 'starting-style'].includes(name) && childRule.block.children.some(node => node.type !== 'Declaration')) {
+			return;
+		}
+
+		return {rule, inner, blockNode: childRule.block};
+	}
+
+	if (!['media', 'layer'].includes(name)) {
 		return;
 	}
 
-	return sourceCode.text.slice(sourceCode.getRange(rule)[0], sourceCode.getRange(rule.block)[0]).trimEnd();
+	const relativeSelector = getRelatedSelectorText(parentSelector, childRule.prelude, sourceCode);
+	if (relativeSelector === undefined) {
+		return;
+	}
+
+	const block = sourceCode.getText(rule.block);
+	const [blockStart] = sourceCode.getRange(rule.block);
+	const [selectorStart, selectorEnd] = sourceCode.getRange(childRule.prelude);
+	const blockText = block.slice(0, selectorStart - blockStart) + relativeSelector + block.slice(selectorEnd - blockStart);
+	return {rule, inner, blockText};
 };
 
-const getMergedReplacement = (parentRule, relatedRules, context) => {
+const getMergedReplacement = (parentRule, parentSelector, relatedRules, context) => {
 	const {sourceCode} = context;
 	const range = [sourceCode.getRange(parentRule)[0], sourceCode.getRange(relatedRules.at(-1).rule)[1]];
 	if (hasCommentInRange(context, range)) {
 		return;
 	}
 
-	const lastChild = parentRule.block.children.at(-1);
+	const hasExistingParent = relatedRules[0].rule !== parentRule;
+	const lastChild = hasExistingParent ? parentRule.block.children.at(-1) : undefined;
 	if (lastChild && !lastChild.block) {
 		if (lastChild.type !== 'Declaration') {
 			return;
@@ -307,8 +349,9 @@ const getMergedReplacement = (parentRule, relatedRules, context) => {
 	const parentText = sourceCode.getText(parentRule);
 	const isMultiline = /[\n\f\r]/u.test(parentText);
 	const parentFormatting = isMultiline ? getIndentation(parentRule, sourceCode) : undefined;
-	let replacement = parentText.slice(0, -1);
-	for (const {rule, inner} of relatedRules) {
+	let replacement = hasExistingParent ? parentText.slice(0, -1) : `${getNodesText(parentSelector.children, sourceCode)} {`;
+	for (const relatedRule of relatedRules) {
+		const {rule} = relatedRule;
 		const childIsMultiline = /[\n\f\r]/u.test(sourceCode.getText(rule));
 		const childFormatting = childIsMultiline ? getIndentation(rule, sourceCode) : undefined;
 		if (
@@ -323,7 +366,7 @@ const getMergedReplacement = (parentRule, relatedRules, context) => {
 			return;
 		}
 
-		const content = getNestedContent(rule, inner, context);
+		const content = getNestedContent(relatedRule, context);
 		if (content === undefined) {
 			return;
 		}
@@ -338,12 +381,12 @@ const getRelatedRules = (children, startIndex, parentSelector, sourceCode) => {
 	const relatedRules = [];
 	for (let index = startIndex; index < children.length; index++) {
 		const rule = children[index];
-		const inner = getRelatedHeader(parentSelector, rule, sourceCode);
-		if (inner === undefined) {
+		const relatedRule = getRelatedRule(parentSelector, rule, sourceCode);
+		if (relatedRule === undefined) {
 			break;
 		}
 
-		relatedRules.push({rule, inner});
+		relatedRules.push(relatedRule);
 	}
 
 	return relatedRules;
@@ -361,32 +404,42 @@ const create = context => {
 	context.on(['StyleSheet', 'Block'], function * (container) {
 		for (let index = 0; index < container.children.length - 1; index++) {
 			const parentRule = container.children[index];
-			const parentSelector = getSingleSelector(parentRule);
+			let parentSelector = getSingleSelector(parentRule);
 			if (
 				!parentSelector
-				|| !isRelatedParent(parentSelector)
-				|| !canBeRepresentedByNestingSelector(parentSelector, false)
 				|| !isStyleRule(parentRule, context)
 				|| hasScopeAncestor(parentRule, context)
 			) {
 				continue;
 			}
 
-			const relatedRules = getRelatedRules(container.children, index + 1, parentSelector, sourceCode);
+			let relatedRules = isRelatedParent(parentSelector) && canBeRepresentedByNestingSelector(parentSelector, false)
+				? getRelatedRules(container.children, index + 1, parentSelector, sourceCode)
+				: [];
 			if (relatedRules.length === 0) {
-				continue;
+				parentSelector = getSharedParent(parentSelector, getSingleSelector(container.children[index + 1]), sourceCode);
+				if (!parentSelector) {
+					continue;
+				}
+
+				relatedRules = getRelatedRules(container.children, index, parentSelector, sourceCode);
+				if (relatedRules.length < 2) {
+					continue;
+				}
 			}
 
-			const replacement = getMergedReplacement(parentRule, relatedRules, context);
+			const hasExistingParent = relatedRules[0].rule !== parentRule;
+			const reportedRule = relatedRules[hasExistingParent ? 0 : 1].rule;
+			const replacement = getMergedReplacement(parentRule, parentSelector, relatedRules, context);
 			yield {
-				node: relatedRules[0].rule.prelude ?? relatedRules[0].rule,
+				node: reportedRule.prelude ?? reportedRule,
 				messageId: MESSAGE_ID_RELATED_RULES,
 				/**
 				@param {Parameters<CssicornRuleFixer>[0]} fixer
 				*/
 				fix: replacement === undefined ? undefined : fixer => fixer.replaceTextRange([sourceCode.getRange(parentRule)[0], sourceCode.getRange(relatedRules.at(-1).rule)[1]], replacement),
 			};
-			index += relatedRules.length;
+			index += relatedRules.length - (hasExistingParent ? 0 : 1);
 		}
 	});
 
@@ -401,7 +454,7 @@ const create = context => {
 			return;
 		}
 
-		const content = getNestedContent(rule, `${candidate.prefix}${getNodesText(candidate.innerNodes, sourceCode)}`, context);
+		const content = getNestedContent({rule, inner: `${candidate.prefix}${getNodesText(candidate.innerNodes, sourceCode)}`}, context);
 		const replacement = content === undefined ? undefined : `${getNodesText(candidate.outerNodes, sourceCode)} {${content}}`;
 		return {
 			node: candidate.node,

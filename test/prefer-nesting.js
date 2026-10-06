@@ -10,8 +10,6 @@ const {test} = getTester(import.meta);
 test({
 	valid: [
 		'.page .card {} .other .page .card .title {}',
-		'.page .card {} .page .cardinal .title {}',
-		'.page > .card {} .page + .card .title {}',
 		'.page .card {} .page .card .title, .page .other .body {}',
 		'.outer { > .card {} > .card .title {} }',
 		'.outer { .page & .card {} .page & .card .title {} }',
@@ -125,7 +123,6 @@ test({
 		'.outer { .card {} & .card .title {} }',
 		'.outer { .card {} .card:has(&) {} }',
 		'.outer { .card {} --value: red; .card .title {} }',
-		'.card {} @media (width > 0px) { .card .title {} }',
 		'@scope (.outer) { .card {} .card .title {} }',
 		'@namespace url("http://www.w3.org/1999/xhtml"); .card {} .card .title {}',
 		String.raw`.c\61 rd {} .card .title {}`,
@@ -743,6 +740,7 @@ nodeTest('related rule fixes settle with selector groups and long adjacent runs'
 		...plugin.configs.recommended,
 		rules: {'cssicorn/prefer-nesting': 'error', 'cssicorn/no-useless-is': 'error'},
 	};
+	assert.equal(linter.verify('.a .x {} .a .y {} .b {} .b .z {}', config, {filename: 'test.css'}).length, 2);
 	const cases = [
 		{
 			code: '.card { color: red; } .card .title { color: blue; } .card .title > a { color: green; }',
@@ -755,6 +753,18 @@ nodeTest('related rule fixes settle with selector groups and long adjacent runs'
 		{
 			code: `.card {} ${Array.from({length: 20}, (_, index) => `.card .child-${index} { color: red; }`).join(' ')}`,
 			output: `.card { ${Array.from({length: 20}, (_, index) => `& .child-${index} { color: red; }`).join(' ')} }`,
+		},
+		{
+			code: '.a .x {} .a .y {} .b {} .b .z {}',
+			output: '.a { & .x {} & .y {} } .b { & .z {} }',
+		},
+		{
+			code: '.card .title {} .card .body {} @media (color) { .card { color: blue; } }',
+			output: '.card { & .title {} & .body {} @media (color) { color: blue; } }',
+		},
+		{
+			code: '.card .title {} .card .body {} @layer theme { .card .footer { color: blue; } }',
+			output: '.card { & .title {} & .body {} @layer theme { & .footer { color: blue; } } }',
 		},
 	];
 	for (const {code, output} of cases) {
@@ -803,6 +813,10 @@ nodeTest('nesting fixes work with the other nesting rules', () => {
 		'form:invalid { color: red; } @media (width > 0px) { form:invalid { color: blue; } }',
 		'.card { color: red; } @media (width > 0px) { .card { color: blue; } }',
 		'.card { color: red; } @supports (display: grid) { .card { color: blue; } }',
+		'.card .title { color: red; } .card .body { color: blue; }',
+		'.card { color: red; } @media (color) { .card .title { color: blue; } }',
+		'.card { color: red; } @layer theme { .card:hover { color: blue; } }',
+		'.card { opacity: 1; } @starting-style { .card { opacity: 0; } }',
 	]) {
 		const result = linter.verifyAndFix(code, config, {filename: 'test.css'});
 		assert.equal(result.fixed, true);
@@ -952,7 +966,6 @@ test({
 		'.outer { a :where(&, .bar).active {} }',
 		'@scope (.outer) { a :is(.foo, .bar).active {} }',
 		'@namespace url("http://www.w3.org/1999/xhtml"); a :where(.foo, .bar) b {}',
-		'.card:lang(en) {} .card:lang(fr) .title {}',
 		String.raw`.card:\6c ang(en) {} .card:\6c ang(en) .title {}`,
 		'.card:visited {} .card:visited .title {}',
 		'.card:host {} .card:host .title {}',
@@ -1051,6 +1064,161 @@ test({
 			'a :where(.foo, #bar) /* keep */ .title { color: red; }',
 			'a :is(.foo, .bar).active {\n\t--value: \\61\nbc;\n}',
 			'a :is(.foo, #bar):hover { color: red; /* keep */ }',
+		].map(code => ({code, errors: 1})),
+	],
+});
+
+nodeTest('supports overrides with nested rules remain parseable', () => {
+	const linter = new Linter();
+	const config = {...plugin.configs.recommended, rules: {'cssicorn/prefer-nesting': 'error'}};
+	for (const code of [
+		'.card { color: red; } @supports (display: grid) { .card { & .title { color: blue; } } }',
+		'.card { color: red; } @supports (display: grid) { .card { opacity: 0; & .title { color: blue; } } }',
+	]) {
+		assert.deepEqual(linter.verify(code, config, {filename: 'test.css'}), []);
+		assert.deepEqual(linter.verifyAndFix(code, config, {filename: 'test.css'}), {fixed: false, messages: [], output: code});
+	}
+});
+
+test({
+	valid: [
+		'.cardinal .title {} .card .body {}',
+		'.card .title {} .other {} .card .body {}',
+		'.card .title {} .card {}',
+		'.card .title, .other .title {} .card .body {}',
+		'.card:scope .title {} .card:scope .body {}',
+		'.outer { & .card .title {} & .card .body {} }',
+		'.card .title:unknown {} .card .body {}',
+		'.card .title {} .card .body:unknown {}',
+		'.outer { .card .title {} .card:has(&) .body {} }',
+		'@scope (.outer) { .card .title {} .card .body {} }',
+		'@namespace url("http://www.w3.org/1999/xhtml"); .card .title {} .card .body {}',
+		'.card {} @media (color) { .card .title {} .other {} }',
+		'.card {} @layer theme { .card .title {} .other .body {} }',
+		'.card {} @supports (display: grid) { .card .title {} }',
+		'.card {} @container (width > 0px) { .card .title {} }',
+		'.card {} @starting-style { .other {} }',
+		'.card {} @starting-style { .card {} .other {} }',
+		'.card {} @starting-style { .card, .other {} }',
+		'.card {} @starting-style { .card .title {} }',
+		'.card {} @starting-style { .card { & .title {} } }',
+		'.card {} @starting-style { .card { @media (color) { color: red; } } }',
+	],
+	invalid: [
+		{
+			code: '.page .card {} .page .cardinal .title {}',
+			output: '.page { & .card {} & .cardinal .title {} }',
+			errors: 1,
+		},
+		{
+			code: '.page > .card {} .page + .card .title {}',
+			output: '.page { & > .card {} & + .card .title {} }',
+			errors: 1,
+		},
+		{
+			code: '.card {} @media (width > 0px) { .card .title {} }',
+			output: '.card { @media (width > 0px) { & .title {} } }',
+			errors: 1,
+		},
+		{
+			code: '.card:lang(en) {} .card:lang(fr) .title {}',
+			output: '.card { &:lang(en) {} &:lang(fr) .title {} }',
+			errors: 1,
+		},
+		...[
+			['.card .title', '.card .body', '.card', '& .title', '& .body'],
+			['.card.title', '.card.body', '.card', '&.title', '&.body'],
+			['.grid > .small', '.grid > .large', '.grid', '& > .small', '& > .large'],
+			['.card + .title', '.card ~ .body', '.card', '& + .title', '& ~ .body'],
+			['.page .card .title', '.page .card .body', '.page .card', '& .title', '& .body'],
+			['.card::before', '.card::after', '.card', '&::before', '&::after'],
+			['.card:lang(en) .title', '.card:lang(en) .body', '.card:lang(en)', '& .title', '& .body'],
+		].map(([first, second, parent, firstInner, secondInner]) => ({
+			code: `${first} { color: red; } ${second} { color: blue; }`,
+			output: `${parent} { ${firstInner} { color: red; } ${secondInner} { color: blue; } }`,
+			errors: 1,
+		})),
+		{
+			code: '.card .title { color: red } .card .body { color: blue }',
+			output: '.card { & .title { color: red } & .body { color: blue } }',
+			errors: 1,
+		},
+		{
+			code: '.card .title {} .card .body {} .card:hover {}',
+			output: '.card { & .title {} & .body {} &:hover {} }',
+			errors: 1,
+		},
+		{
+			code: '.card .title {} .card .body {} .card .footer, .card .aside { color: blue; }',
+			output: '.card { & .title {} & .body {} & .footer, & .aside { color: blue; } }',
+			errors: 1,
+		},
+		{
+			code: '.outer, #outer { .card .title { color: red; } .card .body { color: blue; } }',
+			output: '.outer, #outer { .card { & .title { color: red; } & .body { color: blue; } } }',
+			errors: 1,
+		},
+		{
+			code: String.raw`.c\61 rd .title { color: red; } .c\61 rd .body { color: blue; }`,
+			output: String.raw`.c\61 rd { & .title { color: red; } & .body { color: blue; } }`,
+			errors: 1,
+		},
+		{
+			code: '.card .title {\n\tcolor: red;\n}\n.card .body {\n\tcolor: blue;\n}',
+			output: '.card {\n\t& .title {\n\t\tcolor: red;\n\t}\n\t& .body {\n\t\tcolor: blue;\n\t}\n}',
+			errors: 1,
+		},
+		{
+			code: '.card .title {\r\n  color: red;\r\n}\r\n.card .body {\r\n  color: blue;\r\n}',
+			output: '.card {\r\n  & .title {\r\n    color: red;\r\n  }\r\n  & .body {\r\n    color: blue;\r\n  }\r\n}',
+			errors: 1,
+		},
+		...['media (color)', 'layer theme', 'layer', 'MEDIA (color)', String.raw`m\65 dia (color)`].map(atRule => ({
+			code: `.card { color: red; } @${atRule} { .card .title, .card:hover { color: blue; } }`,
+			output: `.card { color: red; @${atRule} { & .title, &:hover { color: blue; } } }`,
+			errors: 1,
+		})),
+		{
+			code: '.card { color: red; } @media (color) { .card .title { color: blue; & .link { color: green; } } }',
+			output: '.card { color: red; @media (color) { & .title { color: blue; & .link { color: green; } } } }',
+			errors: 1,
+		},
+		{
+			code: '.card {\n\tcolor: red;\n}\n@media (color) {\n\t.card .title {\n\t\tcolor: blue;\n\t}\n}',
+			output: '.card {\n\tcolor: red;\n\t@media (color) {\n\t\t& .title {\n\t\t\tcolor: blue;\n\t\t}\n\t}\n}',
+			errors: 1,
+		},
+		{
+			code: '.card {\r\n  color: red;\r\n}\r\n@layer theme {\r\n  .card:hover {\r\n    color: blue !important;\r\n  }\r\n}',
+			output: '.card {\r\n  color: red;\r\n  @layer theme {\r\n    &:hover {\r\n      color: blue !important;\r\n    }\r\n  }\r\n}',
+			errors: 1,
+		},
+		...['starting-style', 'STARTING-STYLE', String.raw`starting-st\79 le`].map(atRule => ({
+			code: `.card { opacity: 1; } @${atRule} { .card { opacity: 0 !important; } }`,
+			output: `.card { opacity: 1; @${atRule} { opacity: 0 !important; } }`,
+			errors: 1,
+		})),
+		{
+			code: '.card {} @starting-style { .card {} }',
+			output: '.card { @starting-style {} }',
+			errors: 1,
+		},
+		{
+			code: '@media (color) { .card { opacity: 1; } @starting-style { .card { opacity: 0; } } }',
+			output: '@media (color) { .card { opacity: 1; @starting-style { opacity: 0; } } }',
+			errors: 1,
+		},
+		{
+			code: '.card {\r\n  opacity: 1;\r\n}\r\n@starting-style {\r\n  .card {\r\n    opacity: 0;\r\n  }\r\n}',
+			output: '.card {\r\n  opacity: 1;\r\n  @starting-style {\r\n    opacity: 0;\r\n  }\r\n}',
+			errors: 1,
+		},
+		...[
+			'.card .title { color: red; /* keep */ } .card .body { color: blue; }',
+			'.card .title { color: red; } /* keep */ .card .body { color: blue; }',
+			'.card .title { color: red; } .card .body {\n\tcolor: blue;\n}',
+			'.card {} @media (color) { .card /* keep */ .title { color: blue; } }',
+			'.card {} @starting-style { .card { opacity: 0; /* keep */ } }',
 		].map(code => ({code, errors: 1})),
 	],
 });

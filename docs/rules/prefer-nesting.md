@@ -9,37 +9,33 @@
 <!-- end auto-generated rule header -->
 <!-- Do not manually modify this header. Run: `npm run fix:eslint-docs` -->
 
-Prefer native CSS nesting for adjacent rules and overrides that repeat a parent selector, and for structural uses of `:is()` and `:where()` groups.
+Prefer native CSS nesting for adjacent rules that share a parent selector, conditional overrides, and structural `:is()` and `:where()` groups.
 
 ## Examples
 
-Nest adjacent rules under their shared parent, including complex selectors and pseudo-classes such as `:hover`, `:not()`, `:has()`, `:nth-child()`, `:lang()`, and `:dir()`:
+Nest adjacent rules under an existing or shared parent:
 
 ```css
 /* ❌ */
-.card {
+.card .title {
 	color: red;
 }
-.card .title, .card .body {
+.card .body {
 	font-weight: bold;
-}
-.card:hover {
-	color: blue;
 }
 
 /* ✅ */
 .card {
-	color: red;
-	& .title, & .body {
-		font-weight: bold;
+	& .title {
+		color: red;
 	}
-	&:hover {
-		color: blue;
+	& .body {
+		font-weight: bold;
 	}
 }
 ```
 
-Nest an adjacent `@media`, `@supports`, `@container`, or `@layer` block containing only the same selector. For `@container`, that rule must contain only declarations:
+Nest an adjacent `@media` or `@layer` block containing one rule with the same or a related selector. `@supports`, `@container`, and `@starting-style` require the same selector and declarations only:
 
 ```css
 /* ❌ */
@@ -47,7 +43,7 @@ Nest an adjacent `@media`, `@supports`, `@container`, or `@layer` block containi
 	color: red;
 }
 @media (width > 600px) {
-	.card {
+	.card .title {
 		color: blue;
 	}
 }
@@ -56,7 +52,9 @@ Nest an adjacent `@media`, `@supports`, `@container`, or `@layer` block containi
 .card {
 	color: red;
 	@media (width > 600px) {
-		color: blue;
+		& .title {
+			color: blue;
+		}
 	}
 }
 ```
@@ -133,6 +131,6 @@ Leading `:is()` groups preserve their maximum specificity, even with mixed argum
 
 ## Limitations
 
-Merges only adjacent rules with one parent selector repeated exactly. Selector-group conversions require one outer selector and at least two arguments.
+Merges adjacent rules using literal selector prefixes. Finding a new parent requires two single-selector rules. Selector-group conversions require one outer selector and at least two arguments.
 
 Skips existing `&`, escaped group names, opaque parent arguments, `@scope`, and files with `@namespace`. Comments, missing semicolons, or unsafe formatting can prevent fixes.
