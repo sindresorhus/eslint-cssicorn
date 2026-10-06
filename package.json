@@ -55,6 +55,7 @@
 		"@babel/code-frame": "^8.0.6",
 		"@eslint-community/eslint-utils": "^4.10.1",
 		"@eslint/css": "^2.0.0",
+		"@types/node": "^26.6.4",
 		"@typescript-eslint/types": "^8.71.0",
 		"@webref/css": "8.7.5",
 		"enquirer": "^2.4.1",

@@ -1,3 +1,5 @@
+// @ts-check
+
 import {forEachFixOrProblem} from './utilities.js';
 
 /**
@@ -35,6 +37,9 @@ export default function toEslintRuleFixer(fix) {
 	@param {CssicornFixer} fixer
 	*/
 	return fixer => {
+		/**
+		@type {ReturnType<CssicornFixer['replaceText']>[]}
+		*/
 		const eslintReport = [];
 
 		try {

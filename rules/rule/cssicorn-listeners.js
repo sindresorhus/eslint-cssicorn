@@ -1,3 +1,5 @@
+// @ts-check
+
 import toEslintListener from './to-eslint-listener.js';
 
 /**
@@ -8,6 +10,9 @@ import toEslintListener from './to-eslint-listener.js';
 
 export default class CssicornListeners {
 	#context;
+	/**
+	@type {Map<string, CssicornRuleListener[]>}
+	*/
 	#listeners = new Map();
 
 	/**
@@ -17,13 +22,21 @@ export default class CssicornListeners {
 		this.#context = context;
 	}
 
+	/**
+	@template {CssNodePlain['type']} NodeType
+	@param {string[]} selectors
+	@param {CssicornRuleListener<NodeType>} listener
+	*/
 	#addEventListener(selectors, listener) {
 		const listeners = this.#listeners;
+		// Each stored listener is invoked only for its registered node type.
+		const registeredListener = /** @type {CssicornRuleListener} */ (listener);
 		for (const selector of selectors) {
-			if (listeners.has(selector)) {
-				listeners.get(selector).push(listener);
+			const registeredListeners = listeners.get(selector);
+			if (registeredListeners) {
+				registeredListeners.push(registeredListener);
 			} else {
-				listeners.set(selector, [listener]);
+				listeners.set(selector, [registeredListener]);
 			}
 		}
 	}
@@ -52,6 +65,9 @@ export default class CssicornListeners {
 	@returns {CSSRuleVisitor}
 	*/
 	toEslintListeners() {
+		/**
+		@type {CSSRuleVisitor}
+		*/
 		const eslintListeners = {};
 
 		for (const [selector, listeners] of this.#listeners) {

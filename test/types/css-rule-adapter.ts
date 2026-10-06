@@ -10,6 +10,7 @@ import toEslintRule from '../../rules/rule/to-eslint-rule.js';
 import selectorOrderRule from '../../rules/consistent-compound-selector-order.js';
 import layerOrderRule from '../../rules/consistent-layer-order.js';
 import clampRule from '../../rules/prefer-clamp.js';
+import customPropertyCyclesRule from '../../rules/no-self-referencing-custom-properties.js';
 
 declare const context: CssicornContext;
 declare const selector: SelectorPlain;
@@ -84,6 +85,9 @@ const rule: CssicornRule = selectorOrderRule;
 const layerRule: CssicornRule = layerOrderRule;
 const comparisonRule: CssicornRule = clampRule;
 const adapted: CSSRuleDefinition = toEslintRule('order', rule);
+const adaptedCycles: CSSRuleDefinition = toEslintRule('cycles', customPropertyCyclesRule);
+// @ts-expect-error Cssicorn rules require metadata.
+toEslintRule('missing-meta', {create() {}});
 const create: CSSRuleDefinition['create'] = toEslintCreate(rule.create);
 declare const eslintContext: Parameters<CSSRuleDefinition['create']>[0];
 const listeners = new CssicornListeners(eslintContext);

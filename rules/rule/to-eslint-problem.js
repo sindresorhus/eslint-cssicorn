@@ -1,3 +1,5 @@
+// @ts-check
+
 import toEslintFixer from './to-eslint-rule-fixer.js';
 
 /**

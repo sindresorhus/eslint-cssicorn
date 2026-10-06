@@ -3,9 +3,10 @@
 		"allowJs": true,
 		"noEmit": true,
 		"strict": true,
+		"types": ["node"],
 		"skipLibCheck": true,
 		"module": "NodeNext",
 		"target": "ES2023"
 	},
-	"include": ["*.ts"]
+	"include": ["*.ts", "../../rules/rule/*.js"]
 }
