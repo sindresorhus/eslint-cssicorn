@@ -9,9 +9,9 @@
 
 When one overflow axis is `visible` and the other is `hidden`, `auto`, or `scroll`, the browser computes `visible` to `auto`. The legacy `overlay` alias of `auto` has the same effect.
 
-For example, `overflow-x: hidden; overflow-y: visible` computes to `overflow-x: hidden; overflow-y: auto`. Content does not remain visible outside the vertical edges: it can be clipped and become scrollable. The resulting scroll container can also change how sticky descendants behave, because sticky positioning uses the nearest scrollport.
+For example, `overflow-x: hidden; overflow-y: visible` computes to `overflow-x: hidden; overflow-y: auto`. This can clip content, enable scrolling, and change sticky descendants' nearest scrollport.
 
-This rule reports the affected `visible` value and explains both resulting axis values. It checks `overflow`, `overflow-x`/`overflow-y` pairs, and `overflow-block`/`overflow-inline` pairs.
+The rule reports the affected `visible` value and both resulting axis values. It checks `overflow`, `overflow-x`/`overflow-y`, and `overflow-block`/`overflow-inline`.
 
 ## Examples
 
@@ -81,6 +81,8 @@ Logical overflow axes are supported too:
 
 ## Limitations
 
-The rule requires explicit, known values for both axes within one style block, respecting declaration order, `!important`, and shorthand overrides. It skips mixed physical/logical axes and does not resolve the full cascade or substitutions such as `var()`.
+- Requires known values for both axes in one style block; respects declaration order, `!important`, and shorthand overrides.
+- Skips mixed physical/logical axes, substitutions such as `var()`, and cascade resolution across blocks.
+- Ignores `clip` paired with scrollable values because browser behavior is changing.
 
-`clip` paired with scrollable values is ignored because its browser behavior is changing. The rule provides no fixes or suggestions because the intended overflow behavior is ambiguous.
+No fixes or suggestions are offered because the intended behavior is ambiguous.

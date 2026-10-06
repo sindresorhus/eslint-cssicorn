@@ -51,6 +51,18 @@ test('aborting a generator discards previously yielded edits', () => {
 	assert.deepEqual(fix({}), []);
 });
 
+test('absent edits are ignored', () => {
+	assert.deepEqual(toEslintRuleFixer(() => undefined)({}), []);
+
+	const edit = {range: [0, 1], text: 'replacement'};
+	const fix = toEslintRuleFixer(function * () {
+		yield undefined;
+		yield edit;
+		yield undefined;
+	});
+	assert.deepEqual(fix({}), [edit]);
+});
+
 test('ordinary fix errors propagate', () => {
 	const error = new Error('Unexpected fix failure.');
 	const fix = toEslintRuleFixer(() => {

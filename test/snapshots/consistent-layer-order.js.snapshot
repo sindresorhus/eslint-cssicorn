@@ -1,0 +1,801 @@
+exports[`invalid(1): @layer base, theme; @layer themes {} 1`] = `
+
+Options:
+- checkUndeclaredLayers: true
+
+Code:
+  1 | @layer base, theme; @layer themes {}
+
+`;
+
+exports[`invalid(1): @layer base, theme; @layer themes {} 2`] = `
+
+Message:
+> 1 | @layer base, theme; @layer themes {}
+    |                            ^^^^^^ Layer \`themes\` is not declared in the initial layer order.
+
+`;
+
+exports[`invalid(1): @layer reset, base, theme; @layer theme, base, reset; 1`] = `
+
+  1 | @layer reset, base, theme; @layer theme, base, reset;
+
+`;
+
+exports[`invalid(1): @layer reset, base, theme; @layer theme, base, reset; 2`] = `
+
+Message:
+> 1 | @layer reset, base, theme; @layer theme, base, reset;
+    |                                   ^^^^^^^^^^^^^^^^^^ List layer \`base\` before \`theme\` to match the initial layer order.
+
+Output:
+  1 | @layer reset, base, theme; @layer reset, base, theme;
+
+`;
+
+exports[`invalid(10): @layer __proto__, constructor; @layer constructor, __proto__; 1`] = `
+
+  1 | @layer __proto__, constructor; @layer constructor, __proto__;
+
+`;
+
+exports[`invalid(10): @layer __proto__, constructor; @layer constructor, __proto__; 2`] = `
+
+Message:
+> 1 | @layer __proto__, constructor; @layer constructor, __proto__;
+    |                                       ^^^^^^^^^^^^^^^^^^^^^^ List layer \`__proto__\` before \`constructor\` to match the initial layer order.
+
+Output:
+  1 | @layer __proto__, constructor; @layer __proto__, constructor;
+
+`;
+
+exports[`invalid(10): @layer base, theme; @media screen { @layer themes {} } 1`] = `
+
+Options:
+- checkUndeclaredLayers: true
+
+Code:
+  1 | @layer base, theme; @media screen { @layer themes {} }
+
+`;
+
+exports[`invalid(10): @layer base, theme; @media screen { @layer themes {} } 2`] = `
+
+Message:
+> 1 | @layer base, theme; @media screen { @layer themes {} }
+    |                                            ^^^^^^ Layer \`themes\` is not declared in the initial layer order.
+
+`;
+
+exports[`invalid(11): @layer foo\\.bar, foo.bar; @layer foo.bar, foo\\.bar; 1`] = `
+
+  1 | @layer foo\\.bar, foo.bar; @layer foo.bar, foo\\.bar;
+
+`;
+
+exports[`invalid(11): @layer foo\\.bar, foo.bar; @layer foo.bar, foo\\.bar; 2`] = `
+
+Message:
+> 1 | @layer foo\\.bar, foo.bar; @layer foo.bar, foo\\.bar;
+    |                                  ^^^^^^^^^^^^^^^^^ List layer \`foo\\.bar\` before \`foo.bar\` to match the initial layer order.
+
+Output:
+  1 | @layer foo\\.bar, foo.bar; @layer foo\\.bar, foo.bar;
+
+`;
+
+exports[`invalid(11): @layer foo\\.bar, foo.bar; @layer foo.baz {} 1`] = `
+
+Options:
+- checkUndeclaredLayers: true
+
+Code:
+  1 | @layer foo\\.bar, foo.bar; @layer foo.baz {}
+
+`;
+
+exports[`invalid(11): @layer foo\\.bar, foo.bar; @layer foo.baz {} 2`] = `
+
+Message:
+> 1 | @layer foo\\.bar, foo.bar; @layer foo.baz {}
+    |                                  ^^^^^^^ Layer \`foo.baz\` is not declared in the initial layer order.
+
+`;
+
+exports[`invalid(12): @layer base, theme; @layer theme, unknown, base; 1`] = `
+
+Options:
+- checkUndeclaredLayers: true
+
+Code:
+  1 | @layer base, theme; @layer theme, unknown, base;
+
+`;
+
+exports[`invalid(12): @layer base, theme; @layer theme, unknown, base; 2`] = `
+
+Message:
+> 1 | @layer base, theme; @layer theme, unknown, base;
+    |                            ^^^^^^^^^^^^^^^^^^^^ List layer \`base\` before \`theme\` to match the initial layer order.
+
+`;
+
+exports[`invalid(12): @layer base, theme; @layer theme, unknown, base; 3`] = `
+
+Message:
+> 1 | @layer base, theme; @layer theme, unknown, base;
+    |                                   ^^^^^^^ Layer \`unknown\` is not declared in the initial layer order.
+
+`;
+
+exports[`invalid(12): @layer foo\\2e bar, foo.bar; @layer foo.bar, foo\\.bar; 1`] = `
+
+  1 | @layer foo\\2e bar, foo.bar; @layer foo.bar, foo\\.bar;
+
+`;
+
+exports[`invalid(12): @layer foo\\2e bar, foo.bar; @layer foo.bar, foo\\.bar; 2`] = `
+
+Message:
+> 1 | @layer foo\\2e bar, foo.bar; @layer foo.bar, foo\\.bar;
+    |                                    ^^^^^^^^^^^^^^^^^ List layer \`foo\\.bar\` before \`foo.bar\` to match the initial layer order.
+
+Output:
+  1 | @layer foo\\2e bar, foo.bar; @layer foo\\.bar, foo.bar;
+
+`;
+
+exports[`invalid(13): @layer theme { @layer base, components; @layer components, base; } 1`] = `
+
+  1 | @layer theme { @layer base, components; @layer components, base; }
+
+`;
+
+exports[`invalid(13): @layer theme { @layer base, components; @layer components, base; } 2`] = `
+
+Message:
+> 1 | @layer theme { @layer base, components; @layer components, base; }
+    |                                                ^^^^^^^^^^^^^^^^ List layer \`base\` before \`components\` to match the initial layer order.
+
+Output:
+  1 | @layer theme { @layer base, components; @layer base, components; }
+
+`;
+
+exports[`invalid(13): @layer theme.base, theme.components; @import \"theme.css\" layer(theme.buttons.icons) supports(display: grid) screen; 1`] = `
+
+Options:
+- checkUndeclaredLayers: true
+
+Code:
+  1 | @layer theme.base, theme.components; @import "theme.css" layer(theme.buttons.icons) supports(display: grid) screen;
+
+`;
+
+exports[`invalid(13): @layer theme.base, theme.components; @import \"theme.css\" layer(theme.buttons.icons) supports(display: grid) screen; 2`] = `
+
+Message:
+> 1 | @layer theme.base, theme.components; @import "theme.css" layer(theme.buttons.icons) supports(display: grid) screen;
+    |                                                                ^^^^^^^^^^^^^^^^^^^ Layer \`theme.buttons\` is not declared in the initial layer order.
+
+`;
+
+exports[`invalid(14): @layer theme { @layer base, components; } @layer theme { @layer components, base; } 1`] = `
+
+  1 | @layer theme { @layer base, components; } @layer theme { @layer components, base; }
+
+`;
+
+exports[`invalid(14): @layer theme { @layer base, components; } @layer theme { @layer components, base; } 2`] = `
+
+Message:
+> 1 | @layer theme { @layer base, components; } @layer theme { @layer components, base; }
+    |                                                                 ^^^^^^^^^^^^^^^^ List layer \`base\` before \`components\` to match the initial layer order.
+
+Output:
+  1 | @layer theme { @layer base, components; } @layer theme { @layer base, components; }
+
+`;
+
+exports[`invalid(15): @layer theme.base, theme.components; @layer theme.components, theme.base; 1`] = `
+
+  1 | @layer theme.base, theme.components; @layer theme.components, theme.base;
+
+`;
+
+exports[`invalid(15): @layer theme.base, theme.components; @layer theme.components, theme.base; 2`] = `
+
+Message:
+> 1 | @layer theme.base, theme.components; @layer theme.components, theme.base;
+    |                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ List layer \`theme.base\` before \`theme.components\` to match the initial layer order.
+
+Output:
+  1 | @layer theme.base, theme.components; @layer theme.base, theme.components;
+
+`;
+
+exports[`invalid(16): @layer theme.base, theme.components; @layer theme { @layer components, base; } 1`] = `
+
+  1 | @layer theme.base, theme.components; @layer theme { @layer components, base; }
+
+`;
+
+exports[`invalid(16): @layer theme.base, theme.components; @layer theme { @layer components, base; } 2`] = `
+
+Message:
+> 1 | @layer theme.base, theme.components; @layer theme { @layer components, base; }
+    |                                                            ^^^^^^^^^^^^^^^^ List layer \`base\` before \`components\` to match the initial layer order.
+
+Output:
+  1 | @layer theme.base, theme.components; @layer theme { @layer base, components; }
+
+`;
+
+exports[`invalid(17): @layer theme { @layer base, components; } @layer theme.components, theme.base; 1`] = `
+
+  1 | @layer theme { @layer base, components; } @layer theme.components, theme.base;
+
+`;
+
+exports[`invalid(17): @layer theme { @layer base, components; } @layer theme.components, theme.base; 2`] = `
+
+Message:
+> 1 | @layer theme { @layer base, components; } @layer theme.components, theme.base;
+    |                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ List layer \`theme.base\` before \`theme.components\` to match the initial layer order.
+
+`;
+
+exports[`invalid(18): @layer theme.base, reset, theme.components; @layer reset, theme.components, theme.base; 1`] = `
+
+  1 | @layer theme.base, reset, theme.components; @layer reset, theme.components, theme.base;
+
+`;
+
+exports[`invalid(18): @layer theme.base, reset, theme.components; @layer reset, theme.components, theme.base; 2`] = `
+
+Message:
+> 1 | @layer theme.base, reset, theme.components; @layer reset, theme.components, theme.base;
+    |                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ List layer \`theme.components\` before \`reset\` to match the initial layer order.
+
+Output:
+  1 | @layer theme.base, reset, theme.components; @layer theme.base, theme.components, reset;
+
+`;
+
+exports[`invalid(19): @layer theme.base, reset, theme.components; @layer theme.components, reset, theme.base; 1`] = `
+
+  1 | @layer theme.base, reset, theme.components; @layer theme.components, reset, theme.base;
+
+`;
+
+exports[`invalid(19): @layer theme.base, reset, theme.components; @layer theme.components, reset, theme.base; 2`] = `
+
+Message:
+> 1 | @layer theme.base, reset, theme.components; @layer theme.components, reset, theme.base;
+    |                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ List layer \`theme.base\` before \`theme.components\` to match the initial layer order.
+
+Output:
+  1 | @layer theme.base, reset, theme.components; @layer theme.base, theme.components, reset;
+
+`;
+
+exports[`invalid(2): @layer base, theme; @layer themes, base; 1`] = `
+
+Options:
+- checkUndeclaredLayers: true
+
+Code:
+  1 | @layer base, theme; @layer themes, base;
+
+`;
+
+exports[`invalid(2): @layer base, theme; @layer themes, base; 2`] = `
+
+Message:
+> 1 | @layer base, theme; @layer themes, base;
+    |                            ^^^^^^ Layer \`themes\` is not declared in the initial layer order.
+
+`;
+
+exports[`invalid(2): @layer reset, base, theme; @layer theme, reset; 1`] = `
+
+  1 | @layer reset, base, theme; @layer theme, reset;
+
+`;
+
+exports[`invalid(2): @layer reset, base, theme; @layer theme, reset; 2`] = `
+
+Message:
+> 1 | @layer reset, base, theme; @layer theme, reset;
+    |                                   ^^^^^^^^^^^^ List layer \`reset\` before \`theme\` to match the initial layer order.
+
+Output:
+  1 | @layer reset, base, theme; @layer reset, theme;
+
+`;
+
+exports[`invalid(20): @layer theme.base.widgets, theme.base.buttons; @layer theme.base.buttons, theme.base.widgets; 1`] = `
+
+  1 | @layer theme.base.widgets, theme.base.buttons; @layer theme.base.buttons, theme.base.widgets;
+
+`;
+
+exports[`invalid(20): @layer theme.base.widgets, theme.base.buttons; @layer theme.base.buttons, theme.base.widgets; 2`] = `
+
+Message:
+> 1 | @layer theme.base.widgets, theme.base.buttons; @layer theme.base.buttons, theme.base.widgets;
+    |                                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ List layer \`theme.base.widgets\` before \`theme.base.buttons\` to match the initial layer order.
+
+Output:
+  1 | @layer theme.base.widgets, theme.base.buttons; @layer theme.base.widgets, theme.base.buttons;
+
+`;
+
+exports[`invalid(21): @layer theme {} @layer theme.base, theme.components; @layer theme.components, theme.base; 1`] = `
+
+  1 | @layer theme {} @layer theme.base, theme.components; @layer theme.components, theme.base;
+
+`;
+
+exports[`invalid(21): @layer theme {} @layer theme.base, theme.components; @layer theme.components, theme.base; 2`] = `
+
+Message:
+> 1 | @layer theme {} @layer theme.base, theme.components; @layer theme.components, theme.base;
+    |                                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ List layer \`theme.base\` before \`theme.components\` to match the initial layer order.
+
+`;
+
+exports[`invalid(22): @layer reset, theme; @layer theme { @layer reset, theme; @layer theme, reset; } 1`] = `
+
+  1 | @layer reset, theme; @layer theme { @layer reset, theme; @layer theme, reset; }
+
+`;
+
+exports[`invalid(22): @layer reset, theme; @layer theme { @layer reset, theme; @layer theme, reset; } 2`] = `
+
+Message:
+> 1 | @layer reset, theme; @layer theme { @layer reset, theme; @layer theme, reset; }
+    |                                                                 ^^^^^^^^^^^^ List layer \`reset\` before \`theme\` to match the initial layer order.
+
+Output:
+  1 | @layer reset, theme; @layer theme { @layer reset, theme; @layer reset, theme; }
+
+`;
+
+exports[`invalid(23): @layer { @layer base, components; @layer components, base; } 1`] = `
+
+  1 | @layer { @layer base, components; @layer components, base; }
+
+`;
+
+exports[`invalid(23): @layer { @layer base, components; @layer components, base; } 2`] = `
+
+Message:
+> 1 | @layer { @layer base, components; @layer components, base; }
+    |                                          ^^^^^^^^^^^^^^^^ List layer \`base\` before \`components\` to match the initial layer order.
+
+Output:
+  1 | @layer { @layer base, components; @layer base, components; }
+
+`;
+
+exports[`invalid(24): @layer base, theme; @media screen { @layer theme, base; } 1`] = `
+
+  1 | @layer base, theme; @media screen { @layer theme, base; }
+
+`;
+
+exports[`invalid(24): @layer base, theme; @media screen { @layer theme, base; } 2`] = `
+
+Message:
+> 1 | @layer base, theme; @media screen { @layer theme, base; }
+    |                                            ^^^^^^^^^^^ List layer \`base\` before \`theme\` to match the initial layer order.
+
+Output:
+  1 | @layer base, theme; @media screen { @layer base, theme; }
+
+`;
+
+exports[`invalid(25): @layer base, theme; @supports (display: grid) { @layer theme, base; } 1`] = `
+
+  1 | @layer base, theme; @supports (display: grid) { @layer theme, base; }
+
+`;
+
+exports[`invalid(25): @layer base, theme; @supports (display: grid) { @layer theme, base; } 2`] = `
+
+Message:
+> 1 | @layer base, theme; @supports (display: grid) { @layer theme, base; }
+    |                                                        ^^^^^^^^^^^ List layer \`base\` before \`theme\` to match the initial layer order.
+
+Output:
+  1 | @layer base, theme; @supports (display: grid) { @layer base, theme; }
+
+`;
+
+exports[`invalid(26): @layer base, theme; @container (width > 1px) { @layer theme, base; } 1`] = `
+
+  1 | @layer base, theme; @container (width > 1px) { @layer theme, base; }
+
+`;
+
+exports[`invalid(26): @layer base, theme; @container (width > 1px) { @layer theme, base; } 2`] = `
+
+Message:
+> 1 | @layer base, theme; @container (width > 1px) { @layer theme, base; }
+    |                                                       ^^^^^^^^^^^ List layer \`base\` before \`theme\` to match the initial layer order.
+
+Output:
+  1 | @layer base, theme; @container (width > 1px) { @layer base, theme; }
+
+`;
+
+exports[`invalid(27): @layer base, theme; @scope (.card) { @layer theme, base; } 1`] = `
+
+  1 | @layer base, theme; @scope (.card) { @layer theme, base; }
+
+`;
+
+exports[`invalid(27): @layer base, theme; @scope (.card) { @layer theme, base; } 2`] = `
+
+Message:
+> 1 | @layer base, theme; @scope (.card) { @layer theme, base; }
+    |                                             ^^^^^^^^^^^ List layer \`base\` before \`theme\` to match the initial layer order.
+
+Output:
+  1 | @layer base, theme; @scope (.card) { @layer base, theme; }
+
+`;
+
+exports[`invalid(28): @layer base, theme; @layer theme, /* preserve */ base; 1`] = `
+
+  1 | @layer base, theme; @layer theme, /* preserve */ base;
+
+`;
+
+exports[`invalid(28): @layer base, theme; @layer theme, /* preserve */ base; 2`] = `
+
+Message:
+> 1 | @layer base, theme; @layer theme, /* preserve */ base;
+    |                            ^^^^^^^^^^^^^^^^^^^^^^^^^^ List layer \`base\` before \`theme\` to match the initial layer order.
+
+`;
+
+exports[`invalid(29): @layer base, theme; @layer /* preserve */ theme, base; 1`] = `
+
+  1 | @layer base, theme; @layer /* preserve */ theme, base;
+
+`;
+
+exports[`invalid(29): @layer base, theme; @layer /* preserve */ theme, base; 2`] = `
+
+Message:
+> 1 | @layer base, theme; @layer /* preserve */ theme, base;
+    |                                           ^^^^^^^^^^^ List layer \`base\` before \`theme\` to match the initial layer order.
+
+`;
+
+exports[`invalid(3): @layer base, theme; @import \"theme.css\" layer(themes); 1`] = `
+
+Options:
+- checkUndeclaredLayers: true
+
+Code:
+  1 | @layer base, theme; @import "theme.css" layer(themes);
+
+`;
+
+exports[`invalid(3): @layer base, theme; @import \"theme.css\" layer(themes); 2`] = `
+
+Message:
+> 1 | @layer base, theme; @import "theme.css" layer(themes);
+    |                                               ^^^^^^ Layer \`themes\` is not declared in the initial layer order.
+
+`;
+
+exports[`invalid(3): @layer reset, base, theme; @layer base, theme, reset; 1`] = `
+
+  1 | @layer reset, base, theme; @layer base, theme, reset;
+
+`;
+
+exports[`invalid(3): @layer reset, base, theme; @layer base, theme, reset; 2`] = `
+
+Message:
+> 1 | @layer reset, base, theme; @layer base, theme, reset;
+    |                                   ^^^^^^^^^^^^^^^^^^ List layer \`reset\` before \`theme\` to match the initial layer order.
+
+Output:
+  1 | @layer reset, base, theme; @layer reset, base, theme;
+
+`;
+
+exports[`invalid(30): @layer base, theme; @layer theme, extra, base; 1`] = `
+
+  1 | @layer base, theme; @layer theme, extra, base;
+
+`;
+
+exports[`invalid(30): @layer base, theme; @layer theme, extra, base; 2`] = `
+
+Message:
+> 1 | @layer base, theme; @layer theme, extra, base;
+    |                            ^^^^^^^^^^^^^^^^^^ List layer \`base\` before \`theme\` to match the initial layer order.
+
+`;
+
+exports[`invalid(31): @layer base, theme; @layer theme.widgets, base; 1`] = `
+
+  1 | @layer base, theme; @layer theme.widgets, base;
+
+`;
+
+exports[`invalid(31): @layer base, theme; @layer theme.widgets, base; 2`] = `
+
+Message:
+> 1 | @layer base, theme; @layer theme.widgets, base;
+    |                            ^^^^^^^^^^^^^^^^^^^ List layer \`base\` before \`theme.widgets\` to match the initial layer order.
+
+`;
+
+exports[`invalid(32): @layer base, theme; @layer theme.widgets.first, theme.widgets.second, base; 1`] = `
+
+  1 | @layer base, theme; @layer theme.widgets.first, theme.widgets.second, base;
+
+`;
+
+exports[`invalid(32): @layer base, theme; @layer theme.widgets.first, theme.widgets.second, base; 2`] = `
+
+Message:
+> 1 | @layer base, theme; @layer theme.widgets.first, theme.widgets.second, base;
+    |                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ List layer \`base\` before \`theme.widgets.first\` to match the initial layer order.
+
+`;
+
+exports[`invalid(33): @layer base, theme;\r\n@media screen {\r\n    @layer theme, base;\r\n} 1`] = `
+
+  1 | @layer base, theme;
+  2 | @media screen {
+  3 |     @layer theme, base;
+  4 | }
+
+`;
+
+exports[`invalid(33): @layer base, theme;\r\n@media screen {\r\n    @layer theme, base;\r\n} 2`] = `
+
+Message:
+  1 | @layer base, theme;
+  2 | @media screen {
+> 3 |     @layer theme, base;
+    |            ^^^^^^^^^^^ List layer \`base\` before \`theme\` to match the initial layer order.
+  4 | }
+
+Output:
+  1 | @layer base, theme;
+  2 | @media screen {
+  3 |     @layer base, theme;
+  4 | }
+
+`;
+
+exports[`invalid(4): @layer base, theme; @IMPORT url(\"theme.css\") LAYER(themes); 1`] = `
+
+Options:
+- checkUndeclaredLayers: true
+
+Code:
+  1 | @layer base, theme; @IMPORT url("theme.css") LAYER(themes);
+
+`;
+
+exports[`invalid(4): @layer base, theme; @IMPORT url(\"theme.css\") LAYER(themes); 2`] = `
+
+Message:
+> 1 | @layer base, theme; @IMPORT url("theme.css") LAYER(themes);
+    |                                                    ^^^^^^ Layer \`themes\` is not declared in the initial layer order.
+
+`;
+
+exports[`invalid(4): @layer reset, theme; @layer theme, reset, theme; 1`] = `
+
+  1 | @layer reset, theme; @layer theme, reset, theme;
+
+`;
+
+exports[`invalid(4): @layer reset, theme; @layer theme, reset, theme; 2`] = `
+
+Message:
+> 1 | @layer reset, theme; @layer theme, reset, theme;
+    |                             ^^^^^^^^^^^^^^^^^^^ List layer \`reset\` before \`theme\` to match the initial layer order.
+
+Output:
+  1 | @layer reset, theme; @layer reset, theme, theme;
+
+`;
+
+exports[`invalid(5): @layer base, theme; @layer Base {} 1`] = `
+
+Options:
+- checkUndeclaredLayers: true
+
+Code:
+  1 | @layer base, theme; @layer Base {}
+
+`;
+
+exports[`invalid(5): @layer base, theme; @layer Base {} 2`] = `
+
+Message:
+> 1 | @layer base, theme; @layer Base {}
+    |                            ^^^^ Layer \`Base\` is not declared in the initial layer order.
+
+`;
+
+exports[`invalid(5): @layer reset, theme; @layer theme, reset; @layer theme, reset; 1`] = `
+
+  1 | @layer reset, theme; @layer theme, reset; @layer theme, reset;
+
+`;
+
+exports[`invalid(5): @layer reset, theme; @layer theme, reset; @layer theme, reset; 2`] = `
+
+Message:
+> 1 | @layer reset, theme; @layer theme, reset; @layer theme, reset;
+    |                             ^^^^^^^^^^^^ List layer \`reset\` before \`theme\` to match the initial layer order.
+
+Output:
+  1 | @layer reset, theme; @layer reset, theme; @layer theme, reset;
+
+`;
+
+exports[`invalid(5): @layer reset, theme; @layer theme, reset; @layer theme, reset; 3`] = `
+
+Message:
+> 1 | @layer reset, theme; @layer theme, reset; @layer theme, reset;
+    |                                                  ^^^^^^^^^^^^ List layer \`reset\` before \`theme\` to match the initial layer order.
+
+Output:
+  1 | @layer reset, theme; @layer theme, reset; @layer reset, theme;
+
+`;
+
+exports[`invalid(6): @LAYER reset, theme; @LaYeR theme, reset; 1`] = `
+
+  1 | @LAYER reset, theme; @LaYeR theme, reset;
+
+`;
+
+exports[`invalid(6): @LAYER reset, theme; @LaYeR theme, reset; 2`] = `
+
+Message:
+> 1 | @LAYER reset, theme; @LaYeR theme, reset;
+    |                             ^^^^^^^^^^^^ List layer \`reset\` before \`theme\` to match the initial layer order.
+
+Output:
+  1 | @LAYER reset, theme; @LaYeR reset, theme;
+
+`;
+
+exports[`invalid(6): @layer base, theme; @layer themes.components.buttons {} 1`] = `
+
+Options:
+- checkUndeclaredLayers: true
+
+Code:
+  1 | @layer base, theme; @layer themes.components.buttons {}
+
+`;
+
+exports[`invalid(6): @layer base, theme; @layer themes.components.buttons {} 2`] = `
+
+Message:
+> 1 | @layer base, theme; @layer themes.components.buttons {}
+    |                            ^^^^^^^^^^^^^^^^^^^^^^^^^ Layer \`themes\` is not declared in the initial layer order.
+
+`;
+
+exports[`invalid(7): @layer base, theme; @layer theme, \\62 ase; 1`] = `
+
+  1 | @layer base, theme; @layer theme, \\62 ase;
+
+`;
+
+exports[`invalid(7): @layer base, theme; @layer theme, \\62 ase; 2`] = `
+
+Message:
+> 1 | @layer base, theme; @layer theme, \\62 ase;
+    |                            ^^^^^^^^^^^^^^ List layer \`\\62 ase\` before \`theme\` to match the initial layer order.
+
+Output:
+  1 | @layer base, theme; @layer \\62 ase, theme;
+
+`;
+
+exports[`invalid(7): @layer theme.base, theme.components; @layer theme.buttons {} 1`] = `
+
+Options:
+- checkUndeclaredLayers: true
+
+Code:
+  1 | @layer theme.base, theme.components; @layer theme.buttons {}
+
+`;
+
+exports[`invalid(7): @layer theme.base, theme.components; @layer theme.buttons {} 2`] = `
+
+Message:
+> 1 | @layer theme.base, theme.components; @layer theme.buttons {}
+    |                                             ^^^^^^^^^^^^^ Layer \`theme.buttons\` is not declared in the initial layer order.
+
+`;
+
+exports[`invalid(8): @layer \\62 ase, theme; @layer theme, base; 1`] = `
+
+  1 | @layer \\62 ase, theme; @layer theme, base;
+
+`;
+
+exports[`invalid(8): @layer \\62 ase, theme; @layer theme, base; 2`] = `
+
+Message:
+> 1 | @layer \\62 ase, theme; @layer theme, base;
+    |                               ^^^^^^^^^^^ List layer \`base\` before \`theme\` to match the initial layer order.
+
+Output:
+  1 | @layer \\62 ase, theme; @layer base, theme;
+
+`;
+
+exports[`invalid(8): @layer theme { @layer base, components; } @layer theme { @layer buttons {} } 1`] = `
+
+Options:
+- checkUndeclaredLayers: true
+
+Code:
+  1 | @layer theme { @layer base, components; } @layer theme { @layer buttons {} }
+
+`;
+
+exports[`invalid(8): @layer theme { @layer base, components; } @layer theme { @layer buttons {} } 2`] = `
+
+Message:
+> 1 | @layer theme { @layer base, components; } @layer theme { @layer buttons {} }
+    |                                                                 ^^^^^^^ Layer \`buttons\` is not declared in the initial layer order.
+
+`;
+
+exports[`invalid(9): @layer Base, base; @layer base, Base; 1`] = `
+
+  1 | @layer Base, base; @layer base, Base;
+
+`;
+
+exports[`invalid(9): @layer Base, base; @layer base, Base; 2`] = `
+
+Message:
+> 1 | @layer Base, base; @layer base, Base;
+    |                           ^^^^^^^^^^ List layer \`Base\` before \`base\` to match the initial layer order.
+
+Output:
+  1 | @layer Base, base; @layer Base, base;
+
+`;
+
+exports[`invalid(9): @layer theme.base, theme.components; @layer theme { @layer buttons, base; } 1`] = `
+
+Options:
+- checkUndeclaredLayers: true
+
+Code:
+  1 | @layer theme.base, theme.components; @layer theme { @layer buttons, base; }
+
+`;
+
+exports[`invalid(9): @layer theme.base, theme.components; @layer theme { @layer buttons, base; } 2`] = `
+
+Message:
+> 1 | @layer theme.base, theme.components; @layer theme { @layer buttons, base; }
+    |                                                            ^^^^^^^ Layer \`buttons\` is not declared in the initial layer order.
+
+`;

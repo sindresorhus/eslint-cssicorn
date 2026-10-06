@@ -10,7 +10,8 @@ import {
 } from './utils/index.js';
 
 /**
-@import * as ESLint from 'eslint';
+@import {CssicornContext} from './rule/cssicorn-context.js';
+@import {CssicornRule} from './rule/to-eslint-rule.js';
 */
 
 const MESSAGE_ID = 'prefer-clamp';
@@ -177,7 +178,7 @@ function getClampProblem(node, context, reportNode = node) {
 }
 
 /**
-@param {ESLint.Rule.RuleContext} context
+@param {CssicornContext} context
 */
 const create = context => {
 	const {sourceCode} = context;
@@ -243,7 +244,7 @@ const create = context => {
 };
 
 /**
-@type {ESLint.Rule.RuleModule}
+@type {CssicornRule}
 */
 const config = {
 	create,

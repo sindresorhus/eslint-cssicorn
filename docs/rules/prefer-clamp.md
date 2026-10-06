@@ -25,7 +25,7 @@ The outer arguments may appear in either order. Inner arguments retain their sou
 
 ## Reverse nesting
 
-`min(MAX, max(MIN, VALUE))` is converted only when the bounds are finite literals with matching units, or both unitless, and `MIN ≤ MAX`. Literals may be wrapped in `calc()` or parentheses. The first qualifying inner argument becomes the minimum.
+Converts `min(MAX, max(MIN, VALUE))` only when `MIN ≤ MAX` and both bounds are finite literals with matching units (or both unitless). Literals may be wrapped in `calc()` or parentheses. The first qualifying inner argument becomes the minimum.
 
 ```css
 /* ❌ */
@@ -39,5 +39,5 @@ Conflicting, arithmetic, mixed-unit, and percentage bounds are ignored. Unlike `
 
 ## Limitations
 
-- Supports `random()` and substitutions inside retained functions or parentheses when argument order is preserved. Direct substitutions are ignored.
-- Expressions requiring argument reordering are not autofixed if they contain comments.
+- Direct substitutions are ignored. Nested substitutions and `random()` require unchanged argument order.
+- Comments prevent fixes that reorder arguments.

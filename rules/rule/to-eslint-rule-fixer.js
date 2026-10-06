@@ -40,7 +40,9 @@ export default function toEslintRuleFixer(fix) {
 		try {
 			const cssicornReport = fix(fixer, fixOptions);
 			forEachFixOrProblem(cssicornReport, eslintFix => {
-				eslintReport.push(eslintFix);
+				if (eslintFix) {
+					eslintReport.push(eslintFix);
+				}
 			});
 
 			return eslintReport;

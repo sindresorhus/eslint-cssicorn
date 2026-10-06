@@ -122,6 +122,19 @@ test('unopinionated config enables prefer-clamp', async () => {
 	assert.equal(result.messages.some(message => message.ruleId === 'cssicorn/prefer-clamp'), true);
 });
 
+// Checks file-local layer contracts while permitting later additions.
+test('recommended config enables consistent-layer-order with default options', async () => {
+	const eslint = new ESLint({
+		baseConfig: eslintCssicorn.configs.recommended,
+		overrideConfigFile: true,
+	});
+
+	const [result] = await eslint.lintText('@layer base, theme; @layer theme, base; @layer extra {}', {filePath: 'file.css'});
+	const messages = result.messages.filter(message => message.ruleId === 'cssicorn/consistent-layer-order');
+	assert.equal(messages.length, 1);
+	assert.equal(messages[0].messageId, 'consistent-layer-order');
+});
+
 test('Every rule has valid meta.type', () => {
 	const validTypes = ['problem', 'suggestion', 'layout'];
 
