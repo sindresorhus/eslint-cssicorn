@@ -9,33 +9,27 @@
 <!-- end auto-generated rule header -->
 <!-- Do not manually modify this header. Run: `npm run fix:eslint-docs` -->
 
-Prefer native CSS nesting for adjacent rules that share a parent selector, conditional overrides, and structural `:is()` and `:where()` groups.
+Prefer native CSS nesting for repeated parent selectors, conditional overrides, and structural `:is()` and `:where()` groups.
 
 ## Examples
 
-Nest adjacent rules under an existing or shared parent:
+Nest shared literal prefixes in selector lists and adjacent rules:
 
 ```css
 /* ❌ */
-.card .title {
+.card .title, .card .body {
 	color: red;
-}
-.card .body {
-	font-weight: bold;
 }
 
 /* ✅ */
 .card {
-	& .title {
+	& .title, & .body {
 		color: red;
-	}
-	& .body {
-		font-weight: bold;
 	}
 }
 ```
 
-Nest an adjacent `@media` or `@layer` block containing one rule with the same or a related selector. `@supports`, `@container`, and `@starting-style` require the same selector and declarations only:
+Nest adjacent `@media` and `@layer` blocks containing related rules. A single rule may use the exact parent; `@supports`, `@container`, and `@starting-style` require that exact selector and declarations only:
 
 ```css
 /* ❌ */
@@ -75,32 +69,32 @@ a {
 }
 ```
 
+Contextual overrides also nest when the parent is compound and outside ancestor style rules:
+
 ```css
 /* ❌ */
-:where(.foo, #bar) a {
-	color: red;
-}
+.card { color: red; }
+.theme .card { color: blue; }
 
 /* ✅ */
-:where(.foo, #bar) {
-	& a {
-		color: red;
-	}
+.card {
+	color: red;
+	.theme & { color: blue; }
 }
 ```
 
-Attached suffixes use `&`, including pseudo-elements such as `&::before`:
+Attached groups and suffixes use `&`:
 
 ```css
 /* ❌ */
-:is(a, button).active {
-	color: red;
+.card:is(.foo, #bar)::before {
+	content: "test";
 }
 
 /* ✅ */
-a, button {
-	&.active {
-		color: red;
+.card {
+	&:is(.foo, #bar)::before {
+		content: "test";
 	}
 }
 ```
@@ -109,21 +103,7 @@ Leading and trailing groups also support `>`, `+`, and `~`. Trailing groups afte
 
 ## Specificity
 
-Trailing `:is()` is unwrapped only when its arguments have equal specificity and unwrapping preserves [forgiving selector-list behavior](https://drafts.csswg.org/selectors/#forgiving-selector). Complex arguments and arguments with pseudo-classes, attribute flags, namespace syntax, or invalid IDs stay wrapped:
-
-```css
-/* ❌ */
-a :is(.foo, #bar) {
-	color: red;
-}
-
-/* ✅ */
-a {
-	:is(.foo, #bar) {
-		color: red;
-	}
-}
-```
+Trailing `:is()` is unwrapped only when its arguments have equal specificity and unwrapping preserves [forgiving selector-list behavior](https://drafts.csswg.org/selectors/#forgiving-selector). Complex arguments and arguments with pseudo-classes, attribute flags, namespace syntax, or invalid IDs stay wrapped.
 
 `:where()` always stays wrapped to preserve zero specificity.
 
@@ -131,6 +111,6 @@ Leading `:is()` groups preserve their maximum specificity, even with mixed argum
 
 ## Limitations
 
-Merges adjacent rules using literal selector prefixes. Finding a new parent requires two single-selector rules. Selector-group conversions require one outer selector and at least two arguments.
+Uses literal selector prefixes, or compound suffix parents outside ancestor style rules. Multiple conditional children must all extend the parent. Selector-group conversions require one outer selector and at least two arguments.
 
 Skips existing `&`, escaped group names, opaque parent arguments, `@scope`, and files with `@namespace`. Comments, missing semicolons, or unsafe formatting can prevent fixes.

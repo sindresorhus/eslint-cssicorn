@@ -10,7 +10,6 @@ const {test} = getTester(import.meta);
 test({
 	valid: [
 		'.page .card {} .other .page .card .title {}',
-		'.page .card {} .page .card .title, .page .other .body {}',
 		'.outer { > .card {} > .card .title {} }',
 		'.outer { .page & .card {} .page & .card .title {} }',
 		'.page:scope .card {} .page:scope .card .title {}',
@@ -403,7 +402,6 @@ test({
 test.snapshot({
 	valid: [
 		'a { color: red; }',
-		'a:is(.foo, .bar) {}',
 		':is(.foo, .bar) {}',
 		'a :is(.foo) {}',
 		':is(.foo) a {}',
@@ -421,7 +419,6 @@ test.snapshot({
 		':is(.foo, :before).active {}',
 		':is(.foo, :has(:has(.bar))) a {}',
 		'a::before :is(.foo, .bar) {}',
-		'a:is(.foo, .bar)::before {}',
 		'.parent { &:is(:focus, :hover) svg {} }',
 		'.parent { & :is(.foo, .bar) {} }',
 		'.parent { :is(&.foo, &.bar) a {} }',
@@ -766,6 +763,22 @@ nodeTest('related rule fixes settle with selector groups and long adjacent runs'
 			code: '.card .title {} .card .body {} @layer theme { .card .footer { color: blue; } }',
 			output: '.card { & .title {} & .body {} @layer theme { & .footer { color: blue; } } }',
 		},
+		{
+			code: '.card .title, .card .body {} .card:hover {} .theme .card {}',
+			output: '.card { & .title, & .body {} &:hover {} .theme & {} }',
+		},
+		{
+			code: '.card:is(.foo, #bar) {} .card:is(.foo, #bar) .title {}',
+			output: '.card { &:is(.foo, #bar) { & .title {} } }',
+		},
+		{
+			code: '.card {} @media (color) { .card .title, .card .body {} .card.active {} }',
+			output: '.card { @media (color) { & .title, & .body {} &.active {} } }',
+		},
+		{
+			code: '.card .title, .card .body {} @layer theme { .card .footer, .card .aside {} .card.active {} }',
+			output: '.card { & .title, & .body {} @layer theme { & .footer, & .aside {} &.active {} } }',
+		},
 	];
 	for (const {code, output} of cases) {
 		const result = linter.verifyAndFix(code, config, {filename: 'test.css'});
@@ -817,6 +830,12 @@ nodeTest('nesting fixes work with the other nesting rules', () => {
 		'.card { color: red; } @media (color) { .card .title { color: blue; } }',
 		'.card { color: red; } @layer theme { .card:hover { color: blue; } }',
 		'.card { opacity: 1; } @starting-style { .card { opacity: 0; } }',
+		'.card .title, .card #body { color: red; }',
+		'.card:is(.foo, #bar) { color: red; }',
+		'.card:where(.foo, #bar)::before { content: ""; color: red; }',
+		'.card { color: red; } .theme .card { color: blue; }',
+		'.card { color: red; } @media (color) { .card .title, .card .body { color: blue; } .card.active { color: green; } }',
+		'.card { color: red; } @layer theme { .card .title, .card .body { color: blue !important; } .card.active { color: green; } }',
 	]) {
 		const result = linter.verifyAndFix(code, config, {filename: 'test.css'});
 		assert.equal(result.fixed, true);
@@ -957,7 +976,6 @@ test({
 
 test({
 	valid: [
-		'.card:is(.foo, .bar).active {}',
 		'a :is(.foo).active {}',
 		'a :where(.foo).active {}',
 		'a :is(.foo, :unknown).active {}',
@@ -1219,6 +1237,164 @@ test({
 			'.card .title { color: red; } .card .body {\n\tcolor: blue;\n}',
 			'.card {} @media (color) { .card /* keep */ .title { color: blue; } }',
 			'.card {} @starting-style { .card { opacity: 0; /* keep */ } }',
+		].map(code => ({code, errors: 1})),
+	],
+});
+
+test({
+	valid: [
+		'.card, .card.active {}',
+		'.card .title, .other .body {}',
+		'.card .title, .card .body:unknown {}',
+		'.outer { & .title, & .body {} }',
+		'.outer { > .card .title, > .card .body {} }',
+		'@scope (.outer) { .card .title, .card .body {} }',
+		'@namespace url("http://www.w3.org/1999/xhtml"); .card .title, .card .body {}',
+		'.card:is(.foo) {}',
+		'.card:is(.foo, :unknown) {}',
+		'.card:where(.foo, ::before) {}',
+		'.outer { .card:is(.foo, &) {} }',
+		'@scope (.outer) { .card:is(.foo, .bar) {} }',
+		'.card {} .theme .other {}',
+		'.card.active {} .theme .card {}',
+		'.card {} .theme .card.active {}',
+		'.card {} .theme .card:unknown {}',
+		'.page .card {} .theme .page .card {}',
+		'.card {} .theme.card {}',
+		'.card {} .theme .card, .other {}',
+		'.card {} .other {} .theme .card {}',
+		'.outer { .card {} .theme .card {} }',
+		'.outer { @media (color) { .card {} .theme .card {} } }',
+		'.outer { .card {} .theme & .card {} }',
+		'.card {} @media (color) { .theme .card {} }',
+		'@scope (.outer) { .card {} .theme .card {} }',
+		'.card {} @media (color) { .card .title {} .other {} }',
+		'.card {} @media (color) { .card .title {} .card {} }',
+		'.card {} @media (color) { .card .title:unknown {} .card .body {} }',
+		'.card {} @media (color) {}',
+		'.card {} @media (color) { .card .title {} @font-face { font-family: example; src: url(example.woff2); } }',
+		'.card {} @layer theme { .card .title {} @media (color) { .card .body {} } }',
+		'.card {} @supports (display: grid) { .card .title {} .other {} }',
+		'.card {} @container (width > 0px) { .card .title {} .other {} }',
+	],
+	invalid: [
+		{
+			code: '.page .card {} .page .card .title, .page .other .body {}',
+			output: '.page .card {} .page { & .card .title, & .other .body {} }',
+			errors: 1,
+		},
+		{
+			code: 'a:is(.foo, .bar) {}',
+			output: 'a { &:is(.foo, .bar) {} }',
+			errors: 1,
+		},
+		{
+			code: 'a:is(.foo, .bar)::before {}',
+			output: 'a { &:is(.foo, .bar)::before {} }',
+			errors: 1,
+		},
+		{
+			code: '.card:is(.foo, .bar).active {}',
+			output: '.card { &:is(.foo, .bar).active {} }',
+			errors: 1,
+		},
+		{
+			code: '.card:lang("en") .title, .card:lang("en") .body {}',
+			output: '.card:lang("en") { & .title, & .body {} }',
+			errors: 1,
+		},
+		...[
+			['.card .title, .card .body', '.card', '& .title, & .body'],
+			['.card:hover, .card.active, .card[aria-disabled=true]', '.card', '&:hover, &.active, &[aria-disabled=true]'],
+			['input[type=checkbox], input[type=radio]', 'input', '&[type=checkbox], &[type=radio]'],
+			['.page .card > .title, .page .card + #body', '.page .card', '& > .title, & + #body'],
+			['.card::before, .card::after', '.card', '&::before, &::after'],
+			['[data-kind="CARD" i] .title, [data-kind="CARD" i] #body', '[data-kind="CARD" i]', '& .title, & #body'],
+			['.card:not(.disabled) .title, .card:not(.disabled) .body', '.card:not(.disabled)', '& .title, & .body'],
+			[String.raw`.c\61 rd .title, .c\61 rd .body`, String.raw`.c\61 rd`, '& .title, & .body'],
+		].map(([selector, parent, inner]) => ({
+			code: `${selector} { color: red !important; & .link { color: blue; } }`,
+			output: `${parent} { ${inner} { color: red !important; & .link { color: blue; } } }`,
+			errors: 1,
+		})),
+		{
+			code: '.outer, #outer { .card .title, .card #body { color: red; } }',
+			output: '.outer, #outer { .card { & .title, & #body { color: red; } } }',
+			errors: 1,
+		},
+		{
+			code: '.card .title,\r\n.card .body {\r\n  color: red;\r\n}',
+			output: '.card {\r\n  & .title,\r\n  & .body {\r\n    color: red;\r\n  }\r\n}',
+			errors: 1,
+		},
+		...['media (color)', 'supports (display: grid)', 'container (width > 0px)', 'layer theme'].map(atRule => ({
+			code: `@${atRule} { .card .title, .card .body { color: red; } }`,
+			output: `@${atRule} { .card { & .title, & .body { color: red; } } }`,
+			errors: 1,
+		})),
+		...['is', 'where', 'IS', 'WHERE'].flatMap(name => ['', '.active', '::before', ' > .title'].map(suffix => ({
+			code: `.card:${name}(.foo, #bar)${suffix} { color: red; }`,
+			output: `.card { &:${name}(.foo, #bar)${suffix} { color: red; } }`,
+			errors: 1,
+		}))),
+		{
+			code: '.page .card:is(.foo > .bar, .baz) { color: red; }',
+			output: '.page .card { &:is(.foo > .bar, .baz) { color: red; } }',
+			errors: 1,
+		},
+		{
+			code: '.card:is(.foo, #bar) {\n\tcolor: red;\n\t& .title { color: blue; }\n}',
+			output: '.card {\n\t&:is(.foo, #bar) {\n\t\tcolor: red;\n\t\t& .title { color: blue; }\n\t}\n}',
+			errors: 1,
+		},
+		...[' ', ' > ', ' + ', ' ~ '].map(combinator => ({
+			code: `.card { color: red; } .theme${combinator}.card { color: blue; }`,
+			output: `.card { color: red; .theme${combinator}& { color: blue; } }`,
+			errors: 1,
+		})),
+		{
+			code: '.card.active { color: red; } .page .theme > .card.active { color: blue; }',
+			output: '.card.active { color: red; .page .theme > & { color: blue; } }',
+			errors: 1,
+		},
+		{
+			code: '.card { color: red; } .theme .card, #other > .card { color: blue; }',
+			output: '.card { color: red; .theme &, #other > & { color: blue; } }',
+			errors: 1,
+		},
+		{
+			code: String.raw`.c\61 rd { color: red; } .th\65 me .c\61 rd { color: blue; }`,
+			output: String.raw`.c\61 rd { color: red; .th\65 me & { color: blue; } }`,
+			errors: 1,
+		},
+		{
+			code: '.card {\r\n  color: red;\r\n}\r\n.theme .card {\r\n  color: blue;\r\n}',
+			output: '.card {\r\n  color: red;\r\n  .theme & {\r\n    color: blue;\r\n  }\r\n}',
+			errors: 1,
+		},
+		...['media (color)', 'layer theme'].map(atRule => ({
+			code: `@${atRule} { .card { color: red; } .theme .card { color: blue; } }`,
+			output: `@${atRule} { .card { color: red; .theme & { color: blue; } } }`,
+			errors: 1,
+		})),
+		...['media (color)', 'layer theme', 'layer', 'MEDIA (color)', String.raw`l\61 yer theme`].map(atRule => ({
+			code: `.card { color: red; } @${atRule} { .card .title, .card .body { color: blue; } .card:where(.active) { color: green; } }`,
+			output: `.card { color: red; @${atRule} { & .title, & .body { color: blue; } &:where(.active) { color: green; } } }`,
+			errors: 1,
+		})),
+		{
+			code: '.card {\n\tcolor: red;\n}\n@media (color) {\n\t.card .title {\n\t\tcolor: blue;\n\t}\n\t.card:where(.active) {\n\t\tcolor: green;\n\t}\n}',
+			output: '.card {\n\tcolor: red;\n\t@media (color) {\n\t\t& .title {\n\t\t\tcolor: blue;\n\t\t}\n\t\t&:where(.active) {\n\t\t\tcolor: green;\n\t\t}\n\t}\n}',
+			errors: 1,
+		},
+		...[
+			'.card .title, .card /* keep */ .body { color: red; }',
+			'.card:is(.foo, #bar) { color: red; /* keep */ }',
+			'.card:is(.foo, #bar) {\n\tcontent: "a\\\n\tb";\n}',
+			'.card .title, .card .body {\n\t--value: a\n\t\tb;\n}',
+			'.card { color: red; } /* keep */ .theme .card { color: blue; }',
+			'.card { color: red } .theme .card { color: blue; }',
+			'.card { color: red; } @media (color) { .card .title { /* keep */ } .card.active {} }',
 		].map(code => ({code, errors: 1})),
 	],
 });
