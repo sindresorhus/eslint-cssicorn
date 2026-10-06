@@ -112,6 +112,13 @@ test({
 	],
 	invalid: [
 		{
+			code: 'a { --a: var(--b); all: initial; --b: var(--a); }',
+			errors: [
+				{messageId: 'no-self-referencing-custom-properties/cycle', data: {property: '--a'}},
+				{messageId: 'no-self-referencing-custom-properties/cycle', data: {property: '--b'}},
+			],
+		},
+		{
 			code: 'a { @media (width > 1px) { --a: var(--b); --b: var(--a); } }',
 			errors: [
 				{messageId: 'no-self-referencing-custom-properties/cycle', data: {property: '--a'}},
