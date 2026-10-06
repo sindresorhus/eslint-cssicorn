@@ -1,3 +1,5 @@
+// @ts-check
+
 import getDocumentationUrl from '../utils/get-documentation-url.js';
 import toEslintCreate from './to-eslint-create.js';
 
@@ -7,8 +9,9 @@ import toEslintCreate from './to-eslint-create.js';
 */
 
 /**
-@typedef {Omit<CSSRuleDefinition, 'create'> & {
+@typedef {Omit<CSSRuleDefinition, 'create' | 'meta'> & {
 	create: CssicornCreate
+	meta: NonNullable<CSSRuleDefinition['meta']>
 }} CssicornRule
 */
 

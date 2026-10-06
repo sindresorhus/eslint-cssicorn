@@ -70,3 +70,18 @@ test('ordinary fix errors propagate', () => {
 	});
 	assert.throws(() => fix({}), error);
 });
+
+test('void fixers produce no edits', () => {
+	const fix = toEslintRuleFixer(() => {});
+	assert.deepEqual(fix({}), []);
+});
+
+test('generator fixers ignore absent edits', () => {
+	const edit = {range: [0, 1], text: 'replacement'};
+	const fix = toEslintRuleFixer(function * () {
+		yield undefined;
+		yield edit;
+		yield undefined;
+	});
+	assert.deepEqual(fix({}), [edit]);
+});

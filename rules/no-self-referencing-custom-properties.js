@@ -1,3 +1,5 @@
+// @ts-check
+
 import {tokenize, tokenTypes} from '@eslint/css-tree';
 import {decodeCssIdentifier, normalizeCssIdentifier, toLocation} from './utils/index.js';
 
@@ -98,7 +100,7 @@ const getCyclicComponents = declarations => {
 			index: states.size,
 			lowLink: states.size,
 			onStack: true,
-			references: declarations.get(property).references.values(),
+			references: /** @type {CustomPropertyDeclaration} */ (declarations.get(property)).references.values(),
 		};
 		states.set(property, state);
 		componentStack.push(state);
@@ -112,7 +114,7 @@ const getCyclicComponents = declarations => {
 
 		enter(property);
 		while (traversalStack.length > 0) {
-			const state = traversalStack.at(-1);
+			const state = /** @type {TraversalState} */ (traversalStack.at(-1));
 			const {value: reference, done} = state.references.next();
 			if (!done) {
 				if (!declarations.has(reference.property)) {
@@ -142,7 +144,7 @@ const getCyclicComponents = declarations => {
 			const component = new Set();
 			let member;
 			do {
-				member = componentStack.pop();
+				member = /** @type {TraversalState} */ (componentStack.pop());
 				member.onStack = false;
 				component.add(member.property);
 			} while (member !== state);
@@ -199,12 +201,12 @@ const create = context => {
 
 		for (const component of getCyclicComponents(declarations)) {
 			for (const property of component) {
-				const {declaration, references, selfReference} = declarations.get(property);
+				const {declaration, references, selfReference} = /** @type {CustomPropertyDeclaration} */ (declarations.get(property));
 				if (selfReference) {
 					continue;
 				}
 
-				const reference = references.find(reference => component.has(reference.property));
+				const reference = /** @type {Reference} */ (references.find(reference => component.has(reference.property)));
 				yield {
 					node: declaration,
 					loc: toLocation(reference.sourceRange, context),

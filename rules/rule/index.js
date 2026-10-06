@@ -1,3 +1,5 @@
+// @ts-check
+
 /**
 @import {CssicornCreate} from './to-eslint-create.js';
 @import {CssicornRule} from './to-eslint-rule.js';

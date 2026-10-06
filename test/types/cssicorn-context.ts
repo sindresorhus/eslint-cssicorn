@@ -1,4 +1,4 @@
-// Type-check with: node node_modules/typescript/bin/tsc --noEmit --allowJs --module nodenext --target esnext --strict --skipLibCheck test/types/cssicorn-context.ts
+// Type-check with: npm run test:types
 
 import type {CssNodePlain, PseudoClassSelectorPlain} from '@eslint/css-tree';
 import type {CssicornContext} from '../../rules/rule/cssicorn-context.js';

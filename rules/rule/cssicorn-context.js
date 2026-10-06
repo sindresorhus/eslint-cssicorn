@@ -1,3 +1,5 @@
+// @ts-check
+
 /**
 @import {CSSRuleDefinition, CSSRuleVisitor} from '@eslint/css';
 @import {CssNodePlain} from '@eslint/css-tree';

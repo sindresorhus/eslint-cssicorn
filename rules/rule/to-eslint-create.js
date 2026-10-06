@@ -1,3 +1,5 @@
+// @ts-check
+
 import assert from 'node:assert/strict';
 import createCssicornContext from './cssicorn-context.js';
 import CssicornListeners from './cssicorn-listeners.js';
@@ -12,12 +14,7 @@ import CssicornListeners from './cssicorn-listeners.js';
 @typedef {(context: CssicornContext) => void} CssicornCreate
 */
 
-// `checkVueTemplate` function will wrap `create` function, there is no need to wrap twice
-const wrappedFunctions = new Set();
-const markFunctionWrapped = create => {
-	wrappedFunctions.add(create);
-	return create;
-};
+// The rule adapter wraps each `create` function once.
 
 /**
 Convert Cssicorn style of `create` to ESLint style
@@ -26,10 +23,6 @@ Convert Cssicorn style of `create` to ESLint style
 @returns {EslintCreate}
 */
 export default function toEslintCreate(cssicornCreate) {
-	if (wrappedFunctions.has(cssicornCreate)) {
-		return cssicornCreate;
-	}
-
 	return eslintContext => {
 		const cssicornListeners = new CssicornListeners(eslintContext);
 		const cssicornContext = createCssicornContext(eslintContext, cssicornListeners);
@@ -43,5 +36,3 @@ export default function toEslintCreate(cssicornCreate) {
 		return eslintListeners;
 	};
 }
-
-export {markFunctionWrapped};

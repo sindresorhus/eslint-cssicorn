@@ -1,3 +1,5 @@
+// @ts-check
+
 /**
 @import * as ESLint from 'eslint';
 @import {CssNodePlain} from '@eslint/css-tree';
