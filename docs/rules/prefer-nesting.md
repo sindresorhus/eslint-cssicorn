@@ -9,11 +9,11 @@
 <!-- end auto-generated rule header -->
 <!-- Do not manually modify this header. Run: `npm run fix:eslint-docs` -->
 
-Prefer native CSS nesting for adjacent rules and overrides that repeat a parent selector, and for leading or trailing `:is()` and `:where()` groups.
+Prefer native CSS nesting for adjacent rules and overrides that repeat a parent selector, and for structural uses of `:is()` and `:where()` groups.
 
 ## Examples
 
-Nest adjacent rules under their shared parent, including complex selectors and pseudo-classes such as `:hover`, `:not()`, `:has()`, and `:nth-child()`:
+Nest adjacent rules under their shared parent, including complex selectors and pseudo-classes such as `:hover`, `:not()`, `:has()`, `:nth-child()`, `:lang()`, and `:dir()`:
 
 ```css
 /* ❌ */
@@ -61,7 +61,7 @@ Nest an adjacent `@media`, `@supports`, `@container`, or `@layer` block containi
 }
 ```
 
-Convert trailing or leading `:is()` and `:where()` groups:
+Nest `:is()` and `:where()` groups, including groups followed by suffixes or further selectors:
 
 ```css
 /* ❌ */

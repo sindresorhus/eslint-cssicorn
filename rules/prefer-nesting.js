@@ -49,6 +49,13 @@ const PARENT_PSEUDO_CLASSES = new Set([
 	'empty',
 	'root',
 	'target',
+	'any-link',
+	'open',
+	'in-range',
+	'out-of-range',
+	'default',
+	'user-valid',
+	'user-invalid',
 ]);
 
 const PARENT_FUNCTIONAL_PSEUDO_CLASSES = new Set([
@@ -56,6 +63,8 @@ const PARENT_FUNCTIONAL_PSEUDO_CLASSES = new Set([
 	'has',
 	'is',
 	'where',
+	'lang',
+	'dir',
 	'nth-child',
 	'nth-last-child',
 	'nth-of-type',
@@ -140,22 +149,26 @@ const getCandidate = selector => {
 		};
 	}
 
-	const trailingArguments = getSelectorList(children.at(-1));
-	if (children.length < 3 || !trailingArguments || children.at(-2).type !== 'Combinator') {
+	const groupIndex = children.findLastIndex((node, index) => index >= 2 && children[index - 1].type === 'Combinator' && getSelectorList(node));
+	if (groupIndex === -1) {
 		return;
 	}
 
-	let innerNodes = isDescendantCombinator(children.at(-2)) ? [children.at(-1)] : children.slice(-2);
-	if (isDescendantCombinator(children.at(-2)) && normalizeCssIdentifier(children.at(-1).name) === 'is') {
+	const group = children[groupIndex];
+	const combinatorIndex = groupIndex - 1;
+	const isDescendant = isDescendantCombinator(children[combinatorIndex]);
+	let innerNodes = children.slice(isDescendant ? groupIndex : combinatorIndex);
+	if (groupIndex === children.length - 1 && isDescendant && normalizeCssIdentifier(group.name) === 'is') {
 		// Unlike :is(), a nested selector list gives each branch its own specificity.
-		const specificities = trailingArguments.children.map(argument => getRuleSelectorSpecificity(argument, [0, 0, 0]));
+		const argumentsList = getSelectorList(group);
+		const specificities = argumentsList.children.map(argument => getRuleSelectorSpecificity(argument, [0, 0, 0]));
 		const hasEqualSpecificity = specificities.every(specificity => compareSpecificity(specificity, specificities[0]) === 0);
-		innerNodes = hasEqualSpecificity && canUnwrapSelectorList(trailingArguments) ? trailingArguments.children : [children.at(-1)];
+		innerNodes = hasEqualSpecificity && canUnwrapSelectorList(argumentsList) ? argumentsList.children : [group];
 	}
 
 	return {
-		node: children.at(-1),
-		outerNodes: children.slice(0, -2),
+		node: group,
+		outerNodes: children.slice(0, combinatorIndex),
 		innerNodes,
 		prefix: '',
 	};

@@ -25,7 +25,6 @@ test({
 		'@scope (.page) { .card {} @container (width > 0px) { .card {} } }',
 		':is(.foo > .bar, .baz) {}',
 		'a :is(.foo > .bar) {}',
-		'a :is(.foo > .bar, .baz).active {}',
 		'.outer { .target :is(.foo > &, .baz) {} }',
 		'a :is(.foo > :unknown, .baz) {}',
 	],
@@ -411,8 +410,6 @@ test.snapshot({
 		':is(.foo, .bar) {}',
 		'a :is(.foo) {}',
 		':is(.foo) a {}',
-		'a :is(.foo, .bar) b {}',
-		'a :is(.foo, .bar).active {}',
 		'a :is(.foo, .bar), b {}',
 		':is(.foo, .bar) a, b {}',
 		'a :not(.foo, .bar) {}',
@@ -706,6 +703,22 @@ nodeTest('nesting fixes settle across overlapping and repeated candidates', () =
 			output: 'a { .foo, .bar { .baz, .qux { color: red; } } } b { .x, .y { color: blue; } }',
 		},
 		{
+			code: 'a :is(.foo, .bar).active { color: red; }',
+			output: 'a { .foo, .bar { &.active { color: red; } } }',
+		},
+		{
+			code: 'a :where(.foo, #bar) b { color: red; }',
+			output: 'a { :where(.foo, #bar) { & b { color: red; } } }',
+		},
+		{
+			code: 'a :is(.foo, .bar) b :where(.baz, #qux).active { color: red; }',
+			output: 'a { .foo, .bar { & b { :where(.baz, #qux) { &.active { color: red; } } } } }',
+		},
+		{
+			code: ':where(.foo, #bar) a :is(.baz, .qux).active { color: red; }',
+			output: ':where(.foo, #bar) { & a :is(.baz, .qux).active { color: red; } }',
+		},
+		{
 			code: ':is(.foo, :blank) a :is(.bar, :blank) { color: red; }',
 			output: ':is(.foo, :blank) { & a :is(.bar, :blank) { color: red; } }',
 		},
@@ -781,6 +794,9 @@ nodeTest('nesting fixes work with the other nesting rules', () => {
 		'.card { color: red; } @layer theme { .card { color: blue; } }',
 		'a :where(.foo, #bar) { color: red; }',
 		':where(.foo, #bar).active { color: red; }',
+		'a :where(.foo, #bar).active { color: red; }',
+		'.card:lang(en) { color: red; } .card:lang(en) .title { color: blue; }',
+		'.card:open { color: red; } .card:open .title { color: blue; }',
 		'.card { color: red; } .card .title, .card > #body { color: blue; }',
 		'.card:hover { color: red; } .card:hover .title { color: blue; }',
 		'[data-kind="CARD" i] { color: red; } [data-kind="CARD" i] .title { color: blue; }',
@@ -816,7 +832,6 @@ nodeTest('nesting fixes work with the other nesting rules', () => {
 
 test({
 	valid: [
-		'.card:lang(en) {} .card:lang(en) .title {}',
 		String.raw`.card:\4e OT(.disabled) {} .card:\4e OT(.disabled) .title {}`,
 		'.card:not(:unknown) {} .card:not(:unknown) .title {}',
 		'.card:has(:has(.title)) {} .card:has(:has(.title)) .title {}',
@@ -833,8 +848,6 @@ test({
 		String.raw`a :w\68 ere(.foo, .bar) {}`,
 		'a :where(.foo) {}',
 		':where(.foo, .bar) {}',
-		'a :where(.foo, .bar).active {}',
-		'a :where(.foo, .bar) b {}',
 		'a :where(.foo, :unknown) {}',
 		'.outer { a :where(&, .bar) {} }',
 		'@scope (.outer) { a :where(.foo, .bar) {} }',
@@ -925,5 +938,119 @@ test({
 			output: 'a {\r\n  :WHERE(.foo, #bar) {\r\n    color: red !important;\r\n    & .title { color: blue; }\r\n  }\r\n}',
 			errors: 1,
 		},
+	],
+});
+
+test({
+	valid: [
+		'.card:is(.foo, .bar).active {}',
+		'a :is(.foo).active {}',
+		'a :where(.foo).active {}',
+		'a :is(.foo, :unknown).active {}',
+		'a :where(.foo, ::before) b {}',
+		'a::before :is(.foo, .bar).active {}',
+		'.outer { a :where(&, .bar).active {} }',
+		'@scope (.outer) { a :is(.foo, .bar).active {} }',
+		'@namespace url("http://www.w3.org/1999/xhtml"); a :where(.foo, .bar) b {}',
+		'.card:lang(en) {} .card:lang(fr) .title {}',
+		String.raw`.card:\6c ang(en) {} .card:\6c ang(en) .title {}`,
+		'.card:visited {} .card:visited .title {}',
+		'.card:host {} .card:host .title {}',
+	],
+	invalid: [
+		...['is', 'where'].flatMap(name => ['.active', '::before', ' b', ' > b', ' + b', ' ~ b'].map(suffix => ({
+			code: `a :${name}(.foo, #bar)${suffix} { color: red; }`,
+			output: `a { :${name}(.foo, #bar)${suffix} { color: red; } }`,
+			errors: 1,
+		}))),
+		...['>', '+', '~'].map(combinator => ({
+			code: `a ${combinator} :is(.foo, .bar).active { color: red; }`,
+			output: `a { ${combinator} :is(.foo, .bar).active { color: red; } }`,
+			errors: 1,
+		})),
+		{
+			code: 'a :is(.foo, .bar) b :where(.baz, #qux).active { color: red; }',
+			output: 'a :is(.foo, .bar) b { :where(.baz, #qux).active { color: red; } }',
+			errors: [{message: 'Prefer CSS nesting over `:where()`.'}],
+		},
+		{
+			code: 'a :is(.foo > .bar, .baz).active {}',
+			output: 'a { :is(.foo > .bar, .baz).active {} }',
+			errors: 1,
+		},
+		{
+			code: 'a :is(.foo, .bar).active {}',
+			output: 'a { :is(.foo, .bar).active {} }',
+			errors: 1,
+		},
+		{
+			code: 'a :is(.foo, .bar) b {}',
+			output: 'a { :is(.foo, .bar) b {} }',
+			errors: 1,
+		},
+		{
+			code: 'a :where(.foo, .bar).active {}',
+			output: 'a { :where(.foo, .bar).active {} }',
+			errors: 1,
+		},
+		{
+			code: 'a :where(.foo, .bar) b {}',
+			output: 'a { :where(.foo, .bar) b {} }',
+			errors: 1,
+		},
+		...[
+			'lang(en)',
+			'lang("en")',
+			'lang(en, fr)',
+			'dir(rtl)',
+			'LANG(en)',
+			'DIR(rtl)',
+			'any-link',
+			'open',
+			'in-range',
+			'out-of-range',
+			'default',
+			'user-valid',
+			'user-invalid',
+		].map(pseudoClass => ({
+			code: `.card:${pseudoClass} { color: red; } .card:${pseudoClass} .title { color: blue; }`,
+			output: `.card:${pseudoClass} { color: red; & .title { color: blue; } }`,
+			errors: 1,
+		})),
+		{
+			code: '.card:lang(en) {} .card:lang(en) .title {}',
+			output: '.card:lang(en) { & .title {} }',
+			errors: 1,
+		},
+		{
+			code: String.raw`a :IS(.f\6f o, #bar)[data-value="&"] { color: red; }`,
+			output: String.raw`a { :IS(.f\6f o, #bar)[data-value="&"] { color: red; } }`,
+			errors: 1,
+		},
+		{
+			code: '.outer, #outer { a :where(.foo, #bar).active { color: red; & .title { color: blue; } } }',
+			output: '.outer, #outer { a { :where(.foo, #bar).active { color: red; & .title { color: blue; } } } }',
+			errors: 1,
+		},
+		{
+			code: '.card:dir(rtl) { color: red; } @layer theme { .card:dir(rtl) { color: blue; } }',
+			output: '.card:dir(rtl) { color: red; @layer theme { color: blue; } }',
+			errors: 1,
+		},
+		{
+			code: 'a :where(.foo, #bar).active {\r\n  color: red !important;\r\n}',
+			output: 'a {\r\n  :where(.foo, #bar).active {\r\n    color: red !important;\r\n  }\r\n}',
+			errors: 1,
+		},
+		{
+			code: '.card:lang(en) {\n\tcolor: red;\n}\n.card:lang(en) .title {\n\tcolor: blue;\n}',
+			output: '.card:lang(en) {\n\tcolor: red;\n\t& .title {\n\t\tcolor: blue;\n\t}\n}',
+			errors: 1,
+		},
+		...[
+			'a :where(.foo, #bar) /* keep */ .title { color: red; }',
+			'a :is(.foo, .bar).active {\n\t--value: \\61\nbc;\n}',
+			'a :is(.foo, #bar):hover { color: red; /* keep */ }',
+		].map(code => ({code, errors: 1})),
 	],
 });
