@@ -8,6 +8,10 @@ const {test} = getTester(import.meta, 'prefer-nesting');
 
 const cases = [
 	{
+		code: 'input:not([type=submit]) .card, textarea:not([readonly]) .card { color: blue; }',
+		output: 'input:not([type=submit]), textarea:not([readonly]) { & .card { color: blue; } }',
+	},
+	{
 		code: 'input:not([type=submit]):focus, textarea:not([readonly]):focus { color: blue; }',
 		output: ':focus { input&:not([type=submit]), textarea&:not([readonly]) { color: blue; } }',
 	},
@@ -239,11 +243,8 @@ const cases = [
 test({
 	valid: [
 		'.card {} input:not([type=submit]) .card { color: blue; }',
-		'input:not([type=submit]) .card, textarea:not([readonly]) .card { color: blue; }',
-		'.outer { .theme .card, .other .card {} }',
 		'.outer { .a.card {} .b.card {} }',
 		'& .theme .card, & .other .card {}',
-		'.theme .card::before, .other .card::before {}',
 		'.outer { .a, #b {} .a .title, #b .title {} }',
 		'.a, .b {} .a .title {}',
 		'.a, .b {} .a .title, .b .title, .a.active {}',

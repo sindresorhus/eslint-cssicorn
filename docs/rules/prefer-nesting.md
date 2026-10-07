@@ -13,23 +13,23 @@ Prefer native CSS nesting for repeated parent selectors, conditional overrides, 
 
 ## Examples
 
-Nest shared literal prefixes in selector lists and adjacent rules. Lists may include the parent itself; grouped parents require equal specificity and every parent/suffix combination:
+Nest shared literal prefixes in selector lists and adjacent rules. Grouped parents require equal specificity and every parent/suffix combination:
 
 ```css
 /* ❌ */
-.card .title, .card .body, .card {
+.card .title, .panel .title, .card .body, .panel .body {
 	color: red;
 }
 
 /* ✅ */
-.card {
-	& .title, & .body, & {
+.card, .panel {
+	& .title, & .body {
 		color: red;
 	}
 }
 ```
 
-Nest related rules through `@media` and `@layer` chains, including sibling groups and shared prefixes without a preceding parent rule. Conditional blocks can also precede related ordinary rules. Paths through `@supports`, `@container`, or `@starting-style` require the exact parent and declarations only:
+Nest related rules through `@media` and `@layer` chains, including sibling groups and shared prefixes without a preceding parent rule. The parent can appear in a later conditional block; declaration order is preserved. Paths through `@supports`, `@container`, or `@starting-style` require the exact parent and declarations only:
 
 ```css
 /* ❌ */
@@ -69,7 +69,7 @@ a {
 }
 ```
 
-Outside ancestor style rules, factor shared compound suffixes and contextual overrides. A literal compound parent can appear anywhere, with attached refinements or further selectors:
+Factor shared compound suffixes and contextual overrides. A literal compound parent can appear anywhere; inside ancestor style rules, contextual overrides require an explicit `&` in the parent:
 
 ```css
 /* ❌ */
@@ -101,18 +101,18 @@ Attached groups and suffixes use `&`:
 
 Leading and trailing groups also support `>`, `+`, and `~`. Trailing groups after these combinators stay wrapped.
 
-Existing selector `&` references must stay entirely in the retained literal parent. Grouped parents must inherit specificity equally; references inside functions are skipped.
+Existing `&` references, including parsed functional arguments, must stay in one retained literal parent. Grouped parents require equal inherited specificity and no functional `&` references.
 
 ## Specificity
 
 Trailing `:is()` is unwrapped only when its arguments have equal specificity and unwrapping preserves [forgiving selector-list behavior](https://drafts.csswg.org/selectors/#forgiving-selector). Complex arguments and arguments with pseudo-classes, attribute flags, namespace syntax, or invalid IDs stay wrapped.
 
-`:where()` always stays wrapped to preserve zero specificity.
+`:where()` always stays wrapped to preserve zero specificity. Exact declaration-only conditional overrides also preserve mixed parent specificity and pseudo-elements without adding `&`.
 
 Leading `:is()` groups preserve their maximum specificity, even with mixed arguments. The result can trigger [`no-nesting-with-mixed-specificity`](./no-nesting-with-mixed-specificity.md); disable that rule for intentional mixed-specificity nesting.
 
 ## Limitations
 
-Conditional discovery follows single-child chains; every merged child must relate to the parent. `:is()` and `:where()` conversions require one outer selector and at least two arguments.
+Inferred groups use the first compound as parent. Conditional discovery follows single-child chains. `:is()` and `:where()` conversions require one outer selector and at least two arguments.
 
 Skips ambiguous grouped matches, complex type-leading contextual prefixes, opaque parent arguments, `@scope`, and files with `@namespace`. Comments, missing semicolons, or unsafe formatting can prevent fixes.
