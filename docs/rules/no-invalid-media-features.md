@@ -11,7 +11,9 @@ Media query parsers accept unknown feature names and values so that future addit
 
 This rule checks media feature names and validates values and notation for known features. It supports boolean, plain, and range notation, including deprecated standard `device-*` features and features defined in current drafts. Vendor-prefixed features (including the old Firefox form, like `min--moz-device-pixel-ratio`) and custom media queries are ignored.
 
-Values that contain an unknown function, like Tailwind CSS `theme()`, are not validated, because such functions are usually replaced at build time. Feature names and notation are still checked. Values with known functions, like `calc()`, are still validated.
+Values that contain an unknown function, like Tailwind CSS `theme()`, are not validated, because such functions are usually replaced at build time. Feature names and notation are still checked.
+
+Values with known functions are checked on a best-effort basis. Math expressions inside functions like `calc()` and values substituted by `env()`, including fallbacks, are not validated.
 
 Range notation is only allowed for unprefixed range features, like `width` and `resolution`. Discrete features, like `orientation` and `grid`, cannot use range notation. Features prefixed with `min-` or `max-` require plain notation with a value, like `(min-width: 40rem)`.
 

@@ -36,7 +36,7 @@ const mediaFeatureSyntaxes = new Map([
 	['dynamic-range', 'standard | high'],
 	['environment-blending', 'opaque | additive | subtractive'],
 	['forced-colors', 'none | active'],
-	['grid', '0 | 1'],
+	['grid', '<integer [0,1]>'],
 	['hover', 'none | hover'],
 	['inverted-colors', 'none | inverted'],
 	['nav-controls', 'none | back'],
@@ -96,7 +96,8 @@ function getEnvironmentPlaceholder(syntax) {
 			return '0px';
 		}
 
-		case '<integer>': {
+		case '<integer>':
+		case '<integer [0,1]>': {
 			return '0';
 		}
 

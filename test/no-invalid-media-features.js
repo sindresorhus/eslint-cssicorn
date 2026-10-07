@@ -53,6 +53,7 @@ test.snapshot({
 		...validMediaFeatureValues.map(([name, value]) => `@media (${name}: ${value}) {}`),
 		'@media (color) {}',
 		'@media (orientation) and (grid) {}',
+		...['0', '-0', '+1', '01', 'calc(1)', 'env(grid-display)'].map(value => `@media (grid: ${value}) {}`),
 		'@media (min-width: 10px) and (max-width: 20px) {}',
 		'@media (width > 10px) {}',
 		'@media (10px < width) {}',
@@ -87,6 +88,7 @@ test.snapshot({
 		String.raw`@media (width > 1p\78) {}`,
 		String.raw`@media (resolution > in\66 inite) {}`,
 		String.raw`@media (width: c\61 lc(1p\78 + 1em)) {}`,
+		String.raw`@media (width: c\61 lc(e\6e v(viewport-segment-width 0 0) + 1p\78)) {}`,
 		'@media (--narrow) {}',
 		'@media (--narrow: red) {}',
 		'@media (-webkit-min-device-pixel-ratio: 2) {}',
@@ -165,6 +167,9 @@ test.snapshot({
 		String.raw`@media (10px < 20px < m\61 x-width) {}`,
 		String.raw`@media (width: 1\31 px) {}`,
 		String.raw`@media (width: 1\65 2px) {}`,
+		'@media (grid: -1) {}',
+		'@media (grid: 1.0) {}',
+		'@media (theme(--minimum) < width < red) {}',
 	],
 });
 
