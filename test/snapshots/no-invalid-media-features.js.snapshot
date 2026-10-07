@@ -244,6 +244,76 @@ Message:
 
 `;
 
+exports[`invalid(25): @media (min-width) {} 1`] = `
+
+  1 | @media (min-width) {}
+
+`;
+
+exports[`invalid(25): @media (min-width) {} 2`] = `
+
+Message:
+> 1 | @media (min-width) {}
+    |         ^^^^^^^^^ Media feature \`min-width\` requires a value in plain notation.
+
+`;
+
+exports[`invalid(26): @media (max-height) {} 1`] = `
+
+  1 | @media (max-height) {}
+
+`;
+
+exports[`invalid(26): @media (max-height) {} 2`] = `
+
+Message:
+> 1 | @media (max-height) {}
+    |         ^^^^^^^^^^ Media feature \`max-height\` requires a value in plain notation.
+
+`;
+
+exports[`invalid(27): @media (MIN-WIDTH) {} 1`] = `
+
+  1 | @media (MIN-WIDTH) {}
+
+`;
+
+exports[`invalid(27): @media (MIN-WIDTH) {} 2`] = `
+
+Message:
+> 1 | @media (MIN-WIDTH) {}
+    |         ^^^^^^^^^ Media feature \`MIN-WIDTH\` requires a value in plain notation.
+
+`;
+
+exports[`invalid(28): @media (m\\61 x-width) {} 1`] = `
+
+  1 | @media (m\\61 x-width) {}
+
+`;
+
+exports[`invalid(28): @media (m\\61 x-width) {} 2`] = `
+
+Message:
+> 1 | @media (m\\61 x-width) {}
+    |         ^^^^^^^^^^^^ Media feature \`m\\61 x-width\` requires a value in plain notation.
+
+`;
+
+exports[`invalid(29): @media (/* before */ min-width /* name */) {} 1`] = `
+
+  1 | @media (/* before */ min-width /* name */) {}
+
+`;
+
+exports[`invalid(29): @media (/* before */ min-width /* name */) {} 2`] = `
+
+Message:
+> 1 | @media (/* before */ min-width /* name */) {}
+    |                      ^^^^^^^^^ Media feature \`min-width\` requires a value in plain notation.
+
+`;
+
 exports[`invalid(3): @media (/* before */ unknown-feature /* name */: 10px) {} 1`] = `
 
   1 | @media (/* before */ unknown-feature /* name */: 10px) {}
@@ -255,6 +325,146 @@ exports[`invalid(3): @media (/* before */ unknown-feature /* name */: 10px) {} 2
 Message:
 > 1 | @media (/* before */ unknown-feature /* name */: 10px) {}
     |                      ^^^^^^^^^^^^^^^ Unknown media feature \`unknown-feature\`.
+
+`;
+
+exports[`invalid(30): @media (orientation > portrait) {} 1`] = `
+
+  1 | @media (orientation > portrait) {}
+
+`;
+
+exports[`invalid(30): @media (orientation > portrait) {} 2`] = `
+
+Message:
+> 1 | @media (orientation > portrait) {}
+    |         ^^^^^^^^^^^ Media feature \`orientation\` does not support range notation.
+
+`;
+
+exports[`invalid(31): @media (portrait < orientation) {} 1`] = `
+
+  1 | @media (portrait < orientation) {}
+
+`;
+
+exports[`invalid(31): @media (portrait < orientation) {} 2`] = `
+
+Message:
+> 1 | @media (portrait < orientation) {}
+    |                    ^^^^^^^^^^^ Media feature \`orientation\` does not support range notation.
+
+`;
+
+exports[`invalid(32): @media (grid >= 0) {} 1`] = `
+
+  1 | @media (grid >= 0) {}
+
+`;
+
+exports[`invalid(32): @media (grid >= 0) {} 2`] = `
+
+Message:
+> 1 | @media (grid >= 0) {}
+    |         ^^^^ Media feature \`grid\` does not support range notation.
+
+`;
+
+exports[`invalid(33): @media (ORIENTATION > portrait) {} 1`] = `
+
+  1 | @media (ORIENTATION > portrait) {}
+
+`;
+
+exports[`invalid(33): @media (ORIENTATION > portrait) {} 2`] = `
+
+Message:
+> 1 | @media (ORIENTATION > portrait) {}
+    |         ^^^^^^^^^^^ Media feature \`ORIENTATION\` does not support range notation.
+
+`;
+
+exports[`invalid(34): @media (o\\72 ientation > portrait) {} 1`] = `
+
+  1 | @media (o\\72 ientation > portrait) {}
+
+`;
+
+exports[`invalid(34): @media (o\\72 ientation > portrait) {} 2`] = `
+
+Message:
+> 1 | @media (o\\72 ientation > portrait) {}
+    |         ^^^^^^^^^^^^^^ Media feature \`o\\72 ientation\` does not support range notation.
+
+`;
+
+exports[`invalid(35): @media (orientation > square) {} 1`] = `
+
+  1 | @media (orientation > square) {}
+
+`;
+
+exports[`invalid(35): @media (orientation > square) {} 2`] = `
+
+Message:
+> 1 | @media (orientation > square) {}
+    |         ^^^^^^^^^^^ Media feature \`orientation\` does not support range notation.
+
+`;
+
+exports[`invalid(36): @media (orientation > theme(--orientation)) {} 1`] = `
+
+  1 | @media (orientation > theme(--orientation)) {}
+
+`;
+
+exports[`invalid(36): @media (orientation > theme(--orientation)) {} 2`] = `
+
+Message:
+> 1 | @media (orientation > theme(--orientation)) {}
+    |         ^^^^^^^^^^^ Media feature \`orientation\` does not support range notation.
+
+`;
+
+exports[`invalid(37): @media (min-width > 10px) {} 1`] = `
+
+  1 | @media (min-width > 10px) {}
+
+`;
+
+exports[`invalid(37): @media (min-width > 10px) {} 2`] = `
+
+Message:
+> 1 | @media (min-width > 10px) {}
+    |         ^^^^^^^^^ Media feature \`min-width\` does not support range notation.
+
+`;
+
+exports[`invalid(38): @media (10px < max-width) {} 1`] = `
+
+  1 | @media (10px < max-width) {}
+
+`;
+
+exports[`invalid(38): @media (10px < max-width) {} 2`] = `
+
+Message:
+> 1 | @media (10px < max-width) {}
+    |                ^^^^^^^^^ Media feature \`max-width\` does not support range notation.
+
+`;
+
+exports[`invalid(39): @media (MAX-WIDTH > 10px) {} 1`] = `
+
+  1 | @media (MAX-WIDTH > 10px) {}
+
+`;
+
+exports[`invalid(39): @media (MAX-WIDTH > 10px) {} 2`] = `
+
+Message:
+> 1 | @media (MAX-WIDTH > 10px) {}
+    |         ^^^^^^^^^ Media feature \`MAX-WIDTH\` does not support range notation.
 
 `;
 
@@ -272,6 +482,146 @@ Message:
 
 `;
 
+exports[`invalid(40): @media (m\\69 n-width > 10px) {} 1`] = `
+
+  1 | @media (m\\69 n-width > 10px) {}
+
+`;
+
+exports[`invalid(40): @media (m\\69 n-width > 10px) {} 2`] = `
+
+Message:
+> 1 | @media (m\\69 n-width > 10px) {}
+    |         ^^^^^^^^^^^^ Media feature \`m\\69 n-width\` does not support range notation.
+
+`;
+
+exports[`invalid(41): @media (min-width > red) {} 1`] = `
+
+  1 | @media (min-width > red) {}
+
+`;
+
+exports[`invalid(41): @media (min-width > red) {} 2`] = `
+
+Message:
+> 1 | @media (min-width > red) {}
+    |         ^^^^^^^^^ Media feature \`min-width\` does not support range notation.
+
+`;
+
+exports[`invalid(42): @media (10px < min-width < 20px) {} 1`] = `
+
+  1 | @media (10px < min-width < 20px) {}
+
+`;
+
+exports[`invalid(42): @media (10px < min-width < 20px) {} 2`] = `
+
+Message:
+> 1 | @media (10px < min-width < 20px) {}
+    |                ^^^^^^^^^ Media feature \`min-width\` does not support range notation.
+
+`;
+
+exports[`invalid(43): @media (10px < width > 20px) {} 1`] = `
+
+  1 | @media (10px < width > 20px) {}
+
+`;
+
+exports[`invalid(43): @media (10px < width > 20px) {} 2`] = `
+
+Message:
+> 1 | @media (10px < width > 20px) {}
+    |        ^^^^^^^^^^^^^^^^^^^^^ Chained media feature comparisons must place the feature between two values and use the same comparison direction.
+
+`;
+
+exports[`invalid(44): @media (20px >= width <= 10px) {} 1`] = `
+
+  1 | @media (20px >= width <= 10px) {}
+
+`;
+
+exports[`invalid(44): @media (20px >= width <= 10px) {} 2`] = `
+
+Message:
+> 1 | @media (20px >= width <= 10px) {}
+    |        ^^^^^^^^^^^^^^^^^^^^^^^ Chained media feature comparisons must place the feature between two values and use the same comparison direction.
+
+`;
+
+exports[`invalid(45): @media (width < 10px < 20px) {} 1`] = `
+
+  1 | @media (width < 10px < 20px) {}
+
+`;
+
+exports[`invalid(45): @media (width < 10px < 20px) {} 2`] = `
+
+Message:
+> 1 | @media (width < 10px < 20px) {}
+    |        ^^^^^^^^^^^^^^^^^^^^^ Chained media feature comparisons must place the feature between two values and use the same comparison direction.
+
+`;
+
+exports[`invalid(46): @media (10px < 20px < width) {} 1`] = `
+
+  1 | @media (10px < 20px < width) {}
+
+`;
+
+exports[`invalid(46): @media (10px < 20px < width) {} 2`] = `
+
+Message:
+> 1 | @media (10px < 20px < width) {}
+    |        ^^^^^^^^^^^^^^^^^^^^^ Chained media feature comparisons must place the feature between two values and use the same comparison direction.
+
+`;
+
+exports[`invalid(47): @media (/* before */ 10px /* left */ < width /* middle */ > 20px) {} 1`] = `
+
+  1 | @media (/* before */ 10px /* left */ < width /* middle */ > 20px) {}
+
+`;
+
+exports[`invalid(47): @media (/* before */ 10px /* left */ < width /* middle */ > 20px) {} 2`] = `
+
+Message:
+> 1 | @media (/* before */ 10px /* left */ < width /* middle */ > 20px) {}
+    |        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Chained media feature comparisons must place the feature between two values and use the same comparison direction.
+
+`;
+
+exports[`invalid(48): @media (theme(--minimum) < width > theme(--maximum)) {} 1`] = `
+
+  1 | @media (theme(--minimum) < width > theme(--maximum)) {}
+
+`;
+
+exports[`invalid(48): @media (theme(--minimum) < width > theme(--maximum)) {} 2`] = `
+
+Message:
+> 1 | @media (theme(--minimum) < width > theme(--maximum)) {}
+    |        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Chained media feature comparisons must place the feature between two values and use the same comparison direction.
+
+`;
+
+exports[`invalid(49): @media (min-grid: 1) {} 1`] = `
+
+  1 | @media (min-grid: 1) {}
+
+`;
+
+exports[`invalid(49): @media (min-grid: 1) {} 2`] = `
+
+Message:
+> 1 | @media (min-grid: 1) {}
+    |         ^^^^^^^^ Unknown media feature \`min-grid\`.
+
+`;
+
 exports[`invalid(5): @media (unknown-feature > 10px) {} 1`] = `
 
   1 | @media (unknown-feature > 10px) {}
@@ -283,6 +633,48 @@ exports[`invalid(5): @media (unknown-feature > 10px) {} 2`] = `
 Message:
 > 1 | @media (unknown-feature > 10px) {}
     |         ^^^^^^^^^^^^^^^ Unknown media feature \`unknown-feature\`.
+
+`;
+
+exports[`invalid(50): @supports (display: grid) { .element { @media (max-width) { color: red; } } } 1`] = `
+
+  1 | @supports (display: grid) { .element { @media (max-width) { color: red; } } }
+
+`;
+
+exports[`invalid(50): @supports (display: grid) { .element { @media (max-width) { color: red; } } } 2`] = `
+
+Message:
+> 1 | @supports (display: grid) { .element { @media (max-width) { color: red; } } }
+    |                                                ^^^^^^^^^ Media feature \`max-width\` requires a value in plain notation.
+
+`;
+
+exports[`invalid(51): @import \"theme.css\" (orientation > portrait); 1`] = `
+
+  1 | @import "theme.css" (orientation > portrait);
+
+`;
+
+exports[`invalid(51): @import \"theme.css\" (orientation > portrait); 2`] = `
+
+Message:
+> 1 | @import "theme.css" (orientation > portrait);
+    |                      ^^^^^^^^^^^ Media feature \`orientation\` does not support range notation.
+
+`;
+
+exports[`invalid(52): @media (10px < 20px < unknown-feature) {} 1`] = `
+
+  1 | @media (10px < 20px < unknown-feature) {}
+
+`;
+
+exports[`invalid(52): @media (10px < 20px < unknown-feature) {} 2`] = `
+
+Message:
+> 1 | @media (10px < 20px < unknown-feature) {}
+    |                       ^^^^^^^^^^^^^^^ Unknown media feature \`unknown-feature\`.
 
 `;
 

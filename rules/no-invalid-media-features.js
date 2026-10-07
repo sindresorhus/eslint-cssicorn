@@ -1,11 +1,17 @@
-import {ident, keyword} from '@eslint/css-tree';
+import {keyword} from '@eslint/css-tree';
 import {getFeatureNameRange, normalizeCssIdentifier, toLocation} from './utils/index.js';
 
 const MESSAGE_ID_UNKNOWN = 'no-invalid-media-features/unknown';
 const MESSAGE_ID_INVALID_VALUE = 'no-invalid-media-features/invalid-value';
+const MESSAGE_ID_MISSING_VALUE = 'no-invalid-media-features/missing-value';
+const MESSAGE_ID_INVALID_RANGE = 'no-invalid-media-features/invalid-range';
+const MESSAGE_ID_INVALID_CHAIN = 'no-invalid-media-features/invalid-chain';
 const messages = {
 	[MESSAGE_ID_UNKNOWN]: 'Unknown media feature `{{name}}`.',
 	[MESSAGE_ID_INVALID_VALUE]: 'Invalid value `{{value}}` for media feature `{{name}}`. Expected {{expected}}.',
+	[MESSAGE_ID_MISSING_VALUE]: 'Media feature `{{name}}` requires a value in plain notation.',
+	[MESSAGE_ID_INVALID_RANGE]: 'Media feature `{{name}}` does not support range notation.',
+	[MESSAGE_ID_INVALID_CHAIN]: 'Chained media feature comparisons must place the feature between two values and use the same comparison direction.',
 };
 
 const rangeMediaFeatureSyntaxes = [
@@ -22,6 +28,8 @@ const rangeMediaFeatureSyntaxes = [
 	['vertical-viewport-segments', '<integer>'],
 	['width', '<length>'],
 ];
+
+const rangeMediaFeatureNames = new Set(rangeMediaFeatureSyntaxes.map(([name]) => name));
 
 const mediaFeatureSyntaxes = new Map([
 	...rangeMediaFeatureSyntaxes,
@@ -61,8 +69,6 @@ for (const [name, syntax] of rangeMediaFeatureSyntaxes) {
 	mediaFeatureSyntaxes.set(`min-${name}`, syntax);
 	mediaFeatureSyntaxes.set(`max-${name}`, syntax);
 }
-
-const getFeatureNameDescriptor = name => keyword(ident.decode(name));
 
 // The old Firefox form puts the vendor prefix after `min-`/`max-`, for example `min--moz-device-pixel-ratio`.
 function isIgnoredFeatureName(name) {
@@ -164,9 +170,9 @@ function getInvalidValueProblem(sourceCode, node, name, syntax) {
 }
 
 function getRangeFeatureNameNode(node) {
-	const identifierNodes = [node.left, node.middle].filter(node => node.type === 'Identifier');
+	const identifierNodes = [node.left, node.middle, node.right].filter(node => node?.type === 'Identifier');
 
-	return identifierNodes.find(node => mediaFeatureSyntaxes.has(getFeatureNameDescriptor(node.name).name))
+	return identifierNodes.find(node => mediaFeatureSyntaxes.has(normalizeCssIdentifier(node.name)))
 		?? identifierNodes.find(node => isIgnoredFeatureName(node.name))
 		?? identifierNodes[0];
 }
@@ -186,13 +192,23 @@ const create = context => {
 			return;
 		}
 
-		const syntax = mediaFeatureSyntaxes.get(getFeatureNameDescriptor(node.name).name);
+		const name = normalizeCssIdentifier(node.name);
+		const syntax = mediaFeatureSyntaxes.get(name);
 		if (!syntax) {
 			return getUnknownFeatureProblem(node, node.name, context);
 		}
 
 		if (node.value) {
 			return getInvalidValueProblem(sourceCode, node.value, node.name, syntax);
+		}
+
+		if (name.startsWith('min-') || name.startsWith('max-')) {
+			return {
+				node,
+				loc: toLocation(getFeatureNameRange(node, context), context),
+				messageId: MESSAGE_ID_MISSING_VALUE,
+				data: {name: node.name},
+			};
 		}
 	});
 
@@ -210,9 +226,31 @@ const create = context => {
 			return;
 		}
 
-		const syntax = mediaFeatureSyntaxes.get(getFeatureNameDescriptor(nameNode.name).name);
+		const name = normalizeCssIdentifier(nameNode.name);
+		const syntax = mediaFeatureSyntaxes.get(name);
 		if (!syntax) {
 			yield getUnknownFeatureProblem(nameNode, nameNode.name, context);
+			return;
+		}
+
+		if (!rangeMediaFeatureNames.has(name)) {
+			yield {
+				node: nameNode,
+				messageId: MESSAGE_ID_INVALID_RANGE,
+				data: {name: nameNode.name},
+			};
+			return;
+		}
+
+		if (
+			node.right
+			&& (
+				nameNode !== node.middle
+				|| !['<', '>'].includes(node.leftComparison[0])
+				|| node.leftComparison[0] !== node.rightComparison[0]
+			)
+		) {
+			yield {node, messageId: MESSAGE_ID_INVALID_CHAIN};
 			return;
 		}
 
@@ -237,7 +275,7 @@ const config = {
 	meta: {
 		type: 'problem',
 		docs: {
-			description: 'Disallow unknown media features and invalid values for known media features.',
+			description: 'Disallow unknown media features, invalid values, and invalid notation.',
 			recommended: 'unopinionated',
 		},
 		schema: [],
