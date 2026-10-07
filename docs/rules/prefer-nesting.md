@@ -13,7 +13,7 @@ Prefer native CSS nesting for repeated parent selectors, conditional overrides, 
 
 ## Examples
 
-Nest shared literal prefixes in selector lists and adjacent rules. Lists may include the parent itself:
+Nest shared literal prefixes in selector lists and adjacent rules. Lists may include the parent itself; grouped parents require equal specificity and every parent/suffix combination:
 
 ```css
 /* ❌ */
@@ -29,7 +29,7 @@ Nest shared literal prefixes in selector lists and adjacent rules. Lists may inc
 }
 ```
 
-Nest adjacent `@media` and `@layer` blocks containing related rules, including repeated single selectors without a preceding parent rule. A single rule may use the exact parent; `@supports`, `@container`, and `@starting-style` require that exact selector and declarations only:
+Nest related rules through `@media` and `@layer` chains, including sibling groups and repeated identical selectors without a preceding parent rule. Paths through `@supports`, `@container`, or `@starting-style` require the exact parent and declarations only:
 
 ```css
 /* ❌ */
@@ -69,7 +69,7 @@ a {
 }
 ```
 
-Contextual overrides can include refinements, mix with direct selectors, and occur inside `@media` or `@layer`. The parent must be compound and outside ancestor style rules:
+Outside ancestor style rules, factor shared compound suffixes and contextual overrides, including attached refinements:
 
 ```css
 /* ❌ */
@@ -101,6 +101,8 @@ Attached groups and suffixes use `&`:
 
 Leading and trailing groups also support `>`, `+`, and `~`. Trailing groups after these combinators stay wrapped.
 
+An existing selector `&` must lead a retained parent such as `& .card`; additional references are skipped to preserve their binding.
+
 ## Specificity
 
 Trailing `:is()` is unwrapped only when its arguments have equal specificity and unwrapping preserves [forgiving selector-list behavior](https://drafts.csswg.org/selectors/#forgiving-selector). Complex arguments and arguments with pseudo-classes, attribute flags, namespace syntax, or invalid IDs stay wrapped.
@@ -111,6 +113,6 @@ Leading `:is()` groups preserve their maximum specificity, even with mixed argum
 
 ## Limitations
 
-Uses literal prefixes or compound contextual parents. Conditional-only discovery requires one identical selector per block; other conditional children must all relate to the parent. Selector-group conversions require one outer selector and at least two arguments.
+Uses literal prefixes or compound suffixes. Conditional-only discovery follows single-child chains; every merged child must relate to the parent. `:is()` and `:where()` conversions require one outer selector and at least two arguments.
 
-Skips existing `&`, escaped group names, opaque parent arguments, `@scope`, and files with `@namespace`. Comments, missing semicolons, or unsafe formatting can prevent fixes.
+Skips ambiguous grouped matches, complex type-leading contextual prefixes, opaque parent arguments, `@scope`, and files with `@namespace`. Comments, missing semicolons, or unsafe formatting can prevent fixes.

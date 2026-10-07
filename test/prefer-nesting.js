@@ -225,7 +225,6 @@ test({
 		'.card {} @media (width > 0px) { .other {} }',
 		'.card {} @media (width > 0px) { .card {} .other {} }',
 		'.card {} @media (width > 0px) { .card, .other {} }',
-		'.card {} @media (width > 0px) { @supports (display: grid) { .card {} } }',
 		'.card {} @supports (display: grid) {}',
 		'.card {} .other {} @media (width > 0px) { .card {} }',
 		'@media (width > 0px) { .card {} } .card {}',
@@ -708,11 +707,11 @@ nodeTest('nesting fixes settle across overlapping and repeated candidates', () =
 		},
 		{
 			code: ':where(.foo, #bar) a :is(.baz, .qux).active { color: red; }',
-			output: ':where(.foo, #bar) { & a :is(.baz, .qux).active { color: red; } }',
+			output: ':where(.foo, #bar) { & a { .baz, .qux { &.active { color: red; } } } }',
 		},
 		{
 			code: ':is(.foo, :blank) a :is(.bar, :blank) { color: red; }',
-			output: ':is(.foo, :blank) { & a :is(.bar, :blank) { color: red; } }',
+			output: ':is(.foo, :blank) { & a { :is(.bar, :blank) { color: red; } } }',
 		},
 	];
 
@@ -739,7 +738,7 @@ nodeTest('related rule fixes settle with selector groups and long adjacent runs'
 	const cases = [
 		{
 			code: '.card { color: red; } .card .title { color: blue; } .card .title > a { color: green; }',
-			output: '.card { color: red; & .title { color: blue; } & .title > a { color: green; } }',
+			output: '.card { color: red; & .title { color: blue; & > a { color: green; } } }',
 		},
 		{
 			code: '.card { color: red; } .card :is(.foo, :is(.bar)) { color: blue; }',
@@ -1101,9 +1100,7 @@ test({
 		'.cardinal .title {} .card .body {}',
 		'.card .title {} .other {} .card .body {}',
 		'.card .title {} .card {}',
-		'.card .title, .other .title {} .card .body {}',
 		'.card:scope .title {} .card:scope .body {}',
-		'.outer { & .card .title {} & .card .body {} }',
 		'.card .title:unknown {} .card .body {}',
 		'.card .title {} .card .body:unknown {}',
 		'.outer { .card .title {} .card:has(&) .body {} }',
@@ -1255,8 +1252,6 @@ test({
 		'.card {} .theme .other {}',
 		'.card.active {} .theme .card {}',
 		'.card {} .theme .card:unknown {}',
-		'.page .card {} .theme .page .card {}',
-		'.card {} .theme.card {}',
 		'.card {} .theme .card, .other {}',
 		'.card {} .other {} .theme .card {}',
 		'.outer { .card {} .theme .card {} }',
