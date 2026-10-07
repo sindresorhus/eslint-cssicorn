@@ -3,6 +3,7 @@ import {isKeyframesAtRule, normalizeCssIdentifier} from '../utils/index.js';
 import {functionalPseudoSelectors, nonFunctionalPseudoSelectors} from './standard-pseudo-selectors.js';
 
 const ZERO_SPECIFICITY = [0, 0, 0];
+// TODO: Add 'starting-style' once the minimum supported parser supports style rules inside nested @starting-style blocks.
 const TRANSPARENT_GROUP_RULES = new Set([
 	'container',
 	'layer',

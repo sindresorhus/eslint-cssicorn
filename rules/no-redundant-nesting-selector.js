@@ -27,6 +27,7 @@ const create = context => {
 			return;
 		}
 
+		// TODO: Remove this assertion once @eslint/css-tree types SelectorListPlain.children as SelectorPlain[].
 		for (const selector of /** @type {SelectorPlain[]} */ (rule.prelude.children)) {
 			const [nestingSelector, combinator, firstRemainingNode] = selector.children;
 			if (
@@ -46,6 +47,7 @@ const create = context => {
 
 				// Removing & could make the selector look like a custom property declaration.
 				// The parser also rejects nested selectors starting with an empty namespace.
+				// TODO: Remove the empty-namespace exclusion once the minimum supported parser accepts implicit nested |span selectors.
 				if (
 					firstRemainingNode.type === 'TypeSelector'
 					&& (firstRemainingNode.name.startsWith('|') || decodeCssIdentifier(firstRemainingNode.name).startsWith('--'))
