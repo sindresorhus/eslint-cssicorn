@@ -217,8 +217,6 @@ test({
 test({
 	valid: [
 		'.card {} .card .title, .other .body {}',
-		'.card {} .card .title, .card {}',
-		'.card.active {} .card.active .title, .card {}',
 		'.card {} .card .title, .card:unknown {}',
 		'.outer { .card {} .card .title, & .card .body {} }',
 		'.card:scope {} .card:scope .title {}',
@@ -1243,7 +1241,6 @@ test({
 
 test({
 	valid: [
-		'.card, .card.active {}',
 		'.card .title, .other .body {}',
 		'.card .title, .card .body:unknown {}',
 		'.outer { & .title, & .body {} }',
@@ -1257,7 +1254,6 @@ test({
 		'@scope (.outer) { .card:is(.foo, .bar) {} }',
 		'.card {} .theme .other {}',
 		'.card.active {} .theme .card {}',
-		'.card {} .theme .card.active {}',
 		'.card {} .theme .card:unknown {}',
 		'.page .card {} .theme .page .card {}',
 		'.card {} .theme.card {}',
@@ -1266,14 +1262,12 @@ test({
 		'.outer { .card {} .theme .card {} }',
 		'.outer { @media (color) { .card {} .theme .card {} } }',
 		'.outer { .card {} .theme & .card {} }',
-		'.card {} @media (color) { .theme .card {} }',
 		'@scope (.outer) { .card {} .theme .card {} }',
 		'.card {} @media (color) { .card .title {} .other {} }',
 		'.card {} @media (color) { .card .title {} .card {} }',
 		'.card {} @media (color) { .card .title:unknown {} .card .body {} }',
 		'.card {} @media (color) {}',
 		'.card {} @media (color) { .card .title {} @font-face { font-family: example; src: url(example.woff2); } }',
-		'.card {} @layer theme { .card .title {} @media (color) { .card .body {} } }',
 		'.card {} @supports (display: grid) { .card .title {} .other {} }',
 		'.card {} @container (width > 0px) { .card .title {} .other {} }',
 	],

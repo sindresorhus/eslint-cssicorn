@@ -13,23 +13,23 @@ Prefer native CSS nesting for repeated parent selectors, conditional overrides, 
 
 ## Examples
 
-Nest shared literal prefixes in selector lists and adjacent rules:
+Nest shared literal prefixes in selector lists and adjacent rules. Lists may include the parent itself:
 
 ```css
 /* ❌ */
-.card .title, .card .body {
+.card .title, .card .body, .card {
 	color: red;
 }
 
 /* ✅ */
 .card {
-	& .title, & .body {
+	& .title, & .body, & {
 		color: red;
 	}
 }
 ```
 
-Nest adjacent `@media` and `@layer` blocks containing related rules. A single rule may use the exact parent; `@supports`, `@container`, and `@starting-style` require that exact selector and declarations only:
+Nest adjacent `@media` and `@layer` blocks containing related rules, including repeated single selectors without a preceding parent rule. A single rule may use the exact parent; `@supports`, `@container`, and `@starting-style` require that exact selector and declarations only:
 
 ```css
 /* ❌ */
@@ -69,17 +69,17 @@ a {
 }
 ```
 
-Contextual overrides also nest when the parent is compound and outside ancestor style rules:
+Contextual overrides can include refinements, mix with direct selectors, and occur inside `@media` or `@layer`. The parent must be compound and outside ancestor style rules:
 
 ```css
 /* ❌ */
 .card { color: red; }
-.theme .card { color: blue; }
+.card:hover, .theme .card.active { color: blue; }
 
 /* ✅ */
 .card {
 	color: red;
-	.theme & { color: blue; }
+	&:hover, .theme &.active { color: blue; }
 }
 ```
 
@@ -111,6 +111,6 @@ Leading `:is()` groups preserve their maximum specificity, even with mixed argum
 
 ## Limitations
 
-Uses literal selector prefixes, or compound suffix parents outside ancestor style rules. Multiple conditional children must all extend the parent. Selector-group conversions require one outer selector and at least two arguments.
+Uses literal prefixes or compound contextual parents. Conditional-only discovery requires one identical selector per block; other conditional children must all relate to the parent. Selector-group conversions require one outer selector and at least two arguments.
 
 Skips existing `&`, escaped group names, opaque parent arguments, `@scope`, and files with `@namespace`. Comments, missing semicolons, or unsafe formatting can prevent fixes.
