@@ -90,6 +90,8 @@ The rule targets modern native CSS nesting, including nested type selectors. It 
 
 Content exposed as raw text by `@eslint/css`, including some nested group-rule blocks, is ignored. Descendant selectors whose first type name starts with `--` are also ignored to avoid the [custom-property parsing ambiguity](https://drafts.csswg.org/css-syntax-3/#consume-qualified-rule).
 
+Descendant selectors starting with an empty namespace, such as `& |span`, are ignored because `@eslint/css` cannot parse their implicit form.
+
 ## Related rules
 
 - [`prefer-nesting`](./prefer-nesting.md) creates nesting; this rule can simplify its output.

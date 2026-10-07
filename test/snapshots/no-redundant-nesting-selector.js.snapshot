@@ -501,6 +501,91 @@ Output:
 
 `;
 
+exports[`invalid(34): a { & :unknown(.\\&) {} } 1`] = `
+
+  1 | a { & :unknown(.\\&) {} }
+
+`;
+
+exports[`invalid(34): a { & :unknown(.\\&) {} } 2`] = `
+
+Message:
+> 1 | a { & :unknown(.\\&) {} }
+    |     ^ Remove the redundant nesting selector \`&\`.
+
+Output:
+  1 | a { :unknown(.\\&) {} }
+
+`;
+
+exports[`invalid(35): a { & :unknown(/* & */ .child) {} } 1`] = `
+
+  1 | a { & :unknown(/* & */ .child) {} }
+
+`;
+
+exports[`invalid(35): a { & :unknown(/* & */ .child) {} } 2`] = `
+
+Message:
+> 1 | a { & :unknown(/* & */ .child) {} }
+    |     ^ Remove the redundant nesting selector \`&\`.
+
+Output:
+  1 | a { :unknown(/* & */ .child) {} }
+
+`;
+
+exports[`invalid(36): a { & > |span {} } 1`] = `
+
+  1 | a { & > |span {} }
+
+`;
+
+exports[`invalid(36): a { & > |span {} } 2`] = `
+
+Message:
+> 1 | a { & > |span {} }
+    |     ^ Remove the redundant nesting selector \`&\`.
+
+Output:
+  1 | a { > |span {} }
+
+`;
+
+exports[`invalid(37): a { & *|span {} } 1`] = `
+
+  1 | a { & *|span {} }
+
+`;
+
+exports[`invalid(37): a { & *|span {} } 2`] = `
+
+Message:
+> 1 | a { & *|span {} }
+    |     ^ Remove the redundant nesting selector \`&\`.
+
+Output:
+  1 | a { *|span {} }
+
+`;
+
+exports[`invalid(38): a { & svg|span {} } 1`] = `
+
+  1 | a { & svg|span {} }
+
+`;
+
+exports[`invalid(38): a { & svg|span {} } 2`] = `
+
+Message:
+> 1 | a { & svg|span {} }
+    |     ^ Remove the redundant nesting selector \`&\`.
+
+Output:
+  1 | a { svg|span {} }
+
+`;
+
 exports[`invalid(4): a { & + .child {} } 1`] = `
 
   1 | a { & + .child {} }

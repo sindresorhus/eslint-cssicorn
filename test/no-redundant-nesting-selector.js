@@ -38,6 +38,8 @@ test.snapshot({
 			code: 'a { @supports (display: grid) { & .child {} } @container (width > 1px) { & .child {} } @scope (.root) { & .child {} } }',
 			languageOptions: {tolerant: true},
 		},
+		'a { & |span {} }',
+		'a { & |* {} }',
 	],
 	invalid: [
 		'a { & span {} }',
@@ -73,6 +75,11 @@ test.snapshot({
 		String.raw`a { & s\70 an {} }`,
 		'a { & > --element:hover {} }',
 		'a { & .child { color: red !important; --value: "&"; } }',
+		String.raw`a { & :unknown(.\&) {} }`,
+		'a { & :unknown(/* & */ .child) {} }',
+		'a { & > |span {} }',
+		'a { & *|span {} }',
+		'a { & svg|span {} }',
 	],
 });
 
@@ -97,6 +104,30 @@ test({
 			errors: 1,
 		},
 	],
+});
+
+nodeTest('fixes selector lists and multiple nesting levels completely', () => {
+	const linter = new Linter();
+	const config = {
+		...plugin.configs.all,
+		rules: {'cssicorn/no-redundant-nesting-selector': 'error'},
+	};
+	const cases = [
+		{
+			code: 'a { & .child, & > span, &:hover, span & {} }',
+			output: 'a { .child, > span, &:hover, span & {} }',
+		},
+		{
+			code: 'a { & .child { & span {} } }',
+			output: 'a { .child { span {} } }',
+		},
+	];
+	for (const {code, output} of cases) {
+		const result = linter.verifyAndFix(code, config, {filename: 'test.css'});
+		assert.equal(result.fixed, true);
+		assert.deepEqual(result.messages, []);
+		assert.equal(result.output, output);
+	}
 });
 
 nodeTest('fixes converge with prefer-nesting', () => {

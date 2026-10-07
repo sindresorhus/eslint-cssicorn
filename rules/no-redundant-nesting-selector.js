@@ -42,7 +42,11 @@ const create = context => {
 				}
 
 				// Removing & could make the selector look like a custom property declaration.
-				if (firstRemainingNode.type === 'TypeSelector' && decodeCssIdentifier(firstRemainingNode.name).startsWith('--')) {
+				// The parser also rejects nested selectors starting with an empty namespace.
+				if (
+					firstRemainingNode.type === 'TypeSelector'
+					&& (firstRemainingNode.name.startsWith('|') || decodeCssIdentifier(firstRemainingNode.name).startsWith('--'))
+				) {
 					continue;
 				}
 			}
