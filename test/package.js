@@ -122,6 +122,23 @@ test('unopinionated config enables prefer-clamp', async () => {
 	assert.equal(result.messages.some(message => message.ruleId === 'cssicorn/prefer-clamp'), true);
 });
 
+test('presets report invalid media feature notation', async () => {
+	await Promise.all(Object.values(eslintCssicorn.configs).map(async config => {
+		const eslint = new ESLint({
+			baseConfig: config,
+			overrideConfigFile: true,
+		});
+
+		const [result] = await eslint.lintText('@media (min-width) and (orientation > portrait) and (10px < width > 20px) { a { color: red; } }', {filePath: 'file.css'});
+		const messages = result.messages.filter(message => message.ruleId === 'cssicorn/no-invalid-media-features');
+		assert.deepEqual(messages.map(message => message.messageId), [
+			'no-invalid-media-features/missing-value',
+			'no-invalid-media-features/invalid-range',
+			'no-invalid-media-features/invalid-chain',
+		], config.name);
+	}));
+});
+
 // Checks file-local layer contracts while permitting later additions.
 test('recommended config enables consistent-layer-order with default options', async () => {
 	const eslint = new ESLint({

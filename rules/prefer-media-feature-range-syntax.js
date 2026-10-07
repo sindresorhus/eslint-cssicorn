@@ -1,3 +1,4 @@
+import {rangeMediaFeatureNames} from './shared/media-features.js';
 import {hasCommentInRange, normalizeCssIdentifier} from './utils/index.js';
 
 /**
@@ -11,21 +12,6 @@ const messages = {
 	[MESSAGE_ID_SUGGESTION]: 'Replace `{{value}}` with `{{replacement}}`.',
 };
 
-const rangeFeatureNames = new Set([
-	'aspect-ratio',
-	'color',
-	'color-index',
-	'device-aspect-ratio',
-	'device-height',
-	'device-width',
-	'height',
-	'horizontal-viewport-segments',
-	'monochrome',
-	'resolution',
-	'vertical-viewport-segments',
-	'width',
-]);
-
 const getBound = node => {
 	if (node.type !== 'Feature' || node.kind !== 'media' || !node.value) {
 		return;
@@ -33,7 +19,7 @@ const getBound = node => {
 
 	const name = normalizeCssIdentifier(node.name);
 	const match = /^(min|max)-(.+)$/v.exec(name);
-	if (!match || !rangeFeatureNames.has(match[2])) {
+	if (!match || !rangeMediaFeatureNames.has(match[2])) {
 		return;
 	}
 
