@@ -8,6 +8,14 @@ const {test} = getTester(import.meta, 'prefer-nesting');
 
 const extendedRelatedRuleCases = [
 	{
+		code: '.card {} .theme .card.active .title {}',
+		output: '.card { .theme &.active .title {} }',
+	},
+	{
+		code: '@media (color) { .card {} } @media (width > 0px) { .card.active {} }',
+		output: '.card { @media (color) {} @media (width > 0px) { &.active {} } }',
+	},
+	{
 		code: '.outer, #outer { @media (color) { .card { color: red; & .title { color: blue; } } } @layer theme { .card { color: green; } } }',
 		output: '.outer, #outer { .card { @media (color) { color: red; & .title { color: blue; } } @layer theme { color: green; } } }',
 	},
@@ -113,7 +121,6 @@ test({
 		'.card, .card {}',
 		'.card.active {} .card {}',
 		'.card {} .card, .card {}',
-		'.card {} .theme .card.active .title {}',
 		'.page .card {} .page .card:hover, .theme .page .card {}',
 		'.outer { .card {} .card:hover, .theme .card {} }',
 		'.outer { .card {} .theme .card.active {} }',
@@ -123,7 +130,6 @@ test({
 		'.card {} @starting-style { .theme .card.active {} }',
 		'@media (color) { .card {} } @media (width > 0px) { .other {} }',
 		'@media (color) { .card {} } .card {}',
-		'@media (color) { .card {} } @media (width > 0px) { .card.active {} }',
 		'@media (color) { .card {} .other {} } @media (width > 0px) { .card {} }',
 		'@media (color) { .card::before {} } @media (width > 0px) { .card::before {} }',
 		'@scope (.outer) { @media (color) { .card {} } @media (width > 0px) { .card {} } }',

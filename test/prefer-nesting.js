@@ -11,7 +11,6 @@ test({
 	valid: [
 		'.page .card {} .other .page .card .title {}',
 		'.outer { > .card {} > .card .title {} }',
-		'.outer { .page & .card {} .page & .card .title {} }',
 		'.page:scope .card {} .page:scope .card .title {}',
 		'@scope (.page) { .page .card {} .page .card .title {} }',
 		'.card {} @container (width > 0px) { .card { & .title {} } }',

@@ -29,7 +29,7 @@ Nest shared literal prefixes in selector lists and adjacent rules. Lists may inc
 }
 ```
 
-Nest related rules through `@media` and `@layer` chains, including sibling groups and repeated identical selectors without a preceding parent rule. Paths through `@supports`, `@container`, or `@starting-style` require the exact parent and declarations only:
+Nest related rules through `@media` and `@layer` chains, including sibling groups and shared prefixes without a preceding parent rule. Conditional blocks can also precede related ordinary rules. Paths through `@supports`, `@container`, or `@starting-style` require the exact parent and declarations only:
 
 ```css
 /* ❌ */
@@ -69,7 +69,7 @@ a {
 }
 ```
 
-Outside ancestor style rules, factor shared compound suffixes and contextual overrides, including attached refinements:
+Outside ancestor style rules, factor shared compound suffixes and contextual overrides. A literal compound parent can appear anywhere, with attached refinements or further selectors:
 
 ```css
 /* ❌ */
@@ -101,7 +101,7 @@ Attached groups and suffixes use `&`:
 
 Leading and trailing groups also support `>`, `+`, and `~`. Trailing groups after these combinators stay wrapped.
 
-An existing selector `&` must lead a retained parent such as `& .card`; additional references are skipped to preserve their binding.
+Existing selector `&` references must stay entirely in the retained literal parent. Grouped parents must inherit specificity equally; references inside functions are skipped.
 
 ## Specificity
 
@@ -113,6 +113,6 @@ Leading `:is()` groups preserve their maximum specificity, even with mixed argum
 
 ## Limitations
 
-Uses literal prefixes or compound suffixes. Conditional-only discovery follows single-child chains; every merged child must relate to the parent. `:is()` and `:where()` conversions require one outer selector and at least two arguments.
+Conditional discovery follows single-child chains; every merged child must relate to the parent. `:is()` and `:where()` conversions require one outer selector and at least two arguments.
 
 Skips ambiguous grouped matches, complex type-leading contextual prefixes, opaque parent arguments, `@scope`, and files with `@namespace`. Comments, missing semicolons, or unsafe formatting can prevent fixes.
