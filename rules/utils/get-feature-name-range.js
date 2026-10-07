@@ -1,5 +1,8 @@
+// @ts-check
+
 /**
-@import * as ESLint from 'eslint';
+@import {Feature} from '@eslint/css-tree';
+@import {CssRuleContext} from '../rule/cssicorn-context.js';
 */
 
 const cssWhitespacePattern = /[\t\n\f\r ]/u;
@@ -7,8 +10,8 @@ const cssWhitespacePattern = /[\t\n\f\r ]/u;
 /**
 Get the range of the name of a media or container feature, like `width` in `( width: 1px)`. The node starts at the `(`, which can be followed by whitespace and comments before the name.
 
-@param {object} node - The `Feature` node.
-@param {ESLint.Rule.RuleContext} context - The ESLint rule context object.
+@param {Feature} node - The `Feature` node.
+@param {CssRuleContext} context - The ESLint rule context object.
 @returns {[number, number]}
 */
 export default function getFeatureNameRange(node, context) {

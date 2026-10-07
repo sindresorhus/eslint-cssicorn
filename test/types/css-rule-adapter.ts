@@ -11,6 +11,7 @@ import selectorOrderRule from '../../rules/consistent-compound-selector-order.js
 import layerOrderRule from '../../rules/consistent-layer-order.js';
 import clampRule from '../../rules/prefer-clamp.js';
 import customPropertyCyclesRule from '../../rules/no-self-referencing-custom-properties.js';
+import mediaFeaturesRule from '../../rules/no-invalid-media-features.js';
 
 declare const context: CssicornContext;
 declare const selector: SelectorPlain;
@@ -84,6 +85,7 @@ fixer.replaceText(selector, '#id.foo');
 const rule: CssicornRule = selectorOrderRule;
 const layerRule: CssicornRule = layerOrderRule;
 const comparisonRule: CssicornRule = clampRule;
+const mediaRule: CssicornRule = mediaFeaturesRule;
 const adapted: CSSRuleDefinition = toEslintRule('order', rule);
 const adaptedCycles: CSSRuleDefinition = toEslintRule('cycles', customPropertyCyclesRule);
 // @ts-expect-error Cssicorn rules require metadata.

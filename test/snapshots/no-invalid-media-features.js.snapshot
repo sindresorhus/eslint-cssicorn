@@ -678,6 +678,62 @@ Message:
 
 `;
 
+exports[`invalid(53): @media (10px < 20px < orientation) {} 1`] = `
+
+  1 | @media (10px < 20px < orientation) {}
+
+`;
+
+exports[`invalid(53): @media (10px < 20px < orientation) {} 2`] = `
+
+Message:
+> 1 | @media (10px < 20px < orientation) {}
+    |                       ^^^^^^^^^^^ Media feature \`orientation\` does not support range notation.
+
+`;
+
+exports[`invalid(54): @media (10px < 20px < m\\61 x-width) {} 1`] = `
+
+  1 | @media (10px < 20px < m\\61 x-width) {}
+
+`;
+
+exports[`invalid(54): @media (10px < 20px < m\\61 x-width) {} 2`] = `
+
+Message:
+> 1 | @media (10px < 20px < m\\61 x-width) {}
+    |                       ^^^^^^^^^^^^ Media feature \`m\\61 x-width\` does not support range notation.
+
+`;
+
+exports[`invalid(55): @media (width: 1\\31 px) {} 1`] = `
+
+  1 | @media (width: 1\\31 px) {}
+
+`;
+
+exports[`invalid(55): @media (width: 1\\31 px) {} 2`] = `
+
+Message:
+> 1 | @media (width: 1\\31 px) {}
+    |                ^^^^^^^ Invalid value \`1\\31 px\` for media feature \`width\`. Expected <length>.
+
+`;
+
+exports[`invalid(56): @media (width: 1\\65 2px) {} 1`] = `
+
+  1 | @media (width: 1\\65 2px) {}
+
+`;
+
+exports[`invalid(56): @media (width: 1\\65 2px) {} 2`] = `
+
+Message:
+> 1 | @media (width: 1\\65 2px) {}
+    |                ^^^^^^^^ Invalid value \`1\\65 2px\` for media feature \`width\`. Expected <length>.
+
+`;
+
 exports[`invalid(6): @media (10px < unknown-feature) {} 1`] = `
 
   1 | @media (10px < unknown-feature) {}

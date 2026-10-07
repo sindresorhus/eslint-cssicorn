@@ -1,5 +1,16 @@
-import {keyword} from '@eslint/css-tree';
+// @ts-check
+
+import {generate, ident, keyword} from '@eslint/css-tree';
+import {rangeMediaFeatureNames, rangeMediaFeatureSyntaxes} from './shared/media-features.js';
 import {getFeatureNameRange, normalizeCssIdentifier, toLocation} from './utils/index.js';
+
+/**
+@import {CssNodePlain, Feature, FeatureRange, Identifier, Lexer} from '@eslint/css-tree';
+@import {CSSSourceCode} from '@eslint/css';
+@import {CssicornContext} from './rule/cssicorn-context.js';
+@import {CssicornProblem} from './rule/to-eslint-problem.js';
+@import {CssicornRule} from './rule/to-eslint-rule.js';
+*/
 
 const MESSAGE_ID_UNKNOWN = 'no-invalid-media-features/unknown';
 const MESSAGE_ID_INVALID_VALUE = 'no-invalid-media-features/invalid-value';
@@ -13,23 +24,6 @@ const messages = {
 	[MESSAGE_ID_INVALID_RANGE]: 'Media feature `{{name}}` does not support range notation.',
 	[MESSAGE_ID_INVALID_CHAIN]: 'Chained media feature comparisons must place the feature between two values and use the same comparison direction.',
 };
-
-const rangeMediaFeatureSyntaxes = [
-	['aspect-ratio', '<ratio>'],
-	['color', '<integer>'],
-	['color-index', '<integer>'],
-	['device-aspect-ratio', '<ratio>'],
-	['device-height', '<length>'],
-	['device-width', '<length>'],
-	['height', '<length>'],
-	['horizontal-viewport-segments', '<integer>'],
-	['monochrome', '<integer>'],
-	['resolution', '<resolution> | infinite'],
-	['vertical-viewport-segments', '<integer>'],
-	['width', '<length>'],
-];
-
-const rangeMediaFeatureNames = new Set(rangeMediaFeatureSyntaxes.map(([name]) => name));
 
 const mediaFeatureSyntaxes = new Map([
 	...rangeMediaFeatureSyntaxes,
@@ -71,33 +65,31 @@ for (const [name, syntax] of rangeMediaFeatureSyntaxes) {
 }
 
 // The old Firefox form puts the vendor prefix after `min-`/`max-`, for example `min--moz-device-pixel-ratio`.
+/**
+@param {string} name
+*/
 function isIgnoredFeatureName(name) {
 	const {custom, vendor} = keyword(normalizeCssIdentifier(name).replace(/^(?:min|max)-(?=-)/, ''));
 	return custom || vendor !== '';
 }
 
 // A function the lexer does not know, like Tailwind CSS `theme()`, is usually replaced at build time, so its value cannot be validated.
+/**
+@param {CssNodePlain} node
+@param {Lexer} lexer
+@returns {boolean}
+*/
 function hasUnknownFunction(node, lexer) {
 	if (node.type === 'Function' && !Object.hasOwn(lexer.types, `${normalizeCssIdentifier(node.name)}()`)) {
 		return true;
 	}
 
-	return (node.children ?? []).some(child => hasUnknownFunction(child, lexer));
+	return 'children' in node && (node.children?.some(child => hasUnknownFunction(child, lexer)) ?? false);
 }
 
-function getEnvironmentFunctions(node, functions = []) {
-	if (node.type === 'Function' && normalizeCssIdentifier(node.name) === 'env') {
-		functions.push(node);
-		return functions;
-	}
-
-	for (const child of node.children ?? []) {
-		getEnvironmentFunctions(child, functions);
-	}
-
-	return functions;
-}
-
+/**
+@param {string} syntax
+*/
 function getEnvironmentPlaceholder(syntax) {
 	switch (syntax) {
 		case '<length>': {
@@ -122,25 +114,47 @@ function getEnvironmentPlaceholder(syntax) {
 	}
 }
 
-function getValueWithEnvironmentPlaceholders(sourceCode, node, syntax) {
-	const environmentFunctions = getEnvironmentFunctions(node);
-	if (environmentFunctions.length === 0) {
-		return;
-	}
+/**
+Serialize identifiers for the lexer without changing the source AST or merging numbers with escaped units.
 
-	const nodeStartOffset = sourceCode.getLoc(node).start.offset;
-	const placeholder = getEnvironmentPlaceholder(syntax);
-	let value = sourceCode.getText(node);
+@param {CssNodePlain} node
+@param {Lexer} lexer
+@param {string} environmentPlaceholder
+@returns {string}
+*/
+function getValueForMatching(node, lexer, environmentPlaceholder) {
+	return generate(node, {
+		decorator: handlers => ({
+			...handlers,
+			node(node) {
+				if (node.type === 'Identifier' || node.type === 'Function') {
+					const name = normalizeCssIdentifier(node.name);
+					if (node.type === 'Function' && name === 'env') {
+						handlers.node({...node, type: 'Raw', value: environmentPlaceholder});
+						return;
+					}
 
-	for (const functionNode of environmentFunctions.toReversed()) {
-		const startOffset = sourceCode.getLoc(functionNode).start.offset - nodeStartOffset;
-		const endOffset = sourceCode.getLoc(functionNode).end.offset - nodeStartOffset;
-		value = value.slice(0, startOffset) + placeholder + value.slice(endOffset);
-	}
+					node = {...node, name: ident.encode(name)};
+				} else if (node.type === 'Dimension' && node.unit.includes('\\')) {
+					const unit = normalizeCssIdentifier(node.unit);
+					// Only known units are safe to serialize beside a number. For example, decoding `\\65 2px` could turn `1\\65 2px` into `1e2px`.
+					if (Object.values(lexer.units).some(units => units.includes(unit))) {
+						node = {...node, unit};
+					}
+				}
 
-	return value;
+				handlers.node(node);
+			},
+		}),
+	});
 }
 
+/**
+@param {Feature | Identifier} node
+@param {string} name
+@param {CssicornContext} context
+@returns {CssicornProblem}
+*/
 function getUnknownFeatureProblem(node, name, context) {
 	return {
 		node,
@@ -150,11 +164,24 @@ function getUnknownFeatureProblem(node, name, context) {
 	};
 }
 
-function getInvalidValueProblem(sourceCode, node, name, syntax) {
+/**
+@param {CSSSourceCode} sourceCode
+@param {NonNullable<Feature['value']>} valueNode
+@param {string} name
+@param {string} syntax
+@returns {CssicornProblem | undefined}
+*/
+function getInvalidValueProblem(sourceCode, valueNode, name, syntax) {
+	// CSSTree's feature value types use lists for function children, but @eslint/css supplies plain nodes with arrays.
+	const node = /** @type {CssNodePlain} */ (valueNode);
 	const {error} = sourceCode.lexer.match(syntax, node);
-	const valueWithEnvironmentPlaceholders = error && getValueWithEnvironmentPlaceholders(sourceCode, node, syntax);
 
-	if (!error || hasUnknownFunction(node, sourceCode.lexer) || (valueWithEnvironmentPlaceholders && !sourceCode.lexer.match(syntax, valueWithEnvironmentPlaceholders).error)) {
+	if (!error || hasUnknownFunction(node, sourceCode.lexer)) {
+		return;
+	}
+
+	const normalizedValue = getValueForMatching(node, sourceCode.lexer, getEnvironmentPlaceholder(syntax));
+	if (!sourceCode.lexer.match(syntax, normalizedValue).error) {
 		return;
 	}
 
@@ -169,6 +196,10 @@ function getInvalidValueProblem(sourceCode, node, name, syntax) {
 	};
 }
 
+/**
+@param {FeatureRange} node
+@returns {Identifier | undefined}
+*/
 function getRangeFeatureNameNode(node) {
 	const identifierNodes = [node.left, node.middle, node.right].filter(node => node?.type === 'Identifier');
 
@@ -178,7 +209,7 @@ function getRangeFeatureNameNode(node) {
 }
 
 /**
-@param {import('eslint').Rule.RuleContext} context
+@param {CssicornContext} context
 */
 const create = context => {
 	const {sourceCode} = context;
@@ -247,7 +278,7 @@ const create = context => {
 			&& (
 				nameNode !== node.middle
 				|| !['<', '>'].includes(node.leftComparison[0])
-				|| node.leftComparison[0] !== node.rightComparison[0]
+				|| node.leftComparison[0] !== node.rightComparison?.[0]
 			)
 		) {
 			yield {node, messageId: MESSAGE_ID_INVALID_CHAIN};
@@ -268,7 +299,7 @@ const create = context => {
 };
 
 /**
-@type {import('eslint').Rule.RuleModule}
+@type {CssicornRule}
 */
 const config = {
 	create,
