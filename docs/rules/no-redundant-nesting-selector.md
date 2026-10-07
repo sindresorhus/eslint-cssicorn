@@ -84,16 +84,12 @@ A leading descendant `&` is also necessary when the selector contains another ne
 
 ## Limitations
 
-The rule targets modern native CSS nesting, including nested type selectors. It follows parsed nesting through `@media`, `@supports`, `@container`, and `@layer`. Scope and unknown at-rule boundaries are ignored. A normal style rule inside `@scope` can still contain nested rules checked by this rule.
+Targets modern native CSS. It follows parsed nesting through `@media`, `@supports`, `@container`, and `@layer`, skipping `@scope` and unknown at-rule boundaries.
 
-Content exposed as raw text by `@eslint/css`, including some nested group-rule blocks, is ignored. Descendant selectors whose first type name starts with `--` are also ignored to avoid the [custom-property parsing ambiguity](https://drafts.csswg.org/css-syntax-3/#consume-qualified-rule).
-
-Descendant selectors starting with an empty namespace, such as `& |span`, are ignored because `@eslint/css` cannot parse their implicit form.
+Skips raw parser content and descendant selectors starting with `--` or an empty namespace (`& |span`), where removing `&` can cause parsing problems.
 
 ## Related rules
 
 - [`prefer-nesting`](./prefer-nesting.md) creates nesting; this rule can simplify its output.
 - [`no-redundant-nested-style-rules`](./no-redundant-nested-style-rules.md) removes redundant `&` blocks.
 - [`no-unscoped-nesting-selector`](./no-unscoped-nesting-selector.md) checks whether a nesting selector has a scoping context.
-
-Stylelint's [`relative-selector-nesting-notation`](https://stylelint.io/user-guide/rules/relative-selector-nesting-notation/) with `"implicit"` overlaps with this rule. This rule focuses on safe removal, accounting for later native nesting references, including unparsed functional arguments, without an explicit-notation mode.
