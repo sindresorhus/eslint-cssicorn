@@ -17,6 +17,7 @@ export {default as 'no-nesting-with-mixed-specificity'} from './no-nesting-with-
 export {default as 'no-overflow-axis-coercion'} from './no-overflow-axis-coercion.js';
 export {default as 'no-redundant-longhand-properties'} from './no-redundant-longhand-properties.js';
 export {default as 'no-redundant-nested-style-rules'} from './no-redundant-nested-style-rules.js';
+export {default as 'no-redundant-nesting-selector'} from './no-redundant-nesting-selector.js';
 export {default as 'no-redundant-shorthand-values'} from './no-redundant-shorthand-values.js';
 export {default as 'no-self-referencing-custom-properties'} from './no-self-referencing-custom-properties.js';
 export {default as 'no-unknown-animations'} from './no-unknown-animations.js';
