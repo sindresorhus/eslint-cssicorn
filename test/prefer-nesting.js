@@ -219,7 +219,6 @@ test({
 		'.card {} .card .title, .card:unknown {}',
 		'.outer { .card {} .card .title, & .card .body {} }',
 		'.card:scope {} .card:scope .title {}',
-		':host {} :host .title {}',
 		'.card:unknown {} .card:unknown .title {}',
 		'.card {} @media (width > 0px) { .other {} }',
 		'.card {} @media (width > 0px) { .card {} .other {} }',
@@ -975,7 +974,6 @@ test({
 		'@namespace url("http://www.w3.org/1999/xhtml"); a :where(.foo, .bar) b {}',
 		String.raw`.card:\6c ang(en) {} .card:\6c ang(en) .title {}`,
 		'.card:visited {} .card:visited .title {}',
-		'.card:host {} .card:host .title {}',
 	],
 	invalid: [
 		...['is', 'where'].flatMap(name => ['.active', '::before', ' b', ' > b', ' + b', ' ~ b'].map(suffix => ({
@@ -1261,7 +1259,7 @@ test({
 	invalid: [
 		{
 			code: '.page .card {} .page .card .title, .page .other .body {}',
-			output: '.page .card {} .page { & .card .title, & .other .body {} }',
+			output: '.page { & .card {} & .card .title, & .other .body {} }',
 			errors: 1,
 		},
 		{

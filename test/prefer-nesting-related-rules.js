@@ -131,7 +131,6 @@ test({
 		'@media (color) { .card {} } @media (width > 0px) { .other {} }',
 		'@media (color) { .card {} } .card {}',
 		'@media (color) { .card {} .other {} } @media (width > 0px) { .card {} }',
-		'@media (color) { .card::before {} } @media (width > 0px) { .card::before {} }',
 		'@scope (.outer) { @media (color) { .card {} } @media (width > 0px) { .card {} } }',
 		'@namespace url("https://example.com"); @media (color) { .card {} } @media (width > 0px) { .card {} }',
 	],

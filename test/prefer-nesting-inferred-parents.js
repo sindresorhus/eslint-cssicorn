@@ -33,7 +33,7 @@ const cases = [
 	},
 	{
 		code: 'ul ul ol, ul ol ol, ol ul ol, ol ol ol { list-style-type: lower-alpha; }',
-		output: 'ul, ol { & ul ol, & ol ol { list-style-type: lower-alpha; } }',
+		output: 'ol { ul ul &, ul & ol, & ul ol, & ol ol { list-style-type: lower-alpha; } }',
 	},
 	{
 		code: '.map_canvas img, .map_canvas embed, .map_canvas object, .mqa-display img, .mqa-display embed, .mqa-display object { max-width: none; }',

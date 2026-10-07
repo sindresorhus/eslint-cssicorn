@@ -106,8 +106,6 @@ test({
 		'.card::before {} @media (color) { .card::before { & .title {} } }',
 		'.card, #other {} @media (color) { .card, #other { & .title {} } }',
 		'.card, #other {} @media (color) { .card, #other { @layer theme { color: red; } } }',
-		'@media (color) { .card::before {} } @layer theme { .card::before {} }',
-		'@media (color) { .card, #other {} } @layer theme { .card, #other {} }',
 		'@scope (.outer) { .card::before {} @media (color) { .card::before {} } }',
 		'@namespace url("https://example.com"); .card::before {} @media (color) { .card::before {} }',
 		'.card:unknown::before {} @media (color) { .card:unknown::before {} }',

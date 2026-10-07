@@ -164,7 +164,6 @@ test({
 		'.outer { &.card {} .theme &.card & .title {} }',
 		'.outer { &.card {} .theme &.card:has(> &) {} }',
 		'.outer { .page &.card {} .theme .page &.card {} }',
-		'.outer { &.card {} body .theme &.card {} }',
 		'.outer { & {} .theme & .title {} }',
 		'.outer { &.a, &&.b {} .theme &.a .title, .theme &&.b .title {} }',
 		'.outer { &.a, &.b {} .theme &.a .title {} }',

@@ -117,7 +117,6 @@ test({
 		'.card {} .theme .activecard:hover {}',
 		'.card:scope {} .theme .active.card:scope:hover {}',
 		'.card:visited {} .card:visited:hover {}',
-		':host {} :host:hover {}',
 		'.card:unknown {} .card:unknown .title {}',
 		'@scope (.outer) { .card {} .theme .active.card:hover {} }',
 		'@namespace url("https://example.com"); .card {} .theme .active.card:hover {}',

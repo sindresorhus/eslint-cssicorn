@@ -13,7 +13,7 @@ Prefer native CSS nesting for repeated parent selectors, conditional overrides, 
 
 ## Examples
 
-Nest shared literal prefixes in selector lists and adjacent rules. Grouped parents require equal specificity and every parent/suffix combination:
+Nest shared literal prefixes in selector lists and adjacent rules, including adjacent lists. Grouped parents require equal specificity and every parent/suffix combination:
 
 ```css
 /* ❌ */
@@ -101,7 +101,7 @@ Attached groups and suffixes use `&`:
 
 Leading and trailing groups also support `>`, `+`, and `~`. Trailing groups after these combinators stay wrapped.
 
-Existing `&` references, including parsed functional arguments, must stay in one retained literal parent. Grouped parents require equal inherited specificity and no functional `&` references.
+Parsed standard pseudo-classes, including `:host()`, can be retained as parents. Existing `&` references must stay in one retained literal parent. Grouped parents require equal inherited specificity and no functional `&` references.
 
 ## Specificity
 
@@ -113,6 +113,6 @@ Leading `:is()` groups preserve their maximum specificity, even with mixed argum
 
 ## Limitations
 
-Inferred groups use the first compound as parent. Conditional discovery follows single-child chains. `:is()` and `:where()` conversions require one outer selector and at least two arguments.
+Inferred groups use the first compound as parent. Conditional discovery follows first-child paths; every moved child must relate to the parent. `:is()` and `:where()` conversions require one outer selector and at least two arguments.
 
-Skips ambiguous grouped matches, complex type-leading contextual prefixes, opaque parent arguments, `@scope`, and files with `@namespace`. Comments, missing semicolons, or unsafe formatting can prevent fixes.
+Skips ambiguous grouped matches, parser-sensitive type/pseudo-class prefixes, opaque parent arguments, `@scope`, and files with `@namespace`. Comments, missing semicolons, or unsafe formatting can prevent fixes.
