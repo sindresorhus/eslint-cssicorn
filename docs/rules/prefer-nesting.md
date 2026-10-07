@@ -107,7 +107,7 @@ Parsed standard pseudo-classes, including `:host()`, can be retained as parents.
 
 Trailing `:is()` is unwrapped only when its arguments have equal specificity and unwrapping preserves [forgiving selector-list behavior](https://drafts.csswg.org/selectors/#forgiving-selector). Complex arguments and arguments with pseudo-classes, attribute flags, namespace syntax, or invalid IDs stay wrapped.
 
-`:where()` always stays wrapped to preserve zero specificity. Exact declaration-only conditional overrides also preserve mixed parent specificity and pseudo-elements without adding `&`.
+`:where()` and uncertain forgiving branches stay wrapped. Exact declaration-only conditional overrides preserve mixed parent specificity and pseudo-elements without adding `&`.
 
 Leading `:is()` groups preserve their maximum specificity, even with mixed arguments. The result can trigger [`no-nesting-with-mixed-specificity`](./no-nesting-with-mixed-specificity.md); disable that rule for intentional mixed-specificity nesting.
 

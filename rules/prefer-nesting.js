@@ -32,11 +32,7 @@ const getSelectorList = node => {
 	}
 
 	const argumentsList = node.children?.[0];
-	if (
-		argumentsList?.type !== 'SelectorList'
-		|| argumentsList.children.length < 2
-		|| argumentsList.children.some(selector => !canBeRepresentedByNestingSelector(selector, false))
-	) {
+	if (argumentsList?.type !== 'SelectorList' || argumentsList.children.length < 2) {
 		return;
 	}
 
@@ -68,7 +64,9 @@ const canUnwrapSelectorNode = node => {
 	}
 };
 
-const canUnwrapSelectorList = selectorList => selectorList.children.every(selector => selector.children.every(node => canUnwrapSelectorNode(node)));
+const canUnwrapSelectorList = selectorList => selectorList.children.every(
+	selector => canBeRepresentedByNestingSelector(selector, false) && selector.children.every(node => canUnwrapSelectorNode(node)),
+);
 
 const hasNestingSelector = node => Boolean(find(node, child => child.type === 'NestingSelector' || hasNestingSelectorInRawArgument(child)));
 
