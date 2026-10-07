@@ -24,14 +24,6 @@ const cases = [
 		output: '.label { :host(:not(:last-of-type)) & { color: blue; &:hover { color: red; } &:active { color: green; } } }',
 	},
 	{
-		code: `:root:not([data-theme]) ${detailsSelector}, :host(:not([data-theme])) ${detailsSelector} { filter: brightness(0); }`,
-		output: `:root:not([data-theme]), :host(:not([data-theme])) { & ${detailsSelector} { filter: brightness(0); } }`,
-	},
-	{
-		code: `:root:not([data-theme]) ${busySelector}, :host(:not([data-theme])) ${busySelector} { filter: brightness(0); }`,
-		output: `:root:not([data-theme]), :host(:not([data-theme])) { & ${busySelector} { filter: brightness(0); } }`,
-	},
-	{
 		code: ':HOST(.active) {} :HOST(.active):hover { color: blue; }',
 		output: ':HOST(.active) { &:hover { color: blue; } }',
 	},
@@ -54,10 +46,6 @@ const cases = [
 	{
 		code: ':host-context(.theme) {} @media (color) { :host-context(.theme) > .title { color: blue !important; & .body { color: green; } } }',
 		output: ':host-context(.theme) { @media (color) { & > .title { color: blue !important; & .body { color: green; } } } }',
-	},
-	{
-		code: '.outer { :host(&.active) {} :host(&.active) .title { color: blue; } }',
-		output: '.outer { :host(&.active) { & .title { color: blue; } } }',
 	},
 	{
 		code: '[data-kind="CARD" i]:host {} [data-kind="CARD" i]:host .title { color: blue; }',
@@ -137,6 +125,9 @@ const cases = [
 
 test({
 	valid: [
+		`:root:not([data-theme]) ${detailsSelector}, :host(:not([data-theme])) ${detailsSelector} { filter: brightness(0); }`,
+		`:root:not([data-theme]) ${busySelector}, :host(:not([data-theme])) ${busySelector} { filter: brightness(0); }`,
+		'.outer { :host(&.active) {} :host(&.active) .title { color: blue; } }',
 		'.card:scope {} .card:scope .title {}',
 		'.card:visited {} .card:visited:hover {}',
 		'.card:state(active) {} .card:state(active) .title {}',

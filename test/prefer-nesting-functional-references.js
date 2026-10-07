@@ -7,6 +7,14 @@ import {getTester} from './utils/test.js';
 const {test} = getTester(import.meta, 'prefer-nesting');
 
 const cases = [
+	{
+		code: '.outer { .page &.card {} .theme .page &.card {} }',
+		output: '.outer { &.card { .page & {} .theme .page & {} } }',
+	},
+	{
+		code: '.outer { .card:has(> &) {} .theme .card:has(> &) {} }',
+		output: '.outer { .card:has(> &) { .theme & {} } }',
+	},
 	...[
 		':not(&).card',
 		'.card:has(> &)',
@@ -156,14 +164,11 @@ test({
 		'.outer { .card:has(> &) {} .card:has(> &):is(.active, &.active) {} }',
 		'.outer { .card:is(.active, :unknown(&)) {} .card:is(.active, :unknown(&)) .title {} }',
 		'.outer { .card:unknown(&) {} .card:unknown(&) .title {} }',
-		'.outer { .card:has(> &) {} .theme .card:has(> &) {} }',
-		'.outer { .a:not(&), .b:not(&) {} .a:not(&) .title, .b:not(&) .title {} }',
 		'.outer, #missing { .a:is(&, :where(.foo)), .b:where(&) {} .a:is(&, :where(.foo)) .title, .b:where(&) .title { color: blue; } } .outer.b .title { color: red; }',
 		'.outer { .card {} .theme .card .title {} }',
 		'.outer { &.card {} .theme & &.card .title {} }',
 		'.outer { &.card {} .theme &.card & .title {} }',
 		'.outer { &.card {} .theme &.card:has(> &) {} }',
-		'.outer { .page &.card {} .theme .page &.card {} }',
 		'.outer { & {} .theme & .title {} }',
 		'.outer { &.a, &&.b {} .theme &.a .title, .theme &&.b .title {} }',
 		'.outer { &.a, &.b {} .theme &.a .title {} }',
@@ -174,6 +179,11 @@ test({
 		'@namespace url("https://example.com"); .outer { &.card {} .theme &.card {} }',
 	],
 	invalid: [
+		{
+			code: '.outer { .a:not(&), .b:not(&) {} .a:not(&) .title, .b:not(&) .title {} }',
+			output: '.outer { :not(&) { .a&, .b& {} } .a:not(&) .title, .b:not(&) .title {} }',
+			errors: [{messageId: 'prefer-nesting/related-rules'}],
+		},
 		...cases.map(({code, output, messageId = 'prefer-nesting/related-rules'}) => ({code, output, errors: [{messageId}]})),
 		...[
 			'.outer { .card:has(> &) {} /* keep */ .card:has(> &) .title {} }',

@@ -24,6 +24,46 @@ const messages = {
 	[MESSAGE_ID_RELATED_RULES]: 'Prefer CSS nesting for related rules.',
 };
 
+// These ordinary states were supported before native nesting in Chrome, Firefox, and Safari.
+const UNWRAPPABLE_PSEUDO_CLASSES = new Set([
+	'active',
+	'any-link',
+	'autofill',
+	'checked',
+	'default',
+	'defined',
+	'disabled',
+	'empty',
+	'enabled',
+	'first-child',
+	'first-of-type',
+	'focus',
+	'focus-visible',
+	'focus-within',
+	'fullscreen',
+	'hover',
+	'in-range',
+	'indeterminate',
+	'invalid',
+	'last-child',
+	'last-of-type',
+	'link',
+	'modal',
+	'only-child',
+	'only-of-type',
+	'optional',
+	'out-of-range',
+	'placeholder-shown',
+	'read-only',
+	'read-write',
+	'required',
+	'root',
+	'target',
+	'valid',
+]);
+
+const hasNamedNamespace = name => name.includes('|') && !name.startsWith('*|') && !name.startsWith('|');
+
 const isDescendantCombinator = node => node?.type === 'Combinator' && node.name === ' ';
 
 const getSelectorList = node => {
@@ -39,10 +79,35 @@ const getSelectorList = node => {
 	return argumentsList;
 };
 
+const canUnwrapPseudoClassSelector = node => {
+	const name = normalizeCssIdentifier(node.name);
+	if (node.children === null) {
+		return UNWRAPPABLE_PSEUDO_CLASSES.has(name);
+	}
+
+	const argument = node.children?.[0];
+	if (name === 'lang') {
+		// Lists, quoted ranges, and wildcard matching are outside the legacy grammar.
+		return node.children?.length === 1 && argument.type === 'Identifier' && !normalizeCssIdentifier(argument.name).includes('*');
+	}
+
+	if (['nth-child', 'nth-last-child', 'nth-of-type', 'nth-last-of-type'].includes(name)) {
+		return argument?.type === 'Nth'
+			&& !hasNestingSelector(node)
+			&& (!argument.selector || (['nth-child', 'nth-last-child'].includes(name) && canUnwrapSelectorList(argument.selector, true)));
+	}
+
+	return ['is', 'where', 'not'].includes(name)
+		&& argument?.type === 'SelectorList'
+		// Retained :where() protects uncertain branches without affecting specificity.
+		&& (name === 'where' || (!hasNestingSelector(node) && canUnwrapSelectorList(argument, true)));
+};
+
 // Keep uncertain selectors inside :is() to preserve its forgiving selector-list behavior.
 const canUnwrapSelectorNode = node => {
 	switch (node.type) {
-		case 'ClassSelector': {
+		case 'ClassSelector':
+		case 'NestingSelector': {
 			return true;
 		}
 
@@ -51,11 +116,16 @@ const canUnwrapSelectorNode = node => {
 		}
 
 		case 'TypeSelector': {
-			return !node.name.includes('|');
+			// The parser cannot read an attached & after an empty type namespace, as in |button&.
+			return !hasNamedNamespace(node.name) && !node.name.startsWith('|');
 		}
 
 		case 'AttributeSelector': {
-			return !node.flags && !node.name.name.includes('|');
+			return !hasNamedNamespace(node.name.name) && (!node.flags || (Boolean(node.matcher) && normalizeCssIdentifier(node.flags) === 'i'));
+		}
+
+		case 'PseudoClassSelector': {
+			return canUnwrapPseudoClassSelector(node);
 		}
 
 		default: {
@@ -64,55 +134,125 @@ const canUnwrapSelectorNode = node => {
 	}
 };
 
-const canUnwrapSelectorList = selectorList => selectorList.children.every(
-	selector => canBeRepresentedByNestingSelector(selector, false) && selector.children.every(node => canUnwrapSelectorNode(node)),
-);
+const canUnwrapSelectorList = (selectorList, allowCombinators = false) => selectorList.children.every(selector => canBeRepresentedByNestingSelector(selector, false)
+	&& selector.children.every(node => canUnwrapSelectorNode(node) || (allowCombinators && node.type === 'Combinator' && [' ', '>', '+', '~'].includes(node.name))));
 
 const hasNestingSelector = node => Boolean(find(node, child => child.type === 'NestingSelector' || hasNestingSelectorInRawArgument(child)));
-
-const hasFunctionalNestingSelector = selector => selector.children.some(node => node.type !== 'NestingSelector' && hasNestingSelector(node));
 
 const isBareNestingSelector = nodes => nodes.length === 1 && nodes[0].type === 'NestingSelector';
 
 const isRelatedParent = selector => !isBareNestingSelector(selector.children) && selector.children.every(node => {
 	if (node.type === 'AttributeSelector') {
-		return !node.name.name.includes('|') && (!node.flags || ['i', 's'].includes(normalizeCssIdentifier(node.flags)));
+		return !hasNamedNamespace(node.name.name) && (!node.flags || (Boolean(node.matcher) && ['i', 's'].includes(normalizeCssIdentifier(node.flags))));
 	}
 
-	return node.type === 'NestingSelector' || node.type === 'Combinator' || canUnwrapSelectorNode(node) || (
+	return node.type === 'Combinator' || canUnwrapSelectorNode(node) || (
 		node.type === 'PseudoClassSelector'
 		&& !['scope', 'visited'].includes(normalizeCssIdentifier(node.name))
 	);
-}) && !find(selector, node => node.type === 'Raw');
+}) && !find(selector, node => node.type === 'Raw' || (
+	// Older nesting implementations cannot replace a host-argument reference with an ordinary &.
+	node.type === 'PseudoClassSelector'
+	&& ['host', 'host-context'].includes(normalizeCssIdentifier(node.name))
+	&& hasNestingSelector(node)
+));
 
-const getCandidate = (selector, sourceCode) => {
-	const {children} = selector;
-	const leadingArguments = getSelectorList(children[0]);
-	if (leadingArguments && children.length > 1) {
-		const innerNodes = children.slice(isDescendantCombinator(children[1]) ? 2 : 1);
-		let prefix = '';
-		if (children[1].type !== 'Combinator') {
-			prefix = '&';
-		} else if (innerNodes[0].type === 'TypeSelector') {
-			// Explicit nesting avoids interpreting a leading type selector as a declaration.
-			prefix = '& ';
-		}
-
-		return {
-			node: children[0],
-			outerNodes: normalizeCssIdentifier(children[0].name) === 'is' && canUnwrapSelectorList(leadingArguments) ? leadingArguments.children : [children[0]],
-			inner: prefix + getNodesText(innerNodes, sourceCode),
-		};
+const getGroupSuffixCandidate = (children, groupIndex, sourceCode) => {
+	const suffix = children[groupIndex + 1];
+	if (!suffix) {
+		return;
 	}
 
-	const groupIndex = children.findLastIndex((node, index) => index > 0 && (index > 1 || children[index - 1].type !== 'Combinator') && getSelectorList(node));
+	const isDescendant = isDescendantCombinator(suffix);
+	const innerNodes = children.slice(groupIndex + (isDescendant ? 2 : 1));
+	let prefix = '';
+	if (suffix.type !== 'Combinator') {
+		prefix = '&';
+	} else if (isDescendant && (groupIndex > 0 || innerNodes[0].type === 'TypeSelector')) {
+		// Explicit nesting avoids interpreting a leading type selector as a declaration.
+		prefix = '& ';
+	}
+
+	return {
+		node: children[groupIndex],
+		outerNodes: children.slice(0, groupIndex + 1),
+		inner: prefix + getNodesText(innerNodes, sourceCode),
+	};
+};
+
+const getLeadingGroupCandidate = (children, rule, context) => {
+	const {sourceCode} = context;
+	const groupIndex = children[0]?.type === 'NestingSelector' && children[1]?.type === 'Combinator'
+		? 2
+		: (['NestingSelector', 'Combinator'].includes(children[0]?.type) ? 1 : 0);
+	const leadingNode = children[groupIndex - 1];
+	const group = children[groupIndex];
+	const argumentsList = getSelectorList(group);
+	const candidate = argumentsList && getGroupSuffixCandidate(children, groupIndex, sourceCode);
+	if (!candidate || children.slice(groupIndex + 1).some(node => hasNestingSelector(node))) {
+		return;
+	}
+
+	// An implicit nesting selector would anchor each complex branch's leftmost compound.
+	const hasAncestor = hasAncestorStyleRule(rule, context);
+	const allowCombinators = leadingNode ? leadingNode.type === 'NestingSelector' : !hasAncestor || argumentsList.children.every(argument => hasNestingSelector(argument));
+	const [firstArgument] = argumentsList.children;
+	const firstArgumentHasNestingSelector = hasNestingSelector(firstArgument);
+	const canUnwrap = normalizeCssIdentifier(group.name) === 'is'
+		&& canUnwrapSelectorList(argumentsList, allowCombinators)
+		&& (leadingNode !== undefined || !hasAncestor || argumentsList.children.every(argument => hasNestingSelector(argument) === firstArgumentHasNestingSelector));
+	let parentText;
+	if (canUnwrap) {
+		// The inner selector inherits the list's maximum specificity, just like :is().
+		parentText = getNodesText(argumentsList.children, sourceCode);
+		if (leadingNode) {
+			parentText = argumentsList.children.map(argument => {
+				const nodes = argument.children;
+				const text = getNodesText(nodes, sourceCode);
+				if (leadingNode.type === 'Combinator') {
+					const prefixText = sourceCode.text.slice(sourceCode.getRange(children[0])[0], sourceCode.getRange(group)[0]).trimEnd();
+					return `${prefixText} ${text}`;
+				}
+
+				// The attached & intersects the rightmost compound, after any leading type selector.
+				const compoundStart = nodes.findLastIndex(node => node.type === 'Combinator') + 1;
+				const firstNode = nodes[compoundStart];
+				const insertionOffset = sourceCode.getRange(firstNode)[firstNode.type === 'TypeSelector' ? 1 : 0] - sourceCode.getRange(nodes[0])[0];
+				return `${text.slice(0, insertionOffset)}&${text.slice(insertionOffset)}`;
+			}).join(', ');
+		}
+	}
+
+	return {...candidate, parentText};
+};
+
+const getCandidate = (selector, rule, context) => {
+	const {sourceCode} = context;
+	const {children} = selector;
+	const leadingCandidate = getLeadingGroupCandidate(children, rule, context);
+	if (leadingCandidate) {
+		return leadingCandidate;
+	}
+
+	const groupIndex = children.findLastIndex(node => getSelectorList(node));
 	if (groupIndex === -1) {
 		return;
 	}
 
 	const group = children[groupIndex];
-	const hasCombinator = children[groupIndex - 1].type === 'Combinator';
+	const lastReferenceIndex = children.findLastIndex(node => hasNestingSelector(node));
+	if (lastReferenceIndex >= groupIndex) {
+		// Keep existing & references in their original ancestor context.
+		const candidate = getGroupSuffixCandidate(children, lastReferenceIndex, sourceCode);
+		return candidate && {...candidate, node: group};
+	}
+
+	const hasCombinator = children[groupIndex - 1]?.type === 'Combinator';
 	const parentEnd = groupIndex - (hasCombinator ? 1 : 0);
+	if (parentEnd === 0) {
+		return;
+	}
+
 	const isDescendant = isDescendantCombinator(children[groupIndex - 1]);
 	let innerNodes = children.slice(isDescendant || !hasCombinator ? groupIndex : parentEnd);
 	if (groupIndex === children.length - 1 && isDescendant && normalizeCssIdentifier(group.name) === 'is') {
@@ -251,13 +391,20 @@ const getSharedParent = (selectors, sourceCode) => {
 	}
 
 	const selector = {type: 'Selector', children};
-	if (children.length > 0 && selectors.some(selector => children.length < selector.children.length) && isRelatedParent(selector) && canBeRepresentedByNestingSelector(selector, false)) {
+	if (
+		children.length > 0
+		&& selectors.some(selector => children.length < selector.children.length)
+		// A shared prefix must retain every original ancestor reference.
+		&& selectors.every(selector => selector.children.slice(children.length).every(node => !hasNestingSelector(node)))
+		&& isRelatedParent(selector)
+		&& canBeRepresentedByNestingSelector(selector)
+	) {
 		return selector;
 	}
 };
 
 const getSharedSuffix = (selectors, sourceCode) => {
-	if (selectors.length < 2 || selectors.some(selector => !selector || !canUseRelatedSelector(selector) || find(selector, node => node.type === 'NestingSelector'))) {
+	if (selectors.length < 2 || selectors.some(selector => !selector || !canUseRelatedSelector(selector))) {
 		return;
 	}
 
@@ -279,14 +426,17 @@ const getSharedSuffix = (selectors, sourceCode) => {
 
 const getParentText = (parents, sourceCode) => parents.map(parent => getNodesText(parent.children, sourceCode)).join(', ');
 
-// Implicit nesting contributes once; each explicit & contributes separately.
-const getInheritedSpecificityCount = selector => Math.max(1, selector.children.filter(node => node.type === 'NestingSelector').length);
+// For eligible grouped parents, implicit nesting contributes once and each direct & contributes separately; :where() references contribute nothing.
+const getInheritedSpecificityCount = selector => {
+	const hasImplicitNestingSelector = selector.children.at(0)?.type === 'Combinator' || !hasNestingSelector(selector);
+	return selector.children.filter(node => node.type === 'NestingSelector').length + Number(hasImplicitNestingSelector);
+};
 
 const canUseRelatedParents = parents => {
-	// Functional & references can change specificity nonlinearly, so keep them in a single parent.
+	// Uncertain branches can change computed specificity, so keep them in a single parent.
 	if (
-		(parents.length > 1 && parents.some(parent => hasFunctionalNestingSelector(parent)))
-		|| parents.some(parent => !(isRelatedParent(parent) && canBeRepresentedByNestingSelector(parent, false)))
+		(parents.length > 1 && parents.some(parent => parent.children.some(node => node.type !== 'Combinator' && !canUnwrapSelectorNode(node))))
+		|| parents.some(parent => !(isRelatedParent(parent) && canBeRepresentedByNestingSelector(parent)))
 	) {
 		return false;
 	}
@@ -329,7 +479,7 @@ const getRelativeSelectorText = (parentSelector, selector, rule, context) => {
 	}
 
 	const parentNodes = parentSelector.children;
-	if (parentNodes.some(node => node.type === 'Combinator') || (hasAncestorStyleRule(rule, context) && parentNodes.every(node => node.type !== 'NestingSelector'))) {
+	if (selector.children.at(0)?.type === 'Combinator' || parentNodes.some(node => node.type === 'Combinator')) {
 		return;
 	}
 
@@ -337,6 +487,15 @@ const getRelativeSelectorText = (parentSelector, selector, rule, context) => {
 		&& selector.children.length >= index + parentNodes.length
 		&& parentNodes.every((node, offset) => isSameSelectorNode(node, selector.children[index + offset], sourceCode)));
 	if (parentStart === -1 || selector.children.some((node, index) => (index < parentStart || index >= parentStart + parentNodes.length) && hasNestingSelector(node))) {
+		return;
+	}
+
+	if (
+		selector.children.slice(0, parentStart).some(node => node.type === 'Combinator')
+		&& parentNodes.every(node => !hasNestingSelector(node))
+		&& hasAncestorStyleRule(rule, context)
+	) {
+		// An implicit ancestor must keep constraining the original leftmost compound.
 		return;
 	}
 
@@ -425,7 +584,7 @@ const getInferredParents = (rule, context) => {
 	const parents = [];
 	const parentTexts = new Set();
 	for (const selector of rule.prelude.children) {
-		const boundary = selector.children.findIndex(node => node.type === 'Combinator' || node.type === 'PseudoElementSelector');
+		const boundary = selector.children.findIndex((node, index) => (node.type === 'Combinator' && index > 0) || node.type === 'PseudoElementSelector');
 		if (boundary <= 0) {
 			return;
 		}
@@ -443,7 +602,7 @@ const getInferredParents = (rule, context) => {
 
 const getGroupedCandidate = (rule, context) => {
 	const {sourceCode} = context;
-	const parent = getSharedParent(rule.prelude.children, sourceCode) ?? (hasAncestorStyleRule(rule, context) ? undefined : getSharedSuffix(rule.prelude.children, sourceCode));
+	const parent = getSharedParent(rule.prelude.children, sourceCode) ?? getSharedSuffix(rule.prelude.children, sourceCode);
 	let parents = parent ? [parent] : undefined;
 	let inner = parents && getRelatedSelectorText(parents, rule, context);
 	if (!inner) {
@@ -635,7 +794,7 @@ const getMergeCandidate = (children, index, selectors, context) => {
 	}
 
 	const combinedSelectors = [...selectors, ...nextSelectors];
-	const sharedParent = getSharedParent(combinedSelectors, sourceCode) ?? (hasAncestorStyleRule(parentRule, context) ? undefined : getSharedSuffix(combinedSelectors, sourceCode));
+	const sharedParent = getSharedParent(combinedSelectors, sourceCode) ?? getSharedSuffix(combinedSelectors, sourceCode);
 	if (sharedParent && combinedSelectors.every(selector => selector.children.length > sharedParent.children.length)) {
 		const sharedRules = getRelatedRules(children, index, [sharedParent], context);
 		if (sharedRules.length >= 2) {
@@ -715,7 +874,7 @@ const create = context => {
 		let parentText;
 		if (rule.prelude.children.length === 1) {
 			const [selector] = rule.prelude.children;
-			candidate = getCandidate(selector, sourceCode);
+			candidate = getCandidate(selector, rule, context);
 			if (
 				!candidate
 				|| !canMatchSelector(selector)
@@ -726,7 +885,7 @@ const create = context => {
 				return;
 			}
 
-			parentText = getNodesText(candidate.outerNodes, sourceCode);
+			parentText = candidate.parentText ?? getNodesText(candidate.outerNodes, sourceCode);
 		} else {
 			candidate = getGroupedCandidate(rule, context);
 			if (!candidate) {
