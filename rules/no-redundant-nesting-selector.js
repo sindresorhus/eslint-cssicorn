@@ -1,8 +1,11 @@
+// @ts-check
+
 import {find} from '@eslint/css-tree';
 import {getParentStyleRule, hasNestingSelectorInRawArgument} from './shared/css-selector-specificity.js';
 import {decodeCssIdentifier} from './utils/index.js';
 
 /**
+@import {SelectorPlain} from '@eslint/css-tree';
 @import {CssicornContext} from './rule/cssicorn-context.js';
 @import {CssicornRule} from './rule/to-eslint-rule.js';
 @import {CssicornRuleFixer} from './rule/to-eslint-rule-fixer.js';
@@ -24,7 +27,7 @@ const create = context => {
 			return;
 		}
 
-		for (const selector of rule.prelude.children) {
+		for (const selector of /** @type {SelectorPlain[]} */ (rule.prelude.children)) {
 			const [nestingSelector, combinator, firstRemainingNode] = selector.children;
 			if (
 				nestingSelector?.type !== 'NestingSelector'
@@ -59,7 +62,7 @@ const create = context => {
 				*/
 				fix(fixer) {
 					const [start, end] = sourceCode.getRange(nestingSelector);
-					const whitespace = sourceCode.text.slice(end).match(/^[\t ]*/u)[0];
+					const whitespace = sourceCode.text.slice(end).match(/^[\t ]*/u)?.[0] ?? '';
 					return fixer.removeRange([start, end + whitespace.length]);
 				},
 			};

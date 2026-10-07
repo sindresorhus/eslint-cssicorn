@@ -9,9 +9,7 @@
 <!-- end auto-generated rule header -->
 <!-- Do not manually modify this header. Run: `npm run fix:eslint-docs` -->
 
-Native CSS nesting implies a parent selector for descendant selectors and selectors starting with `>`, `+`, or `~`. A leading `&` is redundant when removing it preserves that behavior.
-
-The rule removes redundant leading nesting selectors while preserving comments and the remaining selector text. It has no options.
+Remove a leading `&` before `>`, `+`, or `~`, or before a descendant selector containing no other nesting references. Comments and remaining selector text are preserved. This rule has no options.
 
 ## Examples
 

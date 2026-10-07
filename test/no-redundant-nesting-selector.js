@@ -126,6 +126,10 @@ nodeTest('fixes selector lists and multiple nesting levels completely', () => {
 			code: 'a { & .child { & span {} } }',
 			output: 'a { .child { span {} } }',
 		},
+		{
+			code: String.raw`a { & .child, & --element:hover, & |span, & \7c span {} }`,
+			output: String.raw`a { .child, & --element:hover, & |span, \7c span {} }`,
+		},
 	];
 	for (const {code, output} of cases) {
 		const result = linter.verifyAndFix(code, config, {filename: 'test.css'});
