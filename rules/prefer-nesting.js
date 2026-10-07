@@ -182,9 +182,15 @@ const getGroupSuffixCandidate = (children, groupIndex, sourceCode) => {
 
 const getLeadingGroupCandidate = (children, rule, context) => {
 	const {sourceCode} = context;
-	const groupIndex = children[0]?.type === 'NestingSelector' && children[1]?.type === 'Combinator'
-		? 2
-		: (['NestingSelector', 'Combinator'].includes(children[0]?.type) ? 1 : 0);
+	let groupIndex = 0;
+	if (children[groupIndex]?.type === 'NestingSelector') {
+		groupIndex++;
+	}
+
+	if (children[groupIndex]?.type === 'Combinator') {
+		groupIndex++;
+	}
+
 	const leadingNode = children[groupIndex - 1];
 	const group = children[groupIndex];
 	const argumentsList = getSelectorList(group);
