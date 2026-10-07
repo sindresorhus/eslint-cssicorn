@@ -87,6 +87,11 @@ test({
 	valid: [],
 	invalid: [
 		{
+			code: String.raw`a { & \7c span {} }`,
+			output: String.raw`a { \7c span {} }`,
+			errors: 1,
+		},
+		{
 			code: 'a {\n  &   .child {}\n}',
 			output: 'a {\n  .child {}\n}',
 			errors: [{
