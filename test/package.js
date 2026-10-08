@@ -256,8 +256,8 @@ test('require-selector-scope component configuration preserves scoped flat selec
 	const [unscopedResult] = await eslint.lintText('button {}', {filePath: 'src/components/card.css'});
 	assert.deepEqual(unscopedResult.messages.map(message => message.ruleId), ['cssicorn/require-selector-scope']);
 
-	for (const filePath of ['src/components/global.css', 'src/components/reset.css', 'src/global.css']) {
-		const [globalResult] = await eslint.lintText('button {}', {filePath});
+	const globalResults = await Promise.all(['src/components/global.css', 'src/components/reset.css', 'src/global.css'].map(filePath => eslint.lintText('button {}', {filePath})));
+	for (const [globalResult] of globalResults) {
 		assert.deepEqual(globalResult.messages, []);
 	}
 });
