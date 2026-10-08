@@ -65,10 +65,9 @@ Collect matching literal colors without descending into a matched color's compon
 
 @param {CssNodePlain} value
 @param {CssNodePlain} foreground
-@param {CssicornContext} context
 @returns {CssNodePlain[]}
 */
-function getMatchingColors(value, foreground, context) {
+function getMatchingColors(value, foreground) {
 	/**
 	@type {CssNodePlain[]}
 	*/
@@ -77,7 +76,7 @@ function getMatchingColors(value, foreground, context) {
 	@param {CssNodePlain} node
 	*/
 	const visit = node => {
-		if (areEqualLiteralColors(foreground, node) && isLiteralColor(node, context)) {
+		if (node.type === foreground.type && areEqualLiteralColors(foreground, node)) {
 			colors.push(node);
 			return;
 		}
@@ -112,7 +111,7 @@ const create = context => {
 				continue;
 			}
 
-			let colors = getMatchingColors(declaration.value, foreground, context);
+			let colors = getMatchingColors(declaration.value, foreground);
 			if (colors.length === 0) {
 				continue;
 			}
@@ -120,7 +119,7 @@ const create = context => {
 			let {value} = declaration;
 			if (sourceCode.getText(value).includes('\\')) {
 				value = getCanonicalLexerNode(value);
-				colors = getMatchingColors(value, foreground, context);
+				colors = getMatchingColors(value, foreground);
 			}
 
 			const match = sourceCode.lexer.matchProperty(property, value);

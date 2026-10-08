@@ -33,6 +33,7 @@ test.snapshot({
 		'a { color: red; color: blue !important; border-color: red; }',
 		'a { color: red; all: unset; border-color: red; }',
 		'a { color: red; all: unset !important; border-color: red; }',
+		'a { color: red !important; all: unset !important; border-color: red; }',
 		'a { all: initial !important; color: red; border-color: red; }',
 		'a { color: red; color: var(--foreground); border-color: red; }',
 		'a { color: red; all: var(--reset); border-color: red; }',
@@ -124,6 +125,9 @@ test.snapshot({
 		String.raw`a { color: red; border-color: r\65 d; }`,
 		String.raw`a { color: r\65 d; border-color: red; }`,
 		String.raw`a { color: rgb(255 0 0); border-color: r\67 b(255 0 0); }`,
+		String.raw`a { color: hsl(0deg 100% 50%); border-color: hsl(0d\65 g 100% 50%); }`,
+		String.raw`a { color: red; border: 1px \73 olid red; }`,
+		'a { color: red; background-image: image(url("icon.svg"), red); }',
 	],
 });
 
@@ -141,6 +145,18 @@ test({
 	}, {
 		code: 'a { color: rgb(255 0 0); border-color: rgb(255 /* keep */ 0 0); }',
 		errors: [{messageId: 'prefer-current-color/error', suggestions: []}],
+	}, {
+		code: String.raw`a { color: color(srgb 1 0 0); border-color: color(s\72 gb 1 0 0); }`,
+		errors: [{
+			messageId: 'prefer-current-color/error',
+			suggestions: [{
+				messageId: 'prefer-current-color/suggestion',
+				output: 'a { color: color(srgb 1 0 0); border-color: currentcolor; }',
+			}],
+		}],
+	}, {
+		code: String.raw`a { color: color(srgb 1 0 0); border-color: color(s\72 gb /* keep */ 1 0 0); }`,
+		errors: [{messageId: 'prefer-current-color/error', suggestions: []}],
 	}],
 });
 
@@ -155,13 +171,13 @@ nodeTest('suggestions compose with lowercase without autofixing the relationship
 			'cssicorn/prefer-current-color': 'error',
 		},
 	};
-	const code = 'a { color: red; border-color: red; }';
+	const code = 'a { COLOR: RED; BORDER-COLOR: RED; }';
 	const result = linter.verifyAndFix(code, configuration, {filename: 'test.css'});
-	assert.equal(result.fixed, false);
-	assert.equal(result.output, code);
+	assert.equal(result.fixed, true);
+	assert.equal(result.output, 'a { color: red; border-color: red; }');
 	assert.equal(result.messages.length, 1);
 	const [suggestion] = result.messages[0].suggestions;
-	const suggestedCode = code.slice(0, suggestion.fix.range[0]) + suggestion.fix.text + code.slice(suggestion.fix.range[1]);
+	const suggestedCode = result.output.slice(0, suggestion.fix.range[0]) + suggestion.fix.text + result.output.slice(suggestion.fix.range[1]);
 	assert.equal(suggestedCode, 'a { color: red; border-color: currentcolor; }');
 	assert.deepEqual(linter.verify(suggestedCode, configuration, {filename: 'test.css'}), []);
 });

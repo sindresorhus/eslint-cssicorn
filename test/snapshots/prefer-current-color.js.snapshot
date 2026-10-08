@@ -1013,6 +1013,40 @@ Suggestion 1/1: Replace with \`currentcolor\`.:
 
 `;
 
+exports[`invalid(58): a { color: hsl(0deg 100% 50%); border-color: hsl(0d\\65 g 100% 50%); } 1`] = `
+
+  1 | a { color: hsl(0deg 100% 50%); border-color: hsl(0d\\65 g 100% 50%); }
+
+`;
+
+exports[`invalid(58): a { color: hsl(0deg 100% 50%); border-color: hsl(0d\\65 g 100% 50%); } 2`] = `
+
+Message:
+> 1 | a { color: hsl(0deg 100% 50%); border-color: hsl(0d\\65 g 100% 50%); }
+    |                                              ^^^^^^^^^^^^^^^^^^^^^ Prefer \`currentcolor\` over repeating the foreground color.
+
+Suggestion 1/1: Replace with \`currentcolor\`.:
+  1 | a { color: hsl(0deg 100% 50%); border-color: currentcolor; }
+
+`;
+
+exports[`invalid(59): a { color: red; border: 1px \\73 olid red; } 1`] = `
+
+  1 | a { color: red; border: 1px \\73 olid red; }
+
+`;
+
+exports[`invalid(59): a { color: red; border: 1px \\73 olid red; } 2`] = `
+
+Message:
+> 1 | a { color: red; border: 1px \\73 olid red; }
+    |                                      ^^^ Prefer \`currentcolor\` over repeating the foreground color.
+
+Suggestion 1/1: Replace with \`currentcolor\`.:
+  1 | a { color: red; border: 1px \\73 olid currentcolor; }
+
+`;
+
 exports[`invalid(6): a { color: transparent; border-color: transparent; } 1`] = `
 
   1 | a { color: transparent; border-color: transparent; }
@@ -1027,6 +1061,23 @@ Message:
 
 Suggestion 1/1: Replace with \`currentcolor\`.:
   1 | a { color: transparent; border-color: currentcolor; }
+
+`;
+
+exports[`invalid(60): a { color: red; background-image: image(url(\"icon.svg\"), red); } 1`] = `
+
+  1 | a { color: red; background-image: image(url("icon.svg"), red); }
+
+`;
+
+exports[`invalid(60): a { color: red; background-image: image(url(\"icon.svg\"), red); } 2`] = `
+
+Message:
+> 1 | a { color: red; background-image: image(url("icon.svg"), red); }
+    |                                                          ^^^ Prefer \`currentcolor\` over repeating the foreground color.
+
+Suggestion 1/1: Replace with \`currentcolor\`.:
+  1 | a { color: red; background-image: image(url("icon.svg"), currentcolor); }
 
 `;
 
