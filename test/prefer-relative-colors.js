@@ -53,6 +53,8 @@ test.snapshot({
 		withRoot(':root { --brand: red; --brand: rgb(var(--channels)); } a { color: rgb(var(--channels) / .5); }'),
 		withRoot(':root { --second: rgb(var(--channels)); --third: rgb(var(--channels)); } a { color: rgb(var(--channels) / .5); }'),
 		withRoot('a { --variant: rgb(/* keep */ var(--channels) / .5); }'),
+		withRoot('a { color: hwb(from rgb(var(--channels) / .5) h w b); }'),
+		'@starting-style { :root { --brand: rgb(var(--channels)); } } a { color: rgb(var(--channels) / .5); }',
 	],
 	invalid: [
 		withRoot('a { color: rgb(var(--channels) / .5); }'),
@@ -92,6 +94,9 @@ test.snapshot({
 		':root { --brand: hsl(var(--channels)); --variant: hsl(var(--channels) / 50%); }',
 		withRoot('a { --gradient: linear-gradient(rgb(var(--channels) / .2), rgba(var(--channels), .8)); }'),
 		withRoot('a { --gradient: linear-gradient(rgb(/* keep */ var(--channels) / .2), rgba(var(--channels), .8)); }'),
+		withRoot(':root { --second: rgb(var(--channels)); } .theme { --second: red; } a { color: rgb(var(--channels) / .5); }'),
+		withRoot('a { @starting-style { --local: rgb(var(--channels)); color: rgb(var(--channels) / .5); } }'),
+		':root { --brand: HSLA(VAR(--channels)) !important; } a { --variant: HSL(VAR(--channels) / clamp(.1, VAR(--alpha), .8)) !important; }',
 	],
 });
 
