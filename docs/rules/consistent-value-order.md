@@ -24,7 +24,7 @@ Enforces these authoring orders for interchangeable value components:
 - `text-wrap`: mode, style.
 - `white-space`: collapse, wrapping, trimming.
 
-Preserves shadow length order, shadow layer order, and keyword order within each component. Single-keyword values remain unchanged.
+Checks shadow layers independently, preserving length order, layer order, and keyword order within each component. Single-keyword values remain unchanged.
 
 Supports casing, CSS escapes, vendor prefixes, and recognized math and color functions. Fixes preserve original spelling and whitespace, adding spaces where needed to separate tokens.
 
@@ -69,6 +69,6 @@ a {
 ## Limitations
 
 - Only checks lexer-recognized values, which can include values browsers reject. White space trimming may require `languageOptions.customSyntax`.
-- Ignores custom properties, CSS Modules interop declarations, substitutions such as `var()`, `env()`, and `attr()`, and random functions. An unmatched or substitution-containing shadow layer excludes the whole declaration.
+- Ignores custom properties, CSS Modules interop declarations, and declarations containing random functions. Substitutions such as `var()`, `env()`, and `attr()` exclude their shadow layer, or the whole value for other properties. Unmatched shadow layers are skipped.
 - Reports out-of-order groups containing comments without fixing them. Other shadow layers can still be fixed.
 - For `columns`, only checks dimensions, `auto`, and positive safe integers. Functions, slash syntax, and unitless zero are ignored. Use `0px` for zero width.

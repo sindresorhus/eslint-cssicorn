@@ -1,4 +1,4 @@
-import {ident} from '@eslint/css-tree';
+import {find, ident} from '@eslint/css-tree';
 import {getVendorPrefix} from './shared/css-shorthand-properties.js';
 import {
 	getCanonicalLexerNode,
@@ -61,11 +61,10 @@ const isLiteralColumnComponent = node => {
 	return node.type === 'Identifier' || node.type === 'Dimension';
 };
 
-const getGroupProblem = (nodes, canonicalNodes, {order, matchResult, property, context}) => {
-	if (nodes.length < 2) {
-		return;
-	}
+const hasRandomFunction = value => Boolean(find(value, node => node.type === 'Function'
+	&& ['random', 'random-item'].includes(normalizeCssIdentifier(node.name))));
 
+const getGroupProblem = (nodes, canonicalNodes, {order, matchResult, property, context}) => {
 	const components = nodes.map((node, index) => ({
 		node,
 		rank: getComponentRank(canonicalNodes[index], order, matchResult),
@@ -132,21 +131,34 @@ const create = context => {
 			|| value.children.length < 2
 			|| isCssModulesInteropDeclaration(declaration, context)
 			|| (property === 'columns' && value.children.some(node => !isLiteralColumnComponent(node)))
-			|| hasSubstitutionOrRandomFunction(value)
 		) {
 			return;
 		}
 
-		const canonicalValue = getCanonicalLexerNode(value);
-		const matchResult = sourceCode.lexer.matchProperty(property, canonicalValue);
-		if (!matchResult.matched) {
+		const isShadow = property === 'box-shadow' || property === 'text-shadow';
+		if (isShadow && hasRandomFunction(value)) {
 			return;
 		}
 
-		const groups = getCommaSeparatedGroups(value);
-		const canonicalGroups = getCommaSeparatedGroups(canonicalValue);
-		for (const [index, {nodes}] of groups.entries()) {
-			const problem = getGroupProblem(nodes, canonicalGroups[index].nodes, {
+		// Literal commas isolate shadow layers even when substitutions expand into additional layers.
+		const groups = isShadow ? getCommaSeparatedGroups(value) : [{nodes: value.children}];
+		for (const {nodes} of groups) {
+			if (nodes.length < 2) {
+				continue;
+			}
+
+			const groupValue = {...value, children: nodes};
+			if (hasSubstitutionOrRandomFunction(groupValue)) {
+				continue;
+			}
+
+			const canonicalValue = getCanonicalLexerNode(groupValue);
+			const matchResult = sourceCode.lexer.matchProperty(property, canonicalValue);
+			if (!matchResult.matched) {
+				continue;
+			}
+
+			const problem = getGroupProblem(nodes, canonicalValue.children, {
 				order, matchResult, property, context,
 			});
 			if (problem) {

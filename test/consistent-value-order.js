@@ -39,8 +39,11 @@ test.snapshot({
 		':import("theme.css") { flex-flow: wrap column; columns: 3 20em; }',
 		'a { border: 1px /* keep */ solid red; }',
 		{code: 'a { border: red solid (; box-shadow: red 0 0 (; }', languageOptions: {tolerant: true}},
-		'a { box-shadow: red 1px 2px, blue 3px; text-shadow: red 1px 2px, blue 3px; }',
-		'a { box-shadow: red 1px 2px, var(--other-shadow); text-shadow: red 1px 2px, rgb(1 2 var(--blue)) 3px 4px; }',
+		'a { box-shadow: 1px 2px red, blue 3px; text-shadow: 1px 2px red, blue 3px; }',
+		'a { box-shadow: 1px 2px red, var(--other-shadow); text-shadow: 1px 2px red, rgb(1 2 var(--blue)) 3px 4px; }',
+		'a { box-shadow: red 0 0, blue calc(random(1px, 2px)) 0; }',
+		'a { text-shadow: blue RANDOM-ITEM(red, green) 0 0, red 1px 2px; }',
+		'a { box-shadow: red var(--x) 0, blue 0 0 var(--blur); }',
 		'a { text-decoration: underline 2px wavy red; text-decoration: overline underline 10% dotted blue; }',
 		'a { text-decoration: underline from-font solid; text-decoration: none; text-emphasis: open circle red; text-emphasis: circle open red; }',
 		'a { text-emphasis: "•" blue; text-emphasis: none red; text-emphasis: inherit; text-decoration: revert-layer; }',
@@ -181,6 +184,46 @@ test({
 			errors: 2,
 		},
 		{
+			code: 'a { box-shadow: red 0 0, var(--other-shadows); }',
+			output: 'a { box-shadow: 0 0 red, var(--other-shadows); }',
+			errors: 1,
+		},
+		{
+			code: 'a { text-shadow: var(--other-shadows, blue 1px 2px, green 3px 4px), red 5px 6px; }',
+			output: 'a { text-shadow: var(--other-shadows, blue 1px 2px, green 3px 4px), 5px 6px red; }',
+			errors: 1,
+		},
+		{
+			code: 'a { box-shadow: blue 1px 2px, red var(--x) 0 inset, green 3px 4px inset; }',
+			output: 'a { box-shadow: 1px 2px blue, red var(--x) 0 inset, inset 3px 4px green; }',
+			errors: 2,
+		},
+		{
+			code: 'a { box-shadow: red 1px 2px, blue 3px; text-shadow: blue 3px, red 1px 2px; }',
+			output: 'a { box-shadow: 1px 2px red, blue 3px; text-shadow: blue 3px, 1px 2px red; }',
+			errors: 2,
+		},
+		{
+			code: 'a { box-shadow: color-mix(in srgb, red, blue) min(1px, 2px) 0 inset, rgb(1 2 var(--blue)) 3px 4px; }',
+			output: 'a { box-shadow: inset min(1px, 2px) 0 color-mix(in srgb, red, blue), rgb(1 2 var(--blue)) 3px 4px; }',
+			errors: 1,
+		},
+		{
+			code: 'a { box-shadow: red /* keep */ 0 0, var(--other), blue 1px 2px; }',
+			output: 'a { box-shadow: red /* keep */ 0 0, var(--other), 1px 2px blue; }',
+			errors: 2,
+		},
+		{
+			code: 'a {\r\n  -moz-box-shadow: VAR(--shadow), RED 0\r\n    0 INSET !important;\r\n}',
+			output: 'a {\r\n  -moz-box-shadow: VAR(--shadow), INSET 0\r\n    0 RED !important;\r\n}',
+			errors: 1,
+		},
+		{
+			code: 'a { box-shadow: env(shadow), red 0 0; text-shadow: red 0 0, attr(data-shadow type(*)); box-shadow: --shadow(), red 0 0; }',
+			output: 'a { box-shadow: env(shadow), 0 0 red; text-shadow: 0 0 red, attr(data-shadow type(*)); box-shadow: --shadow(), 0 0 red; }',
+			errors: 3,
+		},
+		{
 			code: 'a { text-decoration: red wavy underline 2px; text-emphasis: red open circle; }',
 			output: 'a { text-decoration: underline 2px wavy red; text-emphasis: open circle red; }',
 			errors: 2,
@@ -262,6 +305,30 @@ nodeTest('fixes preserve adjacent string boundaries and positional math lengths'
 		assert.equal(result.output, output);
 		assert.deepEqual(result.messages, []);
 		assert.deepEqual(linter.verifyAndFix(output, config, {filename: 'test.css'}), {...result, fixed: false});
+	}
+});
+
+nodeTest('literal shadow fixes preserve validity after variable expansion', () => {
+	const linter = new Linter();
+	const config = {...plugin.configs.all, rules: {'cssicorn/consistent-value-order': 'error'}};
+	for (const property of ['box-shadow', 'text-shadow']) {
+		const value = 'red 1px 2px, var(--shadows), blue 3px 4px';
+		const fixedValue = '1px 2px red, var(--shadows), 3px 4px blue';
+		const result = linter.verifyAndFix(`a { ${property}: ${value}; }`, config, {filename: 'test.css'});
+		assert.equal(result.output, `a { ${property}: ${fixedValue}; }`);
+		assert.deepEqual(result.messages, []);
+		assert.deepEqual(linter.verifyAndFix(result.output, config, {filename: 'test.css'}), {...result, fixed: false});
+		for (const [replacement, expectedValidity] of [
+			['green 5px 6px', true],
+			['green 5px 6px, purple 7px 8px', true],
+			['green 5px', false],
+			['', false],
+		]) {
+			for (const shadowValue of [value, fixedValue]) {
+				const expandedValue = shadowValue.replace('var(--shadows)', () => replacement);
+				assert.equal(Boolean(lexer.matchProperty(property, expandedValue).matched), expectedValidity, expandedValue);
+			}
+		}
 	}
 });
 
