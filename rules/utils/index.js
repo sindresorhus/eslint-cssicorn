@@ -1,5 +1,6 @@
 export {default as getAtRuleContextPart} from './get-at-rule-context-part.js';
 export {default as getCanonicalLexerNode} from './get-canonical-lexer-node.js';
+export {default as getCanonicalCssLexerNode} from './get-canonical-css-lexer-node.js';
 export {default as getCommaSeparatedGroups} from './get-comma-separated-groups.js';
 export {default as getFeatureNameRange} from './get-feature-name-range.js';
 export {default as getPseudoSelectorArgument} from './get-pseudo-selector-argument.js';
@@ -9,6 +10,7 @@ export {default as hasSubstitutionOrRandomFunction} from './has-substitution-or-
 export {default as isCssModulesInteropDeclaration} from './is-css-modules-interop-declaration.js';
 export {default as isCssWideKeyword} from './is-css-wide-keyword.js';
 export {default as isKeyframesAtRule} from './is-keyframes-at-rule.js';
+export {default as isStyleBlock} from './is-style-block.js';
 export {default as isSubstitutionFunction} from './is-substitution-function.js';
 export {decodeCssIdentifier, default as normalizeCssIdentifier, toAsciiLowerCase} from './normalize-css-identifier.js';
 export {default as toLocation} from './to-location.js';

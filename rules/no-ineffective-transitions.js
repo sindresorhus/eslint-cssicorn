@@ -1,0 +1,208 @@
+import {nonAnimatableProperties, discreteProperties} from './shared/css-property-animation-types.js';
+import {shorthandToAffectedProperties} from './shared/css-shorthand-properties.js';
+import {
+	getCanonicalCssLexerNode,
+	getCommaSeparatedGroups,
+	hasSubstitutionOrRandomFunction,
+	isCssModulesInteropDeclaration,
+	isCssWideKeyword,
+	isStyleBlock,
+	normalizeCssIdentifier,
+} from './utils/index.js';
+
+/**
+@import {CssicornContext} from './rule/cssicorn-context.js';
+@import {CssicornRule} from './rule/to-eslint-rule.js';
+@import {CssicornRuleFixer} from './rule/to-eslint-rule-fixer.js';
+*/
+
+const MESSAGE_ID_NON_ANIMATABLE = 'no-ineffective-transitions/non-animatable';
+const MESSAGE_ID_DISCRETE = 'no-ineffective-transitions/discrete';
+const MESSAGE_ID_SUGGESTION = 'no-ineffective-transitions/allow-discrete';
+const messages = {
+	[MESSAGE_ID_NON_ANIMATABLE]: 'Property `{{property}}` cannot be transitioned.',
+	[MESSAGE_ID_DISCRETE]: 'Transitioning `{{property}}` requires `allow-discrete` behavior.',
+	[MESSAGE_ID_SUGGESTION]: 'Allow discrete transitions for all targets using this behavior entry.',
+};
+
+const nonAnimatablePropertyNames = new Set(nonAnimatableProperties);
+const discretePropertyNames = new Set(discreteProperties);
+const transitionProperties = new Set(['transition', 'transition-property', 'transition-behavior', 'all']);
+const longhandProperties = ['transition-property', 'transition-behavior'];
+
+const getTransitionLists = (declaration, property, lexer) => {
+	const {value} = declaration;
+	if (
+		property === 'all'
+		|| value.type !== 'Value'
+		|| hasSubstitutionOrRandomFunction(value)
+		|| value.children.some(node => node.type === 'Identifier' && isCssWideKeyword(normalizeCssIdentifier(node.name)))
+	) {
+		return;
+	}
+
+	const canonicalValue = getCanonicalCssLexerNode(value);
+	const matchResult = lexer.matchProperty(property, canonicalValue);
+	if (!matchResult.matched) {
+		return;
+	}
+
+	const groups = getCommaSeparatedGroups(value);
+	const canonicalGroups = getCommaSeparatedGroups(canonicalValue);
+	const targets = [];
+	const behaviors = [];
+	for (const [index, {nodes}] of groups.entries()) {
+		const canonicalNodes = canonicalGroups[index].nodes;
+		if (property === 'transition') {
+			const targetIndex = canonicalNodes.findIndex(node => matchResult.isType(node, 'single-transition-property'));
+			const behaviorIndex = canonicalNodes.findIndex(node => matchResult.isType(node, 'transition-behavior-value'));
+			const targetNode = nodes[targetIndex];
+			const behaviorNode = nodes[behaviorIndex];
+			targets.push({node: targetNode, name: targetNode ? normalizeCssIdentifier(targetNode.name) : 'all'});
+			behaviors.push({name: behaviorNode ? normalizeCssIdentifier(behaviorNode.name) : 'normal', node: behaviorNode, lastNode: nodes.at(-1)});
+		} else {
+			const [node] = nodes;
+			if (nodes.length !== 1 || node.type !== 'Identifier') {
+				return;
+			}
+
+			const entry = {node, name: normalizeCssIdentifier(node.name)};
+			if (property === 'transition-property') {
+				targets.push(entry);
+			} else {
+				behaviors.push(entry);
+			}
+		}
+	}
+
+	// The lexer accepts `none` in multi-item lists, although the transition grammar does not.
+	if (targets.length > 1 && value.children.some(node => node.type === 'Identifier' && normalizeCssIdentifier(node.name) === 'none')) {
+		return;
+	}
+
+	return {'transition-property': targets, 'transition-behavior': behaviors};
+};
+
+const getBlockTransitions = (declarations, lexer) => {
+	const controls = new Map();
+	for (const {declaration, property} of declarations) {
+		const important = declaration.important === true
+			|| (typeof declaration.important === 'string' && normalizeCssIdentifier(declaration.important) === 'important');
+		const properties = property === 'transition' || property === 'all' ? longhandProperties : [property];
+		const lists = getTransitionLists(declaration, property, lexer);
+		for (const affectedProperty of properties) {
+			if (controls.get(affectedProperty)?.important && !important) {
+				continue;
+			}
+
+			// Unresolved winning declarations still override earlier known values.
+			controls.set(affectedProperty, {entries: lists?.[affectedProperty], important});
+		}
+	}
+
+	return controls;
+};
+
+const getAllowDiscreteSuggestion = behavior => ({
+	messageId: MESSAGE_ID_SUGGESTION,
+	/**
+	@param {Parameters<CssicornRuleFixer>[0]} fixer
+	*/
+	fix: fixer => behavior.node
+		? fixer.replaceText(behavior.node, 'allow-discrete')
+		: fixer.insertTextAfter(behavior.lastNode, ' allow-discrete'),
+});
+
+const getTransitionProblems = function * (targets, behaviors, lexer) {
+	const coveredProperties = new Set();
+	for (let index = targets.length - 1; index >= 0; index--) {
+		const {node, name} = targets[index];
+		if (coveredProperties.has('all') || coveredProperties.has(name)) {
+			continue;
+		}
+
+		coveredProperties.add(name);
+		for (const affectedProperty of shorthandToAffectedProperties.get(name) ?? []) {
+			coveredProperties.add(affectedProperty);
+		}
+
+		if (!node || !Object.hasOwn(lexer.properties, name)) {
+			continue;
+		}
+
+		const data = {property: node.name};
+		if (nonAnimatablePropertyNames.has(name)) {
+			yield {node, messageId: MESSAGE_ID_NON_ANIMATABLE, data};
+			continue;
+		}
+
+		const behavior = behaviors?.[index % behaviors.length];
+		if (discretePropertyNames.has(name) && behavior?.name === 'normal') {
+			yield {
+				node,
+				messageId: MESSAGE_ID_DISCRETE,
+				data,
+				suggest: [getAllowDiscreteSuggestion(behavior)],
+			};
+		}
+	}
+};
+
+/**
+@param {CssicornContext} context
+*/
+const create = context => {
+	const {sourceCode} = context;
+	const {lexer} = sourceCode;
+
+	context.on('Block', function * (block) {
+		const declarations = [];
+		for (const declaration of block.children) {
+			if (declaration.type !== 'Declaration') {
+				continue;
+			}
+
+			const property = normalizeCssIdentifier(declaration.property);
+			if (transitionProperties.has(property)) {
+				declarations.push({declaration, property});
+			}
+		}
+
+		if (
+			declarations.every(({property}) => !(property === 'transition' || property === 'transition-property'))
+			|| !isStyleBlock(block, context)
+			|| isCssModulesInteropDeclaration(declarations[0].declaration, context)
+		) {
+			return;
+		}
+
+		const controls = getBlockTransitions(declarations, lexer);
+		const targets = controls.get('transition-property')?.entries;
+		if (!targets) {
+			return;
+		}
+
+		const behaviors = controls.get('transition-behavior')?.entries;
+		yield * getTransitionProblems(targets, behaviors, lexer);
+	});
+};
+
+/**
+@type {CssicornRule}
+*/
+const config = {
+	create,
+	meta: {
+		type: 'problem',
+		docs: {
+			description: 'Disallow transition targets that cannot transition under the declared behavior.',
+			recommended: 'unopinionated',
+		},
+		hasSuggestions: true,
+		schema: [],
+		messages,
+		languages: ['css/css'],
+	},
+};
+
+export default config;

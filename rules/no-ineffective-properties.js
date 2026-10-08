@@ -5,7 +5,7 @@ import {
 	hasSubstitutionOrRandomFunction,
 	isCssModulesInteropDeclaration,
 	isCssWideKeyword,
-	isKeyframesAtRule,
+	isStyleBlock,
 	normalizeCssIdentifier,
 } from './utils/index.js';
 
@@ -220,28 +220,6 @@ const getControllingValue = (declarationsByProperty, properties, sourceCode) => 
 	}
 
 	return value;
-};
-
-/**
-Check whether a block contains style declarations, excluding keyframes and descriptors.
-
-@param {BlockPlain} block
-@param {CSSSourceCode} sourceCode
-*/
-const isStyleBlock = (block, sourceCode) => {
-	const parent = sourceCode.getParent(block);
-	if (parent?.type === 'Atrule') {
-		const atRule = sourceCode.lexer.getAtrule(normalizeCssIdentifier(parent.name));
-		if (!atRule || atRule.descriptors !== null) {
-			return false;
-		}
-	} else if (parent?.type !== 'Rule') {
-		return false;
-	}
-
-	const ancestors = sourceCode.getAncestors(block);
-	return ancestors.some(node => node.type === 'Rule' && node.prelude?.type === 'SelectorList')
-		&& ancestors.every(node => !isKeyframesAtRule(node));
 };
 
 /**
@@ -493,7 +471,7 @@ const create = context => {
 			declarations.every(({property}) => !targetProperties.has(property))
 			|| declarations.some(({property}) => property === 'all')
 			|| isCssModulesInteropDeclaration(declarations[0].node, context)
-			|| !isStyleBlock(block, sourceCode)
+			|| !isStyleBlock(block, context)
 		) {
 			return;
 		}
