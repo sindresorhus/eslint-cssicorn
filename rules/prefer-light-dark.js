@@ -7,6 +7,7 @@ import {
 	hasCommentInRange,
 	isCssModulesInteropDeclaration,
 	normalizeCssIdentifier,
+	toAsciiLowerCase,
 } from './utils/index.js';
 
 /**
@@ -24,20 +25,20 @@ const messages = {
 
 const getProperty = declaration => {
 	const property = decodeCssIdentifier(declaration.property);
-	return property.startsWith('--') ? property : normalizeCssIdentifier(declaration.property);
+	return property.startsWith('--') ? property : toAsciiLowerCase(property);
 };
 
 const isDeclarationBlock = block => Boolean(block?.children.every(node => node.type === 'Declaration'));
 
 function getMediaMode(node) {
-	if (node?.type !== 'Atrule' || normalizeCssIdentifier(node.name) !== 'media' || node.prelude?.children.length !== 1) {
+	if (node?.type !== 'Atrule' || normalizeCssIdentifier(node.name) !== 'media' || node.prelude?.type !== 'AtrulePrelude' || node.prelude.children.length !== 1) {
 		return;
 	}
 
 	const [list] = node.prelude.children;
 	const query = list.type === 'MediaQueryList' && list.children.length === 1 ? list.children.at(0) : undefined;
 	const condition = query?.condition;
-	if (!query || query.modifier || query.mediaType || condition?.type !== 'Condition' || condition.children.length !== 1) {
+	if (condition?.type !== 'Condition' || condition.children.length !== 1 || query.modifier || query.mediaType) {
 		return;
 	}
 

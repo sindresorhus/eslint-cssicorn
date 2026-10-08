@@ -10,6 +10,14 @@ const {test} = getTester(import.meta);
 const root = ':root { color-scheme: light dark; } ';
 const pair = (base, override, mode = 'dark') => root + 'a { ' + base + ' } @media (prefers-color-scheme: ' + mode + ') { a { ' + override + ' } }';
 
+test({
+	valid: [{
+		code: 'a { color-scheme: light dark; color: red; @media ??? { color: blue; } }',
+		languageOptions: {tolerant: true},
+	}],
+	invalid: [],
+});
+
 test.snapshot({
 	valid: [
 		'a { color: white; } @media (prefers-color-scheme: dark) { a { color: black; } }',
@@ -74,7 +82,10 @@ test.snapshot({
 		'body { color-scheme: light dark; } a { color: white; @media (prefers-color-scheme: dark) { color: black; } }',
 		':root,html { color-scheme: light dark; } a { color: white; @media (prefers-color-scheme: dark) { color: black; } }',
 		root + ':root { color-scheme: light; } a { color: white; @media (prefers-color-scheme: dark) { color: black; } }',
+		root + ':root { all: initial; } a { color: white; @media (prefers-color-scheme: dark) { color: black; } }',
+		pair('color: white;', 'color-scheme: light dark; color-scheme: light dark; color: black;'),
 		root + ':export { color: white; } @media (prefers-color-scheme: dark) { :export { color: black; } }',
+		root + ':import("theme.css") { color: white; } @media (prefers-color-scheme: dark) { :import("theme.css") { color: black; } }',
 		root + '@keyframes foo { from { color: white; @media (prefers-color-scheme: dark) { color: black; } } }',
 	],
 	invalid: [
@@ -110,6 +121,7 @@ test.snapshot({
 		root + 'a { color: white; } @media (prefers-color-scheme: dark) { a { /* keep */ color: black; } }',
 		':root { color-scheme: light dark; }\r\na {\r\n  border: 1px solid white;\r\n  @media (prefers-color-scheme: dark) {\r\n    border: 1px solid black;\r\n    padding: 0;\r\n  }\r\n}',
 		root + 'a { color: white } @media (prefers-color-scheme: dark) { a { color: black } }',
+		pair('color: #0008;', 'color: rgb(0 0 0 / .5);'),
 	],
 });
 
@@ -151,4 +163,19 @@ nodeTest('recommended and all enable the rule, unopinionated excludes it', () =>
 	assert.equal(plugin.configs.recommended.rules['cssicorn/prefer-light-dark'], 'error');
 	assert.equal(plugin.configs.all.rules['cssicorn/prefer-light-dark'], 'error');
 	assert.equal(plugin.configs.unopinionated.rules['cssicorn/prefer-light-dark'], 'off');
+});
+
+nodeTest('applying suggestions one at a time removes the emptied nested media block', () => {
+	const linter = new Linter();
+	const config = configuration({'cssicorn/prefer-light-dark': 'error'});
+	let code = 'a { color-scheme: light dark; color: white; background: red; margin: 0; @media (prefers-color-scheme: dark) { color: black; background: blue; } }';
+	for (const expectedCount of [2, 1]) {
+		const messages = linter.verify(code, config, {filename: 'test.css'});
+		assert.equal(messages.length, expectedCount);
+		const [{fix}] = messages[0].suggestions;
+		code = code.slice(0, fix.range[0]) + fix.text + code.slice(fix.range[1]);
+	}
+
+	assert.equal(code, 'a { color-scheme: light dark; color: light-dark(white, black); background: light-dark(red, blue); margin: 0;  }');
+	assert.deepEqual(linter.verify(code, config, {filename: 'test.css'}), []);
 });
