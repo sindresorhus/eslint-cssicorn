@@ -1,11 +1,15 @@
+// @ts-check
+
 import {shorthandToAffectedProperties} from './shared/css-shorthand-properties.js';
 import {LEGACY_PSEUDO_ELEMENTS} from './shared/css-selector-specificity.js';
 import {functionalPseudoSelectors, nonFunctionalPseudoSelectors} from './shared/standard-pseudo-selectors.js';
 import {hasCommentInRange, normalizeCssIdentifier} from './utils/index.js';
 
 /**
+@import {BlockPlain, SelectorPlain, PseudoElementSelectorPlain, PseudoClassSelectorPlain} from '@eslint/css-tree';
 @import {CssicornContext} from './rule/cssicorn-context.js';
 @import {CssicornRule} from './rule/to-eslint-rule.js';
+@import {CssicornRuleFixer} from './rule/to-eslint-rule-fixer.js';
 */
 
 const MESSAGE_ID = 'no-ineffective-selector-properties';
@@ -15,6 +19,8 @@ const messages = {
 
 /**
 Get the property names and their affected shorthand components from the finite shared catalog.
+
+@param {string[]} properties
 */
 const getPropertyNames = properties => properties.flatMap(property => [property, ...shorthandToAffectedProperties.get(property) ?? []]);
 
@@ -98,6 +104,8 @@ const standardNonFunctionalPseudoSelectors = new Set(nonFunctionalPseudoSelector
 
 /**
 Get the explicit restriction on the final selected compound, without expanding functions or nesting selectors.
+
+@param {SelectorPlain} selector
 */
 const getSelectorRestriction = selector => {
 	for (const node of selector.children) {
@@ -113,8 +121,8 @@ const getSelectorRestriction = selector => {
 	}
 
 	const compound = selector.children.slice(selector.children.findLastIndex(node => node.type === 'Combinator') + 1);
-	const pseudoElement = compound.findLast(node => node.type === 'PseudoElementSelector'
-		|| (node.type === 'PseudoClassSelector' && LEGACY_PSEUDO_ELEMENTS.has(normalizeCssIdentifier(node.name))));
+	const pseudoElement = /** @type {PseudoElementSelectorPlain | PseudoClassSelectorPlain | undefined} */ (compound.findLast(node => node.type === 'PseudoElementSelector'
+		|| (node.type === 'PseudoClassSelector' && LEGACY_PSEUDO_ELEMENTS.has(normalizeCssIdentifier(node.name)))));
 	if (pseudoElement) {
 		const name = normalizeCssIdentifier(pseudoElement.name);
 		if (highlightSelectors.has(name)) {
@@ -135,6 +143,9 @@ const getSelectorRestriction = selector => {
 
 /**
 Get the selector restrictions for a declaration block, crossing only grouping rules with unchanged selector context.
+
+@param {BlockPlain} block
+@param {CssicornContext['sourceCode']} sourceCode
 */
 const getBlockRestrictions = (block, sourceCode) => {
 	let parent = sourceCode.getParent(block);
@@ -144,8 +155,9 @@ const getBlockRestrictions = (block, sourceCode) => {
 				return;
 			}
 
-			const restrictions = parent.prelude.children.map(selector => getSelectorRestriction(selector));
-			return restrictions.length > 0 && restrictions.every(Boolean) ? restrictions : undefined;
+			// Selector lists contain selectors, but the upstream type currently allows any CSS node.
+			const restrictions = /** @type {SelectorPlain[]} */ (parent.prelude.children).map(selector => getSelectorRestriction(selector));
+			return restrictions.length > 0 && restrictions.every(restriction => restriction !== undefined) ? restrictions : undefined;
 		}
 
 		if (parent.type === 'Atrule' && !transparentAtRules.has(normalizeCssIdentifier(parent.name))) {
@@ -182,6 +194,9 @@ const create = context => {
 				node,
 				messageId: MESSAGE_ID,
 				data: {property, selectors: [...new Set(restrictions.map(({selector}) => selector))].join(', ')},
+				/**
+				@type {CssicornRuleFixer}
+				*/
 				fix(fixer, {abort}) {
 					const [start, end] = sourceCode.getRange(node);
 					if (hasCommentInRange(context, [start, end])) {
