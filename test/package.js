@@ -122,6 +122,18 @@ test('unopinionated config enables prefer-clamp', async () => {
 	assert.equal(result.messages.some(message => message.ruleId === 'cssicorn/prefer-clamp'), true);
 });
 
+test('presets enable no-disabled-pinch-zoom only in recommended and all', async () => {
+	await Promise.all(Object.entries(eslintCssicorn.configs).map(async ([name, config]) => {
+		const eslint = new ESLint({
+			baseConfig: config,
+			overrideConfigFile: true,
+		});
+
+		const [result] = await eslint.lintText('a { touch-action: pan-y; }', {filePath: 'file.css'});
+		assert.equal(result.messages.some(message => message.ruleId === 'cssicorn/no-disabled-pinch-zoom'), name !== 'unopinionated', name);
+	}));
+});
+
 test('presets report invalid media feature notation', async () => {
 	await Promise.all(Object.values(eslintCssicorn.configs).map(async config => {
 		const eslint = new ESLint({

@@ -6,6 +6,7 @@ export {default as lowercase} from './lowercase.js';
 export {default as 'no-declarations-after-nested-rules'} from './no-declarations-after-nested-rules.js';
 export {default as 'no-deprecated-features'} from './no-deprecated-features.js';
 export {default as 'no-descending-specificity'} from './no-descending-specificity.js';
+export {default as 'no-disabled-pinch-zoom'} from './no-disabled-pinch-zoom.js';
 export {default as 'no-duplicate-font-family-names'} from './no-duplicate-font-family-names.js';
 export {default as 'no-duplicate-properties'} from './no-duplicate-properties.js';
 export {default as 'no-duplicate-selectors'} from './no-duplicate-selectors.js';
