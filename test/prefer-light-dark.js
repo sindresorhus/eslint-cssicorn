@@ -129,6 +129,7 @@ test.snapshot({
 		pair('--color: rgb(255 0 0 / 0);', '--color: transparent;'),
 		pair('background: linear-gradient(RED,  BLUE) center / cover white;', 'background: linear-gradient(RED,  BLUE) center / cover black;'),
 		pair('--color: rgb(none 0 0);', '--color: rgb(0 0 0);'),
+		pair('fill: url(#paint) white;', 'fill: url(#paint) black;'),
 	],
 });
 

@@ -740,6 +740,23 @@ Suggestion 1/1: Combine the colors with \`light-dark()\` and remove the override
 
 `;
 
+exports[`invalid(48): :root { color-scheme: light dark; } a { fill: url(#paint) white; } @media (prefers-color-scheme: dark) { a { fill: url(#paint) black; } } 1`] = `
+
+  1 | :root { color-scheme: light dark; } a { fill: url(#paint) white; } @media (prefers-color-scheme: dark) { a { fill: url(#paint) black; } }
+
+`;
+
+exports[`invalid(48): :root { color-scheme: light dark; } a { fill: url(#paint) white; } @media (prefers-color-scheme: dark) { a { fill: url(#paint) black; } } 2`] = `
+
+Message:
+> 1 | :root { color-scheme: light dark; } a { fill: url(#paint) white; } @media (prefers-color-scheme: dark) { a { fill: url(#paint) black; } }
+    |                                                                                                              ^^^^^^^^^^^^^^^^^^^^^^^ Prefer \`light-dark()\` for the paired colors in \`fill\`.
+
+Suggestion 1/1: Combine the colors with \`light-dark()\` and remove the override declaration.:
+  1 | :root { color-scheme: light dark; } a { fill: url(#paint) light-dark(white, black); } 
+
+`;
+
 exports[`invalid(5): :root { color-scheme: light dark; } a { color: white; background-color: red; } @media (prefers-color-scheme: dark) { a { color: black; padding: 0; } } 1`] = `
 
   1 | :root { color-scheme: light dark; } a { color: white; background-color: red; } @media (prefers-color-scheme: dark) { a { color: black; padding: 0; } }
