@@ -26,6 +26,18 @@ test({
 		output: '.button,\n.badge { padding: 1rem; border-radius: 0.5rem; }',
 		errors: [{messageId: 'prefer-merged-rules/selectors'}],
 	}, {
+		code: '*|a{color:red}|b{color:red}',
+		output: '*|a,|b{color:red}',
+		errors: [{messageId: 'prefer-merged-rules/selectors'}],
+	}, {
+		code: '[|name]{color:red}[name]{color:red}',
+		output: '[|name],[name]{color:red}',
+		errors: [{messageId: 'prefer-merged-rules/selectors'}],
+	}, {
+		code: '&{color:red}.a{color:red}',
+		output: '&,.a{color:red}',
+		errors: [{messageId: 'prefer-merged-rules/selectors'}],
+	}, {
 		code: '@media (width > 1px) {\r\n  .a { color: red; }\r\n}\r\n@media (width > 1px) {\r\n  .b { color: blue; }\r\n}',
 		output: '@media (width > 1px) {\r\n  .a { color: red; }\r\n  .b { color: blue; }\r\n}',
 		errors: [{messageId: 'prefer-merged-rules/conditions'}],

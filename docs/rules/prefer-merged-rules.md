@@ -9,11 +9,7 @@
 <!-- end auto-generated rule header -->
 <!-- Do not manually modify this header. Run: `npm run fix:eslint-docs` -->
 
-Prefer a single editing location for adjacent rules with the same declarations, or adjacent conditional rules with the same condition.
-
-Unlike [`prefer-nesting`](./prefer-nesting.md), selectors do not need to share a parent or other structure.
-
-<!-- The declaration-only boundary avoids changing the specificity of nested selectors. -->
+Unlike [`prefer-nesting`](./prefer-nesting.md), this rule can merge unrelated selectors.
 
 ## Examples
 
@@ -27,7 +23,7 @@ Unlike [`prefer-nesting`](./prefer-nesting.md), selectors do not need to share a
 .badge { padding: 1rem; border-radius: 0.5rem; }
 ```
 
-Adjacent `@media`, `@supports`, and `@container` rules with matching conditions can share one wrapper. Their contents are kept in their original order:
+Also merges adjacent `@media`, `@supports`, and `@container` wrappers with identical parsed conditions, preserving content order:
 
 ```css
 /* ❌ */
@@ -45,22 +41,10 @@ Adjacent `@media`, `@supports`, and `@container` rules with matching conditions 
 }
 ```
 
-Both transformations also work inside nested style rules and grouping rules such as `@layer` and `@scope`.
+## Details
 
-## Matching
+Works inside nested and grouping rules. Selector bodies must contain only declarations matching in order, value, and importance. Custom property names are case-sensitive; raw values must match exactly.
 
-Declaration blocks must contain only declarations, in the same order, with matching values and `!important` flags. Standard property names are compared case-insensitively and CSS escapes are decoded. Custom property names remain case-sensitive, and their raw values are compared exactly. The rule does not equate different colors, numbers, or value keyword spellings.
+Empty or malformed blocks and keyframe steps are skipped. Selector merging targets current stable Chrome, Firefox, and Safari, skipping uncertain selectors and random functions.
 
-Nested children are excluded because merging parent selector lists can change the [specificity of `&`](https://drafts.csswg.org/css-nesting/#specificity).
-
-Conditional names are compared case-insensitively with escapes decoded. Conditions are compared using their parsed serialization, without rearranging queries or treating different query syntax as equivalent. Wrapper contents do not need to match.
-
-Only adjacent siblings are considered. Intervening comments or other nodes prevent merging. Selectors with identical parsed serialization are kept only once in the combined selector list. Declaration order, fallbacks, original spelling, indentation, and line endings are preserved.
-
-## Limitations
-
-Selector merging targets current stable Chrome, Firefox, and Safari. It supports common selectors and parsed functions such as `:has()`, `:is()`, `:where()`, `:not()`, `:dir()`, `:nth-child(... of ...)`, and `::slotted()` with compound selector arguments. Unknown, vendor-specific, unsupported, or uncertain selectors are skipped, including opaque functional arguments, named namespaces, and the attribute `s` modifier. An invalid selector could otherwise invalidate the entire combined selector list.
-
-Empty blocks, keyframe steps, malformed candidates, declaration blocks containing nested rules, and declarations containing explicit `random()` or `random-item()` functions are skipped. Selector merging also skips custom properties with escaped leading dashes because the parser does not retain their raw values. Only `@media`, `@supports`, and `@container` wrappers are merged; `@layer`, `@scope`, and other wrappers remain separate.
-
-Comments inside matching rules prevent autofixing, but the rule still reports them. Missing final declaration semicolons are inserted when needed to separate merged wrapper contents.
+Intervening comments prevent merging; comments inside matching rules prevent autofixing.

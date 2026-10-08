@@ -7,8 +7,6 @@
 <!-- end auto-generated rule header -->
 <!-- Do not manually modify this header. Run: `npm run fix:eslint-docs` -->
 
-<!-- The examples pair each explicit contradiction with an effective alternative. -->
-
 Catch declarations that have no effect given explicit declarations in the same block, such as leftovers from a layout refactor.
 
 ## Examples
