@@ -2,14 +2,15 @@ import {generate} from '@eslint/css-tree';
 import normalizeCssIdentifier from './normalize-css-identifier.js';
 
 /**
-@import * as ESLint from 'eslint';
+@import {AtrulePlain} from '@eslint/css-tree';
+@import {CssicornContext} from '../rule/cssicorn-context.js';
 */
 
 /**
 Get a JSON-serializable key part for the condition of an at-rule, like `@media (width > 1px)`, to check whether two rules are in the same context. Each anonymous `@layer` block is a separate layer, so it gets a unique part.
 
-@param {object} atRule - The `Atrule` node.
-@param {ESLint.Rule.RuleContext} context - The ESLint rule context object.
+@param {AtrulePlain} atRule - The `Atrule` node.
+@param {CssicornContext} context - The CSS rule context object.
 @returns {Array<string | number>}
 */
 export default function getAtRuleContextPart(atRule, context) {

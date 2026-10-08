@@ -64,6 +64,12 @@ test.snapshot({
 		String.raw`.button { --color: red !important; } .button:hover { --color: /* rollback */ \72 evert-layer /* value */ !important; --color: blue; }`,
 		String.raw`.button { --color: \76 ar(--base) !important; } .button:hover { --color: blue; }`,
 		'.button { --color: {var(--base)} !important; } .button:hover { --color: blue; }',
+		'.button { future-property: 1px !important; } .button:hover { future-property: 2px; }',
+		{
+			code: '.button { future-property: red !important; } .button:hover { future-property: 2px; }',
+			languageOptions: {customSyntax: {properties: {'future-property': '<length>'}}},
+		},
+		'.button { color: red !important; }\n.link { color: red; }\n@layer states { .button:hover, .link:focus, .other:hover { color: blue; } }',
 	],
 	invalid: [
 		'.button { color: red !important; }\n.button:hover { color: blue; }',
@@ -117,5 +123,42 @@ test.snapshot({
 		'.toolbar:IS(.active) > .button { color: red !important; } .toolbar:is(.active) > .button:hover { color: blue; }',
 		'.button {\n\tcolor: red !important;\n}\n.button:hover {\n\tcolor: blue;\n}',
 		'.button { @media print { color: red !important; } } @media print { .button:hover { color: blue; } }',
+		{
+			code: '.button { future-property: 1px !important; } .button:hover { future-property: 2px; }',
+			languageOptions: {customSyntax: {properties: {'future-property': '<length>'}}},
+		},
+		'.button { color: red !important; }\n.link { color: red; }\n@layer states { .button:hover, .link:focus { color: blue; } }',
+	],
+});
+
+test.snapshot({
+	valid: [
+		'.button { color: red; } .button[disabled] { color: gray; }',
+		'.button { color: red !important; } .button[disabled] { color: gray !important; }',
+		'.button[aria-disabled="false"] { color: red !important; } .button[aria-disabled="true"] { color: gray; }',
+		'.button[disabled] { color: red !important; } .button[disabled][data-state="open"] { color: gray; }',
+		'.button:hover { color: red !important; } .button:hover[disabled] { color: gray; }',
+		'.toolbar[hidden] .button { color: red !important; } .toolbar .button[disabled] { color: gray; }',
+		'.button { color: red !important; } .button [disabled] { color: gray; }',
+		'.button { color: red !important; } .button[disabled], .link[disabled] { color: gray; }',
+		'.button { color: red !important; } .button { [disabled] { color: gray; } }',
+		'.button { color: red !important; } .button.is-disabled { color: gray; }',
+	],
+	invalid: [
+		'.button { color: red !important; } .button[disabled] { color: gray; }',
+		'.button[aria-disabled="true"] { color: gray; } .button { color: red !important; }',
+		'.button { color: red !important; } .button[data-state="open"]:hover { color: blue; }',
+		'.button { color: red !important; } .button:hover[data-state="open"] { color: blue; }',
+		'.button { color: red !important; } .button[disabled][data-state="open"] { color: gray; }',
+		'.button[type="submit"] { color: red !important; } .button[type="submit"]:hover { color: blue; }',
+		'.toolbar[hidden] > .button { color: red !important; } .toolbar[hidden] > .button[disabled] { color: gray; }',
+		'.button { color: red !important; &[aria-disabled="true"] { color: gray; } }',
+		'.button { color: red; } @layer state { .button[disabled] { color: gray; } }',
+		'@layer base { .button { color: red !important; } } .button[disabled] { color: gray !important; }',
+		String.raw`.\62 utton { COLOR: red !important; } .button[\64 isabled] { color: gray; }`,
+		'.button { color: red !important; } .button[/* state */ aria-disabled="TRUE" i] { color: gray; }',
+		'.button { color: red !important; } .button[data-state~="open"][data-label^="a"] { color: gray; }',
+		'[data-role="button"] { color: red !important; } [data-role="button"]:hover { color: blue; }',
+		'* { color: red !important; } *[disabled] { color: gray; }',
 	],
 });

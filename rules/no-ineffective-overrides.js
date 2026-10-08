@@ -1,3 +1,5 @@
+// @ts-check
+
 import {
 	find,
 	generate,
@@ -15,8 +17,15 @@ import {
 } from './utils/index.js';
 
 /**
+@import {CssNodePlain, DeclarationPlain, RulePlain, SelectorPlain} from '@eslint/css-tree';
 @import {CssicornContext} from './rule/cssicorn-context.js';
 @import {CssicornRule} from './rule/to-eslint-rule.js';
+*/
+
+/**
+@typedef {ReturnType<typeof getSelectorAnalysis>} SelectorAnalysis
+@typedef {{conditions: string[], layered: boolean, selectors?: SelectorAnalysis[]}} DeclarationContext
+@typedef {DeclarationContext & {selectors: SelectorAnalysis[], declaration: DeclarationPlain, property: string, important: boolean}} DeclarationRecord
 */
 
 const MESSAGE_ID = 'no-ineffective-overrides';
@@ -27,42 +36,71 @@ const CONDITIONAL_RULES = new Set(['media', 'supports', 'container']);
 const UNSUPPORTED_PSEUDO_CLASSES = new Set(['host', 'host-context', 'scope']);
 const ROLLBACK_KEYWORDS = new Set(['revert', 'revert-layer']);
 
+/**
+@param {string} property
+*/
 const getPropertyKey = property => {
 	const decoded = ident.decode(property);
 	return decoded.startsWith('--') ? decoded : normalizeCssIdentifier(property);
 };
 
+/**
+@param {CssNodePlain} node
+*/
 const getNodeKey = node => {
-	if (['ClassSelector', 'IdSelector', 'TypeSelector'].includes(node.type)) {
-		return JSON.stringify([node.type, ident.decode(node.name)]);
-	}
+	switch (node.type) {
+		case 'ClassSelector':
+		case 'IdSelector':
+		case 'TypeSelector': {
+			return JSON.stringify([node.type, ident.decode(node.name)]);
+		}
 
-	if (node.type === 'PseudoClassSelector') {
-		return generate({...node, name: normalizeCssIdentifier(node.name)});
-	}
+		case 'PseudoClassSelector': {
+			return generate({...node, name: normalizeCssIdentifier(node.name)});
+		}
 
-	return generate(node);
+		default: {
+			return generate(node);
+		}
+	}
 };
 
+/**
+@param {CssNodePlain[]} nodes
+*/
 const getSelectorKey = nodes => JSON.stringify(nodes.map(node => getNodeKey(node)));
 
+/**
+@param {CssNodePlain[]} nodes
+*/
 const getSelectorAnalysis = nodes => {
 	const terminalStart = nodes.findLastIndex(node => node.type === 'Combinator') + 1;
 	const baseNodes = nodes.filter((node, index) => index < terminalStart || node.type !== 'PseudoClassSelector');
+	const baseKeys = baseNodes.length > terminalStart ? [getSelectorKey(baseNodes)] : [];
+	const attributeBaseNodes = baseNodes.filter((node, index) => index < terminalStart || node.type !== 'AttributeSelector');
+	if (attributeBaseNodes.length > terminalStart && attributeBaseNodes.length < baseNodes.length) {
+		baseKeys.push(getSelectorKey(attributeBaseNodes));
+	}
+
 	return {
 		key: getSelectorKey(nodes),
-		baseKey: baseNodes.length > terminalStart ? getSelectorKey(baseNodes) : undefined,
+		baseKeys,
 		nodes,
 	};
 };
 
+/**
+@param {RulePlain} rule
+@param {SelectorAnalysis[] | undefined} parentSelectors
+*/
 const getResolvedSelectors = (rule, parentSelectors) => {
 	if (rule.prelude.type !== 'SelectorList' || (parentSelectors && parentSelectors.length !== 1)) {
 		return;
 	}
 
 	const selectors = [];
-	for (const selector of rule.prelude.children) {
+	// SelectorListPlain.children is typed as CssNodePlain[] rather than SelectorPlain[].
+	for (const selector of /** @type {SelectorPlain[]} */ (rule.prelude.children)) {
 		if (!canMatchSelector(selector) || find(selector, node => {
 			if (node.type === 'Raw' || node.type === 'PseudoElementSelector') {
 				return true;
@@ -104,22 +142,32 @@ const getResolvedSelectors = (rule, parentSelectors) => {
 	return selectors.length > 0 ? selectors : undefined;
 };
 
+/**
+@param {DeclarationPlain} declaration
+*/
 const getValueKeyword = declaration => {
 	if (declaration.value.type !== 'Raw') {
 		const identifier = getSingleValueIdentifier(declaration);
 		return identifier ? normalizeCssIdentifier(identifier.name) : undefined;
 	}
 
+	const {value} = declaration.value;
+	/**
+	@type {{type: number, value: string}[]}
+	*/
 	const tokens = [];
-	tokenize(declaration.value.value, (type, start, end) => {
+	tokenize(value, (type, start, end) => {
 		if (type !== tokenTypes.WhiteSpace && type !== tokenTypes.Comment) {
-			tokens.push({type, value: declaration.value.value.slice(start, end)});
+			tokens.push({type, value: value.slice(start, end)});
 		}
 	});
 
 	return tokens.length === 1 && tokens[0].type === tokenTypes.Ident ? normalizeCssIdentifier(tokens[0].value) : undefined;
 };
 
+/**
+@param {DeclarationPlain['value']} value
+*/
 const hasUnresolvedValue = value => {
 	if (value.type !== 'Raw') {
 		return hasSubstitutionOrRandomFunction(value);
@@ -136,6 +184,10 @@ const hasUnresolvedValue = value => {
 	return unresolved;
 };
 
+/**
+@param {DeclarationRecord} base
+@param {DeclarationRecord} override
+*/
 const getBlockingReason = (base, override) => {
 	if (base.important !== override.important) {
 		return base.important ? 'it is marked `!important`' : undefined;
@@ -157,13 +209,36 @@ const getBlockingReason = (base, override) => {
 */
 const create = context => {
 	const {sourceCode} = context;
+	/**
+	@type {WeakMap<CssNodePlain, DeclarationContext | undefined>}
+	*/
 	const contexts = new WeakMap();
+	/**
+	@type {DeclarationRecord[]}
+	*/
 	const records = [];
+	/**
+	@type {Map<string, DeclarationRecord[]>}
+	*/
 	const recordsByKey = new Map();
+	/**
+	@type {Set<string>}
+	*/
 	const rollbackProperties = new Set();
+	/**
+	@type {WeakMap<DeclarationPlain, boolean>}
+	*/
 	const blockerValidity = new WeakMap();
 
+	/**
+	@param {CssNodePlain | undefined} node
+	@returns {DeclarationContext | undefined}
+	*/
 	const getContext = node => {
+		if (!node) {
+			return;
+		}
+
 		if (contexts.has(node)) {
 			return contexts.get(node);
 		}
@@ -192,6 +267,9 @@ const create = context => {
 		return result;
 	};
 
+	/**
+	@param {DeclarationRecord} record
+	*/
 	const isUsableBlocker = record => {
 		const {declaration, property} = record;
 		if (!blockerValidity.has(declaration)) {
@@ -201,13 +279,14 @@ const create = context => {
 			blockerValidity.set(declaration, usable);
 		}
 
-		return blockerValidity.get(declaration);
+		return blockerValidity.get(declaration) === true;
 	};
 
 	context.on('Declaration', declaration => {
 		const property = getPropertyKey(declaration.property);
 		// Rollback can remove a blocker elsewhere in the cascade. Leave this property unchecked rather than simulate the entire cascade.
-		if (ROLLBACK_KEYWORDS.has(getValueKeyword(declaration))) {
+		const keyword = getValueKeyword(declaration);
+		if (keyword && ROLLBACK_KEYWORDS.has(keyword)) {
 			rollbackProperties.add(property);
 		}
 
@@ -217,7 +296,7 @@ const create = context => {
 		}
 
 		const record = {
-			...declarationContext, declaration, property, important: Boolean(declaration.important),
+			...declarationContext, selectors: declarationContext.selectors, declaration, property, important: Boolean(declaration.important),
 		};
 		records.push(record);
 		for (const selector of record.selectors) {
@@ -232,8 +311,12 @@ const create = context => {
 		}
 	});
 
+	/**
+	@param {DeclarationRecord} override
+	@param {SelectorAnalysis} selector
+	*/
 	const getBlocker = (override, selector) => {
-		for (const key of new Set([selector.key, selector.baseKey])) {
+		for (const key of new Set([selector.key, ...selector.baseKeys])) {
 			const entries = recordsByKey.get(JSON.stringify([override.property, key])) ?? [];
 			const blocker = entries.find(base => base.declaration !== override.declaration
 				&& base.conditions.length <= override.conditions.length
@@ -253,6 +336,9 @@ const create = context => {
 				continue;
 			}
 
+			/**
+			@type {DeclarationRecord | undefined}
+			*/
 			let blocker;
 			// A declaration in a selector list can still apply through an unblocked branch.
 			const allBlocked = override.selectors.every(selector => {
@@ -260,7 +346,7 @@ const create = context => {
 				return Boolean(blocker);
 			});
 
-			if (allBlocked) {
+			if (allBlocked && blocker) {
 				yield {
 					node: override.declaration,
 					messageId: MESSAGE_ID,

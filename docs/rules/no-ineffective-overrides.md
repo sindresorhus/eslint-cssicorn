@@ -57,6 +57,28 @@ Unlayered normal declarations take precedence over layered normal declarations, 
 
 For important declarations, layer priority reverses: layered important declarations take precedence over unlayered important declarations.
 
+```css
+/* ❌ */
+@layer components {
+	.button {
+		color: red !important;
+	}
+}
+.button:hover {
+	color: blue !important;
+}
+
+/* ✅ */
+@layer components {
+	.button {
+		color: red !important;
+	}
+	.button:hover {
+		color: blue !important;
+	}
+}
+```
+
 Responsive declarations and native nesting are also checked:
 
 ```css
@@ -81,7 +103,7 @@ Responsive declarations and native nesting are also checked:
 /* ❌ */
 .button {
 	color: red !important;
-	&:disabled {
+	&[aria-disabled="true"] {
 		color: gray;
 	}
 }
@@ -89,7 +111,7 @@ Responsive declarations and native nesting are also checked:
 /* ✅ */
 .button {
 	color: red;
-	&:disabled {
+	&[aria-disabled="true"] {
 		color: gray;
 	}
 }
@@ -97,7 +119,19 @@ Responsive declarations and native nesting are also checked:
 
 ## Supported relationships
 
-- The override adds pseudo-classes to a terminal compound that has no pseudo-classes in the base selector, such as `.toolbar > .button` and `.toolbar > .button:hover`. Additional states on an already stateful base, such as `.button:hover` and `.button:hover:focus`, are not compared. Arguments of retained pseudo-classes must have identical generated text; names and escapes inside them are not normalized. Arguments are not expanded or compared logically.
+State overrides must add pseudo-classes or attributes to the same element while keeping its ancestors unchanged:
+
+| Base selector | Override selector | Compared |
+| --- | --- | --- |
+| `.button` | `.button:hover` | Yes |
+| `.toolbar > .button` | `.toolbar > .button[disabled]:hover` | Yes |
+| `.button[type="submit"]` | `.button[type="submit"]:hover` | Yes |
+| `.button:hover` | `.button:hover:focus` | No |
+| `.button[disabled]` | `.button[disabled][data-state="open"]` | No |
+| `.button` | `.button.is-disabled` | No |
+
+The base element must have no pseudo-classes. Attribute additions are checked only when the base element also has no attributes. Attribute values are not compared logically.
+
 - The override uses the same selector under additional `@media`, `@supports`, or `@container` conditions, or in a different layered/unlayered context.
 - The base's conditions must be an exact prefix of the override's conditions. Separate blocks with identically generated conditions match; logical implication between different queries is not inferred.
 - Native nesting is resolved only when each parent rule has one selector. A leading `&` refers to that selector. Selectors without `&` use their leading combinator, or are descendants when no combinator is specified. Other placements of `&` are skipped.
@@ -111,7 +145,8 @@ This is a conservative check of explicit relationships in the current file, not 
 The rule is enabled only in `recommended`. It can report intentional browser fallbacks: an override may still apply in a browser that does not support the blocking declaration's value. Disable this rule when those fallbacks are deliberate.
 
 - Does not compare priority between two layered declarations with the same importance. Named layer ordering, sublayers, imports, and other files are not resolved.
-- Does not analyze shorthand/longhand relationships, property aliases, `all` interactions, additional classes or attributes, or changes to ancestor selectors. Simple-selector order must match.
+- Does not analyze shorthand/longhand relationships, property aliases, `all` interactions, additional classes, or changes to ancestor selectors. Simple-selector order must match.
+- Retained attributes and pseudo-class arguments must have identical generated text; names and escapes inside them are not normalized. Arguments are not expanded or compared logically.
 - Skips unparsed selector arguments (such as `:state()`), pseudo-elements, namespace type selectors, escaped wildcard type names, shadow-tree pseudo-classes, `:scope`, `@scope`, `@starting-style`, keyframes, and unknown grouping rules.
 - A property is left unchecked throughout the file if any declaration gives it `revert` or `revert-layer`. A rollback on `all` leaves the file unchecked. Rollbacks through shorthands or substitutions are not analyzed.
 - Declarations with substitution functions such as `var()` are not used as blockers. Invalid or unknown ordinary property values are not used as blockers either. Browser support, custom property registration, and computed values are not evaluated.
