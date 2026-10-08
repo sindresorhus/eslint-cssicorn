@@ -15,6 +15,7 @@ export {default as 'no-invalid-media-features'} from './no-invalid-media-feature
 export {default as 'no-invalid-property-references'} from './no-invalid-property-references.js';
 export {default as 'no-nesting-with-mixed-specificity'} from './no-nesting-with-mixed-specificity.js';
 export {default as 'no-overflow-axis-coercion'} from './no-overflow-axis-coercion.js';
+export {default as 'no-redundant-functions'} from './no-redundant-functions.js';
 export {default as 'no-redundant-longhand-properties'} from './no-redundant-longhand-properties.js';
 export {default as 'no-redundant-nested-style-rules'} from './no-redundant-nested-style-rules.js';
 export {default as 'no-redundant-nesting-selector'} from './no-redundant-nesting-selector.js';

@@ -1,4 +1,5 @@
 import {parse, walk} from '@eslint/css-tree';
+import colorFunctionsWithAlpha from './shared/css-color-functions.js';
 import {LEGACY_PSEUDO_ELEMENTS} from './shared/css-selector-specificity.js';
 import {
 	isCssModulesInteropDeclaration,
@@ -17,7 +18,6 @@ const messages = {
 };
 
 const legacyColorFunctions = new Set(['rgb', 'rgba', 'hsl', 'hsla']);
-const colorFunctionsWithAlpha = new Set(['rgb', 'rgba', 'hsl', 'hsla', 'hwb', 'lab', 'lch', 'oklab', 'oklch', 'color']);
 // Matches the start of every function in `colorFunctionsWithAlpha` (`lab(` and `lch(` also match `oklab(` and `oklch(`), and backslashes because a name can be escaped.
 const colorFunctionPattern = /(?:rgba?|hsla?|hwb|lab|lch|color)\(|\\/iv;
 const decimalPattern = /^(?<sign>[+\-]?)(?<integer>\d*)(?:\.(?<fraction>\d+))?$/v;

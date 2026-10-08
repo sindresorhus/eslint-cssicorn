@@ -33,6 +33,7 @@ test.snapshot({
 		'a { margin: calc(--spacing() + 0px) calc(--spacing() + 0px); }',
 		'a { margin: calc(1px + 1px) CALC(1px + 1px); }',
 		'a { margin: 1px 1.0px; }',
+		'a { padding: 10px 010.0PX; }',
 		'a { margin: inherit inherit; }',
 		'a { margin: 1px 1px 1px 1px 1px; }',
 		'a { border-spacing: 1px 1px; }',
