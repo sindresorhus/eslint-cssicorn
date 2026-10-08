@@ -12,6 +12,14 @@ test({
 				{messageId: 'require-selector-scope', column: 16, endColumn: 27},
 			],
 		},
+		{
+			code: '.card, button { .local { a {} } }',
+			errors: [{messageId: 'require-selector-scope', column: 8, endColumn: 14}],
+		},
+		{
+			code: '.card { :not(&) { .local { a {} } } }',
+			errors: [{messageId: 'require-selector-scope', column: 9, endColumn: 16}],
+		},
 	],
 });
 
@@ -78,6 +86,7 @@ test.snapshot({
 		'.card /* keep */ button { color: red !important; }',
 		'.card { content: "button, :not(.card)"; background: url("button"); --selector: button; }',
 		String.raw`.card { :unknown("&") {} :unknown(\26) {} }`,
+		'.card { [data-value="&"] {} }',
 		String.raw`.card { :\69s(.local, :unknown("&")) {} }`,
 	],
 	invalid: [
