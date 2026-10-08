@@ -115,22 +115,6 @@ Slotted arguments can supply a boundary:
 
 Exempt global and reset files. Leave the rule disabled for styles already scoped by [Vue](https://vuejs.org/api/sfc-css-features.html#scoped-css), [Svelte](https://svelte.dev/docs/svelte/scoped-styles), or [Astro](https://docs.astro.build/en/guides/styling/#scoped-styles).
 
-```js
-import cssicorn from 'eslint-cssicorn';
-
-export default [
-	cssicorn.configs.recommended,
-	{
-		files: ['src/components/**/*.css'],
-		ignores: ['**/global.css', '**/reset.css'],
-		rules: {
-			'cssicorn/prefer-nesting': 'off',
-			'cssicorn/require-selector-scope': 'error',
-		},
-	},
-];
-```
-
 Disable `prefer-nesting` because its autofix can introduce unanchored wrappers: `body :is(.card, .other) { color: red; }` becomes `body { .card, .other { color: red; } }`, whose `body` branch fails this rule.
 
 ## Limitations
