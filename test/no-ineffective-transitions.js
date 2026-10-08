@@ -4,6 +4,53 @@ const {test} = getTester(import.meta);
 
 test({
 	valid: [
+		'a { transition: display 1s; -webkit-transition: opacity 1s; }',
+		'a { -webkit-transition: display 1s; transition: opacity 1s; }',
+		'a { transition: display 1s; -webkit-transition-property: opacity; }',
+		'a { -webkit-transition: display 1s; transition-property: opacity; }',
+		'a { -webkit-transition-property: display; }',
+		'a { -webkit-transition: display 1s; transition-behavior: allow-discrete; }',
+		'a { transition-behavior: allow-discrete !important; -webkit-transition: display 1s; }',
+		'a { -webkit-transition: opacity 1s !important; transition: display 1s; }',
+		'a { transition: display 1s; -webkit-transition: var(--transition); }',
+		'a { transition: display 1s; -webkit-transition-property: var(--target); }',
+		'a { -moz-transition: display 1s; }',
+		'@keyframes fade { from { -webkit-transition: display 1s; } }',
+		':export { -webkit-transition: display 1s; }',
+	],
+	invalid: [
+		...[
+			['a { -webkit-transition: display 1s; }', 'a { -webkit-transition: allow-discrete display 1s; }'],
+			['a { -WEBKIT-TRANSITION: /* keep */ display 1s normal !important; }', 'a { -WEBKIT-TRANSITION: /* keep */ display 1s allow-discrete !important; }'],
+			['a { -webkit-transition: display 1s allow-discrete; transition: display 1s; }', 'a { -webkit-transition: display 1s allow-discrete; transition: allow-discrete display 1s; }'],
+			['a { -webkit-transition: display 1s !important; transition: opacity 1s; }', 'a { -webkit-transition: allow-discrete display 1s !important; transition: opacity 1s; }'],
+			[
+				'a { transition: opacity 1s !important; -webkit-transition: display 1s !important; }',
+				'a { transition: opacity 1s !important; -webkit-transition: allow-discrete display 1s !important; }',
+			],
+			['a { -webkit-transition-property: display; transition-behavior: normal; }', 'a { -webkit-transition-property: display; transition-behavior: allow-discrete; }'],
+			['a { transition: opacity 1s normal; -webkit-transition-property: display; }', 'a { transition: opacity 1s allow-discrete; -webkit-transition-property: display; }'],
+		].map(([code, output]) => ({
+			code,
+			errors: [{
+				messageId: 'no-ineffective-transitions/discrete',
+				data: {property: 'display'},
+				suggestions: [{messageId: 'no-ineffective-transitions/allow-discrete', output}],
+			}],
+		})),
+		...['initial', 'unset'].map(value => ({
+			code: `a { -webkit-transition: ${value}; -webkit-transition-property: display; }`,
+			errors: [{messageId: 'no-ineffective-transitions/discrete', data: {property: 'display'}, suggestions: 0}],
+		})),
+		{
+			code: 'a { -webkit-transition-property: will-change; }',
+			errors: [{messageId: 'no-ineffective-transitions/non-animatable', data: {property: 'will-change'}, suggestions: 0}],
+		},
+	],
+});
+
+test({
+	valid: [
 		'a { transition: -webkit-backface-visibility 1s allow-discrete; }',
 		'a { transition: backface-visibility 1s, -webkit-backface-visibility 1s allow-discrete; }',
 		'a { transition: -webkit-backface-visibility 1s, backface-visibility 1s allow-discrete; }',
@@ -228,7 +275,6 @@ test.snapshot({
 		]),
 		'a { transition-property: --progress, -webkit-display, future-property; transition-behavior: normal; }',
 		'a { transition: --progress 1s, -webkit-display 1s, future-property 1s; }',
-		'a { -webkit-transition: display 1s; }',
 		'a { --transition: display 1s; color: "display"; }',
 		'a { transition: margin 1s, background 1s, font 1s; }',
 		...[

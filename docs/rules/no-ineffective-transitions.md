@@ -48,7 +48,7 @@ The `transition` shorthand defaults omitted behavior to `normal`. Put a separate
 
 Also checks shorthands whose longhands all have the same known animation type, such as `overflow`, `background-repeat`, and `transition`. Explicit `initial` and `unset` on `transition-behavior`, `transition`, or `all` establish `normal` behavior.
 
-Later matching targets, `all`, and known shorthand expansions override earlier entries. Resolves `word-wrap` and audited `-webkit-` target aliases, such as `-webkit-backface-visibility`.
+Later matching targets, `all`, and known shorthand expansions override earlier entries. Resolves `word-wrap` and audited `-webkit-` target aliases, such as `-webkit-backface-visibility`, plus `-webkit-transition` and `-webkit-transition-property` declarations.
 
 ## Limitations
 

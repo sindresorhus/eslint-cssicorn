@@ -31,7 +31,7 @@ const discretePropertyNames = new Set(discreteProperties);
 const transitionProperties = new Set(['transition', 'transition-property', 'transition-behavior', 'all']);
 const longhandProperties = ['transition-property', 'transition-behavior'];
 
-const targetPropertyAliases = new Map([
+const propertyAliases = new Map([
 	// https://www.w3.org/TR/css-text-3/#overflow-wrap-property
 	['word-wrap', 'overflow-wrap'],
 	// Explicit legacy name aliases: https://compat.spec.whatwg.org/#css-property-aliases
@@ -192,7 +192,7 @@ const getTransitionProblems = function * (targets, behaviors, lexer) {
 	const coveredProperties = new Set();
 	for (let index = targets.length - 1; index >= 0; index--) {
 		const {node, name: targetName} = targets[index];
-		const name = targetPropertyAliases.get(targetName) ?? targetName;
+		const name = propertyAliases.get(targetName) ?? targetName;
 		const affectedProperties = shorthandToAffectedProperties.get(name);
 		if (
 			coveredProperties.has('all')
@@ -244,7 +244,8 @@ const create = context => {
 				continue;
 			}
 
-			const property = normalizeCssIdentifier(declaration.property);
+			const declaredProperty = normalizeCssIdentifier(declaration.property);
+			const property = propertyAliases.get(declaredProperty) ?? declaredProperty;
 			if (transitionProperties.has(property)) {
 				declarations.push({declaration, property});
 			}
