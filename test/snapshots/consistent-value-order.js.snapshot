@@ -1007,6 +1007,40 @@ Output:
 
 `;
 
+exports[`invalid(55): a { border: rgb(from red r g b / .4) solid 1px; } 1`] = `
+
+  1 | a { border: rgb(from red r g b / .4) solid 1px; }
+
+`;
+
+exports[`invalid(55): a { border: rgb(from red r g b / .4) solid 1px; } 2`] = `
+
+Message:
+> 1 | a { border: rgb(from red r g b / .4) solid 1px; }
+    |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Use consistent ordering for \`border\` value components.
+
+Output:
+  1 | a { border: 1px solid rgb(from red r g b / .4); }
+
+`;
+
+exports[`invalid(56): a { border: r\\67 b(1 2 3)solid calc(1p\\78); } 1`] = `
+
+  1 | a { border: r\\67 b(1 2 3)solid calc(1p\\78); }
+
+`;
+
+exports[`invalid(56): a { border: r\\67 b(1 2 3)solid calc(1p\\78); } 2`] = `
+
+Message:
+> 1 | a { border: r\\67 b(1 2 3)solid calc(1p\\78); }
+    |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Use consistent ordering for \`border\` value components.
+
+Output:
+  1 | a { border: calc(1p\\78) solid r\\67 b(1 2 3); }
+
+`;
+
 exports[`invalid(6): a { border-block: red solid 1px; } 1`] = `
 
   1 | a { border-block: red solid 1px; }

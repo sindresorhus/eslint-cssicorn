@@ -90,7 +90,7 @@ a {
 
 ## Limitations
 
-- Only checks values recognized by the CSS lexer. Invalid values and unsupported newer syntax are left unchanged.
+- Only checks values recognized by the CSS lexer. Unmatched values and unsupported newer syntax are left unchanged. The lexer can recognize some values that browsers reject.
 - Supports ASCII casing, CSS escapes, and vendor-prefixed spellings. Fixes retain the original spelling, spacing, indentation, and line endings, adding spaces where needed to keep component tokens separate.
 - Reports out-of-order groups containing comments without fixing them, including comments inside functions.
 - Ignores custom properties, CSS Modules `:export` and `:import()` declarations, substitutions such as `var()`, `env()`, and `attr()`, and random functions. Ordinary math and color functions are supported when their component roles are known.

@@ -97,6 +97,8 @@ test.snapshot({
 		'@layer theme { a { box-shadow: red 0 0 inset; } }',
 		'@scope (.theme) { a { text-shadow: red 0 0; } }',
 		'@keyframes glow { to { box-shadow: red 0 0 inset; } }',
+		'a { border: rgb(from red r g b / .4) solid 1px; }',
+		String.raw`a { border: r\67 b(1 2 3)solid calc(1p\78); }`,
 	],
 });
 
@@ -185,4 +187,13 @@ nodeTest('fixes converge with longhand combination and are idempotent', () => {
 	assert.equal(result.fixed, true);
 	assert.deepEqual(result.messages, []);
 	assert.deepEqual(linter.verifyAndFix(output, config, {filename: 'test.css'}), {...result, fixed: false});
+});
+
+nodeTest('presets enable value ordering only for recommended and all', () => {
+	const linter = new Linter();
+	for (const [preset, expectedCount] of [['recommended', 1], ['all', 1], ['unopinionated', 0]]) {
+		const messages = linter.verify('a { border: red solid 1px; }', plugin.configs[preset], {filename: 'test.css'});
+		const orderingMessages = messages.filter(message => message.ruleId === 'cssicorn/consistent-value-order');
+		assert.equal(orderingMessages.length, expectedCount, preset);
+	}
 });
