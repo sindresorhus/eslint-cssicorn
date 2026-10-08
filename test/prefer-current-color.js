@@ -130,6 +130,7 @@ test.snapshot({
 		String.raw`a { color: hsl(0deg 100% 50%); border-color: hsl(0d\65 g 100% 50%); }`,
 		String.raw`a { color: red; border: 1px \73 olid red; }`,
 		'a { color: red; background-image: image(url("icon.svg"), red); }',
+		String.raw`a { color: red; background: re\64  url(red); }`,
 	],
 });
 

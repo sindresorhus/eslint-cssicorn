@@ -1081,6 +1081,23 @@ Suggestion 1/1: Replace with \`currentcolor\`.:
 
 `;
 
+exports[`invalid(61): a { color: red; background: re\\64  url(red); } 1`] = `
+
+  1 | a { color: red; background: re\\64  url(red); }
+
+`;
+
+exports[`invalid(61): a { color: red; background: re\\64  url(red); } 2`] = `
+
+Message:
+> 1 | a { color: red; background: re\\64  url(red); }
+    |                             ^^^^^^ Prefer \`currentcolor\` over repeating the foreground color.
+
+Suggestion 1/1: Replace with \`currentcolor\`.:
+  1 | a { color: red; background: currentcolor url(red); }
+
+`;
+
 exports[`invalid(7): a { color: rgb(255 0 0); border-color: rgb(255 0 0); } 1`] = `
 
   1 | a { color: rgb(255 0 0); border-color: rgb(255 0 0); }
