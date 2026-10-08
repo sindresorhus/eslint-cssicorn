@@ -29,6 +29,7 @@ const create = context => {
 			|| value.type !== 'Value'
 			|| value.children.length === 0
 			|| value.children.length > 2
+			// eslint-disable-next-line unicorn/no-negated-array-predicate -- every() narrows the array to identifiers for TypeScript.
 			|| !value.children.every(node => node.type === 'Identifier')
 		) {
 			return;
