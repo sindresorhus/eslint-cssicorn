@@ -1,0 +1,509 @@
+exports[`invalid(1): @keyframes fade { from { opacity: 0; } } @keyframes fade { to { opacity: 1; } } 1`] = `
+
+  1 | @keyframes fade { from { opacity: 0; } } @keyframes fade { to { opacity: 1; } }
+
+`;
+
+exports[`invalid(1): @keyframes fade { from { opacity: 0; } } @keyframes fade { to { opacity: 1; } } 2`] = `
+
+Message:
+> 1 | @keyframes fade { from { opacity: 0; } } @keyframes fade { to { opacity: 1; } }
+    |                                                     ^^^^ Duplicate \`@keyframes\` definition \`fade\`. The first definition is on line 1.
+
+`;
+
+exports[`invalid(10): @POSITION-TRY --above {} @position-try --above {} 1`] = `
+
+  1 | @POSITION-TRY --above {} @position-try --above {}
+
+`;
+
+exports[`invalid(10): @POSITION-TRY --above {} @position-try --above {} 2`] = `
+
+Message:
+> 1 | @POSITION-TRY --above {} @position-try --above {}
+    |                                        ^^^^^^^ Duplicate \`@position-try\` definition \`--above\`. The first definition is on line 1.
+
+`;
+
+exports[`invalid(11): @\\6b eyframes fade {} @keyframes fade {} 1`] = `
+
+  1 | @\\6b eyframes fade {} @keyframes fade {}
+
+`;
+
+exports[`invalid(11): @\\6b eyframes fade {} @keyframes fade {} 2`] = `
+
+Message:
+> 1 | @\\6b eyframes fade {} @keyframes fade {}
+    |                                  ^^^^ Duplicate \`@keyframes\` definition \`fade\`. The first definition is on line 1.
+
+`;
+
+exports[`invalid(12): @\\70 roperty --color {} @property --color {} 1`] = `
+
+  1 | @\\70 roperty --color {} @property --color {}
+
+`;
+
+exports[`invalid(12): @\\70 roperty --color {} @property --color {} 2`] = `
+
+Message:
+> 1 | @\\70 roperty --color {} @property --color {}
+    |                                   ^^^^^^^ Duplicate \`@property\` definition \`--color\`. The first definition is on line 1.
+
+`;
+
+exports[`invalid(13): @counter-style do\\74 s {} @counter-style dots {} 1`] = `
+
+  1 | @counter-style do\\74 s {} @counter-style dots {}
+
+`;
+
+exports[`invalid(13): @counter-style do\\74 s {} @counter-style dots {} 2`] = `
+
+Message:
+> 1 | @counter-style do\\74 s {} @counter-style dots {}
+    |                                          ^^^^ Duplicate \`@counter-style\` definition \`dots\`. The first definition is on line 1.
+
+`;
+
+exports[`invalid(14): @property --c\\6f lor {} @property --color {} 1`] = `
+
+  1 | @property --c\\6f lor {} @property --color {}
+
+`;
+
+exports[`invalid(14): @property --c\\6f lor {} @property --color {} 2`] = `
+
+Message:
+> 1 | @property --c\\6f lor {} @property --color {}
+    |                                   ^^^^^^^ Duplicate \`@property\` definition \`--color\`. The first definition is on line 1.
+
+`;
+
+exports[`invalid(15): @position-try --a\\62 ove {} @position-try --above {} 1`] = `
+
+  1 | @position-try --a\\62 ove {} @position-try --above {}
+
+`;
+
+exports[`invalid(15): @position-try --a\\62 ove {} @position-try --above {} 2`] = `
+
+Message:
+> 1 | @position-try --a\\62 ove {} @position-try --above {}
+    |                                           ^^^^^^^ Duplicate \`@position-try\` definition \`--above\`. The first definition is on line 1.
+
+`;
+
+exports[`invalid(16): @keyframes f\\61 de {} @keyframes fade {} 1`] = `
+
+  1 | @keyframes f\\61 de {} @keyframes fade {}
+
+`;
+
+exports[`invalid(16): @keyframes f\\61 de {} @keyframes fade {} 2`] = `
+
+Message:
+> 1 | @keyframes f\\61 de {} @keyframes fade {}
+    |                                  ^^^^ Duplicate \`@keyframes\` definition \`fade\`. The first definition is on line 1.
+
+`;
+
+exports[`invalid(17): @keyframes \"fade\" {} @keyframes fade {} 1`] = `
+
+  1 | @keyframes "fade" {} @keyframes fade {}
+
+`;
+
+exports[`invalid(17): @keyframes \"fade\" {} @keyframes fade {} 2`] = `
+
+Message:
+> 1 | @keyframes "fade" {} @keyframes fade {}
+    |                                 ^^^^ Duplicate \`@keyframes\` definition \`fade\`. The first definition is on line 1.
+
+`;
+
+exports[`invalid(18): @keyframes fade {} @keyframes \"f\\61 de\" {} 1`] = `
+
+  1 | @keyframes fade {} @keyframes "f\\61 de" {}
+
+`;
+
+exports[`invalid(18): @keyframes fade {} @keyframes \"f\\61 de\" {} 2`] = `
+
+Message:
+> 1 | @keyframes fade {} @keyframes "f\\61 de" {}
+    |                               ^^^^^^^^^ Duplicate \`@keyframes\` definition \`fade\`. The first definition is on line 1.
+
+`;
+
+exports[`invalid(19): @keyframes 'fade' {} @keyframes \"fade\" {} 1`] = `
+
+  1 | @keyframes 'fade' {} @keyframes "fade" {}
+
+`;
+
+exports[`invalid(19): @keyframes 'fade' {} @keyframes \"fade\" {} 2`] = `
+
+Message:
+> 1 | @keyframes 'fade' {} @keyframes "fade" {}
+    |                                 ^^^^^^ Duplicate \`@keyframes\` definition \`fade\`. The first definition is on line 1.
+
+`;
+
+exports[`invalid(2): @property --color { syntax: \"<color>\"; inherits: false; initial-value: red; } @property --color { syntax: \"<color>\"; inherits: false; initial-value: blue; } 1`] = `
+
+  1 | @property --color { syntax: "<color>"; inherits: false; initial-value: red; } @property --color { syntax: "<color>"; inherits: false; initial-value: blue; }
+
+`;
+
+exports[`invalid(2): @property --color { syntax: \"<color>\"; inherits: false; initial-value: red; } @property --color { syntax: \"<color>\"; inherits: false; initial-value: blue; } 2`] = `
+
+Message:
+> 1 | @property --color { syntax: "<color>"; inherits: false; initial-value: red; } @property --color { syntax: "<color>"; inherits: false; initial-value: blue; }
+    |                                                                                         ^^^^^^^ Duplicate \`@property\` definition \`--color\`. The first definition is on line 1.
+
+`;
+
+exports[`invalid(20): @keyframes \"\" {} @keyframes \"\" {} 1`] = `
+
+  1 | @keyframes "" {} @keyframes "" {}
+
+`;
+
+exports[`invalid(20): @keyframes \"\" {} @keyframes \"\" {} 2`] = `
+
+Message:
+> 1 | @keyframes "" {} @keyframes "" {}
+    |                             ^^ Duplicate \`@keyframes\` definition \`\`. The first definition is on line 1.
+
+`;
+
+exports[`invalid(21): @keyframes \"none\" {} @keyframes \"none\" {} 1`] = `
+
+  1 | @keyframes "none" {} @keyframes "none" {}
+
+`;
+
+exports[`invalid(21): @keyframes \"none\" {} @keyframes \"none\" {} 2`] = `
+
+Message:
+> 1 | @keyframes "none" {} @keyframes "none" {}
+    |                                 ^^^^^^ Duplicate \`@keyframes\` definition \`none\`. The first definition is on line 1.
+
+`;
+
+exports[`invalid(22): @-webkit-keyframes fade {} @-WEBKIT-KEYFRAMES fade {} 1`] = `
+
+  1 | @-webkit-keyframes fade {} @-WEBKIT-KEYFRAMES fade {}
+
+`;
+
+exports[`invalid(22): @-webkit-keyframes fade {} @-WEBKIT-KEYFRAMES fade {} 2`] = `
+
+Message:
+> 1 | @-webkit-keyframes fade {} @-WEBKIT-KEYFRAMES fade {}
+    |                                               ^^^^ Duplicate \`@-webkit-keyframes\` definition \`fade\`. The first definition is on line 1.
+
+`;
+
+exports[`invalid(23): @-moz-keyframes fade {} @-moz-keyframes fade {} 1`] = `
+
+  1 | @-moz-keyframes fade {} @-moz-keyframes fade {}
+
+`;
+
+exports[`invalid(23): @-moz-keyframes fade {} @-moz-keyframes fade {} 2`] = `
+
+Message:
+> 1 | @-moz-keyframes fade {} @-moz-keyframes fade {}
+    |                                         ^^^^ Duplicate \`@-moz-keyframes\` definition \`fade\`. The first definition is on line 1.
+
+`;
+
+exports[`invalid(24): @-o-keyframes fade {} @-o-keyframes fade {} 1`] = `
+
+  1 | @-o-keyframes fade {} @-o-keyframes fade {}
+
+`;
+
+exports[`invalid(24): @-o-keyframes fade {} @-o-keyframes fade {} 2`] = `
+
+Message:
+> 1 | @-o-keyframes fade {} @-o-keyframes fade {}
+    |                                     ^^^^ Duplicate \`@-o-keyframes\` definition \`fade\`. The first definition is on line 1.
+
+`;
+
+exports[`invalid(25): @-webkit-keyframes fade {} @keyframes fade {} @keyframes fade {} 1`] = `
+
+  1 | @-webkit-keyframes fade {} @keyframes fade {} @keyframes fade {}
+
+`;
+
+exports[`invalid(25): @-webkit-keyframes fade {} @keyframes fade {} @keyframes fade {} 2`] = `
+
+Message:
+> 1 | @-webkit-keyframes fade {} @keyframes fade {} @keyframes fade {}
+    |                                                          ^^^^ Duplicate \`@keyframes\` definition \`fade\`. The first definition is on line 1.
+
+`;
+
+exports[`invalid(26): @media (width > 40rem) { @keyframes fade {} @keyframes fade {} } 1`] = `
+
+  1 | @media (width > 40rem) { @keyframes fade {} @keyframes fade {} }
+
+`;
+
+exports[`invalid(26): @media (width > 40rem) { @keyframes fade {} @keyframes fade {} } 2`] = `
+
+Message:
+> 1 | @media (width > 40rem) { @keyframes fade {} @keyframes fade {} }
+    |                                                        ^^^^ Duplicate \`@keyframes\` definition \`fade\`. The first definition is on line 1.
+
+`;
+
+exports[`invalid(27): @supports (display: grid) { @property --color {} @property --color {} } 1`] = `
+
+  1 | @supports (display: grid) { @property --color {} @property --color {} }
+
+`;
+
+exports[`invalid(27): @supports (display: grid) { @property --color {} @property --color {} } 2`] = `
+
+Message:
+> 1 | @supports (display: grid) { @property --color {} @property --color {} }
+    |                                                            ^^^^^^^ Duplicate \`@property\` definition \`--color\`. The first definition is on line 1.
+
+`;
+
+exports[`invalid(28): @container card (width > 20rem) { @position-try --above {} @position-try --above {} } 1`] = `
+
+  1 | @container card (width > 20rem) { @position-try --above {} @position-try --above {} }
+
+`;
+
+exports[`invalid(28): @container card (width > 20rem) { @position-try --above {} @position-try --above {} } 2`] = `
+
+Message:
+> 1 | @container card (width > 20rem) { @position-try --above {} @position-try --above {} }
+    |                                                                          ^^^^^^^ Duplicate \`@position-try\` definition \`--above\`. The first definition is on line 1.
+
+`;
+
+exports[`invalid(29): @layer theme { @counter-style dots {} @counter-style dots {} } 1`] = `
+
+  1 | @layer theme { @counter-style dots {} @counter-style dots {} }
+
+`;
+
+exports[`invalid(29): @layer theme { @counter-style dots {} @counter-style dots {} } 2`] = `
+
+Message:
+> 1 | @layer theme { @counter-style dots {} @counter-style dots {} }
+    |                                                      ^^^^ Duplicate \`@counter-style\` definition \`dots\`. The first definition is on line 1.
+
+`;
+
+exports[`invalid(3): @counter-style dots { system: cyclic; symbols: \"•\"; } @counter-style dots { system: cyclic; symbols: \"*\"; } 1`] = `
+
+  1 | @counter-style dots { system: cyclic; symbols: "•"; } @counter-style dots { system: cyclic; symbols: "*"; }
+
+`;
+
+exports[`invalid(3): @counter-style dots { system: cyclic; symbols: \"•\"; } @counter-style dots { system: cyclic; symbols: \"*\"; } 2`] = `
+
+Message:
+> 1 | @counter-style dots { system: cyclic; symbols: "•"; } @counter-style dots { system: cyclic; symbols: "*"; }
+    |                                                                      ^^^^ Duplicate \`@counter-style\` definition \`dots\`. The first definition is on line 1.
+
+`;
+
+exports[`invalid(30): @scope (.card) { @keyframes fade {} @keyframes fade {} } 1`] = `
+
+  1 | @scope (.card) { @keyframes fade {} @keyframes fade {} }
+
+`;
+
+exports[`invalid(30): @scope (.card) { @keyframes fade {} @keyframes fade {} } 2`] = `
+
+Message:
+> 1 | @scope (.card) { @keyframes fade {} @keyframes fade {} }
+    |                                                ^^^^ Duplicate \`@keyframes\` definition \`fade\`. The first definition is on line 1.
+
+`;
+
+exports[`invalid(31): .card { @media (width > 40rem) { @keyframes fade {} @keyframes fade {} } } 1`] = `
+
+  1 | .card { @media (width > 40rem) { @keyframes fade {} @keyframes fade {} } }
+
+`;
+
+exports[`invalid(31): .card { @media (width > 40rem) { @keyframes fade {} @keyframes fade {} } } 2`] = `
+
+Message:
+> 1 | .card { @media (width > 40rem) { @keyframes fade {} @keyframes fade {} } }
+    |                                                                ^^^^ Duplicate \`@keyframes\` definition \`fade\`. The first definition is on line 1.
+
+`;
+
+exports[`invalid(32): @keyframes fade /* first */ {} /* keep */ @keyframes /* second */ fade {} 1`] = `
+
+  1 | @keyframes fade /* first */ {} /* keep */ @keyframes /* second */ fade {}
+
+`;
+
+exports[`invalid(32): @keyframes fade /* first */ {} /* keep */ @keyframes /* second */ fade {} 2`] = `
+
+Message:
+> 1 | @keyframes fade /* first */ {} /* keep */ @keyframes /* second */ fade {}
+    |                                                                   ^^^^ Duplicate \`@keyframes\` definition \`fade\`. The first definition is on line 1.
+
+`;
+
+exports[`invalid(33): @media (width > 40rem) {\r\n  @keyframes fade {}\r\n  /* keep */ @keyframes \"fade\" {}\r\n} 1`] = `
+
+  1 | @media (width > 40rem) {
+  2 |   @keyframes fade {}
+  3 |   /* keep */ @keyframes "fade" {}
+  4 | }
+
+`;
+
+exports[`invalid(33): @media (width > 40rem) {\r\n  @keyframes fade {}\r\n  /* keep */ @keyframes \"fade\" {}\r\n} 2`] = `
+
+Message:
+  1 | @media (width > 40rem) {
+  2 |   @keyframes fade {}
+> 3 |   /* keep */ @keyframes "fade" {}
+    |                         ^^^^^^ Duplicate \`@keyframes\` definition \`fade\`. The first definition is on line 2.
+  4 | }
+
+`;
+
+exports[`invalid(34): @property --color {} @property --color { syntax: \"<color>\"; inherits: false; initial-value: red; } 1`] = `
+
+  1 | @property --color {} @property --color { syntax: "<color>"; inherits: false; initial-value: red; }
+
+`;
+
+exports[`invalid(34): @property --color {} @property --color { syntax: \"<color>\"; inherits: false; initial-value: red; } 2`] = `
+
+Message:
+> 1 | @property --color {} @property --color { syntax: "<color>"; inherits: false; initial-value: red; }
+    |                                ^^^^^^^ Duplicate \`@property\` definition \`--color\`. The first definition is on line 1.
+
+`;
+
+exports[`invalid(35): @property --color { syntax: \"<color>\"; inherits: false; initial-value: red; } @property --color { syntax: \"<color>\"; inherits: false; initial-value: future-color(red); } 1`] = `
+
+  1 | @property --color { syntax: "<color>"; inherits: false; initial-value: red; } @property --color { syntax: "<color>"; inherits: false; initial-value: future-color(red); }
+
+`;
+
+exports[`invalid(35): @property --color { syntax: \"<color>\"; inherits: false; initial-value: red; } @property --color { syntax: \"<color>\"; inherits: false; initial-value: future-color(red); } 2`] = `
+
+Message:
+> 1 | @property --color { syntax: "<color>"; inherits: false; initial-value: red; } @property --color { syntax: "<color>"; inherits: false; initial-value: future-color(red); }
+    |                                                                                         ^^^^^^^ Duplicate \`@property\` definition \`--color\`. The first definition is on line 1.
+
+`;
+
+exports[`invalid(4): @position-try --above { top: 0; } @position-try --above { bottom: 0; } 1`] = `
+
+  1 | @position-try --above { top: 0; } @position-try --above { bottom: 0; }
+
+`;
+
+exports[`invalid(4): @position-try --above { top: 0; } @position-try --above { bottom: 0; } 2`] = `
+
+Message:
+> 1 | @position-try --above { top: 0; } @position-try --above { bottom: 0; }
+    |                                                 ^^^^^^^ Duplicate \`@position-try\` definition \`--above\`. The first definition is on line 1.
+
+`;
+
+exports[`invalid(5): @keyframes fade {} a { color: red; } @keyframes slide {} @keyframes fade {} 1`] = `
+
+  1 | @keyframes fade {} a { color: red; } @keyframes slide {} @keyframes fade {}
+
+`;
+
+exports[`invalid(5): @keyframes fade {} a { color: red; } @keyframes slide {} @keyframes fade {} 2`] = `
+
+Message:
+> 1 | @keyframes fade {} a { color: red; } @keyframes slide {} @keyframes fade {}
+    |                                                                     ^^^^ Duplicate \`@keyframes\` definition \`fade\`. The first definition is on line 1.
+
+`;
+
+exports[`invalid(6): @keyframes fade {}\n@keyframes fade {}\n@keyframes fade {} 1`] = `
+
+  1 | @keyframes fade {}
+  2 | @keyframes fade {}
+  3 | @keyframes fade {}
+
+`;
+
+exports[`invalid(6): @keyframes fade {}\n@keyframes fade {}\n@keyframes fade {} 2`] = `
+
+Message:
+  1 | @keyframes fade {}
+> 2 | @keyframes fade {}
+    |            ^^^^ Duplicate \`@keyframes\` definition \`fade\`. The first definition is on line 1.
+  3 | @keyframes fade {}
+
+`;
+
+exports[`invalid(6): @keyframes fade {}\n@keyframes fade {}\n@keyframes fade {} 3`] = `
+
+Message:
+  1 | @keyframes fade {}
+  2 | @keyframes fade {}
+> 3 | @keyframes fade {}
+    |            ^^^^ Duplicate \`@keyframes\` definition \`fade\`. The first definition is on line 1.
+
+`;
+
+exports[`invalid(7): @KEYFRAMES fade {} @keyframes fade {} 1`] = `
+
+  1 | @KEYFRAMES fade {} @keyframes fade {}
+
+`;
+
+exports[`invalid(7): @KEYFRAMES fade {} @keyframes fade {} 2`] = `
+
+Message:
+> 1 | @KEYFRAMES fade {} @keyframes fade {}
+    |                               ^^^^ Duplicate \`@keyframes\` definition \`fade\`. The first definition is on line 1.
+
+`;
+
+exports[`invalid(8): @PROPERTY --color {} @property --color {} 1`] = `
+
+  1 | @PROPERTY --color {} @property --color {}
+
+`;
+
+exports[`invalid(8): @PROPERTY --color {} @property --color {} 2`] = `
+
+Message:
+> 1 | @PROPERTY --color {} @property --color {}
+    |                                ^^^^^^^ Duplicate \`@property\` definition \`--color\`. The first definition is on line 1.
+
+`;
+
+exports[`invalid(9): @COUNTER-STYLE dots {} @counter-style dots {} 1`] = `
+
+  1 | @COUNTER-STYLE dots {} @counter-style dots {}
+
+`;
+
+exports[`invalid(9): @COUNTER-STYLE dots {} @counter-style dots {} 2`] = `
+
+Message:
+> 1 | @COUNTER-STYLE dots {} @counter-style dots {}
+    |                                       ^^^^ Duplicate \`@counter-style\` definition \`dots\`. The first definition is on line 1.
+
+`;
