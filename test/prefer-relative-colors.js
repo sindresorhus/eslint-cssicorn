@@ -29,6 +29,7 @@ test.snapshot({
 		':export { --brand: rgb(var(--channels)); } a { color: rgb(var(--channels) / .5); }',
 		'.theme { --brand: rgb(var(--channels)); } a { color: rgb(var(--channels) / .5); }',
 		'@media screen { :root { --brand: rgb(var(--channels)); } } a { color: rgb(var(--channels) / .5); }',
+		'@media screen { @layer theme { :root { --brand: rgb(var(--channels)); } } } a { color: rgb(var(--channels) / .5); }',
 		'@supports (display: grid) { html { --brand: rgb(var(--channels)); } } a { color: rgb(var(--channels) / .5); }',
 		'@scope (.theme) { :root { --brand: rgb(var(--channels)); } } a { color: rgb(var(--channels) / .5); }',
 		':root.theme { --brand: rgb(var(--channels)); } a { color: rgb(var(--channels) / .5); }',
@@ -36,6 +37,7 @@ test.snapshot({
 		'.theme { :root { --brand: rgb(var(--channels)); } } a { color: rgb(var(--channels) / .5); }',
 		'a { --brand: rgb(var(--channels)); @media screen { color: rgb(var(--channels) / .5); } }',
 		withRoot('.theme { --brand: red; } a { color: rgb(var(--channels) / .5); }'),
+		withRoot('@media screen { :root { --brand: red; } } a { color: rgb(var(--channels) / .5); }'),
 		withRoot(':root { --brand: hsl(var(--channels)); } a { color: rgb(var(--channels) / .5); }'),
 		withRoot(':root { --brand: rgb(var(--other)); } a { color: rgb(var(--channels) / .5); }'),
 		withRoot(':root { --second: rgb(var(--channels)); } a { color: rgb(var(--channels) / .5); }'),
@@ -88,7 +90,28 @@ test.snapshot({
 		':root { --brand: hsla(var(--channels)); } a { color: hsla(var(--channels), 25%); }',
 		'a { color: rgb(var(--channels) / .5); --brand: rgb(var(--channels)); }',
 		':root { --brand: hsl(var(--channels)); --variant: hsl(var(--channels) / 50%); }',
+		withRoot('a { --gradient: linear-gradient(rgb(var(--channels) / .2), rgba(var(--channels), .8)); }'),
+		withRoot('a { --gradient: linear-gradient(rgb(/* keep */ var(--channels) / .2), rgba(var(--channels), .8)); }'),
 	],
+});
+
+const multilineVariant = withRoot('a {\r\n  --label: "🟣";\r\n  --gradient: linear-gradient(\r\n    rgb(var(--channels) / calc(\r\n      var(--alpha, .25) * .5\r\n    )), black\r\n  );\r\n}');
+const multilineReplacement = 'rgb(from var(--brand) r g b / calc(\r\n      var(--alpha, .25) * .5\r\n    ))';
+
+test({
+	valid: [],
+	invalid: [{
+		code: multilineVariant,
+		errors: [{
+			messageId: 'prefer-relative-colors',
+			data: {replacement: multilineReplacement},
+			suggestions: [{
+				messageId: 'prefer-relative-colors/suggestion',
+				data: {replacement: multilineReplacement},
+				output: withRoot('a {\r\n  --label: "🟣";\r\n  --gradient: linear-gradient(\r\n    rgb(from var(--brand) r g b / calc(\r\n      var(--alpha, .25) * .5\r\n    )), black\r\n  );\r\n}'),
+			}],
+		}],
+	}],
 });
 
 test({

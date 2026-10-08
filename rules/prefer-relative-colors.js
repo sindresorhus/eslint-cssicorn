@@ -117,7 +117,7 @@ function getColorProblem(node, declaration, {candidates, rootCandidates}, contex
 	const destination = candidates?.has(color.key) ? candidates.get(color.key) : rootCandidates.get(color.key);
 	const {sourceCode} = context;
 	const range = sourceCode.getRange(node);
-	if (destination === undefined || destination === decodeCssIdentifier(declaration.property) || hasCommentInRange(context, range)) {
+	if (destination === undefined || hasCommentInRange(context, range)) {
 		return;
 	}
 
@@ -248,12 +248,16 @@ const create = context => {
 		}
 
 		for (const declaration of declarations) {
+			const candidates = blockCandidates.get(/** @type {BlockPlain} */ (sourceCode.getParent(declaration)));
+			if (!candidates && rootCandidates.size === 0) {
+				continue;
+			}
+
 			const value = getValue(declaration);
 			if (!value) {
 				continue;
 			}
 
-			const candidates = blockCandidates.get(/** @type {BlockPlain} */ (sourceCode.getParent(declaration)));
 			/**
 			@param {CssNodePlain} node
 			@returns {Generator<CssicornProblem>}

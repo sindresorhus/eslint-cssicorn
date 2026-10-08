@@ -20,7 +20,7 @@ import {
 } from './utils/index.js';
 
 /**
-@import {CssLocationRange, CssNodePlain, DeclarationPlain, Dimension, FunctionNodePlain, Hash, NumberNode, ParenthesesPlain, Percentage, ValuePlain} from '@eslint/css-tree';
+@import {CssLocationRange, CssNodePlain, Dimension, FunctionNodePlain, Hash, NumberNode, ParenthesesPlain, Percentage, ValuePlain} from '@eslint/css-tree';
 @import {CssicornContext} from './rule/cssicorn-context.js';
 @import {CssicornProblem} from './rule/to-eslint-problem.js';
 @import {CssicornRule} from './rule/to-eslint-rule.js';
