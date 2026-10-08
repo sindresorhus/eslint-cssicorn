@@ -1,3 +1,4 @@
+export {default as evaluateCssMath, isCssMathFunction} from './evaluate-css-math.js';
 export {default as getAtRuleContextPart} from './get-at-rule-context-part.js';
 export {default as getCanonicalLexerNode} from './get-canonical-lexer-node.js';
 export {default as getCommaSeparatedGroups} from './get-comma-separated-groups.js';

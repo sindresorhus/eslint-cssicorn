@@ -60,9 +60,9 @@ Math includes comparison, rounding, trigonometric, exponential, sign, `progress(
 ### Default arguments
 
 - `translate()` / `skew()`: Omit the second positive-zero length / angle. `scale()`: Omit a repeated number or percentage; equivalent safe integer spellings also match.
-- `brightness()`, `contrast()`, `grayscale()`, `invert()`, `opacity()`, `saturate()`, `sepia()`: Omit `1` / `100%`; also omit larger literals in `grayscale()`, `invert()`, `opacity()`, and `sepia()` because they clamp to `1`.
+- `brightness()`, `contrast()`, `grayscale()`, `invert()`, `opacity()`, `saturate()`, `sepia()`: Omit `1` / `100%`. Retain larger literals because they can affect filter interpolation.
 - `blur()` / `hue-rotate()`: Omit positive-zero length / angle. `drop-shadow()`: Omit a positive-zero third length and `currentcolor`.
-- Modern color functions, including `device-cmyk()`: Omit absolute literal alpha at or above `1` / `100%` and relative `/ alpha` (inherits origin alpha, including missing alpha).
+- Modern color functions, including `device-cmyk()`: Omit absolute literal alpha equal to `1` / `100%` and relative `/ alpha` (inherits origin alpha, including missing alpha). Retain over-range alpha for clamping diagnostics.
 - [`light-dark()`](https://drafts.csswg.org/css-color-5/#light-dark): Collapse equivalent literal colors (safe integer channels and `rgb()`/`rgba()`, `hsl()`/`hsla()`, `xyz`/`xyz-d65` aliases) and nested calls with literal inner colors, keeping the branch selected by the outer call.
 - [`superellipse()`](https://drafts.csswg.org/css-borders-4/#funcdef-superellipse): Replace literal `0`, `1`, `2`, `-1`, `infinity`, and `-infinity` with corner-shape keywords.
 - `counter()` / `counters()` and their `target-` variants: Omit `decimal`. `symbols()`: Omit `symbolic`.

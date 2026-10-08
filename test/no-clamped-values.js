@@ -1,0 +1,151 @@
+import assert from 'node:assert/strict';
+import nodeTest from 'node:test';
+import {Linter} from 'eslint';
+import css from '@eslint/css';
+import plugin from '../index.js';
+import {getTester} from './utils/test.js';
+
+const {test} = getTester(import.meta);
+
+const opacityProperties = ['opacity', 'fill-opacity', 'stroke-opacity', 'stop-opacity', 'flood-opacity', 'shape-image-threshold'];
+const boundedFilters = ['grayscale', 'invert', 'opacity', 'sepia'];
+const filterProperties = ['filter', 'backdrop-filter', '-webkit-backdrop-filter'];
+
+test.snapshot({
+	valid: [
+		...opacityProperties.flatMap(property => ['0', '1', '0%', '100%', '.5', '50%', 'var(--amount)'].map(value => `a { ${property}: ${value}; }`)),
+		...boundedFilters.flatMap(name => ['0', '1', '100%', '-1', '-10%', 'var(--amount)'].map(value => `a { filter: ${name}(${value}); }`)),
+		'a { filter: brightness(50) contrast(50) saturate(50); }',
+		'a { filter: brightness(-1) contrast(-1) saturate(-1); }',
+		'a { color: rgb(0 255 100% / 100%); }',
+		'a { color: rgba(0, 255, 0, 1); }',
+		'a { color: hsl(0 200% 200%); background: hwb(0 200% 200%); }',
+		'a { color: lab(100 200 -200); background: lch(100 200 999); }',
+		'a { color: oklab(1 2 -2); background: oklch(1 2 999); }',
+		'a { color: color(display-p3 2 -1 3); }',
+		'a { color: rgb(from red 300 -1 999 / 1); }',
+		'a { color: lch(from red 150 -1 0); }',
+		'a { color: color(from red --profile 2 -1 3); }',
+		'a { color: rgba(var(--channels), 50); }',
+		// The newer legacy comma-separated device-cmyk() syntax is outside this rule's supported boundary.
+		'a { color: device-cmyk(2, 0, 0, 0); }',
+		'a { color: rgba(0, 0, 0, var(--alpha)); }',
+		'a { perspective: 1px; transform: perspective(2px); }',
+		'a { perspective: -1px; transform: perspective(-1px); }',
+		'a { perspective: .5em; transform: perspective(.5rem); }',
+		'a { border-image: url(a) 100% / 200%; mask-border-slice: 100%; }',
+		'a { border-image-slice: 999; mask-border: url(a) 999 / 200%; }',
+		'a { text-decoration-thickness: .1px; text-decoration: underline .1em; }',
+		'a { width: -1px; font-weight: 1200; animation-duration: -1s; }',
+		'a { opacity: calc(2 - 1); width: calc(-1px + 2px); }',
+		'a { opacity: min(1, 2); opacity: clamp(0, 2, 1); }',
+		'a { width: max(calc(-1px), 2px); }',
+		'a { width: clamp(0px, calc(-1px), 2px); }',
+		'a { opacity: calc(2+ 3); opacity: calc(2 +/**/3); }',
+		'a { width: calc(1in - 96px); }',
+		'a { opacity: calc(.5 + 50%); width: calc(-2foo); }',
+		'a { opacity: calc(infinity); opacity: calc(NaN); }',
+		'a { opacity: calc(2 + var(--amount)); width: calc(1em - 2px); }',
+		'a { opacity: random(1, 50); width: calc-size(auto, size - 1px); }',
+		'a { column-count: calc(.5); orphans: calc(.5); widows: calc(1.5); }',
+		'a { column-count: calc(1% / 10%); font-weight: calc(1% / 10%); }',
+		'a { grid-template-columns: calc(-1fr); width: calc(-1s); }',
+		'a { --amount: 50; --color: rgb(300 0 0 / 50); }',
+		'a { content: "rgb(300 0 0 / 50)"; background: url("opacity(50)"); }',
+		':export { opacity: 50; color: rgb(300 0 0 / 50); }',
+		':import("./theme.css") { opacity: 50; }',
+		'@property --amount { syntax: "<number>"; inherits: false; initial-value: calc(1200); }',
+		'@unknown { opacity: 50; width: calc(-1px); }',
+		'@supports (opacity: 50) { a { opacity: .5; } }',
+		{code: 'a { opacity: ; color: rgb(; filter: grayscale(; }', languageOptions: {tolerant: true}},
+	],
+	invalid: [
+		...opacityProperties.flatMap(property => ['-1', '2', '50', '-1%', '101%', 'calc(25 + 25)', 'min(110%, 120%)'].map(value => `a { ${property}: ${value}; }`)),
+		...boundedFilters.flatMap(name => filterProperties.flatMap(property => ['50', '150%', 'calc(-1)', 'calc(25 + 25)'].map(value => `a { ${property}: ${name}(${value}); }`))),
+		'a { filter: brightness(calc(-1)) contrast(calc(-1)) saturate(calc(-1)); }',
+		'a { color: rgb(300 0 0); }',
+		'a { color: rgb(-1 0 0); }',
+		'a { color: rgb(101% 0% 0%); }',
+		'a { color: rgb(0 0 0 / 50); }',
+		'a { color: rgba(0, 0, 0, 50); }',
+		'a { color: hsla(0, 50%, 50%, -1); }',
+		'a { color: rgb(var(--channels) / 50); }',
+		'a { color: rgb(from red r g b / 50); }',
+		'a { color: alpha(from red / 50); }',
+		'a { color: hsl(0 -1% 50%); }',
+		'a { color: lab(150 0 0); }',
+		'a { color: lch(-1% 0 0); }',
+		'a { color: lch(50 -1 0); }',
+		'a { color: oklab(2 0 0); }',
+		'a { color: oklch(101% 0 0); }',
+		'a { color: oklch(.5 -1 0); }',
+		'a { color: device-cmyk(2 0 0 0 / 50); }',
+		'a { color: color(--profile 2 0 0 / 50); }',
+		'a { color: color(display-p3 2 -1 3 / 50); }',
+		'a { background: linear-gradient(rgb(300 0 0), light-dark(red, rgb(0 0 0 / 50))); }',
+		'a { color: color-mix(in srgb, rgb(300 0 0), blue); }',
+		'a { color: rgb(calc(200 + 200) 0 0 / calc(25 + 25)); }',
+		'a { color: rgb(calc(10% / 20%) 0 0 / calc(30% / 10%)); }',
+		'a { perspective: .5px; }',
+		'a { perspective: 0; }',
+		'a { perspective: 0em; }',
+		'a { transform: perspective(.005in); }',
+		'a { perspective: calc(-1px); }',
+		'a { transform: perspective(calc(.25px + .25px)); }',
+		'a { border-image-slice: 110%; }',
+		'a { mask-border-slice: 110%; }',
+		'a { border-image: url(a) 110% / 200%; }',
+		'a { mask-border: url(a) 110% / 200%; }',
+		'a { border-image-slice: calc(50% + 60%); }',
+		'a { border-image-slice: calc(-1); mask-border-slice: calc(-1); }',
+		'a { border-image: url(a) calc(-1) / 1; mask-border: url(a) calc(-1) / 1; }',
+		'a { perspective: calc(-1em); transform: perspective(calc(-1em)); }',
+		'a { text-decoration-thickness: 0; }',
+		'a { text-decoration-thickness: -1px; }',
+		'a { text-decoration: underline -1%; }',
+		'a { text-decoration-thickness: calc(1px - 2px); }',
+		'a { width: calc(-1px); }',
+		'a { width: calc(-10%); }',
+		'a { padding: calc(1px - 2px); }',
+		'a { border-image: url(a) 50% / calc(-1px); }',
+		'a { font-weight: calc(1200); }',
+		'a { animation-duration: calc(-1s); }',
+		'a { column-count: calc(.4); orphans: calc(.4); widows: calc(.4); }',
+		'@font-face { font-family: test; src: url(a); font-weight: calc(1200); }',
+		'@position-try --test { width: calc(-1px); }',
+		'a { OPACITY: 50 !important; color: RGB(0 0 0 / 50); filter: GRAYSCALE(50); }',
+		'a { WIDTH: CALC(-1px); opacity: MAX(2, 1); }',
+		String.raw`a { filter: \67 rayscale(50); color: r\67 b(0 0 0 / 50); }`,
+		'a { opacity: /* keep */ 50; color: rgb(0 0 0 / /* keep */ 50); }',
+		'@media (width > 1px) { @supports (display: grid) { a { opacity: 50; } } }',
+		'@container (width > 1px) { @layer theme { @scope (.a) { .b { opacity: 50; } } } }',
+		'a { & .b { opacity: 50; } } @keyframes fade { to { filter: grayscale(50); } }',
+	],
+});
+
+nodeTest('clamping diagnostics survive fixes from existing rules', () => {
+	const linter = new Linter();
+	const code = '@keyframes fade { to { filter: grayscale(50); color: rgb(0 0 0 / 50); } }';
+	const config = {
+		files: ['**/*.css'],
+		language: 'css/css',
+		plugins: {css, cssicorn: plugin},
+		rules: {
+			'cssicorn/no-clamped-values': 'error',
+			'cssicorn/no-redundant-functions': 'error',
+			'cssicorn/prefer-modern-syntax': 'error',
+		},
+	};
+	const result = linter.verifyAndFix(code, config, {filename: 'test.css'});
+	assert.equal(result.output, '@keyframes fade { to { filter: grayscale(50); color: rgb(0 0 0 / 5000%); } }');
+	assert.equal(result.messages.length, 2);
+	assert.ok(result.messages.every(message => message.ruleId === 'cssicorn/no-clamped-values'));
+	assert.equal(linter.verifyAndFix(result.output, config, {filename: 'test.css'}).fixed, false);
+});
+
+nodeTest('recommended and all enable the rule', () => {
+	const name = 'cssicorn/no-clamped-values';
+	assert.equal(plugin.configs.recommended.rules[name], 'error');
+	assert.equal(plugin.configs.all.rules[name], 'error');
+	assert.equal(plugin.configs.unopinionated.rules[name], 'off');
+});
