@@ -29,10 +29,13 @@ test.snapshot({
 			'calc(50% + 1)',
 			'calc(50% - 50%)',
 			'calc(50% - 75%)',
+			'calc(50% - 25% * 3)',
+			'calc(50% - 25% - 25%)',
 			'calc(-50%)',
 			'calc(50% * 0)',
 			'calc(50% / 0)',
 			'calc(50% / (1 - 1))',
+			'calc(50% / (4 / 2 / 2 - 1))',
 			'calc(50% / 25%)',
 			'calc(50% * 25%)',
 			'calc(50% * infinity)',
@@ -132,6 +135,9 @@ test.snapshot({
 		'a { height: 0; padding: calc(25% + 25%) 0 calc(100% / 2); }',
 		'a { height: 0; padding-top: calc((50% / 25% + 1) * 50%); }',
 		'a { height: 0; padding-top: calc((25% * 25% + 75% * 75%) / 100%); }',
+		'a { height: 0; padding-top: calc((50% - 25%) * 3); }',
+		'a { height: 0; padding-top: calc((25% - 75%) * -1); }',
+		'a { height: 0; padding-top: calc(1 / 2% * 50% * 50%); }',
 	],
 });
 
