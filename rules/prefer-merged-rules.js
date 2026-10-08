@@ -191,6 +191,11 @@ const getMergeKey = (rule, context) => {
 	const declarations = [];
 	for (const declaration of rule.block.children) {
 		const customProperty = isCustomProperty(declaration.property);
+		// Escaped leading dashes can make the parser treat opaque custom-property text as a regular value.
+		if (customProperty && declaration.value.type !== 'Raw') {
+			return;
+		}
+
 		if ((declaration.value.type === 'Raw' && !customProperty) || hasRandomFunction(context.sourceCode.getText(declaration.value))) {
 			return;
 		}

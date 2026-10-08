@@ -8,7 +8,10 @@ import {getTester} from './utils/test.js';
 const {test} = getTester(import.meta);
 
 test({
-	valid: [],
+	valid: [
+		String.raw`.a { \2d\2d foo: a  b; } .b { \2d\2d foo: a b; }`,
+		String.raw`.a { \2d\2d foo:  red; } .b { \2d\2d foo: red; }`,
+	],
 	invalid: [{
 		code: '.button { padding: 1rem; border-radius: 0.5rem; }\n.badge { padding: 1rem; border-radius: 0.5rem; }',
 		output: '.button,\n.badge { padding: 1rem; border-radius: 0.5rem; }',
@@ -41,6 +44,10 @@ test({
 		code: String.raw`.parent{@media all{--text: \;;}@media all{color:red}}`,
 		output: String.raw`.parent{@media all{--text: \;;color:red}}`,
 		errors: [{messageId: 'prefer-merged-rules/conditions'}],
+	}, {
+		code: String.raw`.a { --f\6fo: a  b; } .b { --foo: a  b; }`,
+		output: String.raw`.a, .b { --f\6fo: a  b; }`,
+		errors: [{messageId: 'prefer-merged-rules/selectors'}],
 	}],
 });
 

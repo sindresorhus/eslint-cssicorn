@@ -59,6 +59,6 @@ Only adjacent siblings are considered. Intervening comments or other nodes preve
 
 Selector merging targets current stable Chrome, Firefox, and Safari. It supports common selectors and parsed functions such as `:has()`, `:is()`, `:where()`, `:not()`, and `:nth-child(... of ...)`. Unknown, vendor-specific, unsupported, or uncertain selectors are skipped, including opaque functional arguments, named namespaces, and the attribute `s` modifier. An invalid selector could otherwise invalidate the entire combined selector list.
 
-Empty blocks, keyframe steps, malformed candidates, declaration blocks containing nested rules, and declarations containing explicit `random()` or `random-item()` functions are skipped. Only `@media`, `@supports`, and `@container` wrappers are merged; `@layer`, `@scope`, and other wrappers remain separate.
+Empty blocks, keyframe steps, malformed candidates, declaration blocks containing nested rules, and declarations containing explicit `random()` or `random-item()` functions are skipped. Selector merging also skips custom properties with escaped leading dashes because the parser does not retain their raw values. Only `@media`, `@supports`, and `@container` wrappers are merged; `@layer`, `@scope`, and other wrappers remain separate.
 
 Comments inside matching rules prevent autofixing, but the rule still reports them. Missing final declaration semicolons are inserted when needed to separate merged wrapper contents.
