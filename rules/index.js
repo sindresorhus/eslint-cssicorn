@@ -13,6 +13,7 @@ export {default as 'no-duplicate-properties'} from './no-duplicate-properties.js
 export {default as 'no-duplicate-selectors'} from './no-duplicate-selectors.js';
 export {default as 'no-ineffective-keyframe-declarations'} from './no-ineffective-keyframe-declarations.js';
 export {default as 'no-ineffective-properties'} from './no-ineffective-properties.js';
+export {default as 'no-ineffective-selector-properties'} from './no-ineffective-selector-properties.js';
 export {default as 'no-ineffective-supports-conditions'} from './no-ineffective-supports-conditions.js';
 export {default as 'no-ineffective-transitions'} from './no-ineffective-transitions.js';
 export {default as 'no-invalid-media-features'} from './no-invalid-media-features.js';

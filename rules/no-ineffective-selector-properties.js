@@ -1,0 +1,204 @@
+import {shorthandToAffectedProperties} from './shared/css-shorthand-properties.js';
+import {LEGACY_PSEUDO_ELEMENTS} from './shared/css-selector-specificity.js';
+import {hasCommentInRange, normalizeCssIdentifier} from './utils/index.js';
+
+/**
+@import {CssicornContext} from './rule/cssicorn-context.js';
+@import {CssicornRule} from './rule/to-eslint-rule.js';
+*/
+
+const MESSAGE_ID = 'no-ineffective-selector-properties';
+const messages = {
+	[MESSAGE_ID]: '`{{property}}` has no effect on the targets selected by {{selectors}}.',
+};
+
+/**
+Get the property names and their affected shorthand components from the finite shared catalog.
+*/
+const getPropertyNames = properties => properties.flatMap(property => [property, ...shorthandToAffectedProperties.get(property) ?? []]);
+
+// Use a denylist, since marker text inheritance and future properties make exhaustive allowlists unsafe.
+const commonProperties = new Set([
+	...getPropertyNames([
+		'margin',
+		'margin-block',
+		'margin-inline',
+		'padding',
+		'padding-block',
+		'padding-inline',
+		'inset',
+		'inset-block',
+		'inset-inline',
+		'border-width',
+		'border-block-width',
+		'border-inline-width',
+		'border-style',
+		'border-block-style',
+		'border-inline-style',
+		'border-radius',
+	]),
+	'width',
+	'height',
+	'min-width',
+	'min-height',
+	'max-width',
+	'max-height',
+	'inline-size',
+	'block-size',
+	'min-inline-size',
+	'min-block-size',
+	'max-inline-size',
+	'max-block-size',
+	'display',
+	'position',
+	'opacity',
+	'transform',
+	'transform-origin',
+	'translate',
+	'rotate',
+	'scale',
+	'box-shadow',
+	'background-image',
+	'background-position',
+	'background-position-x',
+	'background-position-y',
+	'background-size',
+	'background-repeat',
+	'background-origin',
+	'background-clip',
+	'background-attachment',
+	'border-start-start-radius',
+	'border-start-end-radius',
+	'border-end-start-radius',
+	'border-end-end-radius',
+]);
+const fontProperties = getPropertyNames(['font', 'font-variant', 'font-synthesis']);
+const borderColorProperties = [
+	...getPropertyNames(['border-color', 'border-block-color', 'border-inline-color']),
+	'border',
+	'border-top',
+	'border-right',
+	'border-bottom',
+	'border-left',
+	'border-block',
+	'border-block-start',
+	'border-block-end',
+	'border-inline',
+	'border-inline-start',
+	'border-inline-end',
+];
+const highlightProperties = new Set([...commonProperties, ...fontProperties, ...borderColorProperties]);
+const markerProperties = new Set([...commonProperties, ...borderColorProperties, 'background', 'background-color']);
+const visitedProperties = new Set([...commonProperties, ...fontProperties, 'text-shadow']);
+const highlightSelectors = new Set(['selection', 'target-text', 'spelling-error', 'grammar-error', 'search-text', 'highlight']);
+const transparentAtRules = new Set(['media', 'supports', 'container', 'layer', 'starting-style']);
+const targetProperties = highlightProperties.union(markerProperties).union(visitedProperties);
+
+/**
+Get the explicit restriction on the final selected compound, without expanding functions or nesting selectors.
+*/
+const getSelectorRestriction = selector => {
+	const compound = selector.children.slice(selector.children.findLastIndex(node => node.type === 'Combinator') + 1);
+	const pseudoElement = compound.findLast(node => node.type === 'PseudoElementSelector'
+		|| (node.type === 'PseudoClassSelector' && LEGACY_PSEUDO_ELEMENTS.has(normalizeCssIdentifier(node.name))));
+	if (pseudoElement) {
+		const name = normalizeCssIdentifier(pseudoElement.name);
+		if (highlightSelectors.has(name)) {
+			return {selector: `::${name}`, properties: highlightProperties};
+		}
+
+		if (name === 'marker') {
+			return {selector: '::marker', properties: markerProperties};
+		}
+
+		return;
+	}
+
+	if (compound.some(node => node.type === 'PseudoClassSelector' && node.children === null && normalizeCssIdentifier(node.name) === 'visited')) {
+		return {selector: ':visited', properties: visitedProperties};
+	}
+};
+
+/**
+Get the selector restrictions for a declaration block, crossing only grouping rules with unchanged selector context.
+*/
+const getBlockRestrictions = (block, sourceCode) => {
+	let parent = sourceCode.getParent(block);
+	while (parent) {
+		if (parent.type === 'Rule') {
+			if (parent.prelude?.type !== 'SelectorList') {
+				return;
+			}
+
+			const restrictions = parent.prelude.children.map(selector => getSelectorRestriction(selector));
+			return restrictions.length > 0 && restrictions.every(Boolean) ? restrictions : undefined;
+		}
+
+		if (parent.type === 'Atrule' && !transparentAtRules.has(normalizeCssIdentifier(parent.name))) {
+			return;
+		}
+
+		parent = sourceCode.getParent(parent);
+	}
+};
+
+/**
+@param {CssicornContext} context
+*/
+const create = context => {
+	const {sourceCode} = context;
+
+	context.on('Block', function * (block) {
+		const declarations = block.children.filter(node => node.type === 'Declaration' && node.value.type === 'Value')
+			.map(node => ({node, property: normalizeCssIdentifier(node.property)}))
+			.filter(({property}) => targetProperties.has(property));
+		if (declarations.length === 0) {
+			return;
+		}
+
+		const restrictions = getBlockRestrictions(block, sourceCode);
+		if (!restrictions) {
+			return;
+		}
+
+		for (const {node, property} of declarations) {
+			if (restrictions.some(({properties}) => !properties.has(property))) {
+				continue;
+			}
+
+			yield {
+				node,
+				messageId: MESSAGE_ID,
+				data: {property, selectors: [...new Set(restrictions.map(({selector}) => selector))].join(', ')},
+				fix(fixer, {abort}) {
+					const [start, end] = sourceCode.getRange(node);
+					if (hasCommentInRange(context, [start, end])) {
+						abort();
+					}
+
+					return fixer.removeRange([start, end + (sourceCode.text[end] === ';' ? 1 : 0)]);
+				},
+			};
+		}
+	});
+};
+
+/**
+@type {CssicornRule}
+*/
+const config = {
+	create,
+	meta: {
+		type: 'problem',
+		docs: {
+			description: 'Disallow properties that cannot affect their selected targets.',
+			recommended: 'unopinionated',
+		},
+		fixable: 'code',
+		schema: [],
+		messages,
+		languages: ['css/css'],
+	},
+};
+
+export default config;
