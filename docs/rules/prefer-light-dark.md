@@ -11,7 +11,7 @@
 
 [The `light-dark()` function](https://drafts.csswg.org/css-color-5/#light-dark) keeps related theme colors together and can remove duplicated declarations and selectors.
 
-This rule provides editor suggestions only. `light-dark()` selects a branch using the element's used color scheme, while `prefers-color-scheme` queries the user's preference. A locally forced scheme can therefore change the result after applying a suggestion. Review suggestions against your theme behavior and browser support requirements.
+Suggestions require review: `light-dark()` uses the element's color scheme, which can differ from the user's preference queried by `prefers-color-scheme`. Check your theme behavior and browser support before applying them.
 
 Use [`css/use-baseline`](https://github.com/eslint/css/blob/main/docs/rules/use-baseline.md) to check CSS browser support against your chosen Baseline target.
 
@@ -84,26 +84,20 @@ Color-valued custom properties are also supported:
 ```
 
 > [!IMPORTANT]
-> An unregistered custom property containing `light-dark()` resolves its color when consumed as a color value, using the consuming element's color scheme. Descendants with a different scheme can therefore render differently from an inherited literal branch color. Custom properties consumed as strings or non-color values may also change behavior.
+> An unregistered custom property's `light-dark()` resolves using the consuming element's color scheme. This can change inherited colors on descendants with a different scheme, or behavior when consumed as a non-color value.
 
-The rule does not inspect custom-property registrations. Check their syntax before applying a suggestion: `red` and `blue` are valid `<custom-ident>` values, but `light-dark(red, blue)` is not.
+Custom-property registrations are not checked. For example, `<custom-ident>` accepts `red` and `blue`, but not `light-dark(red, blue)`.
 
 ## Supported patterns
 
-The media query must contain only `(prefers-color-scheme: light)` or `(prefers-color-scheme: dark)`. For adjacent rules, the media block must contain exactly one style rule, and both style blocks must contain only declarations. For the nested form, ordinary declarations must precede a single final media block containing only declarations. Matching can occur inside other style rules and grouping at-rules, preserving their conditions and layers.
+Matches the adjacent and final nested forms above, using only `(prefers-color-scheme: light)` or `(prefers-color-scheme: dark)`. Adjacent selectors must serialize identically, with one rule in the media block. Participating blocks cannot contain other nested rules.
 
-The rule requires a literal `color-scheme` declaration supporting both `light` and `dark` in the base rule, or in an unconditional bare `:root` or `html` rule in the same stylesheet. Root rules inside `@layer` blocks count. Either mode order and an optional `only` keyword are accepted. Duplicate or incompatible scheme declarations in participating blocks are skipped. Conflicting unconditional root scheme declarations do not provide root evidence.
+Requires literal `color-scheme: light dark` in the base rule or an unconditional bare `:root`/`html` rule in this file, including inside `@layer`. Either order and optional `only` are accepted.
 
-This setup is eligibility evidence, not proof of the complete cascade. The rule does not infer setup from other files, HTML, or JavaScript, and never inserts `color-scheme`.
-
-Differing components must be literal named colors, hex colors, or absolute color functions. A custom property's entire value must be one literal color. For ordinary properties, corresponding top-level components must match except for literal colors, and the combined value must pass CSSTree's property grammar. Unchanged components such as `currentColor` and gradients are preserved. Ordinary values containing `var()` are skipped because the combined declaration's grammar cannot be validated. Multiple color components can be combined, such as in `border-color` or `box-shadow`. Matching property names are decoded, custom-property case is preserved, and `!important` status must match.
-
-Each convertible override declaration is reported separately. A suggestion replaces its differing base color components and removes that override declaration. Unrelated declarations remain. Empty wrappers are removed only when they contain no comments. Reports involving comments in either paired declaration have no suggestion.
+Values may differ only in top-level literal colors, with matching `!important`. Custom properties must contain a single literal color.
 
 ## Limitations
 
-The rule skips separated pairs, two explicit media branches, nested selector overrides, and gradients requiring internal rewriting. Differing components containing dynamic colors, system colors, relative colors, or existing `light-dark()` calls are skipped. It also skips duplicate target declarations, overlapping shorthand and longhand declarations, ambiguous logical and physical border declarations, keyframes, descriptor blocks, CSS Modules interop declarations, and unparseable values. Blocks containing vendor-prefixed ordinary declarations are skipped because their aliases can hide shorthand conflicts. Blocks containing `all` are skipped even for custom-property pairs because it also resets the required `color-scheme`.
+The setup check does not guarantee the cascade. Unsupported or conflicting patterns are skipped, and color equivalence is best effort. Comments in paired declarations prevent suggestions; commented wrappers are preserved.
 
-Equivalent branch colors are ignored on a best-effort basis. Named colors, expanded hex colors, and literal `rgb()`/`rgba()` values are compared in sRGB, normalizing channel units and alpha without rounding. Other absolute functions use conservative comparisons within the same color space. The rule does not perform general color-space conversion, so some equivalent colors may still be reported.
-
-[`no-redundant-functions`](./no-redundant-functions.md) simplifies existing function calls. This rule introduces `light-dark()` suggestions and does not expand that rule's autofix behavior.
+[`no-redundant-functions`](./no-redundant-functions.md) simplifies existing calls; this rule introduces them through suggestions.
