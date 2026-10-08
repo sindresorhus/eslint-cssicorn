@@ -69,7 +69,7 @@ a {
 }
 ```
 
-Factor shared compound suffixes and contextual overrides. Contextual overrides inside nested rules require an existing `&` in the parent when the prefix contains combinators:
+Factor shared compound suffixes and contextual overrides. Nested contextual overrides need an existing `&` in the parent when the prefix contains a combinator:
 
 ```css
 /* ❌ */
@@ -119,21 +119,21 @@ Attached `:is()` groups use `&` at each nesting level:
 }
 ```
 
-Leading and attached groups support existing `&` references, type selectors, ordinary states such as `:hover`, and the `>`, `+`, and `~` combinators. Existing references remain at their original nesting level; only the following suffix is moved.
+Groups support type selectors, common pseudo-classes, attributes, and the `>`, `+`, and `~` combinators. Existing `&` references keep their original ancestor context.
 
 ## Specificity
 
-Trailing `:is()` is unwrapped only when its arguments have equal specificity and unwrapping preserves [forgiving selector-list behavior](https://drafts.csswg.org/selectors/#forgiving-selector). Supported arguments include ordinary states, validated logical and `:nth-*()` functions, single unquoted `:lang()` ranges, case-insensitive attribute matches, and wildcard namespace prefixes. Complex trailing arguments and uncertain selectors stay wrapped.
+Trailing `:is()` is unwrapped only when its arguments have equal specificity and unwrapping preserves [forgiving selector-list behavior](https://drafts.csswg.org/selectors/#forgiving-selector). Complex trailing arguments and uncertain selectors stay wrapped.
 
-`:where()` stays intact, including its uncertain branches and existing `&` references. Related grouped parents require equal specificity, including inherited specificity; functional `&` references are allowed only inside intact top-level `:where()` functions. Uncertain functions can remain in a single literal parent. Exact declaration-only conditional overrides preserve mixed parent specificity and pseudo-elements without adding `&`.
+`:where()` stays wrapped. Related grouped parents require equal specificity, including inherited specificity. Functional `&` references in grouped parents are supported only inside top-level `:where()` functions.
 
-Inside nested rules, unprefixed leading groups can expand only when every argument contains `&` or every argument contains none. Complex arguments in these unprefixed groups require a reference in every branch; otherwise the group stays wrapped to preserve ancestor matching.
+Inside nested rules, groups stay wrapped when expansion could change ancestor matching. Exact declaration-only conditional overrides preserve mixed parent specificity and pseudo-elements without adding `&`.
 
 Leading and attached `:is()` groups preserve their maximum specificity, even with mixed arguments. The result can trigger [`no-nesting-with-mixed-specificity`](./no-nesting-with-mixed-specificity.md); disable that rule for intentional mixed-specificity nesting.
 
 ## Limitations
 
-Inferred groups use the first compound as parent, including any leading relative combinator. Conditional discovery follows first-child paths; every moved child must relate to the parent. `:is()` and `:where()` conversions require one outer selector and at least two arguments. Attached groups stay wrapped unless a suffix follows.
+Inferred groups use the first compound as parent, including a leading combinator. Conditional discovery follows first-child paths; every moved child must relate to the parent. `:is()` and `:where()` conversions require one outer selector and at least two arguments. Attached groups need a following suffix to be unwrapped.
 
 Skips ambiguous grouped matches, parser-sensitive type/pseudo-class prefixes, opaque parent arguments, `@scope`, and files with `@namespace`. Suffix and contextual factoring skip selectors beginning with a combinator. Related parent factoring skips ancestor references inside `:host()` or `:host-context()`. Comments, missing semicolons, or unsafe formatting can prevent fixes.
 
