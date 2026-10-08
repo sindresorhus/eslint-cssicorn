@@ -110,7 +110,6 @@ test.snapshot({
 			'::first-line',
 			'::first-letter',
 			'::placeholder',
-			'::cue',
 			'::before',
 			'::after',
 			'::file-selector-button',
@@ -459,6 +458,79 @@ test({
 		},
 		{
 			code: 'a:visited { :is(&) { font-weight: /* retain */ bold; } }',
+			errors: 1,
+		},
+	],
+});
+
+test({
+	valid: [
+		...['video::cue', 'video::cue(.important)', 'video::cue(:past)', 'video::cue(:future)'].map(selector => `${selector} { opacity: 0.5; font: bold 1rem/2 serif; white-space: pre; }`),
+		'video::cue { background: url(image.png) yellow; background-image: url(image.png); background-position: center; background-size: cover; }',
+		'video::cue { background-position-x: 1px; background-position-y: 1px; background-repeat: repeat; background-origin: content-box; background-clip: padding-box; background-attachment: fixed; }',
+		'video::cue(b) { visibility: visible; outline: 1px solid red; text-decoration: underline red; text-shadow: 1px 1px red; ruby-position: under; text-combine-upright: all; }',
+		'video::cue(.important) { animation: pulse 1s; transition: color 1s; }',
+		'video::cue { --padding: 1rem; -webkit-transform: scale(2); unknown-property: 1px; all: initial; }',
+		'video::cue, .ordinary { padding: 1rem; }',
+		'video::cue, ::placeholder { width: 10px; }',
+		'video::cue, ::selection { opacity: 0.5; }',
+		'video::cue(.important) { background-color: var(--color); font-weight: var(--weight); }',
+		'video::cue::before { padding: 1rem; }',
+		'video::cue span { padding: 1rem; }',
+		'video::cue { & { padding: 1rem; } }',
+		'video::cue { @scope (.ordinary) { padding: 1rem; } }',
+		'video::cue-region { padding: 1rem; }',
+		'video::cue:global(.ordinary) { padding: 1rem; }',
+	],
+	invalid: [
+		...sharedDeclarations.filter(declaration => !declaration.startsWith('background-') && !declaration.startsWith('opacity:')).map(declaration => ({
+			code: `video::cue { ${declaration}; color: yellow; }`,
+			output: 'video::cue {  color: yellow; }',
+			errors: [{messageId: 'no-ineffective-selector-properties', data: {property: declaration.split(':', 1)[0], selectors: '::cue'}}],
+		})),
+		...[
+			'video::cue(.important)',
+			'video::cue(:past)',
+			'video::cue(:future)',
+			'video::cue(v[voice="Example"])',
+			'VIDEO::CUE(B)',
+		].map(selector => ({
+			code: `${selector} { margin: 1rem; color: yellow; }`,
+			output: `${selector} {  color: yellow; }`,
+			errors: [{messageId: 'no-ineffective-selector-properties', data: {property: 'margin', selectors: '::cue'}}],
+		})),
+		{
+			code: 'video::cue { border: 1px solid red; border-inline-color: red; }',
+			output: 'video::cue {   }',
+			errors: 2,
+		},
+		{
+			code: 'video::cue { PADDING: var(--padding) !important; color: yellow; }',
+			output: 'video::cue {  color: yellow; }',
+			errors: 1,
+		},
+		{
+			code: 'video::cue, ::marker, a:visited { padding: 1rem; }',
+			output: 'video::cue, ::marker, a:visited {  }',
+			errors: [{messageId: 'no-ineffective-selector-properties', data: {property: 'padding', selectors: '::cue, ::marker, :visited'}}],
+		},
+		{
+			code: '.video { &::cue(.important) { margin: 1rem; } }',
+			output: '.video { &::cue(.important) {  } }',
+			errors: 1,
+		},
+		...['@media (width > 1px)', '@supports (display: grid)', '@container (width > 1px)', '@layer example', '@starting-style'].map(atRule => ({
+			code: `video::cue { ${atRule} { padding: 1rem; } }`,
+			output: `video::cue { ${atRule} {  } }`,
+			errors: 1,
+		})),
+		{
+			code: 'video::cue { padding: /* retain */ 1rem; }',
+			errors: 1,
+		},
+		{
+			code: 'video::cue {\r\n  padding: 1rem;\r\n  color: yellow;\r\n}',
+			output: 'video::cue {\r\n  \r\n  color: yellow;\r\n}',
 			errors: 1,
 		},
 	],

@@ -97,6 +97,12 @@ const borderColorProperties = [
 const highlightProperties = new Set([...commonProperties, ...fontProperties, ...borderColorProperties]);
 const markerProperties = new Set([...commonProperties, ...borderColorProperties, 'background', 'background-color']);
 const visitedProperties = new Set([...commonProperties, ...fontProperties, 'text-shadow']);
+const cueProperties = new Set([...commonProperties, ...borderColorProperties]);
+// Cues permit opacity and all background components, including physical position longhands.
+for (const property of ['opacity', ...getPropertyNames(['background']), 'background-position-x', 'background-position-y']) {
+	cueProperties.delete(property);
+}
+
 // Browsers may apply other properties to first-line and placeholder text, but these are explicitly excluded.
 const firstLineProperties = new Set(['writing-mode', 'direction', 'text-orientation']);
 const highlightSelectors = new Set(['selection', 'target-text', 'spelling-error', 'grammar-error', 'search-text', 'highlight']);
@@ -157,6 +163,10 @@ const getSelectorRestriction = (selector, parentIsVisited = false) => {
 
 		if (name === 'marker') {
 			return {selector: '::marker', properties: markerProperties};
+		}
+
+		if (name === 'cue') {
+			return {selector: '::cue', properties: cueProperties};
 		}
 
 		if (name === 'first-line' || name === 'placeholder') {

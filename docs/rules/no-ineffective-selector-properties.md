@@ -56,18 +56,19 @@ a:visited {
 
 ## Checks
 
-Checks [highlights](https://www.w3.org/TR/css-pseudo-4/#highlight-styling) (`::selection`, `::target-text`, `::spelling-error`, `::grammar-error`, `::search-text`, and `::highlight()`), [`::marker`](https://www.w3.org/TR/css-lists-3/#marker-properties), [`::first-line`](https://www.w3.org/TR/css-pseudo-4/#first-line-styling), [`::placeholder`](https://www.w3.org/TR/css-pseudo-4/#placeholder-pseudo), and [`:visited`](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Selectors/:visited).
+Checks [highlights](https://www.w3.org/TR/css-pseudo-4/#highlight-styling) (`::selection`, `::target-text`, `::spelling-error`, `::grammar-error`, `::search-text`, and `::highlight()`), [`::marker`](https://www.w3.org/TR/css-lists-3/#marker-properties), [`::cue` and `::cue()`](https://www.w3.org/TR/webvtt1/#the-cue-pseudo-element), [`::first-line`](https://www.w3.org/TR/css-pseudo-4/#first-line-styling), [`::placeholder`](https://www.w3.org/TR/css-pseudo-4/#placeholder-pseudo), and [`:visited`](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Selectors/:visited).
 
 Reports a finite list of common ineffective properties:
 
-- Highlights, markers, and visited links: margins, padding, physical and logical sizes and insets, `display`, `position`, `opacity`, transforms, `box-shadow`, background image and positioning properties, and border widths, styles, and radii.
+- Highlights, markers, cues, and visited links: margins, padding, physical and logical sizes and insets, `display`, `position`, transforms, `box-shadow`, and border widths, styles, and radii.
+- Highlights, markers, and visited links: `opacity` and background image and positioning properties.
 - Highlights and visited links: font properties and `line-height`.
-- Highlights and markers: border colors and color-bearing border shorthands.
+- Highlights, markers, and cues: border colors and color-bearing border shorthands.
 - Markers: `background` and `background-color`.
 - Visited links: `text-shadow`.
 - First-line and placeholder text: only `writing-mode`, `direction`, and `text-orientation`.
 
-Marker text styling, animations, and transitions are allowed, as are highlight colors, decorations, and text shadows. Custom properties, vendor-prefixed properties, unlisted properties, and `all` are ignored.
+Marker text styling, animations, and transitions are allowed, as are highlight colors, decorations, and text shadows. Cue backgrounds, opacity, fonts, outlines, and text styling are preserved. Custom properties, vendor-prefixed properties, unlisted properties, and `all` are ignored.
 
 Preserves partially effective shorthands, including `background` on highlights and visited links, and `border` on visited links.
 
