@@ -97,11 +97,11 @@ Responsive declarations and native nesting are also checked:
 
 ## Supported relationships
 
-- The override adds pseudo-classes to a terminal compound that has no pseudo-classes in the base selector, such as `.toolbar > .button` and `.toolbar > .button:hover`. Additional states on an already stateful base, such as `.button:hover` and `.button:hover:focus`, are not compared. Pseudo-class arguments are not expanded or compared logically.
+- The override adds pseudo-classes to a terminal compound that has no pseudo-classes in the base selector, such as `.toolbar > .button` and `.toolbar > .button:hover`. Additional states on an already stateful base, such as `.button:hover` and `.button:hover:focus`, are not compared. Arguments of retained pseudo-classes must have identical generated text; names and escapes inside them are not normalized. Arguments are not expanded or compared logically.
 - The override uses the same selector under additional `@media`, `@supports`, or `@container` conditions, or in a different layered/unlayered context.
 - The base's conditions must be an exact prefix of the override's conditions. Separate blocks with identically generated conditions match; logical implication between different queries is not inferred.
 - Native nesting is resolved only when each parent rule has one selector. A leading `&` refers to that selector. Selectors without `&` use their leading combinator, or are descendants when no combinator is specified. Other placements of `&` are skipped.
-- Only identical property names are compared. Property names and pseudo-class names are ASCII case-insensitive; class, ID, and custom property names are case-sensitive. Equivalent escapes in property, class, and ID names match.
+- Only identical property names are compared. Property names and pseudo-class names outside arguments are ASCII case-insensitive; class, ID, and custom property names are case-sensitive. Equivalent escapes in property, class, and ID names match.
 - A declaration in a selector list is reported only when every branch has a blocker. Partially blocked declarations are left alone.
 
 ## Limitations
@@ -112,7 +112,7 @@ The rule is enabled only in `recommended`. It can report intentional browser fal
 
 - Does not compare priority between two layered declarations with the same importance. Named layer ordering, sublayers, imports, and other files are not resolved.
 - Does not analyze shorthand/longhand relationships, property aliases, `all` interactions, additional classes or attributes, or changes to ancestor selectors. Simple-selector order must match.
-- Skips pseudo-elements, namespace type selectors, escaped wildcard type names, shadow-tree pseudo-classes, `:scope`, `@scope`, `@starting-style`, keyframes, and unknown grouping rules.
+- Skips unparsed selector arguments (such as `:state()`), pseudo-elements, namespace type selectors, escaped wildcard type names, shadow-tree pseudo-classes, `:scope`, `@scope`, `@starting-style`, keyframes, and unknown grouping rules.
 - A property is left unchecked throughout the file if any declaration gives it `revert` or `revert-layer`. A rollback on `all` leaves the file unchecked. Rollbacks through shorthands or substitutions are not analyzed.
 - Declarations with substitution functions such as `var()` are not used as blockers. Invalid or unknown ordinary property values are not used as blockers either. Browser support, custom property registration, and computed values are not evaluated.
 

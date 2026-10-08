@@ -58,6 +58,9 @@ test.snapshot({
 		String.raw`\2a { color: red !important; } *:hover { color: blue; }`,
 		'.button { color: red !important; all: revert-layer !important; } .button:hover { color: blue; }',
 		'.toolbar > .button { color: red !important; } .toolbar { .button:hover { color: blue; } }',
+		'.toolbar:is(:HOVER) .button { color: red !important; } .toolbar:is(:hover) .button:focus { color: blue; }',
+		'.button { color: red !important; } .button:state(checked) { color: blue; }',
+		'@supports (display: grid) { .button { color: red !important; } } @media print { @supports (display: grid) { .button:hover { color: blue; } } }',
 	],
 	invalid: [
 		'.button { color: red !important; }\n.button:hover { color: blue; }',
@@ -108,5 +111,8 @@ test.snapshot({
 		'.toolbar ~ .button { color: red !important; } .toolbar { ~ .button:hover { color: blue; } }',
 		'.button { --color: "var(--base)" !important; } .button:hover { --color: blue; }',
 		String.raw`.button { --\63 olor: red !important; } .button:hover { --color: blue; }`,
+		'.toolbar:IS(.active) > .button { color: red !important; } .toolbar:is(.active) > .button:hover { color: blue; }',
+		'.button {\n\tcolor: red !important;\n}\n.button:hover {\n\tcolor: blue;\n}',
+		'.button { @media print { color: red !important; } } @media print { .button:hover { color: blue; } }',
 	],
 });
