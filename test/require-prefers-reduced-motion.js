@@ -68,6 +68,7 @@ test.snapshot({
 		'@-webkit-keyframes fade { to { opacity: 1; -webkit-animation-timing-function: ease; } } a { -webkit-animation: fade 1s; }',
 		String.raw`@KEYFRAMES Fade { TO { \6f pacity: 1; -WEBKIT-ANIMATION-TIMING-FUNCTION: ease; } } a { animation-name: Fade; }`,
 		'@keyframes tint { to { -webkit-text-fill-color: red; } } a { animation-name: tint; }',
+		'/* eslint-disable-next-line rule-to-test/require-prefers-reduced-motion -- Essential motion preview. */\na { animation: slide 1s; }\n@keyframes slide { to { transform: translateX(10px); } }',
 	],
 	invalid: [
 		'a { animation: slide 1s; }',
@@ -141,6 +142,7 @@ test.snapshot({
 		'@scope (.component) { a { scroll-behavior: smooth; } }',
 		'a {\r\n  &:hover {\r\n    transition: transform 1s;\r\n  }\r\n}',
 		String.raw`@KEYFRAMES Fade { TO { \6f pacity: 1; \74 ransform: translateX(10px); -webkit-animation-timing-function: ease; } } a { animation-name: Fade; }`,
+		'a { transition: transform calc(0s); }',
 	],
 });
 

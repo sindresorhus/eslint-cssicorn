@@ -121,7 +121,9 @@ Standalone animation duration, delay, easing, iteration, and timeline declaratio
 
 ## Limitations and exceptions
 
-Unknown animation names, imported keyframes, opaque animation or transition values, and unresolved scrolling values require the guard. Custom-property definitions themselves are allowed; the declarations consuming them are checked. The rule does not resolve variables, inspect JavaScript, reconstruct the cascade, or verify distant overrides.
+Unknown animation names, imported keyframes, entirely opaque animation or transition values, and unresolved scrolling values require the guard. Custom-property definitions themselves are allowed; the declarations consuming them are checked. The rule does not inspect JavaScript, reconstruct the cascade, or verify distant overrides.
+
+Variables are not expanded, including any additional comma-separated effects they may introduce. When explicit names, targets, or literal zero durations establish a non-motion exemption, accompanying variables are treated as modifiers. Place declarations using variables for whole effects or effect lists inside the preference query.
 
 Animation shorthands containing ambiguous `--` names also require a guard when the parser cannot distinguish an animation name from a timeline name. Use an explicit `animation-name` declaration to make the selection clear.
 

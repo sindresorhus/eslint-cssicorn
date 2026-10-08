@@ -980,6 +980,20 @@ Message:
 
 `;
 
+exports[`invalid(72): a { transition: transform calc(0s); } 1`] = `
+
+  1 | a { transition: transform calc(0s); }
+
+`;
+
+exports[`invalid(72): a { transition: transform calc(0s); } 2`] = `
+
+Message:
+> 1 | a { transition: transform calc(0s); }
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Place \`transition\` inside a \`prefers-reduced-motion: no-preference\` media query.
+
+`;
+
 exports[`invalid(8): a { animation-name: external; } 1`] = `
 
   1 | a { animation-name: external; }
