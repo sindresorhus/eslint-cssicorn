@@ -846,6 +846,10 @@ test.snapshot({
 		'a { animation: 2s "none"; }',
 		'a { animation: 2s ease ease; }',
 		'a { animation: 2s linear linear; }',
+		'a { animation: 2s ease forwards forwards; }',
+		'a { animation: 2s ease paused paused; }',
+		'a { animation: 2s ease linear; }',
+		String.raw`a { animation: 2s ease a\20 b; }`,
 		'a { animation: 3s none backwards; }',
 		'a { animation: 2s none; }',
 		'a { animation: 2s ease, none; }',
@@ -940,4 +944,24 @@ test({
 		String.raw`a { border: 1px red; border-\73 tyle: solid; outline: 2px blue; -webkit-outline-\73 tyle: auto; animation: 2s ease; -webkit-animation-n\61 me: fade; }`,
 	],
 	invalid: [],
+});
+
+test({
+	valid: [
+		'a { border: red solid 1px; outline: blue auto 2px; }',
+		'a { border: 1px red; border-style: bad; outline: 2px blue; outline-style: bad; animation: 2s ease; animation-name: 42; }',
+	],
+	invalid: [
+		{
+			code: 'a { border: red 1px; outline: blue 2px; }',
+			errors: [
+				{messageId: omittedComponentMessageId, data: {property: 'border', component: 'the border style'}},
+				{messageId: omittedComponentMessageId, data: {property: 'outline', component: 'the outline style'}},
+			],
+		},
+		...['2s ease forwards', '2s ease paused', '2s infinite alternate paused both'].map(value => ({
+			code: `a { animation: ${value}; }`,
+			errors: [{messageId: omittedComponentMessageId, data: {property: 'animation', component: 'an animation name'}}],
+		})),
+	],
 });
