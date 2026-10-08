@@ -52,13 +52,13 @@ const getComponentRank = (node, order, matchResult) => order.findIndex(component
 	? node.type === 'Identifier' && normalizeCssIdentifier(node.name) === 'inset'
 	: matchResult.isType(node, component) || matchResult.isProperty(node, component));
 
-const isLiteralColumnComponent = node => {
+const isColumnComponent = node => {
 	if (node.type === 'Number') {
 		const number = Number(node.value);
 		return Number.isSafeInteger(number) && number > 0;
 	}
 
-	return node.type === 'Identifier' || node.type === 'Dimension';
+	return ['Identifier', 'Dimension', 'Function'].includes(node.type);
 };
 
 const hasRandomFunction = value => Boolean(find(value, node => node.type === 'Function'
@@ -75,12 +75,16 @@ const getGroupProblem = (nodes, canonicalNodes, {order, matchResult, property, c
 
 	// Equal-ranked lengths keep their positional meaning, and shadow layers are never reordered.
 	const sortedComponents = components.toSorted((first, second) => first.rank - second.rank);
-	if (components.every((component, index) => component === sortedComponents[index])) {
+	const firstChangedIndex = components.findIndex((component, index) => component !== sortedComponents[index]);
+	if (firstChangedIndex === -1) {
 		return;
 	}
 
+	const lastChangedIndex = components.findLastIndex((component, index) => component !== sortedComponents[index]);
 	const {sourceCode} = context;
 	const range = [sourceCode.getRange(nodes[0])[0], sourceCode.getRange(nodes.at(-1))[1]];
+	const fixRange = [sourceCode.getRange(nodes[firstChangedIndex])[0], sourceCode.getRange(nodes[lastChangedIndex])[1]];
+	const getSeparator = index => sourceCode.text.slice(sourceCode.getRange(nodes[index - 1])[1], sourceCode.getRange(nodes[index])[0]);
 	return {
 		loc: toLocation(range, context),
 		messageId: MESSAGE_ID,
@@ -89,18 +93,20 @@ const getGroupProblem = (nodes, canonicalNodes, {order, matchResult, property, c
 		@param {Parameters<CssicornRuleFixer>[0]} fixer
 		*/
 		fix(fixer, {abort}) {
-			if (hasCommentInRange(context, range)) {
+			if (hasCommentInRange(context, fixRange)) {
 				return abort();
 			}
 
-			let replacement = '';
-			for (const [index, {node}] of sortedComponents.entries()) {
-				if (index > 0) {
-					const separator = sourceCode.text.slice(sourceCode.getRange(nodes[index - 1])[1], sourceCode.getRange(nodes[index])[0]);
+			// Leave unchanged components and their comments outside the replacement.
+			let replacement = firstChangedIndex > 0 && !getSeparator(firstChangedIndex) ? ' ' : '';
+			for (let index = firstChangedIndex; index <= lastChangedIndex; index++) {
+				if (index > firstChangedIndex) {
+					const separator = getSeparator(index);
 					// Adjacent functions can originally need no whitespace, but reordered tokens may merge.
 					replacement += separator || ' ';
 				}
 
+				const {node} = sortedComponents[index];
 				const text = sourceCode.getText(node);
 				replacement += text;
 				// A terminating hexadecimal escape consumes one whitespace character before the token separator.
@@ -109,7 +115,11 @@ const getGroupProblem = (nodes, canonicalNodes, {order, matchResult, property, c
 				}
 			}
 
-			return fixer.replaceTextRange(range, replacement);
+			if (lastChangedIndex < nodes.length - 1 && !getSeparator(lastChangedIndex + 1)) {
+				replacement += ' ';
+			}
+
+			return fixer.replaceTextRange(fixRange, replacement);
 		},
 	};
 };
@@ -130,7 +140,6 @@ const create = context => {
 			|| value.type !== 'Value'
 			|| value.children.length < 2
 			|| isCssModulesInteropDeclaration(declaration, context)
-			|| (property === 'columns' && value.children.some(node => !isLiteralColumnComponent(node)))
 		) {
 			return;
 		}
@@ -143,7 +152,9 @@ const create = context => {
 		// Literal commas isolate shadow layers even when substitutions expand into additional layers.
 		const groups = isShadow ? getCommaSeparatedGroups(value) : [{nodes: value.children}];
 		for (const {nodes} of groups) {
-			if (nodes.length < 2) {
+			const slashIndex = property === 'columns' ? nodes.findIndex(node => node.type === 'Operator' && node.value === '/') : -1;
+			const componentNodes = slashIndex === -1 ? nodes : nodes.slice(0, slashIndex);
+			if (componentNodes.length < 2 || (property === 'columns' && componentNodes.some(node => !isColumnComponent(node)))) {
 				continue;
 			}
 
@@ -158,7 +169,7 @@ const create = context => {
 				continue;
 			}
 
-			const problem = getGroupProblem(nodes, canonicalValue.children, {
+			const problem = getGroupProblem(componentNodes, canonicalValue.children, {
 				order, matchResult, property, context,
 			});
 			if (problem) {

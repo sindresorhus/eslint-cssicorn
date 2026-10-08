@@ -27,7 +27,10 @@ test.snapshot({
 		'a { border: red solid calc(random(1px, 5px) + 1px); }',
 		'a { border: red solid --width(); }',
 		'a { flex-flow: var(--direction, column) wrap; }',
-		'a { columns: 3 calc(10px); columns: 3 20em / 10em; columns: 3 0; columns: auto 0; columns: -1 20em; columns: 1.5 20em; }',
+		'a { columns: 3 0; columns: auto 0; columns: -1 20em; columns: 1.5 20em; }',
+		'a { columns: calc(3) calc(20em); columns: auto calc(20em); columns: 3 unknown(); }',
+		'a { columns: 3 calc(var(--width)); columns: 3 calc(random(1px, 2px)); columns: 3 20em / var(--height); }',
+		'a { columns: 3 0 / 10em; columns: 3 20em /; columns: 3 20em / 10em / 2px; }',
 		'a { columns: 3 +0; columns: 3 -0; columns: 3 0.0; }',
 		'a { columns: 9007199254740992 20em; }',
 		'a { border: red solid unknown; flex-flow: wrap column unknown; box-shadow: red 1px; columns: 3 4; }',
@@ -233,6 +236,59 @@ test({
 			output: 'a { text-wrap: wrap balance; white-space: preserve nowrap; }',
 			errors: 2,
 		},
+		{
+			code: 'a { columns: 3 calc(20em); columns: calc(3) 20em; }',
+			output: 'a { columns: calc(20em) 3; columns: 20em calc(3); }',
+			errors: 2,
+		},
+		{
+			code: 'a { columns: 3 min(20em, 30em) / calc(10em + 1px); }',
+			output: 'a { columns: min(20em, 30em) 3 / calc(10em + 1px); }',
+			errors: 1,
+		},
+		{
+			code: 'a { columns: 3 20em / 10em; columns: 3 auto / auto; columns: auto 20em / 0; }',
+			output: 'a { columns: 20em 3 / 10em; columns: auto 3 / auto; columns: 20em auto / 0; }',
+			errors: 3,
+		},
+		{
+			code: 'a {\r\n  -webkit-columns: 3 CALC(20EM) / /* height */ 10EM !important;\r\n}',
+			output: 'a {\r\n  -webkit-columns: CALC(20EM) 3 / /* height */ 10EM !important;\r\n}',
+			errors: 1,
+		},
+		{
+			code: 'a { columns: 3 /* count */ calc(20em) / 10em; }',
+			errors: 1,
+		},
+		{
+			code: 'a { border: calc(1px /* width */ + 2px) red solid; }',
+			output: 'a { border: calc(1px /* width */ + 2px) solid red; }',
+			errors: 1,
+		},
+		{
+			code: 'a { text-decoration: wavy underline rgb(/* color */ 0 0 0); }',
+			output: 'a { text-decoration: underline wavy rgb(/* color */ 0 0 0); }',
+			errors: 1,
+		},
+		{
+			code: 'a { text-decoration: calc(/* thickness */ 2px)rgb(0 0 0) wavy; }',
+			output: 'a { text-decoration: calc(/* thickness */ 2px) wavy rgb(0 0 0); }',
+			errors: 1,
+		},
+		{
+			code: 'a { text-decoration: underline wavy calc(2px)rgb(/* color */ 0 0 0); }',
+			output: 'a { text-decoration: underline calc(2px) wavy rgb(/* color */ 0 0 0); }',
+			errors: 1,
+		},
+		{
+			code: 'a { text-decoration: underline red /* keep */ wavy; }',
+			errors: 1,
+		},
+		{
+			code: 'a { text-decoration: underline /* line */ wavy calc(2px) /* color */ rgb(0 0 0); }',
+			output: 'a { text-decoration: underline /* line */ calc(2px) wavy /* color */ rgb(0 0 0); }',
+			errors: 1,
+		},
 	],
 });
 
@@ -291,7 +347,7 @@ nodeTest('fixes converge with longhand combination and are idempotent', () => {
 	}
 });
 
-nodeTest('fixes preserve adjacent string boundaries and positional math lengths', () => {
+nodeTest('fixes preserve token boundaries and positional math lengths', () => {
 	const linter = new Linter();
 	const config = {...plugin.configs.all, rules: {'cssicorn/consistent-value-order': 'error'}};
 	for (const [code, output] of [
@@ -300,11 +356,30 @@ nodeTest('fixes preserve adjacent string boundaries and positional math lengths'
 			'a { box-shadow: red calc(1px + 2px) min(3px, 4px) max(5px, 6px) clamp(7px, 8px, 9px) inset; }',
 			'a { box-shadow: inset calc(1px + 2px) min(3px, 4px) max(5px, 6px) clamp(7px, 8px, 9px) red; }',
 		],
+		[
+			'a { text-decoration: underline wavy calc(2px)rgb(0 0 0); }',
+			'a { text-decoration: underline calc(2px) wavy rgb(0 0 0); }',
+		],
+		[
+			'a { text-decoration: calc(2px)rgb(0 0 0) wavy; }',
+			'a { text-decoration: calc(2px) wavy rgb(0 0 0); }',
+		],
+		[
+			String.raw`a { text-decoration: underline wav\79  2px rgb(/* keep */ 0 0 0); }`,
+			String.raw`a { text-decoration: underline 2px wav\79  rgb(/* keep */ 0 0 0); }`,
+		],
+		[
+			'a { columns: calc(3) 20em / calc(10em); }',
+			'a { columns: 20em calc(3) / calc(10em); }',
+		],
 	]) {
 		const result = linter.verifyAndFix(code, config, {filename: 'test.css'});
 		assert.equal(result.output, output);
 		assert.deepEqual(result.messages, []);
 		assert.deepEqual(linter.verifyAndFix(output, config, {filename: 'test.css'}), {...result, fixed: false});
+		const [styleRule] = toPlainObject(parse(output)).children;
+		const [declaration] = styleRule.block.children;
+		assert.ok(lexer.matchProperty(declaration.property, getCanonicalLexerNode(declaration.value)).matched);
 	}
 });
 
@@ -341,15 +416,24 @@ nodeTest('presets enable value ordering only for recommended and all', () => {
 	}
 });
 
-nodeTest('ordering converges with preset zero-unit and color fixes', () => {
+nodeTest('ordering converges with other preset fixes', () => {
 	const linter = new Linter();
-	const code = '.example { columns: 3 0px; box-shadow: #000000 0px 1px 2px inset; }';
-	const output = '.example { columns: 0px 3; box-shadow: inset 0 1px 2px #000; }';
-	for (const preset of ['recommended', 'all']) {
-		const result = linter.verifyAndFix(code, plugin.configs[preset], {filename: 'test.css'});
-		assert.equal(result.output, output, preset);
-		assert.equal(result.fixed, true);
-		assert.deepEqual(result.messages, []);
-		assert.deepEqual(linter.verifyAndFix(output, plugin.configs[preset], {filename: 'test.css'}), {...result, fixed: false});
+	for (const [code, output] of [
+		[
+			'.example { columns: 3 0px; box-shadow: #000000 0px 1px 2px inset; }',
+			'.example { columns: 0px 3; box-shadow: inset 0 1px 2px #000; }',
+		],
+		[
+			'.example { columns: 3 calc(20em) / calc(10em); text-decoration: wavy underline rgb(/* color */ 0 0 0); }',
+			'.example { columns: 20em 3 / 10em; text-decoration: underline wavy rgb(/* color */ 0 0 0); }',
+		],
+	]) {
+		for (const preset of ['recommended', 'all']) {
+			const result = linter.verifyAndFix(code, plugin.configs[preset], {filename: 'test.css'});
+			assert.equal(result.output, output, preset);
+			assert.equal(result.fixed, true);
+			assert.deepEqual(result.messages, []);
+			assert.deepEqual(linter.verifyAndFix(output, plugin.configs[preset], {filename: 'test.css'}), {...result, fixed: false});
+		}
 	}
 });

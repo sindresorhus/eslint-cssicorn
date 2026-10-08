@@ -18,7 +18,7 @@ Enforces these authoring orders for interchangeable value components:
 - `flex-flow`: direction, wrap.
 - `box-shadow`: inset, lengths, color.
 - `text-shadow`: lengths, color.
-- `columns`: width, count.
+- `columns`: width, count; preserves any `/ height` suffix.
 - `text-decoration`: lines, thickness, style, color.
 - `text-emphasis`: style, color.
 - `text-wrap`: mode, style.
@@ -70,5 +70,5 @@ a {
 
 - Only checks lexer-recognized values, which can include values browsers reject. White space trimming may require `languageOptions.customSyntax`.
 - Ignores custom properties, CSS Modules interop declarations, and declarations containing random functions. Substitutions such as `var()`, `env()`, and `attr()` exclude their shadow layer, or the whole value for other properties. Unmatched shadow layers are skipped.
-- Reports out-of-order groups containing comments without fixing them. Other shadow layers can still be fixed.
-- For `columns`, only checks dimensions, `auto`, and positive safe integers. Functions, slash syntax, and unitless zero are ignored. Use `0px` for zero width.
+- Reports without fixing when the reordered span contains comments. Comments in unchanged components are preserved.
+- For `columns`, literal counts must be positive safe integers, and unitless zero is ignored; use `0px` for zero width. Ambiguous math component roles may go unreported.
