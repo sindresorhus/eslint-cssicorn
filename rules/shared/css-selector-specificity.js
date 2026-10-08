@@ -4,7 +4,7 @@ import {functionalPseudoSelectors, nonFunctionalPseudoSelectors} from './standar
 
 /**
 @import {PseudoClassSelectorPlain, PseudoElementSelectorPlain, SelectorListPlain, SelectorPlain} from '@eslint/css-tree';
-@typedef {[ids: number, classes: number, types: number]} Specificity
+@typedef {readonly [ids: number, classes: number, types: number]} Specificity
 */
 
 /**
@@ -61,7 +61,7 @@ const compareSpecificity = (first, second) => {
 };
 
 /**
-@param {Specificity[]} specificities
+@param {readonly Specificity[]} specificities
 @returns {Specificity}
 */
 const getMaximumSpecificity = specificities => {
