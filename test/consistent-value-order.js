@@ -226,8 +226,8 @@ nodeTest('presets enable value ordering only for recommended and all', () => {
 
 nodeTest('ordering converges with preset zero-unit and color fixes', () => {
 	const linter = new Linter();
-	const code = 'a { columns: 3 0px; box-shadow: #000000 0px 1px 2px inset; }';
-	const output = 'a { columns: 0px 3; box-shadow: inset 0 1px 2px #000; }';
+	const code = '.example { columns: 3 0px; box-shadow: #000000 0px 1px 2px inset; }';
+	const output = '.example { columns: 0px 3; box-shadow: inset 0 1px 2px #000; }';
 	for (const preset of ['recommended', 'all']) {
 		const result = linter.verifyAndFix(code, plugin.configs[preset], {filename: 'test.css'});
 		assert.equal(result.output, output, preset);
