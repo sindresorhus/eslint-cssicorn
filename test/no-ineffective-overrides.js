@@ -61,6 +61,9 @@ test.snapshot({
 		'.toolbar:is(:HOVER) .button { color: red !important; } .toolbar:is(:hover) .button:focus { color: blue; }',
 		'.button { color: red !important; } .button:state(checked) { color: blue; }',
 		'@supports (display: grid) { .button { color: red !important; } } @media print { @supports (display: grid) { .button:hover { color: blue; } } }',
+		String.raw`.button { --color: red !important; } .button:hover { --color: /* rollback */ \72 evert-layer /* value */ !important; --color: blue; }`,
+		String.raw`.button { --color: \76 ar(--base) !important; } .button:hover { --color: blue; }`,
+		'.button { --color: {var(--base)} !important; } .button:hover { --color: blue; }',
 	],
 	invalid: [
 		'.button { color: red !important; }\n.button:hover { color: blue; }',
