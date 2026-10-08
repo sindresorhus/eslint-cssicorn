@@ -1,0 +1,202 @@
+exports[`invalid(1): a { transform: scale(/* keep */ 2); } 1`] = `
+
+  1 | a { transform: scale(/* keep */ 2); }
+
+`;
+
+exports[`invalid(1): a { transform: scale(/* keep */ 2); } 2`] = `
+
+Message:
+> 1 | a { transform: scale(/* keep */ 2); }
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Prefer individual transform properties over this \`transform\` declaration.
+
+`;
+
+exports[`invalid(10): @container (width > 10px) { a { transform: scale(2); } } 1`] = `
+
+  1 | @container (width > 10px) { a { transform: scale(2); } }
+
+`;
+
+exports[`invalid(10): @container (width > 10px) { a { transform: scale(2); } } 2`] = `
+
+Message:
+> 1 | @container (width > 10px) { a { transform: scale(2); } }
+    |                                 ^^^^^^^^^^^^^^^^^^^ Prefer individual transform properties over this \`transform\` declaration.
+
+Suggestion 1/1: Convert to individual transform properties.:
+  1 | @container (width > 10px) { a { scale: 2; } }
+
+`;
+
+exports[`invalid(11): @layer buttons { a { transform: scale(2); } } 1`] = `
+
+  1 | @layer buttons { a { transform: scale(2); } }
+
+`;
+
+exports[`invalid(11): @layer buttons { a { transform: scale(2); } } 2`] = `
+
+Message:
+> 1 | @layer buttons { a { transform: scale(2); } }
+    |                      ^^^^^^^^^^^^^^^^^^^ Prefer individual transform properties over this \`transform\` declaration.
+
+Suggestion 1/1: Convert to individual transform properties.:
+  1 | @layer buttons { a { scale: 2; } }
+
+`;
+
+exports[`invalid(12): @scope (.buttons) { a { transform: scale(2); } } 1`] = `
+
+  1 | @scope (.buttons) { a { transform: scale(2); } }
+
+`;
+
+exports[`invalid(12): @scope (.buttons) { a { transform: scale(2); } } 2`] = `
+
+Message:
+> 1 | @scope (.buttons) { a { transform: scale(2); } }
+    |                         ^^^^^^^^^^^^^^^^^^^ Prefer individual transform properties over this \`transform\` declaration.
+
+Suggestion 1/1: Convert to individual transform properties.:
+  1 | @scope (.buttons) { a { scale: 2; } }
+
+`;
+
+exports[`invalid(13): a { @media (width > 10px) { transform: scale(2); } } 1`] = `
+
+  1 | a { @media (width > 10px) { transform: scale(2); } }
+
+`;
+
+exports[`invalid(13): a { @media (width > 10px) { transform: scale(2); } } 2`] = `
+
+Message:
+> 1 | a { @media (width > 10px) { transform: scale(2); } }
+    |                             ^^^^^^^^^^^^^^^^^^^ Prefer individual transform properties over this \`transform\` declaration.
+
+Suggestion 1/1: Convert to individual transform properties.:
+  1 | a { @media (width > 10px) { scale: 2; } }
+
+`;
+
+exports[`invalid(2): a { transform: translate(1px) /* keep */ scale(2); } 1`] = `
+
+  1 | a { transform: translate(1px) /* keep */ scale(2); }
+
+`;
+
+exports[`invalid(2): a { transform: translate(1px) /* keep */ scale(2); } 2`] = `
+
+Message:
+> 1 | a { transform: translate(1px) /* keep */ scale(2); }
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Prefer individual transform properties over this \`transform\` declaration.
+
+`;
+
+exports[`invalid(3): a { transform: /* keep */ scale(2); } 1`] = `
+
+  1 | a { transform: /* keep */ scale(2); }
+
+`;
+
+exports[`invalid(3): a { transform: /* keep */ scale(2); } 2`] = `
+
+Message:
+> 1 | a { transform: /* keep */ scale(2); }
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Prefer individual transform properties over this \`transform\` declaration.
+
+`;
+
+exports[`invalid(4): a { transform: scale(2) /* keep */ !important; } 1`] = `
+
+  1 | a { transform: scale(2) /* keep */ !important; }
+
+`;
+
+exports[`invalid(4): a { transform: scale(2) /* keep */ !important; } 2`] = `
+
+Message:
+> 1 | a { transform: scale(2) /* keep */ !important; }
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Prefer individual transform properties over this \`transform\` declaration.
+
+`;
+
+exports[`invalid(5): a { transform /* keep */ : scale(2); } 1`] = `
+
+  1 | a { transform /* keep */ : scale(2); }
+
+`;
+
+exports[`invalid(5): a { transform /* keep */ : scale(2); } 2`] = `
+
+Message:
+> 1 | a { transform /* keep */ : scale(2); }
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Prefer individual transform properties over this \`transform\` declaration.
+
+`;
+
+exports[`invalid(6): a { transform: scale(2) /* keep */; } 1`] = `
+
+  1 | a { transform: scale(2) /* keep */; }
+
+`;
+
+exports[`invalid(6): a { transform: scale(2) /* keep */; } 2`] = `
+
+Message:
+> 1 | a { transform: scale(2) /* keep */; }
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Prefer individual transform properties over this \`transform\` declaration.
+
+`;
+
+exports[`invalid(7): a { &:hover { transform: scale(2); } } 1`] = `
+
+  1 | a { &:hover { transform: scale(2); } }
+
+`;
+
+exports[`invalid(7): a { &:hover { transform: scale(2); } } 2`] = `
+
+Message:
+> 1 | a { &:hover { transform: scale(2); } }
+    |               ^^^^^^^^^^^^^^^^^^^ Prefer individual transform properties over this \`transform\` declaration.
+
+Suggestion 1/1: Convert to individual transform properties.:
+  1 | a { &:hover { scale: 2; } }
+
+`;
+
+exports[`invalid(8): @media (width > 10px) { a { transform: scale(2); } } 1`] = `
+
+  1 | @media (width > 10px) { a { transform: scale(2); } }
+
+`;
+
+exports[`invalid(8): @media (width > 10px) { a { transform: scale(2); } } 2`] = `
+
+Message:
+> 1 | @media (width > 10px) { a { transform: scale(2); } }
+    |                             ^^^^^^^^^^^^^^^^^^^ Prefer individual transform properties over this \`transform\` declaration.
+
+Suggestion 1/1: Convert to individual transform properties.:
+  1 | @media (width > 10px) { a { scale: 2; } }
+
+`;
+
+exports[`invalid(9): @supports (transform: scale(2)) { a { transform: scale(2); } } 1`] = `
+
+  1 | @supports (transform: scale(2)) { a { transform: scale(2); } }
+
+`;
+
+exports[`invalid(9): @supports (transform: scale(2)) { a { transform: scale(2); } } 2`] = `
+
+Message:
+> 1 | @supports (transform: scale(2)) { a { transform: scale(2); } }
+    |                                       ^^^^^^^^^^^^^^^^^^^ Prefer individual transform properties over this \`transform\` declaration.
+
+Suggestion 1/1: Convert to individual transform properties.:
+  1 | @supports (transform: scale(2)) { a { scale: 2; } }
+
+`;
