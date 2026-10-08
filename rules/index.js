@@ -30,6 +30,7 @@ export {default as 'no-useless-is'} from './no-useless-is.js';
 export {default as 'no-zero-length-unit'} from './no-zero-length-unit.js';
 export {default as 'prefer-clamp'} from './prefer-clamp.js';
 export {default as 'prefer-explicit-viewport-units'} from './prefer-explicit-viewport-units.js';
+export {default as 'prefer-light-dark'} from './prefer-light-dark.js';
 export {default as 'prefer-media-feature-range-syntax'} from './prefer-media-feature-range-syntax.js';
 export {default as 'prefer-modern-syntax'} from './prefer-modern-syntax.js';
 export {default as 'prefer-nesting'} from './prefer-nesting.js';

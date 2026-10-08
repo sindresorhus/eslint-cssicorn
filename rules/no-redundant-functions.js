@@ -1,5 +1,7 @@
 import {keyword, parse, walk} from '@eslint/css-tree';
 import colorFunctionsWithAlpha from './shared/css-color-functions.js';
+import {isLiteralColor, areEqualLiteralColors} from './shared/css-colors.js';
+import {getNumericLiteralKey, isSafeIntegerSpelling} from './shared/css-numeric-literals.js';
 import mathFunctions from './shared/css-math-functions.js';
 import {areEqualValues, getCondensedValueCount} from './shared/css-shorthand-values.js';
 import {
@@ -204,21 +206,6 @@ function getLiteralCalculationProblem(node, declaration, parentFunction, context
 		yield fixer.removeRange([start, start + node.name.length + 1]);
 		yield fixer.replaceTextRange([end - 1, end], getFunctionReplacementSeparator(node, context));
 	});
-}
-
-function getNumericLiteralKey(node) {
-	if (node.type === 'Identifier') {
-		return `Identifier:${normalizeCssIdentifier(node.name)}`;
-	}
-
-	if (!['Number', 'Dimension', 'Percentage'].includes(node.type)) {
-		return;
-	}
-
-	// Equivalent integer spellings have the same value at any engine precision. Keep signed zeros, types, and units distinct.
-	const numericValue = Number(node.value);
-	const value = isSafeIntegerSpelling(node.value) ? (Object.is(numericValue, -0) ? '-0' : numericValue) : node.value;
-	return `${node.type}:${value}:${node.type === 'Dimension' ? normalizeCssIdentifier(node.unit) : ''}`;
 }
 
 function getDominatingComparisonProblem(node, name, arguments_, context) {
@@ -434,21 +421,6 @@ function getAlphaProblem(node, context) {
 	}
 }
 
-function isLiteralColor(node, context) {
-	if (node.type === 'Function') {
-		if (!colorFunctionsWithAlpha.has(normalizeCssIdentifier(node.name))
-			|| [...node.children].some(value => !['Number', 'Dimension', 'Percentage', 'Operator', 'Identifier'].includes(value.type)
-				|| (value.type === 'Identifier' && (normalizeCssIdentifier(value.name) === 'from' || normalizeCssIdentifier(value.name).startsWith('--'))))
-		) {
-			return false;
-		}
-	} else if (!['Hash', 'Identifier'].includes(node.type)) {
-		return false;
-	}
-
-	return matchesType(node, 'color-base', context);
-}
-
 function getLightDarkProblem(node, context, parentFunction) {
 	const arguments_ = getCommaSeparatedGroups(node);
 	if (arguments_.length !== 2 || arguments_.some(argument => argument.nodes.length !== 1)) {
@@ -466,27 +438,7 @@ function getLightDarkProblem(node, context, parentFunction) {
 	}
 
 	// Dynamic colors and images have their own resolution and inheritance behavior. Only collapse equivalent literal colors in the same color space.
-	if (first.type === 'Function' && second.type === 'Function') {
-		const names = [first, second].map(color => {
-			const name = normalizeCssIdentifier(color.name);
-			return name === 'rgba' || name === 'hsla' ? name.slice(0, -1) : name;
-		});
-		const values = [...first.children];
-		const otherValues = [...second.children];
-		if (names[0] !== names[1] || values.length !== otherValues.length
-			|| values.some((value, index) => {
-				if (names[0] === 'color' && index === 0
-					&& [value, otherValues[index]].every(child => child.type === 'Identifier' && ['xyz', 'xyz-d65'].includes(normalizeCssIdentifier(child.name)))) {
-					return false;
-				}
-
-				const literalKey = getNumericLiteralKey(value);
-				return literalKey === undefined ? !areEqualValues(value, otherValues[index]) : literalKey !== getNumericLiteralKey(otherValues[index]);
-			})
-		) {
-			return;
-		}
-	} else if (!['Hash', 'Identifier'].includes(first.type) || !areEqualValues(first, second)) {
+	if (!areEqualLiteralColors(first, second)) {
 		return;
 	}
 
@@ -1203,10 +1155,6 @@ function getUnsteppedRoundValue(arguments_) {
 	if (arguments_.length === 1 || (arguments_.length === 2 && ['nearest', 'up', 'down', 'to-zero'].some(strategy => isIdentifierArgument(arguments_[0], strategy)))) {
 		return arguments_.at(-1);
 	}
-}
-
-function isSafeIntegerSpelling(value) {
-	return /^[+\-]?(?:\d+(?:\.0+)?|\.0+)$/v.test(value) && Number.isSafeInteger(Number(value));
 }
 
 function isIntegerMathInput(node) {
