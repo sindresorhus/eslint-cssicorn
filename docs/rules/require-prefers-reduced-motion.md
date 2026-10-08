@@ -117,11 +117,13 @@ Complete transition shorthand layers with an omitted or literal zero duration ar
 
 A nonzero or unresolved `transition-duration` is checked independently because the initial transition property is `all`. It is exempt when exactly one `transition` or `transition-property` declaration in the same block explicitly selects only non-motion properties or `none`. Duplicate controllers and controllers in other selectors do not establish this exemption.
 
-Standalone animation-duration, delay, easing, iteration, and timeline declarations are not checked: the animation name selection is checked where it is declared. Explicit disabling values and `initial`/`unset` resets are allowed. Inherited and reverted values remain potentially moving.
+Standalone animation duration, delay, easing, iteration, and timeline declarations are not checked: the animation name selection is checked where it is declared. Explicit disabling values and `initial`/`unset` resets are allowed. An opaque shorthand such as `animation: none var(--duration)` still requires a guard because the variable can supply an animation name. Inherited and reverted values remain potentially moving.
 
 ## Limitations and exceptions
 
 Unknown animation names, imported keyframes, opaque animation or transition values, and unresolved scrolling values require the guard. Custom-property definitions themselves are allowed; the declarations consuming them are checked. The rule does not resolve variables, inspect JavaScript, reconstruct the cascade, or verify distant overrides.
+
+Animation shorthands containing ambiguous `--` names also require a guard when the parser cannot distinguish an animation name from a timeline name. Use an explicit `animation-name` declaration to make the selection clear.
 
 Harmless external fades and other conservative exceptions can use an ESLint disable comment. Essential motion should also use a suppression with a reason:
 

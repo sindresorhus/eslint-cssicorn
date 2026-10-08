@@ -140,6 +140,11 @@ function hasOnlyNonMotionAnimations(declaration, property, lexer, nonMotionAnima
 			return names.every(node => nonMotionAnimations.get(getAnimationName(node)) === true);
 		}
 
+		// The lexer can mistake a dashed animation name for a timeline in ambiguous shorthands.
+		if (nodes.some(node => node.type === 'Identifier' && normalizeCssIdentifier(node.name).startsWith('--'))) {
+			return false;
+		}
+
 		// A valid shorthand without a name selects `none`; unresolved values can supply a name.
 		const value = {...declaration.value, children: nodes.map(node => getCanonicalLexerNode(node))};
 		return Boolean(lexer.matchProperty(property, value).matched);
