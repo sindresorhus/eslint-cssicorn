@@ -1,6 +1,7 @@
 export {default as getAtRuleContextPart} from './get-at-rule-context-part.js';
 export {default as getCommaSeparatedGroups} from './get-comma-separated-groups.js';
 export {default as getFeatureNameRange} from './get-feature-name-range.js';
+export {default as getPseudoSelectorArgument} from './get-pseudo-selector-argument.js';
 export {default as getSingleValueIdentifier} from './get-single-value-identifier.js';
 export {default as hasCommentInRange} from './has-comment-in-range.js';
 export {default as hasSubstitutionOrRandomFunction} from './has-substitution-or-random-function.js';

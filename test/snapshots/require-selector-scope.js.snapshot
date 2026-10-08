@@ -1,0 +1,731 @@
+exports[`invalid(1): button {} 1`] = `
+
+  1 | button {}
+
+`;
+
+exports[`invalid(1): button {} 2`] = `
+
+Message:
+> 1 | button {}
+    | ^^^^^^ Require a positive scoping boundary for this selector.
+
+`;
+
+exports[`invalid(10): :has(.card) {} 1`] = `
+
+  1 | :has(.card) {}
+
+`;
+
+exports[`invalid(10): :has(.card) {} 2`] = `
+
+Message:
+> 1 | :has(.card) {}
+    | ^^^^^^^^^^^ Require a positive scoping boundary for this selector.
+
+`;
+
+exports[`invalid(11): :not(:not(.card)) {} 1`] = `
+
+  1 | :not(:not(.card)) {}
+
+`;
+
+exports[`invalid(11): :not(:not(.card)) {} 2`] = `
+
+Message:
+> 1 | :not(:not(.card)) {}
+    | ^^^^^^^^^^^^^^^^^ Require a positive scoping boundary for this selector.
+
+`;
+
+exports[`invalid(12): :is(.card, button) {} 1`] = `
+
+  1 | :is(.card, button) {}
+
+`;
+
+exports[`invalid(12): :is(.card, button) {} 2`] = `
+
+Message:
+> 1 | :is(.card, button) {}
+    | ^^^^^^^^^^^^^^^^^^ Require a positive scoping boundary for this selector.
+
+`;
+
+exports[`invalid(13): :where(.card, *) {} 1`] = `
+
+  1 | :where(.card, *) {}
+
+`;
+
+exports[`invalid(13): :where(.card, *) {} 2`] = `
+
+Message:
+> 1 | :where(.card, *) {}
+    | ^^^^^^^^^^^^^^^^ Require a positive scoping boundary for this selector.
+
+`;
+
+exports[`invalid(14): :is(:where(.card, button), #panel) {} 1`] = `
+
+  1 | :is(:where(.card, button), #panel) {}
+
+`;
+
+exports[`invalid(14): :is(:where(.card, button), #panel) {} 2`] = `
+
+Message:
+> 1 | :is(:where(.card, button), #panel) {}
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Require a positive scoping boundary for this selector.
+
+`;
+
+exports[`invalid(15): :is(:not(.card), :has(#panel)) {} 1`] = `
+
+  1 | :is(:not(.card), :has(#panel)) {}
+
+`;
+
+exports[`invalid(15): :is(:not(.card), :has(#panel)) {} 2`] = `
+
+Message:
+> 1 | :is(:not(.card), :has(#panel)) {}
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Require a positive scoping boundary for this selector.
+
+`;
+
+exports[`invalid(16): :\\69s(.card, button) {} 1`] = `
+
+  1 | :\\69s(.card, button) {}
+
+`;
+
+exports[`invalid(16): :\\69s(.card, button) {} 2`] = `
+
+Message:
+> 1 | :\\69s(.card, button) {}
+    | ^^^^^^^^^^^^^^^^^^^^ Require a positive scoping boundary for this selector.
+
+`;
+
+exports[`invalid(17): :\\77here(:\\69s(.card, button), #panel) {} 1`] = `
+
+  1 | :\\77here(:\\69s(.card, button), #panel) {}
+
+`;
+
+exports[`invalid(17): :\\77here(:\\69s(.card, button), #panel) {} 2`] = `
+
+Message:
+> 1 | :\\77here(:\\69s(.card, button), #panel) {}
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Require a positive scoping boundary for this selector.
+
+`;
+
+exports[`invalid(18): :nth-child(2n) {} 1`] = `
+
+  1 | :nth-child(2n) {}
+
+`;
+
+exports[`invalid(18): :nth-child(2n) {} 2`] = `
+
+Message:
+> 1 | :nth-child(2n) {}
+    | ^^^^^^^^^^^^^^ Require a positive scoping boundary for this selector.
+
+`;
+
+exports[`invalid(19): :nth-child(2n of .card, button) {} 1`] = `
+
+  1 | :nth-child(2n of .card, button) {}
+
+`;
+
+exports[`invalid(19): :nth-child(2n of .card, button) {} 2`] = `
+
+Message:
+> 1 | :nth-child(2n of .card, button) {}
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Require a positive scoping boundary for this selector.
+
+`;
+
+exports[`invalid(2): * {} 1`] = `
+
+  1 | * {}
+
+`;
+
+exports[`invalid(2): * {} 2`] = `
+
+Message:
+> 1 | * {}
+    | ^ Require a positive scoping boundary for this selector.
+
+`;
+
+exports[`invalid(20): :nth-last-child(odd of :not(.card)) {} 1`] = `
+
+  1 | :nth-last-child(odd of :not(.card)) {}
+
+`;
+
+exports[`invalid(20): :nth-last-child(odd of :not(.card)) {} 2`] = `
+
+Message:
+> 1 | :nth-last-child(odd of :not(.card)) {}
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Require a positive scoping boundary for this selector.
+
+`;
+
+exports[`invalid(21): :\\6e th-child(2n of .card, button) {} 1`] = `
+
+  1 | :\\6e th-child(2n of .card, button) {}
+
+`;
+
+exports[`invalid(21): :\\6e th-child(2n of .card, button) {} 2`] = `
+
+Message:
+> 1 | :\\6e th-child(2n of .card, button) {}
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Require a positive scoping boundary for this selector.
+
+`;
+
+exports[`invalid(22): :\\6e th-last-child(odd) {} 1`] = `
+
+  1 | :\\6e th-last-child(odd) {}
+
+`;
+
+exports[`invalid(22): :\\6e th-last-child(odd) {} 2`] = `
+
+Message:
+> 1 | :\\6e th-last-child(odd) {}
+    | ^^^^^^^^^^^^^^^^^^^^^^^ Require a positive scoping boundary for this selector.
+
+`;
+
+exports[`invalid(23): ::slotted(*) {} 1`] = `
+
+  1 | ::slotted(*) {}
+
+`;
+
+exports[`invalid(23): ::slotted(*) {} 2`] = `
+
+Message:
+> 1 | ::slotted(*) {}
+    | ^^^^^^^^^^^^ Require a positive scoping boundary for this selector.
+
+`;
+
+exports[`invalid(24): ::slotted(:not(.card)) {} 1`] = `
+
+  1 | ::slotted(:not(.card)) {}
+
+`;
+
+exports[`invalid(24): ::slotted(:not(.card)) {} 2`] = `
+
+Message:
+> 1 | ::slotted(:not(.card)) {}
+    | ^^^^^^^^^^^^^^^^^^^^^^ Require a positive scoping boundary for this selector.
+
+`;
+
+exports[`invalid(25): ::slotted(:is(.card, button)) {} 1`] = `
+
+  1 | ::slotted(:is(.card, button)) {}
+
+`;
+
+exports[`invalid(25): ::slotted(:is(.card, button)) {} 2`] = `
+
+Message:
+> 1 | ::slotted(:is(.card, button)) {}
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Require a positive scoping boundary for this selector.
+
+`;
+
+exports[`invalid(26): ::\\73 lotted(:not(.card)) {} 1`] = `
+
+  1 | ::\\73 lotted(:not(.card)) {}
+
+`;
+
+exports[`invalid(26): ::\\73 lotted(:not(.card)) {} 2`] = `
+
+Message:
+> 1 | ::\\73 lotted(:not(.card)) {}
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^ Require a positive scoping boundary for this selector.
+
+`;
+
+exports[`invalid(27): & {} 1`] = `
+
+  1 | & {}
+
+`;
+
+exports[`invalid(27): & {} 2`] = `
+
+Message:
+> 1 | & {}
+    | ^ Require a positive scoping boundary for this selector.
+
+`;
+
+exports[`invalid(28): :is(&, .card) {} 1`] = `
+
+  1 | :is(&, .card) {}
+
+`;
+
+exports[`invalid(28): :is(&, .card) {} 2`] = `
+
+Message:
+> 1 | :is(&, .card) {}
+    | ^^^^^^^^^^^^^ Require a positive scoping boundary for this selector.
+
+`;
+
+exports[`invalid(29): body { & button {} } 1`] = `
+
+  1 | body { & button {} }
+
+`;
+
+exports[`invalid(29): body { & button {} } 2`] = `
+
+Message:
+> 1 | body { & button {} }
+    | ^^^^ Require a positive scoping boundary for this selector.
+
+`;
+
+exports[`invalid(29): body { & button {} } 3`] = `
+
+Message:
+> 1 | body { & button {} }
+    |        ^^^^^^^^ Require a positive scoping boundary for this selector.
+
+`;
+
+exports[`invalid(3): [class~=\"card\"] {} 1`] = `
+
+  1 | [class~="card"] {}
+
+`;
+
+exports[`invalid(3): [class~=\"card\"] {} 2`] = `
+
+Message:
+> 1 | [class~="card"] {}
+    | ^^^^^^^^^^^^^^^ Require a positive scoping boundary for this selector.
+
+`;
+
+exports[`invalid(30): .card { :not(&) {} } 1`] = `
+
+  1 | .card { :not(&) {} }
+
+`;
+
+exports[`invalid(30): .card { :not(&) {} } 2`] = `
+
+Message:
+> 1 | .card { :not(&) {} }
+    |         ^^^^^^^ Require a positive scoping boundary for this selector.
+
+`;
+
+exports[`invalid(31): .card { :has(&) {} } 1`] = `
+
+  1 | .card { :has(&) {} }
+
+`;
+
+exports[`invalid(31): .card { :has(&) {} } 2`] = `
+
+Message:
+> 1 | .card { :has(&) {} }
+    |         ^^^^^^^ Require a positive scoping boundary for this selector.
+
+`;
+
+exports[`invalid(32): .card { :is(&, body) {} } 1`] = `
+
+  1 | .card { :is(&, body) {} }
+
+`;
+
+exports[`invalid(32): .card { :is(&, body) {} } 2`] = `
+
+Message:
+> 1 | .card { :is(&, body) {} }
+    |         ^^^^^^^^^^^^ Require a positive scoping boundary for this selector.
+
+`;
+
+exports[`invalid(33): .card { :where(&, body) {} } 1`] = `
+
+  1 | .card { :where(&, body) {} }
+
+`;
+
+exports[`invalid(33): .card { :where(&, body) {} } 2`] = `
+
+Message:
+> 1 | .card { :where(&, body) {} }
+    |         ^^^^^^^^^^^^^^^ Require a positive scoping boundary for this selector.
+
+`;
+
+exports[`invalid(34): .card { :is(.local, :not(&)) {} } 1`] = `
+
+  1 | .card { :is(.local, :not(&)) {} }
+
+`;
+
+exports[`invalid(34): .card { :is(.local, :not(&)) {} } 2`] = `
+
+Message:
+> 1 | .card { :is(.local, :not(&)) {} }
+    |         ^^^^^^^^^^^^^^^^^^^^ Require a positive scoping boundary for this selector.
+
+`;
+
+exports[`invalid(35): .card { :\\69s(.local, :\\6e ot(&)) {} } 1`] = `
+
+  1 | .card { :\\69s(.local, :\\6e ot(&)) {} }
+
+`;
+
+exports[`invalid(35): .card { :\\69s(.local, :\\6e ot(&)) {} } 2`] = `
+
+Message:
+> 1 | .card { :\\69s(.local, :\\6e ot(&)) {} }
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^^ Require a positive scoping boundary for this selector.
+
+`;
+
+exports[`invalid(36): .card { :nth-child(2n of &, button) {} } 1`] = `
+
+  1 | .card { :nth-child(2n of &, button) {} }
+
+`;
+
+exports[`invalid(36): .card { :nth-child(2n of &, button) {} } 2`] = `
+
+Message:
+> 1 | .card { :nth-child(2n of &, button) {} }
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^ Require a positive scoping boundary for this selector.
+
+`;
+
+exports[`invalid(37): .card { :\\6e th-child(2n of :\\6e ot(&)) {} } 1`] = `
+
+  1 | .card { :\\6e th-child(2n of :\\6e ot(&)) {} }
+
+`;
+
+exports[`invalid(37): .card { :\\6e th-child(2n of :\\6e ot(&)) {} } 2`] = `
+
+Message:
+> 1 | .card { :\\6e th-child(2n of :\\6e ot(&)) {} }
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Require a positive scoping boundary for this selector.
+
+`;
+
+exports[`invalid(38): .card { ::\\73 lotted(:\\6e ot(&)) {} } 1`] = `
+
+  1 | .card { ::\\73 lotted(:\\6e ot(&)) {} }
+
+`;
+
+exports[`invalid(38): .card { ::\\73 lotted(:\\6e ot(&)) {} } 2`] = `
+
+Message:
+> 1 | .card { ::\\73 lotted(:\\6e ot(&)) {} }
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^ Require a positive scoping boundary for this selector.
+
+`;
+
+exports[`invalid(39): .card { :unknown(&) {} } 1`] = `
+
+  1 | .card { :unknown(&) {} }
+
+`;
+
+exports[`invalid(39): .card { :unknown(&) {} } 2`] = `
+
+Message:
+> 1 | .card { :unknown(&) {} }
+    |         ^^^^^^^^^^^ Require a positive scoping boundary for this selector.
+
+`;
+
+exports[`invalid(4): :hover {} 1`] = `
+
+  1 | :hover {}
+
+`;
+
+exports[`invalid(4): :hover {} 2`] = `
+
+Message:
+> 1 | :hover {}
+    | ^^^^^^ Require a positive scoping boundary for this selector.
+
+`;
+
+exports[`invalid(40): .card { :is(.local, :unknown(&)) {} } 1`] = `
+
+  1 | .card { :is(.local, :unknown(&)) {} }
+
+`;
+
+exports[`invalid(40): .card { :is(.local, :unknown(&)) {} } 2`] = `
+
+Message:
+> 1 | .card { :is(.local, :unknown(&)) {} }
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^ Require a positive scoping boundary for this selector.
+
+`;
+
+exports[`invalid(41): .card, button { a {} .local {} } 1`] = `
+
+  1 | .card, button { a {} .local {} }
+
+`;
+
+exports[`invalid(41): .card, button { a {} .local {} } 2`] = `
+
+Message:
+> 1 | .card, button { a {} .local {} }
+    |        ^^^^^^ Require a positive scoping boundary for this selector.
+
+`;
+
+exports[`invalid(41): .card, button { a {} .local {} } 3`] = `
+
+Message:
+> 1 | .card, button { a {} .local {} }
+    |                 ^ Require a positive scoping boundary for this selector.
+
+`;
+
+exports[`invalid(42): .card { :not(&) { button {} } } 1`] = `
+
+  1 | .card { :not(&) { button {} } }
+
+`;
+
+exports[`invalid(42): .card { :not(&) { button {} } } 2`] = `
+
+Message:
+> 1 | .card { :not(&) { button {} } }
+    |         ^^^^^^^ Require a positive scoping boundary for this selector.
+
+`;
+
+exports[`invalid(42): .card { :not(&) { button {} } } 3`] = `
+
+Message:
+> 1 | .card { :not(&) { button {} } }
+    |                   ^^^^^^ Require a positive scoping boundary for this selector.
+
+`;
+
+exports[`invalid(43): @media all { button {} } 1`] = `
+
+  1 | @media all { button {} }
+
+`;
+
+exports[`invalid(43): @media all { button {} } 2`] = `
+
+Message:
+> 1 | @media all { button {} }
+    |              ^^^^^^ Require a positive scoping boundary for this selector.
+
+`;
+
+exports[`invalid(44): @supports (display: grid) { @layer components { button {} } } 1`] = `
+
+  1 | @supports (display: grid) { @layer components { button {} } }
+
+`;
+
+exports[`invalid(44): @supports (display: grid) { @layer components { button {} } } 2`] = `
+
+Message:
+> 1 | @supports (display: grid) { @layer components { button {} } }
+    |                                                 ^^^^^^ Require a positive scoping boundary for this selector.
+
+`;
+
+exports[`invalid(45): @container (width > 1px) { button {} } 1`] = `
+
+  1 | @container (width > 1px) { button {} }
+
+`;
+
+exports[`invalid(45): @container (width > 1px) { button {} } 2`] = `
+
+Message:
+> 1 | @container (width > 1px) { button {} }
+    |                            ^^^^^^ Require a positive scoping boundary for this selector.
+
+`;
+
+exports[`invalid(46): @scope (.card) {} button {} 1`] = `
+
+  1 | @scope (.card) {} button {}
+
+`;
+
+exports[`invalid(46): @scope (.card) {} button {} 2`] = `
+
+Message:
+> 1 | @scope (.card) {} button {}
+    |                   ^^^^^^ Require a positive scoping boundary for this selector.
+
+`;
+
+exports[`invalid(47): @supports selector(.card) { button {} } 1`] = `
+
+  1 | @supports selector(.card) { button {} }
+
+`;
+
+exports[`invalid(47): @supports selector(.card) { button {} } 2`] = `
+
+Message:
+> 1 | @supports selector(.card) { button {} }
+    |                             ^^^^^^ Require a positive scoping boundary for this selector.
+
+`;
+
+exports[`invalid(48): @utility card { & button {} } 1`] = `
+
+  1 | @utility card { & button {} }
+
+`;
+
+exports[`invalid(48): @utility card { & button {} } 2`] = `
+
+Message:
+> 1 | @utility card { & button {} }
+    |                 ^^^^^^^^ Require a positive scoping boundary for this selector.
+
+`;
+
+exports[`invalid(49): @custom-variant dark { & button {} } 1`] = `
+
+  1 | @custom-variant dark { & button {} }
+
+`;
+
+exports[`invalid(49): @custom-variant dark { & button {} } 2`] = `
+
+Message:
+> 1 | @custom-variant dark { & button {} }
+    |                        ^^^^^^^^ Require a positive scoping boundary for this selector.
+
+`;
+
+exports[`invalid(5): :root {} :scope {} 1`] = `
+
+  1 | :root {} :scope {}
+
+`;
+
+exports[`invalid(5): :root {} :scope {} 2`] = `
+
+Message:
+> 1 | :root {} :scope {}
+    | ^^^^^ Require a positive scoping boundary for this selector.
+
+`;
+
+exports[`invalid(5): :root {} :scope {} 3`] = `
+
+Message:
+> 1 | :root {} :scope {}
+    |          ^^^^^^ Require a positive scoping boundary for this selector.
+
+`;
+
+exports[`invalid(50): button /* .card */ { content: \".card\"; --selector: .card; } 1`] = `
+
+  1 | button /* .card */ { content: ".card"; --selector: .card; }
+
+`;
+
+exports[`invalid(50): button /* .card */ { content: \".card\"; --selector: .card; } 2`] = `
+
+Message:
+> 1 | button /* .card */ { content: ".card"; --selector: .card; }
+    | ^^^^^^ Require a positive scoping boundary for this selector.
+
+`;
+
+exports[`invalid(6): ::before {} 1`] = `
+
+  1 | ::before {}
+
+`;
+
+exports[`invalid(6): ::before {} 2`] = `
+
+Message:
+> 1 | ::before {}
+    | ^^^^^^^^ Require a positive scoping boundary for this selector.
+
+`;
+
+exports[`invalid(7): svg|a {} 1`] = `
+
+  1 | svg|a {}
+
+`;
+
+exports[`invalid(7): svg|a {} 2`] = `
+
+Message:
+> 1 | svg|a {}
+    | ^^^^^ Require a positive scoping boundary for this selector.
+
+`;
+
+exports[`invalid(8): .card, button {} 1`] = `
+
+  1 | .card, button {}
+
+`;
+
+exports[`invalid(8): .card, button {} 2`] = `
+
+Message:
+> 1 | .card, button {}
+    |        ^^^^^^ Require a positive scoping boundary for this selector.
+
+`;
+
+exports[`invalid(9): :not(.card) {} 1`] = `
+
+  1 | :not(.card) {}
+
+`;
+
+exports[`invalid(9): :not(.card) {} 2`] = `
+
+Message:
+> 1 | :not(.card) {}
+    | ^^^^^^^^^^^ Require a positive scoping boundary for this selector.
+
+`;

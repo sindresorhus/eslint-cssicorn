@@ -210,6 +210,8 @@ test('Plugin should have metadata', () => {
 
 // Rules that cannot work well in normal projects. Every other rule belongs in `recommended`.
 const RULES_NOT_RECOMMENDED = new Set([
+	// Component stylesheet policy that intentionally rejects global and reset styles.
+	'require-selector-scope',
 	// Only sees `@keyframes` in the same file.
 	'no-unknown-animations',
 	// Enforces a source order convention, and intentional "specific before general" ordering is common.
@@ -232,5 +234,42 @@ test('rule.meta.docs.recommended should be synchronized with presets', () => {
 
 		const unopinionatedSeverity = eslintCssicorn.configs.unopinionated.rules[`cssicorn/${name}`];
 		assert.equal(unopinionatedSeverity, recommended === 'unopinionated' ? 'error' : 'off', `'${name}' rule should have the correct severity in the unopinionated config.`);
+	}
+});
+
+test('require-selector-scope is enabled only in the all preset', () => {
+	const ruleId = 'cssicorn/require-selector-scope';
+	assert.equal(eslintCssicorn.configs.recommended.rules[ruleId], 'off');
+	assert.equal(eslintCssicorn.configs.unopinionated.rules[ruleId], 'off');
+	assert.equal(eslintCssicorn.configs.all.rules[ruleId], 'error');
+});
+
+test('require-selector-scope component configuration preserves scoped flat selectors', async () => {
+	const eslint = new ESLint({
+		overrideConfigFile: true,
+		fix: true,
+		baseConfig: [
+			eslintCssicorn.configs.recommended,
+			{
+				files: ['src/components/**/*.css'],
+				ignores: ['**/global.css', '**/reset.css'],
+				rules: {
+					'cssicorn/prefer-nesting': 'off',
+					'cssicorn/require-selector-scope': 'error',
+				},
+			},
+		],
+	});
+	const code = 'body :is(.card, .other) { color: red; }';
+	const [result] = await eslint.lintText(code, {filePath: 'src/components/card.css'});
+	assert.deepEqual(result.messages, []);
+	assert.equal(result.output, undefined);
+
+	const [unscopedResult] = await eslint.lintText('button {}', {filePath: 'src/components/card.css'});
+	assert.deepEqual(unscopedResult.messages.map(message => message.ruleId), ['cssicorn/require-selector-scope']);
+
+	const globalResults = await Promise.all(['src/components/global.css', 'src/components/reset.css', 'src/global.css'].map(filePath => eslint.lintText('button {}', {filePath})));
+	for (const [globalResult] of globalResults) {
+		assert.deepEqual(globalResult.messages, []);
 	}
 });

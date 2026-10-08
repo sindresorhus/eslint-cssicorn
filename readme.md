@@ -94,6 +94,7 @@ export default defineConfig([
 | [prefer-nesting](docs/rules/prefer-nesting.md)                                               | Prefer CSS nesting for related rules and selector groups.                                                    | ✅    | 🔧 |    |
 | [prefer-short-hex-color](docs/rules/prefer-short-hex-color.md)                               | Prefer short hexadecimal color notation.                                                                     | ✅    | 🔧 |    |
 | [require-property-descriptors](docs/rules/require-property-descriptors.md)                   | Require descriptors in CSS `@property` rules.                                                                | ✅ ☑️ |    |    |
+| [require-selector-scope](docs/rules/require-selector-scope.md)                               | Require a positive scoping boundary for every selector.                                                      |      |    |    |
 
 <!-- end auto-generated rules list -->
 

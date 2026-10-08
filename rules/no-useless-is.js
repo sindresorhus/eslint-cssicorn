@@ -1,8 +1,6 @@
 import {
 	find,
 	ident,
-	parse,
-	toPlainObject,
 } from '@eslint/css-tree';
 import {
 	canBeRepresentedByNestingSelector,
@@ -11,7 +9,7 @@ import {
 	hasScopeAncestor,
 	isStyleRule,
 } from './shared/css-selector-specificity.js';
-import {hasCommentInRange, normalizeCssIdentifier} from './utils/index.js';
+import {getPseudoSelectorArgument, hasCommentInRange, normalizeCssIdentifier} from './utils/index.js';
 
 /**
 @import {CssicornContext} from './rule/cssicorn-context.js';
@@ -67,28 +65,11 @@ const isUnsupportedArgumentNode = node => {
 
 /**
 @param {PseudoClassSelectorPlain} node
-@param {CssicornContext['sourceCode']} sourceCode
+@param {CssicornContext} context
 */
-const getSelectorArgument = (node, sourceCode) => {
-	if (node.children?.length !== 1) {
-		return;
-	}
-
-	let [selectorList] = node.children;
-	// CSSTree leaves arguments of escaped pseudo-class names unparsed.
-	if (selectorList.type === 'Raw') {
-		try {
-			selectorList = toPlainObject(parse(selectorList.value, {
-				context: 'selectorList',
-				positions: true,
-				offset: sourceCode.getRange(selectorList)[0],
-			}));
-		} catch {
-			return;
-		}
-	}
-
-	if (selectorList.type !== 'SelectorList' || selectorList.children.length !== 1) {
+const getSelectorArgument = (node, context) => {
+	const selectorList = getPseudoSelectorArgument(node, context);
+	if (selectorList?.type !== 'SelectorList' || selectorList.children.length !== 1) {
 		return;
 	}
 
@@ -122,7 +103,7 @@ const create = context => {
 			return;
 		}
 
-		const selector = getSelectorArgument(node, sourceCode);
+		const selector = getSelectorArgument(node, context);
 		if (!selector) {
 			return;
 		}
