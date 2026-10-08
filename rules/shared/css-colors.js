@@ -1,3 +1,5 @@
+// @ts-check
+
 import {normalizeCssIdentifier} from '../utils/index.js';
 import colorFunctionsWithAlpha from './css-color-functions.js';
 import {getNumericLiteralKey} from './css-numeric-literals.js';
@@ -5,7 +7,16 @@ import {areEqualValues} from './css-shorthand-values.js';
 import namedColors from './named-colors.js';
 
 /**
+@import {CssNode, CssNodePlain, NumberNode, Percentage} from '@eslint/css-tree';
+@import {CssicornContext} from '../rule/cssicorn-context.js';
+*/
+
+/**
 Check for a literal named, hexadecimal, or absolute functional color.
+
+@param {CssNode | CssNodePlain} node
+@param {CssicornContext} context
+@returns {boolean}
 */
 export function isLiteralColor(node, context) {
 	if (node.type === 'Function') {
@@ -28,6 +39,10 @@ export function isLiteralColor(node, context) {
 
 /**
 Compare literal colors conservatively within the same color space, preserving the existing simplification contract.
+
+@param {CssNode | CssNodePlain} first
+@param {CssNode | CssNodePlain} second
+@returns {boolean}
 */
 export function areEqualLiteralColors(first, second) {
 	if (first.type === 'Function' && second.type === 'Function') {
@@ -57,8 +72,15 @@ export function areEqualLiteralColors(first, second) {
 	return true;
 }
 
+/**
+@param {number} value
+*/
 const clampUnit = value => Math.min(1, Math.max(0, value));
 
+/**
+@param {CssNode | CssNodePlain} node
+@returns {number[] | undefined}
+*/
 function getRgbComponents(node) {
 	if (node.type === 'Identifier') {
 		const name = normalizeCssIdentifier(node.name);
@@ -88,11 +110,12 @@ function getRgbComponents(node) {
 	}
 
 	const components = [...node.children].filter(child => child.type !== 'Operator');
-	if (components.some(child => !['Number', 'Percentage'].includes(child.type))) {
+	if (components.some(child => child.type !== 'Number' && child.type !== 'Percentage')) {
 		return;
 	}
 
-	const channels = components.map((component, index) => clampUnit(Number(component.value) / (component.type === 'Percentage' ? 100 : (index === 3 ? 1 : 255))));
+	const numericComponents = /** @type {(NumberNode | Percentage)[]} */ (components);
+	const channels = numericComponents.map((component, index) => clampUnit(Number(component.value) / (component.type === 'Percentage' ? 100 : (index === 3 ? 1 : 255))));
 	if (channels.length === 3) {
 		channels.push(1);
 	}
@@ -102,6 +125,10 @@ function getRgbComponents(node) {
 
 /**
 Compare common sRGB literals across named, hex, and RGB syntax without rounding. Other color spaces retain the conservative structural comparison.
+
+@param {CssNode | CssNodePlain} first
+@param {CssNode | CssNodePlain} second
+@returns {boolean}
 */
 export function areEquivalentColors(first, second) {
 	if (areEqualLiteralColors(first, second)) {

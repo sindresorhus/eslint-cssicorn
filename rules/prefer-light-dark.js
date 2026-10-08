@@ -1,3 +1,5 @@
+// @ts-check
+
 import {generate, parse, walk} from '@eslint/css-tree';
 import {areEquivalentColors, isLiteralColor} from './shared/css-colors.js';
 import {getVendorPrefix, shorthandToAffectedProperties} from './shared/css-shorthand-properties.js';
@@ -11,8 +13,19 @@ import {
 } from './utils/index.js';
 
 /**
+@import {AtrulePlain, BlockPlain, ConditionPlain, CssNode, CssNodePlain, DeclarationPlain, MediaQueryPlain, RulePlain, SelectorPlain, StyleSheetPlain, Value} from '@eslint/css-tree';
 @import {CssicornContext} from './rule/cssicorn-context.js';
 @import {CssicornRule} from './rule/to-eslint-rule.js';
+@import {CssicornProblem} from './rule/to-eslint-problem.js';
+*/
+
+/**
+@typedef {BlockPlain & {children: DeclarationPlain[]}} DeclarationBlock
+@typedef {'light' | 'dark'} ThemeMode
+@typedef {{base: DeclarationPlain, override: DeclarationPlain, property: string, mode: ThemeMode}} ColorPair
+@typedef {{baseRule: RulePlain, declarations: DeclarationPlain[], media: AtrulePlain, overrides: DeclarationPlain[], mode: ThemeMode}} RulePair
+@typedef {{sourceRange: [number, number], text: string}} ColorReplacement
+@typedef {MediaQueryPlain & {condition?: ConditionPlain | null, modifier?: string | null, mediaType?: string | null}} MediaQuery
 */
 
 const MESSAGE_ID = 'prefer-light-dark';
@@ -23,21 +36,37 @@ const messages = {
 	[MESSAGE_ID_SUGGESTION]: 'Combine the colors with `light-dark()` and remove the override declaration.',
 };
 
+/**
+@param {DeclarationPlain} declaration
+*/
 const getProperty = declaration => {
 	const property = decodeCssIdentifier(declaration.property);
 	return property.startsWith('--') ? property : toAsciiLowerCase(property);
 };
 
+/**
+@param {BlockPlain | null} block
+@returns {block is DeclarationBlock}
+*/
 const isDeclarationBlock = block => Boolean(block?.children.every(node => node.type === 'Declaration'));
 
-function getMediaMode(node) {
+/**
+@param {CssNodePlain | undefined} node
+@returns {{media: AtrulePlain, mode: ThemeMode} | undefined}
+*/
+function getMediaOverride(node) {
 	if (node?.type !== 'Atrule' || normalizeCssIdentifier(node.name) !== 'media' || node.prelude?.type !== 'AtrulePrelude' || node.prelude.children.length !== 1) {
 		return;
 	}
 
 	const [list] = node.prelude.children;
-	const query = list.type === 'MediaQueryList' && list.children.length === 1 ? list.children.at(0) : undefined;
-	const condition = query?.condition;
+	if (list.type !== 'MediaQueryList' || list.children.length !== 1) {
+		return;
+	}
+
+	// MediaQueryPlain currently omits the parser's condition, modifier, and mediaType fields.
+	const query = /** @type {MediaQuery} */ (list.children.at(0));
+	const {condition} = query;
 	if (condition?.type !== 'Condition' || condition.children.length !== 1 || query.modifier || query.mediaType) {
 		return;
 	}
@@ -48,45 +77,82 @@ function getMediaMode(node) {
 	}
 
 	const mode = normalizeCssIdentifier(feature.value.name);
-	return ['light', 'dark'].includes(mode) ? mode : undefined;
+	return mode === 'light' || mode === 'dark' ? {media: node, mode} : undefined;
 }
 
+/**
+@param {DeclarationPlain} declaration
+*/
 function isDualColorScheme(declaration) {
-	const {children} = declaration.value;
-	if (!children || children.some(node => node.type !== 'Identifier')) {
+	if (declaration.value.type !== 'Value') {
 		return false;
 	}
 
-	const names = children.map(node => normalizeCssIdentifier(node.name));
+	const names = [];
+	for (const node of declaration.value.children) {
+		if (node.type !== 'Identifier') {
+			return false;
+		}
+
+		names.push(normalizeCssIdentifier(node.name));
+	}
+
 	return (names.length === 2 || (names.length === 3 && names.includes('only')))
 		&& new Set(names).size === names.length && names.includes('light') && names.includes('dark');
 }
 
+/**
+@param {DeclarationPlain[]} declarations
+*/
 const getSchemes = declarations => declarations.filter(declaration => getProperty(declaration) === 'color-scheme');
+/**
+@param {DeclarationPlain[]} declarations
+*/
 const hasCompatibleScheme = declarations => {
 	const schemes = getSchemes(declarations);
 	return schemes.length === 0 || (schemes.length === 1 && isDualColorScheme(schemes[0]));
 };
 
+/**
+@param {RulePlain} rule
+*/
 function isBareRootRule(rule) {
-	const selectors = rule.prelude?.children;
-	if (rule.prelude?.type !== 'SelectorList' || selectors.length !== 1 || selectors[0].children.length !== 1) {
+	if (rule.prelude?.type !== 'SelectorList' || rule.prelude.children.length !== 1) {
 		return false;
 	}
 
-	const [selector] = selectors[0].children;
+	// SelectorListPlain.children is currently broader than the parser's SelectorPlain[] result.
+	const [rootSelector] = /** @type {SelectorPlain[]} */ (rule.prelude.children);
+	if (rootSelector.children.length !== 1) {
+		return false;
+	}
+
+	const [selector] = rootSelector.children;
 	return (selector.type === 'TypeSelector' && normalizeCssIdentifier(selector.name) === 'html')
 		|| (selector.type === 'PseudoClassSelector' && normalizeCssIdentifier(selector.name) === 'root' && !selector.children);
 }
 
+/**
+@param {StyleSheetPlain} container
+*/
 function hasRootColorScheme(container) {
+	/**
+	@type {DeclarationPlain[]}
+	*/
 	const declarations = [];
+	/**
+	@param {StyleSheetPlain | BlockPlain} node
+	*/
 	function collect(node) {
 		for (const child of node.children) {
 			if (child.type === 'Atrule' && normalizeCssIdentifier(child.name) === 'layer' && child.block) {
 				collect(child.block);
 			} else if (child.type === 'Rule' && isBareRootRule(child)) {
-				declarations.push(...child.block.children.filter(node => node.type === 'Declaration' && ['color-scheme', 'all'].includes(getProperty(node))));
+				for (const declaration of child.block.children) {
+					if (declaration.type === 'Declaration' && ['color-scheme', 'all'].includes(getProperty(declaration))) {
+						declarations.push(declaration);
+					}
+				}
 			}
 		}
 	}
@@ -95,6 +161,10 @@ function hasRootColorScheme(container) {
 	return declarations.length > 0 && declarations.every(declaration => getProperty(declaration) === 'color-scheme' && isDualColorScheme(declaration));
 }
 
+/**
+@param {string} property
+@param {Set<string>} properties
+*/
 function hasPropertyConflict(property, properties) {
 	if (properties.has('all')) {
 		return true;
@@ -124,7 +194,13 @@ function hasPropertyConflict(property, properties) {
 	return false;
 }
 
+/**
+@param {DeclarationPlain[]} declarations
+*/
 function getDeclarationMap(declarations) {
+	/**
+	@type {Map<string, DeclarationPlain | undefined>}
+	*/
 	const result = new Map();
 	for (const declaration of declarations) {
 		const property = getProperty(declaration);
@@ -134,14 +210,33 @@ function getDeclarationMap(declarations) {
 	return result;
 }
 
+/**
+@param {string} text
+@param {number} [offset]
+*/
 function getParsedValue(text, offset = 0) {
 	try {
-		return parse(text, {context: 'value', positions: true, offset});
+		return /** @type {Value} */ (parse(text, {context: 'value', positions: true, offset}));
 	} catch {
 		// Invalid values and tolerant parser nodes are outside this rule's scope.
 	}
 }
 
+/**
+Get the range of a private value node parsed with positions enabled.
+@param {CssNode} node
+@param {CssicornContext} context
+@returns {[number, number]}
+*/
+function getParsedRange(node, context) {
+	// Private trees use List children, but getRange only reads their source locations.
+	return context.sourceCode.getRange(/** @type {CssNodePlain} */ (node));
+}
+
+/**
+@param {ColorPair} pair
+@param {CssicornContext} context
+*/
 function getColorReplacements({base, override, property, mode}, context) {
 	const {sourceCode} = context;
 	if (sourceCode.getText(base.value) === sourceCode.getText(override.value)) {
@@ -160,6 +255,9 @@ function getColorReplacements({base, override, property, mode}, context) {
 		return;
 	}
 
+	/**
+	@type {ColorReplacement[]}
+	*/
 	const replacements = [];
 	for (const [index, value] of values.entries()) {
 		const other = otherValues[index];
@@ -175,12 +273,13 @@ function getColorReplacements({base, override, property, mode}, context) {
 			continue;
 		}
 
-		const colors = [sourceCode.getText(value), sourceCode.getText(other)];
+		const sourceRange = getParsedRange(value, context);
+		const colors = [sourceCode.text.slice(...sourceRange), sourceCode.text.slice(...getParsedRange(other, context))];
 		if (mode === 'light') {
 			colors.reverse();
 		}
 
-		replacements.push({node: value, text: 'light-dark(' + colors.join(', ') + ')'});
+		replacements.push({sourceRange, text: 'light-dark(' + colors.join(', ') + ')'});
 	}
 
 	if (replacements.length === 0) {
@@ -191,7 +290,7 @@ function getColorReplacements({base, override, property, mode}, context) {
 		let text = sourceCode.getText(base.value);
 		const start = sourceCode.getRange(base.value)[0];
 		for (const replacement of replacements.toReversed()) {
-			text = text.slice(0, sourceCode.getRange(replacement.node)[0] - start) + replacement.text + text.slice(sourceCode.getRange(replacement.node)[1] - start);
+			text = text.slice(0, replacement.sourceRange[0] - start) + replacement.text + text.slice(replacement.sourceRange[1] - start);
 		}
 
 		const transformed = getParsedValue(text);
@@ -215,16 +314,21 @@ function getColorReplacements({base, override, property, mode}, context) {
 	return replacements;
 }
 
+/**
+@param {DeclarationPlain} override
+@param {AtrulePlain} media
+@param {CssicornContext} context
+*/
 function getRemovalRange(override, media, context) {
 	const {sourceCode} = context;
-	const block = sourceCode.getParent(override);
+	const block = /** @type {BlockPlain} */ (sourceCode.getParent(override));
 	if (block.children.length === 1) {
 		const wrapper = sourceCode.getParent(block);
 		if (!hasCommentInRange(context, sourceCode.getRange(media))) {
 			return sourceCode.getRange(media);
 		}
 
-		if (wrapper.type === 'Rule' && !hasCommentInRange(context, sourceCode.getRange(wrapper))) {
+		if (wrapper?.type === 'Rule' && !hasCommentInRange(context, sourceCode.getRange(wrapper))) {
 			return sourceCode.getRange(wrapper);
 		}
 	}
@@ -237,6 +341,12 @@ function getRemovalRange(override, media, context) {
 	return range;
 }
 
+/**
+@param {RulePair} pair
+@param {CssicornContext} context
+@param {() => boolean} hasRootScheme
+@returns {Generator<CssicornProblem>}
+*/
 function * getPairProblems({baseRule, declarations, media, overrides, mode}, context, hasRootScheme) {
 	const {sourceCode} = context;
 	if ([...declarations, ...overrides].some(declaration => getVendorPrefix(getProperty(declaration)))
@@ -274,7 +384,7 @@ function * getPairProblems({baseRule, declarations, media, overrides, mode}, con
 					messageId: MESSAGE_ID_SUGGESTION,
 					* fix(fixer) {
 						for (const replacement of replacements) {
-							yield fixer.replaceTextRange(sourceCode.getRange(replacement.node), replacement.text);
+							yield fixer.replaceTextRange(replacement.sourceRange, replacement.text);
 						}
 
 						yield fixer.removeRange(getRemovalRange(override, media, context));
@@ -288,6 +398,9 @@ function * getPairProblems({baseRule, declarations, media, overrides, mode}, con
 @param {CssicornContext} context
 */
 const create = context => {
+	/**
+	@type {boolean | undefined}
+	*/
 	let rootScheme;
 	const hasRootScheme = () => {
 		rootScheme ??= hasRootColorScheme(context.sourceCode.ast);
@@ -296,12 +409,12 @@ const create = context => {
 
 	context.on(['StyleSheet', 'Block'], function * (container) {
 		for (let index = 1; index < container.children.length; index++) {
-			const media = container.children[index];
-			const mode = getMediaMode(media);
-			if (!mode) {
+			const mediaOverride = getMediaOverride(container.children[index]);
+			if (!mediaOverride) {
 				continue;
 			}
 
+			const {media, mode} = mediaOverride;
 			const base = container.children[index - 1];
 			const override = media.block?.children.length === 1 ? media.block.children.at(0) : undefined;
 			if (base.type !== 'Rule' || base.prelude?.type !== 'SelectorList' || override?.type !== 'Rule' || override.prelude?.type !== 'SelectorList'
@@ -319,19 +432,19 @@ const create = context => {
 			return;
 		}
 
-		const media = rule.block.children.at(-1);
-		const mode = getMediaMode(media);
-		if (!mode || !isDeclarationBlock(media.block)) {
+		const mediaOverride = getMediaOverride(rule.block.children.at(-1));
+		if (!mediaOverride || !isDeclarationBlock(mediaOverride.media.block)) {
 			return;
 		}
 
+		const {media, mode} = mediaOverride;
 		const declarations = rule.block.children.slice(0, -1);
 		if (declarations.some(node => node.type !== 'Declaration')) {
 			return;
 		}
 
 		yield * getPairProblems({
-			baseRule: rule, declarations, media, overrides: media.block.children, mode,
+			baseRule: rule, declarations: /** @type {DeclarationPlain[]} */ (declarations), media, overrides: mediaOverride.media.block.children, mode,
 		}, context, hasRootScheme);
 	});
 };

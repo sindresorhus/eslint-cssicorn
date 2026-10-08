@@ -127,6 +127,8 @@ test.snapshot({
 		pair('color: #0008;', 'color: rgb(0 0 0 / .5);'),
 		pair('box-shadow: 0 1px red, 0 2px currentColor;', 'box-shadow: 0 1px blue, 0 2px currentColor;'),
 		pair('--color: rgb(255 0 0 / 0);', '--color: transparent;'),
+		pair('background: linear-gradient(RED,  BLUE) center / cover white;', 'background: linear-gradient(RED,  BLUE) center / cover black;'),
+		pair('--color: rgb(none 0 0);', '--color: rgb(0 0 0);'),
 	],
 });
 

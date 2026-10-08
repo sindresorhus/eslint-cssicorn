@@ -13,6 +13,8 @@
 
 This rule provides editor suggestions only. `light-dark()` selects a branch using the element's used color scheme, while `prefers-color-scheme` queries the user's preference. A locally forced scheme can therefore change the result after applying a suggestion. Review suggestions against your theme behavior and browser support requirements.
 
+Use [`css/use-baseline`](https://github.com/eslint/css/blob/main/docs/rules/use-baseline.md) to check CSS browser support against your chosen Baseline target.
+
 ## Examples
 
 An ordinary style rule immediately followed by a media override with the same serialized selector list:
@@ -84,6 +86,8 @@ Color-valued custom properties are also supported:
 > [!IMPORTANT]
 > An unregistered custom property containing `light-dark()` resolves its color when consumed as a color value, using the consuming element's color scheme. Descendants with a different scheme can therefore render differently from an inherited literal branch color. Custom properties consumed as strings or non-color values may also change behavior.
 
+The rule does not inspect custom-property registrations. Check their syntax before applying a suggestion: `red` and `blue` are valid `<custom-ident>` values, but `light-dark(red, blue)` is not.
+
 ## Supported patterns
 
 The media query must contain only `(prefers-color-scheme: light)` or `(prefers-color-scheme: dark)`. For adjacent rules, the media block must contain exactly one style rule, and both style blocks must contain only declarations. For the nested form, ordinary declarations must precede a single final media block containing only declarations. Matching can occur inside other style rules and grouping at-rules, preserving their conditions and layers.
@@ -98,9 +102,7 @@ Each convertible override declaration is reported separately. A suggestion repla
 
 ## Limitations
 
-The rule skips separated pairs, two explicit media branches, nested selector overrides, additional media conditions, and gradients requiring internal rewriting. Differing components containing dynamic colors such as `var()` and `currentColor`, system colors, relative colors, or existing `light-dark()` calls are skipped. It also skips duplicate target declarations, overlapping shorthand and longhand declarations, ambiguous logical and physical border declarations, blocks containing vendor-prefixed ordinary declarations, `all` resets, keyframes, descriptor blocks, CSS Modules interop declarations, and unparseable values.
-
-The rule skips `all` even for custom-property pairs because it also resets the required `color-scheme`. Vendor-prefixed ordinary declarations are skipped because their aliases can hide shorthand conflicts.
+The rule skips separated pairs, two explicit media branches, nested selector overrides, and gradients requiring internal rewriting. Differing components containing dynamic colors, system colors, relative colors, or existing `light-dark()` calls are skipped. It also skips duplicate target declarations, overlapping shorthand and longhand declarations, ambiguous logical and physical border declarations, keyframes, descriptor blocks, CSS Modules interop declarations, and unparseable values. Blocks containing vendor-prefixed ordinary declarations are skipped because their aliases can hide shorthand conflicts. Blocks containing `all` are skipped even for custom-property pairs because it also resets the required `color-scheme`.
 
 Equivalent branch colors are ignored on a best-effort basis. Named colors, expanded hex colors, and literal `rgb()`/`rgba()` values are compared in sRGB, normalizing channel units and alpha without rounding. Other absolute functions use conservative comparisons within the same color space. The rule does not perform general color-space conversion, so some equivalent colors may still be reported.
 
