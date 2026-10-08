@@ -23,12 +23,14 @@ Enforces a fixed order for interchangeable value components. It preserves shadow
 | `columns` | Width, count |
 | `text-decoration` | Lines, thickness, style, color |
 | `text-emphasis` | Style, color |
+| `text-wrap` | Mode, style |
+| `white-space` | Collapse, wrapping, trimming |
 
 The border shorthands are `border`, `border-top`, `border-right`, `border-bottom`, `border-left`, `border-block`, `border-inline`, `border-block-start`, `border-block-end`, `border-inline-start`, and `border-inline-end`.
 
 These orders are authoring conventions, not specification serialization orders. There are no options.
 
-Multiple text decoration lines and text emphasis style keywords retain their relative order.
+Multiple text decoration lines, text emphasis style keywords, and white space trimming keywords retain their relative order. Single-keyword `white-space` values such as `pre-wrap` remain unchanged.
 
 ## Examples
 
@@ -116,9 +118,34 @@ a {
 }
 ```
 
+```css
+/* ❌ */
+a {
+	text-wrap: balance wrap;
+}
+
+/* ✅ */
+a {
+	text-wrap: wrap balance;
+}
+```
+
+```css
+/* ❌ */
+a {
+	white-space: nowrap preserve;
+}
+
+/* ✅ */
+a {
+	white-space: preserve nowrap;
+}
+```
+
 ## Limitations
 
 - Only checks values recognized by the CSS lexer. Unmatched values and unsupported newer syntax are left unchanged. The lexer can recognize some values that browsers reject.
+- White space trimming values require lexer support, for example through `languageOptions.customSyntax`.
 - Supports ASCII casing, CSS escapes, and vendor-prefixed spellings. Fixes retain the original spelling, spacing, indentation, and line endings, adding spaces where needed to keep component tokens separate.
 - Reports out-of-order groups containing comments without fixing them, including comments inside functions. Other shadow layers can still be fixed.
 - Ignores custom properties, CSS Modules `:export` and `:import()` declarations, substitutions such as `var()`, `env()`, and `attr()`, and random functions. Ordinary math and color functions are supported when their component roles are known.

@@ -44,6 +44,8 @@ const propertyOrders = new Map([
 	['columns', ['column-width', 'column-count']],
 	['text-decoration', ['text-decoration-line', 'text-decoration-thickness', 'text-decoration-style', 'text-decoration-color']],
 	['text-emphasis', ['text-emphasis-style', 'text-emphasis-color']],
+	['text-wrap', ['text-wrap-mode', 'text-wrap-style']],
+	['white-space', ['white-space-collapse', 'text-wrap-mode', 'white-space-trim']],
 ]);
 
 const getComponentRank = (node, order, matchResult) => order.findIndex(component => component === 'inset'

@@ -46,6 +46,11 @@ test.snapshot({
 		'a { text-emphasis: "•" blue; text-emphasis: none red; text-emphasis: inherit; text-decoration: revert-layer; }',
 		'a { text-decoration: red var(--line); text-emphasis: red var(--mark); --text-emphasis: red open circle; }',
 		'a { text-decoration: red unknown 2px; text-emphasis: red unknown; }',
+		'a { text-wrap: wrap balance; text-wrap: nowrap pretty; white-space: preserve nowrap; white-space: collapse wrap; }',
+		'a { text-wrap: balance; text-wrap: auto; white-space: normal; white-space: pre; white-space: pre-wrap; white-space: pre-line; }',
+		'a { text-wrap: var(--mode) balance; white-space: nowrap var(--collapse); --text-wrap: balance wrap; }',
+		'a { text-wrap: balance pretty wrap; text-wrap: wrap nowrap; white-space: pre nowrap; white-space: wrap nowrap; }',
+		'a { white-space: nowrap preserve discard-before; text-wrap: avoid-short-last-line wrap; }',
 	],
 	invalid: [
 		...[
@@ -120,6 +125,20 @@ test.snapshot({
 		String.raw`a { text-emphasis: red c\69 rcle op\65 n; }`,
 		'a { text-emphasis: red /* keep */ circle; }',
 		'@media (width > 0px) { a { text-decoration: red underline 2px !important; } }',
+		'a { text-wrap: pretty nowrap; text-wrap: stable wrap; text-wrap: auto nowrap; }',
+		'a { white-space: wrap collapse; white-space: nowrap preserve-breaks; white-space: nowrap break-spaces; }',
+		'a { TEXT-WRAP: BALANCE WRAP; WHITE-SPACE: NOWRAP PRESERVE; }',
+		String.raw`a { \74 ext-wrap: b\61 lance w\72 ap; white-space: n\6f wrap pr\65 serve; }`,
+		'a { text-wrap: balance /* keep */ wrap; white-space: nowrap /* keep */ preserve; }',
+		'@media (width > 0px) { a { text-wrap: balance wrap !important; white-space: nowrap preserve !important; } }',
+		{
+			code: 'a { white-space: discard-after discard-before nowrap preserve; }',
+			languageOptions: {
+				customSyntax: {
+					properties: {'white-space': '<\'white-space-collapse\'> || <\'text-wrap-mode\'> || <\'white-space-trim\'>'},
+				},
+			},
+		},
 	],
 });
 
@@ -166,6 +185,11 @@ test({
 			output: 'a { text-decoration: underline 2px wavy red; text-emphasis: open circle red; }',
 			errors: 2,
 		},
+		{
+			code: 'a { text-wrap: balance wrap; white-space: nowrap preserve; }',
+			output: 'a { text-wrap: wrap balance; white-space: preserve nowrap; }',
+			errors: 2,
+		},
 	],
 });
 
@@ -206,13 +230,39 @@ nodeTest('fixes converge with longhand combination and are idempotent', () => {
 			'cssicorn/no-redundant-longhand-properties': 'error',
 		},
 	};
-	const code = 'a { flex-wrap: wrap; flex-direction: column; outline-color: red; outline-style: solid; outline-width: 1px; columns: 3 20em; }';
-	const output = 'a { flex-flow: column wrap; outline: 1px solid red; columns: 20em 3; }';
-	const result = linter.verifyAndFix(code, config, {filename: 'test.css'});
-	assert.equal(result.output, output);
-	assert.equal(result.fixed, true);
-	assert.deepEqual(result.messages, []);
-	assert.deepEqual(linter.verifyAndFix(output, config, {filename: 'test.css'}), {...result, fixed: false});
+	for (const [code, output] of [
+		[
+			'a { flex-wrap: wrap; flex-direction: column; outline-color: red; outline-style: solid; outline-width: 1px; columns: 3 20em; }',
+			'a { flex-flow: column wrap; outline: 1px solid red; columns: 20em 3; }',
+		],
+		[
+			'a { text-decoration-color: red; text-decoration-style: wavy; text-decoration-line: underline; text-decoration-thickness: 2px; text-emphasis-color: blue; text-emphasis-style: circle; }',
+			'a { text-decoration: underline 2px wavy red; text-emphasis: circle blue; }',
+		],
+	]) {
+		const result = linter.verifyAndFix(code, config, {filename: 'test.css'});
+		assert.equal(result.output, output);
+		assert.equal(result.fixed, true);
+		assert.deepEqual(result.messages, []);
+		assert.deepEqual(linter.verifyAndFix(output, config, {filename: 'test.css'}), {...result, fixed: false});
+	}
+});
+
+nodeTest('fixes preserve adjacent string boundaries and positional math lengths', () => {
+	const linter = new Linter();
+	const config = {...plugin.configs.all, rules: {'cssicorn/consistent-value-order': 'error'}};
+	for (const [code, output] of [
+		['a { text-emphasis: rgb(1 2 3)"•"; }', 'a { text-emphasis: "•" rgb(1 2 3); }'],
+		[
+			'a { box-shadow: red calc(1px + 2px) min(3px, 4px) max(5px, 6px) clamp(7px, 8px, 9px) inset; }',
+			'a { box-shadow: inset calc(1px + 2px) min(3px, 4px) max(5px, 6px) clamp(7px, 8px, 9px) red; }',
+		],
+	]) {
+		const result = linter.verifyAndFix(code, config, {filename: 'test.css'});
+		assert.equal(result.output, output);
+		assert.deepEqual(result.messages, []);
+		assert.deepEqual(linter.verifyAndFix(output, config, {filename: 'test.css'}), {...result, fixed: false});
+	}
 });
 
 nodeTest('presets enable value ordering only for recommended and all', () => {

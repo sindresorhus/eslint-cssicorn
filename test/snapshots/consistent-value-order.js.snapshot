@@ -1318,6 +1318,207 @@ Output:
 
 `;
 
+exports[`invalid(71): a { text-wrap: pretty nowrap; text-wrap: stable wrap; text-wrap: auto nowrap; } 1`] = `
+
+  1 | a { text-wrap: pretty nowrap; text-wrap: stable wrap; text-wrap: auto nowrap; }
+
+`;
+
+exports[`invalid(71): a { text-wrap: pretty nowrap; text-wrap: stable wrap; text-wrap: auto nowrap; } 2`] = `
+
+Message:
+> 1 | a { text-wrap: pretty nowrap; text-wrap: stable wrap; text-wrap: auto nowrap; }
+    |                ^^^^^^^^^^^^^ Use consistent ordering for \`text-wrap\` value components.
+
+Output:
+  1 | a { text-wrap: nowrap pretty; text-wrap: stable wrap; text-wrap: auto nowrap; }
+
+`;
+
+exports[`invalid(71): a { text-wrap: pretty nowrap; text-wrap: stable wrap; text-wrap: auto nowrap; } 3`] = `
+
+Message:
+> 1 | a { text-wrap: pretty nowrap; text-wrap: stable wrap; text-wrap: auto nowrap; }
+    |                                          ^^^^^^^^^^^ Use consistent ordering for \`text-wrap\` value components.
+
+Output:
+  1 | a { text-wrap: pretty nowrap; text-wrap: wrap stable; text-wrap: auto nowrap; }
+
+`;
+
+exports[`invalid(71): a { text-wrap: pretty nowrap; text-wrap: stable wrap; text-wrap: auto nowrap; } 4`] = `
+
+Message:
+> 1 | a { text-wrap: pretty nowrap; text-wrap: stable wrap; text-wrap: auto nowrap; }
+    |                                                                  ^^^^^^^^^^^ Use consistent ordering for \`text-wrap\` value components.
+
+Output:
+  1 | a { text-wrap: pretty nowrap; text-wrap: stable wrap; text-wrap: nowrap auto; }
+
+`;
+
+exports[`invalid(72): a { white-space: wrap collapse; white-space: nowrap preserve-breaks; white-space: nowrap break-spaces; } 1`] = `
+
+  1 | a { white-space: wrap collapse; white-space: nowrap preserve-breaks; white-space: nowrap break-spaces; }
+
+`;
+
+exports[`invalid(72): a { white-space: wrap collapse; white-space: nowrap preserve-breaks; white-space: nowrap break-spaces; } 2`] = `
+
+Message:
+> 1 | a { white-space: wrap collapse; white-space: nowrap preserve-breaks; white-space: nowrap break-spaces; }
+    |                  ^^^^^^^^^^^^^ Use consistent ordering for \`white-space\` value components.
+
+Output:
+  1 | a { white-space: collapse wrap; white-space: nowrap preserve-breaks; white-space: nowrap break-spaces; }
+
+`;
+
+exports[`invalid(72): a { white-space: wrap collapse; white-space: nowrap preserve-breaks; white-space: nowrap break-spaces; } 3`] = `
+
+Message:
+> 1 | a { white-space: wrap collapse; white-space: nowrap preserve-breaks; white-space: nowrap break-spaces; }
+    |                                              ^^^^^^^^^^^^^^^^^^^^^^ Use consistent ordering for \`white-space\` value components.
+
+Output:
+  1 | a { white-space: wrap collapse; white-space: preserve-breaks nowrap; white-space: nowrap break-spaces; }
+
+`;
+
+exports[`invalid(72): a { white-space: wrap collapse; white-space: nowrap preserve-breaks; white-space: nowrap break-spaces; } 4`] = `
+
+Message:
+> 1 | a { white-space: wrap collapse; white-space: nowrap preserve-breaks; white-space: nowrap break-spaces; }
+    |                                                                                   ^^^^^^^^^^^^^^^^^^^ Use consistent ordering for \`white-space\` value components.
+
+Output:
+  1 | a { white-space: wrap collapse; white-space: nowrap preserve-breaks; white-space: break-spaces nowrap; }
+
+`;
+
+exports[`invalid(73): a { TEXT-WRAP: BALANCE WRAP; WHITE-SPACE: NOWRAP PRESERVE; } 1`] = `
+
+  1 | a { TEXT-WRAP: BALANCE WRAP; WHITE-SPACE: NOWRAP PRESERVE; }
+
+`;
+
+exports[`invalid(73): a { TEXT-WRAP: BALANCE WRAP; WHITE-SPACE: NOWRAP PRESERVE; } 2`] = `
+
+Message:
+> 1 | a { TEXT-WRAP: BALANCE WRAP; WHITE-SPACE: NOWRAP PRESERVE; }
+    |                ^^^^^^^^^^^^ Use consistent ordering for \`text-wrap\` value components.
+
+Output:
+  1 | a { TEXT-WRAP: WRAP BALANCE; WHITE-SPACE: NOWRAP PRESERVE; }
+
+`;
+
+exports[`invalid(73): a { TEXT-WRAP: BALANCE WRAP; WHITE-SPACE: NOWRAP PRESERVE; } 3`] = `
+
+Message:
+> 1 | a { TEXT-WRAP: BALANCE WRAP; WHITE-SPACE: NOWRAP PRESERVE; }
+    |                                           ^^^^^^^^^^^^^^^ Use consistent ordering for \`white-space\` value components.
+
+Output:
+  1 | a { TEXT-WRAP: BALANCE WRAP; WHITE-SPACE: PRESERVE NOWRAP; }
+
+`;
+
+exports[`invalid(74): a { \\74 ext-wrap: b\\61 lance w\\72 ap; white-space: n\\6f wrap pr\\65 serve; } 1`] = `
+
+  1 | a { \\74 ext-wrap: b\\61 lance w\\72 ap; white-space: n\\6f wrap pr\\65 serve; }
+
+`;
+
+exports[`invalid(74): a { \\74 ext-wrap: b\\61 lance w\\72 ap; white-space: n\\6f wrap pr\\65 serve; } 2`] = `
+
+Message:
+> 1 | a { \\74 ext-wrap: b\\61 lance w\\72 ap; white-space: n\\6f wrap pr\\65 serve; }
+    |                   ^^^^^^^^^^^^^^^^^^ Use consistent ordering for \`text-wrap\` value components.
+
+Output:
+  1 | a { \\74 ext-wrap: w\\72 ap b\\61 lance; white-space: n\\6f wrap pr\\65 serve; }
+
+`;
+
+exports[`invalid(74): a { \\74 ext-wrap: b\\61 lance w\\72 ap; white-space: n\\6f wrap pr\\65 serve; } 3`] = `
+
+Message:
+> 1 | a { \\74 ext-wrap: b\\61 lance w\\72 ap; white-space: n\\6f wrap pr\\65 serve; }
+    |                                                    ^^^^^^^^^^^^^^^^^^^^^ Use consistent ordering for \`white-space\` value components.
+
+Output:
+  1 | a { \\74 ext-wrap: b\\61 lance w\\72 ap; white-space: pr\\65 serve n\\6f wrap; }
+
+`;
+
+exports[`invalid(75): a { text-wrap: balance /* keep */ wrap; white-space: nowrap /* keep */ preserve; } 1`] = `
+
+  1 | a { text-wrap: balance /* keep */ wrap; white-space: nowrap /* keep */ preserve; }
+
+`;
+
+exports[`invalid(75): a { text-wrap: balance /* keep */ wrap; white-space: nowrap /* keep */ preserve; } 2`] = `
+
+Message:
+> 1 | a { text-wrap: balance /* keep */ wrap; white-space: nowrap /* keep */ preserve; }
+    |                ^^^^^^^^^^^^^^^^^^^^^^^ Use consistent ordering for \`text-wrap\` value components.
+
+`;
+
+exports[`invalid(75): a { text-wrap: balance /* keep */ wrap; white-space: nowrap /* keep */ preserve; } 3`] = `
+
+Message:
+> 1 | a { text-wrap: balance /* keep */ wrap; white-space: nowrap /* keep */ preserve; }
+    |                                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^ Use consistent ordering for \`white-space\` value components.
+
+`;
+
+exports[`invalid(76): @media (width > 0px) { a { text-wrap: balance wrap !important; white-space: nowrap preserve !important; } } 1`] = `
+
+  1 | @media (width > 0px) { a { text-wrap: balance wrap !important; white-space: nowrap preserve !important; } }
+
+`;
+
+exports[`invalid(76): @media (width > 0px) { a { text-wrap: balance wrap !important; white-space: nowrap preserve !important; } } 2`] = `
+
+Message:
+> 1 | @media (width > 0px) { a { text-wrap: balance wrap !important; white-space: nowrap preserve !important; } }
+    |                                       ^^^^^^^^^^^^ Use consistent ordering for \`text-wrap\` value components.
+
+Output:
+  1 | @media (width > 0px) { a { text-wrap: wrap balance !important; white-space: nowrap preserve !important; } }
+
+`;
+
+exports[`invalid(76): @media (width > 0px) { a { text-wrap: balance wrap !important; white-space: nowrap preserve !important; } } 3`] = `
+
+Message:
+> 1 | @media (width > 0px) { a { text-wrap: balance wrap !important; white-space: nowrap preserve !important; } }
+    |                                                                             ^^^^^^^^^^^^^^^ Use consistent ordering for \`white-space\` value components.
+
+Output:
+  1 | @media (width > 0px) { a { text-wrap: balance wrap !important; white-space: preserve nowrap !important; } }
+
+`;
+
+exports[`invalid(77): a { white-space: discard-after discard-before nowrap preserve; } 1`] = `
+
+  1 | a { white-space: discard-after discard-before nowrap preserve; }
+
+`;
+
+exports[`invalid(77): a { white-space: discard-after discard-before nowrap preserve; } 2`] = `
+
+Message:
+> 1 | a { white-space: discard-after discard-before nowrap preserve; }
+    |                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Use consistent ordering for \`white-space\` value components.
+
+Output:
+  1 | a { white-space: preserve nowrap discard-after discard-before; }
+
+`;
+
 exports[`invalid(8): a { border-block-start: red solid 1px; } 1`] = `
 
   1 | a { border-block-start: red solid 1px; }
