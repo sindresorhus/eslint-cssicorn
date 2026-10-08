@@ -1,0 +1,808 @@
+exports[`invalid(1): .a{color:red}.b{color:red}.c{color:red} 1`] = `
+
+  1 | .a{color:red}.b{color:red}.c{color:red}
+
+`;
+
+exports[`invalid(1): .a{color:red}.b{color:red}.c{color:red} 2`] = `
+
+Message:
+> 1 | .a{color:red}.b{color:red}.c{color:red}
+    |              ^^ Merge these adjacent rules with identical declarations.
+
+Output:
+  1 | .a,.b,.c{color:red}
+
+`;
+
+exports[`invalid(10): .a { content: \"random()\"; background: url(\"random()\"); } .b { content: \"random()\"; background: url(\"random()\"); } 1`] = `
+
+  1 | .a { content: "random()"; background: url("random()"); } .b { content: "random()"; background: url("random()"); }
+
+`;
+
+exports[`invalid(10): .a { content: \"random()\"; background: url(\"random()\"); } .b { content: \"random()\"; background: url(\"random()\"); } 2`] = `
+
+Message:
+> 1 | .a { content: "random()"; background: url("random()"); } .b { content: "random()"; background: url("random()"); }
+    |                                                          ^^ Merge these adjacent rules with identical declarations.
+
+Output:
+  1 | .a, .b { content: "random()"; background: url("random()"); }
+
+`;
+
+exports[`invalid(11): .a:hover { color: red; } .b:focus-visible { color: red; } 1`] = `
+
+  1 | .a:hover { color: red; } .b:focus-visible { color: red; }
+
+`;
+
+exports[`invalid(11): .a:hover { color: red; } .b:focus-visible { color: red; } 2`] = `
+
+Message:
+> 1 | .a:hover { color: red; } .b:focus-visible { color: red; }
+    |                          ^^^^^^^^^^^^^^^^ Merge these adjacent rules with identical declarations.
+
+Output:
+  1 | .a:hover, .b:focus-visible { color: red; }
+
+`;
+
+exports[`invalid(12): .a::before { content: \"\"; } .b::after { content: \"\"; } 1`] = `
+
+  1 | .a::before { content: ""; } .b::after { content: ""; }
+
+`;
+
+exports[`invalid(12): .a::before { content: \"\"; } .b::after { content: \"\"; } 2`] = `
+
+Message:
+> 1 | .a::before { content: ""; } .b::after { content: ""; }
+    |                             ^^^^^^^^^ Merge these adjacent rules with identical declarations.
+
+Output:
+  1 | .a::before, .b::after { content: ""; }
+
+`;
+
+exports[`invalid(13): .a:has(> .child) { color: red; } .b:is(.active, #selected) { color: red; } 1`] = `
+
+  1 | .a:has(> .child) { color: red; } .b:is(.active, #selected) { color: red; }
+
+`;
+
+exports[`invalid(13): .a:has(> .child) { color: red; } .b:is(.active, #selected) { color: red; } 2`] = `
+
+Message:
+> 1 | .a:has(> .child) { color: red; } .b:is(.active, #selected) { color: red; }
+    |                                  ^^^^^^^^^^^^^^^^^^^^^^^^^ Merge these adjacent rules with identical declarations.
+
+Output:
+  1 | .a:has(> .child), .b:is(.active, #selected) { color: red; }
+
+`;
+
+exports[`invalid(14): .a:where(.active) { color: red; } .b:not(.hidden) { color: red; } 1`] = `
+
+  1 | .a:where(.active) { color: red; } .b:not(.hidden) { color: red; }
+
+`;
+
+exports[`invalid(14): .a:where(.active) { color: red; } .b:not(.hidden) { color: red; } 2`] = `
+
+Message:
+> 1 | .a:where(.active) { color: red; } .b:not(.hidden) { color: red; }
+    |                                   ^^^^^^^^^^^^^^^ Merge these adjacent rules with identical declarations.
+
+Output:
+  1 | .a:where(.active), .b:not(.hidden) { color: red; }
+
+`;
+
+exports[`invalid(15): .a:nth-child(2n of .item) { color: red; } .b:nth-last-of-type(odd) { color: red; } 1`] = `
+
+  1 | .a:nth-child(2n of .item) { color: red; } .b:nth-last-of-type(odd) { color: red; }
+
+`;
+
+exports[`invalid(15): .a:nth-child(2n of .item) { color: red; } .b:nth-last-of-type(odd) { color: red; } 2`] = `
+
+Message:
+> 1 | .a:nth-child(2n of .item) { color: red; } .b:nth-last-of-type(odd) { color: red; }
+    |                                           ^^^^^^^^^^^^^^^^^^^^^^^^ Merge these adjacent rules with identical declarations.
+
+Output:
+  1 | .a:nth-child(2n of .item), .b:nth-last-of-type(odd) { color: red; }
+
+`;
+
+exports[`invalid(16): .a:lang(en) { color: red; } .b:lang(\"fr\") { color: red; } 1`] = `
+
+  1 | .a:lang(en) { color: red; } .b:lang("fr") { color: red; }
+
+`;
+
+exports[`invalid(16): .a:lang(en) { color: red; } .b:lang(\"fr\") { color: red; } 2`] = `
+
+Message:
+> 1 | .a:lang(en) { color: red; } .b:lang("fr") { color: red; }
+    |                             ^^^^^^^^^^^^^ Merge these adjacent rules with identical declarations.
+
+Output:
+  1 | .a:lang(en), .b:lang("fr") { color: red; }
+
+`;
+
+exports[`invalid(17): .a:lang(en, \"fr\") { color: red; } .b:nth-of-type(2n) { color: red; } 1`] = `
+
+  1 | .a:lang(en, "fr") { color: red; } .b:nth-of-type(2n) { color: red; }
+
+`;
+
+exports[`invalid(17): .a:lang(en, \"fr\") { color: red; } .b:nth-of-type(2n) { color: red; } 2`] = `
+
+Message:
+> 1 | .a:lang(en, "fr") { color: red; } .b:nth-of-type(2n) { color: red; }
+    |                                   ^^^^^^^^^^^^^^^^^^ Merge these adjacent rules with identical declarations.
+
+Output:
+  1 | .a:lang(en, "fr"), .b:nth-of-type(2n) { color: red; }
+
+`;
+
+exports[`invalid(18): .a:host(.active) { color: red; } .b { color: red; } 1`] = `
+
+  1 | .a:host(.active) { color: red; } .b { color: red; }
+
+`;
+
+exports[`invalid(18): .a:host(.active) { color: red; } .b { color: red; } 2`] = `
+
+Message:
+> 1 | .a:host(.active) { color: red; } .b { color: red; }
+    |                                  ^^ Merge these adjacent rules with identical declarations.
+
+Output:
+  1 | .a:host(.active), .b { color: red; }
+
+`;
+
+exports[`invalid(19): .a,\n  .b { color: red; } .c,\n  .d { color: red; } 1`] = `
+
+  1 | .a,
+  2 |   .b { color: red; } .c,
+  3 |   .d { color: red; }
+
+`;
+
+exports[`invalid(19): .a,\n  .b { color: red; } .c,\n  .d { color: red; } 2`] = `
+
+Message:
+  1 | .a,
+> 2 |   .b { color: red; } .c,
+    |                      ^^^
+> 3 |   .d { color: red; }
+    | ^^^^ Merge these adjacent rules with identical declarations.
+
+Output:
+  1 | .a,
+  2 |   .b, .c,
+  3 |   .d { color: red; }
+
+`;
+
+exports[`invalid(2): .a, .b { color: red; } .b, .c { color: red; } 1`] = `
+
+  1 | .a, .b { color: red; } .b, .c { color: red; }
+
+`;
+
+exports[`invalid(2): .a, .b { color: red; } .b, .c { color: red; } 2`] = `
+
+Message:
+> 1 | .a, .b { color: red; } .b, .c { color: red; }
+    |                        ^^^^^^ Merge these adjacent rules with identical declarations.
+
+Output:
+  1 | .a, .b, .c { color: red; }
+
+`;
+
+exports[`invalid(20): .a, .a, .b { color: red; } .a, .c, .c, .d { color: red; } 1`] = `
+
+  1 | .a, .a, .b { color: red; } .a, .c, .c, .d { color: red; }
+
+`;
+
+exports[`invalid(20): .a, .a, .b { color: red; } .a, .c, .c, .d { color: red; } 2`] = `
+
+Message:
+> 1 | .a, .a, .b { color: red; } .a, .c, .c, .d { color: red; }
+    |                            ^^^^^^^^^^^^^^ Merge these adjacent rules with identical declarations.
+
+Output:
+  1 | .a, .b, .c, .d { color: red; }
+
+`;
+
+exports[`invalid(21): [foo=\"bar\" i] { color: red; } [foo=\"baz\"] { color: red; } 1`] = `
+
+  1 | [foo="bar" i] { color: red; } [foo="baz"] { color: red; }
+
+`;
+
+exports[`invalid(21): [foo=\"bar\" i] { color: red; } [foo=\"baz\"] { color: red; } 2`] = `
+
+Message:
+> 1 | [foo="bar" i] { color: red; } [foo="baz"] { color: red; }
+    |                               ^^^^^^^^^^^ Merge these adjacent rules with identical declarations.
+
+Output:
+  1 | [foo="bar" i], [foo="baz"] { color: red; }
+
+`;
+
+exports[`invalid(22): .a:OPEN { color: red; } .b:popover-open { color: red; } 1`] = `
+
+  1 | .a:OPEN { color: red; } .b:popover-open { color: red; }
+
+`;
+
+exports[`invalid(22): .a:OPEN { color: red; } .b:popover-open { color: red; } 2`] = `
+
+Message:
+> 1 | .a:OPEN { color: red; } .b:popover-open { color: red; }
+    |                         ^^^^^^^^^^^^^^^ Merge these adjacent rules with identical declarations.
+
+Output:
+  1 | .a:OPEN, .b:popover-open { color: red; }
+
+`;
+
+exports[`invalid(23): .a:h\\6fver { color: red; } .b:hover { color: red; } 1`] = `
+
+  1 | .a:h\\6fver { color: red; } .b:hover { color: red; }
+
+`;
+
+exports[`invalid(23): .a:h\\6fver { color: red; } .b:hover { color: red; } 2`] = `
+
+Message:
+> 1 | .a:h\\6fver { color: red; } .b:hover { color: red; }
+    |                            ^^^^^^^^ Merge these adjacent rules with identical declarations.
+
+Output:
+  1 | .a:h\\6fver, .b:hover { color: red; }
+
+`;
+
+exports[`invalid(24): .parent { & .a { color: red; } > .b { color: red; } } 1`] = `
+
+  1 | .parent { & .a { color: red; } > .b { color: red; } }
+
+`;
+
+exports[`invalid(24): .parent { & .a { color: red; } > .b { color: red; } } 2`] = `
+
+Message:
+> 1 | .parent { & .a { color: red; } > .b { color: red; } }
+    |                                ^^^^ Merge these adjacent rules with identical declarations.
+
+Output:
+  1 | .parent { & .a, > .b { color: red; } }
+
+`;
+
+exports[`invalid(25): @media (width > 1px) { .a { color: red; } .b { color: red; } } 1`] = `
+
+  1 | @media (width > 1px) { .a { color: red; } .b { color: red; } }
+
+`;
+
+exports[`invalid(25): @media (width > 1px) { .a { color: red; } .b { color: red; } } 2`] = `
+
+Message:
+> 1 | @media (width > 1px) { .a { color: red; } .b { color: red; } }
+    |                                           ^^ Merge these adjacent rules with identical declarations.
+
+Output:
+  1 | @media (width > 1px) { .a, .b { color: red; } }
+
+`;
+
+exports[`invalid(26): @layer theme { .a { color: red; } .b { color: red; } } 1`] = `
+
+  1 | @layer theme { .a { color: red; } .b { color: red; } }
+
+`;
+
+exports[`invalid(26): @layer theme { .a { color: red; } .b { color: red; } } 2`] = `
+
+Message:
+> 1 | @layer theme { .a { color: red; } .b { color: red; } }
+    |                                   ^^ Merge these adjacent rules with identical declarations.
+
+Output:
+  1 | @layer theme { .a, .b { color: red; } }
+
+`;
+
+exports[`invalid(27): @scope (.parent) { .a { color: red; } .b { color: red; } } 1`] = `
+
+  1 | @scope (.parent) { .a { color: red; } .b { color: red; } }
+
+`;
+
+exports[`invalid(27): @scope (.parent) { .a { color: red; } .b { color: red; } } 2`] = `
+
+Message:
+> 1 | @scope (.parent) { .a { color: red; } .b { color: red; } }
+    |                                       ^^ Merge these adjacent rules with identical declarations.
+
+Output:
+  1 | @scope (.parent) { .a, .b { color: red; } }
+
+`;
+
+exports[`invalid(28): .a { color: red; /* keep */ } .b { color: red; } 1`] = `
+
+  1 | .a { color: red; /* keep */ } .b { color: red; }
+
+`;
+
+exports[`invalid(28): .a { color: red; /* keep */ } .b { color: red; } 2`] = `
+
+Message:
+> 1 | .a { color: red; /* keep */ } .b { color: red; }
+    |                               ^^ Merge these adjacent rules with identical declarations.
+
+`;
+
+exports[`invalid(29): .a /* keep */ { color: red; } .b { color: red; } 1`] = `
+
+  1 | .a /* keep */ { color: red; } .b { color: red; }
+
+`;
+
+exports[`invalid(29): .a /* keep */ { color: red; } .b { color: red; } 2`] = `
+
+Message:
+> 1 | .a /* keep */ { color: red; } .b { color: red; }
+    |                               ^^ Merge these adjacent rules with identical declarations.
+
+`;
+
+exports[`invalid(3): .a { color: red; } .a { color: red; } 1`] = `
+
+  1 | .a { color: red; } .a { color: red; }
+
+`;
+
+exports[`invalid(3): .a { color: red; } .a { color: red; } 2`] = `
+
+Message:
+> 1 | .a { color: red; } .a { color: red; }
+    |                    ^^ Merge these adjacent rules with identical declarations.
+
+Output:
+  1 | .a { color: red; }
+
+`;
+
+exports[`invalid(30): .a { color: red; } .b { color: /* keep */ red; } 1`] = `
+
+  1 | .a { color: red; } .b { color: /* keep */ red; }
+
+`;
+
+exports[`invalid(30): .a { color: red; } .b { color: /* keep */ red; } 2`] = `
+
+Message:
+> 1 | .a { color: red; } .b { color: /* keep */ red; }
+    |                    ^^ Merge these adjacent rules with identical declarations.
+
+`;
+
+exports[`invalid(31): .a {\n  color: red;\n}\n.b {\n  color: red;\n} 1`] = `
+
+  1 | .a {
+  2 |   color: red;
+  3 | }
+  4 | .b {
+  5 |   color: red;
+  6 | }
+
+`;
+
+exports[`invalid(31): .a {\n  color: red;\n}\n.b {\n  color: red;\n} 2`] = `
+
+Message:
+  1 | .a {
+  2 |   color: red;
+  3 | }
+> 4 | .b {
+    | ^^ Merge these adjacent rules with identical declarations.
+  5 |   color: red;
+  6 | }
+
+Output:
+  1 | .a,
+  2 | .b {
+  3 |   color: red;
+  4 | }
+
+`;
+
+exports[`invalid(32): .a {\r\n\tcolor: red;\r\n}\r\n.b {\r\n\tcolor: red;\r\n} 1`] = `
+
+  1 | .a {
+  2 | 	color: red;
+  3 | }
+  4 | .b {
+  5 | 	color: red;
+  6 | }
+
+`;
+
+exports[`invalid(32): .a {\r\n\tcolor: red;\r\n}\r\n.b {\r\n\tcolor: red;\r\n} 2`] = `
+
+Message:
+  1 | .a {
+  2 | 	color: red;
+  3 | }
+> 4 | .b {
+    | ^^ Merge these adjacent rules with identical declarations.
+  5 | 	color: red;
+  6 | }
+
+Output:
+  1 | .a,
+  2 | .b {
+  3 | 	color: red;
+  4 | }
+
+`;
+
+exports[`invalid(33): @media (width > 1px) { .a { color: red; } } @media (width > 1px) { .b { color: blue; } } 1`] = `
+
+  1 | @media (width > 1px) { .a { color: red; } } @media (width > 1px) { .b { color: blue; } }
+
+`;
+
+exports[`invalid(33): @media (width > 1px) { .a { color: red; } } @media (width > 1px) { .b { color: blue; } } 2`] = `
+
+Message:
+> 1 | @media (width > 1px) { .a { color: red; } } @media (width > 1px) { .b { color: blue; } }
+    |                                                    ^^^^^^^^^^^^^^ Merge these adjacent \`@media\` rules with the same condition.
+
+Output:
+  1 | @media (width > 1px) { .a { color: red; } .b { color: blue; } }
+
+`;
+
+exports[`invalid(34): @supports (display: grid) { .a { color: red; } } @supports (display:grid) { .b { color: blue; } } 1`] = `
+
+  1 | @supports (display: grid) { .a { color: red; } } @supports (display:grid) { .b { color: blue; } }
+
+`;
+
+exports[`invalid(34): @supports (display: grid) { .a { color: red; } } @supports (display:grid) { .b { color: blue; } } 2`] = `
+
+Message:
+> 1 | @supports (display: grid) { .a { color: red; } } @supports (display:grid) { .b { color: blue; } }
+    |                                                            ^^^^^^^^^^^^^^ Merge these adjacent \`@supports\` rules with the same condition.
+
+Output:
+  1 | @supports (display: grid) { .a { color: red; } .b { color: blue; } }
+
+`;
+
+exports[`invalid(35): @container card (width > 1px) { .a { color: red; } } @container card (width>1px) { .b { color: blue; } } 1`] = `
+
+  1 | @container card (width > 1px) { .a { color: red; } } @container card (width>1px) { .b { color: blue; } }
+
+`;
+
+exports[`invalid(35): @container card (width > 1px) { .a { color: red; } } @container card (width>1px) { .b { color: blue; } } 2`] = `
+
+Message:
+> 1 | @container card (width > 1px) { .a { color: red; } } @container card (width>1px) { .b { color: blue; } }
+    |                                                                 ^^^^^^^^^^^^^^^^ Merge these adjacent \`@container\` rules with the same condition.
+
+Output:
+  1 | @container card (width > 1px) { .a { color: red; } .b { color: blue; } }
+
+`;
+
+exports[`invalid(36): @MEDIA (width > 1px) { .a {} } @media (width > 1px) { .b {} } 1`] = `
+
+  1 | @MEDIA (width > 1px) { .a {} } @media (width > 1px) { .b {} }
+
+`;
+
+exports[`invalid(36): @MEDIA (width > 1px) { .a {} } @media (width > 1px) { .b {} } 2`] = `
+
+Message:
+> 1 | @MEDIA (width > 1px) { .a {} } @media (width > 1px) { .b {} }
+    |                                       ^^^^^^^^^^^^^^ Merge these adjacent \`@media\` rules with the same condition.
+
+Output:
+  1 | @MEDIA (width > 1px) { .a {} .b {} }
+
+`;
+
+exports[`invalid(37): @media (width > 1px) { a {} } @media (width > 1px) { b {} } @media (width > 1px) { c {} } 1`] = `
+
+  1 | @media (width > 1px) { a {} } @media (width > 1px) { b {} } @media (width > 1px) { c {} }
+
+`;
+
+exports[`invalid(37): @media (width > 1px) { a {} } @media (width > 1px) { b {} } @media (width > 1px) { c {} } 2`] = `
+
+Message:
+> 1 | @media (width > 1px) { a {} } @media (width > 1px) { b {} } @media (width > 1px) { c {} }
+    |                                      ^^^^^^^^^^^^^^ Merge these adjacent \`@media\` rules with the same condition.
+
+Output:
+  1 | @media (width > 1px) { a {} b {} c {} }
+
+`;
+
+exports[`invalid(38): .parent { @media (width > 1px) { color: red } @media (width > 1px) { background: blue } } 1`] = `
+
+  1 | .parent { @media (width > 1px) { color: red } @media (width > 1px) { background: blue } }
+
+`;
+
+exports[`invalid(38): .parent { @media (width > 1px) { color: red } @media (width > 1px) { background: blue } } 2`] = `
+
+Message:
+> 1 | .parent { @media (width > 1px) { color: red } @media (width > 1px) { background: blue } }
+    |                                                      ^^^^^^^^^^^^^^ Merge these adjacent \`@media\` rules with the same condition.
+
+Output:
+  1 | .parent { @media (width > 1px) { color: red ; background: blue } }
+
+`;
+
+exports[`invalid(39): .parent { @supports (display: grid) { --text: a b } @supports (display: grid) { color: var(--text) } } 1`] = `
+
+  1 | .parent { @supports (display: grid) { --text: a b } @supports (display: grid) { color: var(--text) } }
+
+`;
+
+exports[`invalid(39): .parent { @supports (display: grid) { --text: a b } @supports (display: grid) { color: var(--text) } } 2`] = `
+
+Message:
+> 1 | .parent { @supports (display: grid) { --text: a b } @supports (display: grid) { color: var(--text) } }
+    |                                                               ^^^^^^^^^^^^^^^ Merge these adjacent \`@supports\` rules with the same condition.
+
+Output:
+  1 | .parent { @supports (display: grid) { --text: a b ; color: var(--text) } }
+
+`;
+
+exports[`invalid(4): .a { color: red; } #b{ COLOR : red } 1`] = `
+
+  1 | .a { color: red; } #b{ COLOR : red }
+
+`;
+
+exports[`invalid(4): .a { color: red; } #b{ COLOR : red } 2`] = `
+
+Message:
+> 1 | .a { color: red; } #b{ COLOR : red }
+    |                    ^^ Merge these adjacent rules with identical declarations.
+
+Output:
+  1 | .a, #b { color: red; }
+
+`;
+
+exports[`invalid(40): @media (width > 1px) {\n  .a { color: red; }\n}\n@media (width > 1px) {\n  .b { color: blue; }\n} 1`] = `
+
+  1 | @media (width > 1px) {
+  2 |   .a { color: red; }
+  3 | }
+  4 | @media (width > 1px) {
+  5 |   .b { color: blue; }
+  6 | }
+
+`;
+
+exports[`invalid(40): @media (width > 1px) {\n  .a { color: red; }\n}\n@media (width > 1px) {\n  .b { color: blue; }\n} 2`] = `
+
+Message:
+  1 | @media (width > 1px) {
+  2 |   .a { color: red; }
+  3 | }
+> 4 | @media (width > 1px) {
+    |        ^^^^^^^^^^^^^^ Merge these adjacent \`@media\` rules with the same condition.
+  5 |   .b { color: blue; }
+  6 | }
+
+Output:
+  1 | @media (width > 1px) {
+  2 |   .a { color: red; }
+  3 |   .b { color: blue; }
+  4 | }
+
+`;
+
+exports[`invalid(41): @media (width > 1px) {\r\n\t.a { color: red; }\r\n}\r\n@media (width > 1px) {\r\n\t.b { color: blue; }\r\n} 1`] = `
+
+  1 | @media (width > 1px) {
+  2 | 	.a { color: red; }
+  3 | }
+  4 | @media (width > 1px) {
+  5 | 	.b { color: blue; }
+  6 | }
+
+`;
+
+exports[`invalid(41): @media (width > 1px) {\r\n\t.a { color: red; }\r\n}\r\n@media (width > 1px) {\r\n\t.b { color: blue; }\r\n} 2`] = `
+
+Message:
+  1 | @media (width > 1px) {
+  2 | 	.a { color: red; }
+  3 | }
+> 4 | @media (width > 1px) {
+    |        ^^^^^^^^^^^^^^ Merge these adjacent \`@media\` rules with the same condition.
+  5 | 	.b { color: blue; }
+  6 | }
+
+Output:
+  1 | @media (width > 1px) {
+  2 | 	.a { color: red; }
+  3 | 	.b { color: blue; }
+  4 | }
+
+`;
+
+exports[`invalid(42): @media (width > 1px) { /* keep */ .a {} } @media (width > 1px) { .b {} } 1`] = `
+
+  1 | @media (width > 1px) { /* keep */ .a {} } @media (width > 1px) { .b {} }
+
+`;
+
+exports[`invalid(42): @media (width > 1px) { /* keep */ .a {} } @media (width > 1px) { .b {} } 2`] = `
+
+Message:
+> 1 | @media (width > 1px) { /* keep */ .a {} } @media (width > 1px) { .b {} }
+    |                                                  ^^^^^^^^^^^^^^ Merge these adjacent \`@media\` rules with the same condition.
+
+`;
+
+exports[`invalid(43): @media /* keep */ (width > 1px) { .a {} } @media (width > 1px) { .b {} } 1`] = `
+
+  1 | @media /* keep */ (width > 1px) { .a {} } @media (width > 1px) { .b {} }
+
+`;
+
+exports[`invalid(43): @media /* keep */ (width > 1px) { .a {} } @media (width > 1px) { .b {} } 2`] = `
+
+Message:
+> 1 | @media /* keep */ (width > 1px) { .a {} } @media (width > 1px) { .b {} }
+    |                                                  ^^^^^^^^^^^^^^ Merge these adjacent \`@media\` rules with the same condition.
+
+`;
+
+exports[`invalid(44): .parent { @media (width > 1px) { & .a { color: red; } } @media (width > 1px) { & .b { color: red; } } } 1`] = `
+
+  1 | .parent { @media (width > 1px) { & .a { color: red; } } @media (width > 1px) { & .b { color: red; } } }
+
+`;
+
+exports[`invalid(44): .parent { @media (width > 1px) { & .a { color: red; } } @media (width > 1px) { & .b { color: red; } } } 2`] = `
+
+Message:
+> 1 | .parent { @media (width > 1px) { & .a { color: red; } } @media (width > 1px) { & .b { color: red; } } }
+    |                                                                ^^^^^^^^^^^^^^ Merge these adjacent \`@media\` rules with the same condition.
+
+Output:
+  1 | .parent { @media (width > 1px) { & .a { color: red; } & .b { color: red; } } }
+
+`;
+
+exports[`invalid(45): .parent { @container card (width > 1px) { color: red; } @container card (width > 1px) { background: blue; } } 1`] = `
+
+  1 | .parent { @container card (width > 1px) { color: red; } @container card (width > 1px) { background: blue; } }
+
+`;
+
+exports[`invalid(45): .parent { @container card (width > 1px) { color: red; } @container card (width > 1px) { background: blue; } } 2`] = `
+
+Message:
+> 1 | .parent { @container card (width > 1px) { color: red; } @container card (width > 1px) { background: blue; } }
+    |                                                                    ^^^^^^^^^^^^^^^^^^ Merge these adjacent \`@container\` rules with the same condition.
+
+Output:
+  1 | .parent { @container card (width > 1px) { color: red; background: blue; } }
+
+`;
+
+exports[`invalid(5): .a { \\63 olor: red; } .b { color: red; } 1`] = `
+
+  1 | .a { \\63 olor: red; } .b { color: red; }
+
+`;
+
+exports[`invalid(5): .a { \\63 olor: red; } .b { color: red; } 2`] = `
+
+Message:
+> 1 | .a { \\63 olor: red; } .b { color: red; }
+    |                       ^^ Merge these adjacent rules with identical declarations.
+
+Output:
+  1 | .a, .b { \\63 olor: red; }
+
+`;
+
+exports[`invalid(6): .\\61 { color: red; } .b { color: red; } 1`] = `
+
+  1 | .\\61 { color: red; } .b { color: red; }
+
+`;
+
+exports[`invalid(6): .\\61 { color: red; } .b { color: red; } 2`] = `
+
+Message:
+> 1 | .\\61 { color: red; } .b { color: red; }
+    |                      ^^ Merge these adjacent rules with identical declarations.
+
+Output:
+  1 | .\\61 , .b{ color: red; }
+
+`;
+
+exports[`invalid(7): .a { color: RED; } .b { COLOR: RED; } 1`] = `
+
+  1 | .a { color: RED; } .b { COLOR: RED; }
+
+`;
+
+exports[`invalid(7): .a { color: RED; } .b { COLOR: RED; } 2`] = `
+
+Message:
+> 1 | .a { color: RED; } .b { COLOR: RED; }
+    |                    ^^ Merge these adjacent rules with identical declarations.
+
+Output:
+  1 | .a, .b { color: RED; }
+
+`;
+
+exports[`invalid(8): .a { color: red; color: blue !important; } .b { color: red; color: blue !important; } 1`] = `
+
+  1 | .a { color: red; color: blue !important; } .b { color: red; color: blue !important; }
+
+`;
+
+exports[`invalid(8): .a { color: red; color: blue !important; } .b { color: red; color: blue !important; } 2`] = `
+
+Message:
+> 1 | .a { color: red; color: blue !important; } .b { color: red; color: blue !important; }
+    |                                            ^^ Merge these adjacent rules with identical declarations.
+
+Output:
+  1 | .a, .b { color: red; color: blue !important; }
+
+`;
+
+exports[`invalid(9): .a { --theme: a b; color: var(--theme); } .b { --theme: a b; color: var(--theme); } 1`] = `
+
+  1 | .a { --theme: a b; color: var(--theme); } .b { --theme: a b; color: var(--theme); }
+
+`;
+
+exports[`invalid(9): .a { --theme: a b; color: var(--theme); } .b { --theme: a b; color: var(--theme); } 2`] = `
+
+Message:
+> 1 | .a { --theme: a b; color: var(--theme); } .b { --theme: a b; color: var(--theme); }
+    |                                           ^^ Merge these adjacent rules with identical declarations.
+
+Output:
+  1 | .a, .b { --theme: a b; color: var(--theme); }
+
+`;

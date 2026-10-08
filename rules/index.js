@@ -33,6 +33,7 @@ export {default as 'prefer-explicit-viewport-units'} from './prefer-explicit-vie
 export {default as 'prefer-individual-transform-properties'} from './prefer-individual-transform-properties.js';
 export {default as 'prefer-light-dark'} from './prefer-light-dark.js';
 export {default as 'prefer-media-feature-range-syntax'} from './prefer-media-feature-range-syntax.js';
+export {default as 'prefer-merged-rules'} from './prefer-merged-rules.js';
 export {default as 'prefer-modern-syntax'} from './prefer-modern-syntax.js';
 export {default as 'prefer-nesting'} from './prefer-nesting.js';
 export {default as 'prefer-short-hex-color'} from './prefer-short-hex-color.js';
