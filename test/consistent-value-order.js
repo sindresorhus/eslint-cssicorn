@@ -41,6 +41,11 @@ test.snapshot({
 		{code: 'a { border: red solid (; box-shadow: red 0 0 (; }', languageOptions: {tolerant: true}},
 		'a { box-shadow: red 1px 2px, blue 3px; text-shadow: red 1px 2px, blue 3px; }',
 		'a { box-shadow: red 1px 2px, var(--other-shadow); text-shadow: red 1px 2px, rgb(1 2 var(--blue)) 3px 4px; }',
+		'a { text-decoration: underline 2px wavy red; text-decoration: overline underline 10% dotted blue; }',
+		'a { text-decoration: underline from-font solid; text-decoration: none; text-emphasis: open circle red; text-emphasis: circle open red; }',
+		'a { text-emphasis: "•" blue; text-emphasis: none red; text-emphasis: inherit; text-decoration: revert-layer; }',
+		'a { text-decoration: red var(--line); text-emphasis: red var(--mark); --text-emphasis: red open circle; }',
+		'a { text-decoration: red unknown 2px; text-emphasis: red unknown; }',
 	],
 	invalid: [
 		...[
@@ -101,6 +106,20 @@ test.snapshot({
 		'@keyframes glow { to { box-shadow: red 0 0 inset; } }',
 		'a { border: rgb(from red r g b / .4) solid 1px; }',
 		String.raw`a { border: r\67 b(1 2 3)solid calc(1p\78); }`,
+		'a { text-decoration: red wavy underline 2px; }',
+		'a { text-decoration: red overline underline wavy 10%; }',
+		'a { text-decoration: currentColor dotted underline from-font; }',
+		'a { text-decoration: red solid underline calc(1px + 2px); }',
+		'a { text-decoration: rgb(1 2 3)underline wavy auto; }',
+		'a { TEXT-DECORATION: RED WAVY UNDERLINE 2PX; -webkit-text-emphasis: RED OPEN CIRCLE; }',
+		String.raw`a { text-decoration: r\65 d \75 nderline 2p\78; }`,
+		'a { text-decoration: red /* keep */ underline 2px; }',
+		'a { text-emphasis: red open circle; }',
+		String.raw`a { text-emphasis: red "\2022"; }`,
+		'a { text-emphasis: red "/* mark */"; }',
+		String.raw`a { text-emphasis: red c\69 rcle op\65 n; }`,
+		'a { text-emphasis: red /* keep */ circle; }',
+		'@media (width > 0px) { a { text-decoration: red underline 2px !important; } }',
 	],
 });
 
@@ -140,6 +159,11 @@ test({
 		{
 			code: 'a { box-shadow: red /* keep */ 0 0, blue 1px 2px; }',
 			output: 'a { box-shadow: red /* keep */ 0 0, 1px 2px blue; }',
+			errors: 2,
+		},
+		{
+			code: 'a { text-decoration: red wavy underline 2px; text-emphasis: red open circle; }',
+			output: 'a { text-decoration: underline 2px wavy red; text-emphasis: open circle red; }',
 			errors: 2,
 		},
 	],
@@ -197,5 +221,18 @@ nodeTest('presets enable value ordering only for recommended and all', () => {
 		const messages = linter.verify('a { border: red solid 1px; }', plugin.configs[preset], {filename: 'test.css'});
 		const orderingMessages = messages.filter(message => message.ruleId === 'cssicorn/consistent-value-order');
 		assert.equal(orderingMessages.length, expectedCount, preset);
+	}
+});
+
+nodeTest('ordering converges with preset zero-unit and color fixes', () => {
+	const linter = new Linter();
+	const code = 'a { columns: 3 0px; box-shadow: #000000 0px 1px 2px inset; }';
+	const output = 'a { columns: 0px 3; box-shadow: inset 0 1px 2px #000; }';
+	for (const preset of ['recommended', 'all']) {
+		const result = linter.verifyAndFix(code, plugin.configs[preset], {filename: 'test.css'});
+		assert.equal(result.output, output, preset);
+		assert.equal(result.fixed, true);
+		assert.deepEqual(result.messages, []);
+		assert.deepEqual(linter.verifyAndFix(output, plugin.configs[preset], {filename: 'test.css'}), {...result, fixed: false});
 	}
 });

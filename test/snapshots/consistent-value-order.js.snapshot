@@ -1041,6 +1041,57 @@ Output:
 
 `;
 
+exports[`invalid(57): a { text-decoration: red wavy underline 2px; } 1`] = `
+
+  1 | a { text-decoration: red wavy underline 2px; }
+
+`;
+
+exports[`invalid(57): a { text-decoration: red wavy underline 2px; } 2`] = `
+
+Message:
+> 1 | a { text-decoration: red wavy underline 2px; }
+    |                      ^^^^^^^^^^^^^^^^^^^^^^ Use consistent ordering for \`text-decoration\` value components.
+
+Output:
+  1 | a { text-decoration: underline 2px wavy red; }
+
+`;
+
+exports[`invalid(58): a { text-decoration: red overline underline wavy 10%; } 1`] = `
+
+  1 | a { text-decoration: red overline underline wavy 10%; }
+
+`;
+
+exports[`invalid(58): a { text-decoration: red overline underline wavy 10%; } 2`] = `
+
+Message:
+> 1 | a { text-decoration: red overline underline wavy 10%; }
+    |                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Use consistent ordering for \`text-decoration\` value components.
+
+Output:
+  1 | a { text-decoration: overline underline 10% wavy red; }
+
+`;
+
+exports[`invalid(59): a { text-decoration: currentColor dotted underline from-font; } 1`] = `
+
+  1 | a { text-decoration: currentColor dotted underline from-font; }
+
+`;
+
+exports[`invalid(59): a { text-decoration: currentColor dotted underline from-font; } 2`] = `
+
+Message:
+> 1 | a { text-decoration: currentColor dotted underline from-font; }
+    |                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Use consistent ordering for \`text-decoration\` value components.
+
+Output:
+  1 | a { text-decoration: underline from-font dotted currentColor; }
+
+`;
+
 exports[`invalid(6): a { border-block: red solid 1px; } 1`] = `
 
   1 | a { border-block: red solid 1px; }
@@ -1058,6 +1109,181 @@ Output:
 
 `;
 
+exports[`invalid(60): a { text-decoration: red solid underline calc(1px + 2px); } 1`] = `
+
+  1 | a { text-decoration: red solid underline calc(1px + 2px); }
+
+`;
+
+exports[`invalid(60): a { text-decoration: red solid underline calc(1px + 2px); } 2`] = `
+
+Message:
+> 1 | a { text-decoration: red solid underline calc(1px + 2px); }
+    |                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Use consistent ordering for \`text-decoration\` value components.
+
+Output:
+  1 | a { text-decoration: underline calc(1px + 2px) solid red; }
+
+`;
+
+exports[`invalid(61): a { text-decoration: rgb(1 2 3)underline wavy auto; } 1`] = `
+
+  1 | a { text-decoration: rgb(1 2 3)underline wavy auto; }
+
+`;
+
+exports[`invalid(61): a { text-decoration: rgb(1 2 3)underline wavy auto; } 2`] = `
+
+Message:
+> 1 | a { text-decoration: rgb(1 2 3)underline wavy auto; }
+    |                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Use consistent ordering for \`text-decoration\` value components.
+
+Output:
+  1 | a { text-decoration: underline auto wavy rgb(1 2 3); }
+
+`;
+
+exports[`invalid(62): a { TEXT-DECORATION: RED WAVY UNDERLINE 2PX; -webkit-text-emphasis: RED OPEN CIRCLE; } 1`] = `
+
+  1 | a { TEXT-DECORATION: RED WAVY UNDERLINE 2PX; -webkit-text-emphasis: RED OPEN CIRCLE; }
+
+`;
+
+exports[`invalid(62): a { TEXT-DECORATION: RED WAVY UNDERLINE 2PX; -webkit-text-emphasis: RED OPEN CIRCLE; } 2`] = `
+
+Message:
+> 1 | a { TEXT-DECORATION: RED WAVY UNDERLINE 2PX; -webkit-text-emphasis: RED OPEN CIRCLE; }
+    |                      ^^^^^^^^^^^^^^^^^^^^^^ Use consistent ordering for \`text-decoration\` value components.
+
+Output:
+  1 | a { TEXT-DECORATION: UNDERLINE 2PX WAVY RED; -webkit-text-emphasis: RED OPEN CIRCLE; }
+
+`;
+
+exports[`invalid(62): a { TEXT-DECORATION: RED WAVY UNDERLINE 2PX; -webkit-text-emphasis: RED OPEN CIRCLE; } 3`] = `
+
+Message:
+> 1 | a { TEXT-DECORATION: RED WAVY UNDERLINE 2PX; -webkit-text-emphasis: RED OPEN CIRCLE; }
+    |                                                                     ^^^^^^^^^^^^^^^ Use consistent ordering for \`text-emphasis\` value components.
+
+Output:
+  1 | a { TEXT-DECORATION: RED WAVY UNDERLINE 2PX; -webkit-text-emphasis: OPEN CIRCLE RED; }
+
+`;
+
+exports[`invalid(63): a { text-decoration: r\\65 d \\75 nderline 2p\\78; } 1`] = `
+
+  1 | a { text-decoration: r\\65 d \\75 nderline 2p\\78; }
+
+`;
+
+exports[`invalid(63): a { text-decoration: r\\65 d \\75 nderline 2p\\78; } 2`] = `
+
+Message:
+> 1 | a { text-decoration: r\\65 d \\75 nderline 2p\\78; }
+    |                      ^^^^^^^^^^^^^^^^^^^^^^^^^ Use consistent ordering for \`text-decoration\` value components.
+
+Output:
+  1 | a { text-decoration: \\75 nderline 2p\\78  r\\65 d; }
+
+`;
+
+exports[`invalid(64): a { text-decoration: red /* keep */ underline 2px; } 1`] = `
+
+  1 | a { text-decoration: red /* keep */ underline 2px; }
+
+`;
+
+exports[`invalid(64): a { text-decoration: red /* keep */ underline 2px; } 2`] = `
+
+Message:
+> 1 | a { text-decoration: red /* keep */ underline 2px; }
+    |                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Use consistent ordering for \`text-decoration\` value components.
+
+`;
+
+exports[`invalid(65): a { text-emphasis: red open circle; } 1`] = `
+
+  1 | a { text-emphasis: red open circle; }
+
+`;
+
+exports[`invalid(65): a { text-emphasis: red open circle; } 2`] = `
+
+Message:
+> 1 | a { text-emphasis: red open circle; }
+    |                    ^^^^^^^^^^^^^^^ Use consistent ordering for \`text-emphasis\` value components.
+
+Output:
+  1 | a { text-emphasis: open circle red; }
+
+`;
+
+exports[`invalid(66): a { text-emphasis: red \"\\2022\"; } 1`] = `
+
+  1 | a { text-emphasis: red "\\2022"; }
+
+`;
+
+exports[`invalid(66): a { text-emphasis: red \"\\2022\"; } 2`] = `
+
+Message:
+> 1 | a { text-emphasis: red "\\2022"; }
+    |                    ^^^^^^^^^^^ Use consistent ordering for \`text-emphasis\` value components.
+
+Output:
+  1 | a { text-emphasis: "\\2022" red; }
+
+`;
+
+exports[`invalid(67): a { text-emphasis: red \"/* mark */\"; } 1`] = `
+
+  1 | a { text-emphasis: red "/* mark */"; }
+
+`;
+
+exports[`invalid(67): a { text-emphasis: red \"/* mark */\"; } 2`] = `
+
+Message:
+> 1 | a { text-emphasis: red "/* mark */"; }
+    |                    ^^^^^^^^^^^^^^^^ Use consistent ordering for \`text-emphasis\` value components.
+
+Output:
+  1 | a { text-emphasis: "/* mark */" red; }
+
+`;
+
+exports[`invalid(68): a { text-emphasis: red c\\69 rcle op\\65 n; } 1`] = `
+
+  1 | a { text-emphasis: red c\\69 rcle op\\65 n; }
+
+`;
+
+exports[`invalid(68): a { text-emphasis: red c\\69 rcle op\\65 n; } 2`] = `
+
+Message:
+> 1 | a { text-emphasis: red c\\69 rcle op\\65 n; }
+    |                    ^^^^^^^^^^^^^^^^^^^^^ Use consistent ordering for \`text-emphasis\` value components.
+
+Output:
+  1 | a { text-emphasis: c\\69 rcle op\\65 n red; }
+
+`;
+
+exports[`invalid(69): a { text-emphasis: red /* keep */ circle; } 1`] = `
+
+  1 | a { text-emphasis: red /* keep */ circle; }
+
+`;
+
+exports[`invalid(69): a { text-emphasis: red /* keep */ circle; } 2`] = `
+
+Message:
+> 1 | a { text-emphasis: red /* keep */ circle; }
+    |                    ^^^^^^^^^^^^^^^^^^^^^ Use consistent ordering for \`text-emphasis\` value components.
+
+`;
+
 exports[`invalid(7): a { border-inline: red solid 1px; } 1`] = `
 
   1 | a { border-inline: red solid 1px; }
@@ -1072,6 +1298,23 @@ Message:
 
 Output:
   1 | a { border-inline: 1px solid red; }
+
+`;
+
+exports[`invalid(70): @media (width > 0px) { a { text-decoration: red underline 2px !important; } } 1`] = `
+
+  1 | @media (width > 0px) { a { text-decoration: red underline 2px !important; } }
+
+`;
+
+exports[`invalid(70): @media (width > 0px) { a { text-decoration: red underline 2px !important; } } 2`] = `
+
+Message:
+> 1 | @media (width > 0px) { a { text-decoration: red underline 2px !important; } }
+    |                                             ^^^^^^^^^^^^^^^^^ Use consistent ordering for \`text-decoration\` value components.
+
+Output:
+  1 | @media (width > 0px) { a { text-decoration: underline 2px red !important; } }
 
 `;
 
