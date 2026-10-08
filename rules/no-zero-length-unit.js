@@ -1,4 +1,5 @@
 import {ident} from '@eslint/css-tree';
+import mathFunctions from './shared/css-math-functions.js';
 import {isCssModulesInteropDeclaration, normalizeCssIdentifier, toLocation} from './utils/index.js';
 
 /**
@@ -11,34 +12,12 @@ const messages = {
 };
 
 const zeroPattern = /^[+\-]?(?:0+(?:\.0+)?|\.0+)(?:e[+\-]?\d+)?$/iv;
-const mathFunctions = new Set([
-	'abs',
-	'acos',
-	'asin',
-	'atan',
-	'atan2',
-	'calc',
+const calculationFunctions = new Set([
+	...mathFunctions,
 	'calc-mix',
 	'calc-size',
-	'clamp',
 	'container-progress',
-	'cos',
-	'exp',
-	'hypot',
-	'log',
-	'max',
 	'media-progress',
-	'min',
-	'mod',
-	'pow',
-	'progress',
-	'random',
-	'rem',
-	'round',
-	'sign',
-	'sin',
-	'sqrt',
-	'tan',
 ]);
 const excludedProperties = new Set([
 	'border-image',
@@ -63,7 +42,7 @@ const containerLengthFeatures = new Set(['width', 'height', 'inline-size', 'bloc
 const isExcludedContext = ancestors => ancestors.some(ancestor => {
 	if (ancestor.type === 'Function') {
 		const name = normalizeCssIdentifier(ancestor.name);
-		return name.startsWith('-') || mathFunctions.has(name);
+		return name.startsWith('-') || calculationFunctions.has(name);
 	}
 
 	if (ancestor.type === 'Declaration') {

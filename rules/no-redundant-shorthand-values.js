@@ -1,5 +1,5 @@
-import {generate} from '@eslint/css-tree';
 import {getVendorPrefix} from './shared/css-shorthand-properties.js';
+import {areEqualValues, getCondensedValueCount} from './shared/css-shorthand-values.js';
 import {
 	hasCommentInRange,
 	hasSubstitutionOrRandomFunction,
@@ -52,65 +52,7 @@ const placeProperties = new Set([
 	'place-self',
 ]);
 
-const getValueKey = node => {
-	switch (node.type) {
-		case 'Dimension': {
-			return `${node.type}:${node.value}${normalizeCssIdentifier(node.unit)}`;
-		}
-
-		case 'Hash': {
-			return `${node.type}:${node.value.toLowerCase()}`;
-		}
-
-		case 'Identifier': {
-			return `${node.type}:${normalizeCssIdentifier(node.name)}`;
-		}
-
-		default: {
-			return `${node.type}:${generate(node)}`;
-		}
-	}
-};
-
-const areEqualValues = (first, second) => getValueKey(first) === getValueKey(second);
 const getValuesText = (values, sourceCode) => values.map(node => sourceCode.getText(node)).join(' ');
-
-const getCondensedValueCount = (values, preserveFourValueEdges) => {
-	const [first, second, third, fourth] = values;
-
-	if (values.length === 2 && areEqualValues(first, second)) {
-		return 1;
-	}
-
-	if (values.length === 3 && areEqualValues(first, third)) {
-		return areEqualValues(first, second) ? 1 : 2;
-	}
-
-	if (values.length !== 4) {
-		return values.length;
-	}
-
-	if (
-		areEqualValues(first, second)
-		&& areEqualValues(first, third)
-		&& areEqualValues(first, fourth)
-	) {
-		return 1;
-	}
-
-	if (
-		areEqualValues(first, third)
-		&& areEqualValues(second, fourth)
-	) {
-		return 2;
-	}
-
-	if (!preserveFourValueEdges && areEqualValues(second, fourth)) {
-		return 3;
-	}
-
-	return 4;
-};
 
 const getRepeatedPlaceValueCount = values => {
 	if (values.length % 2 !== 0) {
