@@ -44,7 +44,7 @@ const getNodeKey = node => {
 	return generate(node);
 };
 
-const getSelectorKey = nodes => JSON.stringify(nodes.map(getNodeKey));
+const getSelectorKey = nodes => JSON.stringify(nodes.map(node => getNodeKey(node)));
 
 const getSelectorAnalysis = nodes => {
 	const terminalStart = nodes.findLastIndex(node => node.type === 'Combinator') + 1;
