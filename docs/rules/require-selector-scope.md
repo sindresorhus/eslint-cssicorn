@@ -149,7 +149,7 @@ Slotted elements can qualify through their compound selector:
 
 ## Usage
 
-Enable the rule only for component stylesheets, exempting global and reset files:
+Enable the rule only for manually scoped component stylesheets, exempting global and reset files. Leave it disabled for component style blocks already scoped by [Vue](https://vuejs.org/api/sfc-css-features.html#scoped-css), [Svelte](https://svelte.dev/docs/svelte/scoped-styles), or [Astro](https://docs.astro.build/en/guides/styling/#scoped-styles).
 
 ```js
 import cssicorn from 'eslint-cssicorn';

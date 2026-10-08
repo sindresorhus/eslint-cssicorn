@@ -31,6 +31,20 @@ test({
 			code: '.card { :not(&), button {} }',
 			errors: [{messageId: 'require-selector-scope', column: 9, endColumn: 16}],
 		},
+		{
+			code: '.card { button {} } body { button {} }',
+			errors: [
+				{messageId: 'require-selector-scope', column: 21, endColumn: 25},
+				{messageId: 'require-selector-scope', column: 28, endColumn: 34},
+			],
+		},
+		{
+			code: '@scope { body {} } body { button {} }',
+			errors: [
+				{messageId: 'require-selector-scope', column: 20, endColumn: 24},
+				{messageId: 'require-selector-scope', column: 27, endColumn: 33},
+			],
+		},
 	],
 });
 

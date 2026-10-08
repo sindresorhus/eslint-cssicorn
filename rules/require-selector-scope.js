@@ -8,6 +8,7 @@ import {
 import {getPseudoSelectorArgument, isKeyframesAtRule, normalizeCssIdentifier} from './utils/index.js';
 
 /**
+@import {CssNodePlain} from '@eslint/css-tree';
 @import {CssicornContext} from './rule/cssicorn-context.js';
 @import {CssicornRule} from './rule/to-eslint-rule.js';
 */
@@ -19,6 +20,14 @@ const messages = {
 
 const POSITIVE_PSEUDO_CLASSES = new Set(['is', 'where', 'nth-child', 'nth-last-child']);
 
+/**
+Determine whether a selector has a positive scoping boundary.
+
+@param {CssNodePlain | null | undefined} node
+@param {boolean} hasScopedParent
+@param {CssicornContext} context
+@returns {boolean}
+*/
 const hasPositiveAnchor = (node, hasScopedParent, context) => {
 	if (!node) {
 		return false;
