@@ -82,6 +82,7 @@ test.snapshot({
 		':is(#ignored >, .item, :hover) {}',
 		':where(.root) { :is(&, *) {} }',
 		'.root { > .child { :is(&, .root.child) {} } }',
+		'@namespace svg url("http://www.w3.org/2000/svg"); :is(svg|*, *) {}',
 		outdent`
 			.dialog, .modal {
 				&, & {
@@ -169,6 +170,8 @@ test.snapshot({
 		'.root { :nth-last-child(odd of &&, &) {} }',
 		':nth-child(2n of :is(.item, #featured), .other) {}',
 		'::slotted(:is(.item, #featured)) {}',
+		'.root, #root { :is(&, #featured) {} }',
+		'@namespace svg url("http://www.w3.org/2000/svg"); :is(svg|*, svg|circle) {}',
 	],
 });
 

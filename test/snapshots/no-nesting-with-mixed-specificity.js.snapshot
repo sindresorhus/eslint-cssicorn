@@ -896,6 +896,34 @@ Message:
 
 `;
 
+exports[`invalid(64): .root, #root { :is(&, #featured) {} } 1`] = `
+
+  1 | .root, #root { :is(&, #featured) {} }
+
+`;
+
+exports[`invalid(64): .root, #root { :is(&, #featured) {} } 2`] = `
+
+Message:
+> 1 | .root, #root { :is(&, #featured) {} }
+    |                ^^^^^^^^^^^^^^^^^ Do not nest rules under selector lists with mixed specificity.
+
+`;
+
+exports[`invalid(65): @namespace svg url(\"http://www.w3.org/2000/svg\"); :is(svg|*, svg|circle) {} 1`] = `
+
+  1 | @namespace svg url("http://www.w3.org/2000/svg"); :is(svg|*, svg|circle) {}
+
+`;
+
+exports[`invalid(65): @namespace svg url(\"http://www.w3.org/2000/svg\"); :is(svg|*, svg|circle) {} 2`] = `
+
+Message:
+> 1 | @namespace svg url("http://www.w3.org/2000/svg"); :is(svg|*, svg|circle) {}
+    |                                                   ^^^^^^^^^^^^^^^^^^^^^^ The selectors in \`:is()\` have mixed specificity (0-0-0, 0-0-1). The most specific selector determines the specificity of the list.
+
+`;
+
 exports[`invalid(7): :hover, dialog { & .close {} } 1`] = `
 
   1 | :hover, dialog { & .close {} }

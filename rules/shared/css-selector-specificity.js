@@ -2,6 +2,14 @@ import {find, tokenize, tokenTypes} from '@eslint/css-tree';
 import {isKeyframesAtRule, normalizeCssIdentifier} from '../utils/index.js';
 import {functionalPseudoSelectors, nonFunctionalPseudoSelectors} from './standard-pseudo-selectors.js';
 
+/**
+@import {PseudoClassSelectorPlain, PseudoElementSelectorPlain, SelectorListPlain, SelectorPlain} from '@eslint/css-tree';
+@typedef {[ids: number, classes: number, types: number]} Specificity
+*/
+
+/**
+@type {Specificity}
+*/
 const ZERO_SPECIFICITY = [0, 0, 0];
 // TODO: Add 'starting-style' once the minimum supported parser supports style rules inside nested @starting-style blocks.
 const TRANSPARENT_GROUP_RULES = new Set([
@@ -52,6 +60,10 @@ const compareSpecificity = (first, second) => {
 	return 0;
 };
 
+/**
+@param {Specificity[]} specificities
+@returns {Specificity}
+*/
 const getMaximumSpecificity = specificities => {
 	let maximum = ZERO_SPECIFICITY;
 
@@ -66,6 +78,9 @@ const getMaximumSpecificity = specificities => {
 
 /**
 Get the selector argument of a functional pseudo-selector, including an `of` selector list.
+
+@param {PseudoClassSelectorPlain | PseudoElementSelectorPlain} node
+@returns {SelectorPlain | SelectorListPlain | null | undefined}
 */
 const getSelectorArgument = node => {
 	const child = node.children?.[0];
@@ -208,6 +223,10 @@ const hasNestingSelectorInRawArgument = argument => {
 
 /**
 Calculate selector specificity without adding an implicit nesting selector.
+
+@param {SelectorPlain} selector
+@param {Specificity} nestingSpecificity
+@returns {{specificity: Specificity, hasNestingSelector: boolean}}
 */
 const getSelectorSpecificity = (selector, nestingSpecificity) => {
 	let specificity = ZERO_SPECIFICITY;

@@ -1,3 +1,5 @@
+// @ts-check
+
 import {
 	canBeRepresentedByNestingSelector,
 	compareSpecificity,
@@ -13,6 +15,13 @@ import {
 } from './shared/css-selector-specificity.js';
 import {normalizeCssIdentifier} from './utils/index.js';
 
+/**
+@import {RulePlain, SelectorPlain} from '@eslint/css-tree';
+@import {Specificity} from './shared/css-selector-specificity.js';
+@import {CssicornContext} from './rule/cssicorn-context.js';
+@import {CssicornRule} from './rule/to-eslint-rule.js';
+*/
+
 const MESSAGE_ID = 'no-nesting-with-mixed-specificity';
 const MESSAGE_ID_ARGUMENTS = 'mixed-specificity-arguments';
 const CHECKED_PSEUDO_CLASSES = new Set(['is', 'not', 'has', 'nth-child', 'nth-last-child']);
@@ -21,13 +30,19 @@ const messages = {
 	[MESSAGE_ID_ARGUMENTS]: 'The selectors in `:{{name}}()` have mixed specificity ({{specificities}}). The most specific selector determines the specificity of the list.',
 };
 
+/**
+@param {Specificity[]} specificities
+*/
 const hasMixedSpecificity = specificities => specificities.some(specificity => compareSpecificity(specificity, specificities[0]) !== 0);
 
 /**
-@param {import('eslint').Rule.RuleContext} context
+@param {CssicornContext} context
 */
 const create = context => {
 	const {sourceCode} = context;
+	/**
+	@type {WeakMap<RulePlain, Specificity[]>}
+	*/
 	const ruleSpecificities = new WeakMap();
 
 	context.on('Rule', rule => {
@@ -72,7 +87,8 @@ const create = context => {
 			return;
 		}
 
-		const selectors = selectorList.children.filter(selector => canBeRepresentedByNestingSelector(selector, name === 'has'));
+		// CSSTree types selector-list children as generic CSS nodes.
+		const selectors = /** @type {SelectorPlain[]} */ (selectorList.children).filter(selector => canBeRepresentedByNestingSelector(selector, name === 'has'));
 		if (selectors.length < 2 || (name !== 'is' && selectors.length !== selectorList.children.length)) {
 			return;
 		}
@@ -97,7 +113,7 @@ const create = context => {
 };
 
 /**
-@type {import('eslint').Rule.RuleModule}
+@type {CssicornRule}
 */
 const config = {
 	create,

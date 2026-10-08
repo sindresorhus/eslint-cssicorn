@@ -50,6 +50,8 @@ Equalizing the parent selectors' specificity is therefore another possible remed
 
 ## Selector-list pseudo-classes
 
+Diagnostics show each argument's specificity as `IDs-classes-types`, where the middle component also counts attributes and pseudo-classes, and the last also counts pseudo-elements. These are argument specificities; selectors outside the function and the `:nth-child()` or `:nth-last-child()` pseudo-class itself can add specificity to the complete selector.
+
 The most specific argument of `:is()` determines its specificity, even when a less specific argument matches. Here, `#featured` gives the selector ID specificity even when the button matches only through `:hover`:
 
 ```css
@@ -63,6 +65,8 @@ The most specific argument of `:is()` determines its specificity, even when a le
 	color: blue;
 }
 ```
+
+The failing example reports argument specificities `0-1-0` and `1-0-0`. The complete selector has specificity `1-1-0`, including the `.button` class.
 
 `:not()` matches none of its arguments but still takes their maximum specificity. In this example, the excluded ID gives the selector ID specificity even when the button is neither hovered nor featured:
 
