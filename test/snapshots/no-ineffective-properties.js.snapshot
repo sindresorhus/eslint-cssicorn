@@ -2254,16 +2254,16 @@ Message:
 
 `;
 
-exports[`invalid(25): a { animation: 2s auto; } 1`] = `
+exports[`invalid(25): a { animation: ease 2s; } 1`] = `
 
-  1 | a { animation: 2s auto; }
+  1 | a { animation: ease 2s; }
 
 `;
 
-exports[`invalid(25): a { animation: 2s auto; } 2`] = `
+exports[`invalid(25): a { animation: ease 2s; } 2`] = `
 
 Message:
-> 1 | a { animation: 2s auto; }
+> 1 | a { animation: ease 2s; }
     |     ^^^^^^^^^^^^^^^^^^ \`animation\` omits an animation name, which defaults to \`none\`.
 
 `;
@@ -2318,17 +2318,17 @@ Message:
 
 `;
 
-exports[`invalid(26): a { animation: 2s scroll(); } 1`] = `
+exports[`invalid(26): a { animation: steps(4, end) 2s; } 1`] = `
 
-  1 | a { animation: 2s scroll(); }
+  1 | a { animation: steps(4, end) 2s; }
 
 `;
 
-exports[`invalid(26): a { animation: 2s scroll(); } 2`] = `
+exports[`invalid(26): a { animation: steps(4, end) 2s; } 2`] = `
 
 Message:
-> 1 | a { animation: 2s scroll(); }
-    |     ^^^^^^^^^^^^^^^^^^^^^^ \`animation\` omits an animation name, which defaults to \`none\`.
+> 1 | a { animation: steps(4, end) 2s; }
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`animation\` omits an animation name, which defaults to \`none\`.
 
 `;
 

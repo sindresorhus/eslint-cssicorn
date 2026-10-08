@@ -365,8 +365,8 @@ const getOmittedShorthandProblems = function * (declarations, sourceCode) {
 		}
 
 		if (property === 'animation') {
-			// Explicit `none` can be a name reset or another shorthand component. Keep either intentional pattern.
-			if (children.some(child => child.type === 'Identifier' && normalizeCssIdentifier(child.name) === 'none')) {
+			// Explicit `none` can be an intentional reset; browsers and the grammar differ on `auto` and timeline components.
+			if (children.some(child => match.isType(child, 'single-animation-timeline') || (child.type === 'Identifier' && ['none', 'auto'].includes(normalizeCssIdentifier(child.name))))) {
 				continue;
 			}
 		} else if (children.some(child => (child.type === 'Number' || child.type === 'Dimension') && Number(child.value) === 0 && match.isType(child, 'line-width'))) {
