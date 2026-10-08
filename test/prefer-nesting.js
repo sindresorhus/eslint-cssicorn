@@ -802,7 +802,6 @@ nodeTest('nesting fixes work with the other nesting rules', () => {
 		'.page .card { color: red; } .page .card .title { color: blue; }',
 		'.card:first-child { color: red; } .card:first-child + .hint { color: blue; }',
 		'.card { color: red; } @container (width > 0px) { .card { color: blue; } }',
-		'a :is(.foo > .bar, #baz) { color: red; }',
 		'.card:not(.disabled) { color: red; } .card:not(.disabled) .title { color: blue; }',
 		'.card { color: red; } @layer theme { .card { color: blue; } }',
 		'a :where(.foo, #bar) { color: red; }',
@@ -821,7 +820,6 @@ nodeTest('nesting fixes work with the other nesting rules', () => {
 		'.card { color: red; } @layer theme { .card:hover { color: blue; } }',
 		'.card { opacity: 1; } @starting-style { .card { opacity: 0; } }',
 		'.card .title, .card #body { color: red; }',
-		'.card:is(.foo, #bar) { color: red; }',
 		'.card:where(.foo, #bar)::before { content: ""; color: red; }',
 		'.card { color: red; } .theme .card { color: blue; }',
 		'.card { color: red; } @media (color) { .card .title, .card .body { color: blue; } .card.active { color: green; } }',
@@ -833,6 +831,13 @@ nodeTest('nesting fixes work with the other nesting rules', () => {
 		assert.equal(linter.verifyAndFix(result.output, config, {filename: 'test.css'}).fixed, false);
 	}
 
+	for (const code of ['a :is(.foo > .bar, #baz) { color: red; }', '.card:is(.foo, #bar) { color: red; }']) {
+		const result = linter.verifyAndFix(code, config, {filename: 'test.css'});
+		assert.equal(result.fixed, true);
+		assert.deepEqual(result.messages.map(message => message.messageId), ['mixed-specificity-arguments']);
+		assert.equal(linter.verifyAndFix(result.output, config, {filename: 'test.css'}).fixed, false);
+	}
+
 	const equalSpecificity = linter.verifyAndFix(':is(a, button).active { color: red; }', config, {filename: 'test.css'});
 	assert.equal(equalSpecificity.output, 'a, button { &.active { color: red; } }');
 	assert.deepEqual(equalSpecificity.messages, []);
@@ -840,12 +845,12 @@ nodeTest('nesting fixes work with the other nesting rules', () => {
 
 	const trailingMixedSpecificity = linter.verifyAndFix('a :is(.foo, #bar) { color: red; }', config, {filename: 'test.css'});
 	assert.equal(trailingMixedSpecificity.output, 'a { :is(.foo, #bar) { color: red; } }');
-	assert.deepEqual(trailingMixedSpecificity.messages, []);
+	assert.deepEqual(trailingMixedSpecificity.messages.map(message => message.messageId), ['mixed-specificity-arguments']);
 	assert.equal(linter.verifyAndFix(trailingMixedSpecificity.output, config, {filename: 'test.css'}).fixed, false);
 
 	const trailingCombinator = linter.verifyAndFix('a > :is(.foo, #bar) { color: red; }', config, {filename: 'test.css'});
 	assert.equal(trailingCombinator.output, 'a { > :is(.foo, #bar) { color: red; } }');
-	assert.deepEqual(trailingCombinator.messages, []);
+	assert.deepEqual(trailingCombinator.messages.map(message => message.messageId), ['mixed-specificity-arguments']);
 	assert.equal(linter.verifyAndFix(trailingCombinator.output, config, {filename: 'test.css'}).fixed, false);
 
 	const mixedSpecificity = linter.verifyAndFix(':is(.foo, #bar) a { color: red; }', config, {filename: 'test.css'});

@@ -64,6 +64,9 @@ const getMaximumSpecificity = specificities => {
 	return maximum;
 };
 
+/**
+Get the selector argument of a functional pseudo-selector, including an `of` selector list.
+*/
 const getSelectorArgument = node => {
 	const child = node.children?.[0];
 	if (child?.type === 'SelectorList' || child?.type === 'Selector') {
@@ -203,6 +206,9 @@ const hasNestingSelectorInRawArgument = argument => {
 	return hasNestingSelector;
 };
 
+/**
+Calculate selector specificity without adding an implicit nesting selector.
+*/
 const getSelectorSpecificity = (selector, nestingSpecificity) => {
 	let specificity = ZERO_SPECIFICITY;
 	let hasNestingSelector = false;
@@ -398,6 +404,8 @@ export {
 	getParentStyleRule,
 	getRuleSelectorSpecificity,
 	getRuleSpecificities,
+	getSelectorArgument,
+	getSelectorSpecificity,
 	hasAncestorStyleRule,
 	hasLeadingCombinator,
 	hasNestingSelectorInRawArgument,
