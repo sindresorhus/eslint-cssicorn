@@ -275,11 +275,9 @@ function getTrigonometricValue(name, argument) {
 
 	const radians = isAngle ? argument.value * Math.PI / 180 : argument.value;
 	let value = Math[name](radians);
-	if (isAngle && Number.isFinite(degrees) && degrees !== 0) {
+	if (isAngle && Number.isFinite(degrees) && degrees !== 0 && degrees % 90 === 0) {
 		const quadrant = ((degrees % 360) + 360) % 360;
-		if (quadrant % 90 === 0) {
-			value = quadrantValues.get(name)[quadrant / 90];
-		}
+		value = quadrantValues.get(name)[quadrant / 90];
 	}
 
 	return getQuantity(value);

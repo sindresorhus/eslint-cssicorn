@@ -442,6 +442,27 @@ test('preserves small arithmetic differences for callers to interpret', () => {
 	assert.deepEqual(evaluateCssMath(parseValue('calc(.1 * .1 * 100)')), quantity(1.0000000000000002));
 });
 
+test('preserves small nonzero trigonometric angles', () => {
+	for (const name of ['sin', 'tan']) {
+		for (const angle of [1e-15, -1e-15]) {
+			const result = evaluateCssMath(parseValue(`${name}(${angle}deg)`));
+			// At these angles, the cubic error from the linear approximation is negligible.
+			const expected = angle * Math.PI / 180;
+			assert.equal(result.unit, undefined);
+			assert.ok(Math.abs((result.value / expected) - 1) < 1e-12);
+		}
+
+		const negativeZero = evaluateCssMath(parseValue(`${name}(-1 * 0deg)`));
+		assert.ok(Object.is(negativeZero.value, -0));
+	}
+});
+
+test('does not snap angles beside an exact quadrant', () => {
+	assert.ok(evaluateCssMath(parseValue('cos(89.99999999999999deg)')).value > 0);
+	assert.ok(evaluateCssMath(parseValue('sin(179.99999999999997deg)')).value > 0);
+	assert.ok(evaluateCssMath(parseValue('sin(-179.99999999999997deg)')).value < 0);
+});
+
 test('supports direct function and parentheses nodes', () => {
 	const node = parseValue('calc((1 + 2) * 3)').children.at(0);
 	assertQuantity(evaluateCssMath(node), quantity(9));
