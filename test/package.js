@@ -218,6 +218,8 @@ const RULES_NOT_RECOMMENDED = new Set([
 	'no-descending-specificity',
 	// Layout animations are intentional in common patterns like expanding accordions.
 	'no-layout-animations',
+	// Enforces opt-in motion placement rather than accepting reduced-motion overrides or application preferences.
+	'require-prefers-reduced-motion',
 ]);
 
 test('Every rule is recommended unless listed as an exception', () => {
