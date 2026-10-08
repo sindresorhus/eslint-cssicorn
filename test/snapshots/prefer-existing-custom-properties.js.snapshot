@@ -72,26 +72,28 @@ Suggestion 1/1: Replace with \`var(--brand-color)\`.:
 
 `;
 
-exports[`invalid(10): a { width: calc((100% - 8px) / 2); } 1`] = `
+exports[`invalid(10): a { filter: blur(8px) blur(12px); } 1`] = `
 
 Options:
 - customProperties:
-    --width: 'calc((100% - 8px) / 2)'
-    --space: '8px'
+    --first: 'blur(8px)'
+    --second: 'BLUR(8px)'
+    --small: '8px'
+    --large: '12px'
 
 Code:
-  1 | a { width: calc((100% - 8px) / 2); }
+  1 | a { filter: blur(8px) blur(12px); }
 
 `;
 
-exports[`invalid(10): a { width: calc((100% - 8px) / 2); } 2`] = `
+exports[`invalid(10): a { filter: blur(8px) blur(12px); } 2`] = `
 
 Message:
-> 1 | a { width: calc((100% - 8px) / 2); }
-    |            ^^^^^^^^^^^^^^^^^^^^^^ Prefer existing custom property \`var(--width)\` over this literal value.
+> 1 | a { filter: blur(8px) blur(12px); }
+    |                            ^^^^ Prefer existing custom property \`var(--large)\` over this literal value.
 
-Suggestion 1/1: Replace with \`var(--width)\`.:
-  1 | a { width: var(--width); }
+Suggestion 1/1: Replace with \`var(--large)\`.:
+  1 | a { filter: blur(8px) blur(var(--large)); }
 
 `;
 
@@ -132,37 +134,26 @@ Suggestion 1/1: Replace with \`var(--space-small)\`.:
 
 `;
 
-exports[`invalid(11): a { margin: 0.5rem; width: 50%; } 1`] = `
+exports[`invalid(11): a { color: light-dark(#fff, #000); } 1`] = `
 
 Options:
 - customProperties:
-    --space: '+05e-1REM'
-    --half: '50.0%'
+    --color: 'light-dark(#fff, #000)'
+    --white: '#fff'
 
 Code:
-  1 | a { margin: 0.5rem; width: 50%; }
+  1 | a { color: light-dark(#fff, #000); }
 
 `;
 
-exports[`invalid(11): a { margin: 0.5rem; width: 50%; } 2`] = `
+exports[`invalid(11): a { color: light-dark(#fff, #000); } 2`] = `
 
 Message:
-> 1 | a { margin: 0.5rem; width: 50%; }
-    |             ^^^^^^ Prefer existing custom property \`var(--space)\` over this literal value.
+> 1 | a { color: light-dark(#fff, #000); }
+    |            ^^^^^^^^^^^^^^^^^^^^^^ Prefer existing custom property \`var(--color)\` over this literal value.
 
-Suggestion 1/1: Replace with \`var(--space)\`.:
-  1 | a { margin: var(--space); width: 50%; }
-
-`;
-
-exports[`invalid(11): a { margin: 0.5rem; width: 50%; } 3`] = `
-
-Message:
-> 1 | a { margin: 0.5rem; width: 50%; }
-    |                            ^^^ Prefer existing custom property \`var(--half)\` over this literal value.
-
-Suggestion 1/1: Replace with \`var(--half)\`.:
-  1 | a { margin: 0.5rem; width: var(--half); }
+Suggestion 1/1: Replace with \`var(--color)\`.:
+  1 | a { color: var(--color); }
 
 `;
 
@@ -192,37 +183,25 @@ Suggestion 1/1: Replace with \`var(--space-small)\`.:
 
 `;
 
-exports[`invalid(12): a { transition: opacity 200ms cubic-bezier(0.1, 0.2, 0.3, 1); } 1`] = `
+exports[`invalid(12): a { background: linear-gradient(red 50%, blue); } 1`] = `
 
 Options:
 - customProperties:
-    --time: '.2s'
-    --easing: 'cubic-bezier(.1,.2,.3,1)'
+    --stop: '50%'
 
 Code:
-  1 | a { transition: opacity 200ms cubic-bezier(0.1, 0.2, 0.3, 1); }
+  1 | a { background: linear-gradient(red 50%, blue); }
 
 `;
 
-exports[`invalid(12): a { transition: opacity 200ms cubic-bezier(0.1, 0.2, 0.3, 1); } 2`] = `
+exports[`invalid(12): a { background: linear-gradient(red 50%, blue); } 2`] = `
 
 Message:
-> 1 | a { transition: opacity 200ms cubic-bezier(0.1, 0.2, 0.3, 1); }
-    |                         ^^^^^ Prefer existing custom property \`var(--time)\` over this literal value.
+> 1 | a { background: linear-gradient(red 50%, blue); }
+    |                                     ^^^ Prefer existing custom property \`var(--stop)\` over this literal value.
 
-Suggestion 1/1: Replace with \`var(--time)\`.:
-  1 | a { transition: opacity var(--time) cubic-bezier(0.1, 0.2, 0.3, 1); }
-
-`;
-
-exports[`invalid(12): a { transition: opacity 200ms cubic-bezier(0.1, 0.2, 0.3, 1); } 3`] = `
-
-Message:
-> 1 | a { transition: opacity 200ms cubic-bezier(0.1, 0.2, 0.3, 1); }
-    |                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Prefer existing custom property \`var(--easing)\` over this literal value.
-
-Suggestion 1/1: Replace with \`var(--easing)\`.:
-  1 | a { transition: opacity 200ms var(--easing); }
+Suggestion 1/1: Replace with \`var(--stop)\`.:
+  1 | a { background: linear-gradient(red var(--stop), blue); }
 
 `;
 
@@ -252,25 +231,25 @@ Suggestion 1/1: Replace with \`var(--brand-color)\`.:
 
 `;
 
-exports[`invalid(13): a { color: red; } 1`] = `
+exports[`invalid(13): a { margin: 8px; } 1`] = `
 
 Options:
 - customProperties:
-    --Brand Color: 'red'
+    --space: '8px /**/'
 
 Code:
-  1 | a { color: red; }
+  1 | a { margin: 8px; }
 
 `;
 
-exports[`invalid(13): a { color: red; } 2`] = `
+exports[`invalid(13): a { margin: 8px; } 2`] = `
 
 Message:
-> 1 | a { color: red; }
-    |            ^^^ Prefer existing custom property \`var(--Brand\\ Color)\` over this literal value.
+> 1 | a { margin: 8px; }
+    |             ^^^ Prefer existing custom property \`var(--space)\` over this literal value.
 
-Suggestion 1/1: Replace with \`var(--Brand\\ Color)\`.:
-  1 | a { color: var(--Brand\\ Color); }
+Suggestion 1/1: Replace with \`var(--space)\`.:
+  1 | a { margin: var(--space); }
 
 `;
 
@@ -300,26 +279,37 @@ Suggestion 1/1: Replace with \`var(--brand-color)\`.:
 
 `;
 
-exports[`invalid(14): a { color: red; } 1`] = `
+exports[`invalid(14): a { margin: 0.5rem; width: 50%; } 1`] = `
 
 Options:
 - customProperties:
-    --Brand: 'red'
-    --brand: 'blue'
+    --space: '+05e-1REM'
+    --half: '50.0%'
 
 Code:
-  1 | a { color: red; }
+  1 | a { margin: 0.5rem; width: 50%; }
 
 `;
 
-exports[`invalid(14): a { color: red; } 2`] = `
+exports[`invalid(14): a { margin: 0.5rem; width: 50%; } 2`] = `
 
 Message:
-> 1 | a { color: red; }
-    |            ^^^ Prefer existing custom property \`var(--Brand)\` over this literal value.
+> 1 | a { margin: 0.5rem; width: 50%; }
+    |             ^^^^^^ Prefer existing custom property \`var(--space)\` over this literal value.
 
-Suggestion 1/1: Replace with \`var(--Brand)\`.:
-  1 | a { color: var(--Brand); }
+Suggestion 1/1: Replace with \`var(--space)\`.:
+  1 | a { margin: var(--space); width: 50%; }
+
+`;
+
+exports[`invalid(14): a { margin: 0.5rem; width: 50%; } 3`] = `
+
+Message:
+> 1 | a { margin: 0.5rem; width: 50%; }
+    |                            ^^^ Prefer existing custom property \`var(--half)\` over this literal value.
+
+Suggestion 1/1: Replace with \`var(--half)\`.:
+  1 | a { margin: 0.5rem; width: var(--half); }
 
 `;
 
@@ -349,25 +339,37 @@ Suggestion 1/1: Replace with \`var(--duration-fast)\`.:
 
 `;
 
-exports[`invalid(15): a { color: red; } 1`] = `
+exports[`invalid(15): a { transition: opacity 200ms cubic-bezier(0.1, 0.2, 0.3, 1); } 1`] = `
 
 Options:
 - customProperties:
-    --constructor: 'red'
+    --time: '.2s'
+    --easing: 'cubic-bezier(.1,.2,.3,1)'
 
 Code:
-  1 | a { color: red; }
+  1 | a { transition: opacity 200ms cubic-bezier(0.1, 0.2, 0.3, 1); }
 
 `;
 
-exports[`invalid(15): a { color: red; } 2`] = `
+exports[`invalid(15): a { transition: opacity 200ms cubic-bezier(0.1, 0.2, 0.3, 1); } 2`] = `
 
 Message:
-> 1 | a { color: red; }
-    |            ^^^ Prefer existing custom property \`var(--constructor)\` over this literal value.
+> 1 | a { transition: opacity 200ms cubic-bezier(0.1, 0.2, 0.3, 1); }
+    |                         ^^^^^ Prefer existing custom property \`var(--time)\` over this literal value.
 
-Suggestion 1/1: Replace with \`var(--constructor)\`.:
-  1 | a { color: var(--constructor); }
+Suggestion 1/1: Replace with \`var(--time)\`.:
+  1 | a { transition: opacity var(--time) cubic-bezier(0.1, 0.2, 0.3, 1); }
+
+`;
+
+exports[`invalid(15): a { transition: opacity 200ms cubic-bezier(0.1, 0.2, 0.3, 1); } 3`] = `
+
+Message:
+> 1 | a { transition: opacity 200ms cubic-bezier(0.1, 0.2, 0.3, 1); }
+    |                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Prefer existing custom property \`var(--easing)\` over this literal value.
+
+Suggestion 1/1: Replace with \`var(--easing)\`.:
+  1 | a { transition: opacity 200ms var(--easing); }
 
 `;
 
@@ -408,47 +410,48 @@ Suggestion 1/1: Replace with \`var(--space-small)\`.:
 
 `;
 
-exports[`invalid(16): a { color: r\\65 d; } 1`] = `
+exports[`invalid(16): a { color: red; } 1`] = `
 
 Options:
 - customProperties:
-    --color: 'red'
+    --Brand Color: 'red'
 
 Code:
-  1 | a { color: r\\65 d; }
+  1 | a { color: red; }
 
 `;
 
-exports[`invalid(16): a { color: r\\65 d; } 2`] = `
+exports[`invalid(16): a { color: red; } 2`] = `
 
 Message:
-> 1 | a { color: r\\65 d; }
-    |            ^^^^^^ Prefer existing custom property \`var(--color)\` over this literal value.
+> 1 | a { color: red; }
+    |            ^^^ Prefer existing custom property \`var(--Brand\\ Color)\` over this literal value.
 
-Suggestion 1/1: Replace with \`var(--color)\`.:
-  1 | a { color: var(--color); }
+Suggestion 1/1: Replace with \`var(--Brand\\ Color)\`.:
+  1 | a { color: var(--Brand\\ Color); }
 
 `;
 
-exports[`invalid(17): a { color: r\\67 b(255 255 255); } 1`] = `
+exports[`invalid(17): a { color: red; } 1`] = `
 
 Options:
 - customProperties:
-    --white: '#fff'
+    --Brand: 'red'
+    --brand: 'blue'
 
 Code:
-  1 | a { color: r\\67 b(255 255 255); }
+  1 | a { color: red; }
 
 `;
 
-exports[`invalid(17): a { color: r\\67 b(255 255 255); } 2`] = `
+exports[`invalid(17): a { color: red; } 2`] = `
 
 Message:
-> 1 | a { color: r\\67 b(255 255 255); }
-    |            ^^^^^^^^^^^^^^^^^^^ Prefer existing custom property \`var(--white)\` over this literal value.
+> 1 | a { color: red; }
+    |            ^^^ Prefer existing custom property \`var(--Brand)\` over this literal value.
 
-Suggestion 1/1: Replace with \`var(--white)\`.:
-  1 | a { color: var(--white); }
+Suggestion 1/1: Replace with \`var(--Brand)\`.:
+  1 | a { color: var(--Brand); }
 
 `;
 
@@ -481,6 +484,50 @@ Suggestion 1/1: Replace with \`var(--brand-color)\`.:
   1 | a {
   2 |   color: var(--brand-color);
   3 | }
+
+`;
+
+exports[`invalid(18): a { color: red; } 1`] = `
+
+Options:
+- customProperties:
+    --constructor: 'red'
+
+Code:
+  1 | a { color: red; }
+
+`;
+
+exports[`invalid(18): a { color: red; } 2`] = `
+
+Message:
+> 1 | a { color: red; }
+    |            ^^^ Prefer existing custom property \`var(--constructor)\` over this literal value.
+
+Suggestion 1/1: Replace with \`var(--constructor)\`.:
+  1 | a { color: var(--constructor); }
+
+`;
+
+exports[`invalid(19): a { color: r\\65 d; } 1`] = `
+
+Options:
+- customProperties:
+    --color: 'red'
+
+Code:
+  1 | a { color: r\\65 d; }
+
+`;
+
+exports[`invalid(19): a { color: r\\65 d; } 2`] = `
+
+Message:
+> 1 | a { color: r\\65 d; }
+    |            ^^^^^^ Prefer existing custom property \`var(--color)\` over this literal value.
+
+Suggestion 1/1: Replace with \`var(--color)\`.:
+  1 | a { color: var(--color); }
 
 `;
 
@@ -562,6 +609,28 @@ Message:
 
 Suggestion 1/1: Replace with \`var(--color)\`.:
   1 | a { color: var(--color); }
+
+`;
+
+exports[`invalid(20): a { color: r\\67 b(255 255 255); } 1`] = `
+
+Options:
+- customProperties:
+    --white: '#fff'
+
+Code:
+  1 | a { color: r\\67 b(255 255 255); }
+
+`;
+
+exports[`invalid(20): a { color: r\\67 b(255 255 255); } 2`] = `
+
+Message:
+> 1 | a { color: r\\67 b(255 255 255); }
+    |            ^^^^^^^^^^^^^^^^^^^ Prefer existing custom property \`var(--white)\` over this literal value.
+
+Suggestion 1/1: Replace with \`var(--white)\`.:
+  1 | a { color: var(--white); }
 
 `;
 

@@ -33,6 +33,12 @@ const colorFunctions = new Set([...colorFunctionsWithAlpha, 'color-mix', 'light-
 const preservedFunctions = new Set(['random', 'element', '-moz-element']);
 const groupingAtRules = new Set(['media', 'supports', 'container', 'layer', 'scope', 'starting-style']);
 const componentTypes = new Set(['Hash', 'Dimension', 'Percentage', 'Function']);
+const openingTokens = new Map([
+	[tokenTypes.Function, tokenTypes.RightParenthesis],
+	[tokenTypes.LeftParenthesis, tokenTypes.RightParenthesis],
+	[tokenTypes.LeftSquareBracket, tokenTypes.RightSquareBracket],
+	[tokenTypes.LeftCurlyBracket, tokenTypes.RightCurlyBracket],
+]);
 
 /**
 Get the RGBA channels of a hexadecimal color.
@@ -190,18 +196,17 @@ function getFingerprint(node, cache, text) {
 }
 
 /**
-Parse a configured value without accepting the parser's automatic closing of missing delimiters.
+Parse a configured value without accepting the tokenizer's or parser's automatic closing of missing delimiters.
 */
 function parseConfiguredValue(value, name) {
 	try {
 		const closingTokens = [];
-		const openingTokens = new Map([
-			[tokenTypes.Function, tokenTypes.RightParenthesis],
-			[tokenTypes.LeftParenthesis, tokenTypes.RightParenthesis],
-			[tokenTypes.LeftSquareBracket, tokenTypes.RightSquareBracket],
-			[tokenTypes.LeftCurlyBracket, tokenTypes.RightCurlyBracket],
-		]);
-		tokenize(value, type => {
+		// A trailing newline exposes unterminated comments, strings, and URLs instead of accepting EOF recovery.
+		tokenize(`${value}\n`, (type, start, end) => {
+			if (end > value.length && [tokenTypes.Comment, tokenTypes.String, tokenTypes.Url].includes(type)) {
+				throw new Error('Unterminated token.');
+			}
+
 			if (openingTokens.has(type)) {
 				closingTokens.push(openingTokens.get(type));
 			} else if ([tokenTypes.RightParenthesis, tokenTypes.RightSquareBracket, tokenTypes.RightCurlyBracket].includes(type)) {

@@ -93,6 +93,7 @@ test.snapshot({
 		withTokens('a { color: rgb(50%, 0, 100%); }', {'--color': 'rgb(50% 0 100%)'}),
 		withTokens('a { color: rgb(300 0 0); }', {'--color': '#f00'}),
 		withTokens('a { color: rgb(none 0 0); }', {'--color': '#000'}),
+		withTokens('a { color: currentColor; }', {'--color': 'currentColor'}),
 		withTokens('a { color: #010203; }', {'--color': 'rgb(1+2+3)'}),
 		withTokens('a { color: #fff; }', {'--color': 'rgb(100%100%100%)'}),
 		withTokens('a { color: #010203; }', {'--color': 'rgb(1/* */+2/* */+3)'}),
@@ -100,6 +101,7 @@ test.snapshot({
 		withTokens('a { color: red; margin: 8px; }', {
 			'--dynamic': 'var(--other)', '--string': '"red"', '--url': 'url(red)', '--reset': 'initial',
 		}),
+		withTokens('a { color: red; }', {'--string': String.raw`"red\""`, '--url': String.raw`url(foo\))`}),
 		{code: 'a { width: ???; }', options, languageOptions: {tolerant: true}},
 	],
 	invalid: [
@@ -112,7 +114,12 @@ test.snapshot({
 		withTokens('a { background: linear-gradient(rgb(255 255 255), black); }', {'--white': '#fff'}),
 		withTokens('a { opacity: .50; z-index: +01; animation-name: Example; }', {'--half': '.5', '--index': '1', '--name': 'Example'}),
 		withTokens('a { width: calc(1px\n+\t2px); }', {'--width': 'calc(1px + 2px)'}),
-		withTokens('a { width: calc((100% - 8px) / 2); }', {'--width': 'calc((100% - 8px) / 2)', '--space': '8px'}),
+		withTokens('a { filter: blur(8px) blur(12px); }', {
+			'--first': 'blur(8px)', '--second': 'BLUR(8px)', '--small': '8px', '--large': '12px',
+		}),
+		withTokens('a { color: light-dark(#fff, #000); }', {'--color': 'light-dark(#fff, #000)', '--white': '#fff'}),
+		withTokens('a { background: linear-gradient(red 50%, blue); }', {'--stop': '50%'}),
+		withTokens('a { margin: 8px; }', {'--space': '8px /**/'}),
 		withTokens('a { margin: 0.5rem; width: 50%; }', {'--space': '+05e-1REM', '--half': '50.0%'}),
 		withTokens('a { transition: opacity 200ms cubic-bezier(0.1, 0.2, 0.3, 1); }', {'--time': '.2s', '--easing': 'cubic-bezier(.1,.2,.3,1)'}),
 		withTokens('a { color: red; }', {'--Brand Color': 'red'}),
@@ -159,7 +166,7 @@ const lint = customProperties => new Linter().verify('a { color: red; }', {
 	rules: {'cssicorn/prefer-existing-custom-properties': ['error', {customProperties}]},
 }, {filename: 'test.css'});
 
-for (const value of ['', ' ', 'rgb(1 2 3', '8px)', '1px; color: red', '1px !important']) {
+for (const value of ['', ' ', 'rgb(1 2 3', '8px)', '1px; color: red', '1px !important', 'red/*', 'red/*/', '"red', String.raw`"red\"`, 'url(foo', String.raw`url(foo\)`]) {
 	nodeTest(`reject malformed configured value: ${JSON.stringify(value)}`, () => {
 		assert.throws(() => lint({'--token': value}), /Invalid value for custom property/u);
 	});

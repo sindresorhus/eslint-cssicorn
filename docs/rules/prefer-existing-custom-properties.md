@@ -36,7 +36,7 @@ Map eligible custom-property names to their literal CSS values. Names are decode
 
 The default catalog is empty, so configuring eligible tokens is necessary for the rule to report. Tokens may be defined in another stylesheet. The catalog asserts that each token exists and is appropriate where used; the rule does not read stylesheets, resolve imports or aliases, or analyze scope and the cascade.
 
-Empty values, unbalanced delimiters, and malformed value syntax cause a configuration error. Unsupported values, such as strings, URLs, CSS-wide keywords, or substitutions, are not indexed. Values are parsed as generic CSS values, without validating them against a particular property's grammar.
+Empty values, unbalanced delimiters, unterminated comments, strings, or URLs, and malformed value syntax cause a configuration error. Unsupported values, such as strings, URLs, CSS-wide keywords, `currentcolor`, or substitutions, are not indexed. Values are parsed as generic CSS values, without validating them against a particular property's grammar.
 
 ## Examples
 
