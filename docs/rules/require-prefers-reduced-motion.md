@@ -1,34 +1,13 @@
 # require-prefers-reduced-motion
 
-📝 Require motion effects inside prefers-reduced-motion: no-preference media queries.
+📝 Require motion effects inside `prefers-reduced-motion: no-preference` media queries.
 
 🚫 This rule is _disabled_ in the following [configs](https://github.com/sindresorhus/eslint-cssicorn#recommended-config): ✅ `recommended`, ☑️ `unopinionated`.
 
 <!-- end auto-generated rule header -->
 <!-- Do not manually modify this header. Run: `npm run fix:eslint-docs` -->
 
-Require declarations that select potentially moving effects inside `@media (prefers-reduced-motion: no-preference)`.
-
-Start with usable static styles, then enable nonessential movement when the user has not requested reduced motion. This follows the opt-in approach documented in [W3C technique C39](https://www.w3.org/WAI/WCAG22/Techniques/css/C39).
-
-This rule is opt-in because it enforces a particular authoring contract. It reports movement enabled outside the query even if a later `prefers-reduced-motion: reduce` override disables it. It does not establish WCAG compliance or determine whether an effect is essential.
-
-Enable it alongside the recommended config in `eslint.config.js`:
-
-```js
-import cssicorn from 'eslint-cssicorn';
-import {defineConfig} from 'eslint/config';
-
-export default defineConfig([
-	cssicorn.configs.recommended,
-	{
-		files: ['**/*.css'],
-		rules: {
-			'cssicorn/require-prefers-reduced-motion': 'error',
-		},
-	},
-]);
-```
+Require motion inside `@media (prefers-reduced-motion: no-preference)`, following [W3C C39](https://www.w3.org/WAI/WCAG22/Techniques/css/C39). Later `reduce` overrides do not count.
 
 ## Examples
 
@@ -46,132 +25,18 @@ export default defineConfig([
 }
 ```
 
-```css
-/* ❌ */
-.card {
-	transition-property: transform;
-	transition-duration: 200ms;
-}
+Every comma-separated or `or` branch must require `no-preference`. Qualifying ancestors protect nested declarations; bare or negated preference queries do not qualify.
 
-/* ✅ */
-@media (prefers-reduced-motion: no-preference) {
-	.card {
-		transition-property: transform;
-		transition-duration: 200ms;
-	}
-}
-```
+## Coverage
 
-```css
-/* ❌ */
-html {
-	scroll-behavior: smooth;
-}
+Checks animations, transition shorthands and property/duration longhands, and smooth or unresolved scrolling, including prefixed forms. Unknown effects require a guard.
 
-/* ✅ */
-@media (prefers-reduced-motion: no-preference) {
-	html {
-		scroll-behavior: smooth;
-	}
-}
-```
+Known color/opacity properties are exempt; animations must qualify in every same-file definition. Static styles, custom-property definitions, animation timing modifiers, disabling values, and `initial`/`unset` resets are ignored.
 
-Every alternative in a comma-separated or `or` query must require `no-preference`. A viewport condition or a bare `(prefers-reduced-motion)` does not authorize movement. The latter selects users who request reduced motion.
+Transition shorthands with omitted or literal zero duration are exempt. Moving animation and `transition-property` selections remain checked regardless of duration. Nonzero or unresolved `transition-duration` is exempt with exactly one same-block `transition`/`transition-property` declaration (standard or `-webkit-`) selecting only non-motion targets or `none`.
 
-```css
-/* ❌ */
-@media (prefers-reduced-motion: no-preference), (min-width: 600px) {
-	.card {
-		transition: transform 200ms;
-	}
-}
+## Limitations
 
-/* ✅ */
-@media (prefers-reduced-motion: no-preference) and (min-width: 600px) {
-	.card {
-		transition: transform 200ms;
-	}
-}
-```
+No cascade analysis or variable expansion; variables can hide additional moving layers. Imported keyframes remain unknown, and guarding definitions does not protect references.
 
-A qualifying outer query also protects declarations inside nested rules, `@supports`, `@layer`, `@scope`, and additional media queries. Negated equivalents such as `not (prefers-reduced-motion: reduce)` intentionally do not satisfy this explicit opt-in contract.
-
-## Non-motion effects
-
-Static transforms and ordinary positioning or sizing declarations are allowed. Transitions of recognized explicit color and opacity properties are also allowed, even with variable durations. These properties are `color`, `opacity`, and known properties ending in `-color` or `-opacity`.
-
-```css
-/* ✅ */
-.card {
-	transform: translateX(10px);
-	transition: background-color var(--duration), opacity 200ms;
-}
-```
-
-Animations are allowed without a preference query when every same-file definition of their name contains only these properties and, optionally, `animation-timing-function` or its vendor-prefixed aliases.
-
-```css
-/* ✅ */
-@keyframes fade-in {
-	from { opacity: 0; }
-	to { opacity: 1; }
-}
-
-.card {
-	animation: fade-in 200ms;
-}
-```
-
-Other properties are treated conservatively. This includes `filter`, SVG paint properties such as `fill` and `stroke`, custom properties, and shorthands such as `background` and `border`. Use explicit properties such as `background-color` when the effect changes only color.
-
-## Declaration placement
-
-| Declaration | Requires the query when… | Exemptions |
-| --- | --- | --- |
-| `animation`, `animation-name` | Any selected animation is potentially moving or unknown, regardless of duration. | Every same-file definition selects only non-motion properties, or the value explicitly disables animation. |
-| `transition` | Any layer selects a potentially moving property with a positive or unresolved duration. | Each layer selects only non-motion properties, is disabled, or has an omitted or literal zero duration. |
-| `transition-property` | Any selected property is potentially moving or unknown, regardless of duration. | Only non-motion properties or `none` are selected. |
-| `transition-duration` | Any duration is nonzero or unresolved; the initial transition property is `all`. | All durations are literal zero, or exactly one same-block controller explicitly selects only non-motion properties or `none`. |
-| `scroll-behavior` | The value is `smooth` or unresolved. | `auto`. |
-
-Vendor-prefixed animation and transition properties are also checked. A guarded keyframes definition does not exempt an unguarded animation reference. The rule does not infer whether other selectors currently activate motion-selecting longhands. A transition controller is a `transition` or `transition-property` declaration, including their [`-webkit-` aliases](https://compat.spec.whatwg.org/#css-simple-aliases). Other vendor prefixes do not establish this exemption. Duplicate controllers and controllers in other selectors do not establish a non-motion exemption for `transition-duration`.
-
-The first time in a transition shorthand is its duration; a positive delay does not count as a positive duration. Zero-duration animations are still checked because [scroll-driven timelines can reinterpret their duration](https://drafts.csswg.org/css-animations-2/#animation-duration).
-
-Standalone animation duration, delay, easing, iteration, and timeline declarations are not checked: the animation name selection is checked where it is declared. Explicit disabling values and `initial`/`unset` resets are allowed. An opaque shorthand such as `animation: none var(--duration)` still requires a guard because the variable can supply an animation name. Inherited and reverted values remain potentially moving.
-
-## Limitations and exceptions
-
-Unknown animation names, imported keyframes, entirely opaque animation or transition values, and unresolved scrolling values require the guard. Custom-property definitions themselves are allowed; the declarations consuming them are checked. The rule does not inspect JavaScript, reconstruct the cascade, or verify distant overrides.
-
-Variables are not expanded, including any additional comma-separated effects they may introduce. When explicit names, targets, or literal zero durations establish a non-motion exemption, accompanying variables are treated as modifiers. Place declarations using variables for whole effects or effect lists inside the preference query.
-
-For example, the rule does not detect the extra moving layer introduced by `var(--effects)` in `transition: opacity var(--effects)`. Guard the declaration when the variable supplies additional effects:
-
-```css
-:root {
-	--effects: 200ms, transform 200ms;
-}
-
-/* ✅ */
-@media (prefers-reduced-motion: no-preference) {
-	.card {
-		transition: opacity var(--effects);
-	}
-}
-```
-
-Animation shorthands containing ambiguous `--` names also require a guard when the parser cannot distinguish an animation name from a timeline name. Use an explicit `animation-name` declaration to make the selection clear.
-
-Harmless external fades and other conservative exceptions can use an ESLint disable comment. Essential motion should also use a suppression with a reason:
-
-```css
-.motion-preview {
-	/* eslint-disable-next-line cssicorn/require-prefers-reduced-motion -- Previewing the selected motion is the purpose of this control. */
-	animation: selected-motion 1s;
-}
-```
-
-Parsing is handled by `@eslint/css`, whose current parser rejects some valid nested media conditions before rules run.
-
-This rule has no automatic fixes or suggestions. Authors must choose usable static fallback styles and intentionally place movement inside the preference query. View transitions, fixed-background parallax, and JavaScript-controlled motion are outside its scope.
+Use ESLint disable comments with reasons for essential motion or harmless external fades. No automatic fixes, JavaScript/view-transition analysis, or WCAG compliance guarantee.

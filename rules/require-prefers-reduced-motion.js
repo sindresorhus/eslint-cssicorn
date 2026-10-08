@@ -305,7 +305,7 @@ const config = {
 	meta: {
 		type: 'suggestion',
 		docs: {
-			description: 'Require motion effects inside prefers-reduced-motion: no-preference media queries.',
+			description: 'Require motion effects inside `prefers-reduced-motion: no-preference` media queries.',
 			recommended: false,
 		},
 		schema: [],
