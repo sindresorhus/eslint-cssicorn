@@ -1098,6 +1098,23 @@ Suggestion 1/1: Replace with \`currentcolor\`.:
 
 `;
 
+exports[`invalid(62): a{color:#f00;border:1px soli\\64 #f00} 1`] = `
+
+  1 | a{color:#f00;border:1px soli\\64 #f00}
+
+`;
+
+exports[`invalid(62): a{color:#f00;border:1px soli\\64 #f00} 2`] = `
+
+Message:
+> 1 | a{color:#f00;border:1px soli\\64 #f00}
+    |                                 ^^^^ Prefer \`currentcolor\` over repeating the foreground color.
+
+Suggestion 1/1: Replace with \`currentcolor\`.:
+  1 | a{color:#f00;border:1px soli\\64  currentcolor}
+
+`;
+
 exports[`invalid(7): a { color: rgb(255 0 0); border-color: rgb(255 0 0); } 1`] = `
 
   1 | a { color: rgb(255 0 0); border-color: rgb(255 0 0); }

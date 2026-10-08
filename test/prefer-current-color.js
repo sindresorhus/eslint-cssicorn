@@ -131,6 +131,7 @@ test.snapshot({
 		String.raw`a { color: red; border: 1px \73 olid red; }`,
 		'a { color: red; background-image: image(url("icon.svg"), red); }',
 		String.raw`a { color: red; background: re\64  url(red); }`,
+		String.raw`a{color:#f00;border:1px soli\64 #f00}`,
 	],
 });
 
@@ -206,4 +207,41 @@ nodeTest('multiple suggestions preserve escaped and nested functional color rang
 
 	assert.equal(suggestedCode, 'a { color: rgb(255 0 0); background-color: color-mix(in srgb, currentcolor, rgb(from currentcolor r g b)); }');
 	assert.deepEqual(linter.verify(suggestedCode, configuration, {filename: 'test.css'}), []);
+});
+
+nodeTest('suggestions keep adjacent CSS tokens separate', () => {
+	const linter = new Linter();
+	const configuration = {
+		...plugin.configs.recommended,
+		rules: {
+			'cssicorn/prefer-current-color': 'error',
+			'css/no-invalid-properties': 'error',
+		},
+	};
+	const cases = [
+		['a{color:#f00;border:1px solid#f00}', 'a{color:#f00;border:1px solid currentcolor}'],
+		['a{color:#f00;box-shadow:0 0#f00}', 'a{color:#f00;box-shadow:0 0 currentcolor}'],
+		['a{color:#f00;border:solid 1px#f00}', 'a{color:#f00;border:solid 1px currentcolor}'],
+		['a{color:rgb(255 0 0);border:rgb(255 0 0)solid 1px}', 'a{color:rgb(255 0 0);border:currentcolor solid 1px}'],
+		['a{color:rgb(255 0 0);box-shadow:rgb(255 0 0)0 0}', 'a{color:rgb(255 0 0);box-shadow:currentcolor 0 0}'],
+		['a{color:rgb(255 0 0);border-color:rgb(255 0 0)rgb(255 0 0)}', 'a{color:rgb(255 0 0);border-color:currentcolor currentcolor}'],
+		['a{color:#f00;border-color:#f00#f00}', 'a{color:#f00;border-color:currentcolor currentcolor}'],
+		['a{color:#f00;border:1px solid/* keep */#f00}', 'a{color:#f00;border:1px solid/* keep */currentcolor}'],
+		['a{color:rgb(255 0 0);border:rgb(255 0 0)/* keep */solid 1px}', 'a{color:rgb(255 0 0);border:currentcolor/* keep */solid 1px}'],
+	];
+	for (const [code, expected] of cases) {
+		const messages = linter.verify(code, configuration, {filename: 'test.css'});
+		assert.ok(messages.length > 0);
+		assert.equal(messages.some(message => message.ruleId === 'css/no-invalid-properties'), false, code);
+		let suggestedCode = code;
+		for (const message of messages.toReversed()) {
+			const [{fix}] = message.suggestions;
+			const individualSuggestion = code.slice(0, fix.range[0]) + fix.text + code.slice(fix.range[1]);
+			assert.equal(linter.verify(individualSuggestion, configuration, {filename: 'test.css'}).some(message => message.ruleId === 'css/no-invalid-properties'), false, individualSuggestion);
+			suggestedCode = suggestedCode.slice(0, fix.range[0]) + fix.text + suggestedCode.slice(fix.range[1]);
+		}
+
+		assert.equal(suggestedCode, expected);
+		assert.deepEqual(linter.verify(suggestedCode, configuration, {filename: 'test.css'}), []);
+	}
 });

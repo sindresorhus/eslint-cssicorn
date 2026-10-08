@@ -1,5 +1,6 @@
 // @ts-check
 
+import {generate} from '@eslint/css-tree';
 import {areEqualLiteralColors, isLiteralColor} from './shared/css-colors.js';
 import {
 	getCanonicalLexerNode,
@@ -144,7 +145,21 @@ const create = context => {
 							/**
 						@param {Parameters<CssicornRuleFixer>[0]} fixer
 						*/
-							fix: fixer => fixer.replaceTextRange(range, 'currentcolor'),
+							fix: fixer => {
+								const [valueStart, valueEnd] = sourceCode.getRange(declaration.value);
+								const before = sourceCode.text.slice(valueStart, range[0]);
+								const after = sourceCode.text.slice(range[1], valueEnd);
+								// Preserve the original chunks and let the generator separate tokens that would otherwise merge.
+								const replacement = generate({
+									type: 'Value',
+									children: [
+										{type: 'Raw', value: before},
+										{type: 'Identifier', name: 'currentcolor'},
+										{type: 'Raw', value: after},
+									],
+								}, {mode: 'spec'});
+								return fixer.replaceTextRange(range, replacement.slice(before.length, replacement.length - after.length));
+							},
 						}],
 				};
 			}
