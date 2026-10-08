@@ -12,6 +12,7 @@ import layerOrderRule from '../../rules/consistent-layer-order.js';
 import clampRule from '../../rules/prefer-clamp.js';
 import customPropertyCyclesRule from '../../rules/no-self-referencing-custom-properties.js';
 import mediaFeaturesRule from '../../rules/no-invalid-media-features.js';
+import duplicateAtRuleDefinitionsRule from '../../rules/no-duplicate-at-rule-definitions.js';
 
 declare const context: CssicornContext;
 declare const selector: SelectorPlain;
@@ -86,8 +87,10 @@ const rule: CssicornRule = selectorOrderRule;
 const layerRule: CssicornRule = layerOrderRule;
 const comparisonRule: CssicornRule = clampRule;
 const mediaRule: CssicornRule = mediaFeaturesRule;
+const definitionsRule: CssicornRule = duplicateAtRuleDefinitionsRule;
 const adapted: CSSRuleDefinition = toEslintRule('order', rule);
 const adaptedCycles: CSSRuleDefinition = toEslintRule('cycles', customPropertyCyclesRule);
+const adaptedDefinitions: CSSRuleDefinition = toEslintRule('definitions', definitionsRule);
 // @ts-expect-error Cssicorn rules require metadata.
 toEslintRule('missing-meta', {create() {}});
 const create: CSSRuleDefinition['create'] = toEslintCreate(rule.create);
