@@ -23,6 +23,17 @@ test.snapshot({
 		'a { transition: overflow-x 1s normal, overflow 1s allow-discrete; }',
 		'a { transition: flex-direction 1s normal, flex-flow 1s allow-discrete; }',
 		'a { transition: font-family 1s normal, font 1s allow-discrete; }',
+		'a { transition: white-space-collapse 1s normal, white-space 1s allow-discrete; }',
+		'a { transition: text-wrap-mode 1s normal, text-wrap 1s allow-discrete; }',
+		'a { transition: text-box-trim 1s normal, text-box 1s allow-discrete; }',
+		'a { transition: caret-animation 1s normal, caret 1s allow-discrete; }',
+		'a { transition: text-decoration-skip-ink 1s normal, text-decoration-skip 1s allow-discrete; }',
+		'a { transition: text-align-last 1s normal, text-align 1s allow-discrete; }',
+		'a { transition: position-try-order 1s normal, position-try 1s allow-discrete; }',
+		'a { transition: animation-trigger 1s, animation 1s; }',
+		'a { transition: animation-composition 1s, animation 1s; }',
+		'a { transition-property: text-wrap-mode, text-wrap; transition-behavior: normal, allow-discrete; }',
+		String.raw`a { transition: white-space-collapse 1s normal, white\2d space 1s allow-discrete; }`,
 		'a { transition-behavior: allow-discrete !important; transition: display 1s; }',
 		'a { transition: display 1s !important; transition-behavior: allow-discrete !important; }',
 		'a { transition: opacity 1s !important; transition-property: display; }',
@@ -33,6 +44,7 @@ test.snapshot({
 		'a { transition: display 1s; transition: var(--transition); }',
 		'a { transition: display var(--duration); }',
 		'a { transition: none, display 1s; }',
+		'a { transition-property: none, display; transition-behavior: normal; }',
 		'a { transition: display 1s; transition-behavior: "normal"; }',
 		'a { transition: display 1s; transition-behavior: env(behavior); }',
 		...['inherit', 'initial', 'unset', 'revert', 'revert-layer', 'revert-rule'].flatMap(value => [
@@ -95,6 +107,8 @@ test.snapshot({
 		'a { transition: all 1s allow-discrete, display 1s normal; }',
 		'a { transition: display 1s allow-discrete, display 1s normal; }',
 		'a { transition: overflow 1s allow-discrete, overflow-x 1s normal; }',
+		'a { transition: white-space 1s allow-discrete, white-space-collapse 1s normal; }',
+		'a { transition: white-space-collapse 1s normal, white-space 1s allow-discrete, display 1s normal; }',
 		'a { transition: display 1s !important; transition-behavior: allow-discrete; }',
 		'a { transition-behavior: normal !important; transition: display 1s allow-discrete; }',
 		'a { transition: display 1s !important; all: initial; }',
@@ -128,11 +142,27 @@ test({
 	valid: [],
 	invalid: [
 		{
+			code: String.raw`a { transition: displa\79; }`,
+			errors: [{
+				messageId: 'no-ineffective-transitions/discrete',
+				data: {property: String.raw`displa\79`},
+				suggestions: [{messageId: 'no-ineffective-transitions/allow-discrete', output: String.raw`a { transition: allow-discrete displa\79; }`}],
+			}],
+		},
+		{
+			code: String.raw`a { transition: display 1\73; }`,
+			errors: [{
+				messageId: 'no-ineffective-transitions/discrete',
+				data: {property: 'display'},
+				suggestions: [{messageId: 'no-ineffective-transitions/allow-discrete', output: String.raw`a { transition: allow-discrete display 1\73; }`}],
+			}],
+		},
+		{
 			code: 'a { transition: display 1s, opacity 2s; }',
 			errors: [{
 				messageId: 'no-ineffective-transitions/discrete',
 				data: {property: 'display'},
-				suggestions: [{messageId: 'no-ineffective-transitions/allow-discrete', output: 'a { transition: display 1s allow-discrete, opacity 2s; }'}],
+				suggestions: [{messageId: 'no-ineffective-transitions/allow-discrete', output: 'a { transition: allow-discrete display 1s, opacity 2s; }'}],
 			}],
 		},
 		{
@@ -148,7 +178,7 @@ test({
 			errors: [{
 				messageId: 'no-ineffective-transitions/discrete',
 				data: {property: 'display'},
-				suggestions: [{messageId: 'no-ineffective-transitions/allow-discrete', output: 'a { transition: opacity 1s allow-discrete; transition-property: display; }'}],
+				suggestions: [{messageId: 'no-ineffective-transitions/allow-discrete', output: 'a { transition: allow-discrete opacity 1s; transition-property: display; }'}],
 			}],
 		},
 		{
@@ -169,7 +199,7 @@ test({
 				data: {property: 'display'},
 				suggestions: [{
 					messageId: 'no-ineffective-transitions/allow-discrete',
-					output: 'a {\r\n  transition: opacity 1s, /* before */ display /* target */ 2s allow-discrete /* after */ !important;\r\n}',
+					output: 'a {\r\n  transition: opacity 1s, /* before */ allow-discrete display /* target */ 2s /* after */ !important;\r\n}',
 				}],
 			}],
 		},

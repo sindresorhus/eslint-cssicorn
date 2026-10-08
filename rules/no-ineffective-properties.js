@@ -10,7 +10,7 @@ import {
 } from './utils/index.js';
 
 /**
-@import {BlockPlain, DeclarationPlain, Raw, ValuePlain} from '@eslint/css-tree';
+@import {DeclarationPlain, Raw, ValuePlain} from '@eslint/css-tree';
 @import {CSSSourceCode} from '@eslint/css';
 @import {CssicornContext} from './rule/cssicorn-context.js';
 @import {CssicornRule} from './rule/to-eslint-rule.js';

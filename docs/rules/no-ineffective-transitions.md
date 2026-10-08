@@ -88,6 +88,8 @@ This rule checks target eligibility, rather than guaranteeing that a transition 
 
 Substitutions such as `var()`, CSS-wide keywords, and unresolved values make the affected controls unknown. Custom properties, vendor-prefixed targets, and shorthand targets are not reported. Later duplicate targets, `all`, and known shorthand expansions override earlier matching entries.
 
+Property aliases and logical-to-physical property relationships are not resolved when matching overlapping targets.
+
 Property classifications come from the bundled, generated Webref data. Properties with missing, prose-defined, or known conflicting classifications are skipped, except for the audited discrete properties `display`, `content-visibility`, and `overlay`. Special interpolation cases such as `visibility` and image-source properties are also skipped. Coverage is intentionally conservative.
 
 The rule does not check timing, endpoint values, browser support, or custom-property registrations. It excludes keyframes, descriptor blocks, and CSS Modules interoperability blocks.

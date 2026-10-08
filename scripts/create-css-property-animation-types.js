@@ -1,6 +1,6 @@
 import fs from 'node:fs';
 import webref from '@webref/css';
-import {shorthandProperties} from '../rules/shared/css-shorthand-properties.js';
+import {shorthandToAffectedProperties} from '../rules/shared/css-shorthand-properties.js';
 
 const targetUrl = new URL('../rules/shared/css-property-animation-types.js', import.meta.url);
 const {properties} = await webref.listAll();
@@ -24,8 +24,6 @@ const excludedProperties = new Set([
 	'unicode-bidi',
 	// Missing shorthand metadata: https://drafts.csswg.org/css-backgrounds-4/#propdef-background-repeat
 	'background-repeat',
-	// https://drafts.csswg.org/css-inline-3/#propdef-text-box
-	'text-box',
 ]);
 
 const nonAnimatableProperties = new Set();
@@ -40,7 +38,7 @@ const discreteProperties = new Set([
 ]);
 
 for (const {name, animationType, longhands} of properties) {
-	if (name.startsWith('-') || excludedProperties.has(name) || shorthandProperties.has(name) || longhands?.length > 0) {
+	if (name.startsWith('-') || excludedProperties.has(name) || shorthandToAffectedProperties.has(name) || longhands?.length > 0) {
 		continue;
 	}
 

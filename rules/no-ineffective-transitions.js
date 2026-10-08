@@ -59,7 +59,7 @@ const getTransitionLists = (declaration, property, lexer) => {
 			const targetNode = nodes[targetIndex];
 			const behaviorNode = nodes[behaviorIndex];
 			targets.push({node: targetNode, name: targetNode ? normalizeCssIdentifier(targetNode.name) : 'all'});
-			behaviors.push({name: behaviorNode ? normalizeCssIdentifier(behaviorNode.name) : 'normal', node: behaviorNode, lastNode: nodes.at(-1)});
+			behaviors.push({name: behaviorNode ? normalizeCssIdentifier(behaviorNode.name) : 'normal', node: behaviorNode, firstNode: nodes[0]});
 		} else {
 			const [node] = nodes;
 			if (nodes.length !== 1 || node.type !== 'Identifier') {
@@ -110,7 +110,7 @@ const getAllowDiscreteSuggestion = behavior => ({
 	*/
 	fix: fixer => behavior.node
 		? fixer.replaceText(behavior.node, 'allow-discrete')
-		: fixer.insertTextAfter(behavior.lastNode, ' allow-discrete'),
+		: fixer.insertTextBefore(behavior.firstNode, 'allow-discrete '),
 });
 
 const getTransitionProblems = function * (targets, behaviors, lexer) {

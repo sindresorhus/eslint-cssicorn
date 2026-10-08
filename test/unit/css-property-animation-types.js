@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import {nonAnimatableProperties, discreteProperties} from '../../rules/shared/css-property-animation-types.js';
-import {shorthandProperties} from '../../rules/shared/css-shorthand-properties.js';
+import {shorthandToAffectedProperties} from '../../rules/shared/css-shorthand-properties.js';
 
 test('property animation catalogs are sorted, unique, and disjoint', () => {
 	for (const properties of [nonAnimatableProperties, discreteProperties]) {
@@ -10,7 +10,7 @@ test('property animation catalogs are sorted, unique, and disjoint', () => {
 			assert.ok(properties[index - 1] < properties[index]);
 		}
 
-		assert.equal(properties.some(property => property.startsWith('-') || shorthandProperties.has(property)), false);
+		assert.equal(properties.some(property => property.startsWith('-') || shorthandToAffectedProperties.has(property)), false);
 	}
 
 	assert.equal(nonAnimatableProperties.some(property => discreteProperties.includes(property)), false);
