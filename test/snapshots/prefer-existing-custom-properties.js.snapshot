@@ -1,0 +1,1196 @@
+exports[`invalid(1): :root { --brand-color: #6750a4; } .button { background: #6750a4; } 1`] = `
+
+Options:
+- customProperties:
+    --brand-color: '#6750a4'
+    --space-small: '8px'
+    --radius-medium: '12px'
+    --duration-fast: '200ms'
+    --shadow-card: '0 2px 8px #0003'
+
+Code:
+  1 | :root { --brand-color: #6750a4; } .button { background: #6750a4; }
+
+`;
+
+exports[`invalid(1): :root { --brand-color: #6750a4; } .button { background: #6750a4; } 2`] = `
+
+Message:
+> 1 | :root { --brand-color: #6750a4; } .button { background: #6750a4; }
+    |                                                         ^^^^^^^ Prefer existing custom property \`var(--brand-color)\` over this literal value.
+
+Suggestion 1/1: Replace with \`var(--brand-color)\`.:
+  1 | :root { --brand-color: #6750a4; } .button { background: var(--brand-color); }
+
+`;
+
+exports[`invalid(1): a { color: #fff; } 1`] = `
+
+Options:
+- customProperties:
+    --white: '#ffffff'
+
+Code:
+  1 | a { color: #fff; }
+
+`;
+
+exports[`invalid(1): a { color: #fff; } 2`] = `
+
+Message:
+> 1 | a { color: #fff; }
+    |            ^^^^ Prefer existing custom property \`var(--white)\` over this literal value.
+
+Suggestion 1/1: Replace with \`var(--white)\`.:
+  1 | a { color: var(--white); }
+
+`;
+
+exports[`invalid(10): a { color: /* before */ #6750a4 /* after */ !important; } 1`] = `
+
+Options:
+- customProperties:
+    --brand-color: '#6750a4'
+    --space-small: '8px'
+    --radius-medium: '12px'
+    --duration-fast: '200ms'
+    --shadow-card: '0 2px 8px #0003'
+
+Code:
+  1 | a { color: /* before */ #6750a4 /* after */ !important; }
+
+`;
+
+exports[`invalid(10): a { color: /* before */ #6750a4 /* after */ !important; } 2`] = `
+
+Message:
+> 1 | a { color: /* before */ #6750a4 /* after */ !important; }
+    |                         ^^^^^^^ Prefer existing custom property \`var(--brand-color)\` over this literal value.
+
+Suggestion 1/1: Replace with \`var(--brand-color)\`.:
+  1 | a { color: /* before */ var(--brand-color) /* after */ !important; }
+
+`;
+
+exports[`invalid(10): a { filter: blur(8px) blur(12px); } 1`] = `
+
+Options:
+- customProperties:
+    --first: 'blur(8px)'
+    --second: 'BLUR(8px)'
+    --small: '8px'
+    --large: '12px'
+
+Code:
+  1 | a { filter: blur(8px) blur(12px); }
+
+`;
+
+exports[`invalid(10): a { filter: blur(8px) blur(12px); } 2`] = `
+
+Message:
+> 1 | a { filter: blur(8px) blur(12px); }
+    |                            ^^^^ Prefer existing custom property \`var(--large)\` over this literal value.
+
+Suggestion 1/1: Replace with \`var(--large)\`.:
+  1 | a { filter: blur(8px) blur(var(--large)); }
+
+`;
+
+exports[`invalid(11): a { & .b { color: #6750a4; } @media (width > 1px) { margin: 8px; } } 1`] = `
+
+Options:
+- customProperties:
+    --brand-color: '#6750a4'
+    --space-small: '8px'
+    --radius-medium: '12px'
+    --duration-fast: '200ms'
+    --shadow-card: '0 2px 8px #0003'
+
+Code:
+  1 | a { & .b { color: #6750a4; } @media (width > 1px) { margin: 8px; } }
+
+`;
+
+exports[`invalid(11): a { & .b { color: #6750a4; } @media (width > 1px) { margin: 8px; } } 2`] = `
+
+Message:
+> 1 | a { & .b { color: #6750a4; } @media (width > 1px) { margin: 8px; } }
+    |                   ^^^^^^^ Prefer existing custom property \`var(--brand-color)\` over this literal value.
+
+Suggestion 1/1: Replace with \`var(--brand-color)\`.:
+  1 | a { & .b { color: var(--brand-color); } @media (width > 1px) { margin: 8px; } }
+
+`;
+
+exports[`invalid(11): a { & .b { color: #6750a4; } @media (width > 1px) { margin: 8px; } } 3`] = `
+
+Message:
+> 1 | a { & .b { color: #6750a4; } @media (width > 1px) { margin: 8px; } }
+    |                                                             ^^^ Prefer existing custom property \`var(--space-small)\` over this literal value.
+
+Suggestion 1/1: Replace with \`var(--space-small)\`.:
+  1 | a { & .b { color: #6750a4; } @media (width > 1px) { margin: var(--space-small); } }
+
+`;
+
+exports[`invalid(11): a { color: light-dark(#fff, #000); } 1`] = `
+
+Options:
+- customProperties:
+    --color: 'light-dark(#fff, #000)'
+    --white: '#fff'
+
+Code:
+  1 | a { color: light-dark(#fff, #000); }
+
+`;
+
+exports[`invalid(11): a { color: light-dark(#fff, #000); } 2`] = `
+
+Message:
+> 1 | a { color: light-dark(#fff, #000); }
+    |            ^^^^^^^^^^^^^^^^^^^^^^ Prefer existing custom property \`var(--color)\` over this literal value.
+
+Suggestion 1/1: Replace with \`var(--color)\`.:
+  1 | a { color: var(--color); }
+
+`;
+
+exports[`invalid(12): @media screen { @supports (display: grid) { @container (width > 1px) { @layer theme { @scope (.card) { a { margin: 8px; } } } } } } 1`] = `
+
+Options:
+- customProperties:
+    --brand-color: '#6750a4'
+    --space-small: '8px'
+    --radius-medium: '12px'
+    --duration-fast: '200ms'
+    --shadow-card: '0 2px 8px #0003'
+
+Code:
+  1 | @media screen { @supports (display: grid) { @container (width > 1px) { @layer theme { @scope (.card) { a { margin: 8px; } } } } } }
+
+`;
+
+exports[`invalid(12): @media screen { @supports (display: grid) { @container (width > 1px) { @layer theme { @scope (.card) { a { margin: 8px; } } } } } } 2`] = `
+
+Message:
+> 1 | @media screen { @supports (display: grid) { @container (width > 1px) { @layer theme { @scope (.card) { a { margin: 8px; } } } } } }
+    |                                                                                                                    ^^^ Prefer existing custom property \`var(--space-small)\` over this literal value.
+
+Suggestion 1/1: Replace with \`var(--space-small)\`.:
+  1 | @media screen { @supports (display: grid) { @container (width > 1px) { @layer theme { @scope (.card) { a { margin: var(--space-small); } } } } } }
+
+`;
+
+exports[`invalid(12): a { background: linear-gradient(red 50%, blue); } 1`] = `
+
+Options:
+- customProperties:
+    --stop: '50%'
+
+Code:
+  1 | a { background: linear-gradient(red 50%, blue); }
+
+`;
+
+exports[`invalid(12): a { background: linear-gradient(red 50%, blue); } 2`] = `
+
+Message:
+> 1 | a { background: linear-gradient(red 50%, blue); }
+    |                                     ^^^ Prefer existing custom property \`var(--stop)\` over this literal value.
+
+Suggestion 1/1: Replace with \`var(--stop)\`.:
+  1 | a { background: linear-gradient(red var(--stop), blue); }
+
+`;
+
+exports[`invalid(13): @keyframes fade { from { color: #6750a4; } } 1`] = `
+
+Options:
+- customProperties:
+    --brand-color: '#6750a4'
+    --space-small: '8px'
+    --radius-medium: '12px'
+    --duration-fast: '200ms'
+    --shadow-card: '0 2px 8px #0003'
+
+Code:
+  1 | @keyframes fade { from { color: #6750a4; } }
+
+`;
+
+exports[`invalid(13): @keyframes fade { from { color: #6750a4; } } 2`] = `
+
+Message:
+> 1 | @keyframes fade { from { color: #6750a4; } }
+    |                                 ^^^^^^^ Prefer existing custom property \`var(--brand-color)\` over this literal value.
+
+Suggestion 1/1: Replace with \`var(--brand-color)\`.:
+  1 | @keyframes fade { from { color: var(--brand-color); } }
+
+`;
+
+exports[`invalid(13): a { margin: 8px; } 1`] = `
+
+Options:
+- customProperties:
+    --space: '8px /**/'
+
+Code:
+  1 | a { margin: 8px; }
+
+`;
+
+exports[`invalid(13): a { margin: 8px; } 2`] = `
+
+Message:
+> 1 | a { margin: 8px; }
+    |             ^^^ Prefer existing custom property \`var(--space)\` over this literal value.
+
+Suggestion 1/1: Replace with \`var(--space)\`.:
+  1 | a { margin: var(--space); }
+
+`;
+
+exports[`invalid(14): @-webkit-keyframes fade { from { color: #6750a4; } } 1`] = `
+
+Options:
+- customProperties:
+    --brand-color: '#6750a4'
+    --space-small: '8px'
+    --radius-medium: '12px'
+    --duration-fast: '200ms'
+    --shadow-card: '0 2px 8px #0003'
+
+Code:
+  1 | @-webkit-keyframes fade { from { color: #6750a4; } }
+
+`;
+
+exports[`invalid(14): @-webkit-keyframes fade { from { color: #6750a4; } } 2`] = `
+
+Message:
+> 1 | @-webkit-keyframes fade { from { color: #6750a4; } }
+    |                                         ^^^^^^^ Prefer existing custom property \`var(--brand-color)\` over this literal value.
+
+Suggestion 1/1: Replace with \`var(--brand-color)\`.:
+  1 | @-webkit-keyframes fade { from { color: var(--brand-color); } }
+
+`;
+
+exports[`invalid(14): a { margin: 0.5rem; width: 50%; } 1`] = `
+
+Options:
+- customProperties:
+    --space: '+05e-1REM'
+    --half: '50.0%'
+
+Code:
+  1 | a { margin: 0.5rem; width: 50%; }
+
+`;
+
+exports[`invalid(14): a { margin: 0.5rem; width: 50%; } 2`] = `
+
+Message:
+> 1 | a { margin: 0.5rem; width: 50%; }
+    |             ^^^^^^ Prefer existing custom property \`var(--space)\` over this literal value.
+
+Suggestion 1/1: Replace with \`var(--space)\`.:
+  1 | a { margin: var(--space); width: 50%; }
+
+`;
+
+exports[`invalid(14): a { margin: 0.5rem; width: 50%; } 3`] = `
+
+Message:
+> 1 | a { margin: 0.5rem; width: 50%; }
+    |                            ^^^ Prefer existing custom property \`var(--half)\` over this literal value.
+
+Suggestion 1/1: Replace with \`var(--half)\`.:
+  1 | a { margin: 0.5rem; width: var(--half); }
+
+`;
+
+exports[`invalid(15): a { -webkit-transition: opacity 200ms; } 1`] = `
+
+Options:
+- customProperties:
+    --brand-color: '#6750a4'
+    --space-small: '8px'
+    --radius-medium: '12px'
+    --duration-fast: '200ms'
+    --shadow-card: '0 2px 8px #0003'
+
+Code:
+  1 | a { -webkit-transition: opacity 200ms; }
+
+`;
+
+exports[`invalid(15): a { -webkit-transition: opacity 200ms; } 2`] = `
+
+Message:
+> 1 | a { -webkit-transition: opacity 200ms; }
+    |                                 ^^^^^ Prefer existing custom property \`var(--duration-fast)\` over this literal value.
+
+Suggestion 1/1: Replace with \`var(--duration-fast)\`.:
+  1 | a { -webkit-transition: opacity var(--duration-fast); }
+
+`;
+
+exports[`invalid(15): a { transition: opacity 200ms cubic-bezier(0.1, 0.2, 0.3, 1); } 1`] = `
+
+Options:
+- customProperties:
+    --time: '.2s'
+    --easing: 'cubic-bezier(.1,.2,.3,1)'
+
+Code:
+  1 | a { transition: opacity 200ms cubic-bezier(0.1, 0.2, 0.3, 1); }
+
+`;
+
+exports[`invalid(15): a { transition: opacity 200ms cubic-bezier(0.1, 0.2, 0.3, 1); } 2`] = `
+
+Message:
+> 1 | a { transition: opacity 200ms cubic-bezier(0.1, 0.2, 0.3, 1); }
+    |                         ^^^^^ Prefer existing custom property \`var(--time)\` over this literal value.
+
+Suggestion 1/1: Replace with \`var(--time)\`.:
+  1 | a { transition: opacity var(--time) cubic-bezier(0.1, 0.2, 0.3, 1); }
+
+`;
+
+exports[`invalid(15): a { transition: opacity 200ms cubic-bezier(0.1, 0.2, 0.3, 1); } 3`] = `
+
+Message:
+> 1 | a { transition: opacity 200ms cubic-bezier(0.1, 0.2, 0.3, 1); }
+    |                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Prefer existing custom property \`var(--easing)\` over this literal value.
+
+Suggestion 1/1: Replace with \`var(--easing)\`.:
+  1 | a { transition: opacity 200ms var(--easing); }
+
+`;
+
+exports[`invalid(16): a { c\\6f lor: #6750\\61 4; margin: 8p\\78; } 1`] = `
+
+Options:
+- customProperties:
+    --brand-color: '#6750a4'
+    --space-small: '8px'
+    --radius-medium: '12px'
+    --duration-fast: '200ms'
+    --shadow-card: '0 2px 8px #0003'
+
+Code:
+  1 | a { c\\6f lor: #6750\\61 4; margin: 8p\\78; }
+
+`;
+
+exports[`invalid(16): a { c\\6f lor: #6750\\61 4; margin: 8p\\78; } 2`] = `
+
+Message:
+> 1 | a { c\\6f lor: #6750\\61 4; margin: 8p\\78; }
+    |               ^^^^^^^^^^ Prefer existing custom property \`var(--brand-color)\` over this literal value.
+
+Suggestion 1/1: Replace with \`var(--brand-color)\`.:
+  1 | a { c\\6f lor: var(--brand-color); margin: 8p\\78; }
+
+`;
+
+exports[`invalid(16): a { c\\6f lor: #6750\\61 4; margin: 8p\\78; } 3`] = `
+
+Message:
+> 1 | a { c\\6f lor: #6750\\61 4; margin: 8p\\78; }
+    |                                   ^^^^^ Prefer existing custom property \`var(--space-small)\` over this literal value.
+
+Suggestion 1/1: Replace with \`var(--space-small)\`.:
+  1 | a { c\\6f lor: #6750\\61 4; margin: var(--space-small); }
+
+`;
+
+exports[`invalid(16): a { color: red; } 1`] = `
+
+Options:
+- customProperties:
+    --Brand Color: 'red'
+
+Code:
+  1 | a { color: red; }
+
+`;
+
+exports[`invalid(16): a { color: red; } 2`] = `
+
+Message:
+> 1 | a { color: red; }
+    |            ^^^ Prefer existing custom property \`var(--Brand\\ Color)\` over this literal value.
+
+Suggestion 1/1: Replace with \`var(--Brand\\ Color)\`.:
+  1 | a { color: var(--Brand\\ Color); }
+
+`;
+
+exports[`invalid(17): a { color: red; } 1`] = `
+
+Options:
+- customProperties:
+    --Brand: 'red'
+    --brand: 'blue'
+
+Code:
+  1 | a { color: red; }
+
+`;
+
+exports[`invalid(17): a { color: red; } 2`] = `
+
+Message:
+> 1 | a { color: red; }
+    |            ^^^ Prefer existing custom property \`var(--Brand)\` over this literal value.
+
+Suggestion 1/1: Replace with \`var(--Brand)\`.:
+  1 | a { color: var(--Brand); }
+
+`;
+
+exports[`invalid(17): a {\r\n  color: #6750a4;\r\n} 1`] = `
+
+Options:
+- customProperties:
+    --brand-color: '#6750a4'
+    --space-small: '8px'
+    --radius-medium: '12px'
+    --duration-fast: '200ms'
+    --shadow-card: '0 2px 8px #0003'
+
+Code:
+  1 | a {
+  2 |   color: #6750a4;
+  3 | }
+
+`;
+
+exports[`invalid(17): a {\r\n  color: #6750a4;\r\n} 2`] = `
+
+Message:
+  1 | a {
+> 2 |   color: #6750a4;
+    |          ^^^^^^^ Prefer existing custom property \`var(--brand-color)\` over this literal value.
+  3 | }
+
+Suggestion 1/1: Replace with \`var(--brand-color)\`.:
+  1 | a {
+  2 |   color: var(--brand-color);
+  3 | }
+
+`;
+
+exports[`invalid(18): a { color: red; } 1`] = `
+
+Options:
+- customProperties:
+    --constructor: 'red'
+
+Code:
+  1 | a { color: red; }
+
+`;
+
+exports[`invalid(18): a { color: red; } 2`] = `
+
+Message:
+> 1 | a { color: red; }
+    |            ^^^ Prefer existing custom property \`var(--constructor)\` over this literal value.
+
+Suggestion 1/1: Replace with \`var(--constructor)\`.:
+  1 | a { color: var(--constructor); }
+
+`;
+
+exports[`invalid(19): a { color: r\\65 d; } 1`] = `
+
+Options:
+- customProperties:
+    --color: 'red'
+
+Code:
+  1 | a { color: r\\65 d; }
+
+`;
+
+exports[`invalid(19): a { color: r\\65 d; } 2`] = `
+
+Message:
+> 1 | a { color: r\\65 d; }
+    |            ^^^^^^ Prefer existing custom property \`var(--color)\` over this literal value.
+
+Suggestion 1/1: Replace with \`var(--color)\`.:
+  1 | a { color: var(--color); }
+
+`;
+
+exports[`invalid(2): a { color: #6750A4 !important; margin: +08.0PX; border-radius: 12px; transition-duration: .2s; } 1`] = `
+
+Options:
+- customProperties:
+    --brand-color: '#6750a4'
+    --space-small: '8px'
+    --radius-medium: '12px'
+    --duration-fast: '200ms'
+    --shadow-card: '0 2px 8px #0003'
+
+Code:
+  1 | a { color: #6750A4 !important; margin: +08.0PX; border-radius: 12px; transition-duration: .2s; }
+
+`;
+
+exports[`invalid(2): a { color: #6750A4 !important; margin: +08.0PX; border-radius: 12px; transition-duration: .2s; } 2`] = `
+
+Message:
+> 1 | a { color: #6750A4 !important; margin: +08.0PX; border-radius: 12px; transition-duration: .2s; }
+    |            ^^^^^^^ Prefer existing custom property \`var(--brand-color)\` over this literal value.
+
+Suggestion 1/1: Replace with \`var(--brand-color)\`.:
+  1 | a { color: var(--brand-color) !important; margin: +08.0PX; border-radius: 12px; transition-duration: .2s; }
+
+`;
+
+exports[`invalid(2): a { color: #6750A4 !important; margin: +08.0PX; border-radius: 12px; transition-duration: .2s; } 3`] = `
+
+Message:
+> 1 | a { color: #6750A4 !important; margin: +08.0PX; border-radius: 12px; transition-duration: .2s; }
+    |                                        ^^^^^^^ Prefer existing custom property \`var(--space-small)\` over this literal value.
+
+Suggestion 1/1: Replace with \`var(--space-small)\`.:
+  1 | a { color: #6750A4 !important; margin: var(--space-small); border-radius: 12px; transition-duration: .2s; }
+
+`;
+
+exports[`invalid(2): a { color: #6750A4 !important; margin: +08.0PX; border-radius: 12px; transition-duration: .2s; } 4`] = `
+
+Message:
+> 1 | a { color: #6750A4 !important; margin: +08.0PX; border-radius: 12px; transition-duration: .2s; }
+    |                                                                ^^^^ Prefer existing custom property \`var(--radius-medium)\` over this literal value.
+
+Suggestion 1/1: Replace with \`var(--radius-medium)\`.:
+  1 | a { color: #6750A4 !important; margin: +08.0PX; border-radius: var(--radius-medium); transition-duration: .2s; }
+
+`;
+
+exports[`invalid(2): a { color: #6750A4 !important; margin: +08.0PX; border-radius: 12px; transition-duration: .2s; } 5`] = `
+
+Message:
+> 1 | a { color: #6750A4 !important; margin: +08.0PX; border-radius: 12px; transition-duration: .2s; }
+    |                                                                                           ^^^ Prefer existing custom property \`var(--duration-fast)\` over this literal value.
+
+Suggestion 1/1: Replace with \`var(--duration-fast)\`.:
+  1 | a { color: #6750A4 !important; margin: +08.0PX; border-radius: 12px; transition-duration: var(--duration-fast); }
+
+`;
+
+exports[`invalid(2): a { color: #abcd; } 1`] = `
+
+Options:
+- customProperties:
+    --color: '#aabbccdd'
+
+Code:
+  1 | a { color: #abcd; }
+
+`;
+
+exports[`invalid(2): a { color: #abcd; } 2`] = `
+
+Message:
+> 1 | a { color: #abcd; }
+    |            ^^^^^ Prefer existing custom property \`var(--color)\` over this literal value.
+
+Suggestion 1/1: Replace with \`var(--color)\`.:
+  1 | a { color: var(--color); }
+
+`;
+
+exports[`invalid(20): a { color: r\\67 b(255 255 255); } 1`] = `
+
+Options:
+- customProperties:
+    --white: '#fff'
+
+Code:
+  1 | a { color: r\\67 b(255 255 255); }
+
+`;
+
+exports[`invalid(20): a { color: r\\67 b(255 255 255); } 2`] = `
+
+Message:
+> 1 | a { color: r\\67 b(255 255 255); }
+    |            ^^^^^^^^^^^^^^^^^^^ Prefer existing custom property \`var(--white)\` over this literal value.
+
+Suggestion 1/1: Replace with \`var(--white)\`.:
+  1 | a { color: var(--white); }
+
+`;
+
+exports[`invalid(21): a { animation-timeline: scroll(); } 1`] = `
+
+Options:
+- customProperties:
+    --timeline: 'scroll()'
+
+Code:
+  1 | a { animation-timeline: scroll(); }
+
+`;
+
+exports[`invalid(21): a { animation-timeline: scroll(); } 2`] = `
+
+Message:
+> 1 | a { animation-timeline: scroll(); }
+    |                         ^^^^^^^^ Prefer existing custom property \`var(--timeline)\` over this literal value.
+
+Suggestion 1/1: Replace with \`var(--timeline)\`.:
+  1 | a { animation-timeline: var(--timeline); }
+
+`;
+
+exports[`invalid(22): a { animation-timeline: view(), SCROLL(); } 1`] = `
+
+Options:
+- customProperties:
+    --timeline: 'scroll()'
+
+Code:
+  1 | a { animation-timeline: view(), SCROLL(); }
+
+`;
+
+exports[`invalid(22): a { animation-timeline: view(), SCROLL(); } 2`] = `
+
+Message:
+> 1 | a { animation-timeline: view(), SCROLL(); }
+    |                                 ^^^^^^^^ Prefer existing custom property \`var(--timeline)\` over this literal value.
+
+Suggestion 1/1: Replace with \`var(--timeline)\`.:
+  1 | a { animation-timeline: view(), var(--timeline); }
+
+`;
+
+exports[`invalid(23): a { background: u\\72l(8px) 8px; } 1`] = `
+
+Options:
+- customProperties:
+    --space: '8px'
+
+Code:
+  1 | a { background: u\\72l(8px) 8px; }
+
+`;
+
+exports[`invalid(23): a { background: u\\72l(8px) 8px; } 2`] = `
+
+Message:
+> 1 | a { background: u\\72l(8px) 8px; }
+    |                            ^^^ Prefer existing custom property \`var(--space)\` over this literal value.
+
+Suggestion 1/1: Replace with \`var(--space)\`.:
+  1 | a { background: u\\72l(8px) var(--space); }
+
+`;
+
+exports[`invalid(24): a { margin: v\\61r(--other, 8px) 8px; } 1`] = `
+
+Options:
+- customProperties:
+    --space: '8px'
+
+Code:
+  1 | a { margin: v\\61r(--other, 8px) 8px; }
+
+`;
+
+exports[`invalid(24): a { margin: v\\61r(--other, 8px) 8px; } 2`] = `
+
+Message:
+> 1 | a { margin: v\\61r(--other, 8px) 8px; }
+    |                                 ^^^ Prefer existing custom property \`var(--space)\` over this literal value.
+
+Suggestion 1/1: Replace with \`var(--space)\`.:
+  1 | a { margin: v\\61r(--other, 8px) var(--space); }
+
+`;
+
+exports[`invalid(25): a { color: h\\73l(0 50% 50%); width: 50%; } 1`] = `
+
+Options:
+- customProperties:
+    --half: '50%'
+
+Code:
+  1 | a { color: h\\73l(0 50% 50%); width: 50%; }
+
+`;
+
+exports[`invalid(25): a { color: h\\73l(0 50% 50%); width: 50%; } 2`] = `
+
+Message:
+> 1 | a { color: h\\73l(0 50% 50%); width: 50%; }
+    |                                     ^^^ Prefer existing custom property \`var(--half)\` over this literal value.
+
+Suggestion 1/1: Replace with \`var(--half)\`.:
+  1 | a { color: h\\73l(0 50% 50%); width: var(--half); }
+
+`;
+
+exports[`invalid(26): a { @starting-style { margin: 8px; } } 1`] = `
+
+Options:
+- customProperties:
+    --space: '8px'
+
+Code:
+  1 | a { @starting-style { margin: 8px; } }
+
+`;
+
+exports[`invalid(26): a { @starting-style { margin: 8px; } } 2`] = `
+
+Message:
+> 1 | a { @starting-style { margin: 8px; } }
+    |                               ^^^ Prefer existing custom property \`var(--space)\` over this literal value.
+
+Suggestion 1/1: Replace with \`var(--space)\`.:
+  1 | a { @starting-style { margin: var(--space); } }
+
+`;
+
+exports[`invalid(3): a { box-shadow: 0 2px 8px #0003; } 1`] = `
+
+Options:
+- customProperties:
+    --brand-color: '#6750a4'
+    --space-small: '8px'
+    --radius-medium: '12px'
+    --duration-fast: '200ms'
+    --shadow-card: '0 2px 8px #0003'
+
+Code:
+  1 | a { box-shadow: 0 2px 8px #0003; }
+
+`;
+
+exports[`invalid(3): a { box-shadow: 0 2px 8px #0003; } 2`] = `
+
+Message:
+> 1 | a { box-shadow: 0 2px 8px #0003; }
+    |                 ^^^^^^^^^^^^^^^ Prefer existing custom property \`var(--shadow-card)\` over this literal value.
+
+Suggestion 1/1: Replace with \`var(--shadow-card)\`.:
+  1 | a { box-shadow: var(--shadow-card); }
+
+`;
+
+exports[`invalid(3): a { color: RGB(255,255,255); } 1`] = `
+
+Options:
+- customProperties:
+    --white: '#fff'
+
+Code:
+  1 | a { color: RGB(255,255,255); }
+
+`;
+
+exports[`invalid(3): a { color: RGB(255,255,255); } 2`] = `
+
+Message:
+> 1 | a { color: RGB(255,255,255); }
+    |            ^^^^^^^^^^^^^^^^ Prefer existing custom property \`var(--white)\` over this literal value.
+
+Suggestion 1/1: Replace with \`var(--white)\`.:
+  1 | a { color: var(--white); }
+
+`;
+
+exports[`invalid(4): a { box-shadow: +0 2.0PX 8px rgba(0 0 0 / .2); } 1`] = `
+
+Options:
+- customProperties:
+    --brand-color: '#6750a4'
+    --space-small: '8px'
+    --radius-medium: '12px'
+    --duration-fast: '200ms'
+    --shadow-card: '0 2px 8px #0003'
+
+Code:
+  1 | a { box-shadow: +0 2.0PX 8px rgba(0 0 0 / .2); }
+
+`;
+
+exports[`invalid(4): a { box-shadow: +0 2.0PX 8px rgba(0 0 0 / .2); } 2`] = `
+
+Message:
+> 1 | a { box-shadow: +0 2.0PX 8px rgba(0 0 0 / .2); }
+    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Prefer existing custom property \`var(--shadow-card)\` over this literal value.
+
+Suggestion 1/1: Replace with \`var(--shadow-card)\`.:
+  1 | a { box-shadow: var(--shadow-card); }
+
+`;
+
+exports[`invalid(4): a { color: rgb(100% 255 100% / 50%); } 1`] = `
+
+Options:
+- customProperties:
+    --white: 'rgba(255, 255, 255, .5)'
+
+Code:
+  1 | a { color: rgb(100% 255 100% / 50%); }
+
+`;
+
+exports[`invalid(4): a { color: rgb(100% 255 100% / 50%); } 2`] = `
+
+Message:
+> 1 | a { color: rgb(100% 255 100% / 50%); }
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^ Prefer existing custom property \`var(--white)\` over this literal value.
+
+Suggestion 1/1: Replace with \`var(--white)\`.:
+  1 | a { color: var(--white); }
+
+`;
+
+exports[`invalid(5): a { border: 8px solid #6750a4; margin: 8px 12px; } 1`] = `
+
+Options:
+- customProperties:
+    --brand-color: '#6750a4'
+    --space-small: '8px'
+    --radius-medium: '12px'
+    --duration-fast: '200ms'
+    --shadow-card: '0 2px 8px #0003'
+
+Code:
+  1 | a { border: 8px solid #6750a4; margin: 8px 12px; }
+
+`;
+
+exports[`invalid(5): a { border: 8px solid #6750a4; margin: 8px 12px; } 2`] = `
+
+Message:
+> 1 | a { border: 8px solid #6750a4; margin: 8px 12px; }
+    |             ^^^ Prefer existing custom property \`var(--space-small)\` over this literal value.
+
+Suggestion 1/1: Replace with \`var(--space-small)\`.:
+  1 | a { border: var(--space-small) solid #6750a4; margin: 8px 12px; }
+
+`;
+
+exports[`invalid(5): a { border: 8px solid #6750a4; margin: 8px 12px; } 3`] = `
+
+Message:
+> 1 | a { border: 8px solid #6750a4; margin: 8px 12px; }
+    |                       ^^^^^^^ Prefer existing custom property \`var(--brand-color)\` over this literal value.
+
+Suggestion 1/1: Replace with \`var(--brand-color)\`.:
+  1 | a { border: 8px solid var(--brand-color); margin: 8px 12px; }
+
+`;
+
+exports[`invalid(5): a { border: 8px solid #6750a4; margin: 8px 12px; } 4`] = `
+
+Message:
+> 1 | a { border: 8px solid #6750a4; margin: 8px 12px; }
+    |                                        ^^^ Prefer existing custom property \`var(--space-small)\` over this literal value.
+
+Suggestion 1/1: Replace with \`var(--space-small)\`.:
+  1 | a { border: 8px solid #6750a4; margin: var(--space-small) 12px; }
+
+`;
+
+exports[`invalid(5): a { border: 8px solid #6750a4; margin: 8px 12px; } 5`] = `
+
+Message:
+> 1 | a { border: 8px solid #6750a4; margin: 8px 12px; }
+    |                                            ^^^^ Prefer existing custom property \`var(--radius-medium)\` over this literal value.
+
+Suggestion 1/1: Replace with \`var(--radius-medium)\`.:
+  1 | a { border: 8px solid #6750a4; margin: 8px var(--radius-medium); }
+
+`;
+
+exports[`invalid(5): a { color: rgb(50% 0 100%); } 1`] = `
+
+Options:
+- customProperties:
+    --color: 'rgb(127.5 0 255)'
+
+Code:
+  1 | a { color: rgb(50% 0 100%); }
+
+`;
+
+exports[`invalid(5): a { color: rgb(50% 0 100%); } 2`] = `
+
+Message:
+> 1 | a { color: rgb(50% 0 100%); }
+    |            ^^^^^^^^^^^^^^^ Prefer existing custom property \`var(--color)\` over this literal value.
+
+Suggestion 1/1: Replace with \`var(--color)\`.:
+  1 | a { color: var(--color); }
+
+`;
+
+exports[`invalid(6): a { background: linear-gradient(#6750a4, black); } 1`] = `
+
+Options:
+- customProperties:
+    --brand-color: '#6750a4'
+    --space-small: '8px'
+    --radius-medium: '12px'
+    --duration-fast: '200ms'
+    --shadow-card: '0 2px 8px #0003'
+
+Code:
+  1 | a { background: linear-gradient(#6750a4, black); }
+
+`;
+
+exports[`invalid(6): a { background: linear-gradient(#6750a4, black); } 2`] = `
+
+Message:
+> 1 | a { background: linear-gradient(#6750a4, black); }
+    |                                 ^^^^^^^ Prefer existing custom property \`var(--brand-color)\` over this literal value.
+
+Suggestion 1/1: Replace with \`var(--brand-color)\`.:
+  1 | a { background: linear-gradient(var(--brand-color), black); }
+
+`;
+
+exports[`invalid(6): a { color: rgba(0,0,0,.5333333333333333); } 1`] = `
+
+Options:
+- customProperties:
+    --color: '#0008'
+
+Code:
+  1 | a { color: rgba(0,0,0,.5333333333333333); }
+
+`;
+
+exports[`invalid(6): a { color: rgba(0,0,0,.5333333333333333); } 2`] = `
+
+Message:
+> 1 | a { color: rgba(0,0,0,.5333333333333333); }
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Prefer existing custom property \`var(--color)\` over this literal value.
+
+Suggestion 1/1: Replace with \`var(--color)\`.:
+  1 | a { color: var(--color); }
+
+`;
+
+exports[`invalid(7): a { background: linear-gradient(rgb(255 255 255), black); } 1`] = `
+
+Options:
+- customProperties:
+    --white: '#fff'
+
+Code:
+  1 | a { background: linear-gradient(rgb(255 255 255), black); }
+
+`;
+
+exports[`invalid(7): a { background: linear-gradient(rgb(255 255 255), black); } 2`] = `
+
+Message:
+> 1 | a { background: linear-gradient(rgb(255 255 255), black); }
+    |                                 ^^^^^^^^^^^^^^^^ Prefer existing custom property \`var(--white)\` over this literal value.
+
+Suggestion 1/1: Replace with \`var(--white)\`.:
+  1 | a { background: linear-gradient(var(--white), black); }
+
+`;
+
+exports[`invalid(7): a { width: calc(100% - 8px); filter: blur(8px); } 1`] = `
+
+Options:
+- customProperties:
+    --brand-color: '#6750a4'
+    --space-small: '8px'
+    --radius-medium: '12px'
+    --duration-fast: '200ms'
+    --shadow-card: '0 2px 8px #0003'
+
+Code:
+  1 | a { width: calc(100% - 8px); filter: blur(8px); }
+
+`;
+
+exports[`invalid(7): a { width: calc(100% - 8px); filter: blur(8px); } 2`] = `
+
+Message:
+> 1 | a { width: calc(100% - 8px); filter: blur(8px); }
+    |                        ^^^ Prefer existing custom property \`var(--space-small)\` over this literal value.
+
+Suggestion 1/1: Replace with \`var(--space-small)\`.:
+  1 | a { width: calc(100% - var(--space-small)); filter: blur(8px); }
+
+`;
+
+exports[`invalid(7): a { width: calc(100% - 8px); filter: blur(8px); } 3`] = `
+
+Message:
+> 1 | a { width: calc(100% - 8px); filter: blur(8px); }
+    |                                           ^^^ Prefer existing custom property \`var(--space-small)\` over this literal value.
+
+Suggestion 1/1: Replace with \`var(--space-small)\`.:
+  1 | a { width: calc(100% - 8px); filter: blur(var(--space-small)); }
+
+`;
+
+exports[`invalid(8): a { border: var(--width) solid #6750a4; margin: var(--gap) 8px; } 1`] = `
+
+Options:
+- customProperties:
+    --brand-color: '#6750a4'
+    --space-small: '8px'
+    --radius-medium: '12px'
+    --duration-fast: '200ms'
+    --shadow-card: '0 2px 8px #0003'
+
+Code:
+  1 | a { border: var(--width) solid #6750a4; margin: var(--gap) 8px; }
+
+`;
+
+exports[`invalid(8): a { border: var(--width) solid #6750a4; margin: var(--gap) 8px; } 2`] = `
+
+Message:
+> 1 | a { border: var(--width) solid #6750a4; margin: var(--gap) 8px; }
+    |                                ^^^^^^^ Prefer existing custom property \`var(--brand-color)\` over this literal value.
+
+Suggestion 1/1: Replace with \`var(--brand-color)\`.:
+  1 | a { border: var(--width) solid var(--brand-color); margin: var(--gap) 8px; }
+
+`;
+
+exports[`invalid(8): a { border: var(--width) solid #6750a4; margin: var(--gap) 8px; } 3`] = `
+
+Message:
+> 1 | a { border: var(--width) solid #6750a4; margin: var(--gap) 8px; }
+    |                                                            ^^^ Prefer existing custom property \`var(--space-small)\` over this literal value.
+
+Suggestion 1/1: Replace with \`var(--space-small)\`.:
+  1 | a { border: var(--width) solid #6750a4; margin: var(--gap) var(--space-small); }
+
+`;
+
+exports[`invalid(8): a { opacity: .50; z-index: +01; animation-name: Example; } 1`] = `
+
+Options:
+- customProperties:
+    --half: '.5'
+    --index: '1'
+    --name: 'Example'
+
+Code:
+  1 | a { opacity: .50; z-index: +01; animation-name: Example; }
+
+`;
+
+exports[`invalid(8): a { opacity: .50; z-index: +01; animation-name: Example; } 2`] = `
+
+Message:
+> 1 | a { opacity: .50; z-index: +01; animation-name: Example; }
+    |              ^^^ Prefer existing custom property \`var(--half)\` over this literal value.
+
+Suggestion 1/1: Replace with \`var(--half)\`.:
+  1 | a { opacity: var(--half); z-index: +01; animation-name: Example; }
+
+`;
+
+exports[`invalid(8): a { opacity: .50; z-index: +01; animation-name: Example; } 3`] = `
+
+Message:
+> 1 | a { opacity: .50; z-index: +01; animation-name: Example; }
+    |                            ^^^ Prefer existing custom property \`var(--index)\` over this literal value.
+
+Suggestion 1/1: Replace with \`var(--index)\`.:
+  1 | a { opacity: .50; z-index: var(--index); animation-name: Example; }
+
+`;
+
+exports[`invalid(8): a { opacity: .50; z-index: +01; animation-name: Example; } 4`] = `
+
+Message:
+> 1 | a { opacity: .50; z-index: +01; animation-name: Example; }
+    |                                                 ^^^^^^^ Prefer existing custom property \`var(--name)\` over this literal value.
+
+Suggestion 1/1: Replace with \`var(--name)\`.:
+  1 | a { opacity: .50; z-index: +01; animation-name: var(--name); }
+
+`;
+
+exports[`invalid(9): a { margin: 8px /* gap */ 8px; } 1`] = `
+
+Options:
+- customProperties:
+    --brand-color: '#6750a4'
+    --space-small: '8px'
+    --radius-medium: '12px'
+    --duration-fast: '200ms'
+    --shadow-card: '0 2px 8px #0003'
+
+Code:
+  1 | a { margin: 8px /* gap */ 8px; }
+
+`;
+
+exports[`invalid(9): a { margin: 8px /* gap */ 8px; } 2`] = `
+
+Message:
+> 1 | a { margin: 8px /* gap */ 8px; }
+    |             ^^^ Prefer existing custom property \`var(--space-small)\` over this literal value.
+
+Suggestion 1/1: Replace with \`var(--space-small)\`.:
+  1 | a { margin: var(--space-small) /* gap */ 8px; }
+
+`;
+
+exports[`invalid(9): a { margin: 8px /* gap */ 8px; } 3`] = `
+
+Message:
+> 1 | a { margin: 8px /* gap */ 8px; }
+    |                           ^^^ Prefer existing custom property \`var(--space-small)\` over this literal value.
+
+Suggestion 1/1: Replace with \`var(--space-small)\`.:
+  1 | a { margin: 8px /* gap */ var(--space-small); }
+
+`;
+
+exports[`invalid(9): a { width: calc(1px\n+\t2px); } 1`] = `
+
+Options:
+- customProperties:
+    --width: 'calc(1px + 2px)'
+
+Code:
+  1 | a { width: calc(1px
+  2 | +	2px); }
+
+`;
+
+exports[`invalid(9): a { width: calc(1px\n+\t2px); } 2`] = `
+
+Message:
+> 1 | a { width: calc(1px
+    |            ^^^^^^^^
+> 2 | +	2px); }
+    | ^^^^^^ Prefer existing custom property \`var(--width)\` over this literal value.
+
+Suggestion 1/1: Replace with \`var(--width)\`.:
+  1 | a { width: var(--width); }
+
+`;
