@@ -410,6 +410,20 @@ Message:
 
 `;
 
+exports[`invalid(36): @-w\\65 bkit-keyframes fade {} @-webkit-keyframes fade {} 1`] = `
+
+  1 | @-w\\65 bkit-keyframes fade {} @-webkit-keyframes fade {}
+
+`;
+
+exports[`invalid(36): @-w\\65 bkit-keyframes fade {} @-webkit-keyframes fade {} 2`] = `
+
+Message:
+> 1 | @-w\\65 bkit-keyframes fade {} @-webkit-keyframes fade {}
+    |                                                  ^^^^ Duplicate \`@-webkit-keyframes\` definition \`fade\`. The first definition is on line 1.
+
+`;
+
 exports[`invalid(4): @position-try --above { top: 0; } @position-try --above { bottom: 0; } 1`] = `
 
   1 | @position-try --above { top: 0; } @position-try --above { bottom: 0; }

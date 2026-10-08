@@ -53,7 +53,7 @@ const create = context => {
 				messageId: MESSAGE_ID,
 				data: {
 					atRule: atRuleName,
-					name,
+					name: JSON.stringify(name).slice(1, -1),
 					line: String(context.sourceCode.getLoc(firstDefinition).start.line),
 				},
 			};

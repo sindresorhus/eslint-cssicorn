@@ -9,6 +9,7 @@ test.snapshot({
 		'@counter-style dots {} @counter-style stars {}',
 		'@position-try --above {} @position-try --below {}',
 		'@keyframes fade {} @keyframes Fade {}',
+		String.raw`@keyframes \46 ade {} @keyframes fade {}`,
 		'@property --color {} @property --Color {}',
 		'@counter-style dots {} @counter-style Dots {}',
 		'@position-try --above {} @position-try --Above {}',
@@ -32,11 +33,12 @@ test.snapshot({
 		'@counter-style "dots" {} @counter-style "dots" {}',
 		'@property "--color" {} @property "--color" {}',
 		'@position-try "--above" {} @position-try "--above" {}',
-		// Multiple-name registrations are outside this rule\'s single-name contract.
+		// Multiple-name registrations are outside this rule's single-name contract.
 		'@property --color, --size {} @property --color, --size {} @property --color {}',
 		// Predefined counter-style case aliases are intentionally not resolved.
 		'@counter-style upper-roman {} @counter-style UPPER-ROMAN {}',
 		'a { --definition: "@keyframes fade {} @keyframes fade {}"; background: url("@keyframes fade {}"); }',
+		'@property --color {}\n/* eslint-disable-next-line rule-to-test/no-duplicate-at-rule-definitions */\n@property --color {}',
 		{
 			code: '@keyframes f|ade {} @keyframes f|ade {}',
 			languageOptions: {tolerant: true},
@@ -79,6 +81,7 @@ test.snapshot({
 		// Body validity and intentional registration fallbacks do not affect detection.
 		'@property --color {} @property --color { syntax: "<color>"; inherits: false; initial-value: red; }',
 		'@property --color { syntax: "<color>"; inherits: false; initial-value: red; } @property --color { syntax: "<color>"; inherits: false; initial-value: future-color(red); }',
+		String.raw`@-w\65 bkit-keyframes fade {} @-webkit-keyframes fade {}`,
 	],
 });
 
@@ -107,6 +110,33 @@ test({
 					suggestions: [],
 				},
 			],
+		},
+		{
+			code: '@keyframes fade {}\n@-webkit-keyframes fade {}\n@media (width > 40rem) {\n  @keyframes fade {}\n  @keyframes fade {}\n}\n@keyframes fade {}\n@-webkit-keyframes fade {}',
+			errors: [
+				{
+					messageId: 'no-duplicate-at-rule-definitions',
+					data: {atRule: 'keyframes', name: 'fade', line: '4'},
+					line: 5,
+				},
+				{
+					messageId: 'no-duplicate-at-rule-definitions',
+					data: {atRule: 'keyframes', name: 'fade', line: '1'},
+					line: 7,
+				},
+				{
+					messageId: 'no-duplicate-at-rule-definitions',
+					data: {atRule: '-webkit-keyframes', name: 'fade', line: '2'},
+					line: 8,
+				},
+			],
+		},
+		{
+			code: String.raw`@keyframes "line\a \1b [31m" {} @keyframes "line\a \1b [31m" {}`,
+			errors: [{
+				message: 'Duplicate `@keyframes` definition `line\\n\\u001b[31m`. The first definition is on line 1.',
+				suggestions: [],
+			}],
 		},
 	],
 });
