@@ -176,3 +176,5 @@ This is a positive-anchor policy, not a guarantee of containment or component ow
 The rule cannot infer scoping supplied by a framework, compiler, stylesheet import, or runtime Shadow DOM attachment. Custom at-rules such as Tailwind's `@utility` are not treated as scoping roots. Arguments of other pseudo-selector functions do not establish boundaries. Logical equivalences such as `:not(:not(.card))` are not analyzed.
 
 Unparsed rule preludes and blocks are skipped, and keyframes are excluded. If a parent has an unanchored branch, its unanchored nested selectors are reported too. CSS keywords are matched ASCII case-insensitively, and escaped names of supported pseudo-selectors are recognized.
+
+The current parser cannot parse style rules inside `@scope` or `@starting-style` blocks when those blocks are nested in another style rule. Declaration-only blocks are supported.
