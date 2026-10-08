@@ -149,6 +149,13 @@ function isNumber(quantity) {
 }
 
 /**
+Check for a number or a single CSS dimension, excluding compound function arguments and final results.
+*/
+function isNumericQuantity(quantity) {
+	return [quantity.types, quantity.units].every(exponents => exponents.size === 0 || (exponents.size === 1 && exponents.values().next().value === 1));
+}
+
+/**
 Compare both numeric units and CSS types before addition or function arguments.
 */
 function areCompatible(first, second) {
@@ -407,6 +414,10 @@ function getLogarithmicValue(argument, base) {
 Dispatch pure math functions to their argument-type family.
 */
 function getFunctionValue(name, arguments_, strategy = 'nearest') {
+	if (arguments_.some(argument => !isNumericQuantity(argument))) {
+		return;
+	}
+
 	if (['sin', 'cos', 'tan'].includes(name)) {
 		return arguments_.length === 1 ? getTrigonometricValue(name, arguments_[0]) : undefined;
 	}
@@ -549,7 +560,11 @@ export default function evaluateCssMath(node, {percentageBasis} = {}) {
 			return;
 		}
 
-		const children = [...target.children];
+		const children = Array.isArray(target.children) ? target.children : [...target.children];
+		if (children.length > remainingNodes) {
+			return;
+		}
+
 		if (target.type === 'Value') {
 			return children.length === 1 ? evaluate(children[0], depth + 1) : undefined;
 		}
@@ -608,7 +623,11 @@ export default function evaluateCssMath(node, {percentageBasis} = {}) {
 		const isNone = group => group.length === 1 && group[0].type === 'Identifier' && normalizeCssIdentifier(group[0].name) === 'none';
 		const values = groups.map((group, index) => index !== 1 && isNone(group) ? undefined : evaluateExpression(group, depth + 1));
 		const [minimum, preferred, maximum] = values;
-		if (!preferred || (!minimum && !isNone(groups[0])) || (!maximum && !isNone(groups[2])) || values.some(value => value && (!areCompatible(preferred, value) || isUnresolved(value)))) {
+		if (!preferred || (!minimum && !isNone(groups[0])) || (!maximum && !isNone(groups[2]))) {
+			return;
+		}
+
+		if (values.some(value => value && (!isNumericQuantity(value) || !areCompatible(preferred, value) || isUnresolved(value)))) {
 			return;
 		}
 
@@ -616,16 +635,8 @@ export default function evaluateCssMath(node, {percentageBasis} = {}) {
 	}
 
 	const result = evaluate(node, 0);
-	if (!result || result.types.size > 1 || result.units.size > 1) {
+	if (!result || !isNumericQuantity(result)) {
 		return;
-	}
-
-	for (const exponents of [result.types, result.units]) {
-		for (const exponent of exponents.values()) {
-			if (exponent !== 1) {
-				return;
-			}
-		}
 	}
 
 	return {value: result.value, unit: result.units.keys().next().value};

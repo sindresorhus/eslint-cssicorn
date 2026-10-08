@@ -267,13 +267,9 @@ function getCalculationProblem(node, trace, declarationProperty, sourceCode) {
 		return;
 	}
 
+	// Percentages retain their type or stay unresolved without an intrinsic basis.
 	let quantity = evaluateCssMath(node);
 	if (!quantity || !Number.isFinite(quantity.value)) {
-		return;
-	}
-
-	// A final number does not make percentage operands legal in number-only contexts.
-	if (quantity.unit === undefined && sourceCode.getText(node).includes('%')) {
 		return;
 	}
 

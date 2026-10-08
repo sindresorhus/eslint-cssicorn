@@ -95,6 +95,7 @@ const cases = [
 	['calc(pi * 1rad)', 180, 'deg'],
 	['calc(2px * 3s / 1s)', 6, 'px'],
 	['calc((2px * 3px) / (1px * 1px))', 6],
+	['calc(calc(2px * 3px) / 1px)', 6, 'px'],
 	['calc(1 / (2px / 1px))', 0.5],
 	['calc(1px / 0px)', Infinity],
 	['calc(2em + 3em)', 5, 'em'],
@@ -311,6 +312,17 @@ const unsupported = [
 	'calc(1em * 1em)',
 	'calc(1px * 1px)',
 	'calc(1 / 1px)',
+	'calc(abs(-1px * 1px) / -1px)',
+	'calc(sign(-1px * 1px) * 1px)',
+	'calc(min(-1px * 1px, -2px * 1px) / 1px)',
+	'calc(max(-1px * 1px, -2px * 1px) / 1px)',
+	'calc(clamp(none, -1px * 1px, none) / 1px)',
+	'calc(round(-1px * 1px, 1px * 1px) / 1px)',
+	'calc(mod(-1px * 1px, 2px * 1px) / 1px)',
+	'calc(rem(-1px * 1px, 2px * 1px) / 1px)',
+	'calc(hypot(3px * 1px, 4px * 1px) / 1px)',
+	'atan2(1px * 1px, 1px * 1px)',
+	'sin(1em * 1deg / 1px)',
 	'min()',
 	'max()',
 	'min(1px, 1s)',
@@ -472,6 +484,29 @@ test('limits excessive nesting', () => {
 	assert.equal(evaluateCssMath(node), undefined);
 });
 
+test('supports the nesting limit and resets the budget between calls', () => {
+	let node = {type: 'Number', value: '1'};
+	for (let depth = 0; depth < 128; depth++) {
+		node = {type: 'Function', name: 'calc', children: [node]};
+	}
+
+	assert.deepEqual(evaluateCssMath(node), quantity(1));
+	assert.equal(evaluateCssMath({type: 'Function', name: 'calc', children: [node]}), undefined);
+	assert.deepEqual(evaluateCssMath(node), quantity(1));
+});
+
+test('enforces the node budget boundary for long expressions', () => {
+	const children = [{type: 'Number', value: '1'}];
+	for (let index = 0; index < 4999; index++) {
+		children.push({type: 'Operator', value: ' + '}, {type: 'Number', value: '1'});
+	}
+
+	Object.freeze(children);
+	const node = {type: 'Function', name: 'calc', children};
+	assert.deepEqual(evaluateCssMath(node), quantity(5000));
+	assert.equal(evaluateCssMath({type: 'Value', children: [node]}), undefined);
+});
+
 test('limits excessive node counts', () => {
 	const children = [{type: 'Number', value: '1'}];
 	for (let index = 0; index < 5001; index++) {
@@ -479,4 +514,13 @@ test('limits excessive node counts', () => {
 	}
 
 	assert.equal(evaluateCssMath({type: 'Function', name: 'calc', children}), undefined);
+});
+
+test('limits excessive function argument lists', () => {
+	const children = [{type: 'Number', value: '1'}];
+	for (let index = 0; index < 5000; index++) {
+		children.push({type: 'Operator', value: ','}, {type: 'Number', value: '1'});
+	}
+
+	assert.equal(evaluateCssMath({type: 'Function', name: 'min', children}), undefined);
 });

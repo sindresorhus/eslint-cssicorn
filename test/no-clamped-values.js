@@ -23,7 +23,9 @@ test.snapshot({
 		'a { color: lab(100 200 -200); background: lch(100 200 999); }',
 		'a { color: oklab(1 2 -2); background: oklch(1 2 999); }',
 		'a { color: color(display-p3 2 -1 3); }',
+		'a { color: color(display-p3 calc(2) calc(-1) calc(3)); }',
 		'a { color: rgb(from red 300 -1 999 / 1); }',
+		'a { color: rgb(from red calc(300) calc(-1) calc(999) / 1); }',
 		'a { color: lch(from red 150 -1 0); }',
 		'a { color: color(from red --profile 2 -1 3); }',
 		'a { color: rgba(var(--channels), 50); }',
@@ -41,6 +43,7 @@ test.snapshot({
 		'a { opacity: calc(2 - 1); width: calc(-1px + 2px); }',
 		'a { opacity: min(1, 2); opacity: clamp(0, 2, 1); }',
 		'a { width: max(calc(-1px), 2px); }',
+		'a { width: calc(abs(-1px * 1px) / -1px); height: calc(min(-1px * 1px, -2px * 1px) / 1px); }',
 		'a { width: clamp(0px, calc(-1px), 2px); }',
 		'a { opacity: calc(2+ 3); opacity: calc(2 +/**/3); }',
 		'a { width: calc(1in - 96px); }',
@@ -109,6 +112,7 @@ test.snapshot({
 		'a { text-decoration: underline -1%; }',
 		'a { text-decoration-thickness: calc(1px - 2px); }',
 		'a { width: calc(-1px); }',
+		'a { width: calc(calc(-1px * 1px) / 1px); }',
 		'a { width: calc(-.00000001px); opacity: calc(-.00000001); }',
 		'a { opacity: -.000000000001; color: rgb(0 0 0 / 1.000000000001); }',
 		'a { width: calc(-10%); }',
@@ -176,4 +180,17 @@ nodeTest('descriptor diagnostics identify the declaration', () => {
 	}, {filename: 'test.css'});
 	assert.equal(messages.length, 1);
 	assert.equal(messages[0].message, '\'font-weight\' evaluates to 1200, which the browser clamps to 1000.');
+});
+
+nodeTest('percent signs in comments do not hide calculated bounds', () => {
+	const messages = new Linter().verify('a { font-weight: calc(1200 /* 50% */); column-count: calc(0 /* 50% */); }', {
+		files: ['**/*.css'],
+		language: 'css/css',
+		plugins: {css, cssicorn: plugin},
+		rules: {'cssicorn/no-clamped-values': 'error'},
+	}, {filename: 'test.css'});
+	assert.deepEqual(messages.map(message => message.message), [
+		'\'font-weight\' evaluates to 1200, which the browser clamps to 1000.',
+		'\'column-count\' evaluates to 0, which the browser clamps to 1.',
+	]);
 });
