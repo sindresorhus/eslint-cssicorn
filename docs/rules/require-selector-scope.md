@@ -7,149 +7,113 @@
 <!-- end auto-generated rule header -->
 <!-- Do not manually modify this header. Run: `npm run fix:eslint-docs` -->
 
-Require a positive scoping boundary in every selector branch. Use this architectural policy in component stylesheets to catch accidentally unanchored selectors while permitting element selectors inside components.
+Use this opt-in rule for manually scoped component CSS. Every selector branch needs one of these boundaries:
 
-This rule is opt-in. Global and reset stylesheets commonly need unanchored selectors. It cannot be autofixed safely because the intended boundary is unknown.
-
-A selector qualifies through:
-
-- A direct class or ID selector, anywhere across its combinators.
+- A direct class or ID anywhere in the selector.
 - `:host`, `:host()`, or `:host-context()`.
-- `:is()` or `:where()` when every argument branch qualifies.
-- `:nth-child()` or `:nth-last-child()` when every `of` selector branch qualifies.
-- `::slotted()` when its compound argument qualifies.
-- An enclosing [`@scope`](https://www.w3.org/TR/css-cascade-6/#scoped-styles), including one without an explicit root.
-- A positive explicit or implicit nesting reference to a parent whose every branch qualifies.
+- `:is()` or `:where()` with every alternative scoped.
+- `:nth-child()` or `:nth-last-child()` with every `of` alternative scoped.
+- `::slotted()` with a scoped compound argument.
+- An enclosing [`@scope`](https://www.w3.org/TR/css-cascade-6/#scoped-styles), even without an explicit root.
+- A positive explicit or implicit nesting reference to a parent whose every branch is scoped.
 
-Classes and IDs inside `:not()` or `:has()` do not establish a boundary. An outer positive anchor still qualifies: `.card:has(button)` and `.card:is(button, a)` are allowed. Bare `:scope`, attribute selectors, universal selectors, and element selectors do not establish a boundary.
+Classes and IDs inside `:not()` or `:has()` do not count; an outer anchor still does, as in `.card:is(button, a)`. Bare `:scope`, attributes, `*`, and element selectors do not count.
 
 ## Examples
 
-Every comma-separated branch must qualify:
+Each comma-separated branch needs a boundary:
 
 ```css
 /* ❌ */
-.card, button {
-	color: red;
-}
+.card, button {}
 
 /* ✅ */
-.card, .card button {
-	color: red;
-}
+.card, .card button {}
 ```
 
-Every alternative in a positive selector function must qualify:
+Every alternative must be scoped:
 
 ```css
 /* ❌ */
-:is(.card, button) {
-	color: red;
-}
+:is(.card, button) {}
 
 /* ✅ */
-:is(.card, #panel) button {
-	color: red;
-}
+:is(.card, #panel) button {}
 ```
 
-Mentioning a class inside an exclusion or relationship test is insufficient:
+`:not()` and `:has()` cannot supply a boundary:
 
 ```css
 /* ❌ */
-button:has(.card) {
-	color: red;
-}
+button:has(.card) {}
 
 /* ✅ */
-.card button:has(.icon) {
-	color: red;
-}
+.card button:has(.icon) {}
 ```
 
-An enclosing scope permits element selectors:
+Native scope permits element selectors:
 
 ```css
 /* ❌ */
-button {
-	color: red;
-}
+button {}
 
 /* ✅ */
 @scope (.card) {
-	button {
-		color: red;
-	}
+	button {}
 }
 ```
 
-Implicit nesting inherits the boundary:
+Implicit nesting inherits the parent's boundary:
 
 ```css
 /* ❌ */
 body {
-	button {
-		color: red;
-	}
+	button {}
 }
 
 /* ✅ */
 .card {
-	button {
-		color: red;
-	}
+	button {}
 }
 ```
 
-An explicit `&` inside `:not()` or `:has()` can escape the nesting parent. The [CSS nesting specification](https://drafts.csswg.org/css-nesting/#nesting) expands `.card { :not(&) {} }` to `:not(.card)`. A leading combinator always implies an initial parent reference, so `.card { > :not(&) {} }` is allowed.
+Under [native nesting semantics](https://drafts.csswg.org/css-nesting/#nesting), explicit `&` suppresses implicit parent anchoring unless a selector starts with a combinator. Thus `.card { :not(&) {} }` fails, while `.card { > :not(&) {} }` passes.
 
 ```css
 /* ❌ */
 .card {
-	:is(&, body) {
-		color: red;
-	}
+	:is(&, body) {}
 }
 
 /* ✅ */
 .card {
-	:is(&, .other-card) {
-		color: red;
-	}
+	:is(&, .other-card) {}
 }
 ```
 
-The `of` filter must constrain every alternative:
+Every `of` alternative needs a boundary:
 
 ```css
 /* ❌ */
-:nth-child(2n of .card, button) {
-	color: red;
-}
+:nth-child(2n of .card, button) {}
 
 /* ✅ */
-:nth-child(2n of .card, #panel) {
-	color: red;
-}
+:nth-child(2n of .card, #panel) {}
 ```
 
-Slotted elements can qualify through their compound selector:
+Slotted arguments can supply a boundary:
 
 ```css
 /* ❌ */
-::slotted(*) {
-	color: red;
-}
+::slotted(*) {}
 
 /* ✅ */
-::slotted(.card) {
-	color: red;
-}
+::slotted(.card) {}
 ```
 
 ## Usage
 
-Enable the rule only for manually scoped component stylesheets, exempting global and reset files. Leave it disabled for component style blocks already scoped by [Vue](https://vuejs.org/api/sfc-css-features.html#scoped-css), [Svelte](https://svelte.dev/docs/svelte/scoped-styles), or [Astro](https://docs.astro.build/en/guides/styling/#scoped-styles).
+Exempt global and reset files. Leave the rule disabled for styles already scoped by [Vue](https://vuejs.org/api/sfc-css-features.html#scoped-css), [Svelte](https://svelte.dev/docs/svelte/scoped-styles), or [Astro](https://docs.astro.build/en/guides/styling/#scoped-styles).
 
 ```js
 import cssicorn from 'eslint-cssicorn';
@@ -167,14 +131,14 @@ export default [
 ];
 ```
 
-Disable `prefer-nesting` in these files because its autofix can introduce unanchored parents without declarations. For example, `body :is(.card, .other) { color: red; }` becomes `body { .card, .other { color: red; } }`. This rule checks every selector branch, including the `body` wrapper.
+Disable `prefer-nesting` because its autofix can introduce unanchored wrappers: `body :is(.card, .other) { color: red; }` becomes `body { .card, .other { color: red; } }`, whose `body` branch fails this rule.
 
 ## Limitations
 
-This is a positive-anchor policy, not a guarantee of containment or component ownership. For example, `.card + button` qualifies even though it targets a sibling outside `.card`, and `@scope (:root)` qualifies even though it covers the document. Use native scope when DOM containment is required.
+A boundary does not guarantee containment or component ownership: `.card + button` and `@scope (:root)` pass. Use native scope for DOM containment. No autofix is provided because the intended boundary is unknown.
 
-The rule cannot infer scoping supplied by a framework, compiler, stylesheet import, or runtime Shadow DOM attachment. Custom at-rules such as Tailwind's `@utility` are not treated as scoping roots. Arguments of other pseudo-selector functions do not establish boundaries. Logical equivalences such as `:not(:not(.card))` are not analyzed.
+Framework, compiler, imported, and runtime Shadow DOM scoping are not inferred. Custom at-rules, other pseudo-selector arguments, and logical equivalences such as `:not(:not(.card))` do not establish boundaries.
 
-Unparsed rule preludes and blocks are skipped, and keyframes are excluded. If a parent has an unanchored branch, its unanchored nested selectors are reported too. CSS keywords are matched ASCII case-insensitively, and escaped names of supported pseudo-selectors are recognized.
+Keyframes and unparsed preludes or blocks are skipped. Unanchored branches are reported, including nested selectors without their own boundary under partially unscoped parents. CSS keywords are matched ASCII case-insensitively, including escaped names.
 
-The current parser cannot parse style rules inside `@container`, `@scope`, `@starting-style`, or `@supports` blocks when those blocks are nested in another style rule. Declaration-only blocks are supported.
+The parser rejects style rules directly inside `@container`, `@scope`, `@starting-style`, or `@supports` blocks nested in a style rule; declaration-only blocks work.
