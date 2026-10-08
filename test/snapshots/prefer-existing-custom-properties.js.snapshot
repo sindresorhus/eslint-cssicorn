@@ -700,6 +700,72 @@ Suggestion 1/1: Replace with \`var(--space)\`.:
 
 `;
 
+exports[`invalid(24): a { margin: v\\61r(--other, 8px) 8px; } 1`] = `
+
+Options:
+- customProperties:
+    --space: '8px'
+
+Code:
+  1 | a { margin: v\\61r(--other, 8px) 8px; }
+
+`;
+
+exports[`invalid(24): a { margin: v\\61r(--other, 8px) 8px; } 2`] = `
+
+Message:
+> 1 | a { margin: v\\61r(--other, 8px) 8px; }
+    |                                 ^^^ Prefer existing custom property \`var(--space)\` over this literal value.
+
+Suggestion 1/1: Replace with \`var(--space)\`.:
+  1 | a { margin: v\\61r(--other, 8px) var(--space); }
+
+`;
+
+exports[`invalid(25): a { color: h\\73l(0 50% 50%); width: 50%; } 1`] = `
+
+Options:
+- customProperties:
+    --half: '50%'
+
+Code:
+  1 | a { color: h\\73l(0 50% 50%); width: 50%; }
+
+`;
+
+exports[`invalid(25): a { color: h\\73l(0 50% 50%); width: 50%; } 2`] = `
+
+Message:
+> 1 | a { color: h\\73l(0 50% 50%); width: 50%; }
+    |                                     ^^^ Prefer existing custom property \`var(--half)\` over this literal value.
+
+Suggestion 1/1: Replace with \`var(--half)\`.:
+  1 | a { color: h\\73l(0 50% 50%); width: var(--half); }
+
+`;
+
+exports[`invalid(26): a { @starting-style { margin: 8px; } } 1`] = `
+
+Options:
+- customProperties:
+    --space: '8px'
+
+Code:
+  1 | a { @starting-style { margin: 8px; } }
+
+`;
+
+exports[`invalid(26): a { @starting-style { margin: 8px; } } 2`] = `
+
+Message:
+> 1 | a { @starting-style { margin: 8px; } }
+    |                               ^^^ Prefer existing custom property \`var(--space)\` over this literal value.
+
+Suggestion 1/1: Replace with \`var(--space)\`.:
+  1 | a { @starting-style { margin: var(--space); } }
+
+`;
+
 exports[`invalid(3): a { box-shadow: 0 2px 8px #0003; } 1`] = `
 
 Options:

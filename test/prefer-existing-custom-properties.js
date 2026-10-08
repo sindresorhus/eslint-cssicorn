@@ -103,6 +103,9 @@ test.snapshot({
 		}),
 		withTokens('a { color: red; }', {'--string': String.raw`"red\""`, '--url': String.raw`url(foo\))`}),
 		withTokens(String.raw`a { background: u\72l(8px); }`, {'--space': '8px', '--image': String.raw`u\72l(8px)`}),
+		withTokens('a { color: rgb(1+2+3); }', {'--color': '#010203'}),
+		withTokens('a { color: rgb(100%100%100%); }', {'--color': '#fff'}),
+		withTokens(String.raw`:root { \2d -space: 8px; }`, {'--space': '8px'}),
 		{code: 'a { width: ???; }', options, languageOptions: {tolerant: true}},
 	],
 	invalid: [
@@ -131,6 +134,9 @@ test.snapshot({
 		withTokens('a { animation-timeline: scroll(); }', {'--timeline': 'scroll()'}),
 		withTokens('a { animation-timeline: view(), SCROLL(); }', {'--timeline': 'scroll()'}),
 		withTokens(String.raw`a { background: u\72l(8px) 8px; }`, {'--space': '8px'}),
+		withTokens(String.raw`a { margin: v\61r(--other, 8px) 8px; }`, {'--space': '8px'}),
+		withTokens(String.raw`a { color: h\73l(0 50% 50%); width: 50%; }`, {'--half': '50%'}),
+		withTokens('a { @starting-style { margin: 8px; } }', {'--space': '8px'}),
 	],
 });
 
