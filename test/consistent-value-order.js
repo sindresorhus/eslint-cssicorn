@@ -39,6 +39,8 @@ test.snapshot({
 		':import("theme.css") { flex-flow: wrap column; columns: 3 20em; }',
 		'a { border: 1px /* keep */ solid red; }',
 		{code: 'a { border: red solid (; box-shadow: red 0 0 (; }', languageOptions: {tolerant: true}},
+		'a { box-shadow: red 1px 2px, blue 3px; text-shadow: red 1px 2px, blue 3px; }',
+		'a { box-shadow: red 1px 2px, var(--other-shadow); text-shadow: red 1px 2px, rgb(1 2 var(--blue)) 3px 4px; }',
 	],
 	invalid: [
 		...[
