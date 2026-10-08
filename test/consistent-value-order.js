@@ -29,8 +29,9 @@ test.snapshot({
 		'a { flex-flow: var(--direction, column) wrap; }',
 		'a { columns: 3 0; columns: auto 0; columns: -1 20em; columns: 1.5 20em; }',
 		'a { columns: calc(3) calc(20em); columns: auto calc(20em); columns: 3 unknown(); }',
-		'a { columns: 3 calc(var(--width)); columns: 3 calc(random(1px, 2px)); columns: 3 20em / var(--height); }',
-		'a { columns: 3 0 / 10em; columns: 3 20em /; columns: 3 20em / 10em / 2px; }',
+		'a { columns: 3 calc(var(--width)); columns: 3 calc(random(1px, 2px)); columns: 20em 3 / var(--height); }',
+		'a { columns: 3 0 / 10em; columns: 20em 3 /; columns: 20em 3 / 10em / 2px; }',
+		'a { columns: 3 4 / var(--height); columns: var(--count) 20em / 10em; }',
 		'a { columns: 3 +0; columns: 3 -0; columns: 3 0.0; }',
 		'a { columns: 9007199254740992 20em; }',
 		'a { border: red solid unknown; flex-flow: wrap column unknown; box-shadow: red 1px; columns: 3 4; }',
@@ -44,8 +45,9 @@ test.snapshot({
 		{code: 'a { border: red solid (; box-shadow: red 0 0 (; }', languageOptions: {tolerant: true}},
 		'a { box-shadow: 1px 2px red, blue 3px; text-shadow: 1px 2px red, blue 3px; }',
 		'a { box-shadow: 1px 2px red, var(--other-shadow); text-shadow: 1px 2px red, rgb(1 2 var(--blue)) 3px 4px; }',
-		'a { box-shadow: red 0 0, blue calc(random(1px, 2px)) 0; }',
-		'a { text-shadow: blue RANDOM-ITEM(red, green) 0 0, red 1px 2px; }',
+		'a { box-shadow: 0 0 red, blue calc(random(1px, 2px)) 0; }',
+		'a { text-shadow: blue RANDOM-ITEM(auto, 1px, 2px) 0 0, 1px 2px red; }',
+		'a { box-shadow: red random(1px, 2px) 0, blue 0 random(3px, 4px); }',
 		'a { box-shadow: red var(--x) 0, blue 0 0 var(--blur); }',
 		'a { text-decoration: underline 2px wavy red; text-decoration: overline underline 10% dotted blue; }',
 		'a { text-decoration: underline from-font solid; text-decoration: none; text-emphasis: open circle red; text-emphasis: circle open red; }',
@@ -261,6 +263,36 @@ test({
 			errors: 1,
 		},
 		{
+			code: 'a { columns: 3 20em / var(--height, 10em); }',
+			output: 'a { columns: 20em 3 / var(--height, 10em); }',
+			errors: 1,
+		},
+		{
+			code: 'a { columns: calc(3)20em/ /* height */ calc(var(--height) + 1px) !important; }',
+			output: 'a { columns: 20em calc(3)/ /* height */ calc(var(--height) + 1px) !important; }',
+			errors: 1,
+		},
+		{
+			code: 'a { columns: 3 20em / random(5em, 10em); }',
+			output: 'a { columns: 20em 3 / random(5em, 10em); }',
+			errors: 1,
+		},
+		{
+			code: 'a { columns: 3 20em /; columns: 3 20em / 10em / 2px; }',
+			output: 'a { columns: 20em 3 /; columns: 20em 3 / 10em / 2px; }',
+			errors: 2,
+		},
+		{
+			code: 'a { box-shadow: red 0 0, blue calc(random(1px, 2px)) 0; }',
+			output: 'a { box-shadow: 0 0 red, blue calc(random(1px, 2px)) 0; }',
+			errors: 1,
+		},
+		{
+			code: 'a { text-shadow: blue RANDOM-ITEM(auto, 1px, 2px) 0 0, red 1px 2px; }',
+			output: 'a { text-shadow: blue RANDOM-ITEM(auto, 1px, 2px) 0 0, 1px 2px red; }',
+			errors: 1,
+		},
+		{
 			code: 'a { border: calc(1px /* width */ + 2px) red solid; }',
 			output: 'a { border: calc(1px /* width */ + 2px) solid red; }',
 			errors: 1,
@@ -403,6 +435,49 @@ nodeTest('literal shadow fixes preserve validity after variable expansion', () =
 				const expandedValue = shadowValue.replace('var(--shadows)', () => replacement);
 				assert.equal(Boolean(lexer.matchProperty(property, expandedValue).matched), expectedValidity, expandedValue);
 			}
+		}
+	}
+});
+
+nodeTest('literal shadow fixes leave random functions in their original order', () => {
+	const linter = new Linter();
+	const config = {...plugin.configs.all, rules: {'cssicorn/consistent-value-order': 'error'}};
+	for (const property of ['box-shadow', 'text-shadow']) {
+		for (const [value, output] of [
+			[
+				'blue random(1px, 2px) random(3px, 4px), red 0 0, green random(5px, 6px) 0',
+				'blue random(1px, 2px) random(3px, 4px), 0 0 red, green random(5px, 6px) 0',
+			],
+			[
+				'var(--other, red random(1px, 2px) 0), blue 3px 4px, random-item(auto, green 5px 6px, purple 7px 8px)',
+				'var(--other, red random(1px, 2px) 0), 3px 4px blue, random-item(auto, green 5px 6px, purple 7px 8px)',
+			],
+			[
+				'rgb(random(0, 255) 0 0) 0 0, red 1px 2px',
+				'rgb(random(0, 255) 0 0) 0 0, 1px 2px red',
+			],
+		]) {
+			const result = linter.verifyAndFix(`a { ${property}: ${value}; }`, config, {filename: 'test.css'});
+			assert.equal(result.output, `a { ${property}: ${output}; }`);
+			assert.deepEqual(result.messages, []);
+			assert.deepEqual(linter.verifyAndFix(result.output, config, {filename: 'test.css'}), {...result, fixed: false});
+		}
+	}
+});
+
+nodeTest('columns prefix fixes preserve validity after height substitution', () => {
+	const linter = new Linter();
+	const config = {...plugin.configs.all, rules: {'cssicorn/consistent-value-order': 'error'}};
+	const value = '3 20em / var(--height)';
+	const output = '20em 3 / var(--height)';
+	const result = linter.verifyAndFix(`a { columns: ${value}; }`, config, {filename: 'test.css'});
+	assert.equal(result.output, `a { columns: ${output}; }`);
+	assert.deepEqual(result.messages, []);
+	assert.deepEqual(linter.verifyAndFix(result.output, config, {filename: 'test.css'}), {...result, fixed: false});
+	for (const [replacement, expectedValidity] of [['10em', true], ['calc(10em)', true], ['', false], ['red', false], ['10em / 20em', false]]) {
+		for (const columnValue of [value, output]) {
+			const expandedValue = columnValue.replace('var(--height)', () => replacement);
+			assert.equal(Boolean(lexer.matchProperty('columns', expandedValue).matched), expectedValidity, expandedValue);
 		}
 	}
 });

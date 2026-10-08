@@ -68,7 +68,7 @@ a {
 
 ## Limitations
 
-- Only checks lexer-recognized values, which can include values browsers reject. White space trimming may require `languageOptions.customSyntax`.
-- Ignores custom properties, CSS Modules interop declarations, and declarations containing random functions. Substitutions such as `var()`, `env()`, and `attr()` exclude their shadow layer, or the whole value for other properties. Unmatched shadow layers are skipped.
+- Only checks lexer-recognized component groups, which can appear in declarations browsers reject. White space trimming may require `languageOptions.customSyntax`.
+- Ignores custom properties and CSS Modules interop declarations. Skips component groups containing substitutions such as `var()`, `env()`, and `attr()`, or random functions.
 - Reports without fixing when the reordered span contains comments. Comments in unchanged components are preserved.
 - For `columns`, literal counts must be positive safe integers, and unitless zero is ignored; use `0px` for zero width. Ambiguous math component roles may go unreported.

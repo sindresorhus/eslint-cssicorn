@@ -1,4 +1,4 @@
-import {find, ident} from '@eslint/css-tree';
+import {ident} from '@eslint/css-tree';
 import {getVendorPrefix} from './shared/css-shorthand-properties.js';
 import {
 	getCanonicalLexerNode,
@@ -60,9 +60,6 @@ const isColumnComponent = node => {
 
 	return ['Identifier', 'Dimension', 'Function'].includes(node.type);
 };
-
-const hasRandomFunction = value => Boolean(find(value, node => node.type === 'Function'
-	&& ['random', 'random-item'].includes(normalizeCssIdentifier(node.name))));
 
 const getGroupProblem = (nodes, canonicalNodes, {order, matchResult, property, context}) => {
 	const components = nodes.map((node, index) => ({
@@ -145,11 +142,8 @@ const create = context => {
 		}
 
 		const isShadow = property === 'box-shadow' || property === 'text-shadow';
-		if (isShadow && hasRandomFunction(value)) {
-			return;
-		}
 
-		// Literal commas isolate shadow layers even when substitutions expand into additional layers.
+		// Literal commas isolate shadow layers even when substitutions expand into additional layers; a slash similarly isolates column width/count from height.
 		const groups = isShadow ? getCommaSeparatedGroups(value) : [{nodes: value.children}];
 		for (const {nodes} of groups) {
 			const slashIndex = property === 'columns' ? nodes.findIndex(node => node.type === 'Operator' && node.value === '/') : -1;
@@ -158,7 +152,7 @@ const create = context => {
 				continue;
 			}
 
-			const groupValue = {...value, children: nodes};
+			const groupValue = {...value, children: componentNodes};
 			if (hasSubstitutionOrRandomFunction(groupValue)) {
 				continue;
 			}
