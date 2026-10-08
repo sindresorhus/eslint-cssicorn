@@ -11,11 +11,9 @@
 
 <!-- Examples pair explicit zoom restrictions with zoom-permitting values. -->
 
-Pan-only `touch-action` values allow browser panning but disable browser pinch zoom. A carousel reserving one gesture axis can unintentionally prevent users from zooming. The [WHATWG Compatibility Standard](https://compat.spec.whatwg.org/#touch-action) recommends `pan-y pinch-zoom` for this case.
+This rule reports `touch-action: none`, single pan keywords, and valid pairs of one horizontal and one vertical pan keyword. The [WHATWG Compatibility Standard](https://compat.spec.whatwg.org/#touch-action) recommends `pan-y pinch-zoom` for carousels.
 
-This rule reports `none`, the six pan keywords (`pan-x`, `pan-left`, `pan-right`, `pan-y`, `pan-up`, and `pan-down`), and valid combinations containing one horizontal and one vertical pan keyword. Values such as `auto`, `manipulation`, and combinations containing `pinch-zoom` already permit pinch zoom.
-
-Suggestions add `pinch-zoom` to pan-only values or replace `none` with `pinch-zoom`. There is no automatic fix because changing browser gesture handling can interfere with application-owned gestures. `pinch-zoom` also permits multi-finger panning; replacing `none` still suppresses single-finger browser panning.
+Suggestions add `pinch-zoom` or replace `none` with it. This also permits multi-finger panning and can interfere with custom gestures, so there is no autofix. Replacing `none` still blocks single-finger browser panning.
 
 ## Examples
 
@@ -45,13 +43,13 @@ Suggestions add `pinch-zoom` to pan-only values or replace `none` with `pinch-zo
 
 ## Scope
 
-This rule checks each explicit declaration independently, including declarations later overridden by another value. It does not resolve variables, CSS-wide keywords, the cascade, selectors, or JavaScript gesture handlers. Invalid value combinations, custom properties, prefixed properties, feature-query conditions, and CSS Modules `:export`/`:import()` declarations are ignored.
+Each declaration is checked independently, even if overridden. Variables, CSS-wide keywords, invalid values, custom/prefixed properties, query conditions, and CSS Modules `:export`/`:import()` declarations are ignored.
 
-Suggestions permit pinch zoom locally. [Ancestor restrictions can still prevent browser zoom](https://www.w3.org/TR/pointerevents3/#determining-supported-direct-manipulation-behavior), and the rule does not guarantee that zoom is available across the page.
+Suggestions permit zoom locally; [ancestors can still restrict it](https://www.w3.org/TR/pointerevents3/#determining-supported-direct-manipulation-behavior). The rule does not resolve the cascade or JavaScript handlers and cannot guarantee page-wide zoom.
 
 ## When not to use it
 
-Drawing tools, maps, and other custom gesture surfaces may intentionally disable browser pinch zoom. Disable this rule for those declarations when the application needs to own the gestures:
+Disable this rule for drawing tools, maps, or other surfaces that intentionally handle pinch gestures:
 
 ```css
 .drawing-surface {
