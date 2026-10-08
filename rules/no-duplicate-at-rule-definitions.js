@@ -2,6 +2,7 @@
 import {decodeCssIdentifier, isKeyframesAtRule, normalizeCssIdentifier} from './utils/index.js';
 
 /**
+@import {Identifier, StringNode} from '@eslint/css-tree';
 @import {CssicornContext} from './rule/cssicorn-context.js';
 @import {CssicornRule} from './rule/to-eslint-rule.js';
 */
@@ -18,6 +19,9 @@ const definitionAtRules = new Set(['property', 'counter-style', 'position-try'])
 */
 const create = context => {
 	context.on(['StyleSheet', 'Block'], function * (parent) {
+		/**
+		@type {Map<string, Identifier | StringNode>}
+		*/
 		const firstDefinitions = new Map();
 
 		for (const atRule of parent.children) {

@@ -14,6 +14,8 @@ test.snapshot({
 		'@counter-style dots {} @counter-style Dots {}',
 		'@position-try --above {} @position-try --Above {}',
 		'@keyframes "fade" {} @keyframes "Fade" {}',
+		// Visually identical names with different code points are distinct.
+		'@keyframes café {} @keyframes cafe\u0301 {}',
 		'@keyframes --shared {} @property --shared {} @counter-style --shared {} @position-try --shared {}',
 		'@-webkit-keyframes fade {} @keyframes fade {} @-moz-keyframes fade {} @-o-keyframes fade {}',
 		'@keyframes fade {} @media (width > 40rem) { @keyframes fade {} }',
