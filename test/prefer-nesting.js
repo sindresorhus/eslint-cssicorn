@@ -10,7 +10,6 @@ const {test} = getTester(import.meta);
 test({
 	valid: [
 		'.page .card {} .other .page .card .title {}',
-		'.outer { > .card {} > .card .title {} }',
 		'.page:scope .card {} .page:scope .card .title {}',
 		'@scope (.page) { .page .card {} .page .card .title {} }',
 		'.card {} @container (width > 0px) { .card { & .title {} } }',
@@ -24,6 +23,11 @@ test({
 		'.outer { .target :is(.foo > &, .baz) {} }',
 	],
 	invalid: [
+		{
+			code: '.outer { > .card {} > .card .title {} }',
+			output: '.outer { > .card { & .title {} } }',
+			errors: 1,
+		},
 		...['.page .card', '.page > .card', '.page + .card', '.page ~ .card'].map(parent => ({
 			code: `${parent} { color: red; } ${parent} .title, ${parent}:hover { color: blue; }`,
 			output: `${parent} { color: red; & .title, &:hover { color: blue; } }`,
@@ -96,7 +100,7 @@ test({
 		},
 		{
 			code: ':is(.foo + .bar, .baz).active { color: red; & .title { color: blue; } }',
-			output: ':is(.foo + .bar, .baz) { &.active { color: red; & .title { color: blue; } } }',
+			output: '.foo + .bar, .baz { &.active { color: red; & .title { color: blue; } } }',
 			errors: 1,
 		},
 		{
@@ -386,7 +390,7 @@ test({
 		},
 		{
 			code: ':is([data-kind="CARD" i], .card) .title { color: blue; }',
-			output: ':is([data-kind="CARD" i], .card) { .title { color: blue; } }',
+			output: '[data-kind="CARD" i], .card { .title { color: blue; } }',
 			errors: 1,
 		},
 	],
@@ -407,7 +411,7 @@ test.snapshot({
 		'a > :is(.foo) {}',
 		'a > :is(.foo, .bar), b {}',
 		'a::before :is(.foo, .bar) {}',
-		'.parent { &:is(:focus, :hover) svg {} }',
+		'.parent { &:is(:focus, :hover) {} }',
 		'.parent { & :is(.foo, .bar) {} }',
 		'.parent { :is(.foo, .bar):not(&) {} }',
 		'.parent { :is(.foo, .bar) > & {} }',
@@ -960,13 +964,13 @@ test({
 		'a :is(.foo).active {}',
 		'a :where(.foo).active {}',
 		'a::before :is(.foo, .bar).active {}',
-		'.outer { a :where(&, .bar).active {} }',
 		'@scope (.outer) { a :is(.foo, .bar).active {} }',
 		'@namespace url("http://www.w3.org/1999/xhtml"); a :where(.foo, .bar) b {}',
 		String.raw`.card:\6c ang(en) {} .card:\6c ang(en) .title {}`,
 		'.card:visited {} .card:visited .title {}',
 	],
 	invalid: [
+		{code: '.outer { a :where(&, .bar).active {} }', output: '.outer { a :where(&, .bar) { &.active {} } }', errors: 1},
 		...['is', 'where'].flatMap(name => ['.active', '::before', ' b', ' > b', ' + b', ' ~ b'].map(suffix => ({
 			code: `a :${name}(.foo, #bar)${suffix} { color: red; }`,
 			output: `a { :${name}(.foo, #bar)${suffix} { color: red; } }`,
@@ -1222,7 +1226,6 @@ test({
 		'.card .title, .other .body {}',
 		'.card .title, .card .body:unknown {}',
 		'.outer { & .title, & .body {} }',
-		'.outer { > .card .title, > .card .body {} }',
 		'@scope (.outer) { .card .title, .card .body {} }',
 		'@namespace url("http://www.w3.org/1999/xhtml"); .card .title, .card .body {}',
 		'.card:is(.foo) {}',
@@ -1249,6 +1252,11 @@ test({
 		{
 			code: '.page .card {} .page .card .title, .page .other .body {}',
 			output: '.page { & .card {} & .card .title, & .other .body {} }',
+			errors: 1,
+		},
+		{
+			code: '.outer { > .card .title, > .card .body {} }',
+			output: '.outer { > .card { & .title, & .body {} } }',
 			errors: 1,
 		},
 		{

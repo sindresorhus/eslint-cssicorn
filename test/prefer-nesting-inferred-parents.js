@@ -7,6 +7,38 @@ import {getTester} from './utils/test.js';
 const {test} = getTester(import.meta, 'prefer-nesting');
 
 const cases = [
+	...['>', '+', '~'].flatMap(combinator => ['', '&', '&&', ':where(&)'].map(reference => {
+		const parents = ['.card', '.panel'].map(parent => `${combinator} ${parent}${reference}`);
+		return {
+			code: `.outer, #missing { ${parents.map(parent => `${parent} .title, ${parent} .body`).join(', ')} { color: red; &::before { content: "test"; } } }`,
+			output: `.outer, #missing { ${parents.join(', ')} { & .title, & .body { color: red; &::before { content: "test"; } } } }`,
+		};
+	})),
+	...[
+		['> .card', '+ .panel'],
+		['> .card', '&.panel'],
+		['> &.card', '&&.panel'],
+		['> .card:where(&)', '.panel'],
+	].map(parents => ({
+		code: `.outer, #missing { ${parents.map(parent => `${parent}::before, ${parent}::after`).join(', ')} { content: "test"; } }`,
+		output: `.outer, #missing { ${parents.join(', ')} { &::before, &::after { content: "test"; } } }`,
+	})),
+	{
+		code: '.outer { > .card .title, + .panel .title { color: red; } > .card .body, + .panel .body { color: blue; } }',
+		output: '.outer { > .card, + .panel { & .title { color: red; } & .body { color: blue; } } }',
+	},
+	{
+		code: '.outer { > .card .title, + .panel .title { color: red; } @media (color) { > .card .body, + .panel .body { color: blue; } } }',
+		output: '.outer { > .card, + .panel { & .title { color: red; } @media (color) { & .body { color: blue; } } } }',
+	},
+	...['\n', '\r\n'].map(lineBreak => ({
+		code: ['.outer {', '  > .card .title, + .panel .title, > .card .body, + .panel .body {', '    color: red;', '  }', '}'].join(lineBreak),
+		output: ['.outer {', '  > .card, + .panel {', '    & .title, & .body {', '      color: red;', '    }', '  }', '}'].join(lineBreak),
+	})),
+	{
+		code: '.outer { .a:where(&) .title, .b:where(&) .title, .a:where(&) .body, .b:where(&) .body { color: blue; } }',
+		output: '.outer { .a:where(&), .b:where(&) { & .title, & .body { color: blue; } } }',
+	},
 	{
 		code: '.a .title, .b .title, .a .body, .b .body { color: blue; }',
 		output: '.a, .b { & .title, & .body { color: blue; } }',
@@ -127,6 +159,14 @@ const cases = [
 
 test({
 	valid: [
+		'.outer { > .card .title, + .panel .title, > .card .body { color: red; } }',
+		'.outer { > .card .title, + #panel .title, > .card .body, + #panel .body { color: red; } }',
+		'.outer, #missing { > &.card .title, &.panel .title, > &.card .body, &.panel .body { color: red; } }',
+		'.outer, #missing { > .card:where(&) .title, .panel:where(&) .title, > .card:where(&) .body, .panel:where(&) .body { color: red; } }',
+		'.outer { > .card .title, + .panel .title, > .card & .body, + .panel & .body { color: red; } }',
+		'.outer { > .card:has(&) .title, + .panel:has(&) .title, > .card:has(&) .body, + .panel:has(&) .body { color: red; } }',
+		'.outer { > :is(#1, .card) .title, + #panel .title, > :is(#1, .card) .body, + #panel .body { color: red; } }',
+		'@scope (.outer) { .outer { > .card .title, + .panel .title, > .card .body, + .panel .body { color: red; } } }',
 		'.a .title, .b .title, .a .body { color: blue; }',
 		'.a .title, .b .title, .a .body, .b .other { color: blue; }',
 		'.a::before, .b::after { content: "test"; }',
@@ -136,7 +176,6 @@ test({
 		'.outer, #missing { &.a .title, &&.b .title, &.a .body, &&.b .body { color: blue; } }',
 		'.outer { &.a .title, &.b .title, &.a & .body, &.b & .body { color: blue; } }',
 		'.outer { .a:has(> &) .title, .b:has(> &) .title, .a:has(> &) .body, .b:has(> &) .body { color: blue; } }',
-		'.outer { .a:where(&) .title, .b:where(&) .title, .a:where(&) .body, .b:where(&) .body { color: blue; } }',
 		'.a:unknown .title, .b:unknown .title, .a:unknown .body, .b:unknown .body { color: blue; }',
 		'.a:state(active) .title, .b:state(active) .title, .a:state(active) .body, .b:state(active) .body { color: blue; }',
 		[
@@ -149,6 +188,7 @@ test({
 		'@scope (.outer) { .a .title, .b .title, .a .body, .b .body { color: blue; } }',
 	],
 	invalid: [
+		{code: '.outer { > .card .title, + .panel /* keep */ .title, > .card .body, + .panel .body { color: red; } }', errors: [{messageId: 'prefer-nesting/related-rules'}]},
 		...cases.map(({code, output}) => ({code, output, errors: [{messageId: 'prefer-nesting/related-rules'}]})),
 		...[
 			'.a .title, .b /* keep */ .title, .a .body, .b .body { color: blue; }',

@@ -62,7 +62,7 @@ Message:
     |   ^^^^^^^^^^^^^^^^^^^ Prefer CSS nesting over \`:is()\`.
 
 Output:
-  1 | a { :is(:hover, :focus) { color: red; } }
+  1 | a { :hover, :focus { color: red; } }
 
 `;
 
@@ -79,7 +79,7 @@ Message:
     |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Prefer CSS nesting over \`:is()\`.
 
 Output:
-  1 | a { :is(.foo:not(.disabled), .bar:not(.hidden)) { color: red; } }
+  1 | a { .foo:not(.disabled), .bar:not(.hidden) { color: red; } }
 
 `;
 
@@ -96,7 +96,7 @@ Message:
     |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Prefer CSS nesting over \`:is()\`.
 
 Output:
-  1 | a { :is(:nth-child(2n), :nth-last-child(2n)) { color: red; } }
+  1 | a { :nth-child(2n), :nth-last-child(2n) { color: red; } }
 
 `;
 
@@ -164,7 +164,7 @@ Message:
     |   ^^^^^^^^^^^^^^^^^^^^ Prefer CSS nesting over \`:is()\`.
 
 Output:
-  1 | a { :is(:where(#foo), *) { color: red; } }
+  1 | a { :where(#foo), * { color: red; } }
 
 `;
 
@@ -687,7 +687,7 @@ Message:
     | ^^^^^^^^^^^^^^^^^^^^ Prefer CSS nesting over \`:is()\`.
 
 Output:
-  1 | :is(.foo .bar, .baz) { & a {} }
+  1 | .foo .bar, .baz { & a {} }
 
 `;
 
@@ -704,7 +704,7 @@ Message:
     | ^^^^^^^^^^^^^^^^^^^^^^ Prefer CSS nesting over \`:is()\`.
 
 Output:
-  1 | :is(.foo > .bar, .baz) { &.active {} }
+  1 | .foo > .bar, .baz { &.active {} }
 
 `;
 
@@ -721,7 +721,7 @@ Message:
     | ^^^^^^^^^^^^^^^^^^^^ Prefer CSS nesting over \`:is()\`.
 
 Output:
-  1 | :is(.foo .bar, .baz) { > a {} }
+  1 | .foo .bar, .baz { > a {} }
 
 `;
 

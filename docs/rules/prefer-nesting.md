@@ -69,7 +69,7 @@ a {
 }
 ```
 
-Factor shared compound suffixes and contextual overrides. A literal compound parent can appear anywhere; inside ancestor style rules, contextual overrides require an explicit `&` in the parent:
+Factor shared compound suffixes and contextual overrides. Nested contextual overrides need an existing `&` in the parent when the prefix contains a combinator:
 
 ```css
 /* ❌ */
@@ -83,7 +83,25 @@ Factor shared compound suffixes and contextual overrides. A literal compound par
 }
 ```
 
-Attached groups and suffixes use `&`:
+Shared prefixes can begin with `>`, `+`, or `~`:
+
+```css
+/* ❌ */
+.card {
+	> .item { color: red; }
+	> .item:hover { color: blue; }
+}
+
+/* ✅ */
+.card {
+	> .item {
+		color: red;
+		&:hover { color: blue; }
+	}
+}
+```
+
+Attached `:is()` groups use `&` at each nesting level:
 
 ```css
 /* ❌ */
@@ -93,26 +111,30 @@ Attached groups and suffixes use `&`:
 
 /* ✅ */
 .card {
-	&:is(.foo, #bar)::before {
-		content: "test";
+	&.foo, &#bar {
+		&::before {
+			content: "test";
+		}
 	}
 }
 ```
 
-Leading and trailing groups also support `>`, `+`, and `~`. Trailing groups after these combinators stay wrapped.
-
-Parsed standard pseudo-classes, including `:host()`, can be retained as parents. Existing `&` references must stay in one retained literal parent. Grouped parents require equal inherited specificity and no functional `&` references.
+Groups support type selectors, common pseudo-classes, attributes, and the `>`, `+`, and `~` combinators. Existing `&` references keep their original ancestor context.
 
 ## Specificity
 
-Trailing `:is()` is unwrapped only when its arguments have equal specificity and unwrapping preserves [forgiving selector-list behavior](https://drafts.csswg.org/selectors/#forgiving-selector). Complex arguments and arguments with pseudo-classes, attribute flags, namespace syntax, or invalid IDs stay wrapped.
+Trailing `:is()` is unwrapped only when its arguments have equal specificity and unwrapping preserves [forgiving selector-list behavior](https://drafts.csswg.org/selectors/#forgiving-selector). Complex trailing arguments and uncertain selectors stay wrapped.
 
-`:where()` and uncertain forgiving branches stay wrapped. Exact declaration-only conditional overrides preserve mixed parent specificity and pseudo-elements without adding `&`.
+`:where()` stays wrapped. Related grouped parents require equal specificity, including inherited specificity. Functional `&` references in grouped parents are supported only inside top-level `:where()` functions.
 
-Leading `:is()` groups preserve their maximum specificity, even with mixed arguments. The result can trigger [`no-nesting-with-mixed-specificity`](./no-nesting-with-mixed-specificity.md); disable that rule for intentional mixed-specificity nesting.
+Inside nested rules, groups stay wrapped when expansion could change ancestor matching. Exact declaration-only conditional overrides preserve mixed parent specificity and pseudo-elements without adding `&`.
+
+Leading and attached `:is()` groups preserve their maximum specificity, even with mixed arguments. The result can trigger [`no-nesting-with-mixed-specificity`](./no-nesting-with-mixed-specificity.md); disable that rule for intentional mixed-specificity nesting.
 
 ## Limitations
 
-Inferred groups use the first compound as parent. Conditional discovery follows first-child paths; every moved child must relate to the parent. `:is()` and `:where()` conversions require one outer selector and at least two arguments.
+Inferred groups use the first compound as parent, including a leading combinator. Conditional discovery follows first-child paths; every moved child must relate to the parent. `:is()` and `:where()` conversions require one outer selector and at least two arguments. Attached groups need a following suffix to be unwrapped.
 
-Skips ambiguous grouped matches, parser-sensitive type/pseudo-class prefixes, opaque parent arguments, `@scope`, and files with `@namespace`. Comments, missing semicolons, or unsafe formatting can prevent fixes.
+Skips ambiguous grouped matches, parser-sensitive type/pseudo-class prefixes, opaque parent arguments, `@scope`, and files with `@namespace`. Suffix and contextual factoring skip selectors beginning with a combinator. Related parent factoring skips ancestor references inside `:host()` or `:host-context()`. Comments, missing semicolons, or unsafe formatting can prevent fixes.
+
+Autofixes target HTML and SVG elements. Other XML namespaces are unsupported.
