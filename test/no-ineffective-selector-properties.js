@@ -333,7 +333,6 @@ test({
 		'a:visited { &::before { font-weight: bold; } }',
 		'::marker { & { padding: 1rem; } }',
 		'a:visited, ::selection { & { font-weight: bold; } }',
-		'a:visited { :is(&) { font-weight: bold; } }',
 		'a:visited { &:hover, .ordinary { font-weight: bold; } }',
 		'a:visited { @scope (.ordinary) { font-weight: bold; } }',
 		'@scope (.ordinary) { & { font-weight: bold; } }',
@@ -404,6 +403,62 @@ test({
 		},
 		{
 			code: 'input::placeholder { direction: /* retain */ rtl; }',
+			errors: 1,
+		},
+	],
+});
+
+test({
+	valid: [
+		'a:visited { :is(&, .ordinary) { font-weight: bold; } }',
+		'a:visited, .ordinary { :where(&) { font-weight: bold; } }',
+		'a:visited { :is(& span) { font-weight: bold; } }',
+		'a:visited { :where(& + span) { font-weight: bold; } }',
+		'a:visited { :is(&)::before { font-weight: bold; } }',
+		'a:visited { :is(&:before) { font-weight: bold; } }',
+		'::selection { :where(&) { padding: 1rem; } }',
+		'a:visited { :not(&) { font-weight: bold; } }',
+		'a:visited { :has(&) { font-weight: bold; } }',
+		'a:visited { :is(&:future-custom) { font-weight: bold; } }',
+		'a:visited { :where(&:global(.ordinary)) { font-weight: bold; } }',
+		'a:visited:global(.ordinary) { :is(&) { font-weight: bold; } }',
+		'a:visited { :is(:where(&), .ordinary) { font-weight: bold; } }',
+		'a:visited { :is(&), .ordinary { font-weight: bold; } }',
+		'a:visited { :is(&) span { font-weight: bold; } }',
+		'@scope (a:visited) { :where(&) { font-weight: bold; } }',
+		':where(&) { font-weight: bold; }',
+		'a:visited { :where(&) { color: purple; border: 1px solid red; } }',
+	],
+	invalid: [
+		...[
+			':is(&)',
+			':where(&)',
+			':is(&:hover, &:focus)',
+			':is(&, a:visited)',
+			':is(:where(&))',
+			':IS(&:HOVER)',
+		].map(selector => ({
+			code: `a:visited { ${selector} { font-weight: bold; color: purple; } }`,
+			output: `a:visited { ${selector} {  color: purple; } }`,
+			errors: [{messageId: 'no-ineffective-selector-properties', data: {property: 'font-weight', selectors: ':visited'}}],
+		})),
+		{
+			code: 'a:visited { :where(&) { &:hover { font-weight: bold; } } }',
+			output: 'a:visited { :where(&) { &:hover {  } } }',
+			errors: 1,
+		},
+		{
+			code: ':where(a:visited) { @media (width > 1px) { :is(&:hover) { font-weight: bold; } } }',
+			output: ':where(a:visited) { @media (width > 1px) { :is(&:hover) {  } } }',
+			errors: 1,
+		},
+		{
+			code: 'a:visited { :where(&) { @supports (display: grid) { font-weight: var(--weight) !important; } } }',
+			output: 'a:visited { :where(&) { @supports (display: grid) {  } } }',
+			errors: 1,
+		},
+		{
+			code: 'a:visited { :is(&) { font-weight: /* retain */ bold; } }',
 			errors: 1,
 		},
 	],

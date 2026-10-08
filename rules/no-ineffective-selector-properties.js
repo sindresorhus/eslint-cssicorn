@@ -108,9 +108,10 @@ const standardNonFunctionalPseudoSelectors = new Set(nonFunctionalPseudoSelector
 Check whether a pseudo-class requires its target to be a visited link.
 
 @param {PseudoClassSelectorPlain} node
+@param {boolean} [parentIsVisited=false]
 @returns {boolean}
 */
-const isVisitedPseudoClass = node => {
+const isVisitedPseudoClass = (node, parentIsVisited = false) => {
 	const name = normalizeCssIdentifier(node.name);
 	if (name === 'visited') {
 		return node.children === null;
@@ -123,11 +124,11 @@ const isVisitedPseudoClass = node => {
 	const selectorList = getSelectorArgument(node);
 	return selectorList?.type === 'SelectorList'
 		&& selectorList.children.length > 0
-		&& selectorList.children.every(selector => selector.type === 'Selector' && getSelectorRestriction(selector)?.selector === ':visited');
+		&& selectorList.children.every(selector => selector.type === 'Selector' && getSelectorRestriction(selector, parentIsVisited)?.selector === ':visited');
 };
 
 /**
-Get the restriction on the final selected compound, including all-visited `:is()` and `:where()` arguments and direct nesting selectors with all-visited parents.
+Get the restriction on the final selected compound, including all-visited `:is()` and `:where()` arguments and nesting selectors with all-visited parents.
 
 @param {SelectorPlain} selector
 @param {boolean} [parentIsVisited=false]
@@ -165,7 +166,7 @@ const getSelectorRestriction = (selector, parentIsVisited = false) => {
 		return;
 	}
 
-	if (compound.some(node => (node.type === 'PseudoClassSelector' && isVisitedPseudoClass(node))
+	if (compound.some(node => (node.type === 'PseudoClassSelector' && isVisitedPseudoClass(node, parentIsVisited))
 		|| (node.type === 'NestingSelector' && parentIsVisited))) {
 		return {selector: ':visited', properties: visitedProperties};
 	}
@@ -188,8 +189,9 @@ const getEnclosingRestrictions = (node, sourceCode) => {
 
 			// Selector lists contain selectors, but the upstream type currently allows any CSS node.
 			const selectors = /** @type {SelectorPlain[]} */ (parent.prelude.children);
-			const parentIsVisited = selectors.some(selector => selector.children.some(child => child.type === 'NestingSelector'))
-				&& getEnclosingRestrictions(parent, sourceCode)?.every(restriction => restriction.selector === ':visited');
+			const parentIsVisited = selectors.some(selector => selector.children.some(child => child.type === 'NestingSelector'
+				|| (child.type === 'PseudoClassSelector' && child.children !== null)))
+			&& getEnclosingRestrictions(parent, sourceCode)?.every(restriction => restriction.selector === ':visited');
 			const restrictions = selectors.map(selector => getSelectorRestriction(selector, parentIsVisited));
 			return restrictions.length > 0 && restrictions.every(restriction => restriction !== undefined) ? restrictions : undefined;
 		}

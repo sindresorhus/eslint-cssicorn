@@ -75,7 +75,7 @@ Preserves partially effective shorthands, including `background` on highlights a
 
 A declaration is reported only when every selector makes it ineffective. For example, `padding` is allowed with `::selection, .ordinary`, and `font-size` with `::selection, ::marker`.
 
-Only targets on the final selected compound are checked, including `li::before::marker` and `:is(.first, .second)::marker`. Parsed `:is()` and `:where()` arguments are also checked when every branch selects a visited link. A direct `&` on the final compound, such as `&:hover` or `.wrapper &`, inherits visited restrictions when every parent selector selects a visited link. Other functional arguments and visited restrictions on ancestors, siblings, or pseudo-elements are not analyzed.
+Only targets on the final selected compound are checked, including `li::before::marker` and `:is(.first, .second)::marker`. Parsed `:is()` and `:where()` arguments are also checked when every branch selects a visited link. A final `&`, including inside these arguments as in `:where(&)`, inherits visited restrictions when every parent selector selects a visited link. Other functional arguments and visited restrictions on ancestors, siblings, or pseudo-elements are not analyzed.
 
 Unknown or preprocessing pseudo-selectors in analyzed selectors, such as CSS Modules' `:global()` and Vue's `:deep()`, cause that branch to be skipped, suppressing reports for the list.
 
