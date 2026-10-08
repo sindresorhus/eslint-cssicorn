@@ -15,27 +15,25 @@ This rule offers editor suggestions to replace directly convertible `transform` 
 
 ## Examples
 
+After converting both declarations, remove the repeated hover translation so the hover state only changes scale.
+
 ```css
 /* ❌ */
 .button {
 	transform: translateY(-2px);
+
+	&:hover {
+		transform: translateY(-2px) scale(1.05);
+	}
 }
 
 /* ✅ */
 .button {
 	translate: 0 -2px;
-}
-```
 
-```css
-/* ❌ */
-.button:hover {
-	transform: scale(1.05);
-}
-
-/* ✅ */
-.button:hover {
-	scale: 1.05;
+	&:hover {
+		scale: 1.05;
+	}
 }
 ```
 
