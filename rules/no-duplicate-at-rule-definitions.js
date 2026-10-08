@@ -29,7 +29,6 @@ const create = context => {
 				atRule.type !== 'Atrule'
 				|| atRule.block?.type !== 'Block'
 				|| atRule.prelude?.type !== 'AtrulePrelude'
-				|| atRule.prelude.children.length !== 1
 			) {
 				continue;
 			}
@@ -40,28 +39,43 @@ const create = context => {
 				continue;
 			}
 
-			const [nameNode] = atRule.prelude.children;
-			if (nameNode.type !== 'Identifier' && !(isKeyframes && nameNode.type === 'String')) {
+			const {children} = atRule.prelude;
+			if (atRuleName === 'property') {
+				if (
+					children.length % 2 !== 1
+					|| children.some((node, index) => index % 2 === 0
+						? node.type !== 'Identifier'
+						: node.type !== 'Operator' || node.value !== ',')
+				) {
+					continue;
+				}
+			} else if (children.length !== 1) {
 				continue;
 			}
 
-			const name = nameNode.type === 'Identifier' ? decodeCssIdentifier(nameNode.name) : nameNode.value;
-			const key = `${atRuleName}/${name}`;
-			const firstDefinition = firstDefinitions.get(key);
-			if (!firstDefinition) {
-				firstDefinitions.set(key, nameNode);
-				continue;
-			}
+			for (const nameNode of children) {
+				if (nameNode.type !== 'Identifier' && !(isKeyframes && nameNode.type === 'String')) {
+					continue;
+				}
 
-			yield {
-				node: nameNode,
-				messageId: MESSAGE_ID,
-				data: {
-					atRule: atRuleName,
-					name: JSON.stringify(name).slice(1, -1),
-					line: String(context.sourceCode.getLoc(firstDefinition).start.line),
-				},
-			};
+				const name = nameNode.type === 'Identifier' ? decodeCssIdentifier(nameNode.name) : nameNode.value;
+				const key = `${atRuleName}/${name}`;
+				const firstDefinition = firstDefinitions.get(key);
+				if (!firstDefinition) {
+					firstDefinitions.set(key, nameNode);
+					continue;
+				}
+
+				yield {
+					node: nameNode,
+					messageId: MESSAGE_ID,
+					data: {
+						atRule: atRuleName,
+						name: JSON.stringify(name).slice(1, -1),
+						line: String(context.sourceCode.getLoc(firstDefinition).start.line),
+					},
+				};
+			}
 		}
 	});
 };

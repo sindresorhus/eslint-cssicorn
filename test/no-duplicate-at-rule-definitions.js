@@ -35,8 +35,23 @@ test.snapshot({
 		'@counter-style "dots" {} @counter-style "dots" {}',
 		'@property "--color" {} @property "--color" {}',
 		'@position-try "--above" {} @position-try "--above" {}',
-		// Multiple-name registrations are outside this rule's single-name contract.
-		'@property --color, --size {} @property --color, --size {} @property --color {}',
+		// Comma-separated registrations use the same case-sensitive names and parent boundary.
+		'@property --color, --size {} @property --Color, --Size {}',
+		'@property --color, --size {} @property --width, --height {}',
+		'@supports (display: grid) { @property --color, --size {} } @supports (display: grid) { @property --color, --size {} }',
+		'@property --color, --size; @property --color {} @property --size {}',
+		'@property --color, --size {} @keyframes --color {}',
+		// Malformed name lists are ignored entirely.
+		'@property --color, {} @property --color {}',
+		'@property , --color {} @property --color {}',
+		'@property --color,, --size {} @property --color {} @property --size {}',
+		'@property --color --size {} @property --color {} @property --size {}',
+		'@property --color / --size {} @property --color {} @property --size {}',
+		'@property "--color", --size {} @property --size {}',
+		'@property --color, var(--size) {} @property --color {}',
+		'@keyframes fade, slide {} @keyframes fade, slide {}',
+		'@counter-style dots, stars {} @counter-style dots, stars {}',
+		'@position-try --above, --below {} @position-try --above, --below {}',
 		// Predefined counter-style case aliases are intentionally not resolved.
 		'@counter-style upper-roman {} @counter-style UPPER-ROMAN {}',
 		'a { --definition: "@keyframes fade {} @keyframes fade {}"; background: url("@keyframes fade {}"); }',
@@ -84,12 +99,43 @@ test.snapshot({
 		'@property --color {} @property --color { syntax: "<color>"; inherits: false; initial-value: red; }',
 		'@property --color { syntax: "<color>"; inherits: false; initial-value: red; } @property --color { syntax: "<color>"; inherits: false; initial-value: future-color(red); }',
 		String.raw`@-w\65 bkit-keyframes fade {} @-webkit-keyframes fade {}`,
+		'@property --color, --size {} @property --color {}',
+		'@property --color {} @property --size, --color {}',
+		'@property --color, --size {} @property --size, --color {}',
+		'@property --color, --color {}',
+		'@property --color, --color, --color {}',
+		'@property --color, --size {} @property --color, --size {} @property --color {}',
+		String.raw`@\70 roperty --c\6f lor, --size {} @PROPERTY --color {}`,
+		'@media (width > 40rem) { @property --color, --size {} @property --size {} }',
 	],
 });
 
 test({
 	valid: [],
 	invalid: [
+		{
+			code: '@property --color,\r\n  --size {}\r\n/* keep */ @property --size, --color {}',
+			errors: [
+				{
+					messageId: 'no-duplicate-at-rule-definitions',
+					data: {atRule: 'property', name: '--size', line: '2'},
+					line: 3,
+					column: 22,
+					endLine: 3,
+					endColumn: 28,
+					suggestions: [],
+				},
+				{
+					messageId: 'no-duplicate-at-rule-definitions',
+					data: {atRule: 'property', name: '--color', line: '1'},
+					line: 3,
+					column: 30,
+					endLine: 3,
+					endColumn: 37,
+					suggestions: [],
+				},
+			],
+		},
 		{
 			code: '@keyframes fade {}\r\n/* keep */ @keyframes "fade" {}\r\n@keyframes fade {}',
 			errors: [
