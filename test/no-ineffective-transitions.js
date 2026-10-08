@@ -4,6 +4,82 @@ const {test} = getTester(import.meta);
 
 test({
 	valid: [
+		'a { transition: -webkit-backface-visibility 1s allow-discrete; }',
+		'a { transition: backface-visibility 1s, -webkit-backface-visibility 1s allow-discrete; }',
+		'a { transition: -webkit-backface-visibility 1s, backface-visibility 1s allow-discrete; }',
+		'a { transition: flex-direction 1s, -webkit-flex-flow 1s allow-discrete; }',
+		'a { transition: -webkit-flex-direction 1s, flex-flow 1s allow-discrete; }',
+		'a { transition: -webkit-flex-flow 1s, flex-direction 1s allow-discrete, -webkit-flex-wrap 1s allow-discrete; }',
+		'a { transition: -webkit-flex-direction 1s, -webkit-flex-wrap 1s, flex-flow 1s allow-discrete; }',
+		'a { transition: animation-name 1s, -webkit-animation 1s; }',
+		'a { transition: -webkit-mask-box-image-repeat 1s, mask-border 1s allow-discrete; }',
+		'a { transition: -webkit-display 1s, -moz-backface-visibility 1s, -webkit-box-align 1s; }',
+		'a { transition-property: -webkit-box-sizing; }',
+		{
+			code: 'a { transition: -webkit-backface-visibility 1s; }',
+			languageOptions: {customSyntax: {properties: {'backface-visibility': null}}},
+		},
+	],
+	invalid: [
+		...[
+			'-webkit-align-content',
+			'-webkit-align-items',
+			'-webkit-align-self',
+			'-webkit-backface-visibility',
+			'-webkit-box-sizing',
+			'-webkit-flex-direction',
+			'-webkit-flex-flow',
+			'-webkit-flex-wrap',
+			'-webkit-justify-content',
+			'-webkit-transform-style',
+			'-webkit-mask-box-image-repeat',
+		].map(property => ({
+			code: `a { transition: ${property} 1s; }`,
+			errors: [{
+				messageId: 'no-ineffective-transitions/discrete',
+				data: {property},
+				suggestions: [{messageId: 'no-ineffective-transitions/allow-discrete', output: `a { transition: allow-discrete ${property} 1s; }`}],
+			}],
+		})),
+		...['-webkit-animation-name', '-webkit-transition-duration'].map(property => ({
+			code: `a { transition-property: ${property}; }`,
+			errors: [{messageId: 'no-ineffective-transitions/non-animatable', data: {property}, suggestions: 0}],
+		})),
+		{
+			code: 'a { transition: backface-visibility 1s allow-discrete, -webkit-backface-visibility 1s; }',
+			errors: [{
+				messageId: 'no-ineffective-transitions/discrete',
+				data: {property: '-webkit-backface-visibility'},
+				suggestions: [{
+					messageId: 'no-ineffective-transitions/allow-discrete',
+					output: 'a { transition: backface-visibility 1s allow-discrete, allow-discrete -webkit-backface-visibility 1s; }',
+				}],
+			}],
+		},
+		{
+			code: 'a { transition: -webkit-flex-flow 1s, flex-direction 1s allow-discrete; }',
+			errors: [{
+				messageId: 'no-ineffective-transitions/discrete',
+				data: {property: '-webkit-flex-flow'},
+				suggestions: [{messageId: 'no-ineffective-transitions/allow-discrete', output: 'a { transition: allow-discrete -webkit-flex-flow 1s, flex-direction 1s allow-discrete; }'}],
+			}],
+		},
+		{
+			code: 'a { TRANSITION-PROPERTY: -WEBKIT-BOX-SIZING; transition-behavior: /* keep */ normal !important; }',
+			errors: [{
+				messageId: 'no-ineffective-transitions/discrete',
+				data: {property: '-WEBKIT-BOX-SIZING'},
+				suggestions: [{
+					messageId: 'no-ineffective-transitions/allow-discrete',
+					output: 'a { TRANSITION-PROPERTY: -WEBKIT-BOX-SIZING; transition-behavior: /* keep */ allow-discrete !important; }',
+				}],
+			}],
+		},
+	],
+});
+
+test({
+	valid: [
 		'a { transition-property: background-repeat; }',
 		'a { transition: background-repeat 1s allow-discrete; }',
 		...[

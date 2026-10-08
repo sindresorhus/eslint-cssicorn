@@ -48,12 +48,12 @@ The `transition` shorthand defaults omitted behavior to `normal`. Put a separate
 
 Also checks shorthands whose longhands all have the same known animation type, such as `overflow`, `background-repeat`, and `transition`. Explicit `initial` and `unset` on `transition-behavior`, `transition`, or `all` establish `normal` behavior.
 
-Later matching targets, `all`, and known shorthand expansions override earlier entries. Resolves `word-wrap` as an alias of `overflow-wrap`.
+Later matching targets, `all`, and known shorthand expansions override earlier entries. Resolves `word-wrap` and audited `-webkit-` target aliases, such as `-webkit-backface-visibility`.
 
 ## Limitations
 
 - Resolves declarations within one style block, respecting order and `!important`. Separate rules, omitted longhands, substitutions such as `var()`, and unresolved CSS-wide values remain unknown. `transition-property: display` alone is not reported.
-- Uses conservative Webref coverage. Skips custom properties, vendor-prefixed targets, mixed or unknown shorthand types, and special interpolation cases such as `visibility` and image-source properties. Logical-to-physical relationships remain unresolved.
+- Uses conservative Webref coverage. Skips custom properties, unaudited vendor-prefixed targets, mixed or unknown shorthand types, and special interpolation cases such as `visibility` and image-source properties. Logical-to-physical relationships remain unresolved.
 
 > [!NOTE]
 > Entry transitions from `display: none` can also require [`@starting-style`](https://www.w3.org/TR/css-transitions-2/#defining-before-change-style). `allow-discrete` alone does not establish a starting style.
