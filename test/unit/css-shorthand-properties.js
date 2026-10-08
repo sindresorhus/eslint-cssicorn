@@ -17,3 +17,12 @@ test('additional animation resets preserve existing components and nested resets
 
 	assert.equal(shorthandProperties.get('animation').components.includes('animation-composition'), false);
 });
+
+test('background repeat expands both axes without enabling shorthand serialization', () => {
+	assert.equal(shorthandProperties.has('background-repeat'), false);
+	assert.deepEqual([...shorthandToAffectedProperties.get('background-repeat')], ['background-repeat-x', 'background-repeat-y']);
+	const properties = shorthandToAffectedProperties.get('background');
+	for (const property of ['background-repeat', 'background-repeat-x', 'background-repeat-y', 'background-color']) {
+		assert.ok(properties.has(property), property);
+	}
+});

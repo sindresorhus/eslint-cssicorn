@@ -17,11 +17,25 @@ test('property animation catalogs are sorted, unique, and disjoint', () => {
 });
 
 test('catalogs include audited animation types and exclude ambiguous targets', () => {
-	for (const property of ['transition-duration', 'animation-name', 'contain', 'will-change', 'transition', 'animation-range']) {
+	for (const property of ['transition-duration', 'animation-name', 'contain', 'will-change', 'transition', 'animation-range', 'direction', 'unicode-bidi']) {
 		assert.ok(nonAnimatableProperties.includes(property), property);
 	}
 
-	for (const property of ['display', 'content-visibility', 'overlay', 'position', 'cursor', 'font-family', 'overflow', 'flex-flow', 'white-space', 'text-wrap', 'text-box', 'font-variant']) {
+	for (const property of [
+		'display',
+		'content-visibility',
+		'overlay',
+		'position',
+		'cursor',
+		'font-family',
+		'overflow',
+		'flex-flow',
+		'white-space',
+		'text-wrap',
+		'text-box',
+		'font-variant',
+		'background-repeat',
+	]) {
 		assert.ok(discreteProperties.includes(property), property);
 	}
 
@@ -35,14 +49,11 @@ test('catalogs include audited animation types and exclude ambiguous targets', (
 		'font-style',
 		'stroke-miterlimit',
 		'text-overflow',
-		'direction',
-		'unicode-bidi',
 		'font',
 		'background',
 		'border',
 		'caret',
 		'animation',
-		'background-repeat',
 		'opacity',
 		'transform',
 	];

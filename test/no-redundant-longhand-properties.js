@@ -7,6 +7,27 @@ import {getTester} from './utils/test.js';
 
 const {test: testRule, rule} = getTester(import.meta);
 
+testRule({
+	valid: [{
+		code: outdent`
+			a {
+				background-blend-mode: initial;
+				background-image: none;
+				background-position: 0% 0%;
+				background-size: auto;
+				background-repeat: repeat;
+				background-repeat-x: no-repeat;
+				background-attachment: scroll;
+				background-origin: padding-box;
+				background-clip: border-box;
+				background-color: red;
+			}
+		`,
+		languageOptions: {customSyntax: {properties: {'background-repeat-x': '<custom-ident>#'}}},
+	}],
+	invalid: [],
+});
+
 testRule.snapshot({
 	valid: [
 		// CSS Modules interop blocks are read by JavaScript as exact strings

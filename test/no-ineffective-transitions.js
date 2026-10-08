@@ -4,6 +4,70 @@ const {test} = getTester(import.meta);
 
 test({
 	valid: [
+		'a { transition-property: background-repeat; }',
+		'a { transition: background-repeat 1s allow-discrete; }',
+		...[
+			'a { transition: background-repeat-x 1s, background-repeat 1s allow-discrete; }',
+			'a { transition: background-repeat-y 1s, background 1s allow-discrete; }',
+			'a { transition: background-repeat 1s, background-repeat-x 1s allow-discrete, background-repeat-y 1s allow-discrete; }',
+		].map(code => ({
+			code,
+			languageOptions: {customSyntax: {properties: {'background-repeat-x': '<custom-ident>#', 'background-repeat-y': '<custom-ident>#'}}},
+		})),
+		'a { transition: direction 1s; transition-property: opacity; }',
+		'a { transition: unicode-bidi 1s, all 1s; }',
+	],
+	invalid: [
+		...['direction', 'unicode-bidi'].flatMap(property => [
+			{
+				code: `a { transition-property: ${property}; }`,
+				errors: [{messageId: 'no-ineffective-transitions/non-animatable', data: {property}, suggestions: 0}],
+			},
+			{
+				code: `a { transition: ${property} 1s allow-discrete; }`,
+				errors: [{messageId: 'no-ineffective-transitions/non-animatable', data: {property}, suggestions: 0}],
+			},
+		]),
+		{
+			code: String.raw`a { TRANSITION: DIRECTION 1s, unicode\2d bidi 1s; }`,
+			errors: ['DIRECTION', String.raw`unicode\2d bidi`].map(property => ({messageId: 'no-ineffective-transitions/non-animatable', data: {property}, suggestions: 0})),
+		},
+		...[
+			['a { transition: background-repeat 1s; }', 'a { transition: allow-discrete background-repeat 1s; }'],
+			['a { transition: background-repeat 1s, background-repeat-x 1s allow-discrete; }', 'a { transition: allow-discrete background-repeat 1s, background-repeat-x 1s allow-discrete; }'],
+		].map(([code, output]) => ({
+			code,
+			errors: [{
+				messageId: 'no-ineffective-transitions/discrete',
+				data: {property: 'background-repeat'},
+				suggestions: [{messageId: 'no-ineffective-transitions/allow-discrete', output}],
+			}],
+		})),
+		{
+			code: 'a { transition: background-repeat 1s allow-discrete, background-repeat-y 1s; }',
+			languageOptions: {customSyntax: {properties: {'background-repeat-y': '<custom-ident>#'}}},
+			errors: [{
+				messageId: 'no-ineffective-transitions/discrete',
+				data: {property: 'background-repeat-y'},
+				suggestions: [{messageId: 'no-ineffective-transitions/allow-discrete', output: 'a { transition: background-repeat 1s allow-discrete, allow-discrete background-repeat-y 1s; }'}],
+			}],
+		},
+		{
+			code: String.raw`a { transition-property: BACKGROUND\2d REPEAT; transition-behavior: /* keep */ normal; }`,
+			errors: [{
+				messageId: 'no-ineffective-transitions/discrete',
+				data: {property: String.raw`BACKGROUND\2d REPEAT`},
+				suggestions: [{
+					messageId: 'no-ineffective-transitions/allow-discrete',
+					output: String.raw`a { transition-property: BACKGROUND\2d REPEAT; transition-behavior: /* keep */ allow-discrete; }`,
+				}],
+			}],
+		},
+	],
+});
+
+test({
+	valid: [
 		'a { all: initial; transition-property: display; transition-behavior: allow-discrete; }',
 		'a { transition: unset; transition-behavior: allow-discrete; transition-property: display; }',
 		'a { transition-property: display; all: unset; }',
@@ -100,9 +164,6 @@ test.snapshot({
 			'font-style',
 			'stroke-miterlimit',
 			'text-overflow',
-			'direction',
-			'unicode-bidi',
-			'background-repeat',
 		].map(property => `a { transition: ${property} 1s; }`),
 		'@font-face { transition: display 1s; }',
 		'@property --example { transition: display 1s; }',

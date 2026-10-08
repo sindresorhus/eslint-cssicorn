@@ -14,6 +14,8 @@ This rule reports:
 - Non-animatable properties, such as `will-change`, regardless of behavior.
 - Discrete properties, such as `display`, whose behavior resolves to `normal` in the same style block.
 
+Checks target eligibility without guaranteeing a transition will run. Timing, endpoint values, browser support, and custom-property registrations are outside its scope.
+
 Suggestions enable `allow-discrete`. They can affect multiple targets sharing a behavior entry, so they are not autofixes. Reports based on `transition` or `all` resets have no suggestions.
 
 ## Examples
@@ -44,7 +46,7 @@ Suggestions enable `allow-discrete`. They can affect multiple targets sharing a 
 
 The `transition` shorthand defaults omitted behavior to `normal`. Put a separate `transition-behavior` override after it.
 
-Also checks shorthands whose longhands all have the same known animation type, such as `overflow` and `transition`. Explicit `initial` and `unset` on `transition-behavior`, `transition`, or `all` establish `normal` behavior.
+Also checks shorthands whose longhands all have the same known animation type, such as `overflow`, `background-repeat`, and `transition`. Explicit `initial` and `unset` on `transition-behavior`, `transition`, or `all` establish `normal` behavior.
 
 Later matching targets, `all`, and known shorthand expansions override earlier entries. Resolves `word-wrap` as an alias of `overflow-wrap`.
 
@@ -52,7 +54,6 @@ Later matching targets, `all`, and known shorthand expansions override earlier e
 
 - Resolves declarations within one style block, respecting order and `!important`. Separate rules, omitted longhands, substitutions such as `var()`, and unresolved CSS-wide values remain unknown. `transition-property: display` alone is not reported.
 - Uses conservative Webref coverage. Skips custom properties, vendor-prefixed targets, mixed or unknown shorthand types, and special interpolation cases such as `visibility` and image-source properties. Logical-to-physical relationships remain unresolved.
-- Checks target eligibility without guaranteeing a transition will run. Timing, endpoint values, browser support, and custom-property registrations are outside its scope.
 
 > [!NOTE]
 > Entry transitions from `display: none` can also require [`@starting-style`](https://www.w3.org/TR/css-transitions-2/#defining-before-change-style). `allow-discrete` alone does not establish a starting style.

@@ -19,13 +19,9 @@ const excludedProperties = new Set([
 	'stroke-miterlimit',
 	// https://drafts.csswg.org/css-overflow-4/#propdef-text-overflow
 	'text-overflow',
-	// https://drafts.csswg.org/css-writing-modes-4/
-	'direction',
-	'unicode-bidi',
-	// Missing shorthand metadata: https://drafts.csswg.org/css-backgrounds-4/#propdef-background-repeat
-	'background-repeat',
 ]);
 
+// Includes non-animatable bidi controls: https://drafts.csswg.org/css-writing-modes-4/
 const nonAnimatableProperties = new Set();
 const discreteProperties = new Set([
 	// These property tables refer to prose describing their discrete interpolation.

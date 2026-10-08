@@ -110,6 +110,9 @@ const shorthandToAffectedProperties = new Map(shorthandProperties.keys().map(sho
 const additionalAffectedPropertyEntries = [
 	// https://drafts.csswg.org/css-animations-2/#animation
 	['animation', 'animation-composition animation-trigger'],
+	// Missing shorthand metadata: https://drafts.csswg.org/css-backgrounds-4/#propdef-background-repeat
+	['background', 'background-repeat-x background-repeat-y'],
+	['background-repeat', 'background-repeat-x background-repeat-y'],
 	// https://drafts.csswg.org/css-ui-4/#propdef-caret
 	['caret', 'caret-color caret-animation caret-shape'],
 	// https://drafts.csswg.org/css-anchor-position-1/#propdef-position-try
