@@ -1,0 +1,783 @@
+exports[`invalid(1): a { touch-action: pan-x; } 1`] = `
+
+  1 | a { touch-action: pan-x; }
+
+`;
+
+exports[`invalid(1): a { touch-action: pan-x; } 2`] = `
+
+Message:
+> 1 | a { touch-action: pan-x; }
+    |                   ^^^^^ This \`touch-action\` value disables browser pinch zoom.
+
+Suggestion 1/1: Allow browser pinch zoom.:
+  1 | a { touch-action: pinch-zoom pan-x; }
+
+`;
+
+exports[`invalid(10): a { touch-action: pan-up pan-x; } 1`] = `
+
+  1 | a { touch-action: pan-up pan-x; }
+
+`;
+
+exports[`invalid(10): a { touch-action: pan-up pan-x; } 2`] = `
+
+Message:
+> 1 | a { touch-action: pan-up pan-x; }
+    |                   ^^^^^^^^^^^^ This \`touch-action\` value disables browser pinch zoom.
+
+Suggestion 1/1: Allow browser pinch zoom.:
+  1 | a { touch-action: pinch-zoom pan-up pan-x; }
+
+`;
+
+exports[`invalid(11): a { touch-action: pan-x pan-down; } 1`] = `
+
+  1 | a { touch-action: pan-x pan-down; }
+
+`;
+
+exports[`invalid(11): a { touch-action: pan-x pan-down; } 2`] = `
+
+Message:
+> 1 | a { touch-action: pan-x pan-down; }
+    |                   ^^^^^^^^^^^^^^ This \`touch-action\` value disables browser pinch zoom.
+
+Suggestion 1/1: Allow browser pinch zoom.:
+  1 | a { touch-action: pinch-zoom pan-x pan-down; }
+
+`;
+
+exports[`invalid(12): a { touch-action: pan-down pan-x; } 1`] = `
+
+  1 | a { touch-action: pan-down pan-x; }
+
+`;
+
+exports[`invalid(12): a { touch-action: pan-down pan-x; } 2`] = `
+
+Message:
+> 1 | a { touch-action: pan-down pan-x; }
+    |                   ^^^^^^^^^^^^^^ This \`touch-action\` value disables browser pinch zoom.
+
+Suggestion 1/1: Allow browser pinch zoom.:
+  1 | a { touch-action: pinch-zoom pan-down pan-x; }
+
+`;
+
+exports[`invalid(13): a { touch-action: pan-left pan-y; } 1`] = `
+
+  1 | a { touch-action: pan-left pan-y; }
+
+`;
+
+exports[`invalid(13): a { touch-action: pan-left pan-y; } 2`] = `
+
+Message:
+> 1 | a { touch-action: pan-left pan-y; }
+    |                   ^^^^^^^^^^^^^^ This \`touch-action\` value disables browser pinch zoom.
+
+Suggestion 1/1: Allow browser pinch zoom.:
+  1 | a { touch-action: pinch-zoom pan-left pan-y; }
+
+`;
+
+exports[`invalid(14): a { touch-action: pan-y pan-left; } 1`] = `
+
+  1 | a { touch-action: pan-y pan-left; }
+
+`;
+
+exports[`invalid(14): a { touch-action: pan-y pan-left; } 2`] = `
+
+Message:
+> 1 | a { touch-action: pan-y pan-left; }
+    |                   ^^^^^^^^^^^^^^ This \`touch-action\` value disables browser pinch zoom.
+
+Suggestion 1/1: Allow browser pinch zoom.:
+  1 | a { touch-action: pinch-zoom pan-y pan-left; }
+
+`;
+
+exports[`invalid(15): a { touch-action: pan-left pan-up; } 1`] = `
+
+  1 | a { touch-action: pan-left pan-up; }
+
+`;
+
+exports[`invalid(15): a { touch-action: pan-left pan-up; } 2`] = `
+
+Message:
+> 1 | a { touch-action: pan-left pan-up; }
+    |                   ^^^^^^^^^^^^^^^ This \`touch-action\` value disables browser pinch zoom.
+
+Suggestion 1/1: Allow browser pinch zoom.:
+  1 | a { touch-action: pinch-zoom pan-left pan-up; }
+
+`;
+
+exports[`invalid(16): a { touch-action: pan-up pan-left; } 1`] = `
+
+  1 | a { touch-action: pan-up pan-left; }
+
+`;
+
+exports[`invalid(16): a { touch-action: pan-up pan-left; } 2`] = `
+
+Message:
+> 1 | a { touch-action: pan-up pan-left; }
+    |                   ^^^^^^^^^^^^^^^ This \`touch-action\` value disables browser pinch zoom.
+
+Suggestion 1/1: Allow browser pinch zoom.:
+  1 | a { touch-action: pinch-zoom pan-up pan-left; }
+
+`;
+
+exports[`invalid(17): a { touch-action: pan-left pan-down; } 1`] = `
+
+  1 | a { touch-action: pan-left pan-down; }
+
+`;
+
+exports[`invalid(17): a { touch-action: pan-left pan-down; } 2`] = `
+
+Message:
+> 1 | a { touch-action: pan-left pan-down; }
+    |                   ^^^^^^^^^^^^^^^^^ This \`touch-action\` value disables browser pinch zoom.
+
+Suggestion 1/1: Allow browser pinch zoom.:
+  1 | a { touch-action: pinch-zoom pan-left pan-down; }
+
+`;
+
+exports[`invalid(18): a { touch-action: pan-down pan-left; } 1`] = `
+
+  1 | a { touch-action: pan-down pan-left; }
+
+`;
+
+exports[`invalid(18): a { touch-action: pan-down pan-left; } 2`] = `
+
+Message:
+> 1 | a { touch-action: pan-down pan-left; }
+    |                   ^^^^^^^^^^^^^^^^^ This \`touch-action\` value disables browser pinch zoom.
+
+Suggestion 1/1: Allow browser pinch zoom.:
+  1 | a { touch-action: pinch-zoom pan-down pan-left; }
+
+`;
+
+exports[`invalid(19): a { touch-action: pan-right pan-y; } 1`] = `
+
+  1 | a { touch-action: pan-right pan-y; }
+
+`;
+
+exports[`invalid(19): a { touch-action: pan-right pan-y; } 2`] = `
+
+Message:
+> 1 | a { touch-action: pan-right pan-y; }
+    |                   ^^^^^^^^^^^^^^^ This \`touch-action\` value disables browser pinch zoom.
+
+Suggestion 1/1: Allow browser pinch zoom.:
+  1 | a { touch-action: pinch-zoom pan-right pan-y; }
+
+`;
+
+exports[`invalid(2): a { touch-action: pan-left; } 1`] = `
+
+  1 | a { touch-action: pan-left; }
+
+`;
+
+exports[`invalid(2): a { touch-action: pan-left; } 2`] = `
+
+Message:
+> 1 | a { touch-action: pan-left; }
+    |                   ^^^^^^^^ This \`touch-action\` value disables browser pinch zoom.
+
+Suggestion 1/1: Allow browser pinch zoom.:
+  1 | a { touch-action: pinch-zoom pan-left; }
+
+`;
+
+exports[`invalid(20): a { touch-action: pan-y pan-right; } 1`] = `
+
+  1 | a { touch-action: pan-y pan-right; }
+
+`;
+
+exports[`invalid(20): a { touch-action: pan-y pan-right; } 2`] = `
+
+Message:
+> 1 | a { touch-action: pan-y pan-right; }
+    |                   ^^^^^^^^^^^^^^^ This \`touch-action\` value disables browser pinch zoom.
+
+Suggestion 1/1: Allow browser pinch zoom.:
+  1 | a { touch-action: pinch-zoom pan-y pan-right; }
+
+`;
+
+exports[`invalid(21): a { touch-action: pan-right pan-up; } 1`] = `
+
+  1 | a { touch-action: pan-right pan-up; }
+
+`;
+
+exports[`invalid(21): a { touch-action: pan-right pan-up; } 2`] = `
+
+Message:
+> 1 | a { touch-action: pan-right pan-up; }
+    |                   ^^^^^^^^^^^^^^^^ This \`touch-action\` value disables browser pinch zoom.
+
+Suggestion 1/1: Allow browser pinch zoom.:
+  1 | a { touch-action: pinch-zoom pan-right pan-up; }
+
+`;
+
+exports[`invalid(22): a { touch-action: pan-up pan-right; } 1`] = `
+
+  1 | a { touch-action: pan-up pan-right; }
+
+`;
+
+exports[`invalid(22): a { touch-action: pan-up pan-right; } 2`] = `
+
+Message:
+> 1 | a { touch-action: pan-up pan-right; }
+    |                   ^^^^^^^^^^^^^^^^ This \`touch-action\` value disables browser pinch zoom.
+
+Suggestion 1/1: Allow browser pinch zoom.:
+  1 | a { touch-action: pinch-zoom pan-up pan-right; }
+
+`;
+
+exports[`invalid(23): a { touch-action: pan-right pan-down; } 1`] = `
+
+  1 | a { touch-action: pan-right pan-down; }
+
+`;
+
+exports[`invalid(23): a { touch-action: pan-right pan-down; } 2`] = `
+
+Message:
+> 1 | a { touch-action: pan-right pan-down; }
+    |                   ^^^^^^^^^^^^^^^^^^ This \`touch-action\` value disables browser pinch zoom.
+
+Suggestion 1/1: Allow browser pinch zoom.:
+  1 | a { touch-action: pinch-zoom pan-right pan-down; }
+
+`;
+
+exports[`invalid(24): a { touch-action: pan-down pan-right; } 1`] = `
+
+  1 | a { touch-action: pan-down pan-right; }
+
+`;
+
+exports[`invalid(24): a { touch-action: pan-down pan-right; } 2`] = `
+
+Message:
+> 1 | a { touch-action: pan-down pan-right; }
+    |                   ^^^^^^^^^^^^^^^^^^ This \`touch-action\` value disables browser pinch zoom.
+
+Suggestion 1/1: Allow browser pinch zoom.:
+  1 | a { touch-action: pinch-zoom pan-down pan-right; }
+
+`;
+
+exports[`invalid(25): a { touch-action: none; } 1`] = `
+
+  1 | a { touch-action: none; }
+
+`;
+
+exports[`invalid(25): a { touch-action: none; } 2`] = `
+
+Message:
+> 1 | a { touch-action: none; }
+    |                   ^^^^ This \`touch-action\` value disables browser pinch zoom.
+
+Suggestion 1/1: Allow browser pinch zoom.:
+  1 | a { touch-action: pinch-zoom; }
+
+`;
+
+exports[`invalid(26): a { TOUCH-ACTION: NONE; } 1`] = `
+
+  1 | a { TOUCH-ACTION: NONE; }
+
+`;
+
+exports[`invalid(26): a { TOUCH-ACTION: NONE; } 2`] = `
+
+Message:
+> 1 | a { TOUCH-ACTION: NONE; }
+    |                   ^^^^ This \`touch-action\` value disables browser pinch zoom.
+
+Suggestion 1/1: Allow browser pinch zoom.:
+  1 | a { TOUCH-ACTION: pinch-zoom; }
+
+`;
+
+exports[`invalid(27): a { Touch-Action: PAN-Y pan-LEFT; } 1`] = `
+
+  1 | a { Touch-Action: PAN-Y pan-LEFT; }
+
+`;
+
+exports[`invalid(27): a { Touch-Action: PAN-Y pan-LEFT; } 2`] = `
+
+Message:
+> 1 | a { Touch-Action: PAN-Y pan-LEFT; }
+    |                   ^^^^^^^^^^^^^^ This \`touch-action\` value disables browser pinch zoom.
+
+Suggestion 1/1: Allow browser pinch zoom.:
+  1 | a { Touch-Action: pinch-zoom PAN-Y pan-LEFT; }
+
+`;
+
+exports[`invalid(28): a { t\\6f uch-action: p\\61n-y; } 1`] = `
+
+  1 | a { t\\6f uch-action: p\\61n-y; }
+
+`;
+
+exports[`invalid(28): a { t\\6f uch-action: p\\61n-y; } 2`] = `
+
+Message:
+> 1 | a { t\\6f uch-action: p\\61n-y; }
+    |                      ^^^^^^^ This \`touch-action\` value disables browser pinch zoom.
+
+Suggestion 1/1: Allow browser pinch zoom.:
+  1 | a { t\\6f uch-action: pinch-zoom p\\61n-y; }
+
+`;
+
+exports[`invalid(29): a { touch-action: pan-\\79; } 1`] = `
+
+  1 | a { touch-action: pan-\\79; }
+
+`;
+
+exports[`invalid(29): a { touch-action: pan-\\79; } 2`] = `
+
+Message:
+> 1 | a { touch-action: pan-\\79; }
+    |                   ^^^^^^^ This \`touch-action\` value disables browser pinch zoom.
+
+Suggestion 1/1: Allow browser pinch zoom.:
+  1 | a { touch-action: pinch-zoom pan-\\79; }
+
+`;
+
+exports[`invalid(3): a { touch-action: pan-right; } 1`] = `
+
+  1 | a { touch-action: pan-right; }
+
+`;
+
+exports[`invalid(3): a { touch-action: pan-right; } 2`] = `
+
+Message:
+> 1 | a { touch-action: pan-right; }
+    |                   ^^^^^^^^^ This \`touch-action\` value disables browser pinch zoom.
+
+Suggestion 1/1: Allow browser pinch zoom.:
+  1 | a { touch-action: pinch-zoom pan-right; }
+
+`;
+
+exports[`invalid(30): a { touch-action: pan-\\79 ; } 1`] = `
+
+  1 | a { touch-action: pan-\\79 ; }
+
+`;
+
+exports[`invalid(30): a { touch-action: pan-\\79 ; } 2`] = `
+
+Message:
+> 1 | a { touch-action: pan-\\79 ; }
+    |                   ^^^^^^^^ This \`touch-action\` value disables browser pinch zoom.
+
+Suggestion 1/1: Allow browser pinch zoom.:
+  1 | a { touch-action: pinch-zoom pan-\\79 ; }
+
+`;
+
+exports[`invalid(31): a { touch-action: n\\6fne; } 1`] = `
+
+  1 | a { touch-action: n\\6fne; }
+
+`;
+
+exports[`invalid(31): a { touch-action: n\\6fne; } 2`] = `
+
+Message:
+> 1 | a { touch-action: n\\6fne; }
+    |                   ^^^^^^ This \`touch-action\` value disables browser pinch zoom.
+
+Suggestion 1/1: Allow browser pinch zoom.:
+  1 | a { touch-action: pinch-zoom; }
+
+`;
+
+exports[`invalid(32): a { touch-action: /* before */ pan-y /* after */; } 1`] = `
+
+  1 | a { touch-action: /* before */ pan-y /* after */; }
+
+`;
+
+exports[`invalid(32): a { touch-action: /* before */ pan-y /* after */; } 2`] = `
+
+Message:
+> 1 | a { touch-action: /* before */ pan-y /* after */; }
+    |                                ^^^^^^^^^^^^^^^^^ This \`touch-action\` value disables browser pinch zoom.
+
+Suggestion 1/1: Allow browser pinch zoom.:
+  1 | a { touch-action: /* before */ pinch-zoom pan-y /* after */; }
+
+`;
+
+exports[`invalid(33): a { touch-action: pan-left /* between */ pan-down; } 1`] = `
+
+  1 | a { touch-action: pan-left /* between */ pan-down; }
+
+`;
+
+exports[`invalid(33): a { touch-action: pan-left /* between */ pan-down; } 2`] = `
+
+Message:
+> 1 | a { touch-action: pan-left /* between */ pan-down; }
+    |                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ This \`touch-action\` value disables browser pinch zoom.
+
+Suggestion 1/1: Allow browser pinch zoom.:
+  1 | a { touch-action: pinch-zoom pan-left /* between */ pan-down; }
+
+`;
+
+exports[`invalid(34): a { touch-action: /* before */ none /* after */; } 1`] = `
+
+  1 | a { touch-action: /* before */ none /* after */; }
+
+`;
+
+exports[`invalid(34): a { touch-action: /* before */ none /* after */; } 2`] = `
+
+Message:
+> 1 | a { touch-action: /* before */ none /* after */; }
+    |                                ^^^^^^^^^^^^^^^^ This \`touch-action\` value disables browser pinch zoom.
+
+Suggestion 1/1: Allow browser pinch zoom.:
+  1 | a { touch-action: /* before */ pinch-zoom /* after */; }
+
+`;
+
+exports[`invalid(35): a { touch-action: pan-y!important; } 1`] = `
+
+  1 | a { touch-action: pan-y!important; }
+
+`;
+
+exports[`invalid(35): a { touch-action: pan-y!important; } 2`] = `
+
+Message:
+> 1 | a { touch-action: pan-y!important; }
+    |                   ^^^^^ This \`touch-action\` value disables browser pinch zoom.
+
+Suggestion 1/1: Allow browser pinch zoom.:
+  1 | a { touch-action: pinch-zoom pan-y!important; }
+
+`;
+
+exports[`invalid(36): a { touch-action: none !IMPORTANT; } 1`] = `
+
+  1 | a { touch-action: none !IMPORTANT; }
+
+`;
+
+exports[`invalid(36): a { touch-action: none !IMPORTANT; } 2`] = `
+
+Message:
+> 1 | a { touch-action: none !IMPORTANT; }
+    |                   ^^^^^ This \`touch-action\` value disables browser pinch zoom.
+
+Suggestion 1/1: Allow browser pinch zoom.:
+  1 | a { touch-action: pinch-zoom !IMPORTANT; }
+
+`;
+
+exports[`invalid(37): a {\n  touch-action:\n    pan-x\n    pan-y;\n} 1`] = `
+
+  1 | a {
+  2 |   touch-action:
+  3 |     pan-x
+  4 |     pan-y;
+  5 | }
+
+`;
+
+exports[`invalid(37): a {\n  touch-action:\n    pan-x\n    pan-y;\n} 2`] = `
+
+Message:
+  1 | a {
+  2 |   touch-action:
+> 3 |     pan-x
+    |     ^^^^^
+> 4 |     pan-y;
+    | ^^^^^^^^^ This \`touch-action\` value disables browser pinch zoom.
+  5 | }
+
+Suggestion 1/1: Allow browser pinch zoom.:
+  1 | a {
+  2 |   touch-action:
+  3 |     pinch-zoom pan-x
+  4 |     pan-y;
+  5 | }
+
+`;
+
+exports[`invalid(38): a {\r\n  touch-action: pan-y /* comment */ !important;\r\n} 1`] = `
+
+  1 | a {
+  2 |   touch-action: pan-y /* comment */ !important;
+  3 | }
+
+`;
+
+exports[`invalid(38): a {\r\n  touch-action: pan-y /* comment */ !important;\r\n} 2`] = `
+
+Message:
+  1 | a {
+> 2 |   touch-action: pan-y /* comment */ !important;
+    |                 ^^^^^^^^^^^^^^^^^^^^ This \`touch-action\` value disables browser pinch zoom.
+  3 | }
+
+Suggestion 1/1: Allow browser pinch zoom.:
+  1 | a {
+  2 |   touch-action: pinch-zoom pan-y /* comment */ !important;
+  3 | }
+
+`;
+
+exports[`invalid(39): a { & .drag { touch-action: none; } } 1`] = `
+
+  1 | a { & .drag { touch-action: none; } }
+
+`;
+
+exports[`invalid(39): a { & .drag { touch-action: none; } } 2`] = `
+
+Message:
+> 1 | a { & .drag { touch-action: none; } }
+    |                             ^^^^ This \`touch-action\` value disables browser pinch zoom.
+
+Suggestion 1/1: Allow browser pinch zoom.:
+  1 | a { & .drag { touch-action: pinch-zoom; } }
+
+`;
+
+exports[`invalid(4): a { touch-action: pan-y; } 1`] = `
+
+  1 | a { touch-action: pan-y; }
+
+`;
+
+exports[`invalid(4): a { touch-action: pan-y; } 2`] = `
+
+Message:
+> 1 | a { touch-action: pan-y; }
+    |                   ^^^^^ This \`touch-action\` value disables browser pinch zoom.
+
+Suggestion 1/1: Allow browser pinch zoom.:
+  1 | a { touch-action: pinch-zoom pan-y; }
+
+`;
+
+exports[`invalid(40): @media (hover: none) { a { touch-action: pan-y; } } 1`] = `
+
+  1 | @media (hover: none) { a { touch-action: pan-y; } }
+
+`;
+
+exports[`invalid(40): @media (hover: none) { a { touch-action: pan-y; } } 2`] = `
+
+Message:
+> 1 | @media (hover: none) { a { touch-action: pan-y; } }
+    |                                          ^^^^^ This \`touch-action\` value disables browser pinch zoom.
+
+Suggestion 1/1: Allow browser pinch zoom.:
+  1 | @media (hover: none) { a { touch-action: pinch-zoom pan-y; } }
+
+`;
+
+exports[`invalid(41): @supports (touch-action: pan-y) { a { touch-action: pan-y; } } 1`] = `
+
+  1 | @supports (touch-action: pan-y) { a { touch-action: pan-y; } }
+
+`;
+
+exports[`invalid(41): @supports (touch-action: pan-y) { a { touch-action: pan-y; } } 2`] = `
+
+Message:
+> 1 | @supports (touch-action: pan-y) { a { touch-action: pan-y; } }
+    |                                                     ^^^^^ This \`touch-action\` value disables browser pinch zoom.
+
+Suggestion 1/1: Allow browser pinch zoom.:
+  1 | @supports (touch-action: pan-y) { a { touch-action: pinch-zoom pan-y; } }
+
+`;
+
+exports[`invalid(42): @container (width > 20em) { a { touch-action: pan-y; } } 1`] = `
+
+  1 | @container (width > 20em) { a { touch-action: pan-y; } }
+
+`;
+
+exports[`invalid(42): @container (width > 20em) { a { touch-action: pan-y; } } 2`] = `
+
+Message:
+> 1 | @container (width > 20em) { a { touch-action: pan-y; } }
+    |                                               ^^^^^ This \`touch-action\` value disables browser pinch zoom.
+
+Suggestion 1/1: Allow browser pinch zoom.:
+  1 | @container (width > 20em) { a { touch-action: pinch-zoom pan-y; } }
+
+`;
+
+exports[`invalid(43): @layer gestures { a { touch-action: pan-y; } } 1`] = `
+
+  1 | @layer gestures { a { touch-action: pan-y; } }
+
+`;
+
+exports[`invalid(43): @layer gestures { a { touch-action: pan-y; } } 2`] = `
+
+Message:
+> 1 | @layer gestures { a { touch-action: pan-y; } }
+    |                                     ^^^^^ This \`touch-action\` value disables browser pinch zoom.
+
+Suggestion 1/1: Allow browser pinch zoom.:
+  1 | @layer gestures { a { touch-action: pinch-zoom pan-y; } }
+
+`;
+
+exports[`invalid(44): @scope (.carousel) { a { touch-action: pan-y; } } 1`] = `
+
+  1 | @scope (.carousel) { a { touch-action: pan-y; } }
+
+`;
+
+exports[`invalid(44): @scope (.carousel) { a { touch-action: pan-y; } } 2`] = `
+
+Message:
+> 1 | @scope (.carousel) { a { touch-action: pan-y; } }
+    |                                        ^^^^^ This \`touch-action\` value disables browser pinch zoom.
+
+Suggestion 1/1: Allow browser pinch zoom.:
+  1 | @scope (.carousel) { a { touch-action: pinch-zoom pan-y; } }
+
+`;
+
+exports[`invalid(45): a { touch-action: none; touch-action: auto; } 1`] = `
+
+  1 | a { touch-action: none; touch-action: auto; }
+
+`;
+
+exports[`invalid(45): a { touch-action: none; touch-action: auto; } 2`] = `
+
+Message:
+> 1 | a { touch-action: none; touch-action: auto; }
+    |                   ^^^^ This \`touch-action\` value disables browser pinch zoom.
+
+Suggestion 1/1: Allow browser pinch zoom.:
+  1 | a { touch-action: pinch-zoom; touch-action: auto; }
+
+`;
+
+exports[`invalid(5): a { touch-action: pan-up; } 1`] = `
+
+  1 | a { touch-action: pan-up; }
+
+`;
+
+exports[`invalid(5): a { touch-action: pan-up; } 2`] = `
+
+Message:
+> 1 | a { touch-action: pan-up; }
+    |                   ^^^^^^ This \`touch-action\` value disables browser pinch zoom.
+
+Suggestion 1/1: Allow browser pinch zoom.:
+  1 | a { touch-action: pinch-zoom pan-up; }
+
+`;
+
+exports[`invalid(6): a { touch-action: pan-down; } 1`] = `
+
+  1 | a { touch-action: pan-down; }
+
+`;
+
+exports[`invalid(6): a { touch-action: pan-down; } 2`] = `
+
+Message:
+> 1 | a { touch-action: pan-down; }
+    |                   ^^^^^^^^ This \`touch-action\` value disables browser pinch zoom.
+
+Suggestion 1/1: Allow browser pinch zoom.:
+  1 | a { touch-action: pinch-zoom pan-down; }
+
+`;
+
+exports[`invalid(7): a { touch-action: pan-x pan-y; } 1`] = `
+
+  1 | a { touch-action: pan-x pan-y; }
+
+`;
+
+exports[`invalid(7): a { touch-action: pan-x pan-y; } 2`] = `
+
+Message:
+> 1 | a { touch-action: pan-x pan-y; }
+    |                   ^^^^^^^^^^^ This \`touch-action\` value disables browser pinch zoom.
+
+Suggestion 1/1: Allow browser pinch zoom.:
+  1 | a { touch-action: pinch-zoom pan-x pan-y; }
+
+`;
+
+exports[`invalid(8): a { touch-action: pan-y pan-x; } 1`] = `
+
+  1 | a { touch-action: pan-y pan-x; }
+
+`;
+
+exports[`invalid(8): a { touch-action: pan-y pan-x; } 2`] = `
+
+Message:
+> 1 | a { touch-action: pan-y pan-x; }
+    |                   ^^^^^^^^^^^ This \`touch-action\` value disables browser pinch zoom.
+
+Suggestion 1/1: Allow browser pinch zoom.:
+  1 | a { touch-action: pinch-zoom pan-y pan-x; }
+
+`;
+
+exports[`invalid(9): a { touch-action: pan-x pan-up; } 1`] = `
+
+  1 | a { touch-action: pan-x pan-up; }
+
+`;
+
+exports[`invalid(9): a { touch-action: pan-x pan-up; } 2`] = `
+
+Message:
+> 1 | a { touch-action: pan-x pan-up; }
+    |                   ^^^^^^^^^^^^ This \`touch-action\` value disables browser pinch zoom.
+
+Suggestion 1/1: Allow browser pinch zoom.:
+  1 | a { touch-action: pinch-zoom pan-x pan-up; }
+
+`;
