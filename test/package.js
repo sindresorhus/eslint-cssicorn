@@ -216,6 +216,8 @@ const RULES_NOT_RECOMMENDED = new Set([
 	'no-unknown-animations',
 	// Enforces a source order convention, and intentional "specific before general" ordering is common.
 	'no-descending-specificity',
+	// Layout animations are intentional in common patterns like expanding accordions.
+	'no-layout-animations',
 ]);
 
 test('Every rule is recommended unless listed as an exception', () => {
