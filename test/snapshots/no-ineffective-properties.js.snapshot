@@ -40,6 +40,20 @@ Message:
 
 `;
 
+exports[`invalid(1): a { columns: 2; column-rule: 1px red; } 1`] = `
+
+  1 | a { columns: 2; column-rule: 1px red; }
+
+`;
+
+exports[`invalid(1): a { columns: 2; column-rule: 1px red; } 2`] = `
+
+Message:
+> 1 | a { columns: 2; column-rule: 1px red; }
+    |                 ^^^^^^^^^^^^^^^^^^^^ \`column-rule\` omits the column rule style, which defaults to \`none\`.
+
+`;
+
 exports[`invalid(1): a { display: grid; flex-direction: column; } 1`] = `
 
   1 | a { display: grid; flex-direction: column; }
@@ -93,6 +107,28 @@ exports[`invalid(10): a { border-inline-start: 1px red; } 2`] = `
 Message:
 > 1 | a { border-inline-start: 1px red; }
     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`border-inline-start\` omits the border style, which defaults to \`none\`.
+
+`;
+
+exports[`invalid(10): a { column-\\72 ule: 1p\\78  red; text-decor\\61 tion: w\\61 vy red; } 1`] = `
+
+  1 | a { column-\\72 ule: 1p\\78  red; text-decor\\61 tion: w\\61 vy red; }
+
+`;
+
+exports[`invalid(10): a { column-\\72 ule: 1p\\78  red; text-decor\\61 tion: w\\61 vy red; } 2`] = `
+
+Message:
+> 1 | a { column-\\72 ule: 1p\\78  red; text-decor\\61 tion: w\\61 vy red; }
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^ \`column-rule\` omits the column rule style, which defaults to \`none\`.
+
+`;
+
+exports[`invalid(10): a { column-\\72 ule: 1p\\78  red; text-decor\\61 tion: w\\61 vy red; } 3`] = `
+
+Message:
+> 1 | a { column-\\72 ule: 1p\\78  red; text-decor\\61 tion: w\\61 vy red; }
+    |                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`text-decoration\` omits the decoration line, which defaults to \`none\`.
 
 `;
 
@@ -278,6 +314,28 @@ Message:
 
 `;
 
+exports[`invalid(11): a { column-rule: 1px /* color */ red; text-decoration: wavy /* color */ red; } 1`] = `
+
+  1 | a { column-rule: 1px /* color */ red; text-decoration: wavy /* color */ red; }
+
+`;
+
+exports[`invalid(11): a { column-rule: 1px /* color */ red; text-decoration: wavy /* color */ red; } 2`] = `
+
+Message:
+> 1 | a { column-rule: 1px /* color */ red; text-decoration: wavy /* color */ red; }
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`column-rule\` omits the column rule style, which defaults to \`none\`.
+
+`;
+
+exports[`invalid(11): a { column-rule: 1px /* color */ red; text-decoration: wavy /* color */ red; } 3`] = `
+
+Message:
+> 1 | a { column-rule: 1px /* color */ red; text-decoration: wavy /* color */ red; }
+    |                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`text-decoration\` omits the decoration line, which defaults to \`none\`.
+
+`;
+
 exports[`invalid(11): a { display: flex; grid-auto-flow: column dense; } 1`] = `
 
   1 | a { display: flex; grid-auto-flow: column dense; }
@@ -443,6 +501,28 @@ exports[`invalid(119): a { border-spacing: 8px 12px !important; border-collapse:
 Message:
 > 1 | a { border-spacing: 8px 12px !important; border-collapse: collapse; display: table; }
     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`border-spacing\` has no effect on this table with \`border-collapse: collapse\`. Use \`border-collapse: separate\` for spacing between cells.
+
+`;
+
+exports[`invalid(12): a { & b { column-rule: 1px red; text-decoration: wavy red; } } 1`] = `
+
+  1 | a { & b { column-rule: 1px red; text-decoration: wavy red; } }
+
+`;
+
+exports[`invalid(12): a { & b { column-rule: 1px red; text-decoration: wavy red; } } 2`] = `
+
+Message:
+> 1 | a { & b { column-rule: 1px red; text-decoration: wavy red; } }
+    |           ^^^^^^^^^^^^^^^^^^^^ \`column-rule\` omits the column rule style, which defaults to \`none\`.
+
+`;
+
+exports[`invalid(12): a { & b { column-rule: 1px red; text-decoration: wavy red; } } 3`] = `
+
+Message:
+> 1 | a { & b { column-rule: 1px red; text-decoration: wavy red; } }
+    |                                 ^^^^^^^^^^^^^^^^^^^^^^^^^ \`text-decoration\` omits the decoration line, which defaults to \`none\`.
 
 `;
 
@@ -642,6 +722,28 @@ Message:
 
 `;
 
+exports[`invalid(13): a { @media (width > 1px) { column-rule: 1px red; text-decoration: wavy red; } } 1`] = `
+
+  1 | a { @media (width > 1px) { column-rule: 1px red; text-decoration: wavy red; } }
+
+`;
+
+exports[`invalid(13): a { @media (width > 1px) { column-rule: 1px red; text-decoration: wavy red; } } 2`] = `
+
+Message:
+> 1 | a { @media (width > 1px) { column-rule: 1px red; text-decoration: wavy red; } }
+    |                            ^^^^^^^^^^^^^^^^^^^^ \`column-rule\` omits the column rule style, which defaults to \`none\`.
+
+`;
+
+exports[`invalid(13): a { @media (width > 1px) { column-rule: 1px red; text-decoration: wavy red; } } 3`] = `
+
+Message:
+> 1 | a { @media (width > 1px) { column-rule: 1px red; text-decoration: wavy red; } }
+    |                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^ \`text-decoration\` omits the decoration line, which defaults to \`none\`.
+
+`;
+
 exports[`invalid(13): a { border: thin; } 1`] = `
 
   1 | a { border: thin; }
@@ -835,6 +937,20 @@ exports[`invalid(139): a { display: table; border-collapse: collapse; padding: /
 Message:
 > 1 | a { display: table; border-collapse: collapse; padding: /* inset */ calc(1rem + 2px); }
     |                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`padding\` has no effect on this table with \`border-collapse: collapse\`. Apply padding to table cells or use separate borders.
+
+`;
+
+exports[`invalid(14): a { column-rule: 1px red; } a:hover { column-rule-style: solid; } 1`] = `
+
+  1 | a { column-rule: 1px red; } a:hover { column-rule-style: solid; }
+
+`;
+
+exports[`invalid(14): a { column-rule: 1px red; } a:hover { column-rule-style: solid; } 2`] = `
+
+Message:
+> 1 | a { column-rule: 1px red; } a:hover { column-rule-style: solid; }
+    |     ^^^^^^^^^^^^^^^^^^^^ \`column-rule\` omits the column rule style, which defaults to \`none\`.
 
 `;
 
@@ -1076,6 +1192,20 @@ Message:
 
 `;
 
+exports[`invalid(15): a { text-decoration: wavy red; } a:hover { text-decoration-line: underline; } 1`] = `
+
+  1 | a { text-decoration: wavy red; } a:hover { text-decoration-line: underline; }
+
+`;
+
+exports[`invalid(15): a { text-decoration: wavy red; } a:hover { text-decoration-line: underline; } 2`] = `
+
+Message:
+> 1 | a { text-decoration: wavy red; } a:hover { text-decoration-line: underline; }
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^ \`text-decoration\` omits the decoration line, which defaults to \`none\`.
+
+`;
+
 exports[`invalid(15): a { transition-property: none; transition-timing-function: cubic-bezier(0.1, 0.2, 0.3, 0.4); } 1`] = `
 
   1 | a { transition-property: none; transition-timing-function: cubic-bezier(0.1, 0.2, 0.3, 0.4); }
@@ -1227,6 +1357,20 @@ exports[`invalid(159): a { display: inline-block; table-layout: fixed; } 2`] = `
 Message:
 > 1 | a { display: inline-block; table-layout: fixed; }
     |                            ^^^^^^^^^^^^^^^^^^^ \`table-layout\` has no effect with \`display: inline-block\`. It requires a table container.
+
+`;
+
+exports[`invalid(16): a { column-rule-style: solid; & b { column-rule: 1px red; } } 1`] = `
+
+  1 | a { column-rule-style: solid; & b { column-rule: 1px red; } }
+
+`;
+
+exports[`invalid(16): a { column-rule-style: solid; & b { column-rule: 1px red; } } 2`] = `
+
+Message:
+> 1 | a { column-rule-style: solid; & b { column-rule: 1px red; } }
+    |                                     ^^^^^^^^^^^^^^^^^^^^ \`column-rule\` omits the column rule style, which defaults to \`none\`.
 
 `;
 
@@ -1482,6 +1626,20 @@ Message:
 
 `;
 
+exports[`invalid(17): a { text-decoration: wavy red; & b { text-decoration-line: underline; } } 1`] = `
+
+  1 | a { text-decoration: wavy red; & b { text-decoration-line: underline; } }
+
+`;
+
+exports[`invalid(17): a { text-decoration: wavy red; & b { text-decoration-line: underline; } } 2`] = `
+
+Message:
+> 1 | a { text-decoration: wavy red; & b { text-decoration-line: underline; } }
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^ \`text-decoration\` omits the decoration line, which defaults to \`none\`.
+
+`;
+
 exports[`invalid(170): a { @media (width > 1px) { display: grid; table-layout: /* algorithm */ fixed; } } 1`] = `
 
   1 | a { @media (width > 1px) { display: grid; table-layout: /* algorithm */ fixed; } }
@@ -1647,6 +1805,20 @@ exports[`invalid(18): a { border: calc(1px + 2px) rgb(0 0 0); } 2`] = `
 Message:
 > 1 | a { border: calc(1px + 2px) rgb(0 0 0); }
     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`border\` omits the border style, which defaults to \`none\`.
+
+`;
+
+exports[`invalid(18): a { column-rule: 1px red; column-rule-width: 2px; column-rule-color: blue; border-style: solid; border-image: url(\"border.png\") 1; } 1`] = `
+
+  1 | a { column-rule: 1px red; column-rule-width: 2px; column-rule-color: blue; border-style: solid; border-image: url("border.png") 1; }
+
+`;
+
+exports[`invalid(18): a { column-rule: 1px red; column-rule-width: 2px; column-rule-color: blue; border-style: solid; border-image: url(\"border.png\") 1; } 2`] = `
+
+Message:
+> 1 | a { column-rule: 1px red; column-rule-width: 2px; column-rule-color: blue; border-style: solid; border-image: url("border.png") 1; }
+    |     ^^^^^^^^^^^^^^^^^^^^ \`column-rule\` omits the column rule style, which defaults to \`none\`.
 
 `;
 
@@ -1860,6 +2032,20 @@ Message:
 
 `;
 
+exports[`invalid(19): a { text-decoration: wavy red; text-decoration-style: solid; text-decoration-color: blue; text-decoration-thickness: 2px; outline-style: solid; } 1`] = `
+
+  1 | a { text-decoration: wavy red; text-decoration-style: solid; text-decoration-color: blue; text-decoration-thickness: 2px; outline-style: solid; }
+
+`;
+
+exports[`invalid(19): a { text-decoration: wavy red; text-decoration-style: solid; text-decoration-color: blue; text-decoration-thickness: 2px; outline-style: solid; } 2`] = `
+
+Message:
+> 1 | a { text-decoration: wavy red; text-decoration-style: solid; text-decoration-color: blue; text-decoration-thickness: 2px; outline-style: solid; }
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^ \`text-decoration\` omits the decoration line, which defaults to \`none\`.
+
+`;
+
 exports[`invalid(19): a { view-timeline-name: none; view-timeline-inset: 10% 20%; } 1`] = `
 
   1 | a { view-timeline-name: none; view-timeline-inset: 10% 20%; }
@@ -1941,6 +2127,20 @@ exports[`invalid(2): a { border-top: 1px red; } 2`] = `
 Message:
 > 1 | a { border-top: 1px red; }
     |     ^^^^^^^^^^^^^^^^^^^ \`border-top\` omits the border style, which defaults to \`none\`.
+
+`;
+
+exports[`invalid(2): a { column-rule: red; } 1`] = `
+
+  1 | a { column-rule: red; }
+
+`;
+
+exports[`invalid(2): a { column-rule: red; } 2`] = `
+
+Message:
+> 1 | a { column-rule: red; }
+    |     ^^^^^^^^^^^^^^^^ \`column-rule\` omits the column rule style, which defaults to \`none\`.
 
 `;
 
@@ -2632,6 +2832,20 @@ Message:
 
 `;
 
+exports[`invalid(3): a { column-rule: thin; } 1`] = `
+
+  1 | a { column-rule: thin; }
+
+`;
+
+exports[`invalid(3): a { column-rule: thin; } 2`] = `
+
+Message:
+> 1 | a { column-rule: thin; }
+    |     ^^^^^^^^^^^^^^^^^ \`column-rule\` omits the column rule style, which defaults to \`none\`.
+
+`;
+
 exports[`invalid(3): a { display: grid; flex-flow: column wrap; } 1`] = `
 
   1 | a { display: grid; flex-flow: column wrap; }
@@ -3242,6 +3456,20 @@ Message:
 
 `;
 
+exports[`invalid(4): a { column-rule: calc(0px) red; } 1`] = `
+
+  1 | a { column-rule: calc(0px) red; }
+
+`;
+
+exports[`invalid(4): a { column-rule: calc(0px) red; } 2`] = `
+
+Message:
+> 1 | a { column-rule: calc(0px) red; }
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^ \`column-rule\` omits the column rule style, which defaults to \`none\`.
+
+`;
+
 exports[`invalid(4): a { display: flex; grid: auto-flow / 1fr 1fr; } 1`] = `
 
   1 | a { display: flex; grid: auto-flow / 1fr 1fr; }
@@ -3536,6 +3764,20 @@ Message:
 
 `;
 
+exports[`invalid(5): a { text-decoration: wavy red; } 1`] = `
+
+  1 | a { text-decoration: wavy red; }
+
+`;
+
+exports[`invalid(5): a { text-decoration: wavy red; } 2`] = `
+
+Message:
+> 1 | a { text-decoration: wavy red; }
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^ \`text-decoration\` omits the decoration line, which defaults to \`none\`.
+
+`;
+
 exports[`invalid(50): a { display: flex; flex-\\77 rap: no\\77 rap; align-\\63 ontent: center; } 1`] = `
 
   1 | a { display: flex; flex-\\77 rap: no\\77 rap; align-\\63 ontent: center; }
@@ -3729,6 +3971,20 @@ exports[`invalid(6): a { display: flex; grid-template-columns: 1fr 1fr; } 2`] = 
 Message:
 > 1 | a { display: flex; grid-template-columns: 1fr 1fr; }
     |                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`grid-template-columns\` has no effect with \`display: flex\`. It requires a grid container.
+
+`;
+
+exports[`invalid(6): a { text-decoration: red; } 1`] = `
+
+  1 | a { text-decoration: red; }
+
+`;
+
+exports[`invalid(6): a { text-decoration: red; } 2`] = `
+
+Message:
+> 1 | a { text-decoration: red; }
+    |     ^^^^^^^^^^^^^^^^^^^^ \`text-decoration\` omits the decoration line, which defaults to \`none\`.
 
 `;
 
@@ -3928,6 +4184,20 @@ Message:
 
 `;
 
+exports[`invalid(7): a { text-decoration: 2px; } 1`] = `
+
+  1 | a { text-decoration: 2px; }
+
+`;
+
+exports[`invalid(7): a { text-decoration: 2px; } 2`] = `
+
+Message:
+> 1 | a { text-decoration: 2px; }
+    |     ^^^^^^^^^^^^^^^^^^^^ \`text-decoration\` omits the decoration line, which defaults to \`none\`.
+
+`;
+
 exports[`invalid(70): a { @container (width > 1px) { display: flex; grid-template-columns: 1fr; } } 1`] = `
 
   1 | a { @container (width > 1px) { display: flex; grid-template-columns: 1fr; } }
@@ -4124,6 +4394,20 @@ Message:
 
 `;
 
+exports[`invalid(8): a { text-decoration: 0px red; } 1`] = `
+
+  1 | a { text-decoration: 0px red; }
+
+`;
+
+exports[`invalid(8): a { text-decoration: 0px red; } 2`] = `
+
+Message:
+> 1 | a { text-decoration: 0px red; }
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^ \`text-decoration\` omits the decoration line, which defaults to \`none\`.
+
+`;
+
 exports[`invalid(80): a { display: flex; column-width: 12rem; } 1`] = `
 
   1 | a { display: flex; column-width: 12rem; }
@@ -4269,6 +4553,28 @@ exports[`invalid(89): a { display: flex; position: absolute; float: left; column
 Message:
 > 1 | a { display: flex; position: absolute; float: left; column-width: 12rem; }
     |                                                     ^^^^^^^^^^^^^^^^^^^ \`column-width\` has no effect with \`display: flex\`. Multicol properties require a block container.
+
+`;
+
+exports[`invalid(9): a { COLUMN-RULE: 1PX RED; TEXT-DECORATION: WAVY RED !important; } 1`] = `
+
+  1 | a { COLUMN-RULE: 1PX RED; TEXT-DECORATION: WAVY RED !important; }
+
+`;
+
+exports[`invalid(9): a { COLUMN-RULE: 1PX RED; TEXT-DECORATION: WAVY RED !important; } 2`] = `
+
+Message:
+> 1 | a { COLUMN-RULE: 1PX RED; TEXT-DECORATION: WAVY RED !important; }
+    |     ^^^^^^^^^^^^^^^^^^^^ \`column-rule\` omits the column rule style, which defaults to \`none\`.
+
+`;
+
+exports[`invalid(9): a { COLUMN-RULE: 1PX RED; TEXT-DECORATION: WAVY RED !important; } 3`] = `
+
+Message:
+> 1 | a { COLUMN-RULE: 1PX RED; TEXT-DECORATION: WAVY RED !important; }
+    |                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`text-decoration\` omits the decoration line, which defaults to \`none\`.
 
 `;
 

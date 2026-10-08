@@ -937,6 +937,8 @@ const shorthandControlGroups = [
 	},
 	{declaration: 'outline: 2px blue', controls: ['outline: 2px solid blue', 'outline-style: auto', 'outline-style: none', 'outline-style: var(--style)']},
 	{declaration: 'animation: 2s ease', controls: ['animation: 2s fade', 'animation-name: fade', 'animation-name: none', 'animation-name: var(--name)']},
+	{declaration: 'column-rule: 1px red', controls: ['column-rule: 2px solid blue', 'column-rule-style: solid', 'column-rule-style: none', 'column-rule-style: var(--style)']},
+	{declaration: 'text-decoration: wavy red', controls: ['text-decoration: underline', 'text-decoration-line: underline', 'text-decoration-line: none', 'text-decoration-line: var(--line)']},
 ];
 
 test({
@@ -961,6 +963,7 @@ test({
 	valid: [
 		'a { border: red solid 1px; outline: blue auto 2px; }',
 		'a { border: 1px red; border-style: bad; outline: 2px blue; outline-style: bad; animation: 2s ease; animation-name: 42; }',
+		'a { animation: 2s 2 infinite; }',
 	],
 	invalid: [
 		{
@@ -981,9 +984,83 @@ test({
 			code: 'a { animation: 2s -1s ease; }',
 			errors: [{messageId: omittedComponentMessageId, data: {property: 'animation', component: 'an animation name'}}],
 		},
+		{
+			code: 'a { animation: 2s 2; }',
+			errors: [{messageId: omittedComponentMessageId, data: {property: 'animation', component: 'an animation name'}}],
+		},
 		...['2s ease forwards', '2s ease paused', '2s infinite alternate paused both'].map(value => ({
 			code: `a { animation: ${value}; }`,
 			errors: [{messageId: omittedComponentMessageId, data: {property: 'animation', component: 'an animation name'}}],
 		})),
+	],
+});
+
+test.snapshot({
+	valid: [
+		'a { columns: 2; column-rule: 1px solid red; }',
+		'a { column-rule: 0 red; }',
+		'a { column-rule: -0.0em blue; }',
+		'a { column-rule: none; }',
+		'a { column-rule: hidden; }',
+		'a { text-decoration: underline wavy red; }',
+		'a { text-decoration: red underline overline 2px; }',
+		'a { text-decoration: none wavy red; }',
+		'a { text-decoration: line-through; }',
+		String.raw`a { column-rule: 1p\78  s\6f lid red; text-decoration: \75 nderline wavy red; }`,
+		'a { column-rule: var(--rule); text-decoration: var(--decoration); }',
+		'a { column-rule: calc(1px + var(--width)) red; text-decoration: wavy rgb(var(--color)); }',
+		'a { column-rule: calc(1px * random(1, 2)) red; text-decoration: --decoration(); }',
+		...['inherit', 'initial', 'unset', 'revert', 'revert-layer'].map(value => `a { column-rule: ${value}; text-decoration: ${value}; }`),
+		'a { column-rule: url("rule.png"); text-decoration: "underline"; }',
+		'a { column-rule: 1px red; column-rule: 2px blue; text-decoration: wavy red; text-decoration: dashed blue; }',
+		'a { column-rule: 1px red; column-rule-style: bad; text-decoration: wavy red; text-decoration-line: bad; }',
+		'a { -webkit-column-rule: 1px red; -webkit-text-decoration: wavy red; }',
+		String.raw`a { column-rule: 1px red; -webkit-column-rule-\73 tyle: solid; text-decoration: wavy red; text-decoration-\6c ine: underline; }`,
+		'a { all: initial; column-rule: 1px red; text-decoration: wavy red; }',
+		'a { --column-rule: 1px red; --text-decoration: wavy red; }',
+		'@keyframes layout { to { column-rule: 1px red; text-decoration: wavy red; } }',
+		'@font-face { column-rule: 1px red; text-decoration: wavy red; }',
+		':export { column-rule: 1px red; text-decoration: wavy red; }',
+	],
+	invalid: [
+		'a { columns: 2; column-rule: 1px red; }',
+		'a { column-rule: red; }',
+		'a { column-rule: thin; }',
+		'a { column-rule: calc(0px) red; }',
+		'a { text-decoration: wavy red; }',
+		'a { text-decoration: red; }',
+		'a { text-decoration: 2px; }',
+		'a { text-decoration: 0px red; }',
+		'a { COLUMN-RULE: 1PX RED; TEXT-DECORATION: WAVY RED !important; }',
+		String.raw`a { column-\72 ule: 1p\78  red; text-decor\61 tion: w\61 vy red; }`,
+		'a { column-rule: 1px /* color */ red; text-decoration: wavy /* color */ red; }',
+		'a { & b { column-rule: 1px red; text-decoration: wavy red; } }',
+		'a { @media (width > 1px) { column-rule: 1px red; text-decoration: wavy red; } }',
+		'a { column-rule: 1px red; } a:hover { column-rule-style: solid; }',
+		'a { text-decoration: wavy red; } a:hover { text-decoration-line: underline; }',
+		'a { column-rule-style: solid; & b { column-rule: 1px red; } }',
+		'a { text-decoration: wavy red; & b { text-decoration-line: underline; } }',
+		'a { column-rule: 1px red; column-rule-width: 2px; column-rule-color: blue; border-style: solid; border-image: url("border.png") 1; }',
+		'a { text-decoration: wavy red; text-decoration-style: solid; text-decoration-color: blue; text-decoration-thickness: 2px; outline-style: solid; }',
+	],
+});
+
+test({
+	valid: [],
+	invalid: [
+		{
+			code: 'a { column-rule: 1px red; text-decoration: wavy red; text-decoration-color: blue; text-decoration-thickness: 2px; }',
+			errors: [
+				{messageId: omittedComponentMessageId, data: {property: 'column-rule', component: 'the column rule style'}},
+				{messageId: omittedComponentMessageId, data: {property: 'text-decoration', component: 'the decoration line'}},
+			],
+		},
+		{
+			code: 'a { column-rule: 1px red; column-rule-style: solid; text-decoration: wavy red; border: 1px red; }',
+			errors: [
+				{messageId: omittedComponentMessageId, data: {property: 'text-decoration', component: 'the decoration line'}},
+				{messageId: omittedComponentMessageId, data: {property: 'border', component: 'the border style'}},
+			],
+		},
 	],
 });

@@ -161,6 +161,12 @@ const shorthandPropertyGroups = [
 	{
 		properties: ['animation'], controllingProperties: ['animation', 'animation-name'], component: 'an animation name', type: 'keyframes-name',
 	},
+	{
+		properties: ['column-rule'], controllingProperties: ['column-rule', 'column-rule-style'], component: 'the column rule style', type: 'line-style',
+	},
+	{
+		properties: ['text-decoration'], controllingProperties: ['text-decoration', 'text-decoration-line'], component: 'the decoration line', property: 'text-decoration-line',
+	},
 ];
 const shorthandProperties = new Set(shorthandPropertyGroups.flatMap(({properties}) => properties));
 const targetProperties = new Set([

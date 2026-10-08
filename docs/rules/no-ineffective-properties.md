@@ -9,7 +9,7 @@
 
 <!-- The examples pair each ineffective declaration with an effective alternative. -->
 
-Catch declarations that have no effect given explicit declarations in the same block, such as leftovers from a layout refactor, and shorthands that omit the style or animation name needed for their intended effect.
+Catch declarations that have no effect given explicit declarations in the same block, such as leftovers from a layout refactor, and shorthands that omit the style, decoration line, or animation name needed for their intended effect.
 
 ## Examples
 
@@ -81,6 +81,32 @@ a {
 
 ```css
 /* ❌ */
+.columns {
+	columns: 2;
+	column-rule: 1px red;
+}
+
+/* ✅ */
+.columns {
+	columns: 2;
+	column-rule: 1px solid red;
+}
+```
+
+```css
+/* ❌ */
+a {
+	text-decoration: wavy red;
+}
+
+/* ✅ */
+a {
+	text-decoration: underline wavy red;
+}
+```
+
+```css
+/* ❌ */
 .card {
 	animation: 2s ease;
 }
@@ -109,7 +135,8 @@ The rule reports:
 - Related image controls, such as position, size, repeat, slice, and compositing, when `background-image`, `border-image-source`, or `mask-image` is `none`.
 - Related animation or transition controls with `animation-name: none` or `transition-property: none`.
 - Related timeline axis and inset controls with `scroll-timeline-name: none` or `view-timeline-name: none`.
-- Omitted styles in `border`, physical and logical border side/axis shorthands, and `outline`, where the style defaults to `none`.
+- Omitted styles in `border`, physical and logical border side/axis shorthands, `outline`, and `column-rule`, where the style defaults to `none`.
+- Omitted decoration lines in `text-decoration`, where the line defaults to `none`, even when a style, color, or thickness is specified.
 - Omitted animation names in `animation`, where the name defaults to `none`. A comma-separated list is reported only when every animation is nameless.
 
 Ellipsis needs a block container with clipped inline overflow; `white-space: nowrap` and dimensions are not required. Strings and `fade` values are not checked.
@@ -122,13 +149,33 @@ Only unambiguous declarations in the same style block are checked, including nes
 
 Disabled effects require a single `none` in the controlling longhand; visible overflow requires the `overflow` shorthand. Blocks containing `all`, keyframes, descriptors, and CSS Modules interop blocks are excluded.
 
-Shorthand checks require a successful CSS grammar match. Matching is best effort and does not validate numeric ranges. Checks are suppressed by any competing declaration in the same block, regardless of order or `!important`. For borders, this includes any other physical or logical border shorthand, any border-style declaration, and `border-image` or `border-image-source`, since an image border can render without a border style. For outlines, it includes another `outline` or `outline-style`; for animations, another `animation` or `animation-name`. Vendor-prefixed counterparts also suppress reports, but prefixed shorthands are not reported. Width, color, radius, and border-image sizing declarations alone do not suppress reports.
+Shorthand checks require a successful CSS grammar match. Matching is best effort and does not validate numeric ranges. Any additional declaration from the corresponding group suppresses the check in the same block, regardless of its value, order, or `!important`:
 
-Shorthand values with an explicit border/outline style are not reported. Literal zero widths are skipped as intentional resets. Expressions such as `calc(0px)` are not evaluated. Animation values containing an unquoted `none` keyword or any named animation are skipped. Values containing an unquoted `auto` or components matched as animation timelines are also skipped because browsers and the grammar can interpret them differently. Quoted `"none"` is a name, and `animation: 2s ease ease` names the animation `ease`. Nameless easing-only values and zero-duration values are still reported.
+| Shorthand | Declarations that suppress the check |
+| --- | --- |
+| Border shorthands | Any physical or logical border shorthand, any border-style declaration, `border-image`, or `border-image-source` |
+| `outline` | `outline`, `outline-style` |
+| `animation` | `animation`, `animation-name` |
+| `column-rule` | `column-rule`, `column-rule-style` |
+| `text-decoration` | `text-decoration`, `text-decoration-line` |
+
+Vendor-prefixed counterparts also suppress reports, but prefixed shorthands are not reported. For borders, even declarations for unrelated sides suppress the check, and an image border can render without a border style. Width, color, thickness, radius, and border-image sizing declarations alone do not suppress reports.
+
+For example, a style in the same block suppresses the shorthand check:
+
+```css
+/* ✅ */
+.card {
+	border: 1px red;
+	border-style: solid;
+}
+```
+
+Shorthand values with an explicit border, outline, or column rule style, or a decoration line (including `none`), are not reported. Literal zero border, outline, and column rule widths are skipped as intentional resets. Expressions such as `calc(0px)` are not evaluated. Animation values containing an unquoted `none` keyword or any named animation are skipped. Values containing an unquoted `auto` or components matched as animation timelines are also skipped because browsers and the grammar can interpret them differently. Quoted `"none"` is a name, and `animation: 2s ease ease` names the animation `ease`. Nameless easing-only values and zero-duration values are still reported.
 
 Other selectors, states, parent layout, and browser adjustments are not inferred. Disable intentional reports. There are no fixes or suggestions, since changing declarations could affect other states. Use `css/no-invalid-properties` to validate CSS.
 
-A shorthand may intentionally prepare a style or animation that another state enables. Suppress the report locally when using this pattern:
+A shorthand may intentionally prepare a style, decoration, or animation that another state enables. Suppress the report locally when using this pattern:
 
 ```css
 .card {
