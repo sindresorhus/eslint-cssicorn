@@ -259,6 +259,9 @@ test.snapshot({
 		'@media print { @supports (display: grid) { @keyframes resize { to { grid-template-rows: 1fr; } } } }',
 		'@keyframes resize { to { /* before */ width/**/: 100px /* after */; } }',
 		':export, .card { transition-property: width; }',
+		'a { transition: width 1s allow-discrete, opacity 1s; }',
+		'a { transition: linear(0, 0.5 25%, 1) 1s width; }',
+		String.raw`a { -WEBKIT-TR\41 NSITION-PROPERTY: \57 IDTH, --height, var(--name, height); }`,
 	],
 });
 

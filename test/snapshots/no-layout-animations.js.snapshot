@@ -630,6 +630,48 @@ Message:
 
 `;
 
+exports[`invalid(46): a { transition: width 1s allow-discrete, opacity 1s; } 1`] = `
+
+  1 | a { transition: width 1s allow-discrete, opacity 1s; }
+
+`;
+
+exports[`invalid(46): a { transition: width 1s allow-discrete, opacity 1s; } 2`] = `
+
+Message:
+> 1 | a { transition: width 1s allow-discrete, opacity 1s; }
+    |                 ^^^^^ Avoid animating 'width', which can affect layout.
+
+`;
+
+exports[`invalid(47): a { transition: linear(0, 0.5 25%, 1) 1s width; } 1`] = `
+
+  1 | a { transition: linear(0, 0.5 25%, 1) 1s width; }
+
+`;
+
+exports[`invalid(47): a { transition: linear(0, 0.5 25%, 1) 1s width; } 2`] = `
+
+Message:
+> 1 | a { transition: linear(0, 0.5 25%, 1) 1s width; }
+    |                                          ^^^^^ Avoid animating 'width', which can affect layout.
+
+`;
+
+exports[`invalid(48): a { -WEBKIT-TR\\41 NSITION-PROPERTY: \\57 IDTH, --height, var(--name, height); } 1`] = `
+
+  1 | a { -WEBKIT-TR\\41 NSITION-PROPERTY: \\57 IDTH, --height, var(--name, height); }
+
+`;
+
+exports[`invalid(48): a { -WEBKIT-TR\\41 NSITION-PROPERTY: \\57 IDTH, --height, var(--name, height); } 2`] = `
+
+Message:
+> 1 | a { -WEBKIT-TR\\41 NSITION-PROPERTY: \\57 IDTH, --height, var(--name, height); }
+    |                                     ^^^^^^^^ Avoid animating 'width', which can affect layout.
+
+`;
+
 exports[`invalid(5): a { transition: opacity 1s, height 200ms, margin-inline 1s; } 1`] = `
 
   1 | a { transition: opacity 1s, height 200ms, margin-inline 1s; }
