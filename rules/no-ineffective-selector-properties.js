@@ -1,5 +1,6 @@
 import {shorthandToAffectedProperties} from './shared/css-shorthand-properties.js';
 import {LEGACY_PSEUDO_ELEMENTS} from './shared/css-selector-specificity.js';
+import {functionalPseudoSelectors, nonFunctionalPseudoSelectors} from './shared/standard-pseudo-selectors.js';
 import {hasCommentInRange, normalizeCssIdentifier} from './utils/index.js';
 
 /**
@@ -72,7 +73,7 @@ const commonProperties = new Set([
 	'border-end-start-radius',
 	'border-end-end-radius',
 ]);
-const fontProperties = getPropertyNames(['font', 'font-variant', 'font-synthesis']);
+const fontProperties = getPropertyNames(['font', 'font-synthesis']);
 const borderColorProperties = [
 	...getPropertyNames(['border-color', 'border-block-color', 'border-inline-color']),
 	'border',
@@ -93,11 +94,25 @@ const visitedProperties = new Set([...commonProperties, ...fontProperties, 'text
 const highlightSelectors = new Set(['selection', 'target-text', 'spelling-error', 'grammar-error', 'search-text', 'highlight']);
 const transparentAtRules = new Set(['media', 'supports', 'container', 'layer', 'starting-style']);
 const targetProperties = highlightProperties.union(markerProperties).union(visitedProperties);
+const standardFunctionalPseudoSelectors = new Set(functionalPseudoSelectors);
+const standardNonFunctionalPseudoSelectors = new Set(nonFunctionalPseudoSelectors);
 
 /**
 Get the explicit restriction on the final selected compound, without expanding functions or nesting selectors.
 */
 const getSelectorRestriction = selector => {
+	for (const node of selector.children) {
+		if (node.type !== 'PseudoClassSelector' && node.type !== 'PseudoElementSelector') {
+			continue;
+		}
+
+		const prefix = node.type === 'PseudoElementSelector' ? '::' : ':';
+		const standardPseudoSelectors = node.children === null ? standardNonFunctionalPseudoSelectors : standardFunctionalPseudoSelectors;
+		if (!standardPseudoSelectors.has(`${prefix}${normalizeCssIdentifier(node.name)}`)) {
+			return;
+		}
+	}
+
 	const compound = selector.children.slice(selector.children.findLastIndex(node => node.type === 'Combinator') + 1);
 	const pseudoElement = compound.findLast(node => node.type === 'PseudoElementSelector'
 		|| (node.type === 'PseudoClassSelector' && LEGACY_PSEUDO_ELEMENTS.has(normalizeCssIdentifier(node.name))));

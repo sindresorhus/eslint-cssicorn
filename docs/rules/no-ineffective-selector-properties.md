@@ -86,7 +86,9 @@ A declaration is reported only when every selector in the list makes that proper
 }
 ```
 
-Only explicit restrictions on the final selected compound are recognized. `li::before::marker` is checked as a marker. Visited ancestors, siblings, pseudo-elements of visited links, functional selector arguments, and parent-selector expansion are not analyzed.
+Only explicit restrictions on the final selected compound are recognized. `li::before::marker` is checked as a marker. Visited restrictions on ancestors, siblings, and pseudo-elements, functional selector arguments, and parent-selector expansion are not analyzed.
+
+Selectors containing unknown or preprocessing pseudo-selectors, such as CSS Modules' `:global()` and Vue's `:deep()`, are skipped because compilation can change their selected target.
 
 Explicit restricted targets in nested style rules are checked. Nested declarations in `@media`, `@supports`, `@container`, `@layer`, and `@starting-style` use their enclosing style rule's selector. Other at-rules, descriptors, and keyframes stop this inheritance. First-line, first-letter, placeholder, cue, and vendor-specific pseudo-elements are outside the rule's scope.
 

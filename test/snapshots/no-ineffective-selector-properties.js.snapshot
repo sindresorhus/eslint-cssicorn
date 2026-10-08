@@ -1963,6 +1963,74 @@ Output:
 
 `;
 
+exports[`invalid(200): ::selection { font-optical-sizing: none; } 1`] = `
+
+  1 | ::selection { font-optical-sizing: none; }
+
+`;
+
+exports[`invalid(200): ::selection { font-optical-sizing: none; } 2`] = `
+
+Message:
+> 1 | ::selection { font-optical-sizing: none; }
+    |               ^^^^^^^^^^^^^^^^^^^^^^^^^ \`font-optical-sizing\` has no effect on the targets selected by ::selection.
+
+Output:
+  1 | ::selection {  }
+
+`;
+
+exports[`invalid(201): ::selection { @media (width > 1px) { font-feature-settings: \"kern\"; } } 1`] = `
+
+  1 | ::selection { @media (width > 1px) { font-feature-settings: "kern"; } }
+
+`;
+
+exports[`invalid(201): ::selection { @media (width > 1px) { font-feature-settings: \"kern\"; } } 2`] = `
+
+Message:
+> 1 | ::selection { @media (width > 1px) { font-feature-settings: "kern"; } }
+    |                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`font-feature-settings\` has no effect on the targets selected by ::selection.
+
+Output:
+  1 | ::selection { @media (width > 1px) {  } }
+
+`;
+
+exports[`invalid(202): ::search-text:current { padding: 1rem; } 1`] = `
+
+  1 | ::search-text:current { padding: 1rem; }
+
+`;
+
+exports[`invalid(202): ::search-text:current { padding: 1rem; } 2`] = `
+
+Message:
+> 1 | ::search-text:current { padding: 1rem; }
+    |                         ^^^^^^^^^^^^^ \`padding\` has no effect on the targets selected by ::search-text.
+
+Output:
+  1 | ::search-text:current {  }
+
+`;
+
+exports[`invalid(203): a:visited:lang(en) { font-weight: bold; } 1`] = `
+
+  1 | a:visited:lang(en) { font-weight: bold; }
+
+`;
+
+exports[`invalid(203): a:visited:lang(en) { font-weight: bold; } 2`] = `
+
+Message:
+> 1 | a:visited:lang(en) { font-weight: bold; }
+    |                      ^^^^^^^^^^^^^^^^^ \`font-weight\` has no effect on the targets selected by :visited.
+
+Output:
+  1 | a:visited:lang(en) {  }
+
+`;
+
 exports[`invalid(21): ::selection { inset-block: 1px; } 1`] = `
 
   1 | ::selection { inset-block: 1px; }
