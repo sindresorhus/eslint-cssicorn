@@ -13,6 +13,23 @@ Start with usable static styles, then enable nonessential movement when the user
 
 This rule is opt-in because it enforces a particular authoring contract. It reports movement enabled outside the query even if a later `prefers-reduced-motion: reduce` override disables it. It does not establish WCAG compliance or determine whether an effect is essential.
 
+Enable it alongside the recommended config in `eslint.config.js`:
+
+```js
+import cssicorn from 'eslint-cssicorn';
+import {defineConfig} from 'eslint/config';
+
+export default defineConfig([
+	cssicorn.configs.recommended,
+	{
+		files: ['**/*.css'],
+		rules: {
+			'cssicorn/require-prefers-reduced-motion': 'error',
+		},
+	},
+]);
+```
+
 ## Examples
 
 ```css
@@ -109,13 +126,17 @@ Other properties are treated conservatively. This includes `filter`, SVG paint p
 
 ## Declaration placement
 
-The rule checks `animation`, `animation-name`, `transition`, `transition-property`, `transition-duration`, and `scroll-behavior`, including vendor-prefixed animation and transition properties.
+| Declaration | Requires the query when… | Exemptions |
+| --- | --- | --- |
+| `animation`, `animation-name` | Any selected animation is potentially moving or unknown, regardless of duration. | Every same-file definition selects only non-motion properties, or the value explicitly disables animation. |
+| `transition` | Any layer selects a potentially moving property with a positive or unresolved duration. | Each layer selects only non-motion properties, is disabled, or has an omitted or literal zero duration. |
+| `transition-property` | Any selected property is potentially moving or unknown, regardless of duration. | Only non-motion properties or `none` are selected. |
+| `transition-duration` | Any duration is nonzero or unresolved; the initial transition property is `all`. | All durations are literal zero, or exactly one same-block controller explicitly selects only non-motion properties or `none`. |
+| `scroll-behavior` | The value is `smooth` or unresolved. | `auto`. |
 
-Potentially moving animation names and transition-property selections must be inside the query even when their duration is absent or zero. The rule does not infer whether other selectors currently activate them. A guarded keyframes definition does not exempt an unguarded animation reference.
+Vendor-prefixed animation and transition properties are also checked. A guarded keyframes definition does not exempt an unguarded animation reference. The rule does not infer whether other selectors currently activate motion-selecting longhands. A transition controller is a `transition` or `transition-property` declaration. Duplicate controllers and controllers in other selectors do not establish a non-motion exemption for `transition-duration`.
 
-Complete transition shorthand layers with an omitted or literal zero duration are allowed. A positive delay does not count as a positive duration. Zero-duration animations are still checked because [scroll-driven timelines can reinterpret their duration](https://drafts.csswg.org/css-animations-2/#animation-duration).
-
-A nonzero or unresolved `transition-duration` is checked independently because the initial transition property is `all`. It is exempt when exactly one `transition` or `transition-property` declaration in the same block explicitly selects only non-motion properties or `none`. Duplicate controllers and controllers in other selectors do not establish this exemption.
+The first time in a transition shorthand is its duration; a positive delay does not count as a positive duration. Zero-duration animations are still checked because [scroll-driven timelines can reinterpret their duration](https://drafts.csswg.org/css-animations-2/#animation-duration).
 
 Standalone animation duration, delay, easing, iteration, and timeline declarations are not checked: the animation name selection is checked where it is declared. Explicit disabling values and `initial`/`unset` resets are allowed. An opaque shorthand such as `animation: none var(--duration)` still requires a guard because the variable can supply an animation name. Inherited and reverted values remain potentially moving.
 
@@ -124,6 +145,21 @@ Standalone animation duration, delay, easing, iteration, and timeline declaratio
 Unknown animation names, imported keyframes, entirely opaque animation or transition values, and unresolved scrolling values require the guard. Custom-property definitions themselves are allowed; the declarations consuming them are checked. The rule does not inspect JavaScript, reconstruct the cascade, or verify distant overrides.
 
 Variables are not expanded, including any additional comma-separated effects they may introduce. When explicit names, targets, or literal zero durations establish a non-motion exemption, accompanying variables are treated as modifiers. Place declarations using variables for whole effects or effect lists inside the preference query.
+
+For example, the rule does not detect the extra moving layer introduced by `var(--effects)` in `transition: opacity var(--effects)`. Guard the declaration when the variable supplies additional effects:
+
+```css
+:root {
+	--effects: 200ms, transform 200ms;
+}
+
+/* ✅ */
+@media (prefers-reduced-motion: no-preference) {
+	.card {
+		transition: opacity var(--effects);
+	}
+}
+```
 
 Animation shorthands containing ambiguous `--` names also require a guard when the parser cannot distinguish an animation name from a timeline name. Use an explicit `animation-name` declaration to make the selection clear.
 

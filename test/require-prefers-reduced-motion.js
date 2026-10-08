@@ -70,6 +70,8 @@ test.snapshot({
 		'@keyframes tint { to { -webkit-text-fill-color: red; } } a { animation-name: tint; }',
 		'/* eslint-disable-next-line rule-to-test/require-prefers-reduced-motion -- Essential motion preview. */\na { animation: slide 1s; }\n@keyframes slide { to { transform: translateX(10px); } }',
 		'@media (prefers-reduced-motion: no-preference) { @container (width > 20rem) { @scope (.card) { :scope { animation: slide 1s; transition: transform 1s; scroll-behavior: smooth; } } } }',
+		'@media (prefers-reduced-motion: no-preference) { a { @starting-style { transition: transform 200ms; } } }',
+		'@property --offset { syntax: "<length>"; inherits: false; initial-value: 0; } @media (prefers-reduced-motion: no-preference) { a { translate: var(--offset); transition: --offset 200ms; } }',
 	],
 	invalid: [
 		'a { animation: slide 1s; }',
@@ -145,6 +147,8 @@ test.snapshot({
 		String.raw`@KEYFRAMES Fade { TO { \6f pacity: 1; \74 ransform: translateX(10px); -webkit-animation-timing-function: ease; } } a { animation-name: Fade; }`,
 		'a { transition: transform calc(0s); }',
 		'@container (width > 20rem) { @scope (.card) { :scope { animation: slide 1s; transition: transform 1s; scroll-behavior: smooth; } } }',
+		'a { @starting-style { transition: transform 200ms; } }',
+		'@property --offset { syntax: "<length>"; inherits: false; initial-value: 0; } a { translate: var(--offset); transition: --offset 200ms; }',
 	],
 });
 

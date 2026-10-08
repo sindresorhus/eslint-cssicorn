@@ -1,3 +1,5 @@
+// @ts-check
+
 import {keyword} from '@eslint/css-tree';
 import {
 	getAnimationName,
@@ -15,6 +17,8 @@ import {
 } from './utils/index.js';
 
 /**
+@import {AtrulePlain, BlockPlain, CssNodePlain, DeclarationPlain, Identifier, Lexer, ValuePlain} from '@eslint/css-tree';
+@import {CssicornProblem} from './rule/to-eslint-problem.js';
 @import {CssicornContext} from './rule/cssicorn-context.js';
 @import {CssicornRule} from './rule/to-eslint-rule.js';
 */
@@ -32,6 +36,11 @@ const easingFunctions = new Set(['cubic-bezier', 'steps', 'linear']);
 
 /**
 Check whether a parsed media expression guarantees an explicit positive motion preference.
+
+The parser provides modifier and condition fields that are missing from the current MediaQueryPlain type.
+
+@param {CssNodePlain & {modifier?: string | null, condition?: CssNodePlain | null}} node
+@returns {boolean}
 */
 function hasMotionPreference(node) {
 	if (node.type === 'Feature') {
@@ -69,6 +78,9 @@ function hasMotionPreference(node) {
 
 /**
 Check only recognized explicit color and opacity properties, rather than guessing all properties that might cause motion.
+
+@param {string} property
+@param {Lexer} lexer
 */
 function isNonMotionProperty(property, lexer) {
 	return !property.startsWith('--')
@@ -78,9 +90,12 @@ function isNonMotionProperty(property, lexer) {
 
 /**
 Check whether every declaration in a keyframes definition has a known non-motion effect.
+
+@param {BlockPlain} block
+@param {Lexer} lexer
 */
-function hasOnlyNonMotionKeyframes(atRule, lexer) {
-	return atRule.block.children.every(keyframe => keyframe.type === 'Rule'
+function hasOnlyNonMotionKeyframes(block, lexer) {
+	return block.children.every(keyframe => keyframe.type === 'Rule'
 		&& keyframe.block?.type === 'Block'
 		&& keyframe.block.children.every(declaration => {
 			if (declaration.type !== 'Declaration') {
@@ -94,13 +109,17 @@ function hasOnlyNonMotionKeyframes(atRule, lexer) {
 
 /**
 Check whether a transition layer explicitly selects only non-motion properties, independently of duration.
+
+@param {CssNodePlain[]} nodes
+@param {string} property
+@param {Lexer} lexer
 */
 function hasOnlyNonMotionTransitionTargets(nodes, property, lexer) {
 	if (property === 'transition-property' && nodes.some(node => node.type !== 'Identifier')) {
 		return false;
 	}
 
-	const targets = nodes.filter(node => node.type === 'Identifier' && !transitionKeywords.has(normalizeCssIdentifier(node.name)));
+	const targets = nodes.filter(/** @returns {node is Identifier} */ node => node.type === 'Identifier' && !transitionKeywords.has(normalizeCssIdentifier(node.name)));
 	return targets.length > 0 && targets.every(node => {
 		const target = normalizeCssIdentifier(node.name);
 		return target === 'none' || isNonMotionProperty(target, lexer);
@@ -109,6 +128,8 @@ function hasOnlyNonMotionTransitionTargets(nodes, property, lexer) {
 
 /**
 Check the first time component, distinguishing an explicit zero duration from a delay or an unresolved duration.
+
+@param {CssNodePlain[]} nodes
 */
 function hasZeroTransitionDuration(nodes) {
 	const duration = nodes.find(node => (node.type === 'Dimension' && ['s', 'ms'].includes(normalizeCssIdentifier(node.unit)))
@@ -118,26 +139,44 @@ function hasZeroTransitionDuration(nodes) {
 
 /**
 Check whether a duration declaration has exactly one same-block controller that explicitly excludes moving properties.
+
+@param {BlockPlain} block
+@param {Lexer} lexer
 */
 function hasNonMotionTransitionController(block, lexer) {
-	const controllers = block.children.filter(node => node.type === 'Declaration' && ['transition', 'transition-property'].includes(keyword(normalizeCssIdentifier(node.property)).basename));
-	if (controllers.length !== 1 || controllers[0].value.type !== 'Value') {
+	const controllers = block.children.filter(
+		/**
+		@returns {node is DeclarationPlain}
+		*/
+		node => node.type === 'Declaration' && ['transition', 'transition-property'].includes(keyword(normalizeCssIdentifier(node.property)).basename),
+	);
+	if (controllers.length !== 1) {
 		return false;
 	}
 
 	const [controller] = controllers;
+	if (controller.value.type !== 'Value') {
+		return false;
+	}
+
 	const property = keyword(normalizeCssIdentifier(controller.property)).basename;
 	return getCommaSeparatedGroups(controller.value).every(({nodes}) => hasOnlyNonMotionTransitionTargets(nodes, property, lexer));
 }
 
 /**
 Check whether an animation selection is locally proven to contain no motion.
+
+@param {ValuePlain} value
+@param {string} property
+@param {Lexer} lexer
+@param {Map<string, boolean>} nonMotionAnimations
 */
-function hasOnlyNonMotionAnimations(declaration, property, lexer, nonMotionAnimations) {
-	return getCommaSeparatedGroups(declaration.value).every(({nodes}) => {
-		const names = getGroupAnimationNameNodes(nodes, property, declaration.value, lexer);
+function hasOnlyNonMotionAnimations(value, property, lexer, nonMotionAnimations) {
+	return getCommaSeparatedGroups(value).every(({nodes}) => {
+		const names = getGroupAnimationNameNodes(nodes, property, value, lexer);
 		if (names.length > 0) {
-			return names.every(node => nonMotionAnimations.get(getAnimationName(node)) === true);
+			// Name nodes are identifiers or strings, so their decoded names are defined.
+			return names.every(node => nonMotionAnimations.get(/** @type {string} */ (getAnimationName(node))) === true);
 		}
 
 		// The lexer can mistake a dashed animation name for a timeline in ambiguous shorthands.
@@ -146,8 +185,8 @@ function hasOnlyNonMotionAnimations(declaration, property, lexer, nonMotionAnima
 		}
 
 		// A valid shorthand without a name selects `none`; unresolved values can supply a name.
-		const value = {...declaration.value, children: nodes.map(node => getCanonicalLexerNode(node))};
-		return Boolean(lexer.matchProperty(property, value).matched);
+		const canonicalValue = {...value, children: nodes.map(node => getCanonicalLexerNode(node))};
+		return Boolean(lexer.matchProperty(property, canonicalValue).matched);
 	});
 }
 
@@ -157,10 +196,22 @@ function hasOnlyNonMotionAnimations(declaration, property, lexer, nonMotionAnima
 const create = context => {
 	const {sourceCode} = context;
 	const {lexer} = sourceCode;
+	/**
+	@type {Map<string, boolean>}
+	*/
 	const nonMotionAnimations = new Map();
+	/**
+	@type {{declaration: DeclarationPlain & {value: ValuePlain}, property: string}[]}
+	*/
 	const animationReferences = [];
+	/**
+	@type {WeakMap<AtrulePlain, boolean>}
+	*/
 	const mediaPreferences = new WeakMap();
 
+	/**
+	@param {CssNodePlain[]} ancestors
+	*/
 	const isGuarded = ancestors => ancestors.some(node => {
 		if (node.type !== 'Atrule' || normalizeCssIdentifier(node.name) !== 'media') {
 			return false;
@@ -174,12 +225,18 @@ const create = context => {
 		return mediaPreferences.get(node);
 	});
 
+	/**
+	@param {DeclarationPlain} node
+	@param {string} property
+	@returns {CssicornProblem}
+	*/
 	const getProblem = (node, property) => ({node, messageId: MESSAGE_ID, data: {property}});
 
 	context.on('Atrule', atRule => {
 		const name = getKeyframesName(atRule, lexer);
 		if (name !== undefined) {
-			nonMotionAnimations.set(name, nonMotionAnimations.get(name) !== false && hasOnlyNonMotionKeyframes(atRule, lexer));
+			// `getKeyframesName` verifies that the definition has a block.
+			nonMotionAnimations.set(name, nonMotionAnimations.get(name) !== false && hasOnlyNonMotionKeyframes(/** @type {BlockPlain} */ (atRule.block), lexer));
 		}
 	});
 
@@ -200,7 +257,7 @@ const create = context => {
 		}
 
 		const identifier = getSingleValueIdentifier(declaration);
-		const value = identifier && normalizeCssIdentifier(identifier.name);
+		const value = identifier ? normalizeCssIdentifier(identifier.name) : '';
 		if (resetKeywords.has(value)) {
 			return;
 		}
@@ -210,7 +267,8 @@ const create = context => {
 		}
 
 		if (animationProperties.has(property)) {
-			animationReferences.push({declaration, property});
+			// The declaration's value was validated before deferring animation resolution.
+			animationReferences.push({declaration: /** @type {DeclarationPlain & {value: ValuePlain}} */ (declaration), property});
 			return;
 		}
 
@@ -231,7 +289,7 @@ const create = context => {
 
 	context.onExit('StyleSheet', function * () {
 		for (const {declaration, property} of animationReferences) {
-			if (!hasOnlyNonMotionAnimations(declaration, property, lexer, nonMotionAnimations)) {
+			if (!hasOnlyNonMotionAnimations(declaration.value, property, lexer, nonMotionAnimations)) {
 				yield getProblem(declaration, property);
 			}
 		}

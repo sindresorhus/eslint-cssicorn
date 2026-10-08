@@ -1024,6 +1024,34 @@ Message:
 
 `;
 
+exports[`invalid(74): a { @starting-style { transition: transform 200ms; } } 1`] = `
+
+  1 | a { @starting-style { transition: transform 200ms; } }
+
+`;
+
+exports[`invalid(74): a { @starting-style { transition: transform 200ms; } } 2`] = `
+
+Message:
+> 1 | a { @starting-style { transition: transform 200ms; } }
+    |                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^ Place \`transition\` inside a \`prefers-reduced-motion: no-preference\` media query.
+
+`;
+
+exports[`invalid(75): @property --offset { syntax: \"<length>\"; inherits: false; initial-value: 0; } a { translate: var(--offset); transition: --offset 200ms; } 1`] = `
+
+  1 | @property --offset { syntax: "<length>"; inherits: false; initial-value: 0; } a { translate: var(--offset); transition: --offset 200ms; }
+
+`;
+
+exports[`invalid(75): @property --offset { syntax: \"<length>\"; inherits: false; initial-value: 0; } a { translate: var(--offset); transition: --offset 200ms; } 2`] = `
+
+Message:
+> 1 | @property --offset { syntax: "<length>"; inherits: false; initial-value: 0; } a { translate: var(--offset); transition: --offset 200ms; }
+    |                                                                                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^ Place \`transition\` inside a \`prefers-reduced-motion: no-preference\` media query.
+
+`;
+
 exports[`invalid(8): a { animation-name: external; } 1`] = `
 
   1 | a { animation-name: external; }

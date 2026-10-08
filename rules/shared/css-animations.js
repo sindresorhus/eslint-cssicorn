@@ -1,5 +1,17 @@
+// @ts-check
+
 import {ident} from '@eslint/css-tree';
 import {getCommaSeparatedGroups, isKeyframesAtRule} from '../utils/index.js';
+
+/**
+@import {AtrulePlain, CssNodePlain, Lexer, LexerMatchResult, ValuePlain} from '@eslint/css-tree';
+*/
+
+/**
+The lexer accepts plain nodes, but its trace methods are currently typed for linked-list nodes only.
+
+@typedef {LexerMatchResult & {isType: (node: CssNodePlain, type: string) => boolean, isProperty: (node: CssNodePlain, property: string) => boolean}} PlainLexerMatchResult
+*/
 
 const animationShorthandComponents = [
 	{property: 'animation-duration'},
@@ -15,6 +27,10 @@ const animationShorthandComponents = [
 // The lexer does not consistently recognize escaped keyword, function, or unit spellings.
 /**
 Decode and re-encode identifier spellings in a value for lexer matching without changing the source AST.
+
+@template {CssNodePlain} Node
+@param {Node} node
+@returns {Node}
 */
 const getCanonicalLexerNode = node => {
 	let canonicalNode = node;
@@ -24,10 +40,10 @@ const getCanonicalLexerNode = node => {
 		canonicalNode = {...node, unit: ident.encode(ident.decode(node.unit))};
 	}
 
-	if (node.children) {
+	if ('children' in canonicalNode && canonicalNode.children) {
 		canonicalNode = {
 			...canonicalNode,
-			children: node.children.map(child => getCanonicalLexerNode(child)),
+			children: canonicalNode.children.map(child => getCanonicalLexerNode(child)),
 		};
 	}
 
@@ -36,6 +52,8 @@ const getCanonicalLexerNode = node => {
 
 /**
 Get the decoded, case-sensitive name of an animation identifier or string.
+
+@param {CssNodePlain} node
 */
 const getAnimationName = node => {
 	if (node.type === 'Identifier') {
@@ -47,6 +65,11 @@ const getAnimationName = node => {
 	}
 };
 
+/**
+@param {CssNodePlain} node
+@param {string} property
+@param {Lexer} lexer
+*/
 const isAnimationNameNode = (node, property, lexer) => {
 	const name = getAnimationName(node);
 	if (name === undefined || name === '') {
@@ -54,14 +77,25 @@ const isAnimationNameNode = (node, property, lexer) => {
 	}
 
 	const canonicalNode = getCanonicalLexerNode(node);
-	const matchResult = lexer.matchProperty(property, canonicalNode);
+	const matchResult = /** @type {PlainLexerMatchResult} */ (lexer.matchProperty(property, canonicalNode));
 	return Boolean(matchResult.matched && matchResult.isType(canonicalNode, 'keyframes-name'));
 };
 
+/**
+@param {CssNodePlain} node
+@param {{property: string, type?: string}} component
+@param {PlainLexerMatchResult} matchResult
+*/
 const isShorthandComponentNode = (node, component, matchResult) => component.type
 	? matchResult.isType(node, component.type)
 	: matchResult.isProperty(node, component.property);
 
+/**
+@param {number} index
+@param {CssNodePlain[]} nodes
+@param {PlainLexerMatchResult} matchResult
+@param {Lexer} lexer
+*/
 const isAnimationNameByShorthandOrder = (index, nodes, matchResult, lexer) => {
 	const node = nodes[index];
 	const previousNodes = nodes.slice(0, index);
@@ -73,10 +107,15 @@ const isAnimationNameByShorthandOrder = (index, nodes, matchResult, lexer) => {
 
 /**
 Get animation name nodes from one comma-separated animation layer.
+
+@param {CssNodePlain[]} nodes
+@param {string} property
+@param {ValuePlain} value
+@param {Lexer} lexer
 */
 const getGroupAnimationNameNodes = (nodes, property, value, lexer) => {
 	const canonicalNodes = nodes.map(node => getCanonicalLexerNode(node));
-	const matchResult = lexer.matchProperty(property, {...value, children: canonicalNodes});
+	const matchResult = /** @type {PlainLexerMatchResult} */ (lexer.matchProperty(property, {...value, children: canonicalNodes}));
 	if (matchResult.matched) {
 		const animationNameIndex = canonicalNodes.findIndex((node, index) => getAnimationName(nodes[index]) !== '' && matchResult.isType(node, 'keyframes-name'));
 		if (animationNameIndex === -1) {
@@ -101,12 +140,19 @@ const getGroupAnimationNameNodes = (nodes, property, value, lexer) => {
 
 /**
 Get literal animation name nodes from a declaration, including best-effort shorthand matching.
+
+@param {{value: ValuePlain}} declaration
+@param {string} property
+@param {Lexer} lexer
 */
 const getAnimationNameNodes = (declaration, property, lexer) => getCommaSeparatedGroups(declaration.value)
 	.flatMap(({nodes}) => getGroupAnimationNameNodes(nodes, property, declaration.value, lexer));
 
 /**
 Get the decoded name of a valid keyframes definition.
+
+@param {AtrulePlain} atRule
+@param {Lexer} lexer
 */
 const getKeyframesName = (atRule, lexer) => {
 	if (

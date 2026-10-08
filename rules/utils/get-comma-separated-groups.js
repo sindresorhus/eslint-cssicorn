@@ -1,8 +1,12 @@
 /**
+@import {CssNodePlain, Operator} from '@eslint/css-tree';
+*/
+
+/**
 Split the children of a value into the groups between top-level commas, like the layers of `font-family` or `animation`.
 
-@param {object} value - The `Value` node.
-@returns {{nodes: object[], previousComma: object | undefined, nextComma: object | undefined}[]}
+@param {{children: CssNodePlain[]}} value - The node or object containing the value children.
+@returns {{nodes: CssNodePlain[], previousComma: Operator | undefined, nextComma: Operator | undefined}[]}
 */
 export default function getCommaSeparatedGroups(value) {
 	const groups = [];
