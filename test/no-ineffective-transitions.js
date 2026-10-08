@@ -141,8 +141,20 @@ test.snapshot({
 test({
 	valid: [
 		'a { transition: opacity 1s allow-discrete, transform 2s normal; transition-property: display, opacity, content-visibility; }',
+		'a { transition: opacity 1s steps(2, jump-start), allow-discrete display min(1s, 2s); }',
 	],
 	invalid: [
+		{
+			code: 'a { transition: opacity 1s steps(2, jump-start), display min(1s, 2s); }',
+			errors: [{
+				messageId: 'no-ineffective-transitions/discrete',
+				data: {property: 'display'},
+				suggestions: [{
+					messageId: 'no-ineffective-transitions/allow-discrete',
+					output: 'a { transition: opacity 1s steps(2, jump-start), allow-discrete display min(1s, 2s); }',
+				}],
+			}],
+		},
 		{
 			code: 'a { transition: opacity 1s normal, transform 2s allow-discrete; transition-property: display, opacity, content-visibility; }',
 			errors: ['display', 'content-visibility'].map(property => ({
