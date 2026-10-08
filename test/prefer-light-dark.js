@@ -56,6 +56,8 @@ test.snapshot({
 			['border: 1px solid white; border-color: red;', 'border: 1px solid black;'],
 			['background: white;', 'background: black; background-color: red;'],
 			['border-left-color: white;', 'border-left-color: black; border-inline-color: red;'],
+			['border: 1px solid white; border-inline-color: red;', 'border: 1px solid black;'],
+			['border-inline-color: white; border: 1px solid red;', 'border-inline-color: black;'],
 			['all: initial; color: white;', 'color: black;'],
 			['all: initial; --color: white;', '--color: black;'],
 			['--color: white;', 'all: initial; --color: black;'],
@@ -122,6 +124,7 @@ test.snapshot({
 		':root { color-scheme: light dark; }\r\na {\r\n  border: 1px solid white;\r\n  @media (prefers-color-scheme: dark) {\r\n    border: 1px solid black;\r\n    padding: 0;\r\n  }\r\n}',
 		root + 'a { color: white } @media (prefers-color-scheme: dark) { a { color: black } }',
 		pair('color: #0008;', 'color: rgb(0 0 0 / .5);'),
+		pair('box-shadow: 0 1px red, 0 2px currentColor;', 'box-shadow: 0 1px blue, 0 2px currentColor;'),
 	],
 });
 

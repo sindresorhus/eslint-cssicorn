@@ -116,7 +116,7 @@ function hasPropertyConflict(property, properties) {
 		}
 
 		// Logical and physical border declarations can address the same edge depending on writing mode.
-		if (property.startsWith('border-') && other.startsWith('border-') && /^border-(?:block|inline)(?:-|$)/v.test(property) !== /^border-(?:block|inline)(?:-|$)/v.test(other)) {
+		if (/^border(?:-|$)/v.test(property) && /^border(?:-|$)/v.test(other) && /^border-(?:block|inline)(?:-|$)/v.test(property) !== /^border-(?:block|inline)(?:-|$)/v.test(other)) {
 			return true;
 		}
 	}

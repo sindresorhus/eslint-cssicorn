@@ -92,13 +92,13 @@ The rule requires a literal `color-scheme` declaration supporting both `light` a
 
 This setup is eligibility evidence, not proof of the complete cascade. The rule does not infer setup from other files, HTML, or JavaScript, and never inserts `color-scheme`.
 
-Branches must be literal named colors, hex colors, or absolute color functions. A custom property's entire value must be one literal color. For ordinary properties, corresponding top-level components must match except for literal colors, and the combined value must pass CSSTree's property grammar. Multiple color components can be combined, such as in `border-color` or `box-shadow`. Matching property names are decoded, custom-property case is preserved, and `!important` status must match.
+Differing components must be literal named colors, hex colors, or absolute color functions. A custom property's entire value must be one literal color. For ordinary properties, corresponding top-level components must match except for literal colors, and the combined value must pass CSSTree's property grammar. Unchanged components are preserved, including dynamic colors and gradients. Multiple color components can be combined, such as in `border-color` or `box-shadow`. Matching property names are decoded, custom-property case is preserved, and `!important` status must match.
 
 Each convertible override declaration is reported separately. A suggestion replaces its differing base color components and removes that override declaration. Unrelated declarations remain. Empty wrappers are removed only when they contain no comments. Reports involving comments in either paired declaration have no suggestion.
 
 ## Limitations
 
-The rule skips separated pairs, two explicit media branches, nested selector overrides, additional media conditions, gradients requiring internal rewriting, dynamic colors such as `var()` and `currentColor`, system colors, relative colors, and existing `light-dark()` calls. It also skips duplicate target declarations, overlapping shorthand and longhand declarations, ambiguous logical and physical border declarations, blocks containing vendor-prefixed ordinary declarations, `all` resets, keyframes, descriptor blocks, CSS Modules interop declarations, and unparseable values.
+The rule skips separated pairs, two explicit media branches, nested selector overrides, additional media conditions, and gradients requiring internal rewriting. Differing components containing dynamic colors such as `var()` and `currentColor`, system colors, relative colors, or existing `light-dark()` calls are skipped. It also skips duplicate target declarations, overlapping shorthand and longhand declarations, ambiguous logical and physical border declarations, blocks containing vendor-prefixed ordinary declarations, `all` resets, keyframes, descriptor blocks, CSS Modules interop declarations, and unparseable values.
 
 The rule skips `all` even for custom-property pairs because it also resets the required `color-scheme`. Vendor-prefixed ordinary declarations are skipped because their aliases can hide shorthand conflicts.
 
