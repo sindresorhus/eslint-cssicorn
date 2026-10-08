@@ -25,6 +25,14 @@ test({
 		code: '.parent{@media (width>1px){color:red;&.a{color:blue}background:red}@media (width>1px){color:green;&.b{color:purple}border:0}}',
 		output: '.parent{@media (width>1px){color:red;&.a{color:blue}background:red;color:green;&.b{color:purple}border:0}}',
 		errors: [{messageId: 'prefer-merged-rules/conditions'}],
+	}, {
+		code: '@media all{@layer first;}@media all{@layer second;}',
+		output: '@media all{@layer first;@layer second;}',
+		errors: [{messageId: 'prefer-merged-rules/conditions'}],
+	}, {
+		code: '.a{color:red}.b{color:red}.c:unknown{color:red}.d{color:red}.e{color:red}',
+		output: '.a,.b{color:red}.c:unknown{color:red}.d,.e{color:red}',
+		errors: [{messageId: 'prefer-merged-rules/selectors'}, {messageId: 'prefer-merged-rules/selectors'}],
 	}],
 });
 

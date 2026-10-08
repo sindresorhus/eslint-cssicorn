@@ -149,6 +149,10 @@ const canMergeSelectors = (rule, context) => !find(rule.prelude, isUncertainSele
 	&& (hasAncestorStyleRule(rule, context) || rule.prelude.children.every(selector => selector.children.at(0)?.type !== 'Combinator'));
 
 const hasRandomFunction = value => {
+	if (!value.includes('(')) {
+		return false;
+	}
+
 	let hasRandom = false;
 	tokenize(value, (type, start, end) => {
 		if (type === tokenTypes.Function && ['random', 'random-item'].includes(normalizeCssIdentifier(value.slice(start, end - 1)))) {
