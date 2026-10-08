@@ -15,6 +15,7 @@ test.snapshot({
 		'@supports (color: var(--brand)) {}',
 		'@supports (color: var(--brand, red)) {}',
 		'@supports (color: var(--brand, var(--fallback, red))) {}',
+		'@supports (color: var(--brand)) and (color: oklch(60% 0.2 20)) {}',
 		'@supports (width: env(safe-area-inset-left, 0px)) {}',
 		'@supports (--probe: attr(data-width type(<length>))) {}',
 		'@supports (--probe: if(supports(color: oklch(60% 0.2 20)): red; else: blue)) {}',
