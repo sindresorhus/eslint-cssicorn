@@ -45,6 +45,8 @@ test.snapshot({
 		'a { touch-action: pan-y pan-y; }',
 		'a { touch-action: pan-left pan-right; }',
 		'a { touch-action: pan-up pan-down; }',
+		'a { touch-action: pan-x pan-left; }',
+		'a { touch-action: pan-y pan-up; }',
 		'a { touch-action: pan-x pan-y pan-left; }',
 		'a { touch-action: none pan-y; }',
 		'a { touch-action: none pinch-zoom; }',
@@ -95,6 +97,16 @@ test({
 				suggestions: [{
 					messageId: 'no-disabled-pinch-zoom/suggestion',
 					output: String.raw`a { touch-action: pinch-zoom pan-\79; }`,
+				}],
+			}],
+		},
+		{
+			code: 'a {\r\n  touch-action: /* before */ pan-x/**/pan-y /* after */ !important;\r\n}',
+			errors: [{
+				messageId: 'no-disabled-pinch-zoom/error',
+				suggestions: [{
+					messageId: 'no-disabled-pinch-zoom/suggestion',
+					output: 'a {\r\n  touch-action: /* before */ pinch-zoom pan-x/**/pan-y /* after */ !important;\r\n}',
 				}],
 			}],
 		},
