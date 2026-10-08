@@ -46,6 +46,8 @@ test.snapshot({
 		'a { height: 0; padding-left: 50%; padding-right: 50%; }',
 		'a { height: 0; --padding-top: 50%; }',
 		...['50%', '50% 10px', '50% 0 10px', '50% 0 0 10%', '50% 0 0 0 0', '0 0 0 0', '50% 0deg'].map(value => `a { height: 0; padding: ${value}; }`),
+		'a { height: 0; padding: 50% calc(0%); }',
+		'a { height: 0; padding: calc(-25%) 0 50%; }',
 		'a { height: 0; height: auto; padding-top: 50%; }',
 		'a { height: 0; HEIGHT: 0 !important; padding-top: 50%; }',
 		'a { height: 0; padding-top: 50%; padding-top: 0; }',
@@ -123,6 +125,13 @@ test.snapshot({
 		'a { @media (width > 10px) { height: 0; padding-top: 50%; } }',
 		'a { @supports (display: grid) { height: 0; padding-top: 50%; } }',
 		'a { @container (width > 10px) { height: 0; padding-top: 50%; } }',
+		'a { @layer cards { height: 0; padding-top: 50%; } }',
+		'a { @scope (&) { height: 0; padding-top: 50%; } }',
+		'a { @starting-style { height: 0; padding-top: 50%; } }',
+		'a { height: 0; padding: 0 0 calc(100% - 43.75%); }',
+		'a { height: 0; padding: calc(25% + 25%) 0 calc(100% / 2); }',
+		'a { height: 0; padding-top: calc((50% / 25% + 1) * 50%); }',
+		'a { height: 0; padding-top: calc((25% * 25% + 75% * 75%) / 100%); }',
 	],
 });
 

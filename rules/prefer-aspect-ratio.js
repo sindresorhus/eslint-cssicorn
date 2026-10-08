@@ -146,11 +146,15 @@ function isRatioPadding(declaration, sourceCode) {
 	}
 
 	const [top, right = top, bottom = top, left = right] = children;
-	return isZeroLiteral(right, sourceCode)
-		&& isZeroLiteral(left, sourceCode)
-		&& (isZeroLiteral(top, sourceCode) || isPositivePercentage(top))
-		&& (isZeroLiteral(bottom, sourceCode) || isPositivePercentage(bottom))
-		&& (isPositivePercentage(top) || isPositivePercentage(bottom));
+	if (!isZeroLiteral(right, sourceCode) || !isZeroLiteral(left, sourceCode)) {
+		return false;
+	}
+
+	const hasPositiveTopPadding = isPositivePercentage(top);
+	const hasPositiveBottomPadding = isPositivePercentage(bottom);
+	return (hasPositiveTopPadding || hasPositiveBottomPadding)
+		&& (hasPositiveTopPadding || isZeroLiteral(top, sourceCode))
+		&& (hasPositiveBottomPadding || isZeroLiteral(bottom, sourceCode));
 }
 
 /**
