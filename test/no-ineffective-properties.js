@@ -2,6 +2,38 @@ import {getTester} from './utils/test.js';
 
 const {test} = getTester(import.meta);
 
+const omittedComponentMessageId = 'no-ineffective-properties/omitted-shorthand-component';
+
+test({
+	valid: [],
+	invalid: [
+		{
+			code: '.card { border: 1px red; outline: 2px blue; animation: 2s ease; }',
+			errors: [
+				{messageId: omittedComponentMessageId, data: {property: 'border', component: 'the border style'}},
+				{messageId: omittedComponentMessageId, data: {property: 'outline', component: 'the outline style'}},
+				{messageId: omittedComponentMessageId, data: {property: 'animation', component: 'an animation name'}},
+			],
+		},
+		{
+			code: String.raw`a { \62 order: 1p\78  red; o\75 tline: 2px blue; anim\61 tion: 2\73  e\61 se; }`,
+			errors: [{messageId: omittedComponentMessageId}, {messageId: omittedComponentMessageId}, {messageId: omittedComponentMessageId}],
+		},
+		{
+			code: 'a { animation: 2s ease; animation-duration: 3s; animation-delay: 1s; border: 1px red; border-image-width: 2; }',
+			errors: [{messageId: omittedComponentMessageId}, {messageId: omittedComponentMessageId}],
+		},
+		{
+			code: 'a { --border-style: solid; border: 1px red; --outline-style: auto; outline: 2px blue; --animation-name: fade; animation: 2s ease; }',
+			errors: [{messageId: omittedComponentMessageId}, {messageId: omittedComponentMessageId}, {messageId: omittedComponentMessageId}],
+		},
+		{
+			code: 'a { border: 1px red; border-style: solid; outline: 2px blue; outline-style: auto; animation: 2s ease; animation-name: fade; position: static; top: 1px; }',
+			errors: [{messageId: 'no-ineffective-properties/static'}],
+		},
+	],
+});
+
 const flexProperties = [
 	['flex-direction', 'column'],
 	['flex-wrap', 'wrap'],
@@ -781,6 +813,327 @@ test({
 		{
 			code: 'a { text-decoration-line: none; -webkit-text-decoration: underline; text-decoration-color: red; offset-path: none; offset-distance: 50%; }',
 			errors: [{messageId: 'no-ineffective-properties/motion'}],
+		},
+	],
+});
+
+const borderShorthands = [
+	'border',
+	'border-top',
+	'border-right',
+	'border-bottom',
+	'border-left',
+	'border-block',
+	'border-inline',
+	'border-block-start',
+	'border-block-end',
+	'border-inline-start',
+	'border-inline-end',
+];
+
+test.snapshot({
+	valid: [
+		...borderShorthands.map(property => `a { ${property}: 1px solid red; }`),
+		...borderShorthands.map(property => `a { ${property}: 0 red; }`),
+		...['none', 'hidden', 'dotted', 'dashed', 'double', 'groove', 'ridge', 'inset', 'outset'].map(style => `a { border: 1px ${style} red; }`),
+		'a { border: 0px red; outline: -0.0em blue; }',
+		'a { border: +0 red; outline: 0; }',
+		'a { outline: 2px solid blue; }',
+		'a { outline: 2px auto blue; }',
+		'a { outline: none; }',
+		String.raw`a { border: 1p\78  s\6f lid red; outline: 2px a\75 to blue; }`,
+		'a { animation: fade; }',
+		'a { animation: 2s auto; }',
+		'a { animation: auto 2s; }',
+		'a { animation: auto; }',
+		String.raw`a { animation: \61 uto ease; }`,
+		'a { ANIMATION: AUTO 2S; }',
+		'a { animation: 2s scroll(); }',
+		'a { animation: 1s --fade; }',
+		'a { animation: --fade 1s; }',
+		String.raw`a { animation: 1s \2d -fade; }`,
+		'a { animation: 2s ease, 1s --fade; }',
+		'a { animation: 2s view(); }',
+		'a { animation: 2s "none"; }',
+		'a { animation: 2s ease ease; }',
+		'a { animation: 2s linear linear; }',
+		'a { animation: 2s ease forwards forwards; }',
+		'a { animation: 2s ease paused paused; }',
+		'a { animation: 2s ease linear; }',
+		String.raw`a { animation: 2s ease a\20 b; }`,
+		'a { animation: 3s none backwards; }',
+		'a { animation: 2s none; }',
+		'a { animation: 2s ease, none; }',
+		'a { animation: 2s ease, 1s fade; }',
+		'a { animation: 1s fade, 2s ease; }',
+		String.raw`a { animation: 2s n\6f ne; }`,
+		String.raw`a { animation: 2s e\61 se e\61 se; }`,
+		'a { border: thin medium red; outline: 2px hidden; animation: 2s ease ease ease; }',
+		'a { border: url("border.png"); outline: "solid"; animation: url("fade"); }',
+		'a { border: var(--border); outline: 2px var(--style) blue; animation: 2s var(--name); }',
+		'a { border: calc(1px + var(--width)) red; outline: 2px rgb(var(--color)); animation: 2s linear(var(--stop), 1); }',
+		'a { border: calc(1px * random(1, 2)) red; outline: 2px --color(); animation: calc(1s * random(1, 2)) ease; }',
+		...['inherit', 'initial', 'unset', 'revert', 'revert-layer'].map(value => `a { border: ${value}; outline: ${value}; animation: ${value}; }`),
+		String.raw`a { border: \69 nherit; outline: \75 nset; animation: \69 nitial; }`,
+		'a { all: initial; border: 1px red; outline: 2px blue; animation: 2s ease; }',
+		'a { --border: 1px red; --outline: 2px blue; --animation: 2s ease; }',
+		'a { content: "border: 1px red; animation: 2s ease"; background-image: url("outline: 2px blue"); }',
+		'@keyframes fade { to { border: 1px red; outline: 2px blue; animation: 2s ease; } }',
+		'@-webkit-keyframes fade { to { border: 1px red; } }',
+		'@font-face { border: 1px red; outline: 2px blue; animation: 2s ease; }',
+		'@page { border: 1px red; }',
+		'@unknown { animation: 2s ease; }',
+		':export { border: 1px red; outline: 2px blue; animation: 2s ease; }',
+		':import("tokens.css") { border: 1px red; }',
+		'a { -webkit-border: 1px red; -moz-outline: 2px blue; -webkit-animation: 2s ease; }',
+	],
+	invalid: [
+		...borderShorthands.map(property => `a { ${property}: 1px red; }`),
+		'a { border: red; }',
+		'a { border: thin; }',
+		'a { outline: 2px blue; }',
+		'a { outline: blue; }',
+		'a { outline: thick; }',
+		'a { border: calc(0px) red; }',
+		'a { border: calc(1px + 2px) rgb(0 0 0); }',
+		'a { outline: 2px rgb(0 0 0 / 0); }',
+		'a { animation: 2s ease; }',
+		'a { animation: ease; }',
+		'a { animation: 0s; }',
+		'a { animation: 2s steps(4, end); }',
+		'a { animation: 2s linear(0, 1); }',
+		'a { animation: ease 2s; }',
+		'a { animation: steps(4, end) 2s; }',
+		'a { animation: 2s ease, 1s linear; }',
+		'a { BORDER: 1PX RED; OUTLINE: 2PX BLUE; ANIMATION: 2S EASE !important; }',
+		String.raw`a { animation: 2s s\74 eps(4, end); }`,
+		'a { border: 1px /* color */ red !important; outline: /* width */ 2px blue; animation: 2s /* easing */ ease; }',
+		'a { & b { border: 1px red; } }',
+		...['media (width > 1px)', 'supports (display: grid)', 'container (width > 1px)', 'layer components', 'scope (.card)'].map(atRule => `a { @${atRule} { outline: 2px blue; } }`),
+		'a { border: 1px red; } a:hover { border-style: solid; }',
+		'a { outline: 2px blue; } a:focus-visible { outline-style: auto; }',
+		'a { animation: 2s ease; } a:hover { animation-name: fade; }',
+		'a { border-style: solid; & b { border: 1px red; } }',
+		'a { outline-style: auto; @media (width > 1px) { outline: 2px blue; } }',
+		'a { animation: 2s ease; & b { animation-name: fade; } }',
+		'a { border: 1px red; border-width: 2px; border-color: blue; border-radius: 4px; }',
+		'a { outline: 2px blue; outline-width: 3px; outline-color: red; outline-offset: 2px; }',
+		'a { border: 1px red; border-image-slice: 1; border-image-width: 5px; border-image-outset: 1; border-image-repeat: stretch; }',
+	],
+});
+
+const shorthandControlGroups = [
+	{
+		declaration: 'border: 1px red',
+		controls: [
+			...borderShorthands.map(property => `${property}: 2px solid blue`),
+			...borderShorthands.map(property => `${property}-style: solid`),
+			'border-image: linear-gradient(red, blue) 1 / 5px',
+			'border-image-source: url("border.png")',
+			'border-style: none',
+			'border-block-start-style: var(--style)',
+			'border-inline-end-style: inherit',
+		],
+	},
+	{declaration: 'outline: 2px blue', controls: ['outline: 2px solid blue', 'outline-style: auto', 'outline-style: none', 'outline-style: var(--style)']},
+	{declaration: 'animation: 2s ease', controls: ['animation: 2s fade', 'animation-name: fade', 'animation-name: none', 'animation-name: var(--name)']},
+	{
+		declaration: 'column-rule: 1px red',
+		controls: [
+			'column-rule: 2px solid blue',
+			'column-rule-style: solid',
+			'column-rule-style: none',
+			'column-rule-style: var(--style)',
+			'rule: 2px solid blue',
+			'rule-style: solid',
+			'rule: var(--rule)',
+			'rule-style: bad',
+		],
+	},
+	{declaration: 'text-decoration: wavy red', controls: ['text-decoration: underline', 'text-decoration-line: underline', 'text-decoration-line: none', 'text-decoration-line: var(--line)']},
+	{
+		declaration: 'text-emphasis: red',
+		controls: ['text-emphasis: filled blue', 'text-emphasis-style: filled', 'text-emphasis-style: none', 'text-emphasis-style: var(--style)', 'text-emphasis-style: bad'],
+	},
+];
+
+test({
+	valid: [
+		...shorthandControlGroups.flatMap(({declaration, controls}) => controls.flatMap(control => [
+			`a { ${declaration}; ${control}; }`,
+			`a { ${control} !important; ${declaration}; }`,
+			`a { ${declaration} !important; -webkit-${control}; }`,
+		])),
+		'a { border-block-start: 1px red; border-bottom-style: solid; }',
+		'a { border-inline: 1px red; border-right: 2px blue; }',
+		'a { border: 1px red; border: 2px blue; }',
+		'a { outline: 2px blue; outline: 3px red; }',
+		'a { animation: 2s ease; animation: 3s linear; }',
+		'a { BORDER: 1PX RED; -MOZ-BORDER-STYLE: SOLID; OUTLINE: 2PX BLUE; -MOZ-OUTLINE-STYLE: AUTO; ANIMATION: 2S EASE; -WEBKIT-ANIMATION-NAME: FADE; }',
+		String.raw`a { border: 1px red; border-\73 tyle: solid; outline: 2px blue; -webkit-outline-\73 tyle: auto; animation: 2s ease; -webkit-animation-n\61 me: fade; }`,
+		'a { COLUMN-RULE: 1PX RED; RULE: 2PX SOLID BLUE; }',
+		'a { COLUMN-RULE: 1PX RED; RULE-STYLE: SOLID; }',
+		String.raw`a { column-rule: 1px red; \72 ule: 2px solid blue; }`,
+		String.raw`a { column-rule: 1px red; rule-\73 tyle: solid; }`,
+		'a { TEXT-EMPHASIS: RED; TEXT-EMPHASIS-STYLE: FILLED; }',
+		String.raw`a { text-emphasis: red; -webkit-text-emphasis-\73 tyle: filled; }`,
+	],
+	invalid: [],
+});
+
+test({
+	valid: [
+		...['filled', 'open', 'sesame', 'open dot', 'none', '"﹅"', '"none"', '""'].map(style => `em { text-emphasis: ${style} red; }`),
+		String.raw`em { text-emphasis: \66 illed red; }`,
+		...['inherit', 'initial', 'unset', 'revert', 'revert-layer', 'var(--emphasis)', 'rgb(var(--color))', '--emphasis()', 'red blue', 'url("red")'].map(value => `em { text-emphasis: ${value}; }`),
+		'em { text-emphasis: red; text-emphasis: blue; }',
+		'em { -webkit-text-emphasis: red; --text-emphasis: red; }',
+		'em { all: initial; text-emphasis: red; }',
+		'@keyframes emphasis { to { text-emphasis: red; } }',
+		'@font-face { text-emphasis: red; }',
+		':export { text-emphasis: red; }',
+	],
+	invalid: [
+		...['red', '#f00', 'rgb(255 0 0)', 'currentcolor'].map(value => ({
+			code: `em { text-emphasis: ${value}; }`,
+			errors: [{messageId: omittedComponentMessageId, data: {property: 'text-emphasis', component: 'the emphasis mark style'}}],
+		})),
+		{
+			code: 'em { TEXT-EMPHASIS: RED !important; }',
+			errors: [{messageId: omittedComponentMessageId, data: {property: 'text-emphasis', component: 'the emphasis mark style'}}],
+		},
+		{
+			code: String.raw`em { text-\65 mphasis: \72 ed; }`,
+			errors: [{messageId: omittedComponentMessageId, data: {property: 'text-emphasis', component: 'the emphasis mark style'}}],
+		},
+		...[
+			'em { text-emphasis: /* color */ red; }',
+			'em { text-emphasis: red; text-emphasis-color: blue; text-emphasis-position: under left; }',
+			'em { text-emphasis-style: filled; & span { text-emphasis: red; } }',
+			'em { @media (width > 1px) { text-emphasis: red; } }',
+			'em { text-emphasis: red; } em:hover { text-emphasis-style: filled; }',
+		].map(code => ({
+			code,
+			errors: [{messageId: omittedComponentMessageId, data: {property: 'text-emphasis', component: 'the emphasis mark style'}}],
+		})),
+	],
+});
+
+test({
+	valid: [
+		'a { border: red solid 1px; outline: blue auto 2px; }',
+		'a { border: 1px red; border-style: bad; outline: 2px blue; outline-style: bad; animation: 2s ease; animation-name: 42; }',
+		'a { animation: 2s 2 infinite; }',
+		'a { animation: 2s ease, 3s ease ease ease; }',
+	],
+	invalid: [
+		{
+			code: 'a { border: red 1px; outline: blue 2px; }',
+			errors: [
+				{messageId: omittedComponentMessageId, data: {property: 'border', component: 'the border style'}},
+				{messageId: omittedComponentMessageId, data: {property: 'outline', component: 'the outline style'}},
+			],
+		},
+		{
+			code: 'a { border: 1px red; border-style: solid; outline: 2px blue; animation: 2s ease; }',
+			errors: [
+				{messageId: omittedComponentMessageId, data: {property: 'outline', component: 'the outline style'}},
+				{messageId: omittedComponentMessageId, data: {property: 'animation', component: 'an animation name'}},
+			],
+		},
+		{
+			code: 'a { animation: 2s -1s ease; }',
+			errors: [{messageId: omittedComponentMessageId, data: {property: 'animation', component: 'an animation name'}}],
+		},
+		{
+			code: 'a { animation: 2s 2; }',
+			errors: [{messageId: omittedComponentMessageId, data: {property: 'animation', component: 'an animation name'}}],
+		},
+		...['2s ease forwards', '2s ease paused', '2s infinite alternate paused both'].map(value => ({
+			code: `a { animation: ${value}; }`,
+			errors: [{messageId: omittedComponentMessageId, data: {property: 'animation', component: 'an animation name'}}],
+		})),
+	],
+});
+
+test.snapshot({
+	valid: [
+		'a { columns: 2; column-rule: 1px solid red; }',
+		'a { column-rule: 0 red; }',
+		'a { column-rule: -0.0em blue; }',
+		'a { column-rule: none; }',
+		'a { column-rule: hidden; }',
+		'a { text-decoration: underline wavy red; }',
+		'a { text-decoration: red underline overline 2px; }',
+		'a { text-decoration: none wavy red; }',
+		'a { text-decoration: line-through; }',
+		String.raw`a { column-rule: 1p\78  s\6f lid red; text-decoration: \75 nderline wavy red; }`,
+		'a { column-rule: var(--rule); text-decoration: var(--decoration); }',
+		'a { column-rule: calc(1px + var(--width)) red; text-decoration: wavy rgb(var(--color)); }',
+		'a { column-rule: calc(1px * random(1, 2)) red; text-decoration: --decoration(); }',
+		...['inherit', 'initial', 'unset', 'revert', 'revert-layer'].map(value => `a { column-rule: ${value}; text-decoration: ${value}; }`),
+		'a { column-rule: url("rule.png"); text-decoration: "underline"; }',
+		'a { column-rule: 1px red; column-rule: 2px blue; text-decoration: wavy red; text-decoration: dashed blue; }',
+		'a { column-rule: 1px red; column-rule-style: bad; text-decoration: wavy red; text-decoration-line: bad; }',
+		'a { -webkit-column-rule: 1px red; -webkit-text-decoration: wavy red; }',
+		String.raw`a { column-rule: 1px red; -webkit-column-rule-\73 tyle: solid; text-decoration: wavy red; text-decoration-\6c ine: underline; }`,
+		'a { all: initial; column-rule: 1px red; text-decoration: wavy red; }',
+		'a { --column-rule: 1px red; --text-decoration: wavy red; }',
+		'@keyframes layout { to { column-rule: 1px red; text-decoration: wavy red; } }',
+		'@font-face { column-rule: 1px red; text-decoration: wavy red; }',
+		':export { column-rule: 1px red; text-decoration: wavy red; }',
+	],
+	invalid: [
+		'a { columns: 2; column-rule: 1px red; }',
+		'a { column-rule: red; }',
+		'a { column-rule: thin; }',
+		'a { column-rule: calc(0px) red; }',
+		'a { text-decoration: wavy red; }',
+		'a { text-decoration: red; }',
+		'a { text-decoration: 2px; }',
+		'a { text-decoration: 0px red; }',
+		'a { COLUMN-RULE: 1PX RED; TEXT-DECORATION: WAVY RED !important; }',
+		String.raw`a { column-\72 ule: 1p\78  red; text-decor\61 tion: w\61 vy red; }`,
+		'a { column-rule: 1px /* color */ red; text-decoration: wavy /* color */ red; }',
+		'a { & b { column-rule: 1px red; text-decoration: wavy red; } }',
+		'a { @media (width > 1px) { column-rule: 1px red; text-decoration: wavy red; } }',
+		'a { column-rule: 1px red; } a:hover { column-rule-style: solid; }',
+		'a { text-decoration: wavy red; } a:hover { text-decoration-line: underline; }',
+		'a { column-rule-style: solid; & b { column-rule: 1px red; } }',
+		'a { text-decoration: wavy red; & b { text-decoration-line: underline; } }',
+		'a { column-rule: 1px red; column-rule-width: 2px; column-rule-color: blue; border-style: solid; border-image: url("border.png") 1; }',
+		'a { text-decoration: wavy red; text-decoration-style: solid; text-decoration-color: blue; text-decoration-thickness: 2px; outline-style: solid; }',
+	],
+});
+
+test({
+	valid: [],
+	invalid: [
+		...['row-rule: 2px solid blue', 'rule-width: 2px', 'rule-color: blue'].map(control => ({
+			code: `a { column-rule: 1px red; ${control}; }`,
+			errors: [{messageId: omittedComponentMessageId, data: {property: 'column-rule', component: 'the column rule style'}}],
+		})),
+		{
+			code: 'a { border: 1px red; rule-style: solid; }',
+			errors: [{messageId: omittedComponentMessageId, data: {property: 'border', component: 'the border style'}}],
+		},
+		{
+			code: 'a { rule-style: solid; & b { column-rule: 1px red; } }',
+			errors: [{messageId: omittedComponentMessageId, data: {property: 'column-rule', component: 'the column rule style'}}],
+		},
+		{
+			code: 'a { column-rule: 1px red; text-decoration: wavy red; text-decoration-color: blue; text-decoration-thickness: 2px; }',
+			errors: [
+				{messageId: omittedComponentMessageId, data: {property: 'column-rule', component: 'the column rule style'}},
+				{messageId: omittedComponentMessageId, data: {property: 'text-decoration', component: 'the decoration line'}},
+			],
+		},
+		{
+			code: 'a { column-rule: 1px red; column-rule-style: solid; text-decoration: wavy red; border: 1px red; }',
+			errors: [
+				{messageId: omittedComponentMessageId, data: {property: 'text-decoration', component: 'the decoration line'}},
+				{messageId: omittedComponentMessageId, data: {property: 'border', component: 'the border style'}},
+			],
 		},
 	],
 });

@@ -1,8 +1,8 @@
-import type {CssNodePlain, FunctionNodePlain, Operator, ValuePlain} from '@eslint/css-tree';
+import type {CssNode, CssNodePlain, FunctionNodePlain, Identifier, Operator, ValuePlain} from '@eslint/css-tree';
 import type {CssicornProblem} from '../../rules/rule/to-eslint-problem.js';
 import type {EslintReportFixer} from '../../rules/rule/to-eslint-rule-fixer.js';
 import {forEachFixOrProblem} from '../../rules/rule/utilities.js';
-import {getCommaSeparatedGroups} from '../../rules/utils/index.js';
+import {getCanonicalLexerNode, getCommaSeparatedGroups} from '../../rules/utils/index.js';
 
 declare const node: CssNodePlain;
 const problem = {node, messageId: 'problem'} satisfies CssicornProblem;
@@ -39,3 +39,24 @@ groups[0].nextComma satisfies Operator | undefined;
 groups[0].nodes[0].name;
 // @ts-expect-error Group children must be CSS nodes.
 getCommaSeparatedGroups({children: ['opacity']});
+
+const canonicalValue = getCanonicalLexerNode(value);
+canonicalValue satisfies ValuePlain;
+canonicalValue.type satisfies 'Value';
+canonicalValue.children satisfies CssNodePlain[];
+// @ts-expect-error Values do not have identifier names.
+canonicalValue.name;
+
+declare const identifier: Identifier;
+const canonicalIdentifier = getCanonicalLexerNode(identifier);
+canonicalIdentifier satisfies Identifier;
+canonicalIdentifier.type satisfies 'Identifier';
+canonicalIdentifier.name satisfies string;
+// @ts-expect-error Identifiers do not have children.
+canonicalIdentifier.children;
+
+declare const listNode: CssNode;
+// @ts-expect-error Lexer canonicalization requires plain nodes with array children.
+getCanonicalLexerNode(listNode);
+// @ts-expect-error Identifiers require a name.
+getCanonicalLexerNode({type: 'Identifier'});

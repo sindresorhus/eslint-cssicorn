@@ -26,6 +26,34 @@ Message:
 
 `;
 
+exports[`invalid(1): a { border: 1px red; } 1`] = `
+
+  1 | a { border: 1px red; }
+
+`;
+
+exports[`invalid(1): a { border: 1px red; } 2`] = `
+
+Message:
+> 1 | a { border: 1px red; }
+    |     ^^^^^^^^^^^^^^^ \`border\` omits the border style, which defaults to \`none\`.
+
+`;
+
+exports[`invalid(1): a { columns: 2; column-rule: 1px red; } 1`] = `
+
+  1 | a { columns: 2; column-rule: 1px red; }
+
+`;
+
+exports[`invalid(1): a { columns: 2; column-rule: 1px red; } 2`] = `
+
+Message:
+> 1 | a { columns: 2; column-rule: 1px red; }
+    |                 ^^^^^^^^^^^^^^^^^^^^ \`column-rule\` omits the column rule style, which defaults to \`none\`.
+
+`;
+
 exports[`invalid(1): a { display: grid; flex-direction: column; } 1`] = `
 
   1 | a { display: grid; flex-direction: column; }
@@ -65,6 +93,42 @@ exports[`invalid(10): a { border-image-source: none; border-image-repeat: round;
 Message:
 > 1 | a { border-image-source: none; border-image-repeat: round; }
     |                                ^^^^^^^^^^^^^^^^^^^^^^^^^^ \`border-image-repeat\` has no effect with \`border-image-source: none\`. Set a border image to use this property.
+
+`;
+
+exports[`invalid(10): a { border-inline-start: 1px red; } 1`] = `
+
+  1 | a { border-inline-start: 1px red; }
+
+`;
+
+exports[`invalid(10): a { border-inline-start: 1px red; } 2`] = `
+
+Message:
+> 1 | a { border-inline-start: 1px red; }
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`border-inline-start\` omits the border style, which defaults to \`none\`.
+
+`;
+
+exports[`invalid(10): a { column-\\72 ule: 1p\\78  red; text-decor\\61 tion: w\\61 vy red; } 1`] = `
+
+  1 | a { column-\\72 ule: 1p\\78  red; text-decor\\61 tion: w\\61 vy red; }
+
+`;
+
+exports[`invalid(10): a { column-\\72 ule: 1p\\78  red; text-decor\\61 tion: w\\61 vy red; } 2`] = `
+
+Message:
+> 1 | a { column-\\72 ule: 1p\\78  red; text-decor\\61 tion: w\\61 vy red; }
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^ \`column-rule\` omits the column rule style, which defaults to \`none\`.
+
+`;
+
+exports[`invalid(10): a { column-\\72 ule: 1p\\78  red; text-decor\\61 tion: w\\61 vy red; } 3`] = `
+
+Message:
+> 1 | a { column-\\72 ule: 1p\\78  red; text-decor\\61 tion: w\\61 vy red; }
+    |                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`text-decoration\` omits the decoration line, which defaults to \`none\`.
 
 `;
 
@@ -236,6 +300,42 @@ Message:
 
 `;
 
+exports[`invalid(11): a { border-inline-end: 1px red; } 1`] = `
+
+  1 | a { border-inline-end: 1px red; }
+
+`;
+
+exports[`invalid(11): a { border-inline-end: 1px red; } 2`] = `
+
+Message:
+> 1 | a { border-inline-end: 1px red; }
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^ \`border-inline-end\` omits the border style, which defaults to \`none\`.
+
+`;
+
+exports[`invalid(11): a { column-rule: 1px /* color */ red; text-decoration: wavy /* color */ red; } 1`] = `
+
+  1 | a { column-rule: 1px /* color */ red; text-decoration: wavy /* color */ red; }
+
+`;
+
+exports[`invalid(11): a { column-rule: 1px /* color */ red; text-decoration: wavy /* color */ red; } 2`] = `
+
+Message:
+> 1 | a { column-rule: 1px /* color */ red; text-decoration: wavy /* color */ red; }
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`column-rule\` omits the column rule style, which defaults to \`none\`.
+
+`;
+
+exports[`invalid(11): a { column-rule: 1px /* color */ red; text-decoration: wavy /* color */ red; } 3`] = `
+
+Message:
+> 1 | a { column-rule: 1px /* color */ red; text-decoration: wavy /* color */ red; }
+    |                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`text-decoration\` omits the decoration line, which defaults to \`none\`.
+
+`;
+
 exports[`invalid(11): a { display: flex; grid-auto-flow: column dense; } 1`] = `
 
   1 | a { display: flex; grid-auto-flow: column dense; }
@@ -404,6 +504,28 @@ Message:
 
 `;
 
+exports[`invalid(12): a { & b { column-rule: 1px red; text-decoration: wavy red; } } 1`] = `
+
+  1 | a { & b { column-rule: 1px red; text-decoration: wavy red; } }
+
+`;
+
+exports[`invalid(12): a { & b { column-rule: 1px red; text-decoration: wavy red; } } 2`] = `
+
+Message:
+> 1 | a { & b { column-rule: 1px red; text-decoration: wavy red; } }
+    |           ^^^^^^^^^^^^^^^^^^^^ \`column-rule\` omits the column rule style, which defaults to \`none\`.
+
+`;
+
+exports[`invalid(12): a { & b { column-rule: 1px red; text-decoration: wavy red; } } 3`] = `
+
+Message:
+> 1 | a { & b { column-rule: 1px red; text-decoration: wavy red; } }
+    |                                 ^^^^^^^^^^^^^^^^^^^^^^^^^ \`text-decoration\` omits the decoration line, which defaults to \`none\`.
+
+`;
+
 exports[`invalid(12): a { animation-name: none; animation-range-end: exit 90%; } 1`] = `
 
   1 | a { animation-name: none; animation-range-end: exit 90%; }
@@ -415,6 +537,20 @@ exports[`invalid(12): a { animation-name: none; animation-range-end: exit 90%; }
 Message:
 > 1 | a { animation-name: none; animation-range-end: exit 90%; }
     |                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`animation-range-end\` has no effect with \`animation-name: none\`. Set an animation name to use this property.
+
+`;
+
+exports[`invalid(12): a { border: red; } 1`] = `
+
+  1 | a { border: red; }
+
+`;
+
+exports[`invalid(12): a { border: red; } 2`] = `
+
+Message:
+> 1 | a { border: red; }
+    |     ^^^^^^^^^^^ \`border\` omits the border style, which defaults to \`none\`.
 
 `;
 
@@ -583,6 +719,42 @@ exports[`invalid(129): a { display: table; border-collapse: collapse; padding-bl
 Message:
 > 1 | a { display: table; border-collapse: collapse; padding-block: 8px; }
     |                                                ^^^^^^^^^^^^^^^^^^ \`padding-block\` has no effect on this table with \`border-collapse: collapse\`. Apply padding to table cells or use separate borders.
+
+`;
+
+exports[`invalid(13): a { @media (width > 1px) { column-rule: 1px red; text-decoration: wavy red; } } 1`] = `
+
+  1 | a { @media (width > 1px) { column-rule: 1px red; text-decoration: wavy red; } }
+
+`;
+
+exports[`invalid(13): a { @media (width > 1px) { column-rule: 1px red; text-decoration: wavy red; } } 2`] = `
+
+Message:
+> 1 | a { @media (width > 1px) { column-rule: 1px red; text-decoration: wavy red; } }
+    |                            ^^^^^^^^^^^^^^^^^^^^ \`column-rule\` omits the column rule style, which defaults to \`none\`.
+
+`;
+
+exports[`invalid(13): a { @media (width > 1px) { column-rule: 1px red; text-decoration: wavy red; } } 3`] = `
+
+Message:
+> 1 | a { @media (width > 1px) { column-rule: 1px red; text-decoration: wavy red; } }
+    |                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^ \`text-decoration\` omits the decoration line, which defaults to \`none\`.
+
+`;
+
+exports[`invalid(13): a { border: thin; } 1`] = `
+
+  1 | a { border: thin; }
+
+`;
+
+exports[`invalid(13): a { border: thin; } 2`] = `
+
+Message:
+> 1 | a { border: thin; }
+    |     ^^^^^^^^^^^^ \`border\` omits the border style, which defaults to \`none\`.
 
 `;
 
@@ -768,6 +940,20 @@ Message:
 
 `;
 
+exports[`invalid(14): a { column-rule: 1px red; } a:hover { column-rule-style: solid; } 1`] = `
+
+  1 | a { column-rule: 1px red; } a:hover { column-rule-style: solid; }
+
+`;
+
+exports[`invalid(14): a { column-rule: 1px red; } a:hover { column-rule-style: solid; } 2`] = `
+
+Message:
+> 1 | a { column-rule: 1px red; } a:hover { column-rule-style: solid; }
+    |     ^^^^^^^^^^^^^^^^^^^^ \`column-rule\` omits the column rule style, which defaults to \`none\`.
+
+`;
+
 exports[`invalid(14): a { mask-image: none; mask-origin: content-box; } 1`] = `
 
   1 | a { mask-image: none; mask-origin: content-box; }
@@ -779,6 +965,20 @@ exports[`invalid(14): a { mask-image: none; mask-origin: content-box; } 2`] = `
 Message:
 > 1 | a { mask-image: none; mask-origin: content-box; }
     |                       ^^^^^^^^^^^^^^^^^^^^^^^^ \`mask-origin\` has no effect with \`mask-image: none\`. Set a mask image to use this property.
+
+`;
+
+exports[`invalid(14): a { outline: 2px blue; } 1`] = `
+
+  1 | a { outline: 2px blue; }
+
+`;
+
+exports[`invalid(14): a { outline: 2px blue; } 2`] = `
+
+Message:
+> 1 | a { outline: 2px blue; }
+    |     ^^^^^^^^^^^^^^^^^ \`outline\` omits the outline style, which defaults to \`none\`.
 
 `;
 
@@ -964,6 +1164,20 @@ Message:
 
 `;
 
+exports[`invalid(15): a { outline: blue; } 1`] = `
+
+  1 | a { outline: blue; }
+
+`;
+
+exports[`invalid(15): a { outline: blue; } 2`] = `
+
+Message:
+> 1 | a { outline: blue; }
+    |     ^^^^^^^^^^^^^ \`outline\` omits the outline style, which defaults to \`none\`.
+
+`;
+
 exports[`invalid(15): a { position: static; left: 20px; } 1`] = `
 
   1 | a { position: static; left: 20px; }
@@ -975,6 +1189,20 @@ exports[`invalid(15): a { position: static; left: 20px; } 2`] = `
 Message:
 > 1 | a { position: static; left: 20px; }
     |                       ^^^^^^^^^^ \`left\` has no effect with \`position: static\`. Insets require a positioned element.
+
+`;
+
+exports[`invalid(15): a { text-decoration: wavy red; } a:hover { text-decoration-line: underline; } 1`] = `
+
+  1 | a { text-decoration: wavy red; } a:hover { text-decoration-line: underline; }
+
+`;
+
+exports[`invalid(15): a { text-decoration: wavy red; } a:hover { text-decoration-line: underline; } 2`] = `
+
+Message:
+> 1 | a { text-decoration: wavy red; } a:hover { text-decoration-line: underline; }
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^ \`text-decoration\` omits the decoration line, which defaults to \`none\`.
 
 `;
 
@@ -1132,6 +1360,20 @@ Message:
 
 `;
 
+exports[`invalid(16): a { column-rule-style: solid; & b { column-rule: 1px red; } } 1`] = `
+
+  1 | a { column-rule-style: solid; & b { column-rule: 1px red; } }
+
+`;
+
+exports[`invalid(16): a { column-rule-style: solid; & b { column-rule: 1px red; } } 2`] = `
+
+Message:
+> 1 | a { column-rule-style: solid; & b { column-rule: 1px red; } }
+    |                                     ^^^^^^^^^^^^^^^^^^^^ \`column-rule\` omits the column rule style, which defaults to \`none\`.
+
+`;
+
 exports[`invalid(16): a { mask-image: none; mask-mode: luminance; } 1`] = `
 
   1 | a { mask-image: none; mask-mode: luminance; }
@@ -1143,6 +1385,20 @@ exports[`invalid(16): a { mask-image: none; mask-mode: luminance; } 2`] = `
 Message:
 > 1 | a { mask-image: none; mask-mode: luminance; }
     |                       ^^^^^^^^^^^^^^^^^^^^ \`mask-mode\` has no effect with \`mask-image: none\`. Set a mask image to use this property.
+
+`;
+
+exports[`invalid(16): a { outline: thick; } 1`] = `
+
+  1 | a { outline: thick; }
+
+`;
+
+exports[`invalid(16): a { outline: thick; } 2`] = `
+
+Message:
+> 1 | a { outline: thick; }
+    |     ^^^^^^^^^^^^^^ \`outline\` omits the outline style, which defaults to \`none\`.
 
 `;
 
@@ -1314,6 +1570,20 @@ Message:
 
 `;
 
+exports[`invalid(17): a { border: calc(0px) red; } 1`] = `
+
+  1 | a { border: calc(0px) red; }
+
+`;
+
+exports[`invalid(17): a { border: calc(0px) red; } 2`] = `
+
+Message:
+> 1 | a { border: calc(0px) red; }
+    |     ^^^^^^^^^^^^^^^^^^^^^ \`border\` omits the border style, which defaults to \`none\`.
+
+`;
+
 exports[`invalid(17): a { mask-image: none; mask-composite: intersect; } 1`] = `
 
   1 | a { mask-image: none; mask-composite: intersect; }
@@ -1353,6 +1623,20 @@ exports[`invalid(17): a { scroll-timeline-name: none; scroll-timeline-axis: x; }
 Message:
 > 1 | a { scroll-timeline-name: none; scroll-timeline-axis: x; }
     |                                 ^^^^^^^^^^^^^^^^^^^^^^^ \`scroll-timeline-axis\` has no effect with \`scroll-timeline-name: none\`. Name a scroll timeline to use this property.
+
+`;
+
+exports[`invalid(17): a { text-decoration: wavy red; & b { text-decoration-line: underline; } } 1`] = `
+
+  1 | a { text-decoration: wavy red; & b { text-decoration-line: underline; } }
+
+`;
+
+exports[`invalid(17): a { text-decoration: wavy red; & b { text-decoration-line: underline; } } 2`] = `
+
+Message:
+> 1 | a { text-decoration: wavy red; & b { text-decoration-line: underline; } }
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^ \`text-decoration\` omits the decoration line, which defaults to \`none\`.
 
 `;
 
@@ -1507,6 +1791,34 @@ exports[`invalid(18): a { BACKGROUND-SIZE: COVER !important; BACKGROUND-IMAGE: N
 Message:
 > 1 | a { BACKGROUND-SIZE: COVER !important; BACKGROUND-IMAGE: NONE; }
     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`background-size\` has no effect with \`background-image: none\`. Set a background image to use this property.
+
+`;
+
+exports[`invalid(18): a { border: calc(1px + 2px) rgb(0 0 0); } 1`] = `
+
+  1 | a { border: calc(1px + 2px) rgb(0 0 0); }
+
+`;
+
+exports[`invalid(18): a { border: calc(1px + 2px) rgb(0 0 0); } 2`] = `
+
+Message:
+> 1 | a { border: calc(1px + 2px) rgb(0 0 0); }
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`border\` omits the border style, which defaults to \`none\`.
+
+`;
+
+exports[`invalid(18): a { column-rule: 1px red; column-rule-width: 2px; column-rule-color: blue; border-style: solid; border-image: url(\"border.png\") 1; } 1`] = `
+
+  1 | a { column-rule: 1px red; column-rule-width: 2px; column-rule-color: blue; border-style: solid; border-image: url("border.png") 1; }
+
+`;
+
+exports[`invalid(18): a { column-rule: 1px red; column-rule-width: 2px; column-rule-color: blue; border-style: solid; border-image: url(\"border.png\") 1; } 2`] = `
+
+Message:
+> 1 | a { column-rule: 1px red; column-rule-width: 2px; column-rule-color: blue; border-style: solid; border-image: url("border.png") 1; }
+    |     ^^^^^^^^^^^^^^^^^^^^ \`column-rule\` omits the column rule style, which defaults to \`none\`.
 
 `;
 
@@ -1692,6 +2004,20 @@ Message:
 
 `;
 
+exports[`invalid(19): a { outline: 2px rgb(0 0 0 / 0); } 1`] = `
+
+  1 | a { outline: 2px rgb(0 0 0 / 0); }
+
+`;
+
+exports[`invalid(19): a { outline: 2px rgb(0 0 0 / 0); } 2`] = `
+
+Message:
+> 1 | a { outline: 2px rgb(0 0 0 / 0); }
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`outline\` omits the outline style, which defaults to \`none\`.
+
+`;
+
 exports[`invalid(19): a { position: static; inset-block-start: 20px; } 1`] = `
 
   1 | a { position: static; inset-block-start: 20px; }
@@ -1703,6 +2029,20 @@ exports[`invalid(19): a { position: static; inset-block-start: 20px; } 2`] = `
 Message:
 > 1 | a { position: static; inset-block-start: 20px; }
     |                       ^^^^^^^^^^^^^^^^^^^^^^^ \`inset-block-start\` has no effect with \`position: static\`. Insets require a positioned element.
+
+`;
+
+exports[`invalid(19): a { text-decoration: wavy red; text-decoration-style: solid; text-decoration-color: blue; text-decoration-thickness: 2px; outline-style: solid; } 1`] = `
+
+  1 | a { text-decoration: wavy red; text-decoration-style: solid; text-decoration-color: blue; text-decoration-thickness: 2px; outline-style: solid; }
+
+`;
+
+exports[`invalid(19): a { text-decoration: wavy red; text-decoration-style: solid; text-decoration-color: blue; text-decoration-thickness: 2px; outline-style: solid; } 2`] = `
+
+Message:
+> 1 | a { text-decoration: wavy red; text-decoration-style: solid; text-decoration-color: blue; text-decoration-thickness: 2px; outline-style: solid; }
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^ \`text-decoration\` omits the decoration line, which defaults to \`none\`.
 
 `;
 
@@ -1776,6 +2116,34 @@ Message:
 
 `;
 
+exports[`invalid(2): a { border-top: 1px red; } 1`] = `
+
+  1 | a { border-top: 1px red; }
+
+`;
+
+exports[`invalid(2): a { border-top: 1px red; } 2`] = `
+
+Message:
+> 1 | a { border-top: 1px red; }
+    |     ^^^^^^^^^^^^^^^^^^^ \`border-top\` omits the border style, which defaults to \`none\`.
+
+`;
+
+exports[`invalid(2): a { column-rule: red; } 1`] = `
+
+  1 | a { column-rule: red; }
+
+`;
+
+exports[`invalid(2): a { column-rule: red; } 2`] = `
+
+Message:
+> 1 | a { column-rule: red; }
+    |     ^^^^^^^^^^^^^^^^ \`column-rule\` omits the column rule style, which defaults to \`none\`.
+
+`;
+
 exports[`invalid(2): a { display: grid; flex-wrap: wrap; } 1`] = `
 
   1 | a { display: grid; flex-wrap: wrap; }
@@ -1818,6 +2186,20 @@ Message:
 
 `;
 
+exports[`invalid(20): a { animation: 2s ease; } 1`] = `
+
+  1 | a { animation: 2s ease; }
+
+`;
+
+exports[`invalid(20): a { animation: 2s ease; } 2`] = `
+
+Message:
+> 1 | a { animation: 2s ease; }
+    |     ^^^^^^^^^^^^^^^^^^ \`animation\` omits an animation name, which defaults to \`none\`.
+
+`;
+
 exports[`invalid(20): a { position: static; inset-block-end: 20px; } 1`] = `
 
   1 | a { position: static; inset-block-end: 20px; }
@@ -1843,6 +2225,20 @@ exports[`invalid(21): a { TRANSITION-BEHAVIOR: ALLOW-DISCRETE !important; TRANSI
 Message:
 > 1 | a { TRANSITION-BEHAVIOR: ALLOW-DISCRETE !important; TRANSITION-PROPERTY: NONE; }
     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`transition-behavior\` has no effect with \`transition-property: none\`. Select at least one property to transition.
+
+`;
+
+exports[`invalid(21): a { animation: ease; } 1`] = `
+
+  1 | a { animation: ease; }
+
+`;
+
+exports[`invalid(21): a { animation: ease; } 2`] = `
+
+Message:
+> 1 | a { animation: ease; }
+    |     ^^^^^^^^^^^^^^^ \`animation\` omits an animation name, which defaults to \`none\`.
 
 `;
 
@@ -1888,6 +2284,20 @@ Message:
 
 `;
 
+exports[`invalid(22): a { animation: 0s; } 1`] = `
+
+  1 | a { animation: 0s; }
+
+`;
+
+exports[`invalid(22): a { animation: 0s; } 2`] = `
+
+Message:
+> 1 | a { animation: 0s; }
+    |     ^^^^^^^^^^^^^ \`animation\` omits an animation name, which defaults to \`none\`.
+
+`;
+
 exports[`invalid(22): a { border-image-sour\\63 e: n\\6f ne; border-image-sli\\63 e: 30 fill; } 1`] = `
 
   1 | a { border-image-sour\\63 e: n\\6f ne; border-image-sli\\63 e: 30 fill; }
@@ -1927,6 +2337,20 @@ exports[`invalid(23): a { VIEW-TIMELINE-INSET: 10% !important; VIEW-TIMELINE-NAM
 Message:
 > 1 | a { VIEW-TIMELINE-INSET: 10% !important; VIEW-TIMELINE-NAME: NONE; }
     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`view-timeline-inset\` has no effect with \`view-timeline-name: none\`. Name a view timeline to use this property.
+
+`;
+
+exports[`invalid(23): a { animation: 2s steps(4, end); } 1`] = `
+
+  1 | a { animation: 2s steps(4, end); }
+
+`;
+
+exports[`invalid(23): a { animation: 2s steps(4, end); } 2`] = `
+
+Message:
+> 1 | a { animation: 2s steps(4, end); }
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`animation\` omits an animation name, which defaults to \`none\`.
 
 `;
 
@@ -1980,6 +2404,20 @@ Message:
 
 `;
 
+exports[`invalid(24): a { animation: 2s linear(0, 1); } 1`] = `
+
+  1 | a { animation: 2s linear(0, 1); }
+
+`;
+
+exports[`invalid(24): a { animation: 2s linear(0, 1); } 2`] = `
+
+Message:
+> 1 | a { animation: 2s linear(0, 1); }
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^ \`animation\` omits an animation name, which defaults to \`none\`.
+
+`;
+
 exports[`invalid(24): a { background-image: /* image */ none; background-position: /* placement */ calc(50% + 1px) center; background-color: red; } 1`] = `
 
   1 | a { background-image: /* image */ none; background-position: /* placement */ calc(50% + 1px) center; background-color: red; }
@@ -2013,6 +2451,20 @@ exports[`invalid(24): a { display: inline; flex-direction: column; grid-template
 Message:
 > 1 | a { display: inline; flex-direction: column; grid-template-columns: 1fr 1fr; }
     |                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`grid-template-columns\` has no effect with \`display: inline\`. It requires a grid container.
+
+`;
+
+exports[`invalid(25): a { animation: ease 2s; } 1`] = `
+
+  1 | a { animation: ease 2s; }
+
+`;
+
+exports[`invalid(25): a { animation: ease 2s; } 2`] = `
+
+Message:
+> 1 | a { animation: ease 2s; }
+    |     ^^^^^^^^^^^^^^^^^^ \`animation\` omits an animation name, which defaults to \`none\`.
 
 `;
 
@@ -2063,6 +2515,20 @@ exports[`invalid(25): a { transition-prop\\65 rty: n\\6f ne; transition-del\\61 
 Message:
 > 1 | a { transition-prop\\65 rty: n\\6f ne; transition-del\\61 y: 1s; }
     |                                      ^^^^^^^^^^^^^^^^^^^^^^^ \`transition-delay\` has no effect with \`transition-property: none\`. Select at least one property to transition.
+
+`;
+
+exports[`invalid(26): a { animation: steps(4, end) 2s; } 1`] = `
+
+  1 | a { animation: steps(4, end) 2s; }
+
+`;
+
+exports[`invalid(26): a { animation: steps(4, end) 2s; } 2`] = `
+
+Message:
+> 1 | a { animation: steps(4, end) 2s; }
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`animation\` omits an animation name, which defaults to \`none\`.
 
 `;
 
@@ -2130,6 +2596,20 @@ Message:
 
 `;
 
+exports[`invalid(27): a { animation: 2s ease, 1s linear; } 1`] = `
+
+  1 | a { animation: 2s ease, 1s linear; }
+
+`;
+
+exports[`invalid(27): a { animation: 2s ease, 1s linear; } 2`] = `
+
+Message:
+> 1 | a { animation: 2s ease, 1s linear; }
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`animation\` omits an animation name, which defaults to \`none\`.
+
+`;
+
 exports[`invalid(27): a { display: flow-root; flex-direction: column; grid-template-columns: 1fr 1fr; } 1`] = `
 
   1 | a { display: flow-root; flex-direction: column; grid-template-columns: 1fr 1fr; }
@@ -2180,6 +2660,36 @@ Message:
 
 `;
 
+exports[`invalid(28): a { BORDER: 1PX RED; OUTLINE: 2PX BLUE; ANIMATION: 2S EASE !important; } 1`] = `
+
+  1 | a { BORDER: 1PX RED; OUTLINE: 2PX BLUE; ANIMATION: 2S EASE !important; }
+
+`;
+
+exports[`invalid(28): a { BORDER: 1PX RED; OUTLINE: 2PX BLUE; ANIMATION: 2S EASE !important; } 2`] = `
+
+Message:
+> 1 | a { BORDER: 1PX RED; OUTLINE: 2PX BLUE; ANIMATION: 2S EASE !important; }
+    |     ^^^^^^^^^^^^^^^ \`border\` omits the border style, which defaults to \`none\`.
+
+`;
+
+exports[`invalid(28): a { BORDER: 1PX RED; OUTLINE: 2PX BLUE; ANIMATION: 2S EASE !important; } 3`] = `
+
+Message:
+> 1 | a { BORDER: 1PX RED; OUTLINE: 2PX BLUE; ANIMATION: 2S EASE !important; }
+    |                      ^^^^^^^^^^^^^^^^^ \`outline\` omits the outline style, which defaults to \`none\`.
+
+`;
+
+exports[`invalid(28): a { BORDER: 1PX RED; OUTLINE: 2PX BLUE; ANIMATION: 2S EASE !important; } 4`] = `
+
+Message:
+> 1 | a { BORDER: 1PX RED; OUTLINE: 2PX BLUE; ANIMATION: 2S EASE !important; }
+    |                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`animation\` omits an animation name, which defaults to \`none\`.
+
+`;
+
 exports[`invalid(28): a { animation-name: /* disabled */ none; animation-timing-function: /* easing */ steps(4); } 1`] = `
 
   1 | a { animation-name: /* disabled */ none; animation-timing-function: /* easing */ steps(4); }
@@ -2227,6 +2737,20 @@ exports[`invalid(29): a { @supports (mask-image: none) { mask-image: none; mask-
 Message:
 > 1 | a { @supports (mask-image: none) { mask-image: none; mask-mode: luminance; } }
     |                                                      ^^^^^^^^^^^^^^^^^^^^ \`mask-mode\` has no effect with \`mask-image: none\`. Set a mask image to use this property.
+
+`;
+
+exports[`invalid(29): a { animation: 2s s\\74 eps(4, end); } 1`] = `
+
+  1 | a { animation: 2s s\\74 eps(4, end); }
+
+`;
+
+exports[`invalid(29): a { animation: 2s s\\74 eps(4, end); } 2`] = `
+
+Message:
+> 1 | a { animation: 2s s\\74 eps(4, end); }
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`animation\` omits an animation name, which defaults to \`none\`.
 
 `;
 
@@ -2294,6 +2818,34 @@ Message:
 
 `;
 
+exports[`invalid(3): a { border-right: 1px red; } 1`] = `
+
+  1 | a { border-right: 1px red; }
+
+`;
+
+exports[`invalid(3): a { border-right: 1px red; } 2`] = `
+
+Message:
+> 1 | a { border-right: 1px red; }
+    |     ^^^^^^^^^^^^^^^^^^^^^ \`border-right\` omits the border style, which defaults to \`none\`.
+
+`;
+
+exports[`invalid(3): a { column-rule: thin; } 1`] = `
+
+  1 | a { column-rule: thin; }
+
+`;
+
+exports[`invalid(3): a { column-rule: thin; } 2`] = `
+
+Message:
+> 1 | a { column-rule: thin; }
+    |     ^^^^^^^^^^^^^^^^^ \`column-rule\` omits the column rule style, which defaults to \`none\`.
+
+`;
+
 exports[`invalid(3): a { display: grid; flex-flow: column wrap; } 1`] = `
 
   1 | a { display: grid; flex-flow: column wrap; }
@@ -2305,6 +2857,36 @@ exports[`invalid(3): a { display: grid; flex-flow: column wrap; } 2`] = `
 Message:
 > 1 | a { display: grid; flex-flow: column wrap; }
     |                    ^^^^^^^^^^^^^^^^^^^^^^ \`flex-flow\` has no effect with \`display: grid\`. It requires a flex container.
+
+`;
+
+exports[`invalid(30): a { border: 1px /* color */ red !important; outline: /* width */ 2px blue; animation: 2s /* easing */ ease; } 1`] = `
+
+  1 | a { border: 1px /* color */ red !important; outline: /* width */ 2px blue; animation: 2s /* easing */ ease; }
+
+`;
+
+exports[`invalid(30): a { border: 1px /* color */ red !important; outline: /* width */ 2px blue; animation: 2s /* easing */ ease; } 2`] = `
+
+Message:
+> 1 | a { border: 1px /* color */ red !important; outline: /* width */ 2px blue; animation: 2s /* easing */ ease; }
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`border\` omits the border style, which defaults to \`none\`.
+
+`;
+
+exports[`invalid(30): a { border: 1px /* color */ red !important; outline: /* width */ 2px blue; animation: 2s /* easing */ ease; } 3`] = `
+
+Message:
+> 1 | a { border: 1px /* color */ red !important; outline: /* width */ 2px blue; animation: 2s /* easing */ ease; }
+    |                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`outline\` omits the outline style, which defaults to \`none\`.
+
+`;
+
+exports[`invalid(30): a { border: 1px /* color */ red !important; outline: /* width */ 2px blue; animation: 2s /* easing */ ease; } 4`] = `
+
+Message:
+> 1 | a { border: 1px /* color */ red !important; outline: /* width */ 2px blue; animation: 2s /* easing */ ease; }
+    |                                                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`animation\` omits an animation name, which defaults to \`none\`.
 
 `;
 
@@ -2355,6 +2937,20 @@ exports[`invalid(30): a { scroll-timeline-name: /* disabled */ none; scroll-time
 Message:
 > 1 | a { scroll-timeline-name: /* disabled */ none; scroll-timeline-axis: /* direction */ x; }
     |                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`scroll-timeline-axis\` has no effect with \`scroll-timeline-name: none\`. Name a scroll timeline to use this property.
+
+`;
+
+exports[`invalid(31): a { & b { border: 1px red; } } 1`] = `
+
+  1 | a { & b { border: 1px red; } }
+
+`;
+
+exports[`invalid(31): a { & b { border: 1px red; } } 2`] = `
+
+Message:
+> 1 | a { & b { border: 1px red; } }
+    |           ^^^^^^^^^^^^^^^ \`border\` omits the border style, which defaults to \`none\`.
 
 `;
 
@@ -2422,6 +3018,20 @@ Message:
 
 `;
 
+exports[`invalid(32): a { @media (width > 1px) { outline: 2px blue; } } 1`] = `
+
+  1 | a { @media (width > 1px) { outline: 2px blue; } }
+
+`;
+
+exports[`invalid(32): a { @media (width > 1px) { outline: 2px blue; } } 2`] = `
+
+Message:
+> 1 | a { @media (width > 1px) { outline: 2px blue; } }
+    |                            ^^^^^^^^^^^^^^^^^ \`outline\` omits the outline style, which defaults to \`none\`.
+
+`;
+
 exports[`invalid(32): a { display: ruby; flex-direction: column; grid-template-columns: 1fr 1fr; } 1`] = `
 
   1 | a { display: ruby; flex-direction: column; grid-template-columns: 1fr 1fr; }
@@ -2472,6 +3082,20 @@ Message:
 
 `;
 
+exports[`invalid(33): a { @supports (display: grid) { outline: 2px blue; } } 1`] = `
+
+  1 | a { @supports (display: grid) { outline: 2px blue; } }
+
+`;
+
+exports[`invalid(33): a { @supports (display: grid) { outline: 2px blue; } } 2`] = `
+
+Message:
+> 1 | a { @supports (display: grid) { outline: 2px blue; } }
+    |                                 ^^^^^^^^^^^^^^^^^ \`outline\` omits the outline style, which defaults to \`none\`.
+
+`;
+
 exports[`invalid(33): a { background-image: none; background-size: cover, contain; } 1`] = `
 
   1 | a { background-image: none; background-size: cover, contain; }
@@ -2505,6 +3129,20 @@ exports[`invalid(33): a { display: list-item; flex-direction: column; grid-templ
 Message:
 > 1 | a { display: list-item; flex-direction: column; grid-template-columns: 1fr 1fr; }
     |                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`grid-template-columns\` has no effect with \`display: list-item\`. It requires a grid container.
+
+`;
+
+exports[`invalid(34): a { @container (width > 1px) { outline: 2px blue; } } 1`] = `
+
+  1 | a { @container (width > 1px) { outline: 2px blue; } }
+
+`;
+
+exports[`invalid(34): a { @container (width > 1px) { outline: 2px blue; } } 2`] = `
+
+Message:
+> 1 | a { @container (width > 1px) { outline: 2px blue; } }
+    |                                ^^^^^^^^^^^^^^^^^ \`outline\` omits the outline style, which defaults to \`none\`.
 
 `;
 
@@ -2572,6 +3210,20 @@ Message:
 
 `;
 
+exports[`invalid(35): a { @layer components { outline: 2px blue; } } 1`] = `
+
+  1 | a { @layer components { outline: 2px blue; } }
+
+`;
+
+exports[`invalid(35): a { @layer components { outline: 2px blue; } } 2`] = `
+
+Message:
+> 1 | a { @layer components { outline: 2px blue; } }
+    |                         ^^^^^^^^^^^^^^^^^ \`outline\` omits the outline style, which defaults to \`none\`.
+
+`;
+
 exports[`invalid(35): a { display: inline flow list-item; flex-direction: column; grid-template-columns: 1fr 1fr; } 1`] = `
 
   1 | a { display: inline flow list-item; flex-direction: column; grid-template-columns: 1fr 1fr; }
@@ -2591,6 +3243,20 @@ exports[`invalid(35): a { display: inline flow list-item; flex-direction: column
 Message:
 > 1 | a { display: inline flow list-item; flex-direction: column; grid-template-columns: 1fr 1fr; }
     |                                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`grid-template-columns\` has no effect with \`display: inline flow list-item\`. It requires a grid container.
+
+`;
+
+exports[`invalid(36): a { @scope (.card) { outline: 2px blue; } } 1`] = `
+
+  1 | a { @scope (.card) { outline: 2px blue; } }
+
+`;
+
+exports[`invalid(36): a { @scope (.card) { outline: 2px blue; } } 2`] = `
+
+Message:
+> 1 | a { @scope (.card) { outline: 2px blue; } }
+    |                      ^^^^^^^^^^^^^^^^^ \`outline\` omits the outline style, which defaults to \`none\`.
 
 `;
 
@@ -2636,6 +3302,20 @@ Message:
 
 `;
 
+exports[`invalid(37): a { border: 1px red; } a:hover { border-style: solid; } 1`] = `
+
+  1 | a { border: 1px red; } a:hover { border-style: solid; }
+
+`;
+
+exports[`invalid(37): a { border: 1px red; } a:hover { border-style: solid; } 2`] = `
+
+Message:
+> 1 | a { border: 1px red; } a:hover { border-style: solid; }
+    |     ^^^^^^^^^^^^^^^ \`border\` omits the border style, which defaults to \`none\`.
+
+`;
+
 exports[`invalid(37): a { display: inline-grid; flex-wrap: wrap; } 1`] = `
 
   1 | a { display: inline-grid; flex-wrap: wrap; }
@@ -2675,6 +3355,34 @@ exports[`invalid(38): a { display: inline flex; grid-template-columns: 1fr 1fr; 
 Message:
 > 1 | a { display: inline flex; grid-template-columns: 1fr 1fr; }
     |                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`grid-template-columns\` has no effect with \`display: inline flex\`. It requires a grid container.
+
+`;
+
+exports[`invalid(38): a { outline: 2px blue; } a:focus-visible { outline-style: auto; } 1`] = `
+
+  1 | a { outline: 2px blue; } a:focus-visible { outline-style: auto; }
+
+`;
+
+exports[`invalid(38): a { outline: 2px blue; } a:focus-visible { outline-style: auto; } 2`] = `
+
+Message:
+> 1 | a { outline: 2px blue; } a:focus-visible { outline-style: auto; }
+    |     ^^^^^^^^^^^^^^^^^ \`outline\` omits the outline style, which defaults to \`none\`.
+
+`;
+
+exports[`invalid(39): a { animation: 2s ease; } a:hover { animation-name: fade; } 1`] = `
+
+  1 | a { animation: 2s ease; } a:hover { animation-name: fade; }
+
+`;
+
+exports[`invalid(39): a { animation: 2s ease; } a:hover { animation-name: fade; } 2`] = `
+
+Message:
+> 1 | a { animation: 2s ease; } a:hover { animation-name: fade; }
+    |     ^^^^^^^^^^^^^^^^^^ \`animation\` omits an animation name, which defaults to \`none\`.
 
 `;
 
@@ -2734,6 +3442,34 @@ Message:
 
 `;
 
+exports[`invalid(4): a { border-bottom: 1px red; } 1`] = `
+
+  1 | a { border-bottom: 1px red; }
+
+`;
+
+exports[`invalid(4): a { border-bottom: 1px red; } 2`] = `
+
+Message:
+> 1 | a { border-bottom: 1px red; }
+    |     ^^^^^^^^^^^^^^^^^^^^^^ \`border-bottom\` omits the border style, which defaults to \`none\`.
+
+`;
+
+exports[`invalid(4): a { column-rule: calc(0px) red; } 1`] = `
+
+  1 | a { column-rule: calc(0px) red; }
+
+`;
+
+exports[`invalid(4): a { column-rule: calc(0px) red; } 2`] = `
+
+Message:
+> 1 | a { column-rule: calc(0px) red; }
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^ \`column-rule\` omits the column rule style, which defaults to \`none\`.
+
+`;
+
 exports[`invalid(4): a { display: flex; grid: auto-flow / 1fr 1fr; } 1`] = `
 
   1 | a { display: flex; grid: auto-flow / 1fr 1fr; }
@@ -2745,6 +3481,20 @@ exports[`invalid(4): a { display: flex; grid: auto-flow / 1fr 1fr; } 2`] = `
 Message:
 > 1 | a { display: flex; grid: auto-flow / 1fr 1fr; }
     |                    ^^^^^^^^^^^^^^^^^^^^^^^^^ \`grid\` has no effect with \`display: flex\`. It requires a grid container.
+
+`;
+
+exports[`invalid(40): a { border-style: solid; & b { border: 1px red; } } 1`] = `
+
+  1 | a { border-style: solid; & b { border: 1px red; } }
+
+`;
+
+exports[`invalid(40): a { border-style: solid; & b { border: 1px red; } } 2`] = `
+
+Message:
+> 1 | a { border-style: solid; & b { border: 1px red; } }
+    |                                ^^^^^^^^^^^^^^^ \`border\` omits the border style, which defaults to \`none\`.
 
 `;
 
@@ -2776,6 +3526,34 @@ Message:
 
 `;
 
+exports[`invalid(41): a { outline-style: auto; @media (width > 1px) { outline: 2px blue; } } 1`] = `
+
+  1 | a { outline-style: auto; @media (width > 1px) { outline: 2px blue; } }
+
+`;
+
+exports[`invalid(41): a { outline-style: auto; @media (width > 1px) { outline: 2px blue; } } 2`] = `
+
+Message:
+> 1 | a { outline-style: auto; @media (width > 1px) { outline: 2px blue; } }
+    |                                                 ^^^^^^^^^^^^^^^^^ \`outline\` omits the outline style, which defaults to \`none\`.
+
+`;
+
+exports[`invalid(42): a { animation: 2s ease; & b { animation-name: fade; } } 1`] = `
+
+  1 | a { animation: 2s ease; & b { animation-name: fade; } }
+
+`;
+
+exports[`invalid(42): a { animation: 2s ease; & b { animation-name: fade; } } 2`] = `
+
+Message:
+> 1 | a { animation: 2s ease; & b { animation-name: fade; } }
+    |     ^^^^^^^^^^^^^^^^^^ \`animation\` omits an animation name, which defaults to \`none\`.
+
+`;
+
 exports[`invalid(42): a { display: /* layout */ flex !important; grid-template-columns: /* tracks */ 1fr 1fr; } 1`] = `
 
   1 | a { display: /* layout */ flex !important; grid-template-columns: /* tracks */ 1fr 1fr; }
@@ -2804,6 +3582,20 @@ Message:
 
 `;
 
+exports[`invalid(43): a { border: 1px red; border-width: 2px; border-color: blue; border-radius: 4px; } 1`] = `
+
+  1 | a { border: 1px red; border-width: 2px; border-color: blue; border-radius: 4px; }
+
+`;
+
+exports[`invalid(43): a { border: 1px red; border-width: 2px; border-color: blue; border-radius: 4px; } 2`] = `
+
+Message:
+> 1 | a { border: 1px red; border-width: 2px; border-color: blue; border-radius: 4px; }
+    |     ^^^^^^^^^^^^^^^ \`border\` omits the border style, which defaults to \`none\`.
+
+`;
+
 exports[`invalid(44): a { display: flex; flex-wrap: nowrap; align-content: center; } 1`] = `
 
   1 | a { display: flex; flex-wrap: nowrap; align-content: center; }
@@ -2815,6 +3607,34 @@ exports[`invalid(44): a { display: flex; flex-wrap: nowrap; align-content: cente
 Message:
 > 1 | a { display: flex; flex-wrap: nowrap; align-content: center; }
     |                                       ^^^^^^^^^^^^^^^^^^^^^ \`align-content\` has no effect on a flex container with \`nowrap\`. Consider \`align-items\` or enabling wrapping.
+
+`;
+
+exports[`invalid(44): a { outline: 2px blue; outline-width: 3px; outline-color: red; outline-offset: 2px; } 1`] = `
+
+  1 | a { outline: 2px blue; outline-width: 3px; outline-color: red; outline-offset: 2px; }
+
+`;
+
+exports[`invalid(44): a { outline: 2px blue; outline-width: 3px; outline-color: red; outline-offset: 2px; } 2`] = `
+
+Message:
+> 1 | a { outline: 2px blue; outline-width: 3px; outline-color: red; outline-offset: 2px; }
+    |     ^^^^^^^^^^^^^^^^^ \`outline\` omits the outline style, which defaults to \`none\`.
+
+`;
+
+exports[`invalid(45): a { border: 1px red; border-image-slice: 1; border-image-width: 5px; border-image-outset: 1; border-image-repeat: stretch; } 1`] = `
+
+  1 | a { border: 1px red; border-image-slice: 1; border-image-width: 5px; border-image-outset: 1; border-image-repeat: stretch; }
+
+`;
+
+exports[`invalid(45): a { border: 1px red; border-image-slice: 1; border-image-width: 5px; border-image-outset: 1; border-image-repeat: stretch; } 2`] = `
+
+Message:
+> 1 | a { border: 1px red; border-image-slice: 1; border-image-width: 5px; border-image-outset: 1; border-image-repeat: stretch; }
+    |     ^^^^^^^^^^^^^^^ \`border\` omits the border style, which defaults to \`none\`.
 
 `;
 
@@ -2916,6 +3736,20 @@ Message:
 
 `;
 
+exports[`invalid(5): a { border-left: 1px red; } 1`] = `
+
+  1 | a { border-left: 1px red; }
+
+`;
+
+exports[`invalid(5): a { border-left: 1px red; } 2`] = `
+
+Message:
+> 1 | a { border-left: 1px red; }
+    |     ^^^^^^^^^^^^^^^^^^^^ \`border-left\` omits the border style, which defaults to \`none\`.
+
+`;
+
 exports[`invalid(5): a { display: flex; grid-template: 100px / 1fr 1fr; } 1`] = `
 
   1 | a { display: flex; grid-template: 100px / 1fr 1fr; }
@@ -2927,6 +3761,20 @@ exports[`invalid(5): a { display: flex; grid-template: 100px / 1fr 1fr; } 2`] = 
 Message:
 > 1 | a { display: flex; grid-template: 100px / 1fr 1fr; }
     |                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`grid-template\` has no effect with \`display: flex\`. It requires a grid container.
+
+`;
+
+exports[`invalid(5): a { text-decoration: wavy red; } 1`] = `
+
+  1 | a { text-decoration: wavy red; }
+
+`;
+
+exports[`invalid(5): a { text-decoration: wavy red; } 2`] = `
+
+Message:
+> 1 | a { text-decoration: wavy red; }
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^ \`text-decoration\` omits the decoration line, which defaults to \`none\`.
 
 `;
 
@@ -3098,6 +3946,20 @@ Message:
 
 `;
 
+exports[`invalid(6): a { border-block: 1px red; } 1`] = `
+
+  1 | a { border-block: 1px red; }
+
+`;
+
+exports[`invalid(6): a { border-block: 1px red; } 2`] = `
+
+Message:
+> 1 | a { border-block: 1px red; }
+    |     ^^^^^^^^^^^^^^^^^^^^^ \`border-block\` omits the border style, which defaults to \`none\`.
+
+`;
+
 exports[`invalid(6): a { display: flex; grid-template-columns: 1fr 1fr; } 1`] = `
 
   1 | a { display: flex; grid-template-columns: 1fr 1fr; }
@@ -3109,6 +3971,20 @@ exports[`invalid(6): a { display: flex; grid-template-columns: 1fr 1fr; } 2`] = 
 Message:
 > 1 | a { display: flex; grid-template-columns: 1fr 1fr; }
     |                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`grid-template-columns\` has no effect with \`display: flex\`. It requires a grid container.
+
+`;
+
+exports[`invalid(6): a { text-decoration: red; } 1`] = `
+
+  1 | a { text-decoration: red; }
+
+`;
+
+exports[`invalid(6): a { text-decoration: red; } 2`] = `
+
+Message:
+> 1 | a { text-decoration: red; }
+    |     ^^^^^^^^^^^^^^^^^^^^ \`text-decoration\` omits the decoration line, which defaults to \`none\`.
 
 `;
 
@@ -3280,6 +4156,20 @@ Message:
 
 `;
 
+exports[`invalid(7): a { border-inline: 1px red; } 1`] = `
+
+  1 | a { border-inline: 1px red; }
+
+`;
+
+exports[`invalid(7): a { border-inline: 1px red; } 2`] = `
+
+Message:
+> 1 | a { border-inline: 1px red; }
+    |     ^^^^^^^^^^^^^^^^^^^^^^ \`border-inline\` omits the border style, which defaults to \`none\`.
+
+`;
+
 exports[`invalid(7): a { display: flex; grid-template-rows: 100px 100px; } 1`] = `
 
   1 | a { display: flex; grid-template-rows: 100px 100px; }
@@ -3291,6 +4181,20 @@ exports[`invalid(7): a { display: flex; grid-template-rows: 100px 100px; } 2`] =
 Message:
 > 1 | a { display: flex; grid-template-rows: 100px 100px; }
     |                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`grid-template-rows\` has no effect with \`display: flex\`. It requires a grid container.
+
+`;
+
+exports[`invalid(7): a { text-decoration: 2px; } 1`] = `
+
+  1 | a { text-decoration: 2px; }
+
+`;
+
+exports[`invalid(7): a { text-decoration: 2px; } 2`] = `
+
+Message:
+> 1 | a { text-decoration: 2px; }
+    |     ^^^^^^^^^^^^^^^^^^^^ \`text-decoration\` omits the decoration line, which defaults to \`none\`.
 
 `;
 
@@ -3448,6 +4352,20 @@ Message:
 
 `;
 
+exports[`invalid(8): a { border-block-start: 1px red; } 1`] = `
+
+  1 | a { border-block-start: 1px red; }
+
+`;
+
+exports[`invalid(8): a { border-block-start: 1px red; } 2`] = `
+
+Message:
+> 1 | a { border-block-start: 1px red; }
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`border-block-start\` omits the border style, which defaults to \`none\`.
+
+`;
+
 exports[`invalid(8): a { border-image-source: none; border-image-width: 2; } 1`] = `
 
   1 | a { border-image-source: none; border-image-width: 2; }
@@ -3473,6 +4391,20 @@ exports[`invalid(8): a { display: flex; grid-template-areas: \"header header\"; 
 Message:
 > 1 | a { display: flex; grid-template-areas: "header header"; }
     |                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`grid-template-areas\` has no effect with \`display: flex\`. It requires a grid container.
+
+`;
+
+exports[`invalid(8): a { text-decoration: 0px red; } 1`] = `
+
+  1 | a { text-decoration: 0px red; }
+
+`;
+
+exports[`invalid(8): a { text-decoration: 0px red; } 2`] = `
+
+Message:
+> 1 | a { text-decoration: 0px red; }
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^ \`text-decoration\` omits the decoration line, which defaults to \`none\`.
 
 `;
 
@@ -3624,6 +4556,28 @@ Message:
 
 `;
 
+exports[`invalid(9): a { COLUMN-RULE: 1PX RED; TEXT-DECORATION: WAVY RED !important; } 1`] = `
+
+  1 | a { COLUMN-RULE: 1PX RED; TEXT-DECORATION: WAVY RED !important; }
+
+`;
+
+exports[`invalid(9): a { COLUMN-RULE: 1PX RED; TEXT-DECORATION: WAVY RED !important; } 2`] = `
+
+Message:
+> 1 | a { COLUMN-RULE: 1PX RED; TEXT-DECORATION: WAVY RED !important; }
+    |     ^^^^^^^^^^^^^^^^^^^^ \`column-rule\` omits the column rule style, which defaults to \`none\`.
+
+`;
+
+exports[`invalid(9): a { COLUMN-RULE: 1PX RED; TEXT-DECORATION: WAVY RED !important; } 3`] = `
+
+Message:
+> 1 | a { COLUMN-RULE: 1PX RED; TEXT-DECORATION: WAVY RED !important; }
+    |                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`text-decoration\` omits the decoration line, which defaults to \`none\`.
+
+`;
+
 exports[`invalid(9): a { animation-name: none; animation-timeline: scroll(); } 1`] = `
 
   1 | a { animation-name: none; animation-timeline: scroll(); }
@@ -3635,6 +4589,20 @@ exports[`invalid(9): a { animation-name: none; animation-timeline: scroll(); } 2
 Message:
 > 1 | a { animation-name: none; animation-timeline: scroll(); }
     |                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`animation-timeline\` has no effect with \`animation-name: none\`. Set an animation name to use this property.
+
+`;
+
+exports[`invalid(9): a { border-block-end: 1px red; } 1`] = `
+
+  1 | a { border-block-end: 1px red; }
+
+`;
+
+exports[`invalid(9): a { border-block-end: 1px red; } 2`] = `
+
+Message:
+> 1 | a { border-block-end: 1px red; }
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^ \`border-block-end\` omits the border style, which defaults to \`none\`.
 
 `;
 

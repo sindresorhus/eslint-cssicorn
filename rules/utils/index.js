@@ -1,4 +1,5 @@
 export {default as getAtRuleContextPart} from './get-at-rule-context-part.js';
+export {default as getCanonicalLexerNode} from './get-canonical-lexer-node.js';
 export {default as getCommaSeparatedGroups} from './get-comma-separated-groups.js';
 export {default as getFeatureNameRange} from './get-feature-name-range.js';
 export {default as getPseudoSelectorArgument} from './get-pseudo-selector-argument.js';
