@@ -110,5 +110,15 @@ test({
 				}],
 			}],
 		},
+		{
+			code: 'a { @supports (touch-action: none) { touch-action: pan-y; } }',
+			errors: [{
+				messageId: 'no-disabled-pinch-zoom/error',
+				suggestions: [{
+					messageId: 'no-disabled-pinch-zoom/suggestion',
+					output: 'a { @supports (touch-action: none) { touch-action: pinch-zoom pan-y; } }',
+				}],
+			}],
+		},
 	],
 });
