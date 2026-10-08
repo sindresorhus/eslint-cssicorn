@@ -2,6 +2,38 @@ import {getTester} from './utils/test.js';
 
 const {test} = getTester(import.meta);
 
+const omittedComponentMessageId = 'no-ineffective-properties/omitted-shorthand-component';
+
+test({
+	valid: [],
+	invalid: [
+		{
+			code: '.card { border: 1px red; outline: 2px blue; animation: 2s ease; }',
+			errors: [
+				{messageId: omittedComponentMessageId, data: {property: 'border', component: 'the border style'}},
+				{messageId: omittedComponentMessageId, data: {property: 'outline', component: 'the outline style'}},
+				{messageId: omittedComponentMessageId, data: {property: 'animation', component: 'an animation name'}},
+			],
+		},
+		{
+			code: String.raw`a { \62 order: 1p\78  red; o\75 tline: 2px blue; anim\61 tion: 2\73  e\61 se; }`,
+			errors: [{messageId: omittedComponentMessageId}, {messageId: omittedComponentMessageId}, {messageId: omittedComponentMessageId}],
+		},
+		{
+			code: 'a { animation: 2s ease; animation-duration: 3s; animation-delay: 1s; border: 1px red; border-image-width: 2; }',
+			errors: [{messageId: omittedComponentMessageId}, {messageId: omittedComponentMessageId}],
+		},
+		{
+			code: 'a { --border-style: solid; border: 1px red; --outline-style: auto; outline: 2px blue; --animation-name: fade; animation: 2s ease; }',
+			errors: [{messageId: omittedComponentMessageId}, {messageId: omittedComponentMessageId}, {messageId: omittedComponentMessageId}],
+		},
+		{
+			code: 'a { border: 1px red; border-style: solid; outline: 2px blue; outline-style: auto; animation: 2s ease; animation-name: fade; position: static; top: 1px; }',
+			errors: [{messageId: 'no-ineffective-properties/static'}],
+		},
+	],
+});
+
 const flexProperties = [
 	['flex-direction', 'column'],
 	['flex-wrap', 'wrap'],
@@ -783,4 +815,129 @@ test({
 			errors: [{messageId: 'no-ineffective-properties/motion'}],
 		},
 	],
+});
+
+const borderShorthands = [
+	'border',
+	'border-top',
+	'border-right',
+	'border-bottom',
+	'border-left',
+	'border-block',
+	'border-inline',
+	'border-block-start',
+	'border-block-end',
+	'border-inline-start',
+	'border-inline-end',
+];
+
+test.snapshot({
+	valid: [
+		...borderShorthands.map(property => `a { ${property}: 1px solid red; }`),
+		...borderShorthands.map(property => `a { ${property}: 0 red; }`),
+		...['none', 'hidden', 'dotted', 'dashed', 'double', 'groove', 'ridge', 'inset', 'outset'].map(style => `a { border: 1px ${style} red; }`),
+		'a { border: 0px red; outline: -0.0em blue; }',
+		'a { border: +0 red; outline: 0; }',
+		'a { outline: 2px solid blue; }',
+		'a { outline: 2px auto blue; }',
+		'a { outline: none; }',
+		String.raw`a { border: 1p\78  s\6f lid red; outline: 2px a\75 to blue; }`,
+		'a { animation: fade; }',
+		'a { animation: 2s "none"; }',
+		'a { animation: 2s ease ease; }',
+		'a { animation: 2s linear linear; }',
+		'a { animation: 3s none backwards; }',
+		'a { animation: 2s none; }',
+		'a { animation: 2s ease, none; }',
+		'a { animation: 2s ease, 1s fade; }',
+		'a { animation: 1s fade, 2s ease; }',
+		String.raw`a { animation: 2s n\6f ne; }`,
+		String.raw`a { animation: 2s e\61 se e\61 se; }`,
+		'a { border: thin medium red; outline: 2px hidden; animation: 2s ease ease ease; }',
+		'a { border: url("border.png"); outline: "solid"; animation: url("fade"); }',
+		'a { border: var(--border); outline: 2px var(--style) blue; animation: 2s var(--name); }',
+		'a { border: calc(1px + var(--width)) red; outline: 2px rgb(var(--color)); animation: 2s linear(var(--stop), 1); }',
+		'a { border: calc(1px * random(1, 2)) red; outline: 2px --color(); animation: calc(1s * random(1, 2)) ease; }',
+		...['inherit', 'initial', 'unset', 'revert', 'revert-layer'].map(value => `a { border: ${value}; outline: ${value}; animation: ${value}; }`),
+		String.raw`a { border: \69 nherit; outline: \75 nset; animation: \69 nitial; }`,
+		'a { all: initial; border: 1px red; outline: 2px blue; animation: 2s ease; }',
+		'a { --border: 1px red; --outline: 2px blue; --animation: 2s ease; }',
+		'a { content: "border: 1px red; animation: 2s ease"; background-image: url("outline: 2px blue"); }',
+		'@keyframes fade { to { border: 1px red; outline: 2px blue; animation: 2s ease; } }',
+		'@-webkit-keyframes fade { to { border: 1px red; } }',
+		'@font-face { border: 1px red; outline: 2px blue; animation: 2s ease; }',
+		'@page { border: 1px red; }',
+		'@unknown { animation: 2s ease; }',
+		':export { border: 1px red; outline: 2px blue; animation: 2s ease; }',
+		':import("tokens.css") { border: 1px red; }',
+		'a { -webkit-border: 1px red; -moz-outline: 2px blue; -webkit-animation: 2s ease; }',
+	],
+	invalid: [
+		...borderShorthands.map(property => `a { ${property}: 1px red; }`),
+		'a { border: red; }',
+		'a { border: thin; }',
+		'a { outline: 2px blue; }',
+		'a { outline: blue; }',
+		'a { outline: thick; }',
+		'a { border: calc(0px) red; }',
+		'a { border: calc(1px + 2px) rgb(0 0 0); }',
+		'a { outline: 2px rgb(0 0 0 / 0); }',
+		'a { animation: 2s ease; }',
+		'a { animation: ease; }',
+		'a { animation: 0s; }',
+		'a { animation: 2s steps(4, end); }',
+		'a { animation: 2s linear(0, 1); }',
+		'a { animation: 2s auto; }',
+		'a { animation: 2s scroll(); }',
+		'a { animation: 2s ease, 1s linear; }',
+		'a { BORDER: 1PX RED; OUTLINE: 2PX BLUE; ANIMATION: 2S EASE !important; }',
+		String.raw`a { animation: 2s s\74 eps(4, end); }`,
+		'a { border: 1px /* color */ red !important; outline: /* width */ 2px blue; animation: 2s /* easing */ ease; }',
+		'a { & b { border: 1px red; } }',
+		...['media (width > 1px)', 'supports (display: grid)', 'container (width > 1px)', 'layer components', 'scope (.card)'].map(atRule => `a { @${atRule} { outline: 2px blue; } }`),
+		'a { border: 1px red; } a:hover { border-style: solid; }',
+		'a { outline: 2px blue; } a:focus-visible { outline-style: auto; }',
+		'a { animation: 2s ease; } a:hover { animation-name: fade; }',
+		'a { border-style: solid; & b { border: 1px red; } }',
+		'a { outline-style: auto; @media (width > 1px) { outline: 2px blue; } }',
+		'a { animation: 2s ease; & b { animation-name: fade; } }',
+		'a { border: 1px red; border-width: 2px; border-color: blue; border-radius: 4px; }',
+		'a { outline: 2px blue; outline-width: 3px; outline-color: red; outline-offset: 2px; }',
+		'a { border: 1px red; border-image-slice: 1; border-image-width: 5px; border-image-outset: 1; border-image-repeat: stretch; }',
+	],
+});
+
+const shorthandControlGroups = [
+	{
+		declaration: 'border: 1px red',
+		controls: [
+			...borderShorthands.map(property => `${property}: 2px solid blue`),
+			...borderShorthands.map(property => `${property}-style: solid`),
+			'border-image: linear-gradient(red, blue) 1 / 5px',
+			'border-image-source: url("border.png")',
+			'border-style: none',
+			'border-block-start-style: var(--style)',
+			'border-inline-end-style: inherit',
+		],
+	},
+	{declaration: 'outline: 2px blue', controls: ['outline: 2px solid blue', 'outline-style: auto', 'outline-style: none', 'outline-style: var(--style)']},
+	{declaration: 'animation: 2s ease', controls: ['animation: 2s fade', 'animation-name: fade', 'animation-name: none', 'animation-name: var(--name)']},
+];
+
+test({
+	valid: [
+		...shorthandControlGroups.flatMap(({declaration, controls}) => controls.flatMap(control => [
+			`a { ${declaration}; ${control}; }`,
+			`a { ${control} !important; ${declaration}; }`,
+			`a { ${declaration} !important; -webkit-${control}; }`,
+		])),
+		'a { border-block-start: 1px red; border-bottom-style: solid; }',
+		'a { border-inline: 1px red; border-right: 2px blue; }',
+		'a { border: 1px red; border: 2px blue; }',
+		'a { outline: 2px blue; outline: 3px red; }',
+		'a { animation: 2s ease; animation: 3s linear; }',
+		'a { BORDER: 1PX RED; -MOZ-BORDER-STYLE: SOLID; OUTLINE: 2PX BLUE; -MOZ-OUTLINE-STYLE: AUTO; ANIMATION: 2S EASE; -WEBKIT-ANIMATION-NAME: FADE; }',
+		String.raw`a { border: 1px red; border-\73 tyle: solid; outline: 2px blue; -webkit-outline-\73 tyle: auto; animation: 2s ease; -webkit-animation-n\61 me: fade; }`,
+	],
+	invalid: [],
 });

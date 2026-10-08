@@ -1,4 +1,6 @@
+import {keyword} from '@eslint/css-tree';
 import {
+	getCanonicalLexerNode,
 	getSingleValueIdentifier,
 	hasSubstitutionOrRandomFunction,
 	isCssModulesInteropDeclaration,
@@ -36,6 +38,7 @@ const MESSAGE_ID_ANIMATION = 'no-ineffective-properties/animation';
 const MESSAGE_ID_TRANSITION = 'no-ineffective-properties/transition';
 const MESSAGE_ID_SCROLL_TIMELINE = 'no-ineffective-properties/scroll-timeline';
 const MESSAGE_ID_VIEW_TIMELINE = 'no-ineffective-properties/view-timeline';
+const MESSAGE_ID_OMITTED_SHORTHAND_COMPONENT = 'no-ineffective-properties/omitted-shorthand-component';
 const messages = {
 	[MESSAGE_ID_DISPLAY]: '`{{property}}` has no effect with `display: {{display}}`. It requires a {{layout}} container.',
 	[MESSAGE_ID_NOWRAP]: '`align-content` has no effect on a flex container with `nowrap`. Consider `align-items` or enabling wrapping.',
@@ -59,6 +62,7 @@ const messages = {
 	[MESSAGE_ID_TRANSITION]: '`{{property}}` has no effect with `transition-property: none`. Select at least one property to transition.',
 	[MESSAGE_ID_SCROLL_TIMELINE]: '`{{property}}` has no effect with `scroll-timeline-name: none`. Name a scroll timeline to use this property.',
 	[MESSAGE_ID_VIEW_TIMELINE]: '`{{property}}` has no effect with `view-timeline-name: none`. Name a view timeline to use this property.',
+	[MESSAGE_ID_OMITTED_SHORTHAND_COMPONENT]: '`{{property}}` omits {{component}}, which defaults to `none`.',
 };
 
 const flexProperties = new Set(['flex-direction', 'flex-wrap', 'flex-flow']);
@@ -131,12 +135,41 @@ const inactivePropertyGroups = [
 ];
 const floatValues = new Set(['left', 'right', 'inline-start', 'inline-end']);
 const clearValues = new Set([...floatValues, 'both']);
+const borderShorthands = [
+	'border',
+	'border-top',
+	'border-right',
+	'border-bottom',
+	'border-left',
+	'border-block',
+	'border-inline',
+	'border-block-start',
+	'border-block-end',
+	'border-inline-start',
+	'border-inline-end',
+];
+const shorthandPropertyGroups = [
+	{
+		properties: borderShorthands,
+		controllingProperties: [...borderShorthands, ...borderShorthands.map(property => `${property}-style`), 'border-image', 'border-image-source'],
+		component: 'the border style',
+		type: 'line-style',
+	},
+	{
+		properties: ['outline'], controllingProperties: ['outline', 'outline-style'], component: 'the outline style', property: 'outline-style',
+	},
+	{
+		properties: ['animation'], controllingProperties: ['animation', 'animation-name'], component: 'an animation name', type: 'keyframes-name',
+	},
+];
+const shorthandProperties = new Set(shorthandPropertyGroups.flatMap(({properties}) => properties));
 const targetProperties = new Set([
 	...flexProperties,
 	...gridProperties,
 	...insetProperties,
 	...paddingProperties,
 	...multicolProperties,
+	...shorthandProperties,
 	...inactivePropertyGroups.flatMap(({properties}) => properties),
 	'align-content',
 	'text-overflow',
@@ -292,6 +325,59 @@ const getInactiveEffectProblem = (node, property, {inactiveProperties}) => {
 };
 
 /**
+Get problems for omitted shorthand components without resolving competing declarations or their vendor-prefixed aliases.
+
+@param {{node: DeclarationPlain, property: string}[]} declarations
+@param {CSSSourceCode} sourceCode
+*/
+const getOmittedShorthandProblems = function * (declarations, sourceCode) {
+	if (declarations.every(({property}) => !shorthandProperties.has(property))) {
+		return;
+	}
+
+	const declarationsByProperty = Map.groupBy(declarations, ({property}) => keyword(property).basename);
+	for (const group of shorthandPropertyGroups) {
+		const controllingDeclarations = group.controllingProperties.flatMap(property => declarationsByProperty.get(property) ?? []);
+		if (controllingDeclarations.length !== 1) {
+			continue;
+		}
+
+		const [{node, property}] = controllingDeclarations;
+		const identifier = getSingleValueIdentifier(node);
+		if (
+			!group.properties.includes(property)
+			|| node.value.type !== 'Value'
+			|| isCssWideKeyword(identifier && normalizeCssIdentifier(identifier.name))
+			|| hasSubstitutionOrRandomFunction(node.value)
+		) {
+			continue;
+		}
+
+		const value = getCanonicalLexerNode(node.value);
+		const match = sourceCode.lexer.matchProperty(property, value);
+		if (!match.matched) {
+			continue;
+		}
+
+		const {children} = value;
+		if (children.some(child => group.type ? match.isType(child, group.type) : match.isProperty(child, group.property))) {
+			continue;
+		}
+
+		if (property === 'animation') {
+			// Explicit `none` can be a name reset or another shorthand component. Keep either intentional pattern.
+			if (children.some(child => child.type === 'Identifier' && normalizeCssIdentifier(child.name) === 'none')) {
+				continue;
+			}
+		} else if (children.some(child => (child.type === 'Number' || child.type === 'Dimension') && Number(child.value) === 0 && match.isType(child, 'line-width'))) {
+			continue;
+		}
+
+		yield {node, messageId: MESSAGE_ID_OMITTED_SHORTHAND_COMPONENT, data: {property, component: group.component}};
+	}
+};
+
+/**
 Get the problem for a declaration given the explicit controls in its block.
 
 @param {DeclarationPlain} node
@@ -406,6 +492,8 @@ const create = context => {
 		const declarationsByProperty = Map.groupBy(declarations, ({property}) => property);
 		const controls = getBlockControls(declarationsByProperty, sourceCode);
 
+		yield * getOmittedShorthandProblems(declarations, sourceCode);
+
 		for (const {node, property} of declarations) {
 			if (!targetProperties.has(property) || node.value.type !== 'Value') {
 				continue;
@@ -427,7 +515,7 @@ const config = {
 	meta: {
 		type: 'problem',
 		docs: {
-			description: 'Disallow properties that have no effect given other declarations in the same block.',
+			description: 'Disallow properties that have no effect given other declarations or shorthand defaults.',
 			recommended: 'unopinionated',
 		},
 		schema: [],
