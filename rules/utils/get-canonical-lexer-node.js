@@ -7,7 +7,7 @@ import {ident} from '@eslint/css-tree';
 */
 
 /**
-Canonicalize escaped identifiers, function names, and units for CSS lexer matching without changing their source locations.
+Decode and re-encode escaped identifiers, function names, and units for CSS lexer matching without changing the source AST or source locations.
 
 @template {CssNodePlain} Node
 @param {Node} node - The CSS AST node to canonicalize.
