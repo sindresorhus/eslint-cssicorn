@@ -46,6 +46,11 @@ function getClampingProblem(node, target, quantity, {minimum, maximum, percentag
 	}
 
 	const bound = quantity.value < minimum ? minimum : maximum;
+	// Suppress insignificant calculation rounding errors without changing intermediate arithmetic or authored literals.
+	if (isCssMathFunction(node) && Math.abs(quantity.value - bound) <= 1e-10 * Math.max(1, Math.abs(bound))) {
+		return;
+	}
+
 	return {
 		node,
 		messageId: MESSAGE_ID,
@@ -81,13 +86,18 @@ function getAmountProblem(node, target, sourceCode, {minimum = 0, maximum = 1, p
 	});
 }
 
-function isLength(quantity, lexer) {
+function isLength(node, quantity, lexer) {
+	// The unitless-zero exception applies to literals, not calculated numbers.
+	if (quantity.unit === undefined && isCssMathFunction(node)) {
+		return false;
+	}
+
 	return Boolean(lexer.matchType('length', formatQuantity(quantity)).matched);
 }
 
 function getPerspectiveProblem(node, target, sourceCode, lexer) {
 	let quantity = evaluateCssMath(node);
-	if (!quantity || !Number.isFinite(quantity.value) || !isLength(quantity, lexer) || (quantity.value < 0 && !isCssMathFunction(node))) {
+	if (!quantity || !Number.isFinite(quantity.value) || !isLength(node, quantity, lexer) || (quantity.value < 0 && !isCssMathFunction(node))) {
 		return;
 	}
 
@@ -104,7 +114,7 @@ function getPerspectiveProblem(node, target, sourceCode, lexer) {
 
 function getThicknessProblem(node, target, lexer) {
 	const quantity = evaluateCssMath(node);
-	if (!quantity || !Number.isFinite(quantity.value) || quantity.value > 0 || (quantity.unit !== '%' && !isLength(quantity, lexer))) {
+	if (!quantity || !Number.isFinite(quantity.value) || quantity.value > 0 || (quantity.unit !== '%' && !isLength(node, quantity, lexer))) {
 		return;
 	}
 
@@ -246,12 +256,12 @@ function getRangeEndpoint(endpoint, unit, fallback) {
 	return quantity?.unit === unit ? quantity.value : undefined;
 }
 
-function getCalculationProblem(node, trace, sourceCode, lexer) {
+function getCalculationProblem(node, trace, declarationProperty, sourceCode) {
 	if (!trace) {
 		return;
 	}
 
-	const property = trace.findLast(part => part.type === 'Property')?.name;
+	const property = trace.findLast(part => part.type === 'Property')?.name ?? declarationProperty;
 	const range = trace.findLast(part => part.type === 'Type' && part.opts?.type === 'Range');
 	if (!range && !integerMinimumProperties.has(property)) {
 		return;
@@ -269,6 +279,7 @@ function getCalculationProblem(node, trace, sourceCode, lexer) {
 
 	const type = range?.name ?? 'integer';
 	const integer = trace.some(part => part.type === 'Type' && part.name === 'integer');
+	const {lexer} = sourceCode;
 	if (!lexer.matchType(integer ? 'number' : type, formatQuantity(quantity)).matched) {
 		return;
 	}
@@ -283,7 +294,7 @@ function getCalculationProblem(node, trace, sourceCode, lexer) {
 		return;
 	}
 
-	return getClampingProblem(node, property ?? type, quantity, {minimum, maximum, sourceCode});
+	return getClampingProblem(node, property, quantity, {minimum, maximum, sourceCode});
 }
 
 /**
@@ -372,7 +383,7 @@ const create = context => {
 				const name = normalizeCssIdentifier(node.name);
 				if (isCssMathFunction(node)) {
 					if (!handled.has(node)) {
-						const problem = getCalculationProblem(node, getTrace(node), sourceCode, lexer);
+						const problem = getCalculationProblem(node, getTrace(node), property, sourceCode);
 						if (problem) {
 							problems.push(problem);
 						}

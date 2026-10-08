@@ -33,6 +33,7 @@ test.snapshot({
 		'a { perspective: 1px; transform: perspective(2px); }',
 		'a { perspective: -1px; transform: perspective(-1px); }',
 		'a { perspective: .5em; transform: perspective(.5rem); }',
+		'a { perspective: calc(0); transform: perspective(calc(0)); text-decoration-thickness: calc(0); }',
 		'a { border-image: url(a) 100% / 200%; mask-border-slice: 100%; }',
 		'a { border-image-slice: 999; mask-border: url(a) 999 / 200%; }',
 		'a { text-decoration-thickness: .1px; text-decoration: underline .1em; }',
@@ -43,6 +44,8 @@ test.snapshot({
 		'a { width: clamp(0px, calc(-1px), 2px); }',
 		'a { opacity: calc(2+ 3); opacity: calc(2 +/**/3); }',
 		'a { width: calc(1in - 96px); }',
+		'a { width: calc(1cm - 10mm); padding: calc(30mm - 3cm); }',
+		'a { opacity: calc((.1 + .2) / .3); color: rgb(0 0 0 / calc(.1 * .1 * 100)); }',
 		'a { opacity: calc(.5 + 50%); width: calc(-2foo); }',
 		'a { opacity: calc(infinity); opacity: calc(NaN); }',
 		'a { opacity: calc(2 + var(--amount)); width: calc(1em - 2px); }',
@@ -89,6 +92,7 @@ test.snapshot({
 		'a { perspective: .5px; }',
 		'a { perspective: 0; }',
 		'a { perspective: 0em; }',
+		'a { perspective: calc(0px); transform: perspective(calc(0px)); text-decoration-thickness: calc(0px); }',
 		'a { transform: perspective(.005in); }',
 		'a { perspective: calc(-1px); }',
 		'a { transform: perspective(calc(.25px + .25px)); }',
@@ -105,6 +109,8 @@ test.snapshot({
 		'a { text-decoration: underline -1%; }',
 		'a { text-decoration-thickness: calc(1px - 2px); }',
 		'a { width: calc(-1px); }',
+		'a { width: calc(-.00000001px); opacity: calc(-.00000001); }',
+		'a { opacity: -.000000000001; color: rgb(0 0 0 / 1.000000000001); }',
 		'a { width: calc(-10%); }',
 		'a { padding: calc(1px - 2px); }',
 		'a { border-image: url(a) 50% / calc(-1px); }',
@@ -148,4 +154,26 @@ nodeTest('recommended and all enable the rule', () => {
 	assert.equal(plugin.configs.recommended.rules[name], 'error');
 	assert.equal(plugin.configs.all.rules[name], 'error');
 	assert.equal(plugin.configs.unopinionated.rules[name], 'off');
+});
+
+for (const preset of ['recommended', 'all']) {
+	nodeTest(`${preset} autofixes preserve clamping diagnostics`, () => {
+		const linter = new Linter();
+		const config = plugin.configs[preset];
+		const result = linter.verifyAndFix('a { opacity: 50; filter: grayscale(50); color: rgb(0 0 0 / 50); }', config, {filename: 'test.css'});
+		assert.equal(result.messages.filter(message => message.ruleId === 'cssicorn/no-clamped-values').length, 3);
+		assert.equal(linter.verifyAndFix(result.output, config, {filename: 'test.css'}).fixed, false);
+	});
+}
+
+nodeTest('descriptor diagnostics identify the declaration', () => {
+	const linter = new Linter();
+	const messages = linter.verify('@font-face { font-weight: calc(1200); }', {
+		files: ['**/*.css'],
+		language: 'css/css',
+		plugins: {css, cssicorn: plugin},
+		rules: {'cssicorn/no-clamped-values': 'error'},
+	}, {filename: 'test.css'});
+	assert.equal(messages.length, 1);
+	assert.equal(messages[0].message, '\'font-weight\' evaluates to 1200, which the browser clamps to 1000.');
 });

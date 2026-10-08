@@ -288,15 +288,14 @@ function getCompatibleFunctionValue(name, arguments_, strategy) {
 
 	const [first, second] = arguments_;
 	const compatible = arguments_.every(argument => areCompatible(first, argument));
-	const hasNaN = arguments_.some(argument => Number.isNaN(argument.value));
-	const values = arguments_.map(argument => argument.value);
 	const isResolved = arguments_.every(argument => !isUnresolved(argument));
 	if (['min', 'max', 'hypot'].includes(name)) {
 		if (!compatible || !isResolved) {
 			return;
 		}
 
-		return {...first, value: hasNaN ? NaN : Math[name](...values)};
+		const hasNaN = arguments_.some(argument => Number.isNaN(argument.value));
+		return {...first, value: hasNaN ? NaN : Math[name](...arguments_.map(argument => argument.value))};
 	}
 
 	if (['round', 'mod', 'rem'].includes(name)) {
@@ -352,7 +351,7 @@ function getNumberFunctionValue(name, arguments_) {
 	}
 
 	if (unaryNumberFunctions.has(name)) {
-		return arguments_.length === 1 && isNumber(first) ? getQuantity(unaryNumberFunctions.get(name)(first.value)) : undefined;
+		return arguments_.length === 1 ? getQuantity(unaryNumberFunctions.get(name)(first.value)) : undefined;
 	}
 
 	if (name === 'pow') {

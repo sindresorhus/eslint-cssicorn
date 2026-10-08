@@ -425,6 +425,11 @@ test('supports List children and does not mutate the input', () => {
 	assert.deepEqual(toPlainObject(node), original);
 });
 
+test('preserves small arithmetic differences for callers to interpret', () => {
+	assert.deepEqual(evaluateCssMath(parseValue('calc(1 + 1e-15)')), quantity(1.000000000000001));
+	assert.deepEqual(evaluateCssMath(parseValue('calc(.1 * .1 * 100)')), quantity(1.0000000000000002));
+});
+
 test('supports direct function and parentheses nodes', () => {
 	const node = parseValue('calc((1 + 2) * 3)').children.at(0);
 	assertQuantity(evaluateCssMath(node), quantity(9));

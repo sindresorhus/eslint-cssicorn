@@ -36,6 +36,8 @@ Relative non-alpha color components and predefined `color()` channels retain out
 
 The rule evaluates constant CSS math functions, including `calc()`, comparisons, rounding, trigonometric functions, powers, and logarithms. It checks the complete calculation against its receiving property or recognized descriptor's numeric range. General range coverage depends on the bundled CSS-tree grammar metadata; bounds absent from that metadata can be missed. Integer results are rounded before checking integer bounds. Intermediate values that cancel into range are allowed. [CSS calculation range checking](https://www.w3.org/TR/css-values-4/#calc-range)
 
+Numeric range checks allow calculated results within `1e-10 × max(1, |bound|)` of a bound to avoid diagnostics caused by floating-point rounding, such as `calc(1cm - 10mm)`. Literal values are checked exactly; intermediate arithmetic is not rounded.
+
 Variables, environmental functions, unknown units, unresolved unit combinations, and context-dependent percentage calculations are skipped. Intrinsic percentages in opacity, filter amounts, and color components can be resolved. Final NaN and infinite results are skipped. Evaluation is limited to 128 nested nodes and 10,000 visited items per expression.
 
 The rule does not infer limits that require layout, fonts, image dimensions, or device color capabilities. Numeric image slices have no statically known upper bound. Positive decoration thickness below 1 CSS pixel is allowed because the device pixel ratio determines its effective minimum. Custom property values, strings, URLs, and unknown descriptor contexts are ignored. Direct color checks apply to properties; recognized descriptors receive calculation-range checks.
