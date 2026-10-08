@@ -25,6 +25,8 @@ test.snapshot({
 		'a { color: rgb(255 0 0); border-color: hsl(0 100% 50%); }',
 		'a { color: rgb(255 0 0); border-color: rgb(255, 0, 0); }',
 		'a { color: rgb(255 0 0); border-color: rgb(100% 0% 0%); }',
+		'a { color: rgb(255 0 0); border-color: rgb(0 0 255); }',
+		'a { color: color(srgb 1 0 0); border-color: color(display-p3 1 0 0); }',
 		'a { color: red; } b { border-color: red; }',
 		'a { color: red; & b { border-color: red; } }',
 		'a { color: red; @media (width > 1px) { border-color: red; } }',
@@ -179,5 +181,28 @@ nodeTest('suggestions compose with lowercase without autofixing the relationship
 	const [suggestion] = result.messages[0].suggestions;
 	const suggestedCode = result.output.slice(0, suggestion.fix.range[0]) + suggestion.fix.text + result.output.slice(suggestion.fix.range[1]);
 	assert.equal(suggestedCode, 'a { color: red; border-color: currentcolor; }');
+	assert.deepEqual(linter.verify(suggestedCode, configuration, {filename: 'test.css'}), []);
+});
+
+nodeTest('multiple suggestions preserve escaped and nested functional color ranges', () => {
+	const linter = new Linter();
+	const configuration = {
+		...plugin.configs.recommended,
+		rules: {'cssicorn/prefer-current-color': 'error'},
+	};
+	const code = String.raw`a { color: rgb(255 0 0); background-color: color-mix(in srgb, r\67 b(255 0 0), rgb(from rgb(255 0 0) r g b)); }`;
+	const result = linter.verifyAndFix(code, configuration, {filename: 'test.css'});
+	assert.equal(result.fixed, false);
+	assert.equal(result.output, code);
+	assert.equal(result.messages.length, 2);
+
+	let suggestedCode = code;
+	for (const message of result.messages.toReversed()) {
+		assert.equal(message.suggestions.length, 1);
+		const [{fix}] = message.suggestions;
+		suggestedCode = suggestedCode.slice(0, fix.range[0]) + fix.text + suggestedCode.slice(fix.range[1]);
+	}
+
+	assert.equal(suggestedCode, 'a { color: rgb(255 0 0); background-color: color-mix(in srgb, currentcolor, rgb(from currentcolor r g b)); }');
 	assert.deepEqual(linter.verify(suggestedCode, configuration, {filename: 'test.css'}), []);
 });
