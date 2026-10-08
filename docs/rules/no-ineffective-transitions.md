@@ -9,12 +9,12 @@
 <!-- end auto-generated rule header -->
 <!-- Do not manually modify this header. Run: `npm run fix:eslint-docs` -->
 
-A valid property name does not necessarily make an effective transition. This rule reports:
+This rule reports:
 
-- Properties that cannot animate, such as `transition-duration` and `will-change`, regardless of transition behavior.
-- Discrete properties, such as `display` and `position`, when the corresponding behavior resolves to `normal` in the same declaration block.
+- Non-animatable properties, such as `will-change`, regardless of behavior.
+- Discrete properties, such as `display`, whose behavior resolves to `normal` in the same style block.
 
-The rule provides suggestions to enable `allow-discrete`. These change behavior, so they are not automatic fixes. A behavior entry can apply to several targets; changing it enables discrete transitions for all of them.
+Suggestions enable `allow-discrete`. They change behavior and can affect multiple targets sharing a behavior entry, so they are not autofixes.
 
 ## Examples
 
@@ -22,28 +22,11 @@ The rule provides suggestions to enable `allow-discrete`. These change behavior,
 /* ❌ */
 .panel {
 	transition: display 200ms;
-	transition-behavior: normal;
 }
 
 /* ✅ */
 .panel {
 	transition: display 200ms allow-discrete;
-}
-```
-
-```css
-/* ❌ */
-.panel {
-	transition-property: display, opacity;
-	transition-duration: 200ms;
-	transition-behavior: normal;
-}
-
-/* ✅ */
-.panel {
-	transition-property: display, opacity;
-	transition-duration: 200ms;
-	transition-behavior: allow-discrete;
 }
 ```
 
@@ -59,48 +42,19 @@ The rule provides suggestions to enable `allow-discrete`. These change behavior,
 }
 ```
 
-The `transition` shorthand resets omitted behavior to `normal`. Put an overriding `transition-behavior` declaration after the shorthand:
+The `transition` shorthand defaults omitted behavior to `normal`. Put a separate `transition-behavior` override after it.
 
-```css
-/* ❌ */
-.panel {
-	transition-behavior: allow-discrete;
-	transition: display 200ms;
-}
-
-/* ✅ */
-.panel {
-	transition: display 200ms;
-	transition-behavior: allow-discrete;
-}
-```
+Also checks shorthands whose longhands all have the same known animation type, such as `overflow` and `transition`. Explicit `transition-behavior: initial` and `unset` resolve to `normal`.
 
 ## Limitations
 
-This rule checks target eligibility, rather than guaranteeing that a transition will run. It only resolves literal declarations within the same style block, respecting declaration order and `!important`. It does not combine separate rules or infer behavior from an omitted `transition-behavior` longhand:
-
-```css
-/* ✅ Behavior may be declared elsewhere. */
-.panel {
-	transition-property: display;
-}
-```
-
-Substitutions such as `var()`, CSS-wide keywords, and unresolved values make the affected controls unknown. Custom properties, vendor-prefixed targets, and shorthand targets are not reported. Later duplicate targets, `all`, and known shorthand expansions override earlier matching entries.
-
-Property aliases and logical-to-physical property relationships are not resolved when matching overlapping targets.
-
-Property classifications come from the bundled, generated Webref data. Properties with missing, prose-defined, or known conflicting classifications are skipped, except for the audited discrete properties `display`, `content-visibility`, and `overlay`. Special interpolation cases such as `visibility` and image-source properties are also skipped. Coverage is intentionally conservative.
-
-The rule does not check timing, endpoint values, browser support, or custom-property registrations. It excludes keyframes, descriptor blocks, and CSS Modules interoperability blocks.
+- Resolves literal declarations within one style block, respecting order and `!important`. Separate rules and omitted longhands remain unknown, so `transition-property: display` alone is not reported.
+- Substitutions such as `var()`, other CSS-wide keywords, and unresolved values make the affected controls unknown.
+- Skips custom properties, vendor-prefixed targets, and shorthands with mixed or unknown animation types. Coverage uses bundled Webref data and skips ambiguous types and special cases such as `visibility` and image-source properties.
+- Later matching targets, `all`, and known shorthand expansions override earlier entries. Resolves `word-wrap` as an alias of `overflow-wrap`; logical-to-physical relationships remain unknown.
+- Does not check timing, endpoint values, browser support, or custom-property registrations. Excludes keyframes, descriptor blocks, and CSS Modules interoperability blocks.
 
 > [!NOTE]
-> Entry transitions involving `display: none` can additionally require [`@starting-style`](https://www.w3.org/TR/css-transitions-2/#defining-before-change-style). Enabling `allow-discrete` alone does not establish a starting style. Exit-only transitions do not necessarily need one.
+> Entry transitions from `display: none` can also require [`@starting-style`](https://www.w3.org/TR/css-transitions-2/#defining-before-change-style). `allow-discrete` alone does not establish a starting style.
 
-Use [`no-invalid-property-references`](./no-invalid-property-references.md) to catch unknown target names and [`no-ineffective-properties`](./no-ineffective-properties.md) to catch controls disabled by `transition-property: none`.
-
-## References
-
-- [CSS transition behavior](https://www.w3.org/TR/css-transitions-2/#transition-behavior-property)
-- [Animation types and special interpolation](https://www.w3.org/TR/web-animations-1/#animating-properties)
-- [Webref CSS data](https://github.com/w3c/webref/tree/main/ed/css)
+For unknown target names, use [`no-invalid-property-references`](./no-invalid-property-references.md). For controls disabled by `transition-property: none`, use [`no-ineffective-properties`](./no-ineffective-properties.md).

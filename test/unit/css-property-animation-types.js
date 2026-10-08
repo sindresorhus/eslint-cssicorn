@@ -10,18 +10,18 @@ test('property animation catalogs are sorted, unique, and disjoint', () => {
 			assert.ok(properties[index - 1] < properties[index]);
 		}
 
-		assert.equal(properties.some(property => property.startsWith('-') || shorthandToAffectedProperties.has(property)), false);
+		assert.equal(properties.some(property => property.startsWith('-')), false);
 	}
 
 	assert.equal(nonAnimatableProperties.some(property => discreteProperties.includes(property)), false);
 });
 
 test('catalogs include audited animation types and exclude ambiguous targets', () => {
-	for (const property of ['transition-duration', 'animation-name', 'contain', 'will-change']) {
+	for (const property of ['transition-duration', 'animation-name', 'contain', 'will-change', 'transition', 'animation-range']) {
 		assert.ok(nonAnimatableProperties.includes(property), property);
 	}
 
-	for (const property of ['display', 'content-visibility', 'overlay', 'position', 'cursor', 'font-family']) {
+	for (const property of ['display', 'content-visibility', 'overlay', 'position', 'cursor', 'font-family', 'overflow', 'flex-flow', 'white-space', 'text-wrap', 'text-box', 'font-variant']) {
 		assert.ok(discreteProperties.includes(property), property);
 	}
 
@@ -37,12 +37,33 @@ test('catalogs include audited animation types and exclude ambiguous targets', (
 		'text-overflow',
 		'direction',
 		'unicode-bidi',
-		'text-box',
+		'font',
+		'background',
+		'border',
+		'caret',
+		'animation',
 		'background-repeat',
 		'opacity',
 		'transform',
 	];
 	for (const property of excludedProperties) {
 		assert.equal(nonAnimatableProperties.includes(property) || discreteProperties.includes(property), false, property);
+	}
+});
+
+test('classified shorthands have uniformly classified longhands', () => {
+	for (const properties of [nonAnimatableProperties, discreteProperties]) {
+		for (const property of properties) {
+			const affectedProperties = shorthandToAffectedProperties.get(property);
+			if (!affectedProperties) {
+				continue;
+			}
+
+			for (const longhand of affectedProperties) {
+				if (!shorthandToAffectedProperties.has(longhand)) {
+					assert.ok(properties.includes(longhand), `${property}: ${longhand}`);
+				}
+			}
+		}
 	}
 });

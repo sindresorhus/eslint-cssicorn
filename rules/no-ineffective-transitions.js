@@ -3,6 +3,7 @@ import {shorthandToAffectedProperties} from './shared/css-shorthand-properties.j
 import {
 	getCanonicalCssLexerNode,
 	getCommaSeparatedGroups,
+	getSingleValueIdentifier,
 	hasSubstitutionOrRandomFunction,
 	isCssModulesInteropDeclaration,
 	isCssWideKeyword,
@@ -36,8 +37,19 @@ const getTransitionLists = (declaration, property, lexer) => {
 		property === 'all'
 		|| value.type !== 'Value'
 		|| hasSubstitutionOrRandomFunction(value)
-		|| value.children.some(node => node.type === 'Identifier' && isCssWideKeyword(normalizeCssIdentifier(node.name)))
 	) {
+		return;
+	}
+
+	if (property === 'transition-behavior') {
+		const node = getSingleValueIdentifier(declaration);
+		const name = node && normalizeCssIdentifier(node.name);
+		if (name === 'initial' || name === 'unset') {
+			return {'transition-behavior': [{node, name: 'normal'}]};
+		}
+	}
+
+	if (value.children.some(node => node.type === 'Identifier' && isCssWideKeyword(normalizeCssIdentifier(node.name)))) {
 		return;
 	}
 
@@ -116,17 +128,24 @@ const getAllowDiscreteSuggestion = behavior => ({
 const getTransitionProblems = function * (targets, behaviors, lexer) {
 	const coveredProperties = new Set();
 	for (let index = targets.length - 1; index >= 0; index--) {
-		const {node, name} = targets[index];
-		if (coveredProperties.has('all') || coveredProperties.has(name)) {
+		const {node, name: targetName} = targets[index];
+		// https://www.w3.org/TR/css-text-3/#overflow-wrap-property
+		const name = targetName === 'word-wrap' ? 'overflow-wrap' : targetName;
+		const affectedProperties = shorthandToAffectedProperties.get(name);
+		if (
+			coveredProperties.has('all')
+			|| coveredProperties.has(name)
+			|| affectedProperties?.values().every(property => shorthandToAffectedProperties.has(property) || coveredProperties.has(property))
+		) {
 			continue;
 		}
 
 		coveredProperties.add(name);
-		for (const affectedProperty of shorthandToAffectedProperties.get(name) ?? []) {
+		for (const affectedProperty of affectedProperties ?? []) {
 			coveredProperties.add(affectedProperty);
 		}
 
-		if (!node || !Object.hasOwn(lexer.properties, name)) {
+		if (!node || !Object.hasOwn(lexer.properties, targetName)) {
 			continue;
 		}
 

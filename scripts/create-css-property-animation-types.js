@@ -49,6 +49,16 @@ for (const {name, animationType, longhands} of properties) {
 	}
 }
 
+// Classify a shorthand only when every affected longhand has the same known animation type.
+for (const [shorthand, affectedProperties] of shorthandToAffectedProperties) {
+	const longhands = [...affectedProperties].filter(property => !shorthandToAffectedProperties.has(property));
+	for (const properties of [nonAnimatableProperties, discreteProperties]) {
+		if (longhands.length > 0 && longhands.every(property => properties.has(property))) {
+			properties.add(shorthand);
+		}
+	}
+}
+
 const compareProperties = (first, second) => {
 	if (first === second) {
 		return 0;

@@ -47,8 +47,8 @@ test.snapshot({
 		'a { transition-property: none, display; transition-behavior: normal; }',
 		'a { transition: display 1s; transition-behavior: "normal"; }',
 		'a { transition: display 1s; transition-behavior: env(behavior); }',
+		...['inherit', 'revert', 'revert-layer', 'revert-rule'].map(value => `a { transition: display 1s; transition-behavior: ${value}; }`),
 		...['inherit', 'initial', 'unset', 'revert', 'revert-layer', 'revert-rule'].flatMap(value => [
-			`a { transition: display 1s; transition-behavior: ${value}; }`,
 			`a { transition: display 1s; transition-property: ${value}; }`,
 			`a { transition: display 1s; transition: ${value}; }`,
 		]),
@@ -56,7 +56,7 @@ test.snapshot({
 		'a { transition: --progress 1s, -webkit-display 1s, future-property 1s; }',
 		'a { -webkit-transition: display 1s; }',
 		'a { --transition: display 1s; color: "display"; }',
-		'a { transition: margin 1s, overflow 1s, font 1s; }',
+		'a { transition: margin 1s, background 1s, font 1s; }',
 		...[
 			'background-image',
 			'border-image-source',
@@ -69,7 +69,6 @@ test.snapshot({
 			'direction',
 			'unicode-bidi',
 			'background-repeat',
-			'text-box',
 		].map(property => `a { transition: ${property} 1s; }`),
 		'@font-face { transition: display 1s; }',
 		'@property --example { transition: display 1s; }',
@@ -135,6 +134,87 @@ test.snapshot({
 		...['media (width > 1px)', 'supports (display: grid)', 'container (width > 1px)', 'layer components', 'scope (.card)'].map(atRule => `@${atRule} { a { transition: display 1s; } }`),
 		'a { @media print { transition: display 1s; } }',
 		'a { @starting-style { transition: display 1s; } }',
+	],
+});
+
+test({
+	valid: [
+		'a { transition: overflow-wrap 1s, word-wrap 1s allow-discrete; }',
+		'a { transition: word-wrap 1s, overflow-wrap 1s allow-discrete; }',
+		String.raw`a { transition: OVERFLOW-WRAP 1s, w\6f rd-wrap 1s allow-discrete; }`,
+		'a { transition: overflow 1s, overflow-x 1s allow-discrete, overflow-y 1s allow-discrete; }',
+		'a { transition: grid-area 1s, grid-row 1s allow-discrete, grid-column 1s allow-discrete; }',
+		'a { transition: white-space 1s, white-space-collapse 1s allow-discrete, text-wrap-mode 1s allow-discrete, white-space-trim 1s allow-discrete; }',
+		'a { transition: overflow 1s allow-discrete; }',
+		'a { transition-property: flex-flow; }',
+		'a { transition: display 1s; transition-behavior: initial; transition-behavior: allow-discrete; }',
+		'a { transition: display 1s; transition-behavior: allow-discrete !important; transition-behavior: unset; }',
+		'a { transition: display 1s; transition-behavior: initial; all: unset; }',
+		'a { transition: display 1s; transition-behavior: initial, allow-discrete; }',
+		{
+			code: 'a { transition: word-wrap 1s; }',
+			languageOptions: {customSyntax: {properties: {'word-wrap': null}}},
+		},
+	],
+	invalid: [
+		...['word-wrap', 'overflow', 'flex-flow', 'text-box'].map(property => ({
+			code: `a { transition: ${property} 1s; }`,
+			errors: [{
+				messageId: 'no-ineffective-transitions/discrete',
+				data: {property},
+				suggestions: [{messageId: 'no-ineffective-transitions/allow-discrete', output: `a { transition: allow-discrete ${property} 1s; }`}],
+			}],
+		})),
+		{
+			code: 'a { transition: overflow 1s, overflow-x 1s allow-discrete; }',
+			errors: [{
+				messageId: 'no-ineffective-transitions/discrete',
+				data: {property: 'overflow'},
+				suggestions: [{messageId: 'no-ineffective-transitions/allow-discrete', output: 'a { transition: allow-discrete overflow 1s, overflow-x 1s allow-discrete; }'}],
+			}],
+		},
+		{
+			code: 'a { transition: overflow-wrap 1s allow-discrete, word-wrap 1s; }',
+			errors: [{
+				messageId: 'no-ineffective-transitions/discrete',
+				data: {property: 'word-wrap'},
+				suggestions: [{messageId: 'no-ineffective-transitions/allow-discrete', output: 'a { transition: overflow-wrap 1s allow-discrete, allow-discrete word-wrap 1s; }'}],
+			}],
+		},
+		...['transition', 'animation-range'].map(property => ({
+			code: `a { transition: ${property} 1s allow-discrete; }`,
+			errors: [{messageId: 'no-ineffective-transitions/non-animatable', data: {property}}],
+		})),
+		...['initial', 'unset'].map(value => ({
+			code: `a { transition-property: display; transition-behavior: /* before */ ${value} /* after */; }`,
+			errors: [{
+				messageId: 'no-ineffective-transitions/discrete',
+				data: {property: 'display'},
+				suggestions: [{messageId: 'no-ineffective-transitions/allow-discrete', output: 'a { transition-property: display; transition-behavior: /* before */ allow-discrete /* after */; }'}],
+			}],
+		})),
+		{
+			code: String.raw`a { transition: DISPLAY 1s allow-discrete !important; TRANSITION-BEHAVIOR: \75 nset !important; }`,
+			errors: [{
+				messageId: 'no-ineffective-transitions/discrete',
+				data: {property: 'DISPLAY'},
+				suggestions: [{
+					messageId: 'no-ineffective-transitions/allow-discrete',
+					output: 'a { transition: DISPLAY 1s allow-discrete !important; TRANSITION-BEHAVIOR: allow-discrete !important; }',
+				}],
+			}],
+		},
+		{
+			code: 'a { transition-property: text-wrap, white-space, border-style, grid-area; transition-behavior: normal, allow-discrete; }',
+			errors: ['text-wrap', 'border-style'].map(property => ({
+				messageId: 'no-ineffective-transitions/discrete',
+				data: {property},
+				suggestions: [{
+					messageId: 'no-ineffective-transitions/allow-discrete',
+					output: 'a { transition-property: text-wrap, white-space, border-style, grid-area; transition-behavior: allow-discrete, allow-discrete; }',
+				}],
+			})),
+		},
 	],
 });
 
