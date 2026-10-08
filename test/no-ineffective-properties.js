@@ -959,6 +959,17 @@ test({
 				{messageId: omittedComponentMessageId, data: {property: 'outline', component: 'the outline style'}},
 			],
 		},
+		{
+			code: 'a { border: 1px red; border-style: solid; outline: 2px blue; animation: 2s ease; }',
+			errors: [
+				{messageId: omittedComponentMessageId, data: {property: 'outline', component: 'the outline style'}},
+				{messageId: omittedComponentMessageId, data: {property: 'animation', component: 'an animation name'}},
+			],
+		},
+		{
+			code: 'a { animation: 2s -1s ease; }',
+			errors: [{messageId: omittedComponentMessageId, data: {property: 'animation', component: 'an animation name'}}],
+		},
 		...['2s ease forwards', '2s ease paused', '2s infinite alternate paused both'].map(value => ({
 			code: `a { animation: ${value}; }`,
 			errors: [{messageId: omittedComponentMessageId, data: {property: 'animation', component: 'an animation name'}}],
