@@ -14,6 +14,7 @@ export {default as 'no-ineffective-keyframe-declarations'} from './no-ineffectiv
 export {default as 'no-ineffective-properties'} from './no-ineffective-properties.js';
 export {default as 'no-invalid-media-features'} from './no-invalid-media-features.js';
 export {default as 'no-invalid-property-references'} from './no-invalid-property-references.js';
+export {default as 'no-layout-animations'} from './no-layout-animations.js';
 export {default as 'no-nesting-with-mixed-specificity'} from './no-nesting-with-mixed-specificity.js';
 export {default as 'no-overflow-axis-coercion'} from './no-overflow-axis-coercion.js';
 export {default as 'no-redundant-functions'} from './no-redundant-functions.js';
