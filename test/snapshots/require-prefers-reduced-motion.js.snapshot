@@ -1052,6 +1052,62 @@ Message:
 
 `;
 
+exports[`invalid(76): a { -future-transition-property: opacity; transition-duration: 1s; } 1`] = `
+
+  1 | a { -future-transition-property: opacity; transition-duration: 1s; }
+
+`;
+
+exports[`invalid(76): a { -future-transition-property: opacity; transition-duration: 1s; } 2`] = `
+
+Message:
+> 1 | a { -future-transition-property: opacity; transition-duration: 1s; }
+    |                                           ^^^^^^^^^^^^^^^^^^^^^^^ Place \`transition-duration\` inside a \`prefers-reduced-motion: no-preference\` media query.
+
+`;
+
+exports[`invalid(77): a { -future-transition: color 1s; transition-duration: 1s; } 1`] = `
+
+  1 | a { -future-transition: color 1s; transition-duration: 1s; }
+
+`;
+
+exports[`invalid(77): a { -future-transition: color 1s; transition-duration: 1s; } 2`] = `
+
+Message:
+> 1 | a { -future-transition: color 1s; transition-duration: 1s; }
+    |                                   ^^^^^^^^^^^^^^^^^^^^^^^ Place \`transition-duration\` inside a \`prefers-reduced-motion: no-preference\` media query.
+
+`;
+
+exports[`invalid(78): a { -FUTURE-TRANSITION-PROP\\65 RTY: opacity; transition-duration: 1s; } 1`] = `
+
+  1 | a { -FUTURE-TRANSITION-PROP\\65 RTY: opacity; transition-duration: 1s; }
+
+`;
+
+exports[`invalid(78): a { -FUTURE-TRANSITION-PROP\\65 RTY: opacity; transition-duration: 1s; } 2`] = `
+
+Message:
+> 1 | a { -FUTURE-TRANSITION-PROP\\65 RTY: opacity; transition-duration: 1s; }
+    |                                              ^^^^^^^^^^^^^^^^^^^^^^^ Place \`transition-duration\` inside a \`prefers-reduced-motion: no-preference\` media query.
+
+`;
+
+exports[`invalid(79): a { -moz-transition-property: opacity; transition-duration: 1s; } 1`] = `
+
+  1 | a { -moz-transition-property: opacity; transition-duration: 1s; }
+
+`;
+
+exports[`invalid(79): a { -moz-transition-property: opacity; transition-duration: 1s; } 2`] = `
+
+Message:
+> 1 | a { -moz-transition-property: opacity; transition-duration: 1s; }
+    |                                        ^^^^^^^^^^^^^^^^^^^^^^^ Place \`transition-duration\` inside a \`prefers-reduced-motion: no-preference\` media query.
+
+`;
+
 exports[`invalid(8): a { animation-name: external; } 1`] = `
 
   1 | a { animation-name: external; }
@@ -1063,6 +1119,20 @@ exports[`invalid(8): a { animation-name: external; } 2`] = `
 Message:
 > 1 | a { animation-name: external; }
     |     ^^^^^^^^^^^^^^^^^^^^^^^^ Place \`animation-name\` inside a \`prefers-reduced-motion: no-preference\` media query.
+
+`;
+
+exports[`invalid(80): a { transition-property: opacity; -webkit-transition-property: color; transition-duration: 1s; } 1`] = `
+
+  1 | a { transition-property: opacity; -webkit-transition-property: color; transition-duration: 1s; }
+
+`;
+
+exports[`invalid(80): a { transition-property: opacity; -webkit-transition-property: color; transition-duration: 1s; } 2`] = `
+
+Message:
+> 1 | a { transition-property: opacity; -webkit-transition-property: color; transition-duration: 1s; }
+    |                                                                       ^^^^^^^^^^^^^^^^^^^^^^^ Place \`transition-duration\` inside a \`prefers-reduced-motion: no-preference\` media query.
 
 `;
 

@@ -30,6 +30,7 @@ const messages = {
 
 const animationProperties = new Set(['animation', 'animation-name']);
 const targetProperties = new Set([...animationProperties, 'transition', 'transition-property', 'transition-duration', 'scroll-behavior']);
+const transitionControllerProperties = new Set(['transition', 'transition-property', '-webkit-transition', '-webkit-transition-property']);
 const resetKeywords = new Set(['initial', 'unset']);
 const transitionKeywords = new Set(['ease', 'ease-in', 'ease-out', 'ease-in-out', 'linear', 'step-start', 'step-end', 'normal', 'allow-discrete']);
 const easingFunctions = new Set(['cubic-bezier', 'steps', 'linear']);
@@ -148,7 +149,7 @@ function hasNonMotionTransitionController(block, lexer) {
 		/**
 		@returns {node is DeclarationPlain}
 		*/
-		node => node.type === 'Declaration' && ['transition', 'transition-property'].includes(keyword(normalizeCssIdentifier(node.property)).basename),
+		node => node.type === 'Declaration' && transitionControllerProperties.has(normalizeCssIdentifier(node.property)),
 	);
 	if (controllers.length !== 1) {
 		return false;

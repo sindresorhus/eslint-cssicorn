@@ -134,7 +134,7 @@ Other properties are treated conservatively. This includes `filter`, SVG paint p
 | `transition-duration` | Any duration is nonzero or unresolved; the initial transition property is `all`. | All durations are literal zero, or exactly one same-block controller explicitly selects only non-motion properties or `none`. |
 | `scroll-behavior` | The value is `smooth` or unresolved. | `auto`. |
 
-Vendor-prefixed animation and transition properties are also checked. A guarded keyframes definition does not exempt an unguarded animation reference. The rule does not infer whether other selectors currently activate motion-selecting longhands. A transition controller is a `transition` or `transition-property` declaration. Duplicate controllers and controllers in other selectors do not establish a non-motion exemption for `transition-duration`.
+Vendor-prefixed animation and transition properties are also checked. A guarded keyframes definition does not exempt an unguarded animation reference. The rule does not infer whether other selectors currently activate motion-selecting longhands. A transition controller is a `transition` or `transition-property` declaration, including their [`-webkit-` aliases](https://compat.spec.whatwg.org/#css-simple-aliases). Other vendor prefixes do not establish this exemption. Duplicate controllers and controllers in other selectors do not establish a non-motion exemption for `transition-duration`.
 
 The first time in a transition shorthand is its duration; a positive delay does not count as a positive duration. Zero-duration animations are still checked because [scroll-driven timelines can reinterpret their duration](https://drafts.csswg.org/css-animations-2/#animation-duration).
 

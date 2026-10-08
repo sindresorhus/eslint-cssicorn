@@ -72,6 +72,11 @@ test.snapshot({
 		'@media (prefers-reduced-motion: no-preference) { @container (width > 20rem) { @scope (.card) { :scope { animation: slide 1s; transition: transform 1s; scroll-behavior: smooth; } } } }',
 		'@media (prefers-reduced-motion: no-preference) { a { @starting-style { transition: transform 200ms; } } }',
 		'@property --offset { syntax: "<length>"; inherits: false; initial-value: 0; } @media (prefers-reduced-motion: no-preference) { a { translate: var(--offset); transition: --offset 200ms; } }',
+		'a { transition: linear(0, 1) transform 0s 1s; }',
+		'a { -webkit-transition-property: opacity; transition-duration: 1s; }',
+		'a { -webkit-transition: color 1s; transition-duration: var(--duration); }',
+		String.raw`a { -WEBKIT-TRANSITION-PROP\65 RTY: opacity; -webkit-transition-duration: 1s; }`,
+		'a { -future-transition-property: color; transition-property: opacity; transition-duration: 1s; }',
 	],
 	invalid: [
 		'a { animation: slide 1s; }',
@@ -149,6 +154,11 @@ test.snapshot({
 		'@container (width > 20rem) { @scope (.card) { :scope { animation: slide 1s; transition: transform 1s; scroll-behavior: smooth; } } }',
 		'a { @starting-style { transition: transform 200ms; } }',
 		'@property --offset { syntax: "<length>"; inherits: false; initial-value: 0; } a { translate: var(--offset); transition: --offset 200ms; }',
+		'a { -future-transition-property: opacity; transition-duration: 1s; }',
+		'a { -future-transition: color 1s; transition-duration: 1s; }',
+		String.raw`a { -FUTURE-TRANSITION-PROP\65 RTY: opacity; transition-duration: 1s; }`,
+		'a { -moz-transition-property: opacity; transition-duration: 1s; }',
+		'a { transition-property: opacity; -webkit-transition-property: color; transition-duration: 1s; }',
 	],
 });
 
