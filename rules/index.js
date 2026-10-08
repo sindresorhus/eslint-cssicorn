@@ -29,6 +29,7 @@ export {default as 'no-unscoped-nesting-selector'} from './no-unscoped-nesting-s
 export {default as 'no-useless-is'} from './no-useless-is.js';
 export {default as 'no-zero-length-unit'} from './no-zero-length-unit.js';
 export {default as 'prefer-clamp'} from './prefer-clamp.js';
+export {default as 'prefer-existing-custom-properties'} from './prefer-existing-custom-properties.js';
 export {default as 'prefer-explicit-viewport-units'} from './prefer-explicit-viewport-units.js';
 export {default as 'prefer-individual-transform-properties'} from './prefer-individual-transform-properties.js';
 export {default as 'prefer-light-dark'} from './prefer-light-dark.js';
