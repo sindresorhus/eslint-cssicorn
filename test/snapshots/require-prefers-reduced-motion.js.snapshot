@@ -1,0 +1,883 @@
+exports[`invalid(1): a { animation: slide 1s; } 1`] = `
+
+  1 | a { animation: slide 1s; }
+
+`;
+
+exports[`invalid(1): a { animation: slide 1s; } 2`] = `
+
+Message:
+> 1 | a { animation: slide 1s; }
+    |     ^^^^^^^^^^^^^^^^^^^ Place \`animation\` inside a \`prefers-reduced-motion: no-preference\` media query.
+
+`;
+
+exports[`invalid(10): @keyframes fade { to { opacity: 1; } } a { animation: fade 1s, var(--effect); } 1`] = `
+
+  1 | @keyframes fade { to { opacity: 1; } } a { animation: fade 1s, var(--effect); }
+
+`;
+
+exports[`invalid(10): @keyframes fade { to { opacity: 1; } } a { animation: fade 1s, var(--effect); } 2`] = `
+
+Message:
+> 1 | @keyframes fade { to { opacity: 1; } } a { animation: fade 1s, var(--effect); }
+    |                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Place \`animation\` inside a \`prefers-reduced-motion: no-preference\` media query.
+
+`;
+
+exports[`invalid(11): @keyframes fade { to { opacity: 1; } } a { animation-name: Fade; } 1`] = `
+
+  1 | @keyframes fade { to { opacity: 1; } } a { animation-name: Fade; }
+
+`;
+
+exports[`invalid(11): @keyframes fade { to { opacity: 1; } } a { animation-name: Fade; } 2`] = `
+
+Message:
+> 1 | @keyframes fade { to { opacity: 1; } } a { animation-name: Fade; }
+    |                                            ^^^^^^^^^^^^^^^^^^^^ Place \`animation-name\` inside a \`prefers-reduced-motion: no-preference\` media query.
+
+`;
+
+exports[`invalid(12): @keyframes fade { to { opacity: 1; } } @media (hover) { @keyframes fade { to { transform: scale(2); } } } a { animation-name: fade; } 1`] = `
+
+  1 | @keyframes fade { to { opacity: 1; } } @media (hover) { @keyframes fade { to { transform: scale(2); } } } a { animation-name: fade; }
+
+`;
+
+exports[`invalid(12): @keyframes fade { to { opacity: 1; } } @media (hover) { @keyframes fade { to { transform: scale(2); } } } a { animation-name: fade; } 2`] = `
+
+Message:
+> 1 | @keyframes fade { to { opacity: 1; } } @media (hover) { @keyframes fade { to { transform: scale(2); } } } a { animation-name: fade; }
+    |                                                                                                               ^^^^^^^^^^^^^^^^^^^^ Place \`animation-name\` inside a \`prefers-reduced-motion: no-preference\` media query.
+
+`;
+
+exports[`invalid(13): @media (prefers-reduced-motion: no-preference) { @keyframes slide { to { transform: translateX(10px); } } } a { animation-name: slide; } 1`] = `
+
+  1 | @media (prefers-reduced-motion: no-preference) { @keyframes slide { to { transform: translateX(10px); } } } a { animation-name: slide; }
+
+`;
+
+exports[`invalid(13): @media (prefers-reduced-motion: no-preference) { @keyframes slide { to { transform: translateX(10px); } } } a { animation-name: slide; } 2`] = `
+
+Message:
+> 1 | @media (prefers-reduced-motion: no-preference) { @keyframes slide { to { transform: translateX(10px); } } } a { animation-name: slide; }
+    |                                                                                                                 ^^^^^^^^^^^^^^^^^^^^^ Place \`animation-name\` inside a \`prefers-reduced-motion: no-preference\` media query.
+
+`;
+
+exports[`invalid(14): @keyframes blur { to { filter: blur(10px); } } a { animation: blur 1s; } 1`] = `
+
+  1 | @keyframes blur { to { filter: blur(10px); } } a { animation: blur 1s; }
+
+`;
+
+exports[`invalid(14): @keyframes blur { to { filter: blur(10px); } } a { animation: blur 1s; } 2`] = `
+
+Message:
+> 1 | @keyframes blur { to { filter: blur(10px); } } a { animation: blur 1s; }
+    |                                                    ^^^^^^^^^^^^^^^^^^ Place \`animation\` inside a \`prefers-reduced-motion: no-preference\` media query.
+
+`;
+
+exports[`invalid(15): @keyframes tint { to { background: red; } } a { animation-name: tint; } 1`] = `
+
+  1 | @keyframes tint { to { background: red; } } a { animation-name: tint; }
+
+`;
+
+exports[`invalid(15): @keyframes tint { to { background: red; } } a { animation-name: tint; } 2`] = `
+
+Message:
+> 1 | @keyframes tint { to { background: red; } } a { animation-name: tint; }
+    |                                                 ^^^^^^^^^^^^^^^^^^^^ Place \`animation-name\` inside a \`prefers-reduced-motion: no-preference\` media query.
+
+`;
+
+exports[`invalid(16): @keyframes custom { to { --position: 10px; } } a { animation: custom 1s; } 1`] = `
+
+  1 | @keyframes custom { to { --position: 10px; } } a { animation: custom 1s; }
+
+`;
+
+exports[`invalid(16): @keyframes custom { to { --position: 10px; } } a { animation: custom 1s; } 2`] = `
+
+Message:
+> 1 | @keyframes custom { to { --position: 10px; } } a { animation: custom 1s; }
+    |                                                    ^^^^^^^^^^^^^^^^^^^^ Place \`animation\` inside a \`prefers-reduced-motion: no-preference\` media query.
+
+`;
+
+exports[`invalid(17): @keyframes fake { to { future-color: red; } } a { animation-name: fake; } 1`] = `
+
+  1 | @keyframes fake { to { future-color: red; } } a { animation-name: fake; }
+
+`;
+
+exports[`invalid(17): @keyframes fake { to { future-color: red; } } a { animation-name: fake; } 2`] = `
+
+Message:
+> 1 | @keyframes fake { to { future-color: red; } } a { animation-name: fake; }
+    |                                                   ^^^^^^^^^^^^^^^^^^^^ Place \`animation-name\` inside a \`prefers-reduced-motion: no-preference\` media query.
+
+`;
+
+exports[`invalid(18): a { -webkit-animation: slide 1s; } 1`] = `
+
+  1 | a { -webkit-animation: slide 1s; }
+
+`;
+
+exports[`invalid(18): a { -webkit-animation: slide 1s; } 2`] = `
+
+Message:
+> 1 | a { -webkit-animation: slide 1s; }
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^ Place \`animation\` inside a \`prefers-reduced-motion: no-preference\` media query.
+
+`;
+
+exports[`invalid(19): a { anim\\61 tion-name: sl\\69 de; } 1`] = `
+
+  1 | a { anim\\61 tion-name: sl\\69 de; }
+
+`;
+
+exports[`invalid(19): a { anim\\61 tion-name: sl\\69 de; } 2`] = `
+
+Message:
+> 1 | a { anim\\61 tion-name: sl\\69 de; }
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^ Place \`animation-name\` inside a \`prefers-reduced-motion: no-preference\` media query.
+
+`;
+
+exports[`invalid(2): a { animation-name: external; } 1`] = `
+
+  1 | a { animation-name: external; }
+
+`;
+
+exports[`invalid(2): a { animation-name: external; } 2`] = `
+
+Message:
+> 1 | a { animation-name: external; }
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^ Place \`animation-name\` inside a \`prefers-reduced-motion: no-preference\` media query.
+
+`;
+
+exports[`invalid(20): a { animation-name: \"slide\"; } 1`] = `
+
+  1 | a { animation-name: "slide"; }
+
+`;
+
+exports[`invalid(20): a { animation-name: \"slide\"; } 2`] = `
+
+Message:
+> 1 | a { animation-name: "slide"; }
+    |     ^^^^^^^^^^^^^^^^^^^^^^^ Place \`animation-name\` inside a \`prefers-reduced-motion: no-preference\` media query.
+
+`;
+
+exports[`invalid(21): a { transition: transform 1s; } 1`] = `
+
+  1 | a { transition: transform 1s; }
+
+`;
+
+exports[`invalid(21): a { transition: transform 1s; } 2`] = `
+
+Message:
+> 1 | a { transition: transform 1s; }
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^ Place \`transition\` inside a \`prefers-reduced-motion: no-preference\` media query.
+
+`;
+
+exports[`invalid(22): a { transition: width 1s, opacity 1s; } 1`] = `
+
+  1 | a { transition: width 1s, opacity 1s; }
+
+`;
+
+exports[`invalid(22): a { transition: width 1s, opacity 1s; } 2`] = `
+
+Message:
+> 1 | a { transition: width 1s, opacity 1s; }
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Place \`transition\` inside a \`prefers-reduced-motion: no-preference\` media query.
+
+`;
+
+exports[`invalid(23): a { transition: 1s ease; } 1`] = `
+
+  1 | a { transition: 1s ease; }
+
+`;
+
+exports[`invalid(23): a { transition: 1s ease; } 2`] = `
+
+Message:
+> 1 | a { transition: 1s ease; }
+    |     ^^^^^^^^^^^^^^^^^^^ Place \`transition\` inside a \`prefers-reduced-motion: no-preference\` media query.
+
+`;
+
+exports[`invalid(24): a { transition: all 1s; } 1`] = `
+
+  1 | a { transition: all 1s; }
+
+`;
+
+exports[`invalid(24): a { transition: all 1s; } 2`] = `
+
+Message:
+> 1 | a { transition: all 1s; }
+    |     ^^^^^^^^^^^^^^^^^^ Place \`transition\` inside a \`prefers-reduced-motion: no-preference\` media query.
+
+`;
+
+exports[`invalid(25): a { transition: transform var(--duration); } 1`] = `
+
+  1 | a { transition: transform var(--duration); }
+
+`;
+
+exports[`invalid(25): a { transition: transform var(--duration); } 2`] = `
+
+Message:
+> 1 | a { transition: transform var(--duration); }
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Place \`transition\` inside a \`prefers-reduced-motion: no-preference\` media query.
+
+`;
+
+exports[`invalid(26): a { transition: var(--transition); } 1`] = `
+
+  1 | a { transition: var(--transition); }
+
+`;
+
+exports[`invalid(26): a { transition: var(--transition); } 2`] = `
+
+Message:
+> 1 | a { transition: var(--transition); }
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Place \`transition\` inside a \`prefers-reduced-motion: no-preference\` media query.
+
+`;
+
+exports[`invalid(27): a { transition: var(--property) 1s; } 1`] = `
+
+  1 | a { transition: var(--property) 1s; }
+
+`;
+
+exports[`invalid(27): a { transition: var(--property) 1s; } 2`] = `
+
+Message:
+> 1 | a { transition: var(--property) 1s; }
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Place \`transition\` inside a \`prefers-reduced-motion: no-preference\` media query.
+
+`;
+
+exports[`invalid(28): a { transition-property: transform; } 1`] = `
+
+  1 | a { transition-property: transform; }
+
+`;
+
+exports[`invalid(28): a { transition-property: transform; } 2`] = `
+
+Message:
+> 1 | a { transition-property: transform; }
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Place \`transition-property\` inside a \`prefers-reduced-motion: no-preference\` media query.
+
+`;
+
+exports[`invalid(29): a { transition-property: opacity, width; } 1`] = `
+
+  1 | a { transition-property: opacity, width; }
+
+`;
+
+exports[`invalid(29): a { transition-property: opacity, width; } 2`] = `
+
+Message:
+> 1 | a { transition-property: opacity, width; }
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Place \`transition-property\` inside a \`prefers-reduced-motion: no-preference\` media query.
+
+`;
+
+exports[`invalid(3): a { animation: var(--effect); } 1`] = `
+
+  1 | a { animation: var(--effect); }
+
+`;
+
+exports[`invalid(3): a { animation: var(--effect); } 2`] = `
+
+Message:
+> 1 | a { animation: var(--effect); }
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^ Place \`animation\` inside a \`prefers-reduced-motion: no-preference\` media query.
+
+`;
+
+exports[`invalid(30): a { transition-property: transform; transition-duration: 0s; } 1`] = `
+
+  1 | a { transition-property: transform; transition-duration: 0s; }
+
+`;
+
+exports[`invalid(30): a { transition-property: transform; transition-duration: 0s; } 2`] = `
+
+Message:
+> 1 | a { transition-property: transform; transition-duration: 0s; }
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Place \`transition-property\` inside a \`prefers-reduced-motion: no-preference\` media query.
+
+`;
+
+exports[`invalid(31): a { transition-property: var(--property); } 1`] = `
+
+  1 | a { transition-property: var(--property); }
+
+`;
+
+exports[`invalid(31): a { transition-property: var(--property); } 2`] = `
+
+Message:
+> 1 | a { transition-property: var(--property); }
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Place \`transition-property\` inside a \`prefers-reduced-motion: no-preference\` media query.
+
+`;
+
+exports[`invalid(32): a { transition: --position 1s; } 1`] = `
+
+  1 | a { transition: --position 1s; }
+
+`;
+
+exports[`invalid(32): a { transition: --position 1s; } 2`] = `
+
+Message:
+> 1 | a { transition: --position 1s; }
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^ Place \`transition\` inside a \`prefers-reduced-motion: no-preference\` media query.
+
+`;
+
+exports[`invalid(33): a { transition-property: --custom-color; } 1`] = `
+
+  1 | a { transition-property: --custom-color; }
+
+`;
+
+exports[`invalid(33): a { transition-property: --custom-color; } 2`] = `
+
+Message:
+> 1 | a { transition-property: --custom-color; }
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Place \`transition-property\` inside a \`prefers-reduced-motion: no-preference\` media query.
+
+`;
+
+exports[`invalid(34): a { transition: filter 1s, background 1s, border 1s; } 1`] = `
+
+  1 | a { transition: filter 1s, background 1s, border 1s; }
+
+`;
+
+exports[`invalid(34): a { transition: filter 1s, background 1s, border 1s; } 2`] = `
+
+Message:
+> 1 | a { transition: filter 1s, background 1s, border 1s; }
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Place \`transition\` inside a \`prefers-reduced-motion: no-preference\` media query.
+
+`;
+
+exports[`invalid(35): a { transition-duration: 1s; } 1`] = `
+
+  1 | a { transition-duration: 1s; }
+
+`;
+
+exports[`invalid(35): a { transition-duration: 1s; } 2`] = `
+
+Message:
+> 1 | a { transition-duration: 1s; }
+    |     ^^^^^^^^^^^^^^^^^^^^^^^ Place \`transition-duration\` inside a \`prefers-reduced-motion: no-preference\` media query.
+
+`;
+
+exports[`invalid(36): a { transition-duration: var(--duration); } 1`] = `
+
+  1 | a { transition-duration: var(--duration); }
+
+`;
+
+exports[`invalid(36): a { transition-duration: var(--duration); } 2`] = `
+
+Message:
+> 1 | a { transition-duration: var(--duration); }
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Place \`transition-duration\` inside a \`prefers-reduced-motion: no-preference\` media query.
+
+`;
+
+exports[`invalid(37): a { transition-duration: 0s, 100ms; } 1`] = `
+
+  1 | a { transition-duration: 0s, 100ms; }
+
+`;
+
+exports[`invalid(37): a { transition-duration: 0s, 100ms; } 2`] = `
+
+Message:
+> 1 | a { transition-duration: 0s, 100ms; }
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Place \`transition-duration\` inside a \`prefers-reduced-motion: no-preference\` media query.
+
+`;
+
+exports[`invalid(38): a { transition-duration: inherit; } 1`] = `
+
+  1 | a { transition-duration: inherit; }
+
+`;
+
+exports[`invalid(38): a { transition-duration: inherit; } 2`] = `
+
+Message:
+> 1 | a { transition-duration: inherit; }
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Place \`transition-duration\` inside a \`prefers-reduced-motion: no-preference\` media query.
+
+`;
+
+exports[`invalid(39): a { transition: transform 0s; transition-duration: 1s; } 1`] = `
+
+  1 | a { transition: transform 0s; transition-duration: 1s; }
+
+`;
+
+exports[`invalid(39): a { transition: transform 0s; transition-duration: 1s; } 2`] = `
+
+Message:
+> 1 | a { transition: transform 0s; transition-duration: 1s; }
+    |                               ^^^^^^^^^^^^^^^^^^^^^^^ Place \`transition-duration\` inside a \`prefers-reduced-motion: no-preference\` media query.
+
+`;
+
+exports[`invalid(4): a { animation-name: var(--name, fade); } 1`] = `
+
+  1 | a { animation-name: var(--name, fade); }
+
+`;
+
+exports[`invalid(4): a { animation-name: var(--name, fade); } 2`] = `
+
+Message:
+> 1 | a { animation-name: var(--name, fade); }
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Place \`animation-name\` inside a \`prefers-reduced-motion: no-preference\` media query.
+
+`;
+
+exports[`invalid(40): a { transition: 0s; transition-duration: 1s; } 1`] = `
+
+  1 | a { transition: 0s; transition-duration: 1s; }
+
+`;
+
+exports[`invalid(40): a { transition: 0s; transition-duration: 1s; } 2`] = `
+
+Message:
+> 1 | a { transition: 0s; transition-duration: 1s; }
+    |                     ^^^^^^^^^^^^^^^^^^^^^^^ Place \`transition-duration\` inside a \`prefers-reduced-motion: no-preference\` media query.
+
+`;
+
+exports[`invalid(41): a { transition-property: initial; transition-duration: 1s; } 1`] = `
+
+  1 | a { transition-property: initial; transition-duration: 1s; }
+
+`;
+
+exports[`invalid(41): a { transition-property: initial; transition-duration: 1s; } 2`] = `
+
+Message:
+> 1 | a { transition-property: initial; transition-duration: 1s; }
+    |                                   ^^^^^^^^^^^^^^^^^^^^^^^ Place \`transition-duration\` inside a \`prefers-reduced-motion: no-preference\` media query.
+
+`;
+
+exports[`invalid(42): a { transition: unset; transition-duration: 1s; } 1`] = `
+
+  1 | a { transition: unset; transition-duration: 1s; }
+
+`;
+
+exports[`invalid(42): a { transition: unset; transition-duration: 1s; } 2`] = `
+
+Message:
+> 1 | a { transition: unset; transition-duration: 1s; }
+    |                        ^^^^^^^^^^^^^^^^^^^^^^^ Place \`transition-duration\` inside a \`prefers-reduced-motion: no-preference\` media query.
+
+`;
+
+exports[`invalid(43): a { transition-property: color; transition-property: opacity; transition-duration: 1s; } 1`] = `
+
+  1 | a { transition-property: color; transition-property: opacity; transition-duration: 1s; }
+
+`;
+
+exports[`invalid(43): a { transition-property: color; transition-property: opacity; transition-duration: 1s; } 2`] = `
+
+Message:
+> 1 | a { transition-property: color; transition-property: opacity; transition-duration: 1s; }
+    |                                                               ^^^^^^^^^^^^^^^^^^^^^^^ Place \`transition-duration\` inside a \`prefers-reduced-motion: no-preference\` media query.
+
+`;
+
+exports[`invalid(44): a { transition-property: opacity; transition-duration: 1s; } a:hover { transition-property: transform; } 1`] = `
+
+  1 | a { transition-property: opacity; transition-duration: 1s; } a:hover { transition-property: transform; }
+
+`;
+
+exports[`invalid(44): a { transition-property: opacity; transition-duration: 1s; } a:hover { transition-property: transform; } 2`] = `
+
+Message:
+> 1 | a { transition-property: opacity; transition-duration: 1s; } a:hover { transition-property: transform; }
+    |                                                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Place \`transition-property\` inside a \`prefers-reduced-motion: no-preference\` media query.
+
+`;
+
+exports[`invalid(45): a { -webkit-transition: transform 1s; } 1`] = `
+
+  1 | a { -webkit-transition: transform 1s; }
+
+`;
+
+exports[`invalid(45): a { -webkit-transition: transform 1s; } 2`] = `
+
+Message:
+> 1 | a { -webkit-transition: transform 1s; }
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Place \`transition\` inside a \`prefers-reduced-motion: no-preference\` media query.
+
+`;
+
+exports[`invalid(46): a { TRANSITION: tr\\61 nsform 1\\73; } 1`] = `
+
+  1 | a { TRANSITION: tr\\61 nsform 1\\73; }
+
+`;
+
+exports[`invalid(46): a { TRANSITION: tr\\61 nsform 1\\73; } 2`] = `
+
+Message:
+> 1 | a { TRANSITION: tr\\61 nsform 1\\73; }
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Place \`transition\` inside a \`prefers-reduced-motion: no-preference\` media query.
+
+`;
+
+exports[`invalid(47): a { scroll-behavior: smooth; } 1`] = `
+
+  1 | a { scroll-behavior: smooth; }
+
+`;
+
+exports[`invalid(47): a { scroll-behavior: smooth; } 2`] = `
+
+Message:
+> 1 | a { scroll-behavior: smooth; }
+    |     ^^^^^^^^^^^^^^^^^^^^^^^ Place \`scroll-behavior\` inside a \`prefers-reduced-motion: no-preference\` media query.
+
+`;
+
+exports[`invalid(48): a { scroll-behavior: var(--scroll); } 1`] = `
+
+  1 | a { scroll-behavior: var(--scroll); }
+
+`;
+
+exports[`invalid(48): a { scroll-behavior: var(--scroll); } 2`] = `
+
+Message:
+> 1 | a { scroll-behavior: var(--scroll); }
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Place \`scroll-behavior\` inside a \`prefers-reduced-motion: no-preference\` media query.
+
+`;
+
+exports[`invalid(49): a { scroll-behavior: inherit; } 1`] = `
+
+  1 | a { scroll-behavior: inherit; }
+
+`;
+
+exports[`invalid(49): a { scroll-behavior: inherit; } 2`] = `
+
+Message:
+> 1 | a { scroll-behavior: inherit; }
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^ Place \`scroll-behavior\` inside a \`prefers-reduced-motion: no-preference\` media query.
+
+`;
+
+exports[`invalid(5): a { animation: slide var(--duration); } 1`] = `
+
+  1 | a { animation: slide var(--duration); }
+
+`;
+
+exports[`invalid(5): a { animation: slide var(--duration); } 2`] = `
+
+Message:
+> 1 | a { animation: slide var(--duration); }
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Place \`animation\` inside a \`prefers-reduced-motion: no-preference\` media query.
+
+`;
+
+exports[`invalid(50): a { SCROLL-BEHAVIOR: SMOOTH !important; } 1`] = `
+
+  1 | a { SCROLL-BEHAVIOR: SMOOTH !important; }
+
+`;
+
+exports[`invalid(50): a { SCROLL-BEHAVIOR: SMOOTH !important; } 2`] = `
+
+Message:
+> 1 | a { SCROLL-BEHAVIOR: SMOOTH !important; }
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Place \`scroll-behavior\` inside a \`prefers-reduced-motion: no-preference\` media query.
+
+`;
+
+exports[`invalid(51): a { scroll-behavior: sm\\6f oth; } 1`] = `
+
+  1 | a { scroll-behavior: sm\\6f oth; }
+
+`;
+
+exports[`invalid(51): a { scroll-behavior: sm\\6f oth; } 2`] = `
+
+Message:
+> 1 | a { scroll-behavior: sm\\6f oth; }
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^ Place \`scroll-behavior\` inside a \`prefers-reduced-motion: no-preference\` media query.
+
+`;
+
+exports[`invalid(52): @media (prefers-reduced-motion: reduce) { a { scroll-behavior: smooth; } } 1`] = `
+
+  1 | @media (prefers-reduced-motion: reduce) { a { scroll-behavior: smooth; } }
+
+`;
+
+exports[`invalid(52): @media (prefers-reduced-motion: reduce) { a { scroll-behavior: smooth; } } 2`] = `
+
+Message:
+> 1 | @media (prefers-reduced-motion: reduce) { a { scroll-behavior: smooth; } }
+    |                                               ^^^^^^^^^^^^^^^^^^^^^^^ Place \`scroll-behavior\` inside a \`prefers-reduced-motion: no-preference\` media query.
+
+`;
+
+exports[`invalid(53): @media (prefers-reduced-motion) { a { animation: slide 1s; } } 1`] = `
+
+  1 | @media (prefers-reduced-motion) { a { animation: slide 1s; } }
+
+`;
+
+exports[`invalid(53): @media (prefers-reduced-motion) { a { animation: slide 1s; } } 2`] = `
+
+Message:
+> 1 | @media (prefers-reduced-motion) { a { animation: slide 1s; } }
+    |                                       ^^^^^^^^^^^^^^^^^^^ Place \`animation\` inside a \`prefers-reduced-motion: no-preference\` media query.
+
+`;
+
+exports[`invalid(54): @media (prefers-reduced-motion: no-preference), (hover) { a { transition: transform 1s; } } 1`] = `
+
+  1 | @media (prefers-reduced-motion: no-preference), (hover) { a { transition: transform 1s; } }
+
+`;
+
+exports[`invalid(54): @media (prefers-reduced-motion: no-preference), (hover) { a { transition: transform 1s; } } 2`] = `
+
+Message:
+> 1 | @media (prefers-reduced-motion: no-preference), (hover) { a { transition: transform 1s; } }
+    |                                                               ^^^^^^^^^^^^^^^^^^^^^^^^ Place \`transition\` inside a \`prefers-reduced-motion: no-preference\` media query.
+
+`;
+
+exports[`invalid(55): @media (prefers-reduced-motion: no-preference) or (hover) { a { scroll-behavior: smooth; } } 1`] = `
+
+  1 | @media (prefers-reduced-motion: no-preference) or (hover) { a { scroll-behavior: smooth; } }
+
+`;
+
+exports[`invalid(55): @media (prefers-reduced-motion: no-preference) or (hover) { a { scroll-behavior: smooth; } } 2`] = `
+
+Message:
+> 1 | @media (prefers-reduced-motion: no-preference) or (hover) { a { scroll-behavior: smooth; } }
+    |                                                                 ^^^^^^^^^^^^^^^^^^^^^^^ Place \`scroll-behavior\` inside a \`prefers-reduced-motion: no-preference\` media query.
+
+`;
+
+exports[`invalid(56): @media not screen and (prefers-reduced-motion: no-preference) { a { animation-name: slide; } } 1`] = `
+
+  1 | @media not screen and (prefers-reduced-motion: no-preference) { a { animation-name: slide; } }
+
+`;
+
+exports[`invalid(56): @media not screen and (prefers-reduced-motion: no-preference) { a { animation-name: slide; } } 2`] = `
+
+Message:
+> 1 | @media not screen and (prefers-reduced-motion: no-preference) { a { animation-name: slide; } }
+    |                                                                     ^^^^^^^^^^^^^^^^^^^^^ Place \`animation-name\` inside a \`prefers-reduced-motion: no-preference\` media query.
+
+`;
+
+exports[`invalid(57): @media not (prefers-reduced-motion: reduce) { a { animation-name: slide; } } 1`] = `
+
+  1 | @media not (prefers-reduced-motion: reduce) { a { animation-name: slide; } }
+
+`;
+
+exports[`invalid(57): @media not (prefers-reduced-motion: reduce) { a { animation-name: slide; } } 2`] = `
+
+Message:
+> 1 | @media not (prefers-reduced-motion: reduce) { a { animation-name: slide; } }
+    |                                                   ^^^^^^^^^^^^^^^^^^^^^ Place \`animation-name\` inside a \`prefers-reduced-motion: no-preference\` media query.
+
+`;
+
+exports[`invalid(58): @media (width > 600px) { a:hover { transition: transform 1s; } } 1`] = `
+
+  1 | @media (width > 600px) { a:hover { transition: transform 1s; } }
+
+`;
+
+exports[`invalid(58): @media (width > 600px) { a:hover { transition: transform 1s; } } 2`] = `
+
+Message:
+> 1 | @media (width > 600px) { a:hover { transition: transform 1s; } }
+    |                                    ^^^^^^^^^^^^^^^^^^^^^^^^ Place \`transition\` inside a \`prefers-reduced-motion: no-preference\` media query.
+
+`;
+
+exports[`invalid(59): @supports (prefers-reduced-motion: no-preference) { a { transition: transform 1s; } } 1`] = `
+
+  1 | @supports (prefers-reduced-motion: no-preference) { a { transition: transform 1s; } }
+
+`;
+
+exports[`invalid(59): @supports (prefers-reduced-motion: no-preference) { a { transition: transform 1s; } } 2`] = `
+
+Message:
+> 1 | @supports (prefers-reduced-motion: no-preference) { a { transition: transform 1s; } }
+    |                                                         ^^^^^^^^^^^^^^^^^^^^^^^^ Place \`transition\` inside a \`prefers-reduced-motion: no-preference\` media query.
+
+`;
+
+exports[`invalid(6): a { animation: inherit; animation-name: revert-layer; } 1`] = `
+
+  1 | a { animation: inherit; animation-name: revert-layer; }
+
+`;
+
+exports[`invalid(6): a { animation: inherit; animation-name: revert-layer; } 2`] = `
+
+Message:
+> 1 | a { animation: inherit; animation-name: revert-layer; }
+    |     ^^^^^^^^^^^^^^^^^^ Place \`animation\` inside a \`prefers-reduced-motion: no-preference\` media query.
+
+`;
+
+exports[`invalid(6): a { animation: inherit; animation-name: revert-layer; } 3`] = `
+
+Message:
+> 1 | a { animation: inherit; animation-name: revert-layer; }
+    |                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Place \`animation-name\` inside a \`prefers-reduced-motion: no-preference\` media query.
+
+`;
+
+exports[`invalid(60): a { transition: transform /* keep this */ 1s; } 1`] = `
+
+  1 | a { transition: transform /* keep this */ 1s; }
+
+`;
+
+exports[`invalid(60): a { transition: transform /* keep this */ 1s; } 2`] = `
+
+Message:
+> 1 | a { transition: transform /* keep this */ 1s; }
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Place \`transition\` inside a \`prefers-reduced-motion: no-preference\` media query.
+
+`;
+
+exports[`invalid(61): @scope (.component) { a { scroll-behavior: smooth; } } 1`] = `
+
+  1 | @scope (.component) { a { scroll-behavior: smooth; } }
+
+`;
+
+exports[`invalid(61): @scope (.component) { a { scroll-behavior: smooth; } } 2`] = `
+
+Message:
+> 1 | @scope (.component) { a { scroll-behavior: smooth; } }
+    |                           ^^^^^^^^^^^^^^^^^^^^^^^ Place \`scroll-behavior\` inside a \`prefers-reduced-motion: no-preference\` media query.
+
+`;
+
+exports[`invalid(62): a {\r\n  &:hover {\r\n    transition: transform 1s;\r\n  }\r\n} 1`] = `
+
+  1 | a {
+  2 |   &:hover {
+  3 |     transition: transform 1s;
+  4 |   }
+  5 | }
+
+`;
+
+exports[`invalid(62): a {\r\n  &:hover {\r\n    transition: transform 1s;\r\n  }\r\n} 2`] = `
+
+Message:
+  1 | a {
+  2 |   &:hover {
+> 3 |     transition: transform 1s;
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^ Place \`transition\` inside a \`prefers-reduced-motion: no-preference\` media query.
+  4 |   }
+  5 | }
+
+`;
+
+exports[`invalid(7): @keyframes slide { to { transform: translateX(10px); } } a { animation: slide 0s; animation-timeline: scroll(); } 1`] = `
+
+  1 | @keyframes slide { to { transform: translateX(10px); } } a { animation: slide 0s; animation-timeline: scroll(); }
+
+`;
+
+exports[`invalid(7): @keyframes slide { to { transform: translateX(10px); } } a { animation: slide 0s; animation-timeline: scroll(); } 2`] = `
+
+Message:
+> 1 | @keyframes slide { to { transform: translateX(10px); } } a { animation: slide 0s; animation-timeline: scroll(); }
+    |                                                              ^^^^^^^^^^^^^^^^^^^ Place \`animation\` inside a \`prefers-reduced-motion: no-preference\` media query.
+
+`;
+
+exports[`invalid(8): @keyframes grow { to { width: 100px; } } a { animation-name: grow; } 1`] = `
+
+  1 | @keyframes grow { to { width: 100px; } } a { animation-name: grow; }
+
+`;
+
+exports[`invalid(8): @keyframes grow { to { width: 100px; } } a { animation-name: grow; } 2`] = `
+
+Message:
+> 1 | @keyframes grow { to { width: 100px; } } a { animation-name: grow; }
+    |                                              ^^^^^^^^^^^^^^^^^^^^ Place \`animation-name\` inside a \`prefers-reduced-motion: no-preference\` media query.
+
+`;
+
+exports[`invalid(9): @keyframes fade { to { opacity: 1; } } @keyframes slide { to { translate: 10px; } } a { animation: fade 1s, slide 1s; } 1`] = `
+
+  1 | @keyframes fade { to { opacity: 1; } } @keyframes slide { to { translate: 10px; } } a { animation: fade 1s, slide 1s; }
+
+`;
+
+exports[`invalid(9): @keyframes fade { to { opacity: 1; } } @keyframes slide { to { translate: 10px; } } a { animation: fade 1s, slide 1s; } 2`] = `
+
+Message:
+> 1 | @keyframes fade { to { opacity: 1; } } @keyframes slide { to { translate: 10px; } } a { animation: fade 1s, slide 1s; }
+    |                                                                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Place \`animation\` inside a \`prefers-reduced-motion: no-preference\` media query.
+
+`;
