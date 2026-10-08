@@ -78,6 +78,9 @@ test.snapshot({
 		'@supports selector(:is(.item, #featured)) { .item {} }',
 		'@scope (:is(.item, #featured)) to (:not(.item, #featured)) { .item {} }',
 		'.item { --selector: :is(.item, #featured); content: ":not(.item, #featured)"; background: url(":has(.item, #featured)"); }',
+		':is(#ignored >, .item, :hover) {}',
+		':where(.root) { :is(&, *) {} }',
+		'.root { > .child { :is(&, .root.child) {} } }',
 		outdent`
 			.dialog, .modal {
 				&, & {
@@ -161,6 +164,9 @@ test.snapshot({
 		'.root { @media (width > 40rem) { @layer components { :is(&, #featured) {} } } }',
 		'.button:is(:hover, #featured)::before { content: ""; }',
 		'#root, .root { :is(&, #featured) {} }',
+		':is(:unknown, .item, #featured) {}',
+		'.root { :nth-last-child(odd of &&, &) {} }',
+		':nth-child(2n of :is(.item, #featured), .other) {}',
 	],
 });
 

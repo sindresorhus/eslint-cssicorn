@@ -62,11 +62,6 @@ const create = context => {
 			return;
 		}
 
-		const selectors = selectorList.children.filter(selector => canBeRepresentedByNestingSelector(selector, name === 'has'));
-		if (selectors.length < 2 || (name !== 'is' && selectors.length !== selectorList.children.length)) {
-			return;
-		}
-
 		const ancestors = sourceCode.getAncestors(node);
 		const owner = ancestors.findLast(ancestor => ancestor.type === 'Rule' || ancestor.type === 'Atrule');
 		if (!owner?.prelude || !isStyleRule(owner, context) || !ancestors.includes(owner.prelude)) {
@@ -74,6 +69,11 @@ const create = context => {
 		}
 
 		if (ancestors.some(ancestor => ancestor.type === 'PseudoClassSelector' && normalizeCssIdentifier(ancestor.name) === 'where')) {
+			return;
+		}
+
+		const selectors = selectorList.children.filter(selector => canBeRepresentedByNestingSelector(selector, name === 'has'));
+		if (selectors.length < 2 || (name !== 'is' && selectors.length !== selectorList.children.length)) {
 			return;
 		}
 

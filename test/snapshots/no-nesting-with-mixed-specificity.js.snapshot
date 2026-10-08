@@ -832,6 +832,56 @@ Message:
 
 `;
 
+exports[`invalid(60): :is(:unknown, .item, #featured) {} 1`] = `
+
+  1 | :is(:unknown, .item, #featured) {}
+
+`;
+
+exports[`invalid(60): :is(:unknown, .item, #featured) {} 2`] = `
+
+Message:
+> 1 | :is(:unknown, .item, #featured) {}
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ The selectors in \`:is()\` have mixed specificity (0-1-0, 1-0-0). The most specific selector determines the specificity of the list.
+
+`;
+
+exports[`invalid(61): .root { :nth-last-child(odd of &&, &) {} } 1`] = `
+
+  1 | .root { :nth-last-child(odd of &&, &) {} }
+
+`;
+
+exports[`invalid(61): .root { :nth-last-child(odd of &&, &) {} } 2`] = `
+
+Message:
+> 1 | .root { :nth-last-child(odd of &&, &) {} }
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ The selectors in \`:nth-last-child()\` have mixed specificity (0-2-0, 0-1-0). The most specific selector determines the specificity of the list.
+
+`;
+
+exports[`invalid(62): :nth-child(2n of :is(.item, #featured), .other) {} 1`] = `
+
+  1 | :nth-child(2n of :is(.item, #featured), .other) {}
+
+`;
+
+exports[`invalid(62): :nth-child(2n of :is(.item, #featured), .other) {} 2`] = `
+
+Message:
+> 1 | :nth-child(2n of :is(.item, #featured), .other) {}
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ The selectors in \`:nth-child()\` have mixed specificity (1-0-0, 0-1-0). The most specific selector determines the specificity of the list.
+
+`;
+
+exports[`invalid(62): :nth-child(2n of :is(.item, #featured), .other) {} 3`] = `
+
+Message:
+> 1 | :nth-child(2n of :is(.item, #featured), .other) {}
+    |                  ^^^^^^^^^^^^^^^^^^^^^ The selectors in \`:is()\` have mixed specificity (0-1-0, 1-0-0). The most specific selector determines the specificity of the list.
+
+`;
+
 exports[`invalid(7): :hover, dialog { & .close {} } 1`] = `
 
   1 | :hover, dialog { & .close {} }
