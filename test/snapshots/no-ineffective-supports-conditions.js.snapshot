@@ -644,6 +644,20 @@ Message:
 
 `;
 
+exports[`invalid(50): @supports (--brand: future-color(red)) {} 1`] = `
+
+  1 | @supports (--brand: future-color(red)) {}
+
+`;
+
+exports[`invalid(50): @supports (--brand: future-color(red)) {} 2`] = `
+
+Message:
+> 1 | @supports (--brand: future-color(red)) {}
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^ This condition does not test support for \`future-color()\`. Custom properties accept their values as tokens.
+
+`;
+
 exports[`invalid(6): @supports (--size: min(1px, max(2px, 3px))) {} 1`] = `
 
   1 | @supports (--size: min(1px, max(2px, 3px))) {}

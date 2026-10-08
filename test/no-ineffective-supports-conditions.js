@@ -24,6 +24,7 @@ test.snapshot({
 		'@supports (--probe: --value()) {}',
 		'@supports (--probe: theme(colors.brand)) {}',
 		'@supports (--probe: theme(oklch(var(--brand)))) {}',
+		'@supports (--brand: future-color(red)) {}',
 		'@supports (--probe: "oklch(60% 0.2 20)") {}',
 		'@supports (--probe: url("oklch(60% 0.2 20)")) {}',
 		'@supports (--probe: url(oklch.png)) {}',
@@ -88,6 +89,10 @@ test.snapshot({
 		String.raw`@supports (color: oklch(v\61 r(--lightness) 0.2 20)) {}`,
 		'@import "theme.css" layer(theme) supports(--brand: oklch(60% 0.2 20)) screen and (width > 1px);',
 		'@import "theme.css" layer(theme) supports((--brand: oklch(60% 0.2 20))) screen and (width > 1px);',
+		{
+			code: '@supports (--brand: future-color(red)) {}',
+			languageOptions: {customSyntax: {types: {'future-color()': 'future-color( <color> )'}}},
+		},
 	],
 });
 
