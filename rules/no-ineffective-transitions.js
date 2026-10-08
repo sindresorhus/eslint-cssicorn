@@ -1,7 +1,7 @@
 import {nonAnimatableProperties, discreteProperties} from './shared/css-property-animation-types.js';
 import {shorthandToAffectedProperties} from './shared/css-shorthand-properties.js';
 import {
-	getCanonicalCssLexerNode,
+	getCanonicalLexerNode,
 	getCommaSeparatedGroups,
 	getSingleValueIdentifier,
 	hasSubstitutionOrRandomFunction,
@@ -52,7 +52,7 @@ const getTransitionLists = (declaration, property, lexer) => {
 		return;
 	}
 
-	const canonicalValue = getCanonicalCssLexerNode(value);
+	const canonicalValue = getCanonicalLexerNode(value);
 	const matchResult = lexer.matchProperty(property, canonicalValue);
 	if (!matchResult.matched) {
 		return;
