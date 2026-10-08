@@ -7,6 +7,8 @@ import {
 	getMaximumSpecificity,
 	getRuleSelectorSpecificity,
 	getRuleSpecificities,
+	getSelectorArgument,
+	getSelectorSpecificity,
 } from '../../rules/shared/css-selector-specificity.js';
 
 const parseRule = selector => toPlainObject(parse(`${selector} {}`)).children.at(0);
@@ -55,6 +57,30 @@ test('calculates explicit and implicit nesting specificity', () => {
 test('excludes pseudo-element branches from nesting parents', () => {
 	assert.deepEqual(getRuleSpecificities(parseRule('dialog, ::before'), [0, 0, 0]), [[0, 0, 1]]);
 	assert.deepEqual(getRuleSpecificities(parseRule(':is(::before)'), [0, 0, 0]), []);
+});
+
+test('extracts functional selector lists and nth of lists', () => {
+	for (const selector of [':is(.item, #featured)', ':not(.item, #featured)', ':has(> .item, #featured)', ':nth-child(2n of .item, #featured)', ':nth-last-child(odd of .item, #featured)']) {
+		const argument = getSelectorArgument(parseSelector(selector).children.at(0));
+		assert.equal(argument.type, 'SelectorList');
+		assert.equal(argument.children.length, 2);
+	}
+
+	assert.equal(getSelectorArgument(parseSelector(':nth-child(2n)').children.at(0)), null);
+	assert.equal(getSelectorArgument(parseSelector(':hover').children.at(0)), undefined);
+});
+
+test('calculates argument specificity without implicit nesting', () => {
+	const parentSpecificity = [0, 1, 0];
+	for (const selector of [':is(&, .item)', ':has(> &, + .item)', ':nth-child(2n of &, .item)']) {
+		const argument = getSelectorArgument(parseSelector(selector).children.at(0));
+		const [nesting, literal] = argument.children.map(selector => getSelectorSpecificity(selector, parentSpecificity));
+		assert.deepEqual(nesting, {specificity: [0, 1, 0], hasNestingSelector: true});
+		assert.deepEqual(literal, {specificity: [0, 1, 0], hasNestingSelector: false});
+	}
+
+	assert.deepEqual(getSelectorSpecificity(parseSelector('&&'), parentSpecificity), {specificity: [0, 2, 0], hasNestingSelector: true});
+	assert.deepEqual(getSelectorSpecificity(parseSelector(':where(&)'), parentSpecificity), {specificity: [0, 0, 0], hasNestingSelector: true});
 });
 
 test('recognizes supported pseudo-selector forms', () => {

@@ -8,5 +8,5 @@
 		"module": "NodeNext",
 		"target": "ES2023"
 	},
-	"include": ["*.ts", "../../rules/rule/*.js", "../../rules/no-disabled-pinch-zoom.js", "../../rules/no-redundant-nesting-selector.js"]
+	"include": ["*.ts", "../../rules/rule/*.js", "../../rules/no-disabled-pinch-zoom.js", "../../rules/no-nesting-with-mixed-specificity.js", "../../rules/no-redundant-nesting-selector.js"]
 }

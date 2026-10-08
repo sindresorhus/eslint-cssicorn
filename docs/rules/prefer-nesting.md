@@ -129,7 +129,7 @@ Trailing `:is()` is unwrapped only when its arguments have equal specificity and
 
 Inside nested rules, groups stay wrapped when expansion could change ancestor matching. Exact declaration-only conditional overrides preserve mixed parent specificity and pseudo-elements without adding `&`.
 
-Leading and attached `:is()` groups preserve their maximum specificity, even with mixed arguments. The result can trigger [`no-nesting-with-mixed-specificity`](./no-nesting-with-mixed-specificity.md); disable that rule for intentional mixed-specificity nesting.
+Leading and attached `:is()` groups preserve maximum specificity. Mixed `:is()` arguments and their resulting nesting parents can trigger [`no-nesting-with-mixed-specificity`](./no-nesting-with-mixed-specificity.md); disable that rule when mixed specificity is intentional.
 
 ## Limitations
 
