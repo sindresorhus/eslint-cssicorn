@@ -21,6 +21,10 @@ test({
 		code: '.a {\r\n\tcolor: red;\r\n}\r\n.b {\r\n\tcolor: red;\r\n}',
 		output: '.a,\r\n.b {\r\n\tcolor: red;\r\n}',
 		errors: [{messageId: 'prefer-merged-rules/selectors'}],
+	}, {
+		code: '.parent{@media (width>1px){color:red;&.a{color:blue}background:red}@media (width>1px){color:green;&.b{color:purple}border:0}}',
+		output: '.parent{@media (width>1px){color:red;&.a{color:blue}background:red;color:green;&.b{color:purple}border:0}}',
+		errors: [{messageId: 'prefer-merged-rules/conditions'}],
 	}],
 });
 
@@ -129,11 +133,13 @@ const configuration = {
 
 nodeTest('merges a long run in one fix', () => {
 	const linter = new Linter();
-	const code = Array.from({length: 30}, (_, index) => `.item-${index} { color: red; }`).join('\n');
+	const selectors = Array.from({length: 30}, (_, index) => `.item-${index}`);
+	const code = selectors.map(selector => `${selector} { color: red; }`).join('\n');
 	const messages = linter.verify(code, configuration, {filename: 'test.css'});
 	assert.equal(messages.length, 1);
 	const {range, text} = messages[0].fix;
 	const output = code.slice(0, range[0]) + text + code.slice(range[1]);
+	assert.equal(output, `${selectors.join(',\n')} { color: red; }`);
 	assert.deepEqual(linter.verify(output, configuration, {filename: 'test.css'}), []);
 });
 

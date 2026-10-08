@@ -61,4 +61,4 @@ Selector merging targets current stable Chrome, Firefox, and Safari. It supports
 
 Empty blocks, keyframe steps, malformed candidates, declaration blocks containing nested rules, and declarations containing explicit `random()` or `random-item()` functions are skipped. Only `@media`, `@supports`, and `@container` wrappers are merged; `@layer`, `@scope`, and other wrappers remain separate.
 
-Comments inside matching rules prevent autofixing, but the rule still reports them. A conditional wrapper whose final blockless at-rule lacks a semicolon can also be reported without a fix. Missing final declaration semicolons are inserted when needed to separate merged wrapper contents.
+Comments inside matching rules prevent autofixing, but the rule still reports them. Missing final declaration semicolons are inserted when needed to separate merged wrapper contents.
