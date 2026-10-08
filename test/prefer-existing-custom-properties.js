@@ -102,6 +102,7 @@ test.snapshot({
 			'--dynamic': 'var(--other)', '--string': '"red"', '--url': 'url(red)', '--reset': 'initial',
 		}),
 		withTokens('a { color: red; }', {'--string': String.raw`"red\""`, '--url': String.raw`url(foo\))`}),
+		withTokens(String.raw`a { background: u\72l(8px); }`, {'--space': '8px', '--image': String.raw`u\72l(8px)`}),
 		{code: 'a { width: ???; }', options, languageOptions: {tolerant: true}},
 	],
 	invalid: [
@@ -127,6 +128,9 @@ test.snapshot({
 		withTokens('a { color: red; }', {'--constructor': 'red'}),
 		withTokens(String.raw`a { color: r\65 d; }`, {'--color': 'red'}),
 		withTokens(String.raw`a { color: r\67 b(255 255 255); }`, {'--white': '#fff'}),
+		withTokens('a { animation-timeline: scroll(); }', {'--timeline': 'scroll()'}),
+		withTokens('a { animation-timeline: view(), SCROLL(); }', {'--timeline': 'scroll()'}),
+		withTokens(String.raw`a { background: u\72l(8px) 8px; }`, {'--space': '8px'}),
 	],
 });
 

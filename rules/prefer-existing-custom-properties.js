@@ -30,7 +30,7 @@ const messages = {
 };
 
 const colorFunctions = new Set([...colorFunctionsWithAlpha, 'color-mix', 'light-dark', 'device-cmyk', 'contrast-color', 'palette-mix']);
-const preservedFunctions = new Set(['random', 'element', '-moz-element']);
+const preservedFunctions = new Set(['random', 'element', '-moz-element', 'url']);
 const groupingAtRules = new Set(['media', 'supports', 'container', 'layer', 'scope', 'starting-style']);
 const componentTypes = new Set(['Hash', 'Dimension', 'Percentage', 'Function']);
 const openingTokens = new Map([
@@ -170,9 +170,9 @@ function getFingerprint(node, cache, text) {
 	if (channels) {
 		fingerprint = ['Color', ...channels];
 	} else if (node.type === 'Identifier') {
-		const name = decodeCssIdentifier(node.name);
-		if (!isCssWideKeyword(normalizeCssIdentifier(node.name)) && normalizeCssIdentifier(node.name) !== 'currentcolor') {
-			fingerprint = ['Identifier', name];
+		const normalizedName = normalizeCssIdentifier(node.name);
+		if (!isCssWideKeyword(normalizedName) && normalizedName !== 'currentcolor') {
+			fingerprint = ['Identifier', decodeCssIdentifier(node.name)];
 		}
 	} else if (['Number', 'Dimension', 'Percentage'].includes(node.type)) {
 		fingerprint = getNumericFingerprint(node);
@@ -180,7 +180,7 @@ function getFingerprint(node, cache, text) {
 		fingerprint = ['Operator', node.value];
 	} else if (['Value', 'Function', 'Parentheses'].includes(node.type) && !isPreservedFunction(node)) {
 		const children = node.children.map(child => getFingerprint(child, cache, text));
-		if (children.length > 0 && children.every(child => child !== undefined)) {
+		if (children.every(child => child !== undefined)) {
 			if (node.type === 'Value') {
 				fingerprint = children.length === 1 ? children[0] : ['Value', children];
 			} else if (node.type === 'Function') {

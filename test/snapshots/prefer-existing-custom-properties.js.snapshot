@@ -634,6 +634,72 @@ Suggestion 1/1: Replace with \`var(--white)\`.:
 
 `;
 
+exports[`invalid(21): a { animation-timeline: scroll(); } 1`] = `
+
+Options:
+- customProperties:
+    --timeline: 'scroll()'
+
+Code:
+  1 | a { animation-timeline: scroll(); }
+
+`;
+
+exports[`invalid(21): a { animation-timeline: scroll(); } 2`] = `
+
+Message:
+> 1 | a { animation-timeline: scroll(); }
+    |                         ^^^^^^^^ Prefer existing custom property \`var(--timeline)\` over this literal value.
+
+Suggestion 1/1: Replace with \`var(--timeline)\`.:
+  1 | a { animation-timeline: var(--timeline); }
+
+`;
+
+exports[`invalid(22): a { animation-timeline: view(), SCROLL(); } 1`] = `
+
+Options:
+- customProperties:
+    --timeline: 'scroll()'
+
+Code:
+  1 | a { animation-timeline: view(), SCROLL(); }
+
+`;
+
+exports[`invalid(22): a { animation-timeline: view(), SCROLL(); } 2`] = `
+
+Message:
+> 1 | a { animation-timeline: view(), SCROLL(); }
+    |                                 ^^^^^^^^ Prefer existing custom property \`var(--timeline)\` over this literal value.
+
+Suggestion 1/1: Replace with \`var(--timeline)\`.:
+  1 | a { animation-timeline: view(), var(--timeline); }
+
+`;
+
+exports[`invalid(23): a { background: u\\72l(8px) 8px; } 1`] = `
+
+Options:
+- customProperties:
+    --space: '8px'
+
+Code:
+  1 | a { background: u\\72l(8px) 8px; }
+
+`;
+
+exports[`invalid(23): a { background: u\\72l(8px) 8px; } 2`] = `
+
+Message:
+> 1 | a { background: u\\72l(8px) 8px; }
+    |                            ^^^ Prefer existing custom property \`var(--space)\` over this literal value.
+
+Suggestion 1/1: Replace with \`var(--space)\`.:
+  1 | a { background: u\\72l(8px) var(--space); }
+
+`;
+
 exports[`invalid(3): a { box-shadow: 0 2px 8px #0003; } 1`] = `
 
 Options:
