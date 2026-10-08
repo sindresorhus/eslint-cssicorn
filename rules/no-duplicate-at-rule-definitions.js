@@ -1,3 +1,4 @@
+// @ts-check
 import {decodeCssIdentifier, isKeyframesAtRule, normalizeCssIdentifier} from './utils/index.js';
 
 /**

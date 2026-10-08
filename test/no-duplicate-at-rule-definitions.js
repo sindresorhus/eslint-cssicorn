@@ -132,6 +132,18 @@ test({
 			],
 		},
 		{
+			code: '@keyframes "fa\\\nde" {}\n@keyframes fade {}',
+			errors: [{
+				messageId: 'no-duplicate-at-rule-definitions',
+				data: {atRule: 'keyframes', name: 'fade', line: '1'},
+				line: 3,
+				column: 12,
+				endLine: 3,
+				endColumn: 16,
+				suggestions: [],
+			}],
+		},
+		{
 			code: String.raw`@keyframes "line\a \1b [31m" {} @keyframes "line\a \1b [31m" {}`,
 			errors: [{
 				message: 'Duplicate `@keyframes` definition `line\\n\\u001b[31m`. The first definition is on line 1.',

@@ -72,7 +72,7 @@ The rule provides no automatic fixes or suggestions because choosing which defin
 @position-try --below { position-area: bottom; }
 ```
 
-Definitions in separate parent blocks are allowed, even when the conditions or layer names are identical:
+Definitions in separate parent blocks are allowed, even when the conditions or layer names are identical. These definitions can still override one another in browsers:
 
 ```css
 /* ✅ */
@@ -97,6 +97,6 @@ Compatibility pairs are allowed, while repeated definitions with the same prefix
 
 This is a syntactic check of single-name definitions, not an analysis of browser validity or runtime collisions. Definitions in different parent blocks or files are not compared.
 
-`@property` definitions are checked regardless of descriptor validity. Browsers use the last [valid registration](https://www.w3.org/TR/css-properties-values-api-1/#at-property-rule), so intentional registration fallbacks can be reported. Use an ESLint disable comment for intentional repetitions. Comma-separated registration names introduced in the [current editor's draft](https://drafts.css-houdini.org/css-properties-values-api/#at-property-rule) are outside this rule's single-name contract.
+`@property` definitions are checked regardless of descriptor validity. Browsers use the last [valid registration](https://www.w3.org/TR/css-properties-values-api-1/#at-property-rule), so intentional registration fallbacks can be reported. Use `/* eslint-disable-next-line cssicorn/no-duplicate-at-rule-definitions -- Intentional compatibility fallback. */` before an intentional repetition. Comma-separated registration names introduced in the [current editor's draft](https://drafts.css-houdini.org/css-properties-values-api/#at-property-rule) are outside this rule's single-name contract.
 
 [Predefined counter-style names](https://drafts.csswg.org/css-counter-styles-3/#the-counter-style-rule) have case aliases in browsers. This rule does not resolve those aliases, so `upper-roman` and `UPPER-ROMAN` are not reported as duplicates. Custom counter-style names remain case-sensitive.
