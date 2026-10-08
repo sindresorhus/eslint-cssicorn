@@ -32,6 +32,7 @@ export {default as 'no-unknown-pseudo-selectors'} from './no-unknown-pseudo-sele
 export {default as 'no-unscoped-nesting-selector'} from './no-unscoped-nesting-selector.js';
 export {default as 'no-useless-is'} from './no-useless-is.js';
 export {default as 'no-zero-length-unit'} from './no-zero-length-unit.js';
+export {default as 'prefer-aspect-ratio'} from './prefer-aspect-ratio.js';
 export {default as 'prefer-clamp'} from './prefer-clamp.js';
 export {default as 'prefer-current-color'} from './prefer-current-color.js';
 export {default as 'prefer-existing-custom-properties'} from './prefer-existing-custom-properties.js';
