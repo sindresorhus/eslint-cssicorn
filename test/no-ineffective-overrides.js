@@ -53,7 +53,6 @@ test.snapshot({
 		'.button { color: red !important; } .button:unknown { color: blue; }',
 		'.button { color: red !important; } .button:host { color: blue; }',
 		'.button { color: red !important; } .button:scope { color: blue; }',
-		'.button:hover { color: red !important; } .button:hover:focus { color: blue; }',
 		String.raw`@namespace foo "urn:foo"; foo\|bar { color: red !important; } foo|bar:hover { color: blue; }`,
 		String.raw`\2a { color: red !important; } *:hover { color: blue; }`,
 		'.button { color: red !important; all: revert-layer !important; } .button:hover { color: blue; }',
@@ -132,6 +131,7 @@ test.snapshot({
 		'.button { color: red !important; }\n.link { color: red; }\n@layer states { .button:hover, .link:focus { color: blue; } }',
 		'.button { margin: revert-layer; color: red !important; } .button:hover { color: blue; }',
 		'.button { --Color: revert-layer; --color: red !important; } .button:hover { --color: blue; }',
+		'.button:hover { color: red !important; } .button:hover:focus { color: blue; }',
 	],
 });
 
@@ -140,13 +140,10 @@ test.snapshot({
 		'.button { color: red; } .button[disabled] { color: gray; }',
 		'.button { color: red !important; } .button[disabled] { color: gray !important; }',
 		'.button[aria-disabled="false"] { color: red !important; } .button[aria-disabled="true"] { color: gray; }',
-		'.button[disabled] { color: red !important; } .button[disabled][data-state="open"] { color: gray; }',
-		'.button:hover { color: red !important; } .button:hover[disabled] { color: gray; }',
 		'.toolbar[hidden] .button { color: red !important; } .toolbar .button[disabled] { color: gray; }',
 		'.button { color: red !important; } .button [disabled] { color: gray; }',
 		'.button { color: red !important; } .button[disabled], .link[disabled] { color: gray; }',
 		'.button { color: red !important; } .button { [disabled] { color: gray; } }',
-		'.button { color: red !important; } .button.is-disabled { color: gray; }',
 	],
 	invalid: [
 		'.button { color: red !important; } .button[disabled] { color: gray; }',
@@ -164,5 +161,38 @@ test.snapshot({
 		'.button { color: red !important; } .button[data-state~="open"][data-label^="a"] { color: gray; }',
 		'[data-role="button"] { color: red !important; } [data-role="button"]:hover { color: blue; }',
 		'* { color: red !important; } *[disabled] { color: gray; }',
+		'.button[disabled] { color: red !important; } .button[disabled][data-state="open"] { color: gray; }',
+		'.button:hover { color: red !important; } .button:hover[disabled] { color: gray; }',
+		'.button { color: red !important; } .button.is-disabled { color: gray; }',
+	],
+});
+
+test.snapshot({
+	valid: [
+		'.button:hover { color: red !important; } .button:hover:focus { color: blue !important; }',
+		'.button:hover { color: red !important; } .button:focus:hover { color: blue; }',
+		'.button[disabled] { color: red !important; } .button[data-state="open"][disabled] { color: gray; }',
+		'.button:not(.active) { color: red !important; } .button:not(.inactive):hover { color: blue; }',
+		'.toolbar .button:hover { color: red !important; } .toolbar:hover .button:hover:focus { color: blue; }',
+		'.button:hover { color: red !important; } .button:hover .icon { color: blue; }',
+		'.button:hover { color: red !important; } .button:hover:focus, .link.active { color: blue; }',
+		'@media print { .button:hover { color: red !important; } } .button:hover.active { color: blue; }',
+		'.button { all: revert-layer; --color: red !important; --color: revert; } .button:hover { --color: blue; }',
+		'.button { all: revert; direction: rtl !important; direction: revert-layer; } .button:hover { direction: ltr; }',
+	],
+	invalid: [
+		'.button.is-loading { color: red !important; } .button.is-loading.is-disabled:hover { color: gray; }',
+		'.button:hover:focus { color: blue; } .button:hover { color: red !important; }',
+		'.button:hover { color: red !important; &:focus { color: blue; } }',
+		'.toolbar:hover > .button { color: red !important; &.is-disabled { color: gray; } }',
+		'.button:not(.active) { color: red !important; } .button:not(.active):hover { color: blue; }',
+		'.button { color: red; } @layer state { .button.is-disabled { color: gray; } }',
+		'@layer base { .button:hover { color: red !important; } } .button:hover.active { color: blue !important; }',
+		String.raw`.button:\68 over { COLOR: red !important; } .button:hover.\61 ctive { color: blue; }`,
+		'.button:hover { /* base */ color: red !important; } .button:hover/* state */:focus { color: blue; }',
+		'.button:hover { color: red !important; } .link[disabled] { color: red !important; } .button:hover:focus, .link[disabled].active { color: blue; }',
+		'.button { all: revert-layer; --color: red !important; } .button:hover { --color: blue; }',
+		'.button { all: revert !important; direction: rtl !important; } .button:hover { direction: ltr; }',
+		String.raw`.button { ALL: revert-layer; \75 nicode-bidi: isolate !important; } .button:hover { unicode-bidi: normal; }`,
 	],
 });

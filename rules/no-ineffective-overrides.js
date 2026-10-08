@@ -35,6 +35,7 @@ const messages = {
 const CONDITIONAL_RULES = new Set(['media', 'supports', 'container']);
 const UNSUPPORTED_PSEUDO_CLASSES = new Set(['host', 'host-context', 'scope']);
 const ROLLBACK_KEYWORDS = new Set(['revert', 'revert-layer']);
+const ALL_EXCLUDED_PROPERTIES = new Set(['direction', 'unicode-bidi']);
 
 /**
 @param {string} property
@@ -68,23 +69,29 @@ const getNodeKey = node => {
 /**
 @param {CssNodePlain[]} nodes
 */
-const getSelectorKey = nodes => JSON.stringify(nodes.map(node => getNodeKey(node)));
-
-/**
-@param {CssNodePlain[]} nodes
-*/
 const getSelectorAnalysis = nodes => {
 	const terminalStart = nodes.findLastIndex(node => node.type === 'Combinator') + 1;
-	const baseNodes = nodes.filter((node, index) => index < terminalStart || node.type !== 'PseudoClassSelector');
-	const baseKeys = baseNodes.length > terminalStart ? [getSelectorKey(baseNodes)] : [];
-	const attributeBaseNodes = baseNodes.filter((node, index) => index < terminalStart || node.type !== 'AttributeSelector');
-	if (attributeBaseNodes.length > terminalStart && attributeBaseNodes.length < baseNodes.length) {
-		baseKeys.push(getSelectorKey(attributeBaseNodes));
+	const nodeKeys = nodes.map(node => getNodeKey(node));
+	const key = JSON.stringify(nodeKeys);
+	const candidateKeys = new Set([key]);
+	const baseNodeKeys = nodeKeys.filter((_, index) => index < terminalStart || nodes[index].type !== 'PseudoClassSelector');
+	if (baseNodeKeys.length > terminalStart) {
+		candidateKeys.add(JSON.stringify(baseNodeKeys));
+	}
+
+	const attributeBaseNodeKeys = nodeKeys.filter((_, index) => index < terminalStart || !['PseudoClassSelector', 'AttributeSelector'].includes(nodes[index].type));
+	if (attributeBaseNodeKeys.length > terminalStart && attributeBaseNodeKeys.length < baseNodeKeys.length) {
+		candidateKeys.add(JSON.stringify(attributeBaseNodeKeys));
+	}
+
+	// Appending conditions to the final compound preserves every condition of the base selector.
+	for (let end = terminalStart + 1; end < nodes.length; end++) {
+		candidateKeys.add(JSON.stringify(nodeKeys.slice(0, end)));
 	}
 
 	return {
-		key: getSelectorKey(nodes),
-		baseKeys,
+		key,
+		candidateKeys,
 		nodes,
 	};
 };
@@ -316,7 +323,7 @@ const create = context => {
 	@param {SelectorAnalysis} selector
 	*/
 	const getBlocker = (override, selector) => {
-		for (const key of new Set([selector.key, ...selector.baseKeys])) {
+		for (const key of selector.candidateKeys) {
 			const entries = recordsByKey.get(JSON.stringify([override.property, key])) ?? [];
 			const blocker = entries.find(base => base.declaration !== override.declaration
 				&& base.conditions.length <= override.conditions.length
@@ -332,7 +339,10 @@ const create = context => {
 
 	context.onExit('StyleSheet', function * () {
 		for (const override of records) {
-			if (rollbackProperties.has('all') || rollbackProperties.has(override.property)) {
+			if (
+				rollbackProperties.has(override.property)
+				|| (rollbackProperties.has('all') && !override.property.startsWith('--') && !ALL_EXCLUDED_PROPERTIES.has(override.property))
+			) {
 				continue;
 			}
 
