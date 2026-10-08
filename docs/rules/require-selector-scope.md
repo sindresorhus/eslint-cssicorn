@@ -119,10 +119,8 @@ Disable `prefer-nesting` because its autofix can introduce unanchored wrappers: 
 
 ## Limitations
 
-A boundary does not guarantee containment or component ownership: `.card + button` and `@scope (:root)` pass. Use native scope for DOM containment. No autofix is provided because the intended boundary is unknown.
+A boundary does not guarantee containment: `.card + button` and `@scope (:root)` pass. External scoping (frameworks, compilers, imports, or runtime Shadow DOM), custom at-rules, unlisted pseudo-functions, and double negation are not inferred.
 
-Framework, compiler, imported, and runtime Shadow DOM scoping are not inferred. Custom at-rules, other pseudo-selector arguments, and logical equivalences such as `:not(:not(.card))` do not establish boundaries.
+Keyframes and unparsed CSS are skipped. The parser rejects style rules directly inside `@container`, `@scope`, `@starting-style`, or `@supports` blocks nested in a style rule; declaration-only blocks work.
 
-Keyframes and unparsed preludes or blocks are skipped. Unanchored branches are reported, including nested selectors without their own boundary under partially unscoped parents. CSS keywords are matched ASCII case-insensitively, including escaped names.
-
-The parser rejects style rules directly inside `@container`, `@scope`, `@starting-style`, or `@supports` blocks nested in a style rule; declaration-only blocks work.
+No autofix is provided because the intended boundary is unknown.
