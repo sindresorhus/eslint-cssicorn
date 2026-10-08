@@ -9,8 +9,6 @@
 <!-- end auto-generated rule header -->
 <!-- Do not manually modify this header. Run: `npm run fix:eslint-docs` -->
 
-<!-- Ordering applies to simple selectors within each compound selector. -->
-
 Orders each compound selector as follows:
 
 1. Type or universal selector (`button`, `*`, `svg|a`)

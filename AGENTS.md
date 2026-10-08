@@ -155,7 +155,7 @@ Tolerant mode (`languageOptions: {tolerant: true}`) is best effort. Rules must n
 Include test cases for these when relevant to the rule:
 
 - **Case** - CSS is ASCII case-insensitive for property names, at-rule names, units, function names, and keywords: `COLOR: RED`.
-- **Escapes** - Identifiers with CSS escapes: `\63 olor`.
+- **Escapes** - Use existing utilities. Only add special handling or tests for realistic cases (such as escaped class names) or demonstrated bugs. Skip contrived escaped property names, at-rule names, and custom-property prefixes.
 - **Vendor prefixes** - `-webkit-transition`, `@-webkit-keyframes`.
 - **Comments** - Comments inside the targeted node, to verify fixes don't drop them.
 - **Nesting** - The pattern inside nested style rules, `@media`, `@supports`, `@container`, `@layer`, and `@scope`.
