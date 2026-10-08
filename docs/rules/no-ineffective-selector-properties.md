@@ -11,7 +11,7 @@
 
 <!-- The examples pair ineffective declarations with removal while retaining effective styling. -->
 
-Catch valid declarations that cannot affect their selected target, such as padding on a text selection, margins on a list marker, or font weight on a visited link.
+Catch ineffective styling of highlights, list markers, and visited links.
 
 ## Examples
 
@@ -56,9 +56,9 @@ a:visited {
 
 ## Checks
 
-The rule checks [highlight pseudo-elements](https://www.w3.org/TR/css-pseudo-4/#highlight-styling) (`::selection`, `::target-text`, `::spelling-error`, `::grammar-error`, `::search-text`, and `::highlight()`), [`::marker`](https://www.w3.org/TR/css-lists-3/#marker-properties), and [`:visited`](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Selectors/:visited).
+Checks [highlights](https://www.w3.org/TR/css-pseudo-4/#highlight-styling) (`::selection`, `::target-text`, `::spelling-error`, `::grammar-error`, `::search-text`, and `::highlight()`), [`::marker`](https://www.w3.org/TR/css-lists-3/#marker-properties), and [`:visited`](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Selectors/:visited).
 
-It uses a finite list of common ineffective properties rather than rejecting every property outside an allowlist:
+Reports a finite list of common ineffective properties:
 
 - All checked targets: margins, padding, physical and logical sizes and insets, `display`, `position`, `opacity`, transforms, `box-shadow`, background image and positioning properties, and border widths, styles, and radii.
 - Highlights and visited links: font properties and `line-height`.
@@ -66,52 +66,26 @@ It uses a finite list of common ineffective properties rather than rejecting eve
 - Markers: `background` and `background-color`.
 - Visited links: `text-shadow`.
 
-Marker fonts, inherited text styling, animations, and transitions are allowed. Highlight colors, text decorations, and text shadows are allowed. Custom properties, vendor-prefixed properties, unlisted properties, and `all` are not checked.
+Marker text styling, animations, and transitions are allowed, as are highlight colors, decorations, and text shadows. Custom properties, vendor-prefixed properties, unlisted properties, and `all` are ignored.
 
-Partially effective shorthands are preserved. For example, `background` can set highlight or visited background colors, and `border` can set visited border colors.
+Preserves partially effective shorthands, including `background` on highlights and visited links, and `border` on visited links.
 
 ## Scope and fixes
 
-A declaration is reported only when every selector in the list makes that property ineffective. An unrestricted selector, an unresolved selector, or a target that permits the property prevents reporting:
+A declaration is reported only when every selector makes it ineffective. For example, `padding` is allowed with `::selection, .ordinary`, and `font-size` with `::selection, ::marker`.
 
-```css
-/* ✅ */
-::selection, .ordinary {
-	padding: 1rem;
-}
+Only targets on the final selected compound are checked, including `li::before::marker` and `:is(.first, .second)::marker`. Parsed `:is()` and `:where()` arguments are also checked when every branch selects a visited link. Parent-selector expansion, other functional arguments, and visited restrictions on ancestors, siblings, or pseudo-elements are not analyzed.
 
-/* ✅ */
-::selection, ::marker {
-	font-size: 1rem;
-}
-```
+Unknown or preprocessing pseudo-selectors in analyzed selectors, such as CSS Modules' `:global()` and Vue's `:deep()`, cause that branch to be skipped, suppressing reports for the list.
 
-Only explicit restrictions on the final selected compound are recognized. `li::before::marker` is checked as a marker. Visited restrictions on ancestors, siblings, and pseudo-elements, functional selector arguments, and parent-selector expansion are not analyzed.
+Explicit targets in nested rules are checked. Declarations inside `@media`, `@supports`, `@container`, `@layer`, and `@starting-style` inherit the enclosing selector; other at-rules, descriptors, and keyframes stop this inheritance. Other pseudo-elements are not checked.
 
-An explicit target after a selector function is checked, but restrictions inside its arguments are not inferred:
+Autofixes remove ineffective declarations; declarations containing comments are reported without a fix. Values, the cascade, and target browsers are not evaluated; no replacements are suggested.
 
-```css
-/* ❌ */
-:is(.first, .second)::marker {
-	padding: 1rem;
-}
-
-/* ✅ Not analyzed */
-:is(a:visited) {
-	font-weight: bold;
-}
-```
-
-Selectors containing unknown or preprocessing pseudo-selectors outside functional arguments, such as CSS Modules' `:global()` and Vue's `:deep()`, are skipped because compilation can change their selected target.
-
-Explicit restricted targets in nested style rules are checked. Nested declarations in `@media`, `@supports`, `@container`, `@layer`, and `@starting-style` use their enclosing style rule's selector. Other at-rules, descriptors, and keyframes stop this inheritance. First-line, first-letter, placeholder, cue, and vendor-specific pseudo-elements are outside the rule's scope.
-
-Autofixes remove ineffective declarations. Declarations containing comments are reported without a fix to preserve those comments. The rule does not suggest replacements or evaluate values, the cascade, or target browsers.
-
-The `:visited` checks reflect current browser privacy restrictions. The [Selectors privacy appendix](https://drafts.csswg.org/selectors-4/#visited-privacy) permits approaches that could relax these restrictions in future browsers. Disable the rule for intentional future-facing declarations.
+Visited checks reflect current browser privacy restrictions, which [may relax in future browsers](https://drafts.csswg.org/selectors-4/#visited-privacy). Disable the rule for intentional future-facing declarations.
 
 ## Related rules
 
 - [`no-ineffective-properties`](./no-ineffective-properties.md) checks declarations disabled by other declarations in the same block.
 - [`css/no-invalid-properties`](https://github.com/eslint/css/blob/main/docs/rules/no-invalid-properties.md) validates property names and values.
-- Stylelint's [`rule-selector-property-disallowed-list`](https://stylelint.io/user-guide/rules/rule-selector-property-disallowed-list/) offers configurable selector/property restrictions. This rule supplies automatic restrictions and handles selector branches conservatively.
+- Stylelint's [`rule-selector-property-disallowed-list`](https://stylelint.io/user-guide/rules/rule-selector-property-disallowed-list/) provides configurable restrictions; this rule supplies automatic restrictions with conservative selector handling.

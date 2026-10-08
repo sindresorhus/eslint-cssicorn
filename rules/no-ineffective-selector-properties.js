@@ -1,7 +1,7 @@
 // @ts-check
 
 import {shorthandToAffectedProperties} from './shared/css-shorthand-properties.js';
-import {LEGACY_PSEUDO_ELEMENTS} from './shared/css-selector-specificity.js';
+import {getSelectorArgument, LEGACY_PSEUDO_ELEMENTS} from './shared/css-selector-specificity.js';
 import {functionalPseudoSelectors, nonFunctionalPseudoSelectors} from './shared/standard-pseudo-selectors.js';
 import {hasCommentInRange, normalizeCssIdentifier} from './utils/index.js';
 
@@ -103,7 +103,29 @@ const standardFunctionalPseudoSelectors = new Set(functionalPseudoSelectors);
 const standardNonFunctionalPseudoSelectors = new Set(nonFunctionalPseudoSelectors);
 
 /**
-Get the explicit restriction on the final selected compound, without expanding functions or nesting selectors.
+Check whether a pseudo-class requires its target to be a visited link.
+
+@param {PseudoClassSelectorPlain} node
+@returns {boolean}
+*/
+const isVisitedPseudoClass = node => {
+	const name = normalizeCssIdentifier(node.name);
+	if (name === 'visited') {
+		return node.children === null;
+	}
+
+	if (name !== 'is' && name !== 'where') {
+		return false;
+	}
+
+	const selectorList = getSelectorArgument(node);
+	return selectorList?.type === 'SelectorList'
+		&& selectorList.children.length > 0
+		&& selectorList.children.every(selector => selector.type === 'Selector' && getSelectorRestriction(selector)?.selector === ':visited');
+};
+
+/**
+Get the restriction on the final selected compound, including all-visited `:is()` and `:where()` arguments, without expanding nesting selectors.
 
 @param {SelectorPlain} selector
 */
@@ -136,7 +158,7 @@ const getSelectorRestriction = selector => {
 		return;
 	}
 
-	if (compound.some(node => node.type === 'PseudoClassSelector' && node.children === null && normalizeCssIdentifier(node.name) === 'visited')) {
+	if (compound.some(node => node.type === 'PseudoClassSelector' && isVisitedPseudoClass(node))) {
 		return {selector: ':visited', properties: visitedProperties};
 	}
 };
