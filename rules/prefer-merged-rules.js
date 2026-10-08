@@ -239,7 +239,8 @@ const getWrapperParts = (rule, sourceCode, needsSeparator) => {
 	const [contentStart] = sourceCode.getRange(rule.block.children.at(0));
 	const lastChild = rule.block.children.at(-1);
 	let [, contentEnd] = sourceCode.getRange(lastChild);
-	if (sourceCode.text[contentEnd] === ';') {
+	const hasDeclarationSemicolon = sourceCode.text[contentEnd] === ';';
+	if (hasDeclarationSemicolon) {
 		contentEnd++;
 	}
 
@@ -250,7 +251,7 @@ const getWrapperParts = (rule, sourceCode, needsSeparator) => {
 
 	return {
 		leading: sourceCode.text.slice(blockStart + 1, contentStart),
-		content: content + (needsSeparator && lastChild.type === 'Declaration' && !content.endsWith(';') ? ';' : ''),
+		content: content + (needsSeparator && lastChild.type === 'Declaration' && !hasDeclarationSemicolon ? ';' : ''),
 		trailing: sourceCode.text.slice(contentEnd, blockEnd - 1),
 	};
 };

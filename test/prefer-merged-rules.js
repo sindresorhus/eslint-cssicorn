@@ -33,6 +33,14 @@ test({
 		code: '.a{color:red}.b{color:red}.c:unknown{color:red}.d{color:red}.e{color:red}',
 		output: '.a,.b{color:red}.c:unknown{color:red}.d,.e{color:red}',
 		errors: [{messageId: 'prefer-merged-rules/selectors'}, {messageId: 'prefer-merged-rules/selectors'}],
+	}, {
+		code: String.raw`.parent{@media all{--text: \;}@media all{color:red}}`,
+		output: String.raw`.parent{@media all{--text: \;;color:red}}`,
+		errors: [{messageId: 'prefer-merged-rules/conditions'}],
+	}, {
+		code: String.raw`.parent{@media all{--text: \;;}@media all{color:red}}`,
+		output: String.raw`.parent{@media all{--text: \;;color:red}}`,
+		errors: [{messageId: 'prefer-merged-rules/conditions'}],
 	}],
 });
 
