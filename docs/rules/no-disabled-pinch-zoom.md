@@ -9,8 +9,6 @@
 <!-- end auto-generated rule header -->
 <!-- Do not manually modify this header. Run: `npm run fix:eslint-docs` -->
 
-<!-- Examples pair explicit zoom restrictions with zoom-permitting values. -->
-
 This rule reports `touch-action: none`, single pan keywords, and valid pairs of one horizontal and one vertical pan keyword. The [WHATWG Compatibility Standard](https://compat.spec.whatwg.org/#touch-action) recommends `pan-y pinch-zoom` for carousels.
 
 Suggestions add `pinch-zoom` or replace `none` with it. This also permits multi-finger panning and can interfere with custom gestures, so there is no autofix. Replacing `none` still blocks single-finger browser panning.
