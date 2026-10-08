@@ -82,7 +82,7 @@ Color-valued custom properties are also supported:
 ```
 
 > [!IMPORTANT]
-> A custom property containing `light-dark()` resolves its color when consumed as a color value, using the consuming element's color scheme. Descendants with a different scheme can therefore render differently from an inherited literal branch color. Custom properties consumed as strings or non-color values may also change behavior.
+> An unregistered custom property containing `light-dark()` resolves its color when consumed as a color value, using the consuming element's color scheme. Descendants with a different scheme can therefore render differently from an inherited literal branch color. Custom properties consumed as strings or non-color values may also change behavior.
 
 ## Supported patterns
 
