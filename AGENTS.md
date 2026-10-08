@@ -6,7 +6,9 @@ This plugin only has rules for CSS. Rules that target CSS together with other la
 
 Keep rules simple. Target common patterns, skip rare edge cases rather than overcomplicating the rule.
 
-Avoid duplicating rules that already exist in [`@eslint/css`](https://github.com/eslint/css/tree/main/docs/rules) or [Stylelint](https://stylelint.io/user-guide/rules). Before adding a rule, check both. Only add an overlapping rule if it is clearly better, for example simpler, more accurate, or with an autofix.
+Avoid duplicating rules that already exist in [`@eslint/css`](https://github.com/eslint/css/tree/main/docs/rules). Before adding a rule, check its existing rules. Only add an overlapping rule if it is clearly better, for example simpler, more accurate, or with an autofix.
+
+Overlap with Stylelint and cssnano is not a problem and must not be used as a reason to reject a rule.
 
 ## Rule anatomy
 

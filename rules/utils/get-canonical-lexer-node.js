@@ -1,13 +1,10 @@
-// @ts-check
-
 import {ident} from '@eslint/css-tree';
 
 /**
-Canonicalize escaped keyword, function, and unit spellings for lexer matching without changing the source nodes.
+Canonicalize escaped identifiers, function names, and units for CSS lexer matching without changing their source locations.
 
-@template {import('@eslint/css-tree').CssNodePlain} Node
-@param {Node} node
-@returns {Node}
+@param {object} node - The CSS AST node to canonicalize.
+@returns {object}
 */
 export default function getCanonicalLexerNode(node) {
 	// The lexer does not consistently recognize escaped keyword, function, or unit spellings.
@@ -18,7 +15,7 @@ export default function getCanonicalLexerNode(node) {
 		canonicalNode = {...node, unit: ident.encode(ident.decode(node.unit))};
 	}
 
-	if ('children' in node && node.children) {
+	if (node.children) {
 		canonicalNode = {
 			...canonicalNode,
 			children: node.children.map(child => getCanonicalLexerNode(child)),
