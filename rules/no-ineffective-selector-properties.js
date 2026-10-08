@@ -93,7 +93,6 @@ const markerProperties = new Set([...commonProperties, ...borderColorProperties,
 const visitedProperties = new Set([...commonProperties, ...fontProperties, 'text-shadow']);
 const highlightSelectors = new Set(['selection', 'target-text', 'spelling-error', 'grammar-error', 'search-text', 'highlight']);
 const transparentAtRules = new Set(['media', 'supports', 'container', 'layer', 'starting-style']);
-const targetProperties = highlightProperties.union(markerProperties).union(visitedProperties);
 const standardFunctionalPseudoSelectors = new Set(functionalPseudoSelectors);
 const standardNonFunctionalPseudoSelectors = new Set(nonFunctionalPseudoSelectors);
 
@@ -164,19 +163,17 @@ const create = context => {
 	const {sourceCode} = context;
 
 	context.on('Block', function * (block) {
-		const declarations = block.children.filter(node => node.type === 'Declaration' && node.value.type === 'Value')
-			.map(node => ({node, property: normalizeCssIdentifier(node.property)}))
-			.filter(({property}) => targetProperties.has(property));
-		if (declarations.length === 0) {
-			return;
-		}
-
 		const restrictions = getBlockRestrictions(block, sourceCode);
 		if (!restrictions) {
 			return;
 		}
 
-		for (const {node, property} of declarations) {
+		for (const node of block.children) {
+			if (node.type !== 'Declaration' || node.value.type !== 'Value') {
+				continue;
+			}
+
+			const property = normalizeCssIdentifier(node.property);
 			if (restrictions.some(({properties}) => !properties.has(property))) {
 				continue;
 			}

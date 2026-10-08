@@ -207,6 +207,21 @@ test({
 			errors: 1,
 		},
 		{
+			code: 'a:visited { padding: 1rem; margin: 2rem; border: 1px solid red; background: red; }',
+			output: 'a:visited {   border: 1px solid red; background: red; }',
+			errors: 2,
+		},
+		{
+			code: '::selection { font-size: 10px; text-shadow: 1em 1em red; }',
+			output: '::selection {  text-shadow: 1em 1em red; }',
+			errors: 1,
+		},
+		{
+			code: '::selection { padding: /* retain */ 1rem; margin: 2rem; color: red; }',
+			output: '::selection { padding: /* retain */ 1rem;  color: red; }',
+			errors: 2,
+		},
+		{
 			code: '::selection { padding: 1rem }',
 			output: '::selection { }',
 			errors: 1,
