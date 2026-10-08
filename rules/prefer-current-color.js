@@ -145,7 +145,7 @@ const create = context => {
 							/**
 						@param {Parameters<CssicornRuleFixer>[0]} fixer
 						*/
-							fix: fixer => {
+							fix(fixer) {
 								const [valueStart, valueEnd] = sourceCode.getRange(declaration.value);
 								const before = sourceCode.text.slice(valueStart, range[0]);
 								const after = sourceCode.text.slice(range[1], valueEnd);
