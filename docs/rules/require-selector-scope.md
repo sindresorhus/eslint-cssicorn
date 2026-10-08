@@ -160,11 +160,14 @@ export default [
 		files: ['src/components/**/*.css'],
 		ignores: ['**/global.css', '**/reset.css'],
 		rules: {
+			'cssicorn/prefer-nesting': 'off',
 			'cssicorn/require-selector-scope': 'error',
 		},
 	},
 ];
 ```
+
+Disable `prefer-nesting` in these files because its autofix can introduce unanchored parents without declarations. For example, `body :is(.card, .other) { color: red; }` becomes `body { .card, .other { color: red; } }`. This rule checks every selector branch, including the `body` wrapper.
 
 ## Limitations
 

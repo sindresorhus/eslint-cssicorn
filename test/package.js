@@ -231,3 +231,33 @@ test('require-selector-scope is enabled only in the all preset', () => {
 	assert.equal(eslintCssicorn.configs.unopinionated.rules[ruleId], 'off');
 	assert.equal(eslintCssicorn.configs.all.rules[ruleId], 'error');
 });
+
+test('require-selector-scope component configuration preserves scoped flat selectors', async () => {
+	const eslint = new ESLint({
+		overrideConfigFile: true,
+		fix: true,
+		baseConfig: [
+			eslintCssicorn.configs.recommended,
+			{
+				files: ['src/components/**/*.css'],
+				ignores: ['**/global.css', '**/reset.css'],
+				rules: {
+					'cssicorn/prefer-nesting': 'off',
+					'cssicorn/require-selector-scope': 'error',
+				},
+			},
+		],
+	});
+	const code = 'body :is(.card, .other) { color: red; }';
+	const [result] = await eslint.lintText(code, {filePath: 'src/components/card.css'});
+	assert.deepEqual(result.messages, []);
+	assert.equal(result.output, undefined);
+
+	const [unscopedResult] = await eslint.lintText('button {}', {filePath: 'src/components/card.css'});
+	assert.deepEqual(unscopedResult.messages.map(message => message.ruleId), ['cssicorn/require-selector-scope']);
+
+	for (const filePath of ['src/components/global.css', 'src/components/reset.css', 'src/global.css']) {
+		const [globalResult] = await eslint.lintText('button {}', {filePath});
+		assert.deepEqual(globalResult.messages, []);
+	}
+});

@@ -3,7 +3,9 @@ import {getTester} from './utils/test.js';
 const {test} = getTester(import.meta);
 
 test({
-	valid: [],
+	valid: [
+		'.card { :nth-child(2n of :is(&, .local)) {} }',
+	],
 	invalid: [
 		{
 			code: '.card, button, :not(.card) {}',
@@ -19,6 +21,10 @@ test({
 		{
 			code: '.card { :not(&) { .local { a {} } } }',
 			errors: [{messageId: 'require-selector-scope', column: 9, endColumn: 16}],
+		},
+		{
+			code: '.card { :nth-child(2n of :is(&, button)) {} }',
+			errors: [{messageId: 'require-selector-scope'}],
 		},
 	],
 });
