@@ -42,6 +42,20 @@ Message:
 
 `;
 
+exports[`invalid(1): .button { margin-top: 0 !important; margin: revert-layer; } .button:hover { margin-top: 1px; } 1`] = `
+
+  1 | .button { margin-top: 0 !important; margin: revert-layer; } .button:hover { margin-top: 1px; }
+
+`;
+
+exports[`invalid(1): .button { margin-top: 0 !important; margin: revert-layer; } .button:hover { margin-top: 1px; } 2`] = `
+
+Message:
+> 1 | .button { margin-top: 0 !important; margin: revert-layer; } .button:hover { margin-top: 1px; }
+    |                                                                             ^^^^^^^^^^^^^^^ \`margin-top\` cannot override the declaration on line 1 because it is marked \`!important\`.
+
+`;
+
 exports[`invalid(1): .button.is-loading { color: red !important; } .button.is-loading.is-disabled:hover { color: gray; } 1`] = `
 
   1 | .button.is-loading { color: red !important; } .button.is-loading.is-disabled:hover { color: gray; }
@@ -526,6 +540,20 @@ Message:
 
 `;
 
+exports[`invalid(2): @layer components { .button { margin-top: 0 !important; margin: revert; } } .button:hover { margin-top: 1px !important; } 1`] = `
+
+  1 | @layer components { .button { margin-top: 0 !important; margin: revert; } } .button:hover { margin-top: 1px !important; }
+
+`;
+
+exports[`invalid(2): @layer components { .button { margin-top: 0 !important; margin: revert; } } .button:hover { margin-top: 1px !important; } 2`] = `
+
+Message:
+> 1 | @layer components { .button { margin-top: 0 !important; margin: revert; } } .button:hover { margin-top: 1px !important; }
+    |                                                                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^ \`margin-top\` cannot override the declaration on line 1 because layered important declarations take precedence over unlayered important declarations.
+
+`;
+
 exports[`invalid(20): .toolbar > .button { color: red !important; } .toolbar > .button:hover { color: blue; } 1`] = `
 
   1 | .toolbar > .button { color: red !important; } .toolbar > .button:hover { color: blue; }
@@ -663,6 +691,20 @@ exports[`invalid(29): @media print { .button { color: red !important; } @support
 Message:
 > 1 | @media print { .button { color: red !important; } @supports (display: grid) { .button { color: blue; } } }
     |                                                                                         ^^^^^^^^^^^ \`color\` cannot override the declaration on line 1 because it is marked \`!important\`.
+
+`;
+
+exports[`invalid(3): .button { color: red !important; margin: revert !important; } .button:hover { color: blue; } 1`] = `
+
+  1 | .button { color: red !important; margin: revert !important; } .button:hover { color: blue; }
+
+`;
+
+exports[`invalid(3): .button { color: red !important; margin: revert !important; } .button:hover { color: blue; } 2`] = `
+
+Message:
+> 1 | .button { color: red !important; margin: revert !important; } .button:hover { color: blue; }
+    |                                                                               ^^^^^^^^^^^ \`color\` cannot override the declaration on line 1 because it is marked \`!important\`.
 
 `;
 
@@ -859,6 +901,20 @@ exports[`invalid(39): .button { color: inherit !important; } .button:hover { col
 Message:
 > 1 | .button { color: inherit !important; } .button:hover { color: blue; }
     |                                                        ^^^^^^^^^^^ \`color\` cannot override the declaration on line 1 because it is marked \`!important\`.
+
+`;
+
+exports[`invalid(4): .button { --margin-top: 0 !important; margin: revert !important; } .button:hover { --margin-top: 1px; } 1`] = `
+
+  1 | .button { --margin-top: 0 !important; margin: revert !important; } .button:hover { --margin-top: 1px; }
+
+`;
+
+exports[`invalid(4): .button { --margin-top: 0 !important; margin: revert !important; } .button:hover { --margin-top: 1px; } 2`] = `
+
+Message:
+> 1 | .button { --margin-top: 0 !important; margin: revert !important; } .button:hover { --margin-top: 1px; }
+    |                                                                                    ^^^^^^^^^^^^^^^^^ \`--margin-top\` cannot override the declaration on line 1 because it is marked \`!important\`.
 
 `;
 

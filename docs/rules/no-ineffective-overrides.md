@@ -114,6 +114,6 @@ Checks only this file. Deliberate browser fallbacks may be reported; suppress th
 - Retained selector order must match. Classes and existing-state refinements must be appended; attributes and pseudo-class arguments must have identical generated text.
 - Skips pseudo-elements, namespaced types, escaped wildcards, shadow-tree/scope selectors, unparsed arguments, and at-rules other than `@media`, `@supports`, `@container`, and `@layer`.
 - Invalid or unknown ordinary values and values with substitutions such as `var()` cannot block overrides.
-- `revert`/`revert-layer` disables blockers for that property throughout the file, except important blockers when all rollbacks are normal. An `all` rollback excludes custom properties, `direction`, and `unicode-bidi`. Other shorthand or substitution rollbacks are not resolved.
+- `revert`/`revert-layer` disables blockers for that property and known shorthand components throughout the file, except important blockers when all rollbacks are normal. An `all` rollback excludes custom properties, `direction`, and `unicode-bidi`. Substitution rollbacks are not resolved.
 
 Related: [`no-descending-specificity`](./no-descending-specificity.md) checks selector ordering, [`no-ineffective-properties`](./no-ineffective-properties.md) checks incompatible properties, and [`consistent-layer-order`](./consistent-layer-order.md) checks layer statements.

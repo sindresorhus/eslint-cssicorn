@@ -8,6 +8,7 @@ import {
 	tokenTypes,
 } from '@eslint/css-tree';
 import {canMatchSelector, LEGACY_PSEUDO_ELEMENTS} from './shared/css-selector-specificity.js';
+import {shorthandToAffectedProperties} from './shared/css-shorthand-properties.js';
 import {
 	getAtRuleContextPart,
 	getSingleValueIdentifier,
@@ -299,7 +300,9 @@ const create = context => {
 		// Rollback can remove a blocker elsewhere in the cascade. Track its highest importance rather than simulate the entire cascade.
 		const keyword = getValueKeyword(declaration);
 		if (keyword && ROLLBACK_KEYWORDS.has(keyword)) {
-			rollbackProperties.set(property, important || rollbackProperties.get(property) === true);
+			for (const affectedProperty of [property, ...(shorthandToAffectedProperties.get(property) ?? [])]) {
+				rollbackProperties.set(affectedProperty, important || rollbackProperties.get(affectedProperty) === true);
+			}
 		}
 
 		const declarationContext = getContext(sourceCode.getParent(declaration));

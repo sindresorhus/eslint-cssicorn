@@ -4,6 +4,26 @@ const {test} = getTester(import.meta);
 
 test.snapshot({
 	valid: [
+		'.button { margin-top: 0 !important; margin: revert !important; } .button:hover { margin-top: 1px; }',
+		'@layer components { .button { margin-top: 0 !important; margin: revert-layer !important; } } .button:hover { margin-top: 1px !important; }',
+		'.button { margin-top: 0; margin: revert-layer; } @layer states { .button:hover { margin-top: 1px; } }',
+		'@layer components { .button { border-image-source: url(border.png) !important; border: revert-layer !important; } } .button:hover { border-image-source: none !important; }',
+		'.button { font-variant-ligatures: none !important; font: revert !important; } .button:hover { font-variant-ligatures: normal; }',
+		'.button { border-image: none !important; border: revert !important; } .button:hover { border-image: url(border.png) 1; }',
+		'.button { margin-top: 0 !important; margin: revert !important; margin-top: revert-layer; } .button:hover { margin-top: 1px; }',
+		'.button { margin-top: 0 !important; margin-top: revert-layer; margin: revert !important; } .button:hover { margin-top: 1px; }',
+		'.button { MARGIN-TOP: 0 !important; MARGIN: REVERT-LAYER !important; } .button:hover { margin-top: 1px; }',
+	],
+	invalid: [
+		'.button { margin-top: 0 !important; margin: revert-layer; } .button:hover { margin-top: 1px; }',
+		'@layer components { .button { margin-top: 0 !important; margin: revert; } } .button:hover { margin-top: 1px !important; }',
+		'.button { color: red !important; margin: revert !important; } .button:hover { color: blue; }',
+		'.button { --margin-top: 0 !important; margin: revert !important; } .button:hover { --margin-top: 1px; }',
+	],
+});
+
+test.snapshot({
+	valid: [
 		'.button { color: red; } .button:hover { color: blue; }',
 		'.button { color: red !important; } .button:hover { color: blue !important; }',
 		'.button { color: red; } .button:hover { color: blue !important; }',
