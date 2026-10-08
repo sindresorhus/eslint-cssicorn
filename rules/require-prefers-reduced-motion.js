@@ -88,7 +88,7 @@ function hasOnlyNonMotionKeyframes(atRule, lexer) {
 			}
 
 			const property = normalizeCssIdentifier(declaration.property);
-			return property === 'animation-timing-function' || isNonMotionProperty(property, lexer);
+			return keyword(property).basename === 'animation-timing-function' || isNonMotionProperty(property, lexer);
 		}));
 }
 

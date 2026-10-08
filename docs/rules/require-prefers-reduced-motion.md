@@ -91,7 +91,7 @@ Static transforms and ordinary positioning or sizing declarations are allowed. T
 }
 ```
 
-Animations are allowed without a preference query when every same-file definition of their name contains only these properties and, optionally, `animation-timing-function`.
+Animations are allowed without a preference query when every same-file definition of their name contains only these properties and, optionally, `animation-timing-function` or its vendor-prefixed aliases.
 
 ```css
 /* ✅ */

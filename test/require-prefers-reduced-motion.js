@@ -65,6 +65,9 @@ test.snapshot({
 		'a { content: "animation: slide 1s"; background: url("transition.png"); }',
 		'@font-face { font-family: demo; src: url(demo.woff2); scroll-behavior: smooth; }',
 		{code: 'a { animation: ???; transition: ???; scroll-behavior: ???; }', languageOptions: {tolerant: true}},
+		'@-webkit-keyframes fade { to { opacity: 1; -webkit-animation-timing-function: ease; } } a { -webkit-animation: fade 1s; }',
+		String.raw`@KEYFRAMES Fade { TO { \6f pacity: 1; -WEBKIT-ANIMATION-TIMING-FUNCTION: ease; } } a { animation-name: Fade; }`,
+		'@keyframes tint { to { -webkit-text-fill-color: red; } } a { animation-name: tint; }',
 	],
 	invalid: [
 		'a { animation: slide 1s; }',
@@ -137,6 +140,7 @@ test.snapshot({
 		'a { transition: transform /* keep this */ 1s; }',
 		'@scope (.component) { a { scroll-behavior: smooth; } }',
 		'a {\r\n  &:hover {\r\n    transition: transform 1s;\r\n  }\r\n}',
+		String.raw`@KEYFRAMES Fade { TO { \6f pacity: 1; \74 ransform: translateX(10px); -webkit-animation-timing-function: ease; } } a { animation-name: Fade; }`,
 	],
 });
 
@@ -147,6 +151,8 @@ nodeTest('nested media conditions guarantee a preference on every branch', () =>
 		{query: '(prefers-reduced-motion: no-preference) and ((hover) or (width > 600px))', guarded: true},
 		{query: '((prefers-reduced-motion: no-preference) and (hover)) or (width > 600px)', guarded: false},
 		{query: 'not ((prefers-reduced-motion: no-preference) and (hover))', guarded: false},
+		{query: '(prefers-reduced-motion: no-preference) and (not (hover))', guarded: true},
+		{query: '(prefers-reduced-motion: no-preference) or (not (hover))', guarded: false},
 	]) {
 		const code = `@media ${query} { a { scroll-behavior: smooth; } }`;
 		const ast = toPlainObject(parse(code, {positions: true}));
