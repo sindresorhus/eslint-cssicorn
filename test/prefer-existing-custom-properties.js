@@ -166,6 +166,18 @@ test({
 				output: 'a { width: var(--width); }',
 			}],
 		}],
+	}, {
+		code: 'a { box-shadow: 0 /* keep */ 2px 8px #0003; margin: 8px; }',
+		options: [{customProperties: {'--shadow-card': '0 2px 8px #0003', '--space-small': '8px'}}],
+		errors: [{
+			messageId: 'prefer-existing-custom-properties/error',
+			data: {replacement: 'var(--space-small)'},
+			suggestions: [{
+				messageId: 'prefer-existing-custom-properties/suggestion',
+				data: {replacement: 'var(--space-small)'},
+				output: 'a { box-shadow: 0 /* keep */ 2px 8px #0003; margin: var(--space-small); }',
+			}],
+		}],
 	}],
 });
 

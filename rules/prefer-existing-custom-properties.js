@@ -1,3 +1,5 @@
+// @ts-check
+
 import {
 	ident,
 	parse,
@@ -17,9 +19,15 @@ import {
 } from './utils/index.js';
 
 /**
+@import {CssLocationRange, CssNodePlain, DeclarationPlain, Dimension, FunctionNodePlain, Hash, NumberNode, ParenthesesPlain, Percentage, ValuePlain} from '@eslint/css-tree';
 @import {CssicornContext} from './rule/cssicorn-context.js';
+@import {CssicornProblem} from './rule/to-eslint-problem.js';
 @import {CssicornRule} from './rule/to-eslint-rule.js';
 @import {CssicornRuleFixer} from './rule/to-eslint-rule-fixer.js';
+*/
+
+/**
+@typedef {Array<string | number | boolean | Fingerprint>} Fingerprint
 */
 
 const MESSAGE_ID_ERROR = 'prefer-existing-custom-properties/error';
@@ -42,6 +50,7 @@ const openingTokens = new Map([
 
 /**
 Get the RGBA channels of a hexadecimal color.
+@param {Hash} node
 */
 function getHexColorChannels(node) {
 	let value = decodeCssIdentifier(node.value);
@@ -61,10 +70,19 @@ function getHexColorChannels(node) {
 
 /**
 Get the channel nodes of a supported modern or legacy RGB function.
+@param {FunctionNodePlain} node
+@param {string} text
 */
 function getRgbChannelNodes(node, text) {
 	const {children} = node;
+	/**
+	@param {number} index
+	@param {string} value
+	*/
 	const isOperator = (index, value) => children[index]?.type === 'Operator' && children[index].value === value;
+	/**
+	@type {CssNodePlain[]}
+	*/
 	let channels;
 	if ((children.length === 5 || children.length === 7) && isOperator(1, ',') && isOperator(3, ',') && (children.length === 5 || isOperator(5, ','))) {
 		channels = [children[0], children[2], children[4], children[6]];
@@ -76,8 +94,13 @@ function getRgbChannelNodes(node, text) {
 		for (let index = 1; index < 3; index++) {
 			let hasWhitespace = false;
 			// These offsets also belong to independently parsed configured values.
+			// Both parsers provide locations for value nodes.
 			// eslint-disable-next-line internal/no-restricted-property-access
-			tokenize(text.slice(channels[index - 1].loc.end.offset, channels[index].loc.start.offset), type => {
+			const previousLocation = /** @type {CssLocationRange} */ (channels[index - 1].loc);
+			// eslint-disable-next-line internal/no-restricted-property-access
+			const location = /** @type {CssLocationRange} */ (channels[index].loc);
+
+			tokenize(text.slice(previousLocation.end.offset, location.start.offset), type => {
 				if (type === tokenTypes.WhiteSpace) {
 					hasWhitespace = true;
 				}
@@ -95,6 +118,8 @@ function getRgbChannelNodes(node, text) {
 
 /**
 Get the RGBA channels of a simple absolute RGB function.
+@param {CssNodePlain} node
+@param {string} text
 */
 function getRgbColorChannels(node, text) {
 	if (node.type !== 'Function' || !['rgb', 'rgba'].includes(normalizeCssIdentifier(node.name))) {
@@ -113,7 +138,7 @@ function getRgbColorChannels(node, text) {
 			continue;
 		}
 
-		if (!['Number', 'Percentage'].includes(channel.type)) {
+		if (channel.type !== 'Number' && channel.type !== 'Percentage') {
 			return;
 		}
 
@@ -131,6 +156,7 @@ function getRgbColorChannels(node, text) {
 
 /**
 Check whether a function contains substitutions or data that must not be tokenized as style values.
+@param {CssNodePlain} node
 */
 function isPreservedFunction(node) {
 	return node.type === 'Function' && (isSubstitutionFunction(node) || preservedFunctions.has(normalizeCssIdentifier(node.name)));
@@ -138,6 +164,8 @@ function isPreservedFunction(node) {
 
 /**
 Normalize numeric spellings without conflating integer tokens, units, or value types.
+@param {NumberNode | Dimension | Percentage} node
+@returns {Fingerprint | undefined}
 */
 function getNumericFingerprint(node) {
 	const value = Number(node.value);
@@ -159,12 +187,19 @@ function getNumericFingerprint(node) {
 
 /**
 Get a structural fingerprint, retaining integer token flags and significant operator whitespace.
+@param {CssNodePlain} node
+@param {WeakMap<CssNodePlain, Fingerprint | undefined>} cache
+@param {string} text
+@returns {Fingerprint | undefined}
 */
 function getFingerprint(node, cache, text) {
 	if (cache.has(node)) {
 		return cache.get(node);
 	}
 
+	/**
+	@type {Fingerprint | undefined}
+	*/
 	let fingerprint;
 	const channels = node.type === 'Hash' ? getHexColorChannels(node) : getRgbColorChannels(node, text);
 	if (channels) {
@@ -175,11 +210,11 @@ function getFingerprint(node, cache, text) {
 			fingerprint = ['Identifier', decodeCssIdentifier(node.name)];
 		}
 	} else if (['Number', 'Dimension', 'Percentage'].includes(node.type)) {
-		fingerprint = getNumericFingerprint(node);
+		fingerprint = getNumericFingerprint(/** @type {NumberNode | Dimension | Percentage} */ (node));
 	} else if (node.type === 'Operator') {
 		fingerprint = ['Operator', node.value];
 	} else if (['Value', 'Function', 'Parentheses'].includes(node.type) && !isPreservedFunction(node)) {
-		const children = node.children.map(child => getFingerprint(child, cache, text));
+		const children = /** @type {ValuePlain | FunctionNodePlain | ParenthesesPlain} */ (node).children.map(child => getFingerprint(child, cache, text));
 		if (children.every(child => child !== undefined)) {
 			if (node.type === 'Value') {
 				fingerprint = children.length === 1 ? children[0] : ['Value', children];
@@ -197,9 +232,14 @@ function getFingerprint(node, cache, text) {
 
 /**
 Parse a configured value without accepting the tokenizer's or parser's automatic closing of missing delimiters.
+@param {string} value
+@param {string} name
 */
 function parseConfiguredValue(value, name) {
 	try {
+		/**
+		@type {(number | undefined)[]}
+		*/
 		const closingTokens = [];
 		// A trailing newline exposes unterminated comments, strings, and URLs instead of accepting EOF recovery.
 		tokenize(`${value}\n`, (type, start, end) => {
@@ -221,13 +261,13 @@ function parseConfiguredValue(value, name) {
 			throw new Error('Unbalanced delimiters.');
 		}
 
-		const parsed = toPlainObject(parse(value, {
+		const parsed = /** @type {ValuePlain} */ (toPlainObject(parse(value, {
 			context: 'value',
 			positions: true,
 			onParseError(error) {
 				throw error;
 			},
-		}));
+		})));
 		if (parsed.children.length === 0) {
 			throw new Error('Empty value.');
 		}
@@ -240,6 +280,8 @@ function parseConfiguredValue(value, name) {
 
 /**
 Check for a style declaration, including declarations directly inside nested grouping rules.
+@param {DeclarationPlain} declaration
+@param {CssicornContext['sourceCode']} sourceCode
 */
 function isStyleDeclaration(declaration, sourceCode) {
 	let parent = sourceCode.getParent(declaration);
@@ -267,9 +309,18 @@ function isStyleDeclaration(declaration, sourceCode) {
 */
 const create = context => {
 	const {sourceCode} = context;
-	const [{customProperties}] = context.options;
+	const [{customProperties}] = /** @type {[{customProperties: Record<string, string>}]} */ (context.options);
+	/**
+	@type {Map<string, string | undefined>}
+	*/
 	const tokens = new Map();
+	/**
+	@type {WeakMap<CssNodePlain, Fingerprint | undefined>}
+	*/
 	const cache = new WeakMap();
+	/**
+	@param {CssNodePlain} node
+	*/
 	const getKey = (node, text = sourceCode.text) => {
 		const fingerprint = getFingerprint(node, cache, text);
 		return fingerprint === undefined ? undefined : JSON.stringify(fingerprint);
@@ -296,7 +347,13 @@ const create = context => {
 			return;
 		}
 
+		/**
+		@type {CssicornProblem[]}
+		*/
 		const problems = [];
+		/**
+		@param {CssNodePlain} node
+		*/
 		const visit = node => {
 			if (isPreservedFunction(node)) {
 				return;
@@ -304,10 +361,13 @@ const create = context => {
 
 			if (node.type === 'Value' || componentTypes.has(node.type)) {
 				const key = getKey(node);
-				if (tokens.has(key)) {
+				if (key !== undefined && tokens.has(key)) {
 					const replacement = tokens.get(key);
+					/**
+					@type {[number, number]}
+					*/
 					const range = node.type === 'Value'
-						? [sourceCode.getRange(node.children.at(0))[0], sourceCode.getRange(node.children.at(-1))[1]]
+						? [sourceCode.getRange(/** @type {CssNodePlain} */ (node.children.at(0)))[0], sourceCode.getRange(/** @type {CssNodePlain} */ (node.children.at(-1)))[1]]
 						: sourceCode.getRange(node);
 					if (replacement !== undefined && !hasCommentInRange(context, range)) {
 						problems.push({
@@ -334,7 +394,7 @@ const create = context => {
 				return;
 			}
 
-			for (const child of node.children ?? []) {
+			for (const child of 'children' in node ? node.children ?? [] : []) {
 				visit(child);
 			}
 		};

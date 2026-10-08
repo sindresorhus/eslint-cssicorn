@@ -36,6 +36,10 @@ Map eligible custom-property names to their literal CSS values. Names are decode
 
 The default catalog is empty, so configuring eligible tokens is necessary for the rule to report. Tokens may be defined in another stylesheet. The catalog asserts that each token exists and is appropriate where used; the rule does not read stylesheets, resolve imports or aliases, or analyze scope and the cascade.
 
+Keep the catalog curated. For example, if both `'--space-small': '8px'` and `'--radius-small': '8px'` are configured, neither `margin: 8px` nor `border-radius: 8px` is reported. The declaration's property does not resolve ambiguity between tokens with equal values, including values the rule normalizes as equivalent.
+
+If you already generate tokens, consider emitting this eligible name-to-value map alongside the custom-property stylesheet. Use the resolved literal CSS values, so the catalog and stylesheet share a source of truth.
+
 Empty values, unbalanced delimiters, unterminated comments, strings, or URLs, and malformed value syntax cause a configuration error. Unsupported values, such as strings, URLs, CSS-wide keywords, `currentcolor`, or substitutions, are not indexed. Values are parsed as generic CSS values, without validating them against a particular property's grammar.
 
 ## Examples
