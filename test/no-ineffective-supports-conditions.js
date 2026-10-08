@@ -37,6 +37,11 @@ test.snapshot({
 		'@import "theme.css" supports(color: var(--brand, red));',
 		'@import "theme.css" supports(selector(:has(a)));',
 		'@import "theme.css" screen;',
+		'@import "theme.css" layer(theme) supports(color: oklch(60% 0.2 20)) screen and (width > 1px);',
+		'@supports (color: var(--brand, "oklch(60% 0.2 20)")) {}',
+		'@supports (background: var(--image, url("oklch.png"))) {}',
+		String.raw`@supports (color: \\var(--brand, oklch(60% 0.2 20))) {}`,
+		String.raw`@supports (color: \\var(--brand) oklch(60% 0.2 20)) {}`,
 	],
 	invalid: [
 		'@supports (--brand: oklch(60% 0.2 20)) {}',
@@ -80,6 +85,9 @@ test.snapshot({
 		'@supports (--transform: rotateX(30deg)) {}',
 		'@supports (--transform: SCALEY(2)) {}',
 		'@supports (transform: translatez(var(--depth))) {}',
+		String.raw`@supports (color: oklch(v\61 r(--lightness) 0.2 20)) {}`,
+		'@import "theme.css" layer(theme) supports(--brand: oklch(60% 0.2 20)) screen and (width > 1px);',
+		'@import "theme.css" layer(theme) supports((--brand: oklch(60% 0.2 20))) screen and (width > 1px);',
 	],
 });
 
@@ -93,6 +101,10 @@ test({
 		{
 			code: '@supports (color: var(--brand, oklch(60% 0.2 20))) {}',
 			errors: [{messageId: 'no-ineffective-supports-conditions/substitution', data: {functionName: 'oklch', substitutionName: 'var'}}],
+		},
+		{
+			code: '@supports (width: calc(--Size() + 1px)) {}',
+			errors: [{messageId: 'no-ineffective-supports-conditions/substitution', data: {functionName: 'calc', substitutionName: '--Size'}}],
 		},
 	],
 });

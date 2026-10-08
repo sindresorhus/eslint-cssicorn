@@ -204,7 +204,7 @@ exports[`invalid(22): @SUPPORTS (--BRAND: OKLCH(60% 0.2 20)) {} 2`] = `
 
 Message:
 > 1 | @SUPPORTS (--BRAND: OKLCH(60% 0.2 20)) {}
-    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^ This condition does not test support for \`oklch()\`. Custom properties accept their values as tokens.
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^ This condition does not test support for \`OKLCH()\`. Custom properties accept their values as tokens.
 
 `;
 
@@ -218,7 +218,7 @@ exports[`invalid(23): @supports (COLOR: OKLCH(VAR(--lightness) 0.2 20)) {} 2`] =
 
 Message:
 > 1 | @supports (COLOR: OKLCH(VAR(--lightness) 0.2 20)) {}
-    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ This condition does not establish support for \`oklch()\` when its value uses \`var()\`.
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ This condition does not establish support for \`OKLCH()\` when its value uses \`VAR()\`.
 
 `;
 
@@ -520,7 +520,7 @@ exports[`invalid(42): @IMPORT \"theme.css\" SUPPORTS(--BRAND: OKLCH(60% 0.2 20))
 
 Message:
 > 1 | @IMPORT "theme.css" SUPPORTS(--BRAND: OKLCH(60% 0.2 20));
-    |                              ^^^^^^^^^^^^^^^^^^^^^^^^^^ This condition does not test support for \`oklch()\`. Custom properties accept their values as tokens.
+    |                              ^^^^^^^^^^^^^^^^^^^^^^^^^^ This condition does not test support for \`OKLCH()\`. Custom properties accept their values as tokens.
 
 `;
 
@@ -556,7 +556,7 @@ exports[`invalid(44): @supports (--transform: rotateX(30deg)) {} 2`] = `
 
 Message:
 > 1 | @supports (--transform: rotateX(30deg)) {}
-    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^ This condition does not test support for \`rotatex()\`. Custom properties accept their values as tokens.
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^ This condition does not test support for \`rotateX()\`. Custom properties accept their values as tokens.
 
 `;
 
@@ -570,7 +570,7 @@ exports[`invalid(45): @supports (--transform: SCALEY(2)) {} 2`] = `
 
 Message:
 > 1 | @supports (--transform: SCALEY(2)) {}
-    |            ^^^^^^^^^^^^^^^^^^^^^^ This condition does not test support for \`scaley()\`. Custom properties accept their values as tokens.
+    |            ^^^^^^^^^^^^^^^^^^^^^^ This condition does not test support for \`SCALEY()\`. Custom properties accept their values as tokens.
 
 `;
 
@@ -585,6 +585,48 @@ exports[`invalid(46): @supports (transform: translatez(var(--depth))) {} 2`] = `
 Message:
 > 1 | @supports (transform: translatez(var(--depth))) {}
     |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ This condition does not establish support for \`translatez()\` when its value uses \`var()\`.
+
+`;
+
+exports[`invalid(47): @supports (color: oklch(v\\61 r(--lightness) 0.2 20)) {} 1`] = `
+
+  1 | @supports (color: oklch(v\\61 r(--lightness) 0.2 20)) {}
+
+`;
+
+exports[`invalid(47): @supports (color: oklch(v\\61 r(--lightness) 0.2 20)) {} 2`] = `
+
+Message:
+> 1 | @supports (color: oklch(v\\61 r(--lightness) 0.2 20)) {}
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ This condition does not establish support for \`oklch()\` when its value uses \`v\\61 r()\`.
+
+`;
+
+exports[`invalid(48): @import \"theme.css\" layer(theme) supports(--brand: oklch(60% 0.2 20)) screen and (width > 1px); 1`] = `
+
+  1 | @import "theme.css" layer(theme) supports(--brand: oklch(60% 0.2 20)) screen and (width > 1px);
+
+`;
+
+exports[`invalid(48): @import \"theme.css\" layer(theme) supports(--brand: oklch(60% 0.2 20)) screen and (width > 1px); 2`] = `
+
+Message:
+> 1 | @import "theme.css" layer(theme) supports(--brand: oklch(60% 0.2 20)) screen and (width > 1px);
+    |                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^ This condition does not test support for \`oklch()\`. Custom properties accept their values as tokens.
+
+`;
+
+exports[`invalid(49): @import \"theme.css\" layer(theme) supports((--brand: oklch(60% 0.2 20))) screen and (width > 1px); 1`] = `
+
+  1 | @import "theme.css" layer(theme) supports((--brand: oklch(60% 0.2 20))) screen and (width > 1px);
+
+`;
+
+exports[`invalid(49): @import \"theme.css\" layer(theme) supports((--brand: oklch(60% 0.2 20))) screen and (width > 1px); 2`] = `
+
+Message:
+> 1 | @import "theme.css" layer(theme) supports((--brand: oklch(60% 0.2 20))) screen and (width > 1px);
+    |                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^ This condition does not test support for \`oklch()\`. Custom properties accept their values as tokens.
 
 `;
 

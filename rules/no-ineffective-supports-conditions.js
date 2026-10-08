@@ -45,10 +45,10 @@ const create = context => {
 				return;
 			}
 
-			const name = normalizeCssIdentifier(valueText.slice(start, end - 1));
+			const name = valueText.slice(start, end - 1);
 			if (isSubstitutionFunction({type: 'Function', name})) {
 				substitutionName ??= name;
-			} else if (valueFunctionNames.has(name)) {
+			} else if (valueFunctionNames.has(normalizeCssIdentifier(name))) {
 				functionName ??= name;
 			} else {
 				// Ignore query syntax, typed attr() arguments, and build-time helpers, including their contents.
