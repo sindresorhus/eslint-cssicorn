@@ -689,6 +689,23 @@ Suggestion 1/1: Combine the colors with \`light-dark()\` and remove the override
 
 `;
 
+exports[`invalid(45): :root { color-scheme: light dark; } a { --color: rgb(255 0 0 / 0); } @media (prefers-color-scheme: dark) { a { --color: transparent; } } 1`] = `
+
+  1 | :root { color-scheme: light dark; } a { --color: rgb(255 0 0 / 0); } @media (prefers-color-scheme: dark) { a { --color: transparent; } }
+
+`;
+
+exports[`invalid(45): :root { color-scheme: light dark; } a { --color: rgb(255 0 0 / 0); } @media (prefers-color-scheme: dark) { a { --color: transparent; } } 2`] = `
+
+Message:
+> 1 | :root { color-scheme: light dark; } a { --color: rgb(255 0 0 / 0); } @media (prefers-color-scheme: dark) { a { --color: transparent; } }
+    |                                                                                                                ^^^^^^^^^^^^^^^^^^^^ Prefer \`light-dark()\` for the paired colors in \`--color\`.
+
+Suggestion 1/1: Combine the colors with \`light-dark()\` and remove the override declaration.:
+  1 | :root { color-scheme: light dark; } a { --color: light-dark(rgb(255 0 0 / 0), transparent); } 
+
+`;
+
 exports[`invalid(5): :root { color-scheme: light dark; } a { color: white; background-color: red; } @media (prefers-color-scheme: dark) { a { color: black; padding: 0; } } 1`] = `
 
   1 | :root { color-scheme: light dark; } a { color: white; background-color: red; } @media (prefers-color-scheme: dark) { a { color: black; padding: 0; } }

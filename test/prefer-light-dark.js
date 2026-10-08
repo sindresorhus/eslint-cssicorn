@@ -70,6 +70,7 @@ test.snapshot({
 			['font-family: red;', 'font-family: blue;'],
 			['content: "red";', 'content: "blue";'],
 			['background-image: url(red);', 'background-image: url(blue);'],
+			['box-shadow: 0 1px var(--color), 0 2px red;', 'box-shadow: 0 1px var(--color), 0 2px blue;'],
 		].map(([base, override]) => pair(base, override)),
 		root + 'a { color: white; } b {} @media (prefers-color-scheme: dark) { a { color: black; } }',
 		root + 'a { color: white; } @media (prefers-color-scheme: dark) { b { color: black; } }',
@@ -125,6 +126,7 @@ test.snapshot({
 		root + 'a { color: white } @media (prefers-color-scheme: dark) { a { color: black } }',
 		pair('color: #0008;', 'color: rgb(0 0 0 / .5);'),
 		pair('box-shadow: 0 1px red, 0 2px currentColor;', 'box-shadow: 0 1px blue, 0 2px currentColor;'),
+		pair('--color: rgb(255 0 0 / 0);', '--color: transparent;'),
 	],
 });
 
