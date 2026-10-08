@@ -864,6 +864,34 @@ Message:
 
 `;
 
+exports[`invalid(54): .button { margin: revert-layer; color: red !important; } .button:hover { color: blue; } 1`] = `
+
+  1 | .button { margin: revert-layer; color: red !important; } .button:hover { color: blue; }
+
+`;
+
+exports[`invalid(54): .button { margin: revert-layer; color: red !important; } .button:hover { color: blue; } 2`] = `
+
+Message:
+> 1 | .button { margin: revert-layer; color: red !important; } .button:hover { color: blue; }
+    |                                                                          ^^^^^^^^^^^ \`color\` cannot override the declaration on line 1 because it is marked \`!important\`.
+
+`;
+
+exports[`invalid(55): .button { --Color: revert-layer; --color: red !important; } .button:hover { --color: blue; } 1`] = `
+
+  1 | .button { --Color: revert-layer; --color: red !important; } .button:hover { --color: blue; }
+
+`;
+
+exports[`invalid(55): .button { --Color: revert-layer; --color: red !important; } .button:hover { --color: blue; } 2`] = `
+
+Message:
+> 1 | .button { --Color: revert-layer; --color: red !important; } .button:hover { --color: blue; }
+    |                                                                             ^^^^^^^^^^^^^ \`--color\` cannot override the declaration on line 1 because it is marked \`!important\`.
+
+`;
+
 exports[`invalid(6): .button { color: red !important; } .button:has(.icon) { color: blue; } 1`] = `
 
   1 | .button { color: red !important; } .button:has(.icon) { color: blue; }

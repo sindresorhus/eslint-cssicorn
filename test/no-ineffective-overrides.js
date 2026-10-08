@@ -64,6 +64,8 @@ test.snapshot({
 		String.raw`.button { --color: red !important; } .button:hover { --color: /* rollback */ \72 evert-layer /* value */ !important; --color: blue; }`,
 		String.raw`.button { --color: \76 ar(--base) !important; } .button:hover { --color: blue; }`,
 		'.button { --color: {var(--base)} !important; } .button:hover { --color: blue; }',
+		'.button { --color: env(theme-color) !important; } .button:hover { --color: blue; }',
+		'.button { --color: attr(data-color type(<color>)) !important; } .button:hover { --color: blue; }',
 		'.button { future-property: 1px !important; } .button:hover { future-property: 2px; }',
 		{
 			code: '.button { future-property: red !important; } .button:hover { future-property: 2px; }',
@@ -128,6 +130,8 @@ test.snapshot({
 			languageOptions: {customSyntax: {properties: {'future-property': '<length>'}}},
 		},
 		'.button { color: red !important; }\n.link { color: red; }\n@layer states { .button:hover, .link:focus { color: blue; } }',
+		'.button { margin: revert-layer; color: red !important; } .button:hover { color: blue; }',
+		'.button { --Color: revert-layer; --color: red !important; } .button:hover { --color: blue; }',
 	],
 });
 

@@ -130,13 +130,13 @@ State overrides must add pseudo-classes or attributes to the same element while 
 | `.button[disabled]` | `.button[disabled][data-state="open"]` | No |
 | `.button` | `.button.is-disabled` | No |
 
-The base element must have no pseudo-classes. Attribute additions are checked only when the base element also has no attributes. Attribute values are not compared logically.
+For these state comparisons, the base element must have no pseudo-classes. Attribute additions are checked only when the base element also has no attributes. Attribute values are not compared logically.
 
-- The override uses the same selector under additional `@media`, `@supports`, or `@container` conditions, or in a different layered/unlayered context.
+- The override uses the same selector under additional `@media`, `@supports`, or `@container` conditions, or in a different layered/unlayered context. These comparisons can retain existing pseudo-classes and attributes.
 - The base's conditions must be an exact prefix of the override's conditions. Separate blocks with identically generated conditions match; logical implication between different queries is not inferred.
 - Native nesting is resolved only when each parent rule has one selector. A leading `&` refers to that selector. Selectors without `&` use their leading combinator, or are descendants when no combinator is specified. Other placements of `&` are skipped.
 - Only identical property names are compared. Property names and pseudo-class names outside arguments are ASCII case-insensitive; class, ID, and custom property names are case-sensitive. Equivalent escapes in property, class, and ID names match.
-- A declaration in a selector list is reported only when every branch has a blocker. Partially blocked declarations are left alone.
+- A declaration in a selector list is reported only when every branch has a blocker. If the branches have different blockers, the diagnostic identifies one of them. Partially blocked declarations are left alone.
 
 ## Limitations
 
