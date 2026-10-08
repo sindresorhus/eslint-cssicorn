@@ -167,6 +167,9 @@ const shorthandPropertyGroups = [
 	{
 		properties: ['text-decoration'], controllingProperties: ['text-decoration', 'text-decoration-line'], component: 'the decoration line', property: 'text-decoration-line',
 	},
+	{
+		properties: ['text-emphasis'], controllingProperties: ['text-emphasis', 'text-emphasis-style'], component: 'the emphasis mark style', property: 'text-emphasis-style',
+	},
 ];
 const shorthandProperties = new Set(shorthandPropertyGroups.flatMap(({properties}) => properties));
 const targetProperties = new Set([

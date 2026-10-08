@@ -951,6 +951,10 @@ const shorthandControlGroups = [
 		],
 	},
 	{declaration: 'text-decoration: wavy red', controls: ['text-decoration: underline', 'text-decoration-line: underline', 'text-decoration-line: none', 'text-decoration-line: var(--line)']},
+	{
+		declaration: 'text-emphasis: red',
+		controls: ['text-emphasis: filled blue', 'text-emphasis-style: filled', 'text-emphasis-style: none', 'text-emphasis-style: var(--style)', 'text-emphasis-style: bad'],
+	},
 ];
 
 test({
@@ -971,8 +975,48 @@ test({
 		'a { COLUMN-RULE: 1PX RED; RULE-STYLE: SOLID; }',
 		String.raw`a { column-rule: 1px red; \72 ule: 2px solid blue; }`,
 		String.raw`a { column-rule: 1px red; rule-\73 tyle: solid; }`,
+		'a { TEXT-EMPHASIS: RED; TEXT-EMPHASIS-STYLE: FILLED; }',
+		String.raw`a { text-emphasis: red; -webkit-text-emphasis-\73 tyle: filled; }`,
 	],
 	invalid: [],
+});
+
+test({
+	valid: [
+		...['filled', 'open', 'sesame', 'open dot', 'none', '"﹅"', '"none"', '""'].map(style => `em { text-emphasis: ${style} red; }`),
+		String.raw`em { text-emphasis: \66 illed red; }`,
+		...['inherit', 'initial', 'unset', 'revert', 'revert-layer', 'var(--emphasis)', 'rgb(var(--color))', '--emphasis()', 'red blue', 'url("red")'].map(value => `em { text-emphasis: ${value}; }`),
+		'em { text-emphasis: red; text-emphasis: blue; }',
+		'em { -webkit-text-emphasis: red; --text-emphasis: red; }',
+		'em { all: initial; text-emphasis: red; }',
+		'@keyframes emphasis { to { text-emphasis: red; } }',
+		'@font-face { text-emphasis: red; }',
+		':export { text-emphasis: red; }',
+	],
+	invalid: [
+		...['red', '#f00', 'rgb(255 0 0)', 'currentcolor'].map(value => ({
+			code: `em { text-emphasis: ${value}; }`,
+			errors: [{messageId: omittedComponentMessageId, data: {property: 'text-emphasis', component: 'the emphasis mark style'}}],
+		})),
+		{
+			code: 'em { TEXT-EMPHASIS: RED !important; }',
+			errors: [{messageId: omittedComponentMessageId, data: {property: 'text-emphasis', component: 'the emphasis mark style'}}],
+		},
+		{
+			code: String.raw`em { text-\65 mphasis: \72 ed; }`,
+			errors: [{messageId: omittedComponentMessageId, data: {property: 'text-emphasis', component: 'the emphasis mark style'}}],
+		},
+		...[
+			'em { text-emphasis: /* color */ red; }',
+			'em { text-emphasis: red; text-emphasis-color: blue; text-emphasis-position: under left; }',
+			'em { text-emphasis-style: filled; & span { text-emphasis: red; } }',
+			'em { @media (width > 1px) { text-emphasis: red; } }',
+			'em { text-emphasis: red; } em:hover { text-emphasis-style: filled; }',
+		].map(code => ({
+			code,
+			errors: [{messageId: omittedComponentMessageId, data: {property: 'text-emphasis', component: 'the emphasis mark style'}}],
+		})),
+	],
 });
 
 test({
