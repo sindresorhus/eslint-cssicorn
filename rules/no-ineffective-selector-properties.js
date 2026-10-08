@@ -6,7 +6,7 @@ import {functionalPseudoSelectors, nonFunctionalPseudoSelectors} from './shared/
 import {hasCommentInRange, normalizeCssIdentifier} from './utils/index.js';
 
 /**
-@import {BlockPlain, SelectorPlain, PseudoElementSelectorPlain, PseudoClassSelectorPlain} from '@eslint/css-tree';
+@import {BlockPlain, RulePlain, SelectorPlain, PseudoElementSelectorPlain, PseudoClassSelectorPlain} from '@eslint/css-tree';
 @import {CssicornContext} from './rule/cssicorn-context.js';
 @import {CssicornRule} from './rule/to-eslint-rule.js';
 @import {CssicornRuleFixer} from './rule/to-eslint-rule-fixer.js';
@@ -97,6 +97,8 @@ const borderColorProperties = [
 const highlightProperties = new Set([...commonProperties, ...fontProperties, ...borderColorProperties]);
 const markerProperties = new Set([...commonProperties, ...borderColorProperties, 'background', 'background-color']);
 const visitedProperties = new Set([...commonProperties, ...fontProperties, 'text-shadow']);
+// Browsers may apply other properties to first-line and placeholder text, but these are explicitly excluded.
+const firstLineProperties = new Set(['writing-mode', 'direction', 'text-orientation']);
 const highlightSelectors = new Set(['selection', 'target-text', 'spelling-error', 'grammar-error', 'search-text', 'highlight']);
 const transparentAtRules = new Set(['media', 'supports', 'container', 'layer', 'starting-style']);
 const standardFunctionalPseudoSelectors = new Set(functionalPseudoSelectors);
@@ -125,11 +127,12 @@ const isVisitedPseudoClass = node => {
 };
 
 /**
-Get the restriction on the final selected compound, including all-visited `:is()` and `:where()` arguments, without expanding nesting selectors.
+Get the restriction on the final selected compound, including all-visited `:is()` and `:where()` arguments and direct nesting selectors with all-visited parents.
 
 @param {SelectorPlain} selector
+@param {boolean} [parentIsVisited=false]
 */
-const getSelectorRestriction = selector => {
+const getSelectorRestriction = (selector, parentIsVisited = false) => {
 	for (const node of selector.children) {
 		if (node.type !== 'PseudoClassSelector' && node.type !== 'PseudoElementSelector') {
 			continue;
@@ -155,22 +158,28 @@ const getSelectorRestriction = selector => {
 			return {selector: '::marker', properties: markerProperties};
 		}
 
+		if (name === 'first-line' || name === 'placeholder') {
+			return {selector: `::${name}`, properties: firstLineProperties};
+		}
+
 		return;
 	}
 
-	if (compound.some(node => node.type === 'PseudoClassSelector' && isVisitedPseudoClass(node))) {
+	if (compound.some(node => (node.type === 'PseudoClassSelector' && isVisitedPseudoClass(node))
+		|| (node.type === 'NestingSelector' && parentIsVisited))) {
 		return {selector: ':visited', properties: visitedProperties};
 	}
 };
 
 /**
-Get the selector restrictions for a declaration block, crossing only grouping rules with unchanged selector context.
+Get the enclosing selector restrictions, crossing only grouping rules with unchanged selector context.
 
-@param {BlockPlain} block
+@param {BlockPlain | RulePlain} node
 @param {CssicornContext['sourceCode']} sourceCode
+@returns {Array<{selector: string, properties: Set<string>}> | undefined}
 */
-const getBlockRestrictions = (block, sourceCode) => {
-	let parent = sourceCode.getParent(block);
+const getEnclosingRestrictions = (node, sourceCode) => {
+	let parent = sourceCode.getParent(node);
 	while (parent) {
 		if (parent.type === 'Rule') {
 			if (parent.prelude?.type !== 'SelectorList') {
@@ -178,7 +187,10 @@ const getBlockRestrictions = (block, sourceCode) => {
 			}
 
 			// Selector lists contain selectors, but the upstream type currently allows any CSS node.
-			const restrictions = /** @type {SelectorPlain[]} */ (parent.prelude.children).map(selector => getSelectorRestriction(selector));
+			const selectors = /** @type {SelectorPlain[]} */ (parent.prelude.children);
+			const parentIsVisited = selectors.some(selector => selector.children.some(child => child.type === 'NestingSelector'))
+				&& getEnclosingRestrictions(parent, sourceCode)?.every(restriction => restriction.selector === ':visited');
+			const restrictions = selectors.map(selector => getSelectorRestriction(selector, parentIsVisited));
 			return restrictions.length > 0 && restrictions.every(restriction => restriction !== undefined) ? restrictions : undefined;
 		}
 
@@ -197,7 +209,7 @@ const create = context => {
 	const {sourceCode} = context;
 
 	context.on('Block', function * (block) {
-		const restrictions = getBlockRestrictions(block, sourceCode);
+		const restrictions = getEnclosingRestrictions(block, sourceCode);
 		if (!restrictions) {
 			return;
 		}

@@ -11,7 +11,7 @@
 
 <!-- The examples pair ineffective declarations with removal while retaining effective styling. -->
 
-Catch ineffective styling of highlights, list markers, and visited links.
+Catch ineffective styling of pseudo-elements and visited links.
 
 ## Examples
 
@@ -56,15 +56,16 @@ a:visited {
 
 ## Checks
 
-Checks [highlights](https://www.w3.org/TR/css-pseudo-4/#highlight-styling) (`::selection`, `::target-text`, `::spelling-error`, `::grammar-error`, `::search-text`, and `::highlight()`), [`::marker`](https://www.w3.org/TR/css-lists-3/#marker-properties), and [`:visited`](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Selectors/:visited).
+Checks [highlights](https://www.w3.org/TR/css-pseudo-4/#highlight-styling) (`::selection`, `::target-text`, `::spelling-error`, `::grammar-error`, `::search-text`, and `::highlight()`), [`::marker`](https://www.w3.org/TR/css-lists-3/#marker-properties), [`::first-line`](https://www.w3.org/TR/css-pseudo-4/#first-line-styling), [`::placeholder`](https://www.w3.org/TR/css-pseudo-4/#placeholder-pseudo), and [`:visited`](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Selectors/:visited).
 
 Reports a finite list of common ineffective properties:
 
-- All checked targets: margins, padding, physical and logical sizes and insets, `display`, `position`, `opacity`, transforms, `box-shadow`, background image and positioning properties, and border widths, styles, and radii.
+- Highlights, markers, and visited links: margins, padding, physical and logical sizes and insets, `display`, `position`, `opacity`, transforms, `box-shadow`, background image and positioning properties, and border widths, styles, and radii.
 - Highlights and visited links: font properties and `line-height`.
 - Highlights and markers: border colors and color-bearing border shorthands.
 - Markers: `background` and `background-color`.
 - Visited links: `text-shadow`.
+- First-line and placeholder text: only `writing-mode`, `direction`, and `text-orientation`.
 
 Marker text styling, animations, and transitions are allowed, as are highlight colors, decorations, and text shadows. Custom properties, vendor-prefixed properties, unlisted properties, and `all` are ignored.
 
@@ -74,7 +75,7 @@ Preserves partially effective shorthands, including `background` on highlights a
 
 A declaration is reported only when every selector makes it ineffective. For example, `padding` is allowed with `::selection, .ordinary`, and `font-size` with `::selection, ::marker`.
 
-Only targets on the final selected compound are checked, including `li::before::marker` and `:is(.first, .second)::marker`. Parsed `:is()` and `:where()` arguments are also checked when every branch selects a visited link. Parent-selector expansion, other functional arguments, and visited restrictions on ancestors, siblings, or pseudo-elements are not analyzed.
+Only targets on the final selected compound are checked, including `li::before::marker` and `:is(.first, .second)::marker`. Parsed `:is()` and `:where()` arguments are also checked when every branch selects a visited link. A direct `&` on the final compound, such as `&:hover` or `.wrapper &`, inherits visited restrictions when every parent selector selects a visited link. Other functional arguments and visited restrictions on ancestors, siblings, or pseudo-elements are not analyzed.
 
 Unknown or preprocessing pseudo-selectors in analyzed selectors, such as CSS Modules' `:global()` and Vue's `:deep()`, cause that branch to be skipped, suppressing reports for the list.
 
