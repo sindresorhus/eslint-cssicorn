@@ -13,18 +13,18 @@
 
 Enforces a fixed order for interchangeable value components. It preserves shadow length order and the order of comma-separated shadows, which both affect rendering.
 
-| Properties | Order |
-| --- | --- |
-| `border` and its physical and logical side or axis shorthands | Width, style, color |
-| `outline`, `column-rule` | Width, style, color |
-| `flex-flow` | Direction, wrap |
-| `box-shadow` | Inset, lengths, color |
-| `text-shadow` | Lengths, color |
-| `columns` | Width, count |
-| `text-decoration` | Lines, thickness, style, color |
-| `text-emphasis` | Style, color |
-| `text-wrap` | Mode, style |
-| `white-space` | Collapse, wrapping, trimming |
+The supported properties use these component orders:
+
+- `border` and its physical and logical side or axis shorthands: width, style, color.
+- `outline` and `column-rule`: width, style, color.
+- `flex-flow`: direction, wrap.
+- `box-shadow`: inset, lengths, color.
+- `text-shadow`: lengths, color.
+- `columns`: width, count.
+- `text-decoration`: lines, thickness, style, color.
+- `text-emphasis`: style, color.
+- `text-wrap`: mode, style.
+- `white-space`: collapse, wrapping, trimming.
 
 The border shorthands are `border`, `border-top`, `border-right`, `border-bottom`, `border-left`, `border-block`, `border-inline`, `border-block-start`, `border-block-end`, `border-inline-start`, and `border-inline-end`.
 
