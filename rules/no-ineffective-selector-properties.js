@@ -79,7 +79,7 @@ const commonProperties = new Set([
 	'border-end-start-radius',
 	'border-end-end-radius',
 ]);
-const fontProperties = getPropertyNames(['font', 'font-synthesis']);
+const fontProperties = getPropertyNames(['font', 'font-synthesis', 'font-width']);
 const borderColorProperties = [
 	...getPropertyNames(['border-color', 'border-block-color', 'border-inline-color']),
 	'border',

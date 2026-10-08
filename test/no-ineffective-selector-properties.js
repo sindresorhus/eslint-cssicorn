@@ -174,8 +174,27 @@ test.snapshot({
 });
 
 test({
-	valid: [],
+	valid: [
+		'li::marker { font-width: condensed; }',
+		'::selection, li::marker { font-width: condensed; }',
+		'a:visited:future-custom { font-weight: bold; }',
+	],
 	invalid: [
+		{
+			code: '::selection { font-width: condensed; color: red; }',
+			output: '::selection {  color: red; }',
+			errors: [{messageId: 'no-ineffective-selector-properties', data: {property: 'font-width', selectors: '::selection'}}],
+		},
+		{
+			code: 'a:visited { font-width: condensed; color: purple; }',
+			output: 'a:visited {  color: purple; }',
+			errors: [{messageId: 'no-ineffective-selector-properties', data: {property: 'font-width', selectors: ':visited'}}],
+		},
+		{
+			code: '::highlight(*) { padding: 1rem; color: red; }',
+			output: '::highlight(*) {  color: red; }',
+			errors: [{messageId: 'no-ineffective-selector-properties', data: {property: 'padding', selectors: '::highlight'}}],
+		},
 		{
 			code: '::selection { padding: 1rem; color: red; }',
 			output: '::selection {  color: red; }',
