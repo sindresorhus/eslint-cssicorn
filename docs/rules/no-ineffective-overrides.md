@@ -104,7 +104,7 @@ Compares identical properties when an override:
 - Adds classes, attributes, or pseudo-classes to the same element, keeping ancestors unchanged: `.button` → `.button.is-disabled` or `.button:hover` → `.button:hover:focus`.
 - Reuses a selector under additional `@media`, `@supports`, or `@container` conditions, or across layered/unlayered contexts. Every base condition must appear unchanged among the override's conditions; nesting order does not matter.
 
-Nesting requires one selector per parent and a leading `&` or implicit nesting. Selector lists are reported only when every branch is blocked.
+Nesting supports a leading `&` or implicit nesting, skipping combinations of multiple parent and child branches. Lists are reported only when every branch is blocked.
 
 ## Limitations
 

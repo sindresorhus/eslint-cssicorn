@@ -41,7 +41,6 @@ test.snapshot({
 		'.button { color: red !important; } .button:hover, .link:unknown { color: blue; }',
 		'.button { color: red !important; } .button { :hover { color: blue; } }',
 		'.button { color: red !important; } .button { & .icon { color: blue; } }',
-		'.button, .link { color: red !important; &:hover { color: blue; } }',
 		'.button { color: red !important; :is(&:hover) { color: blue; } }',
 		'.button { color: red !important; } .button { .theme & { color: blue; } }',
 		'.Button { color: red !important; } .button:hover { color: blue; }',
@@ -152,6 +151,33 @@ test.snapshot({
 		'.button { --Color: revert-layer; --color: red !important; } .button:hover { --color: blue; }',
 		'.button:hover { color: red !important; } .button:hover:focus { color: blue; }',
 		'@supports (display: grid) { .button { color: red !important; } } @media print { @supports (display: grid) { .button:hover { color: blue; } } }',
+	],
+});
+
+test.snapshot({
+	valid: [
+		'.button, .link { color: red !important; &:hover { color: blue !important; } }',
+		'.button { color: red !important; } .button, .link { &:hover { color: blue; } }',
+		'.link { color: red !important; } .button, .link { &:hover { color: blue; } }',
+		'.button, .link { color: red !important; .icon:hover { color: blue; } }',
+		'.button, .link::before { color: red !important; &:hover { color: blue; } }',
+		'.button, .link { color: red !important; &:hover, &:focus { color: blue; } }',
+		'.toolbar { .button, .link { color: red !important; &:hover, &:focus { color: blue; } } }',
+		'.button, .link { &:hover, &:focus { color: red !important; &:active { color: blue; } } }',
+	],
+	invalid: [
+		'.button, .link { color: red !important; &:hover { color: blue; } }',
+		'.button { color: red !important; } .link { color: red !important; } .button, .link { &:hover { color: blue; } }',
+		'.button, #link { color: red !important; &:hover { color: blue; } }',
+		'.button, .link { color: red !important; &:hover { &:focus { color: blue; } } }',
+		'.toolbar, .menu { .button { color: red !important; &:hover { color: blue; } } }',
+		'.toolbar > .button, .menu > .button { color: red !important; } .toolbar, .menu { > .button:hover { color: blue; } }',
+		'.toolbar { .button, .link { color: red !important; &:hover { color: blue; } } }',
+		'.button { color: red !important; &:hover, &:focus { color: blue; } }',
+		'.button, .link { @media print { color: red !important; &:hover { color: blue; } } }',
+		'.button, .link { color: red; @layer states { &:hover { color: blue; } } }',
+		'@layer components { .button, .link { color: red !important; } } .button, .link { &:hover { color: blue !important; } }',
+		String.raw`.\62 utton, .link { COLOR: red !important; &:\68 over { color: blue; } }`,
 	],
 });
 

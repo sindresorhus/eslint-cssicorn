@@ -102,7 +102,8 @@ const getSelectorAnalysis = nodes => {
 @param {SelectorAnalysis[] | undefined} parentSelectors
 */
 const getResolvedSelectors = (rule, parentSelectors) => {
-	if (rule.prelude.type !== 'SelectorList' || (parentSelectors && parentSelectors.length !== 1)) {
+	// Avoid multiplying selector lists across nesting levels.
+	if (rule.prelude.type !== 'SelectorList' || (parentSelectors && parentSelectors.length > 1 && rule.prelude.children.length > 1)) {
 		return;
 	}
 
@@ -132,15 +133,20 @@ const getResolvedSelectors = (rule, parentSelectors) => {
 		let nodes = selector.children;
 		const hasLeadingNesting = nodes[0]?.type === 'NestingSelector';
 		if (parentSelectors) {
-			const parentNodes = parentSelectors[0].nodes;
 			if (hasLeadingNesting) {
 				nodes = nodes.slice(1);
 			} else if (nodes[0]?.type !== 'Combinator') {
 				nodes = [{type: 'Combinator', name: ' '}, ...nodes];
 			}
 
-			nodes = [...parentNodes, ...nodes];
-		} else if (hasLeadingNesting || nodes[0]?.type === 'Combinator') {
+			for (const parent of parentSelectors) {
+				selectors.push(getSelectorAnalysis([...parent.nodes, ...nodes]));
+			}
+
+			continue;
+		}
+
+		if (hasLeadingNesting || nodes[0]?.type === 'Combinator') {
 			return;
 		}
 
