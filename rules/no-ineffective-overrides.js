@@ -44,7 +44,7 @@ const getNodeKey = node => {
 	return generate(node);
 };
 
-const getSelectorKey = nodes => JSON.stringify(nodes.map(node => getNodeKey(node)));
+const getSelectorKey = nodes => JSON.stringify(nodes.map(getNodeKey));
 
 const getSelectorAnalysis = nodes => {
 	const terminalStart = nodes.findLastIndex(node => node.type === 'Combinator') + 1;
@@ -88,10 +88,12 @@ const getResolvedSelectors = (rule, parentSelectors) => {
 		if (parentSelectors) {
 			const parentNodes = parentSelectors[0].nodes;
 			if (hasLeadingNesting) {
-				nodes = [...parentNodes, ...nodes.slice(1)];
-			} else {
-				nodes = [...parentNodes, {type: 'Combinator', name: ' '}, ...nodes];
+				nodes = nodes.slice(1);
+			} else if (nodes[0]?.type !== 'Combinator') {
+				nodes = [{type: 'Combinator', name: ' '}, ...nodes];
 			}
+
+			nodes = [...parentNodes, ...nodes];
 		} else if (hasLeadingNesting || nodes[0]?.type === 'Combinator') {
 			return;
 		}

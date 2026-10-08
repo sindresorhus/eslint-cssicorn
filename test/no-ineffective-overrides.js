@@ -30,6 +30,7 @@ test.snapshot({
 		'.button { all: initial !important; } .button:hover { color: blue; }',
 		'.button { color: not-a-color !important; } .button:hover { color: blue; }',
 		'.button { color: var(--color) !important; } .button:hover { color: blue; }',
+		'.button { --color: var(--base) !important; } .button:hover { --color: blue; }',
 		'.button { color: red !important; color: revert !important; } .button:hover { color: blue; }',
 		'.button { color: red !important; } .button:hover { color: revert-layer !important; color: blue; }',
 		'.button { --color: revert-layer !important; } .button:hover { --color: blue; }',
@@ -56,6 +57,7 @@ test.snapshot({
 		String.raw`@namespace foo "urn:foo"; foo\|bar { color: red !important; } foo|bar:hover { color: blue; }`,
 		String.raw`\2a { color: red !important; } *:hover { color: blue; }`,
 		'.button { color: red !important; all: revert-layer !important; } .button:hover { color: blue; }',
+		'.toolbar > .button { color: red !important; } .toolbar { .button:hover { color: blue; } }',
 	],
 	invalid: [
 		'.button { color: red !important; }\n.button:hover { color: blue; }',
@@ -100,5 +102,11 @@ test.snapshot({
 		'.button { color: initial !important; } .button:hover { color: blue; }',
 		'.button { color: oklch(60% 0.2 30) !important; } .button:hover { color: red; }',
 		'.button { color: red !important; }\r\n.button:hover { color: blue; }',
+		'.toolbar > .button { color: red !important; } .toolbar { > .button:hover { color: blue; } }',
+		'.toolbar { > .button { color: red !important; } } .toolbar > .button:hover { color: blue; }',
+		'.toolbar + .button { color: red !important; } .toolbar { + .button:hover { color: blue; } }',
+		'.toolbar ~ .button { color: red !important; } .toolbar { ~ .button:hover { color: blue; } }',
+		'.button { --color: "var(--base)" !important; } .button:hover { --color: blue; }',
+		String.raw`.button { --\63 olor: red !important; } .button:hover { --color: blue; }`,
 	],
 });
