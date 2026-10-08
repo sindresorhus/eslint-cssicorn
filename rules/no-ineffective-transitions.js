@@ -34,22 +34,21 @@ const longhandProperties = ['transition-property', 'transition-behavior'];
 const getTransitionLists = (declaration, property, lexer) => {
 	const {value} = declaration;
 	if (
-		property === 'all'
-		|| value.type !== 'Value'
+		value.type !== 'Value'
 		|| hasSubstitutionOrRandomFunction(value)
 	) {
 		return;
 	}
 
-	if (property === 'transition-behavior') {
+	if (property !== 'transition-property') {
 		const node = getSingleValueIdentifier(declaration);
 		const name = node && normalizeCssIdentifier(node.name);
 		if (name === 'initial' || name === 'unset') {
-			return {'transition-behavior': [{node, name: 'normal'}]};
+			return {'transition-behavior': [{node: property === 'transition-behavior' ? node : undefined, name: 'normal'}]};
 		}
 	}
 
-	if (value.children.some(node => node.type === 'Identifier' && isCssWideKeyword(normalizeCssIdentifier(node.name)))) {
+	if (property === 'all' || value.children.some(node => node.type === 'Identifier' && isCssWideKeyword(normalizeCssIdentifier(node.name)))) {
 		return;
 	}
 
@@ -161,7 +160,7 @@ const getTransitionProblems = function * (targets, behaviors, lexer) {
 				node,
 				messageId: MESSAGE_ID_DISCRETE,
 				data,
-				suggest: [getAllowDiscreteSuggestion(behavior)],
+				suggest: behavior.node || behavior.firstNode ? [getAllowDiscreteSuggestion(behavior)] : undefined,
 			};
 		}
 	}

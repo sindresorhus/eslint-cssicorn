@@ -2,6 +2,40 @@ import {getTester} from './utils/test.js';
 
 const {test} = getTester(import.meta);
 
+test({
+	valid: [
+		'a { all: initial; transition-property: display; transition-behavior: allow-discrete; }',
+		'a { transition: unset; transition-behavior: allow-discrete; transition-property: display; }',
+		'a { transition-property: display; all: unset; }',
+		'a { transition-behavior: allow-discrete !important; all: initial; transition-property: display; }',
+		'a { all: initial !important; transition-property: display; }',
+		'a { transition: initial; transition-property: display; transition-behavior: inherit; }',
+		...['inherit', 'revert', 'revert-layer'].flatMap(value => [
+			`a { all: ${value}; transition-property: display; }`,
+			`a { transition: ${value}; transition-property: display; }`,
+		]),
+		'a { all: var(--reset); transition-property: display; }',
+	],
+	invalid: [
+		...['all', 'transition'].flatMap(property => ['initial', 'unset'].map(value => ({
+			code: `a { ${property}: ${value}; transition-property: display; transition-duration: 200ms; }`,
+			errors: [{messageId: 'no-ineffective-transitions/discrete', data: {property: 'display'}, suggestions: 0}],
+		}))),
+		{
+			code: 'a { transition-property: display !important; transition-behavior: allow-discrete; all: unset; }',
+			errors: [{messageId: 'no-ineffective-transitions/discrete', data: {property: 'display'}, suggestions: 0}],
+		},
+		{
+			code: 'a { all: initial !important; transition-property: display !important; transition-behavior: allow-discrete; }',
+			errors: [{messageId: 'no-ineffective-transitions/discrete', data: {property: 'display'}, suggestions: 0}],
+		},
+		{
+			code: 'a { ALL: /* before */ UNSET /* after */; transition-property: display, opacity, overlay; }',
+			errors: ['display', 'overlay'].map(property => ({messageId: 'no-ineffective-transitions/discrete', data: {property}, suggestions: 0})),
+		},
+	],
+});
+
 test.snapshot({
 	valid: [
 		'a { transition: opacity 200ms, transform 1s; }',

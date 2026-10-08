@@ -14,7 +14,7 @@ This rule reports:
 - Non-animatable properties, such as `will-change`, regardless of behavior.
 - Discrete properties, such as `display`, whose behavior resolves to `normal` in the same style block.
 
-Suggestions enable `allow-discrete`. They change behavior and can affect multiple targets sharing a behavior entry, so they are not autofixes.
+Suggestions enable `allow-discrete`. They can affect multiple targets sharing a behavior entry, so they are not autofixes. Reports based on `transition` or `all` resets have no suggestions.
 
 ## Examples
 
@@ -44,15 +44,15 @@ Suggestions enable `allow-discrete`. They change behavior and can affect multipl
 
 The `transition` shorthand defaults omitted behavior to `normal`. Put a separate `transition-behavior` override after it.
 
-Also checks shorthands whose longhands all have the same known animation type, such as `overflow` and `transition`. Explicit `transition-behavior: initial` and `unset` resolve to `normal`.
+Also checks shorthands whose longhands all have the same known animation type, such as `overflow` and `transition`. Explicit `initial` and `unset` on `transition-behavior`, `transition`, or `all` establish `normal` behavior.
+
+Later matching targets, `all`, and known shorthand expansions override earlier entries. Resolves `word-wrap` as an alias of `overflow-wrap`.
 
 ## Limitations
 
-- Resolves literal declarations within one style block, respecting order and `!important`. Separate rules and omitted longhands remain unknown, so `transition-property: display` alone is not reported.
-- Substitutions such as `var()`, other CSS-wide keywords, and unresolved values make the affected controls unknown.
-- Skips custom properties, vendor-prefixed targets, and shorthands with mixed or unknown animation types. Coverage uses bundled Webref data and skips ambiguous types and special cases such as `visibility` and image-source properties.
-- Later matching targets, `all`, and known shorthand expansions override earlier entries. Resolves `word-wrap` as an alias of `overflow-wrap`; logical-to-physical relationships remain unknown.
-- Does not check timing, endpoint values, browser support, or custom-property registrations. Excludes keyframes, descriptor blocks, and CSS Modules interoperability blocks.
+- Resolves declarations within one style block, respecting order and `!important`. Separate rules, omitted longhands, substitutions such as `var()`, and unresolved CSS-wide values remain unknown. `transition-property: display` alone is not reported.
+- Uses conservative Webref coverage. Skips custom properties, vendor-prefixed targets, mixed or unknown shorthand types, and special interpolation cases such as `visibility` and image-source properties. Logical-to-physical relationships remain unresolved.
+- Checks target eligibility without guaranteeing a transition will run. Timing, endpoint values, browser support, and custom-property registrations are outside its scope.
 
 > [!NOTE]
 > Entry transitions from `display: none` can also require [`@starting-style`](https://www.w3.org/TR/css-transitions-2/#defining-before-change-style). `allow-discrete` alone does not establish a starting style.
