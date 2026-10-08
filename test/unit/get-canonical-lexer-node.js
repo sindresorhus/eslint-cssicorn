@@ -1,6 +1,11 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {ident, lexer, parse, toPlainObject} from '@eslint/css-tree';
+import {
+	ident,
+	lexer,
+	parse,
+	toPlainObject,
+} from '@eslint/css-tree';
 import {getCanonicalLexerNode} from '../../rules/utils/index.js';
 
 test('canonicalizes escaped names and units without changing the source nodes', () => {
