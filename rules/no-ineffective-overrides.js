@@ -24,7 +24,7 @@ import {
 
 /**
 @typedef {ReturnType<typeof getSelectorAnalysis>} SelectorAnalysis
-@typedef {{conditions: string[], layered: boolean, selectors?: SelectorAnalysis[]}} DeclarationContext
+@typedef {{conditions: Set<string>, layered: boolean, selectors?: SelectorAnalysis[]}} DeclarationContext
 @typedef {DeclarationContext & {selectors: SelectorAnalysis[], declaration: DeclarationPlain, property: string, important: boolean}} DeclarationRecord
 */
 
@@ -229,9 +229,9 @@ const create = context => {
 	*/
 	const recordsByKey = new Map();
 	/**
-	@type {Set<string>}
+	@type {Map<string, boolean>}
 	*/
-	const rollbackProperties = new Set();
+	const rollbackProperties = new Map();
 	/**
 	@type {WeakMap<DeclarationPlain, boolean>}
 	*/
@@ -251,7 +251,7 @@ const create = context => {
 		}
 
 		if (node.type === 'StyleSheet') {
-			return {conditions: [], layered: false};
+			return {conditions: new Set(), layered: false};
 		}
 
 		const parent = sourceCode.getParent(node);
@@ -261,7 +261,7 @@ const create = context => {
 			if (name === 'layer') {
 				result = {...result, layered: true};
 			} else if (CONDITIONAL_RULES.has(name)) {
-				result = {...result, conditions: [...result.conditions, JSON.stringify(getAtRuleContextPart(node, context))]};
+				result = {...result, conditions: new Set([...result.conditions, JSON.stringify(getAtRuleContextPart(node, context))])};
 			} else {
 				result = undefined;
 			}
@@ -278,10 +278,14 @@ const create = context => {
 	@param {DeclarationRecord} record
 	*/
 	const isUsableBlocker = record => {
-		const {declaration, property} = record;
+		const {declaration, property, important} = record;
 		if (!blockerValidity.has(declaration)) {
+			const propertyRollback = rollbackProperties.get(property);
+			const allRollback = property.startsWith('--') || ALL_EXCLUDED_PROPERTIES.has(property) ? undefined : rollbackProperties.get('all');
+			const hasRollback = (propertyRollback !== undefined && (!important || propertyRollback))
+				|| (allRollback !== undefined && (!important || allRollback));
 			const {value} = declaration;
-			const usable = !hasUnresolvedValue(value)
+			const usable = !hasRollback && !hasUnresolvedValue(value)
 				&& (property.startsWith('--') || (value.type === 'Value' && !sourceCode.lexer.matchProperty(property, value).error));
 			blockerValidity.set(declaration, usable);
 		}
@@ -291,10 +295,11 @@ const create = context => {
 
 	context.on('Declaration', declaration => {
 		const property = getPropertyKey(declaration.property);
-		// Rollback can remove a blocker elsewhere in the cascade. Leave this property unchecked rather than simulate the entire cascade.
+		const important = Boolean(declaration.important);
+		// Rollback can remove a blocker elsewhere in the cascade. Track its highest importance rather than simulate the entire cascade.
 		const keyword = getValueKeyword(declaration);
 		if (keyword && ROLLBACK_KEYWORDS.has(keyword)) {
-			rollbackProperties.add(property);
+			rollbackProperties.set(property, important || rollbackProperties.get(property) === true);
 		}
 
 		const declarationContext = getContext(sourceCode.getParent(declaration));
@@ -303,7 +308,7 @@ const create = context => {
 		}
 
 		const record = {
-			...declarationContext, selectors: declarationContext.selectors, declaration, property, important: Boolean(declaration.important),
+			...declarationContext, selectors: declarationContext.selectors, declaration, property, important,
 		};
 		records.push(record);
 		for (const selector of record.selectors) {
@@ -326,9 +331,8 @@ const create = context => {
 		for (const key of selector.candidateKeys) {
 			const entries = recordsByKey.get(JSON.stringify([override.property, key])) ?? [];
 			const blocker = entries.find(base => base.declaration !== override.declaration
-				&& base.conditions.length <= override.conditions.length
-				&& base.conditions.every((condition, index) => condition === override.conditions[index])
-				&& (key !== selector.key || base.conditions.length < override.conditions.length || base.layered !== override.layered)
+				&& base.conditions.isSubsetOf(override.conditions)
+				&& (key !== selector.key || base.conditions.size < override.conditions.size || base.layered !== override.layered)
 				&& getBlockingReason(base, override)
 				&& isUsableBlocker(base));
 			if (blocker) {
@@ -339,13 +343,6 @@ const create = context => {
 
 	context.onExit('StyleSheet', function * () {
 		for (const override of records) {
-			if (
-				rollbackProperties.has(override.property)
-				|| (rollbackProperties.has('all') && !override.property.startsWith('--') && !ALL_EXCLUDED_PROPERTIES.has(override.property))
-			) {
-				continue;
-			}
-
 			/**
 			@type {DeclarationRecord | undefined}
 			*/

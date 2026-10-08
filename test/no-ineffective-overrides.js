@@ -59,7 +59,6 @@ test.snapshot({
 		'.toolbar > .button { color: red !important; } .toolbar { .button:hover { color: blue; } }',
 		'.toolbar:is(:HOVER) .button { color: red !important; } .toolbar:is(:hover) .button:focus { color: blue; }',
 		'.button { color: red !important; } .button:state(checked) { color: blue; }',
-		'@supports (display: grid) { .button { color: red !important; } } @media print { @supports (display: grid) { .button:hover { color: blue; } } }',
 		String.raw`.button { --color: red !important; } .button:hover { --color: /* rollback */ \72 evert-layer /* value */ !important; --color: blue; }`,
 		String.raw`.button { --color: \76 ar(--base) !important; } .button:hover { --color: blue; }`,
 		'.button { --color: {var(--base)} !important; } .button:hover { --color: blue; }',
@@ -132,6 +131,7 @@ test.snapshot({
 		'.button { margin: revert-layer; color: red !important; } .button:hover { color: blue; }',
 		'.button { --Color: revert-layer; --color: red !important; } .button:hover { --color: blue; }',
 		'.button:hover { color: red !important; } .button:hover:focus { color: blue; }',
+		'@supports (display: grid) { .button { color: red !important; } } @media print { @supports (display: grid) { .button:hover { color: blue; } } }',
 	],
 });
 
@@ -177,8 +177,6 @@ test.snapshot({
 		'.button:hover { color: red !important; } .button:hover .icon { color: blue; }',
 		'.button:hover { color: red !important; } .button:hover:focus, .link.active { color: blue; }',
 		'@media print { .button:hover { color: red !important; } } .button:hover.active { color: blue; }',
-		'.button { all: revert-layer; --color: red !important; --color: revert; } .button:hover { --color: blue; }',
-		'.button { all: revert; direction: rtl !important; direction: revert-layer; } .button:hover { direction: ltr; }',
 	],
 	invalid: [
 		'.button.is-loading { color: red !important; } .button.is-loading.is-disabled:hover { color: gray; }',
@@ -194,5 +192,40 @@ test.snapshot({
 		'.button { all: revert-layer; --color: red !important; } .button:hover { --color: blue; }',
 		'.button { all: revert !important; direction: rtl !important; } .button:hover { direction: ltr; }',
 		String.raw`.button { ALL: revert-layer; \75 nicode-bidi: isolate !important; } .button:hover { unicode-bidi: normal; }`,
+		'.button { all: revert-layer; --color: red !important; --color: revert; } .button:hover { --color: blue; }',
+		'.button { all: revert; direction: rtl !important; direction: revert-layer; } .button:hover { direction: ltr; }',
+	],
+});
+
+test.snapshot({
+	valid: [
+		'.button { color: red; color: revert-layer; } @layer states { .button:hover { color: blue; } }',
+		'.button { color: red; } .other { all: revert; } @layer states { .button:hover { color: blue; } }',
+		'.button { color: red !important; color: revert !important; color: revert-layer; } .button:hover { color: blue; }',
+		'.button { color: red !important; color: revert-layer; color: revert !important; } .button:hover { color: blue; }',
+		'.button { color: red !important; } .other { all: revert !important; all: revert-layer; } .button:hover { color: blue; }',
+		'.button { color: red !important; } .other { all: revert-layer; all: revert !important; } .button:hover { color: blue; }',
+		'.button { color: red !important; color: revert; } .button:hover { color: blue; } .other { all: revert !important; }',
+		'.button { color: red; } @layer states { .button:hover { color: blue; } } .other { color: revert-layer; }',
+		'@media screen { @supports (display: grid) { .button { color: red !important; } } } @supports (display: flex) { @media screen { .button:hover { color: blue; } } }',
+		'@media screen { @supports (display: grid) { .button { color: red !important; } } } @supports (display: grid) { @media screen { .button { color: blue; } } }',
+		'@media screen { .button { color: red !important; } } @media screen { @media screen { .button { color: blue; } } }',
+		'@container card (width > 20rem) { .button { color: red !important; } } @media screen { @container panel (width > 20rem) { .button:hover { color: blue; } } }',
+		'@container box (width > 1px) { @container box (height > 1px) { .button { color: red !important; } } } @container box (width > 1px) and (height > 1px) { .button:hover { color: blue; } }',
+	],
+	invalid: [
+		'.button { color: red !important; color: revert; } .button:hover { color: blue; }',
+		'.other { color: revert-layer; } .button { color: red !important; } .button:hover { color: blue; }',
+		'.button { color: red !important; } .button:hover { color: revert-layer; }',
+		'.button { all: revert-layer; color: red !important; } .button:hover { color: blue; }',
+		'.button { color: red !important; } .button:hover { all: revert; color: blue; }',
+		'.button { --theme: red !important; } .button:hover { --theme: /* rollback */ revert-layer; }',
+		'.button { all: revert !important; --theme: red !important; } .button:hover { --theme: revert-layer; }',
+		'@layer components { .button { color: red !important; } } .other { color: revert; } .button:hover { color: blue !important; }',
+		'@media screen { .button { color: red !important; } } @supports (display: grid) { @media screen { .button { color: blue; } } }',
+		'@media screen { @supports (display: grid) { .button { color: red !important; } } } @supports (display: grid) { @media screen { .button:hover { color: blue; } } }',
+		'@container box (width > 1px) { @container style(--dark: 1) { .box { color: red !important; } } } @container style(--dark: 1) { @container box (width > 1px) { .box:hover { color: blue; } } }',
+		'@media screen { @media screen { .button { color: red !important; } } } @supports (display: grid) { @media screen { .button { color: blue; } } }',
+		'@SUPPORTS (display: grid) { .button { color: red !important; } } @media screen { @supports (display: grid) { .button { &:hover { color: blue; } } } }',
 	],
 });
