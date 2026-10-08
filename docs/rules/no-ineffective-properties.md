@@ -156,7 +156,7 @@ Shorthand checks require a successful CSS grammar match. Matching is best effort
 | Border shorthands | Any physical or logical border shorthand, any border-style declaration, `border-image`, or `border-image-source` |
 | `outline` | `outline`, `outline-style` |
 | `animation` | `animation`, `animation-name` |
-| `column-rule` | `column-rule`, `column-rule-style` |
+| `column-rule` | `column-rule`, `column-rule-style`, `rule`, `rule-style` |
 | `text-decoration` | `text-decoration`, `text-decoration-line` |
 
 Vendor-prefixed counterparts also suppress reports, but prefixed shorthands are not reported. For borders, even declarations for unrelated sides suppress the check, and an image border can render without a border style. Width, color, thickness, radius, and border-image sizing declarations alone do not suppress reports.

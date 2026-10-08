@@ -937,7 +937,19 @@ const shorthandControlGroups = [
 	},
 	{declaration: 'outline: 2px blue', controls: ['outline: 2px solid blue', 'outline-style: auto', 'outline-style: none', 'outline-style: var(--style)']},
 	{declaration: 'animation: 2s ease', controls: ['animation: 2s fade', 'animation-name: fade', 'animation-name: none', 'animation-name: var(--name)']},
-	{declaration: 'column-rule: 1px red', controls: ['column-rule: 2px solid blue', 'column-rule-style: solid', 'column-rule-style: none', 'column-rule-style: var(--style)']},
+	{
+		declaration: 'column-rule: 1px red',
+		controls: [
+			'column-rule: 2px solid blue',
+			'column-rule-style: solid',
+			'column-rule-style: none',
+			'column-rule-style: var(--style)',
+			'rule: 2px solid blue',
+			'rule-style: solid',
+			'rule: var(--rule)',
+			'rule-style: bad',
+		],
+	},
 	{declaration: 'text-decoration: wavy red', controls: ['text-decoration: underline', 'text-decoration-line: underline', 'text-decoration-line: none', 'text-decoration-line: var(--line)']},
 ];
 
@@ -955,6 +967,10 @@ test({
 		'a { animation: 2s ease; animation: 3s linear; }',
 		'a { BORDER: 1PX RED; -MOZ-BORDER-STYLE: SOLID; OUTLINE: 2PX BLUE; -MOZ-OUTLINE-STYLE: AUTO; ANIMATION: 2S EASE; -WEBKIT-ANIMATION-NAME: FADE; }',
 		String.raw`a { border: 1px red; border-\73 tyle: solid; outline: 2px blue; -webkit-outline-\73 tyle: auto; animation: 2s ease; -webkit-animation-n\61 me: fade; }`,
+		'a { COLUMN-RULE: 1PX RED; RULE: 2PX SOLID BLUE; }',
+		'a { COLUMN-RULE: 1PX RED; RULE-STYLE: SOLID; }',
+		String.raw`a { column-rule: 1px red; \72 ule: 2px solid blue; }`,
+		String.raw`a { column-rule: 1px red; rule-\73 tyle: solid; }`,
 	],
 	invalid: [],
 });
@@ -964,6 +980,7 @@ test({
 		'a { border: red solid 1px; outline: blue auto 2px; }',
 		'a { border: 1px red; border-style: bad; outline: 2px blue; outline-style: bad; animation: 2s ease; animation-name: 42; }',
 		'a { animation: 2s 2 infinite; }',
+		'a { animation: 2s ease, 3s ease ease ease; }',
 	],
 	invalid: [
 		{
@@ -1048,6 +1065,18 @@ test.snapshot({
 test({
 	valid: [],
 	invalid: [
+		...['row-rule: 2px solid blue', 'rule-width: 2px', 'rule-color: blue'].map(control => ({
+			code: `a { column-rule: 1px red; ${control}; }`,
+			errors: [{messageId: omittedComponentMessageId, data: {property: 'column-rule', component: 'the column rule style'}}],
+		})),
+		{
+			code: 'a { border: 1px red; rule-style: solid; }',
+			errors: [{messageId: omittedComponentMessageId, data: {property: 'border', component: 'the border style'}}],
+		},
+		{
+			code: 'a { rule-style: solid; & b { column-rule: 1px red; } }',
+			errors: [{messageId: omittedComponentMessageId, data: {property: 'column-rule', component: 'the column rule style'}}],
+		},
 		{
 			code: 'a { column-rule: 1px red; text-decoration: wavy red; text-decoration-color: blue; text-decoration-thickness: 2px; }',
 			errors: [
