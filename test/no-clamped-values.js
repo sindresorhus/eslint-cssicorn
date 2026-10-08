@@ -196,3 +196,42 @@ nodeTest('percent signs in comments do not hide calculated bounds', () => {
 		'\'column-count\' evaluates to 0, which the browser clamps to 1.',
 	]);
 });
+
+nodeTest('calculations use the receiving component\'s intrinsic percentage basis', () => {
+	const linter = new Linter();
+	const config = {
+		files: ['**/*.css'],
+		language: 'css/css',
+		plugins: {css, cssicorn: plugin},
+		rules: {'cssicorn/no-clamped-values': 'error'},
+	};
+	for (const [declaration, expected] of [
+		['color: rgb(min(100%, 150%) 0 0)', []],
+		['color: rgb(min(125%, 150%) 0 0)', ['\'rgb() red\' evaluates to 318.75, which the browser clamps to 255.']],
+		['color: rgb(hypot(60%, 80%) 0 0)', []],
+		['color: rgb(hypot(90%, 120%) 0 0)', ['\'rgb() red\' evaluates to 382.5, which the browser clamps to 255.']],
+		['color: lab(min(100%, 150%) 0 0)', []],
+		['color: lab(min(125%, 150%) 0 0)', ['\'lab() lightness\' evaluates to 125, which the browser clamps to 100.']],
+		['color: oklab(min(100%, 150%) 0 0)', []],
+		['color: oklab(min(125%, 150%) 0 0)', ['\'oklab() lightness\' evaluates to 1.25, which the browser clamps to 1.']],
+		['color: lch(50 rem(-25%, 100%) 0)', ['\'lch() chroma\' evaluates to -37.5, which the browser clamps to 0.']],
+		['color: oklch(.5 rem(-25%, 100%) 0)', ['\'oklch() chroma\' evaluates to -0.1, which the browser clamps to 0.']],
+		['filter: grayscale(round(up, 90%, 20%))', []],
+		['filter: grayscale(round(up, 125%, 50%))', ['\'grayscale() amount\' evaluates to 1.5, which the browser clamps to 1.']],
+		['filter: brightness(hypot(90%, 120%))', []],
+		['color: color(display-p3 min(125%, 150%) 0 0)', []],
+	]) {
+		const messages = linter.verify(`a { ${declaration}; }`, config, {filename: 'test.css'});
+		assert.deepEqual(messages.map(message => message.message), expected, declaration);
+	}
+});
+
+test.snapshot({
+	valid: [
+		'a { border-image: url(a) 100% fill / 200% / 2; mask-border: url(a) 100% fill / 200% / 2; }',
+	],
+	invalid: [
+		'a { border-image: url(a) 110% fill / 200% / 2; mask-border: url(a) 110% fill / 200% / 2; }',
+		'a { color: rgb(from rgb(300 0 0 / 50) r g b / .5); }',
+	],
+});
