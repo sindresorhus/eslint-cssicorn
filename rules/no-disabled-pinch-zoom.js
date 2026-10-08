@@ -1,3 +1,5 @@
+// @ts-check
+
 import {isCssModulesInteropDeclaration, normalizeCssIdentifier} from './utils/index.js';
 
 /**
@@ -27,7 +29,7 @@ const create = context => {
 			|| value.type !== 'Value'
 			|| value.children.length === 0
 			|| value.children.length > 2
-			|| value.children.some(node => node.type !== 'Identifier')
+			|| !value.children.every(node => node.type === 'Identifier')
 		) {
 			return;
 		}
