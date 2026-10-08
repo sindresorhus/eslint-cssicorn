@@ -9,7 +9,7 @@
 <!-- end auto-generated rule header -->
 <!-- Do not manually modify this header. Run: `npm run fix:eslint-docs` -->
 
-Prefer individual `translate`, `rotate`, and `scale` properties so states can change one component without repeating a whole `transform` list. This rule offers suggestions because conversion can change behavior.
+Prefer individual `translate`, `rotate`, and `scale` properties so states can change one component without repeating a whole `transform` list. This rule offers suggestions because conversion can change behavior. Review related styles, transitions, animations, and scripts before applying them.
 
 ## Examples
 
@@ -56,11 +56,5 @@ The rule checks single functions and lists with at most one translation, one rot
 It ignores other transform types, repeated or reordered operations, values containing substitutions (such as `var()`) or `random()`, and blocks with fallback transforms, individual transform properties, or motion paths. Keyframes, vendor-prefixed declarations, and CSS Modules `:export`/`:import()` blocks are also ignored.
 
 Declarations containing comments are reported without suggestions.
-
-## Review before accepting a suggestion
-
-Individual properties cascade independently. Review related selectors, transitions targeting `transform`, animations, `will-change`, and scripts. `transform: none` does not reset `translate`, `rotate`, or `scale`.
-
-They apply in the order `translate`, `rotate`, `scale`, before motion paths and `transform`. Also check SVG attributes, 3D rendering, and browser support: removing CSS `transform` can activate an SVG `transform` attribute, and 3D transforms with neutral Z components or Z-axis rotations can become 2D.
 
 See [CSS individual transform properties](https://web.dev/articles/css-individual-transform-properties) and the [CSS Transforms Level 2 specification](https://drafts.csswg.org/css-transforms-2/#individual-transforms).
