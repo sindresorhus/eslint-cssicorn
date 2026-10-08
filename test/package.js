@@ -198,6 +198,8 @@ test('Plugin should have metadata', () => {
 
 // Rules that cannot work well in normal projects. Every other rule belongs in `recommended`.
 const RULES_NOT_RECOMMENDED = new Set([
+	// Component stylesheet policy that intentionally rejects global and reset styles.
+	'require-selector-scope',
 	// Only sees `@keyframes` in the same file.
 	'no-unknown-animations',
 	// Enforces a source order convention, and intentional "specific before general" ordering is common.
@@ -221,4 +223,11 @@ test('rule.meta.docs.recommended should be synchronized with presets', () => {
 		const unopinionatedSeverity = eslintCssicorn.configs.unopinionated.rules[`cssicorn/${name}`];
 		assert.equal(unopinionatedSeverity, recommended === 'unopinionated' ? 'error' : 'off', `'${name}' rule should have the correct severity in the unopinionated config.`);
 	}
+});
+
+test('require-selector-scope is enabled only in the all preset', () => {
+	const ruleId = 'cssicorn/require-selector-scope';
+	assert.equal(eslintCssicorn.configs.recommended.rules[ruleId], 'off');
+	assert.equal(eslintCssicorn.configs.unopinionated.rules[ruleId], 'off');
+	assert.equal(eslintCssicorn.configs.all.rules[ruleId], 'error');
 });
