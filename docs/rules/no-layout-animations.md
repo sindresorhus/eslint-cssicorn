@@ -17,16 +17,14 @@ No autofix or suggestions. Use an ESLint disable comment for intentional excepti
 
 Checks these longhands and their shorthands:
 
-| Category | Longhands |
-| --- | --- |
-| Dimensions | `width`, `height`, `inline-size`, `block-size`, and their `min-` and `max-` variants |
-| Insets | `top`, `right`, `bottom`, `left`, `inset-block-start`, `inset-block-end`, `inset-inline-start`, `inset-inline-end` |
-| Margins and padding | `margin-` and `padding-` followed by `top`, `right`, `bottom`, `left`, `block-start`, `block-end`, `inline-start`, or `inline-end` |
-| Border thickness | `border-` followed by the same physical or logical sides, then `-width` |
-| Gaps | `row-gap`, `column-gap` |
-| Flex sizing | `flex-basis`, `flex-grow`, `flex-shrink` |
-| Grid sizing | `grid-template-columns`, `grid-template-rows`, `grid-auto-columns`, `grid-auto-rows` |
-| Text geometry | `font-size`, `line-height`, `letter-spacing`, `word-spacing` |
+- Dimensions: `width`, `height`, `inline-size`, `block-size`, and their `min-` and `max-` variants.
+- Insets: `top`, `right`, `bottom`, `left`, `inset-block-start`, `inset-block-end`, `inset-inline-start`, `inset-inline-end`.
+- Margins and padding: `margin-` and `padding-` followed by `top`, `right`, `bottom`, `left`, `block-start`, `block-end`, `inline-start`, or `inline-end`.
+- Border thickness: `border-` followed by the same physical or logical sides, then `-width`.
+- Gaps: `row-gap`, `column-gap`.
+- Flex sizing: `flex-basis`, `flex-grow`, `flex-shrink`.
+- Grid sizing: `grid-template-columns`, `grid-template-rows`, `grid-auto-columns`, `grid-auto-rows`.
+- Text geometry: `font-size`, `line-height`, `letter-spacing`, `word-spacing`.
 
 Shorthands include `inset`, `margin`, `padding`, their logical variants, `gap`, `flex`, `grid`, `grid-template`, `font`, and border side, axis, and width shorthands. They report even when only a component such as border color changes.
 
