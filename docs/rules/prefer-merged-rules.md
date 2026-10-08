@@ -51,13 +51,15 @@ Both transformations also work inside nested style rules and grouping rules such
 
 Declaration blocks must contain only declarations, in the same order, with matching values and `!important` flags. Standard property names are compared case-insensitively and CSS escapes are decoded. Custom property names remain case-sensitive, and their raw values are compared exactly. The rule does not equate different colors, numbers, or value keyword spellings.
 
+Nested children are excluded because merging parent selector lists can change the [specificity of `&`](https://drafts.csswg.org/css-nesting/#specificity).
+
 Conditional names are compared case-insensitively with escapes decoded. Conditions are compared using their parsed serialization, without rearranging queries or treating different query syntax as equivalent. Wrapper contents do not need to match.
 
-Only adjacent siblings are considered. Intervening comments or other nodes prevent merging. Exact duplicate selectors are removed from the combined selector list. Declaration order, fallbacks, original spelling, indentation, and line endings are preserved.
+Only adjacent siblings are considered. Intervening comments or other nodes prevent merging. Selectors with identical parsed serialization are kept only once in the combined selector list. Declaration order, fallbacks, original spelling, indentation, and line endings are preserved.
 
 ## Limitations
 
-Selector merging targets current stable Chrome, Firefox, and Safari. It supports common selectors and parsed functions such as `:has()`, `:is()`, `:where()`, `:not()`, and `:nth-child(... of ...)`. Unknown, vendor-specific, unsupported, or uncertain selectors are skipped, including opaque functional arguments, named namespaces, and the attribute `s` modifier. An invalid selector could otherwise invalidate the entire combined selector list.
+Selector merging targets current stable Chrome, Firefox, and Safari. It supports common selectors and parsed functions such as `:has()`, `:is()`, `:where()`, `:not()`, `:dir()`, `:nth-child(... of ...)`, and `::slotted()` with compound selector arguments. Unknown, vendor-specific, unsupported, or uncertain selectors are skipped, including opaque functional arguments, named namespaces, and the attribute `s` modifier. An invalid selector could otherwise invalidate the entire combined selector list.
 
 Empty blocks, keyframe steps, malformed candidates, declaration blocks containing nested rules, and declarations containing explicit `random()` or `random-item()` functions are skipped. Selector merging also skips custom properties with escaped leading dashes because the parser does not retain their raw values. Only `@media`, `@supports`, and `@container` wrappers are merged; `@layer`, `@scope`, and other wrappers remain separate.
 

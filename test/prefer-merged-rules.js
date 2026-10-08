@@ -11,6 +11,15 @@ test({
 	valid: [
 		String.raw`.a { \2d\2d foo: a  b; } .b { \2d\2d foo: a b; }`,
 		String.raw`.a { \2d\2d foo:  red; } .b { \2d\2d foo: red; }`,
+		'.a{color:red}.b:dir(){color:red}',
+		'.a{color:red}.b::dir(rtl){color:red}',
+		'.a{color:red}.b:slotted(.item){color:red}',
+		'.a{color:red}.b::slotted(){color:red}',
+		'.a{color:red}.b::slotted(.item > .child){color:red}',
+		'.a{color:red}.b::slotted(.item)::before{color:red}',
+		'.a{color:red}.b::slotted(:unknown){color:red}',
+		'@container style(--mode: a b){.a{color:red}}@container style(--mode:ab){.b{color:blue}}',
+		'@container style(--mode: a  b){.a{color:red}}@container style(--mode: a b){.b{color:blue}}',
 	],
 	invalid: [{
 		code: '.button { padding: 1rem; border-radius: 0.5rem; }\n.badge { padding: 1rem; border-radius: 0.5rem; }',
@@ -48,6 +57,46 @@ test({
 		code: String.raw`.a { --f\6fo: a  b; } .b { --foo: a  b; }`,
 		output: String.raw`.a, .b { --f\6fo: a  b; }`,
 		errors: [{messageId: 'prefer-merged-rules/selectors'}],
+	}, {
+		code: '.a:dir(ltr){color:red}.b:dir(rtl){color:red}',
+		output: '.a:dir(ltr),.b:dir(rtl){color:red}',
+		errors: [{messageId: 'prefer-merged-rules/selectors'}],
+	}, {
+		code: '.a:DIR(RTL){color:red}.b:dir(auto){color:red}',
+		output: '.a:DIR(RTL),.b:dir(auto){color:red}',
+		errors: [{messageId: 'prefer-merged-rules/selectors'}],
+	}, {
+		code: String.raw`.a:dir(\72tl){color:red}.b:dir(rtl){color:red}`,
+		output: String.raw`.a:dir(\72tl),.b:dir(rtl){color:red}`,
+		errors: [{messageId: 'prefer-merged-rules/selectors'}],
+	}, {
+		code: '.a::slotted(.item){color:red}.b::slotted(#item){color:red}',
+		output: '.a::slotted(.item),.b::slotted(#item){color:red}',
+		errors: [{messageId: 'prefer-merged-rules/selectors'}],
+	}, {
+		code: '.a::SLOTTED(:is(.item,#item)){color:red}.b{color:red}',
+		output: '.a::SLOTTED(:is(.item,#item)),.b{color:red}',
+		errors: [{messageId: 'prefer-merged-rules/selectors'}],
+	}, {
+		code: String.raw`.a::slotted(.\69tem){color:red}.b{color:red}`,
+		output: String.raw`.a::slotted(.\69tem),.b{color:red}`,
+		errors: [{messageId: 'prefer-merged-rules/selectors'}],
+	}, {
+		code: '.a{color:red}\n.a{color:red}\n.b{color:red}',
+		output: '.a,\n.b{color:red}',
+		errors: [{messageId: 'prefer-merged-rules/selectors'}],
+	}, {
+		code: '.parent{@supports (display:grid){--data:{a:b}}@supports (display:grid){color:red}}',
+		output: '.parent{@supports (display:grid){--data:{a:b};color:red}}',
+		errors: [{messageId: 'prefer-merged-rules/conditions'}],
+	}, {
+		code: '.parent{@media all{color:red!important}@media all{background:blue}}',
+		output: '.parent{@media all{color:red!important;background:blue}}',
+		errors: [{messageId: 'prefer-merged-rules/conditions'}],
+	}, {
+		code: '@media all{@layer{.a{color:red}}}@media all{@layer{.b{color:blue}}}',
+		output: '@media all{@layer{.a{color:red}}@layer{.b{color:blue}}}',
+		errors: [{messageId: 'prefer-merged-rules/conditions'}],
 	}],
 });
 

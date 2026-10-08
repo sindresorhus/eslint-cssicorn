@@ -84,19 +84,37 @@ const NON_FUNCTIONAL_PSEUDOS = new Set([
 	':valid',
 	':visited',
 ]);
-const FUNCTIONAL_PSEUDOS = new Set(['has', 'host', 'is', 'lang', 'not', 'nth-child', 'nth-last-child', 'nth-last-of-type', 'nth-of-type', 'where']);
+const FUNCTIONAL_PSEUDOS = new Set([
+	'::slotted',
+	':dir',
+	':has',
+	':host',
+	':is',
+	':lang',
+	':not',
+	':nth-child',
+	':nth-last-child',
+	':nth-last-of-type',
+	':nth-of-type',
+	':where',
+]);
 
 const hasNamedNamespace = name => name.includes('|') && !name.startsWith('*|') && !name.startsWith('|');
 const isCustomProperty = property => decodeCssIdentifier(property).startsWith('--');
 
 const isUncertainPseudo = node => {
 	const name = normalizeCssIdentifier(node.name);
+	const pseudo = (node.type === 'PseudoElementSelector' ? '::' : ':') + name;
 	if (node.children === null) {
-		return !NON_FUNCTIONAL_PSEUDOS.has((node.type === 'PseudoElementSelector' ? '::' : ':') + name);
+		return !NON_FUNCTIONAL_PSEUDOS.has(pseudo);
 	}
 
-	if (node.type !== 'PseudoClassSelector' || !FUNCTIONAL_PSEUDOS.has(name)) {
+	if (!FUNCTIONAL_PSEUDOS.has(pseudo)) {
 		return true;
+	}
+
+	if (name === 'dir') {
+		return node.children.length !== 1 || node.children.at(0)?.type !== 'Identifier';
 	}
 
 	if (name === 'lang') {
