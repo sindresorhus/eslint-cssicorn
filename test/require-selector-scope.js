@@ -5,6 +5,7 @@ const {test} = getTester(import.meta);
 test({
 	valid: [
 		'.card { :nth-child(2n of :is(&, .local)) {} }',
+		'.card { :unknown(/* & */ button) {} }',
 	],
 	invalid: [
 		{
@@ -25,6 +26,10 @@ test({
 		{
 			code: '.card { :nth-child(2n of :is(&, button)) {} }',
 			errors: [{messageId: 'require-selector-scope'}],
+		},
+		{
+			code: '.card { :not(&), button {} }',
+			errors: [{messageId: 'require-selector-scope', column: 9, endColumn: 16}],
 		},
 	],
 });
