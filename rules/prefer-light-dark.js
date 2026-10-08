@@ -7,13 +7,14 @@ import {areEqualValues} from './shared/css-shorthand-values.js';
 import {
 	decodeCssIdentifier,
 	hasCommentInRange,
+	isBareRootRule,
 	isCssModulesInteropDeclaration,
 	normalizeCssIdentifier,
 	toAsciiLowerCase,
 } from './utils/index.js';
 
 /**
-@import {AtrulePlain, BlockPlain, ConditionPlain, CssNode, CssNodePlain, DeclarationPlain, MediaQueryPlain, RulePlain, SelectorPlain, StyleSheetPlain, Value} from '@eslint/css-tree';
+@import {AtrulePlain, BlockPlain, ConditionPlain, CssNode, CssNodePlain, DeclarationPlain, MediaQueryPlain, RulePlain, StyleSheetPlain, Value} from '@eslint/css-tree';
 @import {CssicornContext} from './rule/cssicorn-context.js';
 @import {CssicornRule} from './rule/to-eslint-rule.js';
 @import {CssicornProblem} from './rule/to-eslint-problem.js';
@@ -112,25 +113,6 @@ const hasCompatibleScheme = declarations => {
 	const schemes = getSchemes(declarations);
 	return schemes.length === 0 || (schemes.length === 1 && isDualColorScheme(schemes[0]));
 };
-
-/**
-@param {RulePlain} rule
-*/
-function isBareRootRule(rule) {
-	if (rule.prelude?.type !== 'SelectorList' || rule.prelude.children.length !== 1) {
-		return false;
-	}
-
-	// SelectorListPlain.children is currently broader than the parser's SelectorPlain[] result.
-	const [rootSelector] = /** @type {SelectorPlain[]} */ (rule.prelude.children);
-	if (rootSelector.children.length !== 1) {
-		return false;
-	}
-
-	const [selector] = rootSelector.children;
-	return (selector.type === 'TypeSelector' && normalizeCssIdentifier(selector.name) === 'html')
-		|| (selector.type === 'PseudoClassSelector' && normalizeCssIdentifier(selector.name) === 'root' && !selector.children);
-}
 
 /**
 @param {StyleSheetPlain} container

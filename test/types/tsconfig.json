@@ -8,5 +8,5 @@
 		"module": "NodeNext",
 		"target": "ES2024"
 	},
-	"include": ["*.ts", "../../rules/rule/*.js", "../../rules/no-disabled-pinch-zoom.js", "../../rules/no-nesting-with-mixed-specificity.js", "../../rules/no-redundant-nesting-selector.js", "../../rules/prefer-current-color.js", "../../rules/prefer-existing-custom-properties.js", "../../rules/prefer-light-dark.js", "../../rules/require-prefers-reduced-motion.js", "../../rules/shared/css-animations.js", "../../rules/shared/css-colors.js", "../../rules/shared/css-numeric-literals.js"]
+	"include": ["*.ts", "../../rules/rule/*.js", "../../rules/no-disabled-pinch-zoom.js", "../../rules/no-nesting-with-mixed-specificity.js", "../../rules/no-redundant-nesting-selector.js", "../../rules/prefer-current-color.js", "../../rules/prefer-existing-custom-properties.js", "../../rules/prefer-light-dark.js", "../../rules/prefer-relative-colors.js", "../../rules/require-prefers-reduced-motion.js", "../../rules/shared/css-animations.js", "../../rules/shared/css-colors.js", "../../rules/shared/css-numeric-literals.js"]
 }
