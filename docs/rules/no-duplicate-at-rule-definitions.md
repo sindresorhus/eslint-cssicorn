@@ -9,13 +9,13 @@
 
 <!-- This rule compares named definitions within the same parent. -->
 
-Repeated named definitions often come from copying or merging stylesheets. For example, two same-name [`@keyframes` blocks](https://www.w3.org/TR/css-animations/#keyframes) do not combine their animation tracks; a later definition can replace the earlier one.
+Reports repeated names in `@keyframes`, `@property`, `@counter-style`, and `@position-try` within the same immediate parent in one file. Each repetition points to the first definition. Other at-rules, including `@layer`, are ignored.
 
-This rule reports repeated names in `@keyframes`, `@property`, `@counter-style`, and `@position-try` definitions that share the same immediate parent within one file. Every repetition refers to the first definition's line. Other at-rules, including merging constructs such as `@layer`, are ignored.
+Later definitions can replace earlier ones; [`@keyframes` blocks](https://www.w3.org/TR/css-animations/#keyframes) do not merge.
 
-At-rule names are ASCII case-insensitive. Definition names are compared case-sensitively after decoding CSS escapes, except [predefined counter-style names](https://drafts.csswg.org/css-counter-styles-3/#the-counter-style-rule), which are ASCII case-insensitive. Quoted and unquoted keyframe names are equivalent. Each at-rule kind is checked independently, and prefixed and unprefixed keyframes are compared separately to allow compatibility declarations.
+Names are compared after decoding CSS escapes. Definition names are case-sensitive, except [predefined counter-style names](https://drafts.csswg.org/css-counter-styles-3/#the-counter-style-rule), which are ASCII case-insensitive. At-rule names are also ASCII case-insensitive. Different kinds and vendor prefixes are checked separately. Quoted and unquoted keyframe names are equivalent.
 
-The rule provides no automatic fixes or suggestions because choosing which definition to keep requires author intent.
+No fixes or suggestions are provided because choosing which definition to keep requires author intent.
 
 ## Examples
 
@@ -33,27 +33,14 @@ The rule provides no automatic fixes or suggestions because choosing which defin
 
 ```css
 /* ❌ */
-@property --accent {
-	syntax: "<color>";
-	inherits: false;
-	initial-value: red;
-}
-
-@property --accent {
-	syntax: "<color>";
-	inherits: false;
-	initial-value: blue;
-}
+@property --accent { syntax: "<color>"; inherits: false; initial-value: red; }
+@property --accent { syntax: "<color>"; inherits: false; initial-value: blue; }
 
 /* ✅ */
-@property --accent {
-	syntax: "<color>";
-	inherits: false;
-	initial-value: blue;
-}
+@property --accent { syntax: "<color>"; inherits: false; initial-value: blue; }
 ```
 
-Comma-separated `@property` registrations from the [current editor's draft](https://drafts.css-houdini.org/css-properties-values-api/#at-property-rule) are checked per name. Repeated names within one list are also reported.
+Comma-separated `@property` names are checked individually, including repetitions within a list ([editor's draft](https://drafts.css-houdini.org/css-properties-values-api/#at-property-rule)).
 
 ```css
 /* ❌ */
@@ -65,16 +52,7 @@ Comma-separated `@property` registrations from the [current editor's draft](http
 ```
 
 > [!NOTE]
-> `@property` definitions are checked regardless of descriptor validity. Browsers use the last [valid registration](https://www.w3.org/TR/css-properties-values-api-1/#at-property-rule), so intentional registration fallbacks can be reported. Use `/* eslint-disable-next-line cssicorn/no-duplicate-at-rule-definitions -- Intentional compatibility fallback. */` before an intentional repetition.
-
-```css
-/* ❌ */
-@counter-style markers { system: cyclic; symbols: "•"; }
-@counter-style markers { system: cyclic; symbols: "*"; }
-
-/* ✅ */
-@counter-style markers { system: cyclic; symbols: "*"; }
-```
+> `@property` is checked regardless of [registration validity](https://www.w3.org/TR/css-properties-values-api-1/#at-property-rule), so intentional fallbacks can be reported. Suppress them with `/* eslint-disable-next-line cssicorn/no-duplicate-at-rule-definitions -- Intentional compatibility fallback. */` before the repeated definition.
 
 ```css
 /* ❌ */
@@ -95,7 +73,7 @@ Comma-separated `@property` registrations from the [current editor's draft](http
 @position-try --below { position-area: bottom; }
 ```
 
-Definitions in separate parent blocks are allowed, even when the conditions or layer names are identical. These definitions can still override one another in browsers:
+Separate parent blocks are allowed, even with identical conditions or layer names. These definitions can still override each other in browsers:
 
 ```css
 /* ✅ */
@@ -108,7 +86,7 @@ Definitions in separate parent blocks are allowed, even when the conditions or l
 }
 ```
 
-Compatibility pairs are allowed, while repeated definitions with the same prefix are reported:
+Prefixed and unprefixed keyframes can coexist:
 
 ```css
 /* ✅ */
