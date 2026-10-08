@@ -582,6 +582,76 @@ Message:
 
 `;
 
+exports[`invalid(45): @counter-style upper-roman {} @counter-style UPPER-ROMAN {} 1`] = `
+
+  1 | @counter-style upper-roman {} @counter-style UPPER-ROMAN {}
+
+`;
+
+exports[`invalid(45): @counter-style upper-roman {} @counter-style UPPER-ROMAN {} 2`] = `
+
+Message:
+> 1 | @counter-style upper-roman {} @counter-style UPPER-ROMAN {}
+    |                                              ^^^^^^^^^^^ Duplicate \`@counter-style\` definition \`UPPER-ROMAN\`. The first definition is on line 1.
+
+`;
+
+exports[`invalid(46): @counter-style LOWER-LATIN {} @counter-style lower-latin {} 1`] = `
+
+  1 | @counter-style LOWER-LATIN {} @counter-style lower-latin {}
+
+`;
+
+exports[`invalid(46): @counter-style LOWER-LATIN {} @counter-style lower-latin {} 2`] = `
+
+Message:
+> 1 | @counter-style LOWER-LATIN {} @counter-style lower-latin {}
+    |                                              ^^^^^^^^^^^ Duplicate \`@counter-style\` definition \`lower-latin\`. The first definition is on line 1.
+
+`;
+
+exports[`invalid(47): @counter-style cjk-earthly-branch {} @counter-style CJK-EARTHLY-BRANCH {} 1`] = `
+
+  1 | @counter-style cjk-earthly-branch {} @counter-style CJK-EARTHLY-BRANCH {}
+
+`;
+
+exports[`invalid(47): @counter-style cjk-earthly-branch {} @counter-style CJK-EARTHLY-BRANCH {} 2`] = `
+
+Message:
+> 1 | @counter-style cjk-earthly-branch {} @counter-style CJK-EARTHLY-BRANCH {}
+    |                                                     ^^^^^^^^^^^^^^^^^^ Duplicate \`@counter-style\` definition \`CJK-EARTHLY-BRANCH\`. The first definition is on line 1.
+
+`;
+
+exports[`invalid(48): @COUNTER-STYLE JAPANESE-FORMAL {} @counter-style japanese-formal {} 1`] = `
+
+  1 | @COUNTER-STYLE JAPANESE-FORMAL {} @counter-style japanese-formal {}
+
+`;
+
+exports[`invalid(48): @COUNTER-STYLE JAPANESE-FORMAL {} @counter-style japanese-formal {} 2`] = `
+
+Message:
+> 1 | @COUNTER-STYLE JAPANESE-FORMAL {} @counter-style japanese-formal {}
+    |                                                  ^^^^^^^^^^^^^^^ Duplicate \`@counter-style\` definition \`japanese-formal\`. The first definition is on line 1.
+
+`;
+
+exports[`invalid(49): @counter-style ETHIOPIC-NUMERIC {} @counter-style ethiopic-numeric {} 1`] = `
+
+  1 | @counter-style ETHIOPIC-NUMERIC {} @counter-style ethiopic-numeric {}
+
+`;
+
+exports[`invalid(49): @counter-style ETHIOPIC-NUMERIC {} @counter-style ethiopic-numeric {} 2`] = `
+
+Message:
+> 1 | @counter-style ETHIOPIC-NUMERIC {} @counter-style ethiopic-numeric {}
+    |                                                   ^^^^^^^^^^^^^^^^ Duplicate \`@counter-style\` definition \`ethiopic-numeric\`. The first definition is on line 1.
+
+`;
+
 exports[`invalid(5): @keyframes fade {} a { color: red; } @keyframes slide {} @keyframes fade {} 1`] = `
 
   1 | @keyframes fade {} a { color: red; } @keyframes slide {} @keyframes fade {}
@@ -593,6 +663,62 @@ exports[`invalid(5): @keyframes fade {} a { color: red; } @keyframes slide {} @k
 Message:
 > 1 | @keyframes fade {} a { color: red; } @keyframes slide {} @keyframes fade {}
     |                                                                     ^^^^ Duplicate \`@keyframes\` definition \`fade\`. The first definition is on line 1.
+
+`;
+
+exports[`invalid(50): @counter-style cjk-ideographic {} @counter-style CJK-IDEOGRAPHIC {} 1`] = `
+
+  1 | @counter-style cjk-ideographic {} @counter-style CJK-IDEOGRAPHIC {}
+
+`;
+
+exports[`invalid(50): @counter-style cjk-ideographic {} @counter-style CJK-IDEOGRAPHIC {} 2`] = `
+
+Message:
+> 1 | @counter-style cjk-ideographic {} @counter-style CJK-IDEOGRAPHIC {}
+    |                                                  ^^^^^^^^^^^^^^^ Duplicate \`@counter-style\` definition \`CJK-IDEOGRAPHIC\`. The first definition is on line 1.
+
+`;
+
+exports[`invalid(51): @counter-style decimal {} @counter-style DECIMAL {} 1`] = `
+
+  1 | @counter-style decimal {} @counter-style DECIMAL {}
+
+`;
+
+exports[`invalid(51): @counter-style decimal {} @counter-style DECIMAL {} 2`] = `
+
+Message:
+> 1 | @counter-style decimal {} @counter-style DECIMAL {}
+    |                                          ^^^^^^^ Duplicate \`@counter-style\` definition \`DECIMAL\`. The first definition is on line 1.
+
+`;
+
+exports[`invalid(52): @counter-style \\75 pper-roman {} @counter-style UPPER-ROMAN {} 1`] = `
+
+  1 | @counter-style \\75 pper-roman {} @counter-style UPPER-ROMAN {}
+
+`;
+
+exports[`invalid(52): @counter-style \\75 pper-roman {} @counter-style UPPER-ROMAN {} 2`] = `
+
+Message:
+> 1 | @counter-style \\75 pper-roman {} @counter-style UPPER-ROMAN {}
+    |                                                 ^^^^^^^^^^^ Duplicate \`@counter-style\` definition \`UPPER-ROMAN\`. The first definition is on line 1.
+
+`;
+
+exports[`invalid(53): @media (width > 40rem) { @counter-style upper-roman {} @counter-style UPPER-ROMAN {} } 1`] = `
+
+  1 | @media (width > 40rem) { @counter-style upper-roman {} @counter-style UPPER-ROMAN {} }
+
+`;
+
+exports[`invalid(53): @media (width > 40rem) { @counter-style upper-roman {} @counter-style UPPER-ROMAN {} } 2`] = `
+
+Message:
+> 1 | @media (width > 40rem) { @counter-style upper-roman {} @counter-style UPPER-ROMAN {} }
+    |                                                                       ^^^^^^^^^^^ Duplicate \`@counter-style\` definition \`UPPER-ROMAN\`. The first definition is on line 1.
 
 `;
 

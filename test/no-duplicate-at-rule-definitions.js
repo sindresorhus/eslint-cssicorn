@@ -52,8 +52,14 @@ test.snapshot({
 		'@keyframes fade, slide {} @keyframes fade, slide {}',
 		'@counter-style dots, stars {} @counter-style dots, stars {}',
 		'@position-try --above, --below {} @position-try --above, --below {}',
-		// Predefined counter-style case aliases are intentionally not resolved.
-		'@counter-style upper-roman {} @counter-style UPPER-ROMAN {}',
+		// Predefined styles with different names remain independent.
+		'@counter-style LOWER-ALPHA {} @counter-style LOWER-LATIN {}',
+		'@counter-style CJK-IDEOGRAPHIC {} @counter-style TRAD-CHINESE-INFORMAL {}',
+		'@counter-style upper-roman-custom {} @counter-style UPPER-ROMAN-CUSTOM {}',
+		'@counter-style KHMER {} @counter-style khmer {}',
+		String.raw`@counter-style \5c 75PPER-ROMAN {} @counter-style upper-roman {}`,
+		'@keyframes upper-roman {} @keyframes UPPER-ROMAN {}',
+		'@layer theme { @counter-style upper-roman {} } @layer theme { @counter-style UPPER-ROMAN {} }',
 		'a { --definition: "@keyframes fade {} @keyframes fade {}"; background: url("@keyframes fade {}"); }',
 		'@property --color {}\n/* eslint-disable-next-line rule-to-test/no-duplicate-at-rule-definitions */\n@property --color {}',
 		{
@@ -107,12 +113,44 @@ test.snapshot({
 		'@property --color, --size {} @property --color, --size {} @property --color {}',
 		String.raw`@\70 roperty --c\6f lor, --size {} @PROPERTY --color {}`,
 		'@media (width > 40rem) { @property --color, --size {} @property --size {} }',
+		'@counter-style upper-roman {} @counter-style UPPER-ROMAN {}',
+		'@counter-style LOWER-LATIN {} @counter-style lower-latin {}',
+		'@counter-style cjk-earthly-branch {} @counter-style CJK-EARTHLY-BRANCH {}',
+		'@COUNTER-STYLE JAPANESE-FORMAL {} @counter-style japanese-formal {}',
+		'@counter-style ETHIOPIC-NUMERIC {} @counter-style ethiopic-numeric {}',
+		'@counter-style cjk-ideographic {} @counter-style CJK-IDEOGRAPHIC {}',
+		'@counter-style decimal {} @counter-style DECIMAL {}',
+		String.raw`@counter-style \75 pper-roman {} @counter-style UPPER-ROMAN {}`,
+		'@media (width > 40rem) { @counter-style upper-roman {} @counter-style UPPER-ROMAN {} }',
 	],
 });
 
 test({
 	valid: [],
 	invalid: [
+		{
+			code: '@counter-style upper-roman {}\r\n/* keep */ @counter-style UPPER-ROMAN {}\r\n@counter-style UpPeR-RoMaN {}',
+			errors: [
+				{
+					messageId: 'no-duplicate-at-rule-definitions',
+					data: {atRule: 'counter-style', name: 'UPPER-ROMAN', line: '1'},
+					line: 2,
+					column: 27,
+					endLine: 2,
+					endColumn: 38,
+					suggestions: [],
+				},
+				{
+					messageId: 'no-duplicate-at-rule-definitions',
+					data: {atRule: 'counter-style', name: 'UpPeR-RoMaN', line: '1'},
+					line: 3,
+					column: 16,
+					endLine: 3,
+					endColumn: 27,
+					suggestions: [],
+				},
+			],
+		},
 		{
 			code: '@property --color,\r\n  --size {}\r\n/* keep */ @property --size, --color {}',
 			errors: [

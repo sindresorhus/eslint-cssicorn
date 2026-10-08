@@ -1,5 +1,10 @@
 // @ts-check
-import {decodeCssIdentifier, isKeyframesAtRule, normalizeCssIdentifier} from './utils/index.js';
+import {
+	decodeCssIdentifier,
+	isKeyframesAtRule,
+	normalizeCssIdentifier,
+	toAsciiLowerCase,
+} from './utils/index.js';
 
 /**
 @import {Identifier, StringNode} from '@eslint/css-tree';
@@ -13,6 +18,74 @@ const messages = {
 };
 
 const definitionAtRules = new Set(['property', 'counter-style', 'position-try']);
+
+// Predefined names in CSS Counter Styles Level 3: https://drafts.csswg.org/css-counter-styles-3/#predefined-counters
+const predefinedCounterStyleNames = new Set([
+	'arabic-indic',
+	'armenian',
+	'bengali',
+	'cambodian',
+	'circle',
+	'cjk-decimal',
+	'cjk-earthly-branch',
+	'cjk-heavenly-stem',
+	'cjk-ideographic',
+	'decimal',
+	'decimal-leading-zero',
+	'devanagari',
+	'disc',
+	'disclosure-closed',
+	'disclosure-open',
+	'ethiopic-numeric',
+	'georgian',
+	'gujarati',
+	'gurmukhi',
+	'hebrew',
+	'hiragana',
+	'hiragana-iroha',
+	'japanese-formal',
+	'japanese-informal',
+	'kannada',
+	'katakana',
+	'katakana-iroha',
+	'khmer',
+	'korean-hangul-formal',
+	'korean-hanja-formal',
+	'korean-hanja-informal',
+	'lao',
+	'lower-alpha',
+	'lower-armenian',
+	'lower-greek',
+	'lower-latin',
+	'lower-roman',
+	'malayalam',
+	'mongolian',
+	'myanmar',
+	'oriya',
+	'persian',
+	'simp-chinese-formal',
+	'simp-chinese-informal',
+	'square',
+	'tamil',
+	'telugu',
+	'thai',
+	'tibetan',
+	'trad-chinese-formal',
+	'trad-chinese-informal',
+	'upper-alpha',
+	'upper-armenian',
+	'upper-latin',
+	'upper-roman',
+]);
+
+/**
+@param {string} name
+@returns {string}
+*/
+function normalizeCounterStyleName(name) {
+	const lowerCaseName = toAsciiLowerCase(name);
+	return predefinedCounterStyleNames.has(lowerCaseName) ? lowerCaseName : name;
+}
 
 /**
 @param {CssicornContext} context
@@ -59,7 +132,8 @@ const create = context => {
 				}
 
 				const name = nameNode.type === 'Identifier' ? decodeCssIdentifier(nameNode.name) : nameNode.value;
-				const key = `${atRuleName}/${name}`;
+				const comparisonName = atRuleName === 'counter-style' ? normalizeCounterStyleName(name) : name;
+				const key = `${atRuleName}/${comparisonName}`;
 				const firstDefinition = firstDefinitions.get(key);
 				if (!firstDefinition) {
 					firstDefinitions.set(key, nameNode);

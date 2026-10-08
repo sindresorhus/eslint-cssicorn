@@ -13,7 +13,7 @@ Repeated named definitions often come from copying or merging stylesheets. For e
 
 This rule reports repeated names in `@keyframes`, `@property`, `@counter-style`, and `@position-try` definitions that share the same immediate parent within one file. Every repetition refers to the first definition's line. Other at-rules, including merging constructs such as `@layer`, are ignored.
 
-At-rule names are ASCII case-insensitive. Definition names are compared case-sensitively after decoding CSS escapes. Quoted and unquoted keyframe names are equivalent. Each at-rule kind is checked independently, and prefixed and unprefixed keyframes are compared separately to allow compatibility declarations.
+At-rule names are ASCII case-insensitive. Definition names are compared case-sensitively after decoding CSS escapes, except [predefined counter-style names](https://drafts.csswg.org/css-counter-styles-3/#the-counter-style-rule), which are ASCII case-insensitive. Quoted and unquoted keyframe names are equivalent. Each at-rule kind is checked independently, and prefixed and unprefixed keyframes are compared separately to allow compatibility declarations.
 
 The rule provides no automatic fixes or suggestions because choosing which definition to keep requires author intent.
 
@@ -64,6 +64,9 @@ Comma-separated `@property` registrations from the [current editor's draft](http
 @property --width, --height { syntax: "*"; inherits: false; }
 ```
 
+> [!NOTE]
+> `@property` definitions are checked regardless of descriptor validity. Browsers use the last [valid registration](https://www.w3.org/TR/css-properties-values-api-1/#at-property-rule), so intentional registration fallbacks can be reported. Use `/* eslint-disable-next-line cssicorn/no-duplicate-at-rule-definitions -- Intentional compatibility fallback. */` before an intentional repetition.
+
 ```css
 /* ❌ */
 @counter-style markers { system: cyclic; symbols: "•"; }
@@ -71,6 +74,15 @@ Comma-separated `@property` registrations from the [current editor's draft](http
 
 /* ✅ */
 @counter-style markers { system: cyclic; symbols: "*"; }
+```
+
+```css
+/* ❌ */
+@counter-style upper-roman { system: cyclic; symbols: "*"; }
+@counter-style UPPER-ROMAN { system: cyclic; symbols: "•"; }
+
+/* ✅ */
+@counter-style upper-roman { system: cyclic; symbols: "•"; }
 ```
 
 ```css
@@ -103,9 +115,3 @@ Compatibility pairs are allowed, while repeated definitions with the same prefix
 @-webkit-keyframes fade { to { opacity: 1; } }
 @keyframes fade { to { opacity: 1; } }
 ```
-
-## Limitations
-
-`@property` definitions are checked regardless of descriptor validity. Browsers use the last [valid registration](https://www.w3.org/TR/css-properties-values-api-1/#at-property-rule), so intentional registration fallbacks can be reported. Use `/* eslint-disable-next-line cssicorn/no-duplicate-at-rule-definitions -- Intentional compatibility fallback. */` before an intentional repetition.
-
-[Predefined counter-style names](https://drafts.csswg.org/css-counter-styles-3/#the-counter-style-rule) have case aliases in browsers. This rule does not resolve those aliases, so `upper-roman` and `UPPER-ROMAN` are not reported as duplicates. Custom counter-style names remain case-sensitive.
