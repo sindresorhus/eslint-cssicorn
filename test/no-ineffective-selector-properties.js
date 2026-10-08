@@ -227,6 +227,21 @@ test({
 			errors: 1,
 		},
 		{
+			code: '::HIGHLIGHT(example) { padding: 1rem; color: red; }',
+			output: '::HIGHLIGHT(example) {  color: red; }',
+			errors: [{messageId: 'no-ineffective-selector-properties', data: {property: 'padding', selectors: '::highlight'}}],
+		},
+		{
+			code: String.raw`::highl\69 ght(example) { padding: 1rem; color: red; }`,
+			output: String.raw`::highl\69 ght(example) {  color: red; }`,
+			errors: [{messageId: 'no-ineffective-selector-properties', data: {property: 'padding', selectors: '::highlight'}}],
+		},
+		{
+			code: String.raw`::selection { @l\61 yer example { padding: 1rem; color: red; } }`,
+			output: String.raw`::selection { @l\61 yer example {  color: red; } }`,
+			errors: 1,
+		},
+		{
 			code: '::selection {\n  padding: 1rem;\n  color: red;\n}',
 			output: '::selection {\n  \n  color: red;\n}',
 			errors: 1,
