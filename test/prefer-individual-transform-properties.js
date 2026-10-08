@@ -1,8 +1,10 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import css from '@eslint/css';
+import {lexer, parse, walk} from '@eslint/css-tree';
 import {Linter} from 'eslint';
 import plugin from '../index.js';
+import {normalizeCssIdentifier} from '../rules/utils/index.js';
 import {getTester} from './utils/test.js';
 
 const {test: ruleTest} = getTester(import.meta);
@@ -41,6 +43,11 @@ const conversions = [
 	['scale(clamp(1, 2, 3), calc(1 + 2))', 'scale: clamp(1, 2, 3) calc(1 + 2)'],
 	['TRANSLATEY(-2PX) ROTATEZ(45DEG) SCALE(2)', 'translate: 0 -2PX; rotate: 45DEG; scale: 2'],
 	[String.raw`tr\61 nslateX(1p\78) r\6f tate(45d\65 g)`, String.raw`translate: 1p\78; rotate: 45d\65 g`],
+	[String.raw`translate(1p\78, 2px)`, String.raw`translate: 1p\78  2px`],
+	[String.raw`translate(1p\000078, 2px)`, String.raw`translate: 1p\000078  2px`],
+	[String.raw`translate(1p\78 , 2px)`, String.raw`translate: 1p\78  2px`],
+	[String.raw`translate3d(1p\78, 2p\78, 3px)`, String.raw`translate: 1p\78  2p\78  3px`],
+	[String.raw`scale(c\61 lc(1 + 1))`, String.raw`scale: c\61 lc(1 + 1)`],
 	...['0', '-0', '+0', '.0', '0.00', '0e10', '-0E-2'].map(angle => [`rotate(${angle})`, `rotate: ${angle}deg`]),
 	['rotateX(0)', 'rotate: x 0deg'],
 	['rotateY(0)', 'rotate: y 0deg'],
@@ -103,6 +110,7 @@ ruleTest({
 			'transform: scale(2)',
 			'-webkit-transform: scale(2)',
 			'-moz-transform: scale(2)',
+			'-WEBKIT-TRANSFORM: scale(2)',
 			'translate: none',
 			'rotate: 45deg',
 			'scale: 1',
@@ -138,6 +146,7 @@ ruleTest({
 		['a {\r\n  transform: translate(1px) scale(2) !important\r\n}', 'a {\r\n  translate: 1px !important;\r\n  scale: 2 !important\r\n}'],
 		['a {\n  transform:\n    translate(1px) scale(2);\n}', 'a {\n  translate:\n    1px;\n  scale:\n    2;\n}'],
 		['a { /* before */ transform: scale(2); /* after */ }', 'a { /* before */ scale: 2; /* after */ }'],
+		['a {\n  transform: translate(1px) scale(2) \t\n}', 'a {\n  translate: 1px;\n  scale: 2 \t\n}'],
 	].map(([code, output]) => ({code, errors: [{messageId: 'prefer-individual-transform-properties/error', suggestions: [{messageId: 'prefer-individual-transform-properties/suggestion', output}]}]})),
 });
 
@@ -157,6 +166,7 @@ ruleTest.snapshot({
 		'@layer buttons { a { transform: scale(2); } }',
 		'@scope (.buttons) { a { transform: scale(2); } }',
 		'a { @media (width > 10px) { transform: scale(2); } }',
+		'a { translate: 1px; transform: scale(2); } b { transform: scale(3); }',
 	],
 });
 
@@ -179,6 +189,33 @@ test('suggestions replace whole declarations without automatic fixes', () => {
 		const {range, text} = result.messages[0].suggestions[0].fix;
 		const output = code.slice(0, range[0]) + text + code.slice(range[1]);
 		assert.deepEqual(linter.verify(output, config, {filename: 'test.css'}), []);
+		// Reparse the actual suggestion to catch token boundaries that change when removing function syntax.
+		const stylesheet = parse(output);
+		walk(stylesheet, {
+			leave(node) {
+				switch (node.type) {
+					case 'Dimension': {
+						node.unit = normalizeCssIdentifier(node.unit);
+
+						break;
+					}
+
+					case 'Function':
+					case 'Identifier': {
+						node.name = normalizeCssIdentifier(node.name);
+
+						break;
+					}
+
+					case 'Declaration': {
+						assert.ok(lexer.matchProperty(node.property, node.value).matched, `${node.property} has a valid value after converting ${value}`);
+
+						break;
+					}
+				// No default
+				}
+			},
+		});
 	}
 });
 

@@ -45,7 +45,8 @@ function getPropertyValue(arguments_, property, variant) {
 		arguments_.push(neutral);
 	}
 
-	return arguments_.join(' ');
+	// Hex escapes consume one following whitespace character, so they need an extra space before another component.
+	return arguments_.map((argument, index) => index < arguments_.length - 1 && /\\[\da-f]{1,6}$/iv.test(argument) ? `${argument} ` : argument).join(' ');
 }
 
 function getTransformProperties(value, sourceCode) {

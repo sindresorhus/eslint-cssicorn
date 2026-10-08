@@ -80,6 +80,23 @@ Suggestion 1/1: Convert to individual transform properties.:
 
 `;
 
+exports[`invalid(14): a { translate: 1px; transform: scale(2); } b { transform: scale(3); } 1`] = `
+
+  1 | a { translate: 1px; transform: scale(2); } b { transform: scale(3); }
+
+`;
+
+exports[`invalid(14): a { translate: 1px; transform: scale(2); } b { transform: scale(3); } 2`] = `
+
+Message:
+> 1 | a { translate: 1px; transform: scale(2); } b { transform: scale(3); }
+    |                                                ^^^^^^^^^^^^^^^^^^^ Prefer individual transform properties over this \`transform\` declaration.
+
+Suggestion 1/1: Convert to individual transform properties.:
+  1 | a { translate: 1px; transform: scale(2); } b { scale: 3; }
+
+`;
+
 exports[`invalid(2): a { transform: translate(1px) /* keep */ scale(2); } 1`] = `
 
   1 | a { transform: translate(1px) /* keep */ scale(2); }
