@@ -51,6 +51,7 @@ test.snapshot({
 		'.button:nth-last-child(odd of .item, :hover) {}',
 		':is(.item, [hidden], :hover) {}',
 		':is(.item > a, b.item) {}',
+		':is(:nth-child(2n of .item), .other.active) {}',
 		':is(:hover) {}',
 		':nth-child(2n) {}',
 		':nth-last-child(odd) {}',
@@ -167,6 +168,7 @@ test.snapshot({
 		':is(:unknown, .item, #featured) {}',
 		'.root { :nth-last-child(odd of &&, &) {} }',
 		':nth-child(2n of :is(.item, #featured), .other) {}',
+		'::slotted(:is(.item, #featured)) {}',
 	],
 });
 
