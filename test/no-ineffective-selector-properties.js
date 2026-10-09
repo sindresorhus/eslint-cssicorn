@@ -479,7 +479,6 @@ test({
 		'video::cue span { padding: 1rem; }',
 		'video::cue { & { padding: 1rem; } }',
 		'video::cue { @scope (.ordinary) { padding: 1rem; } }',
-		'video::cue-region { padding: 1rem; }',
 		'video::cue:global(.ordinary) { padding: 1rem; }',
 	],
 	invalid: [
@@ -531,6 +530,55 @@ test({
 		{
 			code: 'video::cue {\r\n  padding: 1rem;\r\n  color: yellow;\r\n}',
 			output: 'video::cue {\r\n  \r\n  color: yellow;\r\n}',
+			errors: 1,
+		},
+	],
+});
+
+test({
+	valid: [
+		...['video::cue-region', 'video::cue-region(#captions)'].map(selector => `${selector} { background: yellow; background-position-x: 1px; opacity: 0.5; font: bold 1rem/2 serif; }`),
+		'video::cue-region(#captions) { background-image: url(image.png); outline: 1px solid red; text-shadow: 1px 1px red; }',
+		'video::cue-region { --padding: 1rem; -webkit-transform: scale(2); all: initial; }',
+		'video::cue-region, .ordinary { padding: 1rem; }',
+		'video::cue-region, ::selection { opacity: 0.5; }',
+		'video::cue-region(#captions)::before { padding: 1rem; }',
+		'video::cue-region { @scope (.ordinary) { padding: 1rem; } }',
+		'video::cue-region:global(.ordinary) { padding: 1rem; }',
+	],
+	invalid: [
+		...['video::cue-region', 'video::cue-region(#captions)', 'VIDEO::CUE-REGION(#captions)'].map(selector => ({
+			code: `${selector} { padding: 1rem; color: yellow; }`,
+			output: `${selector} {  color: yellow; }`,
+			errors: [{messageId: 'no-ineffective-selector-properties', data: {property: 'padding', selectors: '::cue-region'}}],
+		})),
+		{
+			code: 'video::cue-region { border: 1px solid red; transform: scale(2); }',
+			output: 'video::cue-region {   }',
+			errors: 2,
+		},
+		{
+			code: 'video::cue-region, video::cue { margin: 1rem; }',
+			output: 'video::cue-region, video::cue {  }',
+			errors: [{messageId: 'no-ineffective-selector-properties', data: {property: 'margin', selectors: '::cue-region, ::cue'}}],
+		},
+		{
+			code: '.video { &::cue-region(#captions) { @media (width > 1px) { padding: var(--padding) !important; } } }',
+			output: '.video { &::cue-region(#captions) { @media (width > 1px) {  } } }',
+			errors: 1,
+		},
+		{
+			code: 'video::cue-region { padding: /* retain */ 1rem; }',
+			errors: 1,
+		},
+		{
+			code: 'video::cue-region { padding: 1rem }',
+			output: 'video::cue-region { }',
+			errors: 1,
+		},
+		{
+			code: 'video::cue-region {\r\n  padding: 1rem;\r\n  color: yellow;\r\n}',
+			output: 'video::cue-region {\r\n  \r\n  color: yellow;\r\n}',
 			errors: 1,
 		},
 	],

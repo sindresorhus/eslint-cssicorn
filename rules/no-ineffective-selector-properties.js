@@ -165,8 +165,8 @@ const getSelectorRestriction = (selector, parentIsVisited = false) => {
 			return {selector: '::marker', properties: markerProperties};
 		}
 
-		if (name === 'cue') {
-			return {selector: '::cue', properties: cueProperties};
+		if (name === 'cue' || name === 'cue-region') {
+			return {selector: `::${name}`, properties: cueProperties};
 		}
 
 		if (name === 'first-line' || name === 'placeholder') {
