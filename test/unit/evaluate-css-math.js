@@ -431,7 +431,7 @@ for (const css of ['calc(1 + 50%)', 'calc(1px + 50%)', 'min(1, 50%)', 'clamp(0, 
 }
 
 test('rejects nonfinite and unresolved percentage bases', () => {
-	const node = parseValue('min(25%, 50%)');
+	const node = parseValue('calc(25% + 50%)');
 	for (const basis of [quantity(NaN), quantity(Infinity), quantity(-Infinity), quantity(1, '%'), quantity(1, 'em'), quantity(1, 'unknown')]) {
 		assert.equal(evaluateCssMath(node, {percentageBasis: basis}), undefined);
 	}
