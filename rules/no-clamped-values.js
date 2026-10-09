@@ -275,7 +275,12 @@ function getCalculationProblem(node, trace, declarationProperty, sourceCode) {
 	}
 
 	const property = trace.findLast(part => part.type === 'Property')?.name ?? declarationProperty;
-	const range = trace.findLast(part => part.type === 'Type' && part.opts?.type === 'Range');
+	let range = trace.findLast(part => part.type === 'Type' && part.opts?.type === 'Range');
+	// The bundled grammar omits this bound for the font-style longhand and descriptor.
+	if (!range && declarationProperty === 'font-style' && trace.some(part => part.type === 'Type' && part.name === 'angle')) {
+		range = {name: 'angle', opts: {min: '-90deg', max: '90deg'}};
+	}
+
 	if (!range && !integerMinimumProperties.has(property)) {
 		return;
 	}

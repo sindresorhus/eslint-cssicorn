@@ -277,3 +277,38 @@ for (const [directive, code] of [
 		assert.deepEqual(messages.map(message => message.message), ['\'opacity\' evaluates to 2, which the browser clamps to 1. Did you mean a percentage?']);
 	});
 }
+
+test.snapshot({
+	valid: [
+		'a { font-style: oblique calc(90deg); font-style: oblique calc(-90deg); }',
+		'a { font-style: oblique calc(.25turn); font-style: oblique calc(-100grad); }',
+		'a { font-style: oblique calc(120deg - 30deg); }',
+		'a { font-style: oblique calc(120deg / 2); }',
+		'a { font-style: oblique 100deg; font-style: oblique -100deg; }',
+		'a { font-style: oblique calc(120); font-style: oblique calc(120px); font-style: oblique calc(120%); }',
+		'a { font-style: oblique calc(var(--angle) + 120deg); }',
+		'a { font-style: oblique calc(infinity * 1deg); font-style: oblique calc(NaN * 1deg); }',
+		'a { font-style: italic calc(120deg); font-style: oblique calc(120deg) garbage; }',
+		'a { font: oblique calc(120deg) 16px/1.2 serif; }',
+		'@font-face { font-style: oblique calc(-90deg) calc(90deg); }',
+		'@font-face { font-style: oblique calc(60deg) calc(-60deg); }',
+		'@font-face { font-style: oblique calc(120px); }',
+		'@unknown { font-style: oblique calc(120deg); }',
+		'a { --style: oblique calc(120deg); content: "oblique calc(120deg)"; }',
+	],
+	invalid: [
+		'a { font-style: oblique calc(120deg); }',
+		'a { font-style: oblique calc(-120deg); }',
+		'a { font-style: oblique calc(6 * 20deg); }',
+		'a { font-style: oblique calc(.5turn); }',
+		'a { font-style: oblique calc(-200grad); }',
+		'a { font-style: oblique min(150deg, 120deg); }',
+		'@font-face { font-style: oblique calc(-120deg) calc(120deg); }',
+		'@font-face { font-style: oblique calc(120deg) calc(-120deg); }',
+		'@font-face { font-style: oblique 60deg calc(120deg); }',
+		'a { FONT-STYLE: OBLIQUE CALC(120DEG) !important; }',
+		'a { font-style: oblique calc(/* keep */ 120deg); }',
+		'@supports (font-style: oblique) { a { &:hover { font-style: oblique calc(120deg); } } }',
+		'a { opacity: min(infinity, 2); }',
+	],
+});

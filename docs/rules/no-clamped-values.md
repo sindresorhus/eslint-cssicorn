@@ -18,6 +18,7 @@ This rule reports known clamping bounds for literal values and constant calculat
 | `opacity`, `fill-opacity`, `stroke-opacity`, `stop-opacity`, `flood-opacity`, `shape-image-threshold` | 0 to 1, or 0% to 100% |
 | `grayscale()`, `invert()`, `opacity()`, `sepia()` filter amounts | Up to 1 or 100% |
 | Calculated `blur()` filter lengths | At least 0 |
+| Calculated `font-style: oblique` angles, including `@font-face` endpoints | −90deg to 90deg |
 | Absolute `rgb()` and `rgba()` channels | 0 to 255, or 0% to 100% |
 | Absolute `hsl()` and `hsla()` saturation | At least 0 |
 | Absolute `lab()` and `lch()` lightness | 0 to 100 |
@@ -38,6 +39,8 @@ Relative non-alpha color components and predefined `color()` channels retain out
 The rule evaluates constant CSS math functions, including `calc()`, comparisons, rounding, trigonometric functions, powers, and logarithms. It checks the complete calculation against its receiving property or recognized descriptor's numeric range. Integer results are rounded before checking integer bounds. Intermediate values that cancel into range are allowed. [CSS calculation range checking](https://www.w3.org/TR/css-values-4/#calc-range)
 
 The table above lists explicit semantic checks. Additional calculation checks use numeric ranges in the bundled CSS-tree grammar metadata, such as those for `width`, `font-weight`, and `animation-duration`. Bounds absent from that metadata can be missed.
+
+Calculated oblique angles are checked in `font-style` declarations and `@font-face` descriptors. The `font` shorthand is excluded because the bundled grammar does not reliably identify its angle component. Direct out-of-range angle literals are invalid syntax and are skipped. [Font-style bounds](https://www.w3.org/TR/css-fonts-4/#font-style-prop)
 
 Numeric range checks allow calculated results within `1e-10 × max(1, |bound|)` of a bound to avoid diagnostics caused by floating-point rounding, such as `calc(1cm - 10mm)`. Literal values are checked exactly; intermediate arithmetic is not rounded.
 
@@ -134,6 +137,18 @@ export default [
 /* ✅ */
 .card {
 	width: calc(2px - 1px);
+}
+```
+
+```css
+/* ❌ */
+.heading {
+	font-style: oblique calc(6 * 20deg);
+}
+
+/* ✅ */
+.heading {
+	font-style: oblique 20deg;
 }
 ```
 

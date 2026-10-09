@@ -34,6 +34,20 @@ Message:
 
 `;
 
+exports[`invalid(1): a { font-style: oblique calc(120deg); } 1`] = `
+
+  1 | a { font-style: oblique calc(120deg); }
+
+`;
+
+exports[`invalid(1): a { font-style: oblique calc(120deg); } 2`] = `
+
+Message:
+> 1 | a { font-style: oblique calc(120deg); }
+    |                         ^^^^^^^^^^^^ 'font-style' evaluates to 120deg, which the browser clamps to 90deg.
+
+`;
+
 exports[`invalid(1): a { opacity: -1; } 1`] = `
 
   1 | a { opacity: -1; }
@@ -59,6 +73,20 @@ exports[`invalid(10): @media (width > 1px) { a { &:hover { filter: blur(calc(-1p
 Message:
 > 1 | @media (width > 1px) { a { &:hover { filter: blur(calc(-1px)); } } }
     |                                                   ^^^^^^^^^^ 'blur()' evaluates to -1px, which the browser clamps to 0px.
+
+`;
+
+exports[`invalid(10): a { FONT-STYLE: OBLIQUE CALC(120DEG) !important; } 1`] = `
+
+  1 | a { FONT-STYLE: OBLIQUE CALC(120DEG) !important; }
+
+`;
+
+exports[`invalid(10): a { FONT-STYLE: OBLIQUE CALC(120DEG) !important; } 2`] = `
+
+Message:
+> 1 | a { FONT-STYLE: OBLIQUE CALC(120DEG) !important; }
+    |                         ^^^^^^^^^^^^ 'font-style' evaluates to 120deg, which the browser clamps to 90deg.
 
 `;
 
@@ -246,6 +274,20 @@ Message:
 
 `;
 
+exports[`invalid(11): a { font-style: oblique calc(/* keep */ 120deg); } 1`] = `
+
+  1 | a { font-style: oblique calc(/* keep */ 120deg); }
+
+`;
+
+exports[`invalid(11): a { font-style: oblique calc(/* keep */ 120deg); } 2`] = `
+
+Message:
+> 1 | a { font-style: oblique calc(/* keep */ 120deg); }
+    |                         ^^^^^^^^^^^^^^^^^^^^^^^ 'font-style' evaluates to 120deg, which the browser clamps to 90deg.
+
+`;
+
 exports[`invalid(110): a { color: color(display-p3 2 -1 3 / 50); } 1`] = `
 
   1 | a { color: color(display-p3 2 -1 3 / 50); }
@@ -415,6 +457,20 @@ exports[`invalid(119): a { transform: perspective(.005in); } 2`] = `
 Message:
 > 1 | a { transform: perspective(.005in); }
     |                            ^^^^^^ 'perspective()' evaluates to 0.48px, which the browser clamps to 1px.
+
+`;
+
+exports[`invalid(12): @supports (font-style: oblique) { a { &:hover { font-style: oblique calc(120deg); } } } 1`] = `
+
+  1 | @supports (font-style: oblique) { a { &:hover { font-style: oblique calc(120deg); } } }
+
+`;
+
+exports[`invalid(12): @supports (font-style: oblique) { a { &:hover { font-style: oblique calc(120deg); } } } 2`] = `
+
+Message:
+> 1 | @supports (font-style: oblique) { a { &:hover { font-style: oblique calc(120deg); } } }
+    |                                                                     ^^^^^^^^^^^^ 'font-style' evaluates to 120deg, which the browser clamps to 90deg.
 
 `;
 
@@ -607,6 +663,20 @@ exports[`invalid(13): a { fill-opacity: calc(25 + 25); } 2`] = `
 Message:
 > 1 | a { fill-opacity: calc(25 + 25); }
     |                   ^^^^^^^^^^^^^ 'fill-opacity' evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
+
+`;
+
+exports[`invalid(13): a { opacity: min(infinity, 2); } 1`] = `
+
+  1 | a { opacity: min(infinity, 2); }
+
+`;
+
+exports[`invalid(13): a { opacity: min(infinity, 2); } 2`] = `
+
+Message:
+> 1 | a { opacity: min(infinity, 2); }
+    |              ^^^^^^^^^^^^^^^^ 'opacity' evaluates to 2, which the browser clamps to 1. Did you mean a percentage?
 
 `;
 
@@ -1146,6 +1216,20 @@ Message:
 
 `;
 
+exports[`invalid(2): a { font-style: oblique calc(-120deg); } 1`] = `
+
+  1 | a { font-style: oblique calc(-120deg); }
+
+`;
+
+exports[`invalid(2): a { font-style: oblique calc(-120deg); } 2`] = `
+
+Message:
+> 1 | a { font-style: oblique calc(-120deg); }
+    |                         ^^^^^^^^^^^^^ 'font-style' evaluates to -120deg, which the browser clamps to -90deg.
+
+`;
+
 exports[`invalid(2): a { opacity: 2; } 1`] = `
 
   1 | a { opacity: 2; }
@@ -1311,6 +1395,20 @@ exports[`invalid(3): a { -webkit-backdrop-filter: blur(calc(-1px)); } 2`] = `
 Message:
 > 1 | a { -webkit-backdrop-filter: blur(calc(-1px)); }
     |                                   ^^^^^^^^^^ 'blur()' evaluates to -1px, which the browser clamps to 0px.
+
+`;
+
+exports[`invalid(3): a { font-style: oblique calc(6 * 20deg); } 1`] = `
+
+  1 | a { font-style: oblique calc(6 * 20deg); }
+
+`;
+
+exports[`invalid(3): a { font-style: oblique calc(6 * 20deg); } 2`] = `
+
+Message:
+> 1 | a { font-style: oblique calc(6 * 20deg); }
+    |                         ^^^^^^^^^^^^^^^ 'font-style' evaluates to 120deg, which the browser clamps to 90deg.
 
 `;
 
@@ -1482,6 +1580,20 @@ Message:
 
 `;
 
+exports[`invalid(4): a { font-style: oblique calc(.5turn); } 1`] = `
+
+  1 | a { font-style: oblique calc(.5turn); }
+
+`;
+
+exports[`invalid(4): a { font-style: oblique calc(.5turn); } 2`] = `
+
+Message:
+> 1 | a { font-style: oblique calc(.5turn); }
+    |                         ^^^^^^^^^^^^ 'font-style' evaluates to 180deg, which the browser clamps to 90deg.
+
+`;
+
 exports[`invalid(4): a { opacity: -1%; } 1`] = `
 
   1 | a { opacity: -1%; }
@@ -1647,6 +1759,20 @@ exports[`invalid(5): a { filter: blur(calc(-1em)); } 2`] = `
 Message:
 > 1 | a { filter: blur(calc(-1em)); }
     |                  ^^^^^^^^^^ 'blur()' evaluates to -1em, which the browser clamps to 0em.
+
+`;
+
+exports[`invalid(5): a { font-style: oblique calc(-200grad); } 1`] = `
+
+  1 | a { font-style: oblique calc(-200grad); }
+
+`;
+
+exports[`invalid(5): a { font-style: oblique calc(-200grad); } 2`] = `
+
+Message:
+> 1 | a { font-style: oblique calc(-200grad); }
+    |                         ^^^^^^^^^^^^^^ 'font-style' evaluates to -180deg, which the browser clamps to -90deg.
 
 `;
 
@@ -1818,6 +1944,20 @@ Message:
 
 `;
 
+exports[`invalid(6): a { font-style: oblique min(150deg, 120deg); } 1`] = `
+
+  1 | a { font-style: oblique min(150deg, 120deg); }
+
+`;
+
+exports[`invalid(6): a { font-style: oblique min(150deg, 120deg); } 2`] = `
+
+Message:
+> 1 | a { font-style: oblique min(150deg, 120deg); }
+    |                         ^^^^^^^^^^^^^^^^^^^ 'font-style' evaluates to 120deg, which the browser clamps to 90deg.
+
+`;
+
 exports[`invalid(6): a { opacity: calc(25 + 25); } 1`] = `
 
   1 | a { opacity: calc(25 + 25); }
@@ -1969,6 +2109,28 @@ exports[`invalid(69): a { filter: opacity(calc(-1)); } 2`] = `
 Message:
 > 1 | a { filter: opacity(calc(-1)); }
     |                     ^^^^^^^^ 'opacity() amount' evaluates to -1, which the browser clamps to 0.
+
+`;
+
+exports[`invalid(7): @font-face { font-style: oblique calc(-120deg) calc(120deg); } 1`] = `
+
+  1 | @font-face { font-style: oblique calc(-120deg) calc(120deg); }
+
+`;
+
+exports[`invalid(7): @font-face { font-style: oblique calc(-120deg) calc(120deg); } 2`] = `
+
+Message:
+> 1 | @font-face { font-style: oblique calc(-120deg) calc(120deg); }
+    |                                  ^^^^^^^^^^^^^ 'font-style' evaluates to -120deg, which the browser clamps to -90deg.
+
+`;
+
+exports[`invalid(7): @font-face { font-style: oblique calc(-120deg) calc(120deg); } 3`] = `
+
+Message:
+> 1 | @font-face { font-style: oblique calc(-120deg) calc(120deg); }
+    |                                                ^^^^^^^^^^^^ 'font-style' evaluates to 120deg, which the browser clamps to 90deg.
 
 `;
 
@@ -2140,6 +2302,28 @@ Message:
 
 `;
 
+exports[`invalid(8): @font-face { font-style: oblique calc(120deg) calc(-120deg); } 1`] = `
+
+  1 | @font-face { font-style: oblique calc(120deg) calc(-120deg); }
+
+`;
+
+exports[`invalid(8): @font-face { font-style: oblique calc(120deg) calc(-120deg); } 2`] = `
+
+Message:
+> 1 | @font-face { font-style: oblique calc(120deg) calc(-120deg); }
+    |                                  ^^^^^^^^^^^^ 'font-style' evaluates to 120deg, which the browser clamps to 90deg.
+
+`;
+
+exports[`invalid(8): @font-face { font-style: oblique calc(120deg) calc(-120deg); } 3`] = `
+
+Message:
+> 1 | @font-face { font-style: oblique calc(120deg) calc(-120deg); }
+    |                                               ^^^^^^^^^^^^^ 'font-style' evaluates to -120deg, which the browser clamps to -90deg.
+
+`;
+
 exports[`invalid(8): a { fill-opacity: -1; } 1`] = `
 
   1 | a { fill-opacity: -1; }
@@ -2305,6 +2489,20 @@ exports[`invalid(89): a { -webkit-backdrop-filter: sepia(calc(-1)); } 2`] = `
 Message:
 > 1 | a { -webkit-backdrop-filter: sepia(calc(-1)); }
     |                                    ^^^^^^^^ 'sepia() amount' evaluates to -1, which the browser clamps to 0.
+
+`;
+
+exports[`invalid(9): @font-face { font-style: oblique 60deg calc(120deg); } 1`] = `
+
+  1 | @font-face { font-style: oblique 60deg calc(120deg); }
+
+`;
+
+exports[`invalid(9): @font-face { font-style: oblique 60deg calc(120deg); } 2`] = `
+
+Message:
+> 1 | @font-face { font-style: oblique 60deg calc(120deg); }
+    |                                        ^^^^^^^^^^^^ 'font-style' evaluates to 120deg, which the browser clamps to 90deg.
 
 `;
 
