@@ -1,4 +1,4 @@
-import {ident, tokenize, tokenTypes} from '@eslint/css-tree';
+import {ident} from '@eslint/css-tree';
 import {colorFunctions} from './shared/css-color-functions.js';
 import mathFunctions from './shared/css-math-functions.js';
 import {getVendorPrefix} from './shared/css-shorthand-properties.js';
@@ -65,13 +65,12 @@ const isColumnComponent = node => {
 };
 
 /**
-Use a matching placeholder when substitutions are confined to a known color or math function. The original component is retained for fixes.
+Use a matching placeholder when substitutions or random functions are confined to a known color or math function. The original component is retained for fixes.
 
 @param {CssNodePlain} node
-@param {CssicornContext} context
 @returns {CssNodePlain}
 */
-const getMatchingComponent = (node, context) => {
+const getMatchingComponent = node => {
 	if (node.type !== 'Function') {
 		return node;
 	}
@@ -81,18 +80,6 @@ const getMatchingComponent = (node, context) => {
 		(!colorFunctions.has(name) && !mathFunctions.has(name))
 		|| !hasSubstitutionOrRandomFunction(node)
 	) {
-		return node;
-	}
-
-	// Variable fallbacks are Raw nodes, so inspect tokens to retain the random-function safeguard.
-	const text = context.sourceCode.getText(node);
-	let hasRandomFunction = false;
-	tokenize(text, (type, start, end) => {
-		if (type === tokenTypes.Function && ['random', 'random-item'].includes(normalizeCssIdentifier(text.slice(start, end - 1)))) {
-			hasRandomFunction = true;
-		}
-	});
-	if (hasRandomFunction) {
 		return node;
 	}
 
@@ -117,9 +104,9 @@ const getGroupProblem = (nodes, canonicalNodes, {order, matchResult, property, c
 		return;
 	}
 
-	// Substitutions can hide random functions whose cache keys depend on their occurrence order.
-	const substitutionComponents = components.filter(({node}) => hasSubstitutionOrRandomFunction(node));
-	if (substitutionComponents.some(({rank}, index) => index > 0 && rank < substitutionComponents[index - 1].rank)) {
+	// Preserve random-function occurrence order, including in Raw variable fallbacks and unresolved substitutions.
+	const dynamicComponents = components.filter(({node}) => hasSubstitutionOrRandomFunction(node));
+	if (dynamicComponents.some(({rank}, index) => index > 0 && rank < dynamicComponents[index - 1].rank)) {
 		return;
 	}
 
@@ -198,7 +185,7 @@ const create = context => {
 				continue;
 			}
 
-			const groupValue = {...value, children: componentNodes.map(node => getMatchingComponent(node, context))};
+			const groupValue = {...value, children: componentNodes.map(node => getMatchingComponent(node))};
 			if (hasSubstitutionOrRandomFunction(groupValue)) {
 				continue;
 			}

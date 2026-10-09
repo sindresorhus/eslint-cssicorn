@@ -24,12 +24,12 @@ test.snapshot({
 		'a { box-shadow: 0 0 calc(var(--blur) + 1px) red; }',
 		'a { border: red solid env(border-width); }',
 		'a { border: red solid attr(data-width px); }',
-		'a { border: red solid calc(random(1px, 5px) + 1px); }',
+		'a { border: calc(random(1px, 5px) + 1px) solid red; }',
 		'a { border: red solid --width(); }',
 		'a { flex-flow: var(--direction, column) wrap; }',
 		'a { columns: 3 0; columns: auto 0; columns: -1 20em; columns: 1.5 20em; }',
 		'a { columns: calc(3) calc(20em); columns: auto calc(20em); columns: 3 unknown(); }',
-		'a { columns: calc(var(--width)) 3; columns: 3 calc(random(1px, 2px)); columns: 20em 3 / var(--height); }',
+		'a { columns: calc(var(--width)) 3; columns: calc(random(1px, 2px)) 3; columns: 20em 3 / var(--height); }',
 		'a { columns: 3 0 / 10em; columns: 20em 3 /; columns: 20em 3 / 10em / 2px; }',
 		'a { columns: 3 4 / var(--height); columns: var(--count) 20em / 10em; }',
 		'a { columns: 3 +0; columns: 3 -0; columns: 3 0.0; }',
@@ -50,14 +50,9 @@ test.snapshot({
 		'a { border: rgb(var(--channels)) solid 1px unknown; border: rgb(var(--channels)) solid 1px red; }',
 		'a { border: rgb(var(--channels)) hsl(var(--hue) 50% 50%) solid 1px; border: rgb(red) solid 1px; }',
 		'a { border: palette-mix(in lab, var(--palette)) solid 1px; }',
-		'a { border: rgb(var(--channels, random(0, 255))) solid 1px; }',
-		'a { border: rgb(env(channels, RANDOM-ITEM(auto, 1, 2))) solid 1px; }',
-		String.raw`a { border: rgb(var(--channels, r\61 ndom(0, 255))) solid 1px; }`,
-		'a { border: rgb(random(0, 255) var(--green) 0) solid 1px; }',
-		'a { border: color-mix(in srgb, random-item(auto, red, blue), var(--color)) solid 1px; }',
 		'a { --border: rgb(var(--channels)) solid 1px; color: rgb(var(--channels)); }',
 		':export { border: rgb(var(--channels)) solid 1px; }',
-		'a { box-shadow: 0 0 red, blue calc(random(1px, 2px)) 0; }',
+		'a { box-shadow: 0 0 red, calc(random(1px, 2px)) 0 blue; }',
 		'a { text-shadow: blue RANDOM-ITEM(auto, 1px, 2px) 0 0, 1px 2px red; }',
 		'a { box-shadow: red random(1px, 2px) 0, blue 0 random(3px, 4px); }',
 		'a { box-shadow: red var(--x) 0, blue 0 0 var(--blur); }',
@@ -296,8 +291,8 @@ test({
 		},
 		{
 			code: 'a { box-shadow: red 0 0, blue calc(random(1px, 2px)) 0; }',
-			output: 'a { box-shadow: 0 0 red, blue calc(random(1px, 2px)) 0; }',
-			errors: 1,
+			output: 'a { box-shadow: 0 0 red, calc(random(1px, 2px)) 0 blue; }',
+			errors: 2,
 		},
 		{
 			code: 'a { text-shadow: blue RANDOM-ITEM(auto, 1px, 2px) 0 0, red 1px 2px; }',
@@ -413,8 +408,6 @@ test({
 		'a { columns: sin(var(--angle)) calc(var(--width)); }',
 		'a { columns: calc(var(--count)) calc(var(--width)); }',
 		'a { border: red solid sin(var(--angle)); border: red solid calc-size(auto, var(--width)); }',
-		'a { border: red solid calc(var(--width, random(1px, 2px))); }',
-		'a { border: red solid min(1px, env(width, random-item(auto, 2px, 3px))); }',
 		'a { border: red solid random(var(--min), var(--max)); }',
 		'a { border: red solid calc(var(--width)) var(--extra); }',
 	],
@@ -638,7 +631,65 @@ nodeTest('literal shadow fixes preserve validity after variable expansion', () =
 	}
 });
 
-nodeTest('literal shadow fixes leave random functions in their original order', () => {
+test({
+	valid: [
+		'a { border: rgb(random(0, 255) 0 0) solid calc(random(1px, 2px)); }',
+		'a { border: rgb(var(--channels)) solid calc(random(1px, 2px)); }',
+		'a { border: rgb(random(0, 255) 0 0) solid calc(var(--width)); }',
+		'a { border: rgb(env(channels, random(0, 255))) solid calc(var(--width, random(1px, 2px))); }',
+		'a { border: rgb(random(0, 255) 0 0) solid 1px var(--extra); }',
+	],
+	invalid: [
+		...[
+			'calc(random(1px, 5px) + 1px)',
+			'calc(var(--width, random(1px, 2px)))',
+			'min(1px, env(width, random-item(auto, 2px, 3px)))',
+		].map(width => ({
+			code: `a { border: red solid ${width}; }`,
+			output: `a { border: ${width} solid red; }`,
+			errors: 1,
+		})),
+		...[
+			'rgb(random(0, 255) 0 0)',
+			'rgb(var(--channels, random(0, 255)))',
+			'rgb(env(channels, RANDOM-ITEM(auto, 1, 2)))',
+			String.raw`rgb(var(--channels, r\61 ndom(0, 255)))`,
+			'rgb(random(0, 255) var(--green) 0)',
+			'color-mix(in srgb, random-item(auto, red, blue), var(--color))',
+			'rgb(from var(--color) r g random(0, 255))',
+		].map(color => ({
+			code: `a { border: ${color} solid 1px; }`,
+			output: `a { border: 1px solid ${color}; }`,
+			errors: 1,
+		})),
+		{
+			code: 'a { columns: 3 calc(random(1px, 2px)) / random(5em, 10em); }',
+			output: 'a { columns: calc(random(1px, 2px)) 3 / random(5em, 10em); }',
+			errors: 1,
+		},
+		{
+			code: 'a {\r\n  -webkit-box-shadow: red CALC(RANDOM(1px, 2px)) 0 INSET !important;\r\n}',
+			output: 'a {\r\n  -webkit-box-shadow: INSET CALC(RANDOM(1px, 2px)) 0 red !important;\r\n}',
+			errors: 1,
+		},
+		{
+			code: 'a { border: red solid calc(random(1px, 2px) /* keep */); }',
+			errors: 1,
+		},
+		{
+			code: 'a { border: calc(random(1px, 2px) /* keep */) red solid; }',
+			output: 'a { border: calc(random(1px, 2px) /* keep */) solid red; }',
+			errors: 1,
+		},
+		{
+			code: 'a { text-decoration: wavy calc(random(1px, 2px)) underline rgb(random(0, 255) 0 0); }',
+			output: 'a { text-decoration: underline calc(random(1px, 2px)) wavy rgb(random(0, 255) 0 0); }',
+			errors: 1,
+		},
+	],
+});
+
+nodeTest('shadow fixes preserve random-function order', () => {
 	const linter = new Linter();
 	const config = {...plugin.configs.all, rules: {'cssicorn/consistent-value-order': 'error'}};
 	for (const property of ['box-shadow', 'text-shadow']) {
@@ -652,12 +703,17 @@ nodeTest('literal shadow fixes leave random functions in their original order', 
 				'var(--other, red random(1px, 2px) 0), 3px 4px blue, random-item(auto, green 5px 6px, purple 7px 8px)',
 			],
 			[
+				'red calc(random(1px, 2px)) calc(random(3px, 4px)), blue calc(var(--x, random(5px, 6px))) calc(random(7px, 8px))',
+				'calc(random(1px, 2px)) calc(random(3px, 4px)) red, calc(var(--x, random(5px, 6px))) calc(random(7px, 8px)) blue',
+			],
+			[
 				'rgb(random(0, 255) 0 0) 0 0, red 1px 2px',
-				'rgb(random(0, 255) 0 0) 0 0, 1px 2px red',
+				'0 0 rgb(random(0, 255) 0 0), 1px 2px red',
 			],
 		]) {
 			const result = linter.verifyAndFix(`a { ${property}: ${value}; }`, config, {filename: 'test.css'});
 			assert.equal(result.output, `a { ${property}: ${output}; }`);
+			assert.deepEqual(result.output.match(/(?:random|random-item|var)\([^()]*\)/gu), value.match(/(?:random|random-item|var)\([^()]*\)/gu));
 			assert.deepEqual(result.messages, []);
 			assert.deepEqual(linter.verifyAndFix(result.output, config, {filename: 'test.css'}), {...result, fixed: false});
 		}
