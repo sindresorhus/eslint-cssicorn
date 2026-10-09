@@ -34,6 +34,7 @@ const messages = {
 	[MESSAGE_ID]: '`{{property}}` cannot override the declaration on line {{line}} because {{reason}}.',
 };
 const CONDITIONAL_RULES = new Set(['media', 'supports', 'container', 'starting-style']);
+const SUPPORTED_PSEUDO_ELEMENTS = new Set(['before', 'after']);
 const UNSUPPORTED_PSEUDO_CLASSES = new Set(['host', 'host-context', 'scope']);
 const ROLLBACK_KEYWORDS = new Set(['revert', 'revert-layer']);
 const ALL_EXCLUDED_PROPERTIES = new Set(['direction', 'unicode-bidi']);
@@ -72,9 +73,12 @@ const getNodeKey = node => {
 };
 
 /**
-@param {CssNodePlain[]} nodes
+@param {CssNodePlain[]} sourceNodes
 */
-const getSelectorAnalysis = nodes => {
+const getSelectorAnalysis = sourceNodes => {
+	const lastNode = sourceNodes.at(-1);
+	const pseudoElement = lastNode?.type === 'PseudoElementSelector' ? normalizeCssIdentifier(lastNode.name) : undefined;
+	const nodes = pseudoElement ? sourceNodes.slice(0, -1) : sourceNodes;
 	const terminalStart = nodes.findLastIndex(node => node.type === 'Combinator') + 1;
 	const nodeKeys = nodes.map(node => getNodeKey(node));
 	// Conditions within the final compound are simultaneous; preserve ancestor order and source nodes.
@@ -82,7 +86,7 @@ const getSelectorAnalysis = nodes => {
 	@param {string[]} keys
 	*/
 	// eslint-disable-next-line unicorn/require-array-sort-compare -- String keys need the default code unit ordering.
-	const getSelectorKey = keys => JSON.stringify([...keys.slice(0, terminalStart), ...keys.slice(terminalStart).toSorted()]);
+	const getSelectorKey = keys => JSON.stringify([pseudoElement, ...keys.slice(0, terminalStart), ...keys.slice(terminalStart).toSorted()]);
 	const key = getSelectorKey(nodeKeys);
 	const candidateKeys = new Set([key]);
 	const baseNodeKeys = nodeKeys.filter((_, index) => index < terminalStart || nodes[index].type !== 'PseudoClassSelector');
@@ -103,7 +107,7 @@ const getSelectorAnalysis = nodes => {
 	return {
 		key,
 		candidateKeys,
-		nodes,
+		nodes: sourceNodes,
 	};
 };
 
@@ -117,12 +121,21 @@ const getResolvedSelectors = (rule, parentSelectors) => {
 		return;
 	}
 
+	// Nesting selectors cannot represent pseudo-elements.
+	if (parentSelectors?.some(selector => selector.nodes.at(-1)?.type === 'PseudoElementSelector')) {
+		return;
+	}
+
 	const selectors = [];
 	// SelectorListPlain.children is typed as CssNodePlain[] rather than SelectorPlain[].
 	for (const selector of /** @type {SelectorPlain[]} */ (rule.prelude.children)) {
 		if (!canMatchSelector(selector) || find(selector, node => {
-			if (node.type === 'Raw' || node.type === 'PseudoElementSelector') {
+			if (node.type === 'Raw') {
 				return true;
+			}
+
+			if (node.type === 'PseudoElementSelector') {
+				return node !== selector.children.at(-1) || !SUPPORTED_PSEUDO_ELEMENTS.has(normalizeCssIdentifier(node.name));
 			}
 
 			if (node.type === 'TypeSelector') {
