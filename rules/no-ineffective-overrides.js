@@ -88,6 +88,7 @@ const getSelectorAnalysis = sourceNodes => {
 	const terminalStart = nodes.findLastIndex(node => node.type === 'Combinator') + 1;
 	const nodeKeys = nodes.map(node => getNodeKey(node));
 	// Conditions within the final compound are simultaneous; preserve ancestor order and source nodes.
+	// `.disabled.primary.button:hover` refines `.button.primary`; prefix matching would miss it.
 	const terminalKeys = new Set(nodeKeys.slice(terminalStart));
 
 	return {
@@ -354,6 +355,7 @@ const create = context => {
 	*/
 	const getBlocker = (override, selector) => {
 		// Bare pseudo-elements only compare with other bare pseudo-elements.
+		// Probe every condition: a base's anchor may occur anywhere in the override.
 		for (const anchor of selector.terminalKeys.size > 0 ? selector.terminalKeys : [undefined]) {
 			const entries = recordsByKey.get(JSON.stringify([override.property, selector.ancestorKey, anchor])) ?? [];
 			const blocker = entries.find(({record: base, selector: baseSelector}) => base.declaration !== override.declaration
@@ -361,6 +363,7 @@ const create = context => {
 				&& base.conditions.isSubsetOf(override.conditions)
 				&& (baseSelector.terminalKeys.size < selector.terminalKeys.size || base.conditions.size < override.conditions.size || base.layered !== override.layered)
 				// Added conditions must preserve every condition of the base selector.
+				// Sharing an anchor is insufficient: `.button.active` does not retain `.button.primary`.
 				&& baseSelector.terminalKeys.isSubsetOf(selector.terminalKeys)
 				&& isUsableBlocker(base));
 			if (blocker) {
