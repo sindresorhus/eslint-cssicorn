@@ -32,7 +32,6 @@ test.snapshot({
 		'@supports (display: grid) { html { --brand: rgb(var(--channels)); } } a { color: rgb(var(--channels) / .5); }',
 		'@scope (.theme) { :root { --brand: rgb(var(--channels)); } } a { color: rgb(var(--channels) / .5); }',
 		':root.theme { --brand: rgb(var(--channels)); } a { color: rgb(var(--channels) / .5); }',
-		':root, html { --brand: rgb(var(--channels)); } a { color: rgb(var(--channels) / .5); }',
 		'.theme { :root { --brand: rgb(var(--channels)); } } a { color: rgb(var(--channels) / .5); }',
 		withRoot('.theme { --brand: red; } a { color: rgb(var(--channels) / .5); }'),
 		withRoot('@media screen { :root { --brand: red; } } a { color: rgb(var(--channels) / .5); }'),
@@ -54,7 +53,6 @@ test.snapshot({
 		'@starting-style { :root { --brand: rgb(var(--channels)); } } a { color: rgb(var(--channels) / .5); }',
 		withRoot('a { color: alpha(from rgb(var(--channels) / .5) / .25); }'),
 		withRoot('a { --variant: alpha(from rgb(var(--channels) / .5) / .25); }'),
-		withRoot('a { color: rgb(var(--channels) / /* keep */ .5); }'),
 		withRoot('a { color: rgb(/* keep */ var(--channels) / .5 /* also keep */); }'),
 		':root { --brand: rgb(var(--channels) / 1); }',
 		String.raw`:root { --brand\:primary: rgb(var(--channels) / 100%); }`,
@@ -67,6 +65,10 @@ test.snapshot({
 		'a { @media screen { --brand: rgb(var(--channels)); } @supports (display: grid) { color: rgb(var(--channels) / .5); } }',
 		withRoot('a { --outer: rgb(var(--channels)); @media screen { --one: rgb(var(--channels)); --two: rgb(var(--channels)); color: rgb(var(--channels) / .5); } }'),
 		'a { --brand: rgb(var(--channels)); @media screen { --brand: red; color: rgb(var(--channels) / .5); } }',
+		':root, .theme { --brand: rgb(var(--channels)); } a { color: rgb(var(--channels) / .5); }',
+		'@media screen { :root, html { --brand: rgb(var(--channels)); } } a { color: rgb(var(--channels) / .5); }',
+		withRoot('a { color: rgb(var(--channels) /* keep */ / .5); }'),
+		withRoot('a { color: rgb(var(--channels /* keep */) / .5); }'),
 	],
 	invalid: [
 		withRoot('a { color: rgb(var(--channels) / .5); }'),
@@ -133,6 +135,11 @@ test.snapshot({
 		'a { --brand: rgb(var(--channels)); @starting-style { color: rgb(var(--channels) / .5); } }',
 		withRoot('a { --outer: rgb(var(--channels)); @media screen { --inner: rgb(var(--channels)); @supports (display: grid) { color: rgb(var(--channels) / .5); } } }'),
 		'a { --brand: rgb(var(--channels)); @media screen { --accent: hsl(var(--accent-channels)); color: rgb(var(--channels) / .5); } }',
+		':root, html { --brand: rgb(var(--channels)); } a { color: rgb(var(--channels) / .5); }',
+		'@layer theme { HTML, :ROOT, html { --brand: rgb(var(--channels)); } } a { color: rgb(var(--channels) / .5); }',
+		withRoot('a { color: rgb(var(--channels) / /* keep */ .5); }'),
+		withRoot('a { color: rgba(var(--channels),.5); }'),
+		withRoot('a { --variant: rgba(var(--channels),/* keep */.5); }'),
 	],
 });
 
@@ -171,19 +178,19 @@ test({
 	}],
 });
 
-const closingCommentReplacement = 'rgb(from var(--brand) r g b / .5 /* keep */\r\n  )';
+const commentedReplacement = 'rgb(from var(--brand) r g b /\r\n    /* opacity */ .5 /* keep */\r\n  )';
 
 test({
 	valid: [],
 	invalid: [{
-		code: withRoot('a {\r\n  --variant: rgb(var(--channels) / .5 /* keep */\r\n  ) !important;\r\n}'),
+		code: withRoot('a {\r\n  --variant: rgb(var(--channels) /\r\n    /* opacity */ .5 /* keep */\r\n  ) !important;\r\n}'),
 		errors: [{
 			messageId: 'prefer-relative-colors',
-			data: {replacement: closingCommentReplacement},
+			data: {replacement: commentedReplacement},
 			suggestions: [{
 				messageId: 'prefer-relative-colors/suggestion',
-				data: {replacement: closingCommentReplacement},
-				output: withRoot('a {\r\n  --variant: rgb(from var(--brand) r g b / .5 /* keep */\r\n  ) !important;\r\n}'),
+				data: {replacement: commentedReplacement},
+				output: withRoot('a {\r\n  --variant: rgb(from var(--brand) r g b /\r\n    /* opacity */ .5 /* keep */\r\n  ) !important;\r\n}'),
 			}],
 		}],
 	}],

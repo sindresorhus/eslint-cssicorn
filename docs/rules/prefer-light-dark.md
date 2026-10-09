@@ -92,7 +92,7 @@ Custom-property registrations are not checked. For example, `<custom-ident>` acc
 
 Matches the adjacent and final nested forms above, using only `(prefers-color-scheme: light)` or `(prefers-color-scheme: dark)`. Adjacent selectors must serialize identically, with one rule in the media block. Participating blocks cannot contain other nested rules.
 
-Requires literal `color-scheme: light dark` in the base rule or an unconditional bare `:root`/`html` rule in this file, including inside `@layer`. Either order and optional `only` are accepted.
+Requires literal `color-scheme: light dark` in the base rule or an unconditional rule in this file whose selectors are all bare `:root` or `html`, including inside `@layer`. Either order and optional `only` are accepted.
 
 Values may differ only in top-level literal colors, with matching `!important`. Custom properties must contain a single literal color.
 

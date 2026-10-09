@@ -134,14 +134,14 @@ function getColorProblem(node, declaration, {candidateScopes, rootCandidates}, c
 
 	const {sourceCode} = context;
 	const range = sourceCode.getRange(node);
-	const alphaStart = sourceCode.getRange(alpha)[0];
-	if (hasCommentInRange(context, [range[0], alphaStart])) {
+	const prefixEnd = sourceCode.getRange(separator)[1];
+	if (hasCommentInRange(context, [range[0], prefixEnd])) {
 		return;
 	}
 
 	const components = color.family === 'rgb' ? 'r g b' : 'h s l';
-	const prefix = `${color.family}(from var(${ident.encode(destination)}) ${components} / `;
-	const replacement = prefix + sourceCode.text.slice(alphaStart, range[1]);
+	const prefix = `${color.family}(from var(${ident.encode(destination)}) ${components} /`;
+	const replacement = prefix + sourceCode.text.slice(prefixEnd, range[1]);
 	return {
 		node: declaration,
 		loc: toLocation(range, context),
@@ -153,7 +153,7 @@ function getColorProblem(node, declaration, {candidateScopes, rootCandidates}, c
 			/**
 			@param {Parameters<CssicornRuleFixer>[0]} fixer
 			*/
-			fix: fixer => fixer.replaceTextRange([range[0], alphaStart], prefix),
+			fix: fixer => fixer.replaceTextRange([range[0], prefixEnd], prefix),
 		}],
 	};
 }
