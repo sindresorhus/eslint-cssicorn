@@ -383,9 +383,7 @@ function getDefaultFunctionProblem(node, context) {
 	const defaultAmount = child.type === 'Percentage' ? 100 : 1;
 	const redundant = name === 'blur' || name === 'hue-rotate'
 		? isPositiveZero(child, name === 'blur' ? 'length' : 'angle', context)
-		: ['Number', 'Percentage'].includes(child.type) && (['grayscale', 'invert', 'opacity', 'sepia'].includes(name)
-			? Number(child.value) >= defaultAmount
-			: Number(child.value) === defaultAmount);
+		: ['Number', 'Percentage'].includes(child.type) && Number(child.value) === defaultAmount;
 	return redundant ? getTokenRemovalProblem(node, [child], context) : undefined;
 }
 
@@ -412,10 +410,10 @@ function getAlphaProblem(node, context) {
 	}
 
 	const alpha = children.at(-1);
-	// Absolute literal alpha is clamped to [0, 1] at parse time; relative colors inherit their origin's alpha when omitted.
+	// Preserve over-range absolute alpha for diagnostics; relative colors inherit their origin's alpha when omitted.
 	const redundant = isRelative
 		? alpha.type === 'Identifier' && normalizeCssIdentifier(alpha.name) === 'alpha'
-		: (alpha.type === 'Number' && Number(alpha.value) >= 1) || (alpha.type === 'Percentage' && Number(alpha.value) >= 100);
+		: (alpha.type === 'Number' && Number(alpha.value) === 1) || (alpha.type === 'Percentage' && Number(alpha.value) === 100);
 	if (redundant) {
 		return getTokenRemovalProblem(node, [separator, alpha], context);
 	}

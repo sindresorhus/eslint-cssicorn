@@ -7,6 +7,49 @@ import {getTester} from './utils/test.js';
 
 const {test} = getTester(import.meta);
 
+nodeTest('over-range filter amounts and color alpha remain available for interpolation and diagnostics', () => {
+	const linter = new Linter();
+	const config = {
+		files: ['**/*.css'],
+		language: 'css/css',
+		plugins: {css, cssicorn: plugin},
+		rules: {'cssicorn/no-redundant-functions': 'error'},
+	};
+	const cases = [
+		...['grayscale', 'invert', 'opacity', 'sepia'].flatMap(name => [
+			`@keyframes effect { from { filter: ${name}(0); } to { filter: ${name}(50); } }`,
+			`a { backdrop-filter: ${name}(/* amount */ 150% /* end */); }`,
+		]),
+		'a { color: rgb(0 0 0 / 50); background: hsl(120 50% 50% / 150%); }',
+		'a { color: oklch(.5 .1 30 /* before */ / /* alpha */ 2 /* end */); }',
+		'a { color: color(display-p3 1 0 0 / 200%); }',
+		'a { color: device-cmyk(0 0 0 0 / 2); }',
+		'a { FILTER: GRAYSCALE(+1.5) !important; COLOR: RGB(0 0 0 / 101%); }',
+	];
+	for (const code of cases) {
+		const result = linter.verifyAndFix(code, config, {filename: 'test.css'});
+		assert.equal(result.output, code);
+		assert.equal(result.fixed, false);
+		assert.deepEqual(result.messages, []);
+	}
+});
+
+test({
+	valid: [],
+	invalid: [
+		{
+			code: 'a { filter: grayscale(/* amount */ 1 /* end */) invert(100%) opacity(+1.0) sepia(1e0); }',
+			output: 'a { filter: grayscale(/* amount */  /* end */) invert() opacity() sepia(); }',
+			errors: 4,
+		},
+		{
+			code: 'a { color: rgb(0 0 0 /* before */ / /* alpha */ 100% /* end */); }',
+			output: 'a { color: rgb(0 0 0 /* before */  /* alpha */  /* end */); }',
+			errors: 1,
+		},
+	],
+});
+
 test.snapshot({
 	valid: [
 		'a { width: mod(mod(10px, 3px), 3px); height: rem(rem(10px, 3px), 3px); }',

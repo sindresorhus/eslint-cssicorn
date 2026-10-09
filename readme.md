@@ -46,6 +46,25 @@ export default defineConfig([
 ]);
 ```
 
+## Embedded CSS
+
+To lint fenced CSS blocks in Markdown, configure the [`@eslint/markdown` processor](https://github.com/eslint/markdown/blob/main/docs/processors/markdown.md). The presets match its extracted `.css` files. Lint Markdown prose separately.
+
+```js
+import markdown from '@eslint/markdown';
+import cssicorn from 'eslint-cssicorn';
+
+export default [
+	{
+		files: ['**/*.md'],
+		plugins: {markdown},
+		language: 'markdown/commonmark',
+		processor: 'markdown/markdown',
+	},
+	cssicorn.configs.recommended,
+];
+```
+
 ## Rules
 
 <!-- Do not manually modify this list. Run: `npm run fix:eslint-docs` -->
@@ -62,6 +81,7 @@ export default defineConfig([
 | [consistent-compound-selector-order](docs/rules/consistent-compound-selector-order.md)         | Enforce consistent ordering of compound selector components.                                                 | ✅    | 🔧 |    |
 | [consistent-layer-order](docs/rules/consistent-layer-order.md)                                 | Enforce consistent ordering of cascade layer statements.                                                     | ✅    | 🔧 |    |
 | [lowercase](docs/rules/lowercase.md)                                                           | Enforce lowercase CSS syntax.                                                                                | ✅    | 🔧 |    |
+| [no-clamped-values](docs/rules/no-clamped-values.md)                                           | Disallow CSS values that browsers silently clamp.                                                            | ✅    |    |    |
 | [no-declarations-after-nested-rules](docs/rules/no-declarations-after-nested-rules.md)         | Disallow declarations after nested rules.                                                                    | ✅ ☑️ |    |    |
 | [no-deprecated-features](docs/rules/no-deprecated-features.md)                                 | Disallow deprecated CSS features.                                                                            | ✅    | 🔧 | 💡 |
 | [no-descending-specificity](docs/rules/no-descending-specificity.md)                           | Disallow lower-specificity selectors from following higher-specificity selectors that set the same property. |      |    |    |

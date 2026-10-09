@@ -141,8 +141,6 @@ test.snapshot({
 		'a { --value: sepia(infinity); }',
 		'a { content: "grayscale(2)"; background: url("opacity(200%)"); }',
 		'@supports (filter: invert(2)) {}',
-	],
-	invalid: [
 		'a { filter: grayscale(2) invert(200%) opacity(2) sepia(200%); }',
 		...['grayscale', 'invert', 'opacity', 'sepia'].flatMap(name => [
 			`a { filter: ${name}(2); }`,
@@ -153,13 +151,17 @@ test.snapshot({
 		'a { filter: opacity(2e0); }',
 		'a { filter: sepia(1e999%); }',
 		'a { filter: grayscale(1e999); }',
-		'a { filter: opacity(calc(2)); }',
 		'a { FILTER: GRAYSCALE(200%) !important; }',
 		String.raw`a { filter: in\76 ert(200%); }`,
 		'a { filter: grayscale(/* before */ 2 /* after */); }',
+		'a { filter: opacity(-1e999) sepia(-1e999%); }',
 		'a { --value: invert(2); }',
 		'@media (width > 1px) { a { &:hover { filter: sepia(150%); } } }',
 		'a {\r\n  filter: opacity(\r\n    2);\r\n}',
+	],
+	invalid: [
+		'a { filter: opacity(calc(2)); }',
+		'a { filter: grayscale(2) invert(100%) opacity(2) sepia(100%); }',
 	],
 });
 
@@ -457,8 +459,6 @@ test.snapshot({
 		'a { color: rgba(1, 2, 3, 2); }',
 		'a { content: "rgb(1 2 3 / 2)"; }',
 		'@supports (color: rgb(1 2 3 / 2)) {}',
-	],
-	invalid: [
 		'a { color: rgb(1 2 3 / 2); }',
 		'a { color: rgba(1 2 3 / 200%); }',
 		'a { color: hsl(20 30% 40% / 1.01); }',
@@ -471,6 +471,7 @@ test.snapshot({
 		'a { color: color(display-p3 .2 .3 .4 / 2); }',
 		'a { color: device-cmyk(0 1 1 0 / 200%); }',
 		'a { color: rgb(1 2 3 / 2e999); }',
+		'a { color: rgb(1 2 3 / -2e999); }',
 		'a { COLOR: RGB(1 2 3 / 200%) !important; }',
 		String.raw`a { color: r\67 b(1 2 3 / 2); }`,
 		'a { color: rgb(1 2 3 /* slash */ / /* alpha */ 2 /* end */); }',
@@ -478,12 +479,15 @@ test.snapshot({
 		'@media (width > 10px) { a { &:hover { color: rgb(1 2 3 / 2); } } }',
 		'a {\r\n  color: rgb(1 2 3 /\r\n    200%);\r\n}',
 	],
+	invalid: [
+		'a { color: rgb(1 2 3 / 2); background: rgb(1 2 3 / 1); }',
+	],
 });
 
 test({
 	valid: [],
 	invalid: [
-		{code: 'a { color: rgb(1 2 3 / 2); }', output: 'a { color: rgb(1 2 3  ); }', errors: 1},
+		{code: 'a { color: rgb(1 2 3 / 1); }', output: 'a { color: rgb(1 2 3  ); }', errors: 1},
 	],
 });
 
