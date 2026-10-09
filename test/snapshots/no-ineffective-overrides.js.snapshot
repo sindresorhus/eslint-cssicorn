@@ -98,6 +98,20 @@ Message:
 
 `;
 
+exports[`invalid(1): .button, .button::before { color: red !important; @media print { color: blue; } } 1`] = `
+
+  1 | .button, .button::before { color: red !important; @media print { color: blue; } }
+
+`;
+
+exports[`invalid(1): .button, .button::before { color: red !important; @media print { color: blue; } } 2`] = `
+
+Message:
+> 1 | .button, .button::before { color: red !important; @media print { color: blue; } }
+    |                                                                  ^^^^^^^^^^^ \`color\` cannot override the declaration on line 1 because it is marked \`!important\`.
+
+`;
+
 exports[`invalid(1): .button, .link { color: red !important; &:hover { color: blue; } } 1`] = `
 
   1 | .button, .link { color: red !important; &:hover { color: blue; } }

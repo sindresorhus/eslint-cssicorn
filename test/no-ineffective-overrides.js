@@ -44,7 +44,23 @@ test({
 			message: '`color` cannot override the declaration on line 2 because it is marked `!important`.',
 			line: 3,
 		}],
+	}, {
+		code: '.button { color: not-a-color !important; }\n.button { color: var(--theme) !important; }\n.button { color: red !important; }\n.button:hover { color: blue; }',
+		errors: [{
+			message: '`color` cannot override the declaration on line 3 because it is marked `!important`.',
+			line: 4,
+		}],
 	}],
+});
+
+test.snapshot({
+	valid: [
+		'.button, .button::before { color: red !important; @media print { & { color: blue; } } }',
+		'.button { color: red !important; } .button, .button::before { @media print { color: blue; } }',
+	],
+	invalid: [
+		'.button, .button::before { color: red !important; @media print { color: blue; } }',
+	],
 });
 
 test.snapshot({
