@@ -238,8 +238,6 @@ test.snapshot({
 test.snapshot({
 	valid: [
 		'.button:hover { color: red !important; } .button:hover:focus { color: blue !important; }',
-		'.button:hover { color: red !important; } .button:focus:hover { color: blue; }',
-		'.button[disabled] { color: red !important; } .button[data-state="open"][disabled] { color: gray; }',
 		'.button:not(.active) { color: red !important; } .button:not(.inactive):hover { color: blue; }',
 		'.toolbar .button:hover { color: red !important; } .toolbar:hover .button:hover:focus { color: blue; }',
 		'.button:hover { color: red !important; } .button:hover .icon { color: blue; }',
@@ -262,6 +260,8 @@ test.snapshot({
 		String.raw`.button { ALL: revert-layer; \75 nicode-bidi: isolate !important; } .button:hover { unicode-bidi: normal; }`,
 		'.button { all: revert-layer; --color: red !important; --color: revert; } .button:hover { --color: blue; }',
 		'.button { all: revert; direction: rtl !important; direction: revert-layer; } .button:hover { direction: ltr; }',
+		'.button:hover { color: red !important; } .button:focus:hover { color: blue; }',
+		'.button[disabled] { color: red !important; } .button[data-state="open"][disabled] { color: gray; }',
 	],
 });
 
@@ -465,5 +465,40 @@ test.snapshot({
 		'.card { word-wrap: normal !important; } @scope (.panel) { .card:hover { overflow-wrap: anywhere; } }',
 		'.card { word-wrap: normal; } @layer states { .card:hover { overflow-wrap: anywhere; } }',
 		'@layer components { .card { word-wrap: normal !important; } } .card:hover { overflow-wrap: anywhere !important; }',
+	],
+});
+
+test.snapshot({
+	valid: [
+		'.button.primary { color: red; } .disabled.primary.button:hover { color: blue; }',
+		'.button.primary { color: red !important; } .disabled.primary.button:hover { color: blue !important; }',
+		'.button.primary { color: red !important; } .disabled.button:hover { color: blue; }',
+		'.panel > .button.primary { color: red !important; } .panel .disabled.primary.button:hover { color: blue; }',
+		'.button.primary, .link.active { color: red !important; } .button.active:hover { color: blue; }',
+		'.button.primary { color: red !important; } .disabled.primary.button:hover, .link:hover { color: blue; }',
+		'.button { color: red !important; } .button.button { color: blue; }',
+		'.button.button { color: red !important; } .button { color: blue; }',
+		'.button:hover { color: red !important; } .button:HOVER:hover { color: blue; }',
+		'.button:hover:hover { color: red !important; } .button:hover { color: blue; }',
+		'.toolbar > ::before { color: red !important; } .toolbar > .button:hover::before { color: blue; }',
+	],
+	invalid: [
+		'.button.primary { color: red !important; } .disabled.primary.button:hover { color: blue; }',
+		'.button { color: red !important; } .active.button { color: blue; }',
+		'.button { color: red !important; } .active.button:hover { color: blue; }',
+		'.button.primary { color: red !important; } .disabled.primary.active.button:hover { color: blue; }',
+		'.button[data-mode=quiet] { color: red !important; } [disabled].button[data-mode="quiet"] { color: blue; }',
+		'[hidden] { display: none !important; } [aria-hidden=false][hidden] { display: initial; }',
+		'#submit.button { color: red !important; } .disabled.button#submit:hover { color: blue; }',
+		'.panel > .button.primary { color: red !important; } .panel > .disabled.primary.button:hover { color: blue; }',
+		'.button.primary { color: red !important; &.disabled:hover { color: blue; } }',
+		'.button.primary { color: red !important; } .disabled.primary.button { &:hover { color: blue; } }',
+		'.button { color: red !important; } .link { color: red !important; } .active.button:hover, .active.link:hover { color: blue; }',
+		'.button::before { color: red !important; } .active.button:hover::before { color: blue; }',
+		String.raw`.\62 utton.primary { COLOR: red !important; } .disabled.primary.button:HOVER { color: blue; }`,
+		'.button.primary { color: red; } @layer states { .disabled.primary.button:hover { color: blue; } }',
+		'@layer components { .button.primary { color: red !important; } } .disabled.primary.button:hover { color: blue !important; }',
+		'.button.button { color: red !important; } @media print { .button { color: blue; } }',
+		'.button.primary.primary { color: red !important; } .disabled.primary.button:hover { color: blue; }',
 	],
 });

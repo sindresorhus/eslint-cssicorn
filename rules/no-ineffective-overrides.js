@@ -88,31 +88,13 @@ const getSelectorAnalysis = sourceNodes => {
 	const terminalStart = nodes.findLastIndex(node => node.type === 'Combinator') + 1;
 	const nodeKeys = nodes.map(node => getNodeKey(node));
 	// Conditions within the final compound are simultaneous; preserve ancestor order and source nodes.
-	/**
-	@param {string[]} keys
-	*/
-	// eslint-disable-next-line unicorn/require-array-sort-compare -- String keys need the default code unit ordering.
-	const getSelectorKey = keys => JSON.stringify([pseudoElement, ...keys.slice(0, terminalStart), ...keys.slice(terminalStart).toSorted()]);
-	const key = getSelectorKey(nodeKeys);
-	const candidateKeys = new Set([key]);
-	const baseNodeKeys = nodeKeys.filter((_, index) => index < terminalStart || nodes[index].type !== 'PseudoClassSelector');
-	if (baseNodeKeys.length > terminalStart) {
-		candidateKeys.add(getSelectorKey(baseNodeKeys));
-	}
-
-	const attributeBaseNodeKeys = nodeKeys.filter((_, index) => index < terminalStart || !['PseudoClassSelector', 'AttributeSelector'].includes(nodes[index].type));
-	if (attributeBaseNodeKeys.length > terminalStart && attributeBaseNodeKeys.length < baseNodeKeys.length) {
-		candidateKeys.add(getSelectorKey(attributeBaseNodeKeys));
-	}
-
-	// Appending conditions to the final compound preserves every condition of the base selector.
-	for (let end = terminalStart + 1; end < nodes.length; end++) {
-		candidateKeys.add(getSelectorKey(nodeKeys.slice(0, end)));
-	}
+	const terminalKeys = new Set(nodeKeys.slice(terminalStart));
 
 	return {
-		key,
-		candidateKeys,
+		ancestorKey: JSON.stringify([pseudoElement, ...nodeKeys.slice(0, terminalStart)]),
+		terminalKeys,
+		// A matching override must retain this condition, regardless of selector order.
+		anchor: terminalKeys.values().next().value,
 		nodes: sourceNodes,
 	};
 };
@@ -261,7 +243,7 @@ const create = context => {
 	*/
 	const records = [];
 	/**
-	@type {Map<string, DeclarationRecord[]>}
+	@type {Map<string, {record: DeclarationRecord, selector: SelectorAnalysis}[]>}
 	*/
 	const recordsByKey = new Map();
 	/**
@@ -355,14 +337,14 @@ const create = context => {
 		};
 		records.push(record);
 		for (const selector of record.selectors) {
-			const key = JSON.stringify([property, selector.key]);
+			const key = JSON.stringify([property, selector.ancestorKey, selector.anchor]);
 			let entries = recordsByKey.get(key);
 			if (!entries) {
 				entries = [];
 				recordsByKey.set(key, entries);
 			}
 
-			entries.push(record);
+			entries.push({record, selector});
 		}
 	});
 
@@ -371,15 +353,18 @@ const create = context => {
 	@param {SelectorAnalysis} selector
 	*/
 	const getBlocker = (override, selector) => {
-		for (const key of selector.candidateKeys) {
-			const entries = recordsByKey.get(JSON.stringify([override.property, key])) ?? [];
-			const blocker = entries.find(base => base.declaration !== override.declaration
-				&& base.conditions.isSubsetOf(override.conditions)
-				&& (key !== selector.key || base.conditions.size < override.conditions.size || base.layered !== override.layered)
+		// Bare pseudo-elements only compare with other bare pseudo-elements.
+		for (const anchor of selector.terminalKeys.size > 0 ? selector.terminalKeys : [undefined]) {
+			const entries = recordsByKey.get(JSON.stringify([override.property, selector.ancestorKey, anchor])) ?? [];
+			const blocker = entries.find(({record: base, selector: baseSelector}) => base.declaration !== override.declaration
 				&& getBlockingReason(base, override)
+				&& base.conditions.isSubsetOf(override.conditions)
+				&& (baseSelector.terminalKeys.size < selector.terminalKeys.size || base.conditions.size < override.conditions.size || base.layered !== override.layered)
+				// Added conditions must preserve every condition of the base selector.
+				&& baseSelector.terminalKeys.isSubsetOf(selector.terminalKeys)
 				&& isUsableBlocker(base));
 			if (blocker) {
-				return blocker;
+				return blocker.record;
 			}
 		}
 	};
