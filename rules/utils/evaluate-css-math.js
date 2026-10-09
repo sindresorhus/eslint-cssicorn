@@ -1,8 +1,13 @@
+// @ts-check
+
 import normalizeCssIdentifier from './normalize-css-identifier.js';
 
 /**
 @import {CssNode, CssNodePlain} from '@eslint/css-tree';
 @typedef {{value: number, unit: string | undefined}} CssMathValue
+@typedef {{value: number, units: Map<string, number>, types: Map<string, number>}} CssMathQuantity
+@typedef {CssNode | CssNodePlain} MathNode
+@typedef {'nearest' | 'up' | 'down' | 'to-zero'} RoundingStrategy
 */
 
 const maximumDepth = 128;
@@ -12,6 +17,9 @@ const sumOperatorPattern = /^[\t\n\f\r ]+[+\-][\t\n\f\r ]+$/v;
 const mathFunctions = new Set([
 	'calc', 'min', 'max', 'clamp', 'round', 'mod', 'rem', 'sin', 'cos', 'tan', 'asin', 'acos', 'atan', 'atan2', 'pow', 'sqrt', 'hypot', 'log', 'exp', 'abs', 'sign',
 ]);
+/**
+@type {Map<string, [unit: string, factor: number, type: string]>}
+*/
 const absoluteUnits = new Map([
 	['px', ['px', 1, 'length']],
 	['in', ['px', 96, 'length']],
@@ -84,6 +92,9 @@ const constants = new Map([
 const unaryNumberFunctions = new Map([
 	['sqrt', Math.sqrt], ['exp', Math.exp],
 ]);
+/**
+@type {Map<string, (value: number) => number>}
+*/
 const roundingStrategies = new Map([
 	['nearest', Math.round], ['up', Math.ceil], ['down', Math.floor], ['to-zero', Math.trunc],
 ]);
@@ -95,6 +106,11 @@ const quadrantValues = new Map([
 
 /**
 Create an internal quantity with separate CSS types and resolved numeric units.
+
+@param {number} value
+@param {string | undefined} [unit]
+@param {string | undefined} [type]
+@returns {CssMathQuantity}
 */
 function getQuantity(value, unit, type = unit) {
 	return {
@@ -106,6 +122,10 @@ function getQuantity(value, unit, type = unit) {
 
 /**
 Compare dimension exponent records without depending on insertion order.
+
+@param {Map<string, number>} first
+@param {Map<string, number>} second
+@returns {boolean}
 */
 function areEqualExponents(first, second) {
 	return first.size === second.size && [...first].every(([unit, exponent]) => second.get(unit) === exponent);
@@ -113,6 +133,11 @@ function areEqualExponents(first, second) {
 
 /**
 Combine dimension exponents for multiplication or division.
+
+@param {Map<string, number>} first
+@param {Map<string, number>} second
+@param {number} multiplier
+@returns {Map<string, number>}
 */
 function getCombinedExponents(first, second, multiplier) {
 	const combined = new Map(first);
@@ -130,6 +155,9 @@ function getCombinedExponents(first, second, multiplier) {
 
 /**
 Check whether a quantity still depends on an unknown reference value.
+
+@param {CssMathQuantity} quantity
+@returns {boolean}
 */
 function isUnresolved(quantity) {
 	for (const unit of quantity.units.keys()) {
@@ -143,6 +171,9 @@ function isUnresolved(quantity) {
 
 /**
 Check for a unitless number, retaining its original CSS type.
+
+@param {CssMathQuantity} quantity
+@returns {boolean}
 */
 function isNumber(quantity) {
 	return quantity.types.size === 0 && quantity.units.size === 0;
@@ -150,6 +181,9 @@ function isNumber(quantity) {
 
 /**
 Check for a number or a single CSS dimension, excluding compound function arguments and final results.
+
+@param {CssMathQuantity} quantity
+@returns {boolean}
 */
 function isNumericQuantity(quantity) {
 	return [quantity.types, quantity.units].every(exponents => exponents.size === 0 || (exponents.size === 1 && exponents.values().next().value === 1));
@@ -157,6 +191,10 @@ function isNumericQuantity(quantity) {
 
 /**
 Compare both numeric units and CSS types before addition or function arguments.
+
+@param {CssMathQuantity} first
+@param {CssMathQuantity} second
+@returns {boolean}
 */
 function areCompatible(first, second) {
 	return areEqualExponents(first.types, second.types) && areEqualExponents(first.units, second.units);
@@ -164,6 +202,10 @@ function areCompatible(first, second) {
 
 /**
 Get a canonical absolute dimension, or retain a recognized relative unit.
+
+@param {number} value
+@param {string} unit
+@returns {CssMathQuantity | undefined}
 */
 function getDimension(value, unit) {
 	unit = normalizeCssIdentifier(unit);
@@ -180,6 +222,11 @@ function getDimension(value, unit) {
 
 /**
 Apply arithmetic while keeping source types separate from percentage resolution.
+
+@param {CssMathQuantity} first
+@param {CssMathQuantity} second
+@param {string} operator
+@returns {CssMathQuantity | undefined}
 */
 function getArithmetic(first, second, operator) {
 	if (operator === '+' || operator === '-') {
@@ -205,6 +252,11 @@ function getArithmetic(first, second, operator) {
 
 /**
 Round to a multiple, including CSS signed zero and infinite interval rules.
+
+@param {number} value
+@param {number} interval
+@param {RoundingStrategy} strategy
+@returns {number}
 */
 function getRoundedValue(value, interval, strategy) {
 	if (Number.isNaN(value) || Number.isNaN(interval) || interval === 0 || (!Number.isFinite(value) && !Number.isFinite(interval))) {
@@ -234,17 +286,25 @@ function getRoundedValue(value, interval, strategy) {
 
 	const quotient = value / interval;
 	// An interval smaller than the representable spacing cannot change a finite input.
-	return Number.isFinite(quotient) ? roundingStrategies.get(strategy)(quotient) * interval : value;
+	const round = /** @type {(value: number) => number} */ (roundingStrategies.get(strategy));
+	return Number.isFinite(quotient) ? round(quotient) * interval : value;
 }
 
 /**
 Calculate CSS modulus without losing small remainders against large divisors.
+
+@param {number} value
+@param {number} interval
+@returns {number}
 */
 function getModulus(value, interval) {
 	if (Number.isNaN(value) || Number.isNaN(interval) || interval === 0 || !Number.isFinite(value)) {
 		return NaN;
 	}
 
+	/**
+	@param {number} value
+	*/
 	const isNegative = value => value < 0 || Object.is(value, -0);
 	if (!Number.isFinite(interval)) {
 		return isNegative(value) === isNegative(interval) ? value : NaN;
@@ -260,6 +320,10 @@ function getModulus(value, interval) {
 
 /**
 Evaluate trig arguments after canonical angle conversion.
+
+@param {'sin' | 'cos' | 'tan'} name
+@param {CssMathQuantity} argument
+@returns {CssMathQuantity | undefined}
 */
 function getTrigonometricValue(name, argument) {
 	const isAngle = argument.types.size === 1 && argument.types.get('angle') === 1;
@@ -277,7 +341,8 @@ function getTrigonometricValue(name, argument) {
 	let value = Math[name](radians);
 	if (isAngle && Number.isFinite(degrees) && degrees !== 0 && degrees % 90 === 0) {
 		const quadrant = ((degrees % 360) + 360) % 360;
-		value = quadrantValues.get(name)[quadrant / 90];
+		const values = /** @type {number[]} */ (quadrantValues.get(name));
+		value = values[quadrant / 90];
 	}
 
 	return getQuantity(value);
@@ -285,6 +350,11 @@ function getTrigonometricValue(name, argument) {
 
 /**
 Evaluate a pure function after validating its arity and argument types.
+
+@param {string} name
+@param {CssMathQuantity[]} arguments_
+@param {RoundingStrategy} strategy
+@returns {CssMathQuantity | undefined}
 */
 function getCompatibleFunctionValue(name, arguments_, strategy) {
 	if (arguments_.length === 0) {
@@ -300,7 +370,8 @@ function getCompatibleFunctionValue(name, arguments_, strategy) {
 		}
 
 		const hasNaN = arguments_.some(argument => Number.isNaN(argument.value));
-		return {...first, value: hasNaN ? NaN : Math[name](...arguments_.map(argument => argument.value))};
+		const operation = Math[/** @type {'min' | 'max' | 'hypot'} */ (name)];
+		return {...first, value: hasNaN ? NaN : operation(...arguments_.map(argument => argument.value))};
 	}
 
 	if (['round', 'mod', 'rem'].includes(name)) {
@@ -322,6 +393,12 @@ function getCompatibleFunctionValue(name, arguments_, strategy) {
 
 /**
 Evaluate rounding and remainder functions with a compatible interval.
+
+@param {string} name
+@param {CssMathQuantity[]} arguments_
+@param {RoundingStrategy} strategy
+@param {boolean} compatible
+@returns {CssMathQuantity | undefined}
 */
 function getSteppedFunctionValue(name, arguments_, strategy, compatible) {
 	const [first, second] = arguments_;
@@ -344,6 +421,10 @@ function getSteppedFunctionValue(name, arguments_, strategy, compatible) {
 
 /**
 Evaluate functions accepting only unitless numbers.
+
+@param {string} name
+@param {CssMathQuantity[]} arguments_
+@returns {CssMathQuantity | undefined}
 */
 function getNumberFunctionValue(name, arguments_) {
 	if (arguments_.length === 0 || arguments_.some(argument => !isNumber(argument))) {
@@ -352,11 +433,13 @@ function getNumberFunctionValue(name, arguments_) {
 
 	const [first, second] = arguments_;
 	if (['asin', 'acos', 'atan'].includes(name)) {
-		return arguments_.length === 1 ? getQuantity(Math[name](first.value) * 180 / Math.PI, 'deg', 'angle') : undefined;
+		const operation = Math[/** @type {'asin' | 'acos' | 'atan'} */ (name)];
+		return arguments_.length === 1 ? getQuantity(operation(first.value) * 180 / Math.PI, 'deg', 'angle') : undefined;
 	}
 
-	if (unaryNumberFunctions.has(name)) {
-		return arguments_.length === 1 ? getQuantity(unaryNumberFunctions.get(name)(first.value)) : undefined;
+	const unaryFunction = unaryNumberFunctions.get(name);
+	if (unaryFunction) {
+		return arguments_.length === 1 ? getQuantity(unaryFunction(first.value)) : undefined;
 	}
 
 	if (name === 'pow') {
@@ -374,6 +457,10 @@ function getNumberFunctionValue(name, arguments_) {
 
 /**
 Evaluate logarithms, including the CSS special values.
+
+@param {number} argument
+@param {number} base
+@returns {CssMathQuantity}
 */
 function getLogarithmicValue(argument, base) {
 	let value;
@@ -410,6 +497,11 @@ function getLogarithmicValue(argument, base) {
 
 /**
 Dispatch pure math functions to their argument-type family.
+
+@param {string} name
+@param {CssMathQuantity[]} arguments_
+@param {RoundingStrategy} [strategy]
+@returns {CssMathQuantity | undefined}
 */
 function getFunctionValue(name, arguments_, strategy = 'nearest') {
 	if (arguments_.some(argument => !isNumericQuantity(argument))) {
@@ -417,7 +509,7 @@ function getFunctionValue(name, arguments_, strategy = 'nearest') {
 	}
 
 	if (['sin', 'cos', 'tan'].includes(name)) {
-		return arguments_.length === 1 ? getTrigonometricValue(name, arguments_[0]) : undefined;
+		return arguments_.length === 1 ? getTrigonometricValue(/** @type {'sin' | 'cos' | 'tan'} */ (name), arguments_[0]) : undefined;
 	}
 
 	return ['asin', 'acos', 'atan', 'sqrt', 'exp', 'pow', 'log'].includes(name)
@@ -427,6 +519,10 @@ function getFunctionValue(name, arguments_, strategy = 'nearest') {
 
 /**
 Decode a literal and apply an optional concrete percentage basis.
+
+@param {Extract<MathNode, {type: 'Number' | 'Dimension' | 'Percentage'}>} target
+@param {CssMathQuantity | undefined} basis
+@returns {CssMathQuantity | undefined}
 */
 function getLiteralValue(target, basis) {
 	if (!numberPattern.test(target.value)) {
@@ -472,6 +568,9 @@ Percentages remain symbolic for linear arithmetic unless a finite concrete `perc
 */
 export default function evaluateCssMath(node, {percentageBasis} = {}) {
 	let remainingNodes = maximumNodes;
+	/**
+	@type {CssMathQuantity | undefined}
+	*/
 	let basis;
 	if (percentageBasis !== undefined) {
 		if (!Number.isFinite(percentageBasis?.value) || percentageBasis.unit === '%') {
@@ -486,15 +585,20 @@ export default function evaluateCssMath(node, {percentageBasis} = {}) {
 
 	/**
 	Evaluate a calculation's operators with CSS precedence.
+
+	@param {MathNode[]} children
+	@param {number} depth
+	@returns {CssMathQuantity | undefined}
 	*/
 	function evaluateExpression(children, depth) {
 		let index = 0;
 		const getOperator = () => {
-			if (children[index]?.type !== 'Operator') {
+			const node = children[index];
+			if (node?.type !== 'Operator') {
 				return;
 			}
 
-			const {value} = children[index];
+			const {value} = node;
 			const operator = value.trim();
 			return (operator === '+' || operator === '-') && !sumOperatorPattern.test(value) ? undefined : operator;
 		};
@@ -509,7 +613,7 @@ export default function evaluateCssMath(node, {percentageBasis} = {}) {
 					return;
 				}
 
-				const operator = getOperator();
+				const operator = /** @type {string} */ (getOperator());
 				index++;
 				const next = evaluate(children[index++], depth, true);
 				value = next && getArithmetic(value, next, operator);
@@ -524,7 +628,7 @@ export default function evaluateCssMath(node, {percentageBasis} = {}) {
 				return;
 			}
 
-			const operator = getOperator();
+			const operator = /** @type {string} */ (getOperator());
 			index++;
 			const next = evaluateProduct();
 			value = next && getArithmetic(value, next, operator);
@@ -535,6 +639,11 @@ export default function evaluateCssMath(node, {percentageBasis} = {}) {
 
 	/**
 	Evaluate one AST node with a shared traversal budget.
+
+	@param {MathNode | undefined} target
+	@param {number} depth
+	@param {boolean} [inCalculation]
+	@returns {CssMathQuantity | undefined}
 	*/
 	function evaluate(target, depth, inCalculation = false) {
 		if (!target || depth > maximumDepth || --remainingNodes < 0) {
@@ -542,36 +651,38 @@ export default function evaluateCssMath(node, {percentageBasis} = {}) {
 		}
 
 		if (['Number', 'Percentage', 'Dimension'].includes(target.type)) {
-			return getLiteralValue(target, basis);
+			return getLiteralValue(/** @type {Extract<MathNode, {type: 'Number' | 'Percentage' | 'Dimension'}>} */ (target), basis);
 		}
 
 		if (target.type === 'Identifier') {
 			const name = normalizeCssIdentifier(target.name);
-			return inCalculation && constants.has(name) ? getQuantity(constants.get(name)) : undefined;
+			const value = constants.get(name);
+			return inCalculation && value !== undefined ? getQuantity(value) : undefined;
 		}
 
-		if (!target.children || !['Value', 'Parentheses', 'Function'].includes(target.type)) {
+		if (!['Value', 'Parentheses', 'Function'].includes(target.type)) {
 			return;
 		}
 
-		if (target.type === 'Function' && !isCssMathFunction(target)) {
+		const container = /** @type {Extract<MathNode, {type: 'Value' | 'Parentheses' | 'Function'}>} */ (target);
+		if (!container.children || (container.type === 'Function' && !isCssMathFunction(container))) {
 			return;
 		}
 
-		const children = Array.isArray(target.children) ? target.children : [...target.children];
+		const children = Array.isArray(container.children) ? container.children : [...container.children];
 		if (children.length > remainingNodes) {
 			return;
 		}
 
-		if (target.type === 'Value') {
+		if (container.type === 'Value') {
 			return children.length === 1 ? evaluate(children[0], depth + 1) : undefined;
 		}
 
-		if (target.type === 'Parentheses') {
+		if (container.type === 'Parentheses') {
 			return evaluateExpression(children, depth + 1);
 		}
 
-		const name = normalizeCssIdentifier(target.name);
+		const name = normalizeCssIdentifier(container.name);
 		if (name === 'calc') {
 			return evaluateExpression(children, depth + 1);
 		}
@@ -581,8 +692,16 @@ export default function evaluateCssMath(node, {percentageBasis} = {}) {
 
 	/**
 	Evaluate comma-separated function arguments.
+
+	@param {string} name
+	@param {MathNode[]} children
+	@param {number} depth
+	@returns {CssMathQuantity | undefined}
 	*/
 	function evaluateFunction(name, children, depth) {
+		/**
+		@type {MathNode[][]}
+		*/
 		const groups = [[]];
 		for (const child of children) {
 			if (child.type === 'Operator' && child.value === ',') {
@@ -592,13 +711,16 @@ export default function evaluateCssMath(node, {percentageBasis} = {}) {
 
 				groups.push([]);
 			} else {
-				groups.at(-1).push(child);
+				/** @type {MathNode[]} */ (groups.at(-1)).push(child);
 			}
 		}
 
+		/**
+		@type {RoundingStrategy}
+		*/
 		let strategy = 'nearest';
 		if (name === 'round' && groups[0].length === 1 && groups[0][0].type === 'Identifier' && roundingStrategies.has(normalizeCssIdentifier(groups[0][0].name))) {
-			strategy = normalizeCssIdentifier(groups[0][0].name);
+			strategy = /** @type {RoundingStrategy} */ (normalizeCssIdentifier(groups[0][0].name));
 			groups.shift();
 		}
 
@@ -607,17 +729,24 @@ export default function evaluateCssMath(node, {percentageBasis} = {}) {
 		}
 
 		const arguments_ = groups.map(group => evaluateExpression(group, depth + 1));
-		return arguments_.every(Boolean) ? getFunctionValue(name, arguments_, strategy) : undefined;
+		return arguments_.every(argument => argument !== undefined) ? getFunctionValue(name, arguments_, strategy) : undefined;
 	}
 
 	/**
 	Evaluate clamp bounds, including unbounded endpoints.
+
+	@param {MathNode[][]} groups
+	@param {number} depth
+	@returns {CssMathQuantity | undefined}
 	*/
 	function evaluateClamp(groups, depth) {
 		if (groups.length !== 3) {
 			return;
 		}
 
+		/**
+		@param {MathNode[]} group
+		*/
 		const isNone = group => group.length === 1 && group[0].type === 'Identifier' && normalizeCssIdentifier(group[0].name) === 'none';
 		const values = groups.map((group, index) => index !== 1 && isNone(group) ? undefined : evaluateExpression(group, depth + 1));
 		const [minimum, preferred, maximum] = values;

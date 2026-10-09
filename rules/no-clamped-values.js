@@ -22,8 +22,8 @@ const messages = {
 };
 
 const opacityProperties = new Set(['opacity', 'fill-opacity', 'stroke-opacity', 'stop-opacity', 'flood-opacity', 'shape-image-threshold']);
-const amountFunctions = new Set(['grayscale', 'invert', 'opacity', 'sepia', 'brightness', 'contrast', 'saturate']);
 const boundedAmountFunctions = new Set(['grayscale', 'invert', 'opacity', 'sepia']);
+const filterFunctions = new Set([...boundedAmountFunctions, 'brightness', 'contrast', 'saturate', 'blur']);
 const sliceProperties = new Set(['border-image-slice', 'mask-border-slice']);
 const shorthandProperties = new Set(['border-image', 'mask-border', 'text-decoration']);
 const integerMinimumProperties = new Set(['column-count', 'orphans', 'widows']);
@@ -93,6 +93,19 @@ function isLength(node, quantity, lexer) {
 	}
 
 	return Boolean(lexer.matchType('length', formatQuantity(quantity)).matched);
+}
+
+function getBlurProblem(node, sourceCode, lexer) {
+	if (!isCssMathFunction(node)) {
+		return;
+	}
+
+	const quantity = evaluateCssMath(node);
+	if (!quantity || !Number.isFinite(quantity.value) || !isLength(node, quantity, lexer)) {
+		return;
+	}
+
+	return getClampingProblem(node, 'blur()', quantity, {minimum: 0, maximum: Infinity, sourceCode});
 }
 
 function getPerspectiveProblem(node, target, sourceCode, lexer) {
@@ -394,11 +407,14 @@ const create = context => {
 
 				if (colorFunctions.has(name)) {
 					problems.push(...getColorProblems(node, name, sourceCode, handled));
-				} else if (amountFunctions.has(name) && ['filter', 'backdrop-filter'].includes(property) && declaration.value.children.includes(node) && node.children.length === 1) {
-					const amount = node.children.at(0);
-					addProblem(amount, getAmountProblem(amount, `${name}() amount`, sourceCode, {
-						maximum: boundedAmountFunctions.has(name) ? 1 : Infinity, percentageBasis: 1, percentageHint: boundedAmountFunctions.has(name), checkNegativeLiterals: false,
-					}));
+				} else if (filterFunctions.has(name) && ['filter', 'backdrop-filter'].includes(property) && declaration.value.children.includes(node) && node.children.length === 1) {
+					const argument = node.children.at(0);
+					const problem = name === 'blur'
+						? getBlurProblem(argument, sourceCode, lexer)
+						: getAmountProblem(argument, `${name}() amount`, sourceCode, {
+							maximum: boundedAmountFunctions.has(name) ? 1 : Infinity, percentageBasis: 1, percentageHint: boundedAmountFunctions.has(name), checkNegativeLiterals: false,
+						});
+					addProblem(argument, problem);
 				} else if (name === 'perspective' && property === 'transform' && declaration.value.children.includes(node) && node.children.length === 1) {
 					const length = node.children.at(0);
 					addProblem(length, getPerspectiveProblem(length, 'perspective()', sourceCode, lexer));

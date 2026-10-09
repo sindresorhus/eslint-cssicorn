@@ -430,6 +430,17 @@ for (const css of ['calc(1 + 50%)', 'calc(1px + 50%)', 'min(1, 50%)', 'clamp(0, 
 	});
 }
 
+test('rejects nonfinite and unresolved percentage bases', () => {
+	const node = parseValue('min(25%, 50%)');
+	for (const basis of [quantity(NaN), quantity(Infinity), quantity(-Infinity), quantity(1, '%'), quantity(1, 'em'), quantity(1, 'unknown')]) {
+		assert.equal(evaluateCssMath(node, {percentageBasis: basis}), undefined);
+	}
+});
+
+test('canonicalizes absolute percentage bases', () => {
+	assert.deepEqual(evaluateCssMath(parseValue('min(25%, 50%)'), {percentageBasis: quantity(1, 'in')}), quantity(24, 'px'));
+});
+
 test('supports List children and does not mutate the input', () => {
 	const node = parse('calc(2px * 3px / 1px)', {context: 'value'});
 	const original = toPlainObject(parse('calc(2px * 3px / 1px)', {context: 'value'}));

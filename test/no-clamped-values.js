@@ -235,3 +235,45 @@ test.snapshot({
 		'a { color: rgb(from rgb(300 0 0 / 50) r g b / .5); }',
 	],
 });
+
+test.snapshot({
+	valid: [
+		'a { filter: blur(-1px); backdrop-filter: blur(-1em); }',
+		'a { filter: blur(calc(-1)) blur(calc(-1%)) blur(calc(-1deg)) blur(calc(-1fr)); }',
+		'a { filter: blur(calc(-1px / 1px)); }',
+		'a { filter: blur(0) blur(calc(0px)) blur(calc(-1 * 0px)); }',
+		'a { filter: blur(calc(-1px + 2px)) blur(abs(-1px)); }',
+		'a { filter: blur(calc(1cm - 10mm)); }',
+		'a { filter: blur(calc(var(--radius) - 1px)) blur(calc(1px - 2em)); }',
+		'a { filter: var(--effects, blur(calc(-1px))); content: "blur(calc(-1px))"; }',
+		'a { --effects: blur(calc(-1px)); }',
+		'a { width: calc-size(auto, calc(-1px)); }',
+		'a { opacity: progress(calc(50), 0, 100); }',
+		'a { opacity: calc(progress(calc(50), 0, 100) * 2); }',
+	],
+	invalid: [
+		...filterProperties.map(property => `a { ${property}: blur(calc(-1px)); }`),
+		'a { filter: blur(min(-1px, -2px)); }',
+		'a { filter: blur(calc(-1em)); }',
+		'a { filter: blur(calc(-1px * 1px / 1px)); }',
+		'a { FILTER: BLUR(CALC(-1PX)) !important; }',
+		'a { filter: blur(calc(/* radius */ -1px)); }',
+		'a { filter: blur(calc(-1px)) grayscale(50); }',
+		'@media (width > 1px) { a { &:hover { filter: blur(calc(-1px)); } } }',
+	],
+});
+
+for (const [directive, code] of [
+	['eslint-disable-next-line', 'a {\n/* eslint-disable-next-line cssicorn/no-clamped-values -- Preserve the interpolation endpoint. */\nfilter: grayscale(2);\nopacity: 2;\n}'],
+	['eslint-disable-line', 'a {\nfilter: grayscale(2); /* eslint-disable-line cssicorn/no-clamped-values -- Preserve the interpolation endpoint. */\nopacity: 2;\n}'],
+]) {
+	nodeTest(`${directive} suppresses only the intentional endpoint`, () => {
+		const messages = new Linter().verify(code, {
+			files: ['**/*.css'],
+			language: 'css/css',
+			plugins: {css, cssicorn: plugin},
+			rules: {'cssicorn/no-clamped-values': 'error'},
+		}, {filename: 'test.css'});
+		assert.deepEqual(messages.map(message => message.message), ['\'opacity\' evaluates to 2, which the browser clamps to 1. Did you mean a percentage?']);
+	});
+}

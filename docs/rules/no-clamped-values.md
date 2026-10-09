@@ -9,7 +9,7 @@
 
 CSS accepts some values outside their effective range and silently clamps them. For example, `opacity: 50` produces fully opaque paint rather than 50% opacity. Syntax-validation rules generally accept these values.
 
-This rule reports known clamping bounds for literal values and constant calculations. Diagnostics identify the affected component, its effective value, and the browser's bound.
+This rule reports known clamping bounds for literal values and constant calculations. Diagnostics identify the affected component, its evaluated value before clamping, and the browser's bound.
 
 ## Supported values
 
@@ -17,6 +17,7 @@ This rule reports known clamping bounds for literal values and constant calculat
 | --- | --- |
 | `opacity`, `fill-opacity`, `stroke-opacity`, `stop-opacity`, `flood-opacity`, `shape-image-threshold` | 0 to 1, or 0% to 100% |
 | `grayscale()`, `invert()`, `opacity()`, `sepia()` filter amounts | Up to 1 or 100% |
+| Calculated `blur()` filter lengths | At least 0 |
 | Absolute `rgb()` and `rgba()` channels | 0 to 255, or 0% to 100% |
 | Absolute `hsl()` and `hsla()` saturation | At least 0 |
 | Absolute `lab()` and `lch()` lightness | 0 to 100 |
@@ -28,13 +29,15 @@ This rule reports known clamping bounds for literal values and constant calculat
 | `border-image-slice`, `mask-border-slice`, and corresponding shorthand slice percentages | Up to 100% |
 | `text-decoration-thickness` and corresponding shorthand thickness | At least one device pixel |
 
-Filter checks also apply to `backdrop-filter` and vendor-prefixed properties. Brightness, contrast, and saturation above 100% are allowed. Negative direct filter amounts are invalid syntax; negative calculated amounts can be clamped and are reported.
+Filter checks also apply to `backdrop-filter` and vendor-prefixed properties. Brightness, contrast, and saturation above 100% are allowed. Negative direct filter amounts and blur lengths are invalid syntax and are skipped; negative calculated values can be clamped and are reported. [Filter blur](https://www.w3.org/TR/filter-effects-1/#funcdef-filter-blur)
 
 Relative non-alpha color components and predefined `color()` channels retain out-of-range values and are allowed. HSL saturation has no upper bound; HWB normalization and gamut mapping are different behaviors and are not reported. These checks follow the current [CSS Color 4](https://www.w3.org/TR/css-color-4/) and [CSS Color 5](https://www.w3.org/TR/css-color-5/#relative-colors) specifications.
 
 ## Calculations
 
-The rule evaluates constant CSS math functions, including `calc()`, comparisons, rounding, trigonometric functions, powers, and logarithms. It checks the complete calculation against its receiving property or recognized descriptor's numeric range. General range coverage depends on the bundled CSS-tree grammar metadata; bounds absent from that metadata can be missed. Integer results are rounded before checking integer bounds. Intermediate values that cancel into range are allowed. [CSS calculation range checking](https://www.w3.org/TR/css-values-4/#calc-range)
+The rule evaluates constant CSS math functions, including `calc()`, comparisons, rounding, trigonometric functions, powers, and logarithms. It checks the complete calculation against its receiving property or recognized descriptor's numeric range. Integer results are rounded before checking integer bounds. Intermediate values that cancel into range are allowed. [CSS calculation range checking](https://www.w3.org/TR/css-values-4/#calc-range)
+
+The table above lists explicit semantic checks. Additional calculation checks use numeric ranges in the bundled CSS-tree grammar metadata, such as those for `width`, `font-weight`, and `animation-duration`. Bounds absent from that metadata can be missed.
 
 Numeric range checks allow calculated results within `1e-10 × max(1, |bound|)` of a bound to avoid diagnostics caused by floating-point rounding, such as `calc(1cm - 10mm)`. Literal values are checked exactly; intermediate arithmetic is not rounded.
 
@@ -45,6 +48,32 @@ The rule does not infer limits that require layout, fonts, image dimensions, or 
 ## No automatic correction
 
 There is no autofix or suggestion because the intended value is ambiguous. Over-range filter endpoints can also intentionally affect animation interpolation, even though their painted result is clamped. Use an ESLint disable comment for intentional clamping. [Filter interpolation](https://www.w3.org/TR/filter-effects-1/#interpolation-of-filters)
+
+```css
+.photo {
+	/* eslint-disable-next-line cssicorn/no-clamped-values -- Preserve the transition interpolation endpoint. */
+	filter: grayscale(2);
+}
+```
+
+## Embedded CSS
+
+The rule supports the `css/css` language. To lint fenced CSS blocks in Markdown, configure the [`@eslint/markdown` processor](https://github.com/eslint/markdown/blob/main/docs/processors/markdown.md). It extracts virtual `.css` files, which the ordinary CSS config matches. This processes the fenced CSS, while Markdown prose rules require a separate run.
+
+```js
+import markdown from '@eslint/markdown';
+import cssicorn from 'eslint-cssicorn';
+
+export default [
+	{
+		files: ['**/*.md'],
+		plugins: {markdown},
+		language: 'markdown/commonmark',
+		processor: 'markdown/markdown',
+	},
+	cssicorn.configs.recommended,
+];
+```
 
 ## Examples
 
@@ -81,6 +110,18 @@ There is no autofix or suggestion because the intended value is ambiguous. Over-
 /* ✅ */
 .photo {
 	filter: grayscale(50%);
+}
+```
+
+```css
+/* ❌ */
+.photo {
+	filter: blur(calc(1px - 2px));
+}
+
+/* ✅ */
+.photo {
+	filter: blur(calc(2px - 1px));
 }
 ```
 

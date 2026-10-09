@@ -20,6 +20,20 @@ Message:
 
 `;
 
+exports[`invalid(1): a { filter: blur(calc(-1px)); } 1`] = `
+
+  1 | a { filter: blur(calc(-1px)); }
+
+`;
+
+exports[`invalid(1): a { filter: blur(calc(-1px)); } 2`] = `
+
+Message:
+> 1 | a { filter: blur(calc(-1px)); }
+    |                  ^^^^^^^^^^ 'blur()' evaluates to -1px, which the browser clamps to 0px.
+
+`;
+
 exports[`invalid(1): a { opacity: -1; } 1`] = `
 
   1 | a { opacity: -1; }
@@ -31,6 +45,20 @@ exports[`invalid(1): a { opacity: -1; } 2`] = `
 Message:
 > 1 | a { opacity: -1; }
     |              ^^ 'opacity' evaluates to -1, which the browser clamps to 0.
+
+`;
+
+exports[`invalid(10): @media (width > 1px) { a { &:hover { filter: blur(calc(-1px)); } } } 1`] = `
+
+  1 | @media (width > 1px) { a { &:hover { filter: blur(calc(-1px)); } } }
+
+`;
+
+exports[`invalid(10): @media (width > 1px) { a { &:hover { filter: blur(calc(-1px)); } } } 2`] = `
+
+Message:
+> 1 | @media (width > 1px) { a { &:hover { filter: blur(calc(-1px)); } } }
+    |                                                   ^^^^^^^^^^ 'blur()' evaluates to -1px, which the browser clamps to 0px.
 
 `;
 
@@ -1082,6 +1110,20 @@ Message:
 
 `;
 
+exports[`invalid(2): a { backdrop-filter: blur(calc(-1px)); } 1`] = `
+
+  1 | a { backdrop-filter: blur(calc(-1px)); }
+
+`;
+
+exports[`invalid(2): a { backdrop-filter: blur(calc(-1px)); } 2`] = `
+
+Message:
+> 1 | a { backdrop-filter: blur(calc(-1px)); }
+    |                           ^^^^^^^^^^ 'blur()' evaluates to -1px, which the browser clamps to 0px.
+
+`;
+
 exports[`invalid(2): a { color: rgb(from rgb(300 0 0 / 50) r g b / .5); } 1`] = `
 
   1 | a { color: rgb(from rgb(300 0 0 / 50) r g b / .5); }
@@ -1258,6 +1300,20 @@ Message:
 
 `;
 
+exports[`invalid(3): a { -webkit-backdrop-filter: blur(calc(-1px)); } 1`] = `
+
+  1 | a { -webkit-backdrop-filter: blur(calc(-1px)); }
+
+`;
+
+exports[`invalid(3): a { -webkit-backdrop-filter: blur(calc(-1px)); } 2`] = `
+
+Message:
+> 1 | a { -webkit-backdrop-filter: blur(calc(-1px)); }
+    |                                   ^^^^^^^^^^ 'blur()' evaluates to -1px, which the browser clamps to 0px.
+
+`;
+
 exports[`invalid(3): a { opacity: 50; } 1`] = `
 
   1 | a { opacity: 50; }
@@ -1409,6 +1465,20 @@ exports[`invalid(39): a { shape-image-threshold: -1%; } 2`] = `
 Message:
 > 1 | a { shape-image-threshold: -1%; }
     |                            ^^^ 'shape-image-threshold' evaluates to -1%, which the browser clamps to 0%.
+
+`;
+
+exports[`invalid(4): a { filter: blur(min(-1px, -2px)); } 1`] = `
+
+  1 | a { filter: blur(min(-1px, -2px)); }
+
+`;
+
+exports[`invalid(4): a { filter: blur(min(-1px, -2px)); } 2`] = `
+
+Message:
+> 1 | a { filter: blur(min(-1px, -2px)); }
+    |                  ^^^^^^^^^^^^^^^ 'blur()' evaluates to -2px, which the browser clamps to 0px.
 
 `;
 
@@ -1566,6 +1636,20 @@ Message:
 
 `;
 
+exports[`invalid(5): a { filter: blur(calc(-1em)); } 1`] = `
+
+  1 | a { filter: blur(calc(-1em)); }
+
+`;
+
+exports[`invalid(5): a { filter: blur(calc(-1em)); } 2`] = `
+
+Message:
+> 1 | a { filter: blur(calc(-1em)); }
+    |                  ^^^^^^^^^^ 'blur()' evaluates to -1em, which the browser clamps to 0em.
+
+`;
+
 exports[`invalid(5): a { opacity: 101%; } 1`] = `
 
   1 | a { opacity: 101%; }
@@ -1720,6 +1804,20 @@ Message:
 
 `;
 
+exports[`invalid(6): a { filter: blur(calc(-1px * 1px / 1px)); } 1`] = `
+
+  1 | a { filter: blur(calc(-1px * 1px / 1px)); }
+
+`;
+
+exports[`invalid(6): a { filter: blur(calc(-1px * 1px / 1px)); } 2`] = `
+
+Message:
+> 1 | a { filter: blur(calc(-1px * 1px / 1px)); }
+    |                  ^^^^^^^^^^^^^^^^^^^^^^ 'blur()' evaluates to -1px, which the browser clamps to 0px.
+
+`;
+
 exports[`invalid(6): a { opacity: calc(25 + 25); } 1`] = `
 
   1 | a { opacity: calc(25 + 25); }
@@ -1871,6 +1969,20 @@ exports[`invalid(69): a { filter: opacity(calc(-1)); } 2`] = `
 Message:
 > 1 | a { filter: opacity(calc(-1)); }
     |                     ^^^^^^^^ 'opacity() amount' evaluates to -1, which the browser clamps to 0.
+
+`;
+
+exports[`invalid(7): a { FILTER: BLUR(CALC(-1PX)) !important; } 1`] = `
+
+  1 | a { FILTER: BLUR(CALC(-1PX)) !important; }
+
+`;
+
+exports[`invalid(7): a { FILTER: BLUR(CALC(-1PX)) !important; } 2`] = `
+
+Message:
+> 1 | a { FILTER: BLUR(CALC(-1PX)) !important; }
+    |                  ^^^^^^^^^^ 'blur()' evaluates to -1px, which the browser clamps to 0px.
 
 `;
 
@@ -2042,6 +2154,20 @@ Message:
 
 `;
 
+exports[`invalid(8): a { filter: blur(calc(/* radius */ -1px)); } 1`] = `
+
+  1 | a { filter: blur(calc(/* radius */ -1px)); }
+
+`;
+
+exports[`invalid(8): a { filter: blur(calc(/* radius */ -1px)); } 2`] = `
+
+Message:
+> 1 | a { filter: blur(calc(/* radius */ -1px)); }
+    |                  ^^^^^^^^^^^^^^^^^^^^^^^ 'blur()' evaluates to -1px, which the browser clamps to 0px.
+
+`;
+
 exports[`invalid(80): a { filter: sepia(150%); } 1`] = `
 
   1 | a { filter: sepia(150%); }
@@ -2193,6 +2319,28 @@ exports[`invalid(9): a { fill-opacity: 2; } 2`] = `
 Message:
 > 1 | a { fill-opacity: 2; }
     |                   ^ 'fill-opacity' evaluates to 2, which the browser clamps to 1. Did you mean a percentage?
+
+`;
+
+exports[`invalid(9): a { filter: blur(calc(-1px)) grayscale(50); } 1`] = `
+
+  1 | a { filter: blur(calc(-1px)) grayscale(50); }
+
+`;
+
+exports[`invalid(9): a { filter: blur(calc(-1px)) grayscale(50); } 2`] = `
+
+Message:
+> 1 | a { filter: blur(calc(-1px)) grayscale(50); }
+    |                  ^^^^^^^^^^ 'blur()' evaluates to -1px, which the browser clamps to 0px.
+
+`;
+
+exports[`invalid(9): a { filter: blur(calc(-1px)) grayscale(50); } 3`] = `
+
+Message:
+> 1 | a { filter: blur(calc(-1px)) grayscale(50); }
+    |                                        ^^ 'grayscale() amount' evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
 
 `;
 
