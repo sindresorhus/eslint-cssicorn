@@ -1,3 +1,5 @@
+// @ts-check
+
 import normalizeCssIdentifier from './normalize-css-identifier.js';
 
 /**

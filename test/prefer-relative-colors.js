@@ -111,6 +111,7 @@ test.snapshot({
 			'}',
 			'a { background: linear-gradient(rgb(var(--brand-channels) / .2), rgb(var(--accent-channels) / .8)); }',
 		].join('\n'),
+		withRoot('a { --gradient: linear-gradient(alpha(from rgb(var(--channels) / .2) / .25), rgb(var(--channels) / .8)); }'),
 	],
 });
 
