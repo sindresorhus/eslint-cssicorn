@@ -11,6 +11,8 @@ CSS accepts some values outside their effective range and silently clamps them. 
 
 This rule reports known clamping bounds for literal values and constant calculations. Diagnostics identify the affected component, its evaluated value before clamping, and the browser's bound.
 
+See [Embedded CSS](../../readme.md#embedded-css) for linting CSS code blocks in Markdown.
+
 ## Supported values
 
 | Context | Effective range |
@@ -57,25 +59,6 @@ There is no autofix or suggestion because the intended value is ambiguous. Over-
 	/* eslint-disable-next-line cssicorn/no-clamped-values -- Preserve the transition interpolation endpoint. */
 	filter: grayscale(2);
 }
-```
-
-## Embedded CSS
-
-The rule supports the `css/css` language. To lint fenced CSS blocks in Markdown, configure the [`@eslint/markdown` processor](https://github.com/eslint/markdown/blob/main/docs/processors/markdown.md). It extracts virtual `.css` files, which the ordinary CSS config matches. This processes the fenced CSS, while Markdown prose rules require a separate run.
-
-```js
-import markdown from '@eslint/markdown';
-import cssicorn from 'eslint-cssicorn';
-
-export default [
-	{
-		files: ['**/*.md'],
-		plugins: {markdown},
-		language: 'markdown/commonmark',
-		processor: 'markdown/markdown',
-	},
-	cssicorn.configs.recommended,
-];
 ```
 
 ## Examples
