@@ -77,21 +77,27 @@ const getNodeKey = node => {
 const getSelectorAnalysis = nodes => {
 	const terminalStart = nodes.findLastIndex(node => node.type === 'Combinator') + 1;
 	const nodeKeys = nodes.map(node => getNodeKey(node));
-	const key = JSON.stringify(nodeKeys);
+	// Conditions within the final compound are simultaneous; preserve ancestor order and source nodes.
+	/**
+	@param {string[]} keys
+	*/
+	// eslint-disable-next-line unicorn/require-array-sort-compare -- String keys need the default code unit ordering.
+	const getSelectorKey = keys => JSON.stringify([...keys.slice(0, terminalStart), ...keys.slice(terminalStart).toSorted()]);
+	const key = getSelectorKey(nodeKeys);
 	const candidateKeys = new Set([key]);
 	const baseNodeKeys = nodeKeys.filter((_, index) => index < terminalStart || nodes[index].type !== 'PseudoClassSelector');
 	if (baseNodeKeys.length > terminalStart) {
-		candidateKeys.add(JSON.stringify(baseNodeKeys));
+		candidateKeys.add(getSelectorKey(baseNodeKeys));
 	}
 
 	const attributeBaseNodeKeys = nodeKeys.filter((_, index) => index < terminalStart || !['PseudoClassSelector', 'AttributeSelector'].includes(nodes[index].type));
 	if (attributeBaseNodeKeys.length > terminalStart && attributeBaseNodeKeys.length < baseNodeKeys.length) {
-		candidateKeys.add(JSON.stringify(attributeBaseNodeKeys));
+		candidateKeys.add(getSelectorKey(attributeBaseNodeKeys));
 	}
 
 	// Appending conditions to the final compound preserves every condition of the base selector.
 	for (let end = terminalStart + 1; end < nodes.length; end++) {
-		candidateKeys.add(JSON.stringify(nodeKeys.slice(0, end)));
+		candidateKeys.add(getSelectorKey(nodeKeys.slice(0, end)));
 	}
 
 	return {

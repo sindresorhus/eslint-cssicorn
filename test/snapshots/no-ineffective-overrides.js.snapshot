@@ -70,6 +70,20 @@ Message:
 
 `;
 
+exports[`invalid(1): .button.active { color: red !important; } .active.button:hover { color: blue; } 1`] = `
+
+  1 | .button.active { color: red !important; } .active.button:hover { color: blue; }
+
+`;
+
+exports[`invalid(1): .button.active { color: red !important; } .active.button:hover { color: blue; } 2`] = `
+
+Message:
+> 1 | .button.active { color: red !important; } .active.button:hover { color: blue; }
+    |                                                                  ^^^^^^^^^^^ \`color\` cannot override the declaration on line 1 because it is marked \`!important\`.
+
+`;
+
 exports[`invalid(1): .button.is-loading { color: red !important; } .button.is-loading.is-disabled:hover { color: gray; } 1`] = `
 
   1 | .button.is-loading { color: red !important; } .button.is-loading.is-disabled:hover { color: gray; }
@@ -154,6 +168,20 @@ Message:
 
 `;
 
+exports[`invalid(10): @layer components { .button.active { color: red !important; } } .active.button:hover { color: blue !important; } 1`] = `
+
+  1 | @layer components { .button.active { color: red !important; } } .active.button:hover { color: blue !important; }
+
+`;
+
+exports[`invalid(10): @layer components { .button.active { color: red !important; } } .active.button:hover { color: blue !important; } 2`] = `
+
+Message:
+> 1 | @layer components { .button.active { color: red !important; } } .active.button:hover { color: blue !important; }
+    |                                                                                        ^^^^^^^^^^^^^^^^^^^^^^ \`color\` cannot override the declaration on line 1 because layered important declarations take precedence over unlayered important declarations.
+
+`;
+
 exports[`invalid(10): @media screen { @supports (display: grid) { .button { color: red !important; } } } @supports (display: grid) { @media screen { .button:hover { color: blue; } } } 1`] = `
 
   1 | @media screen { @supports (display: grid) { .button { color: red !important; } } } @supports (display: grid) { @media screen { .button:hover { color: blue; } } }
@@ -207,6 +235,20 @@ exports[`invalid(11): .button { all: revert-layer; --color: red !important; } .b
 Message:
 > 1 | .button { all: revert-layer; --color: red !important; } .button:hover { --color: blue; }
     |                                                                         ^^^^^^^^^^^^^ \`--color\` cannot override the declaration on line 1 because it is marked \`!important\`.
+
+`;
+
+exports[`invalid(11): .button.active { color: red !important; } .active.button { &:hover { color: blue; } } 1`] = `
+
+  1 | .button.active { color: red !important; } .active.button { &:hover { color: blue; } }
+
+`;
+
+exports[`invalid(11): .button.active { color: red !important; } .active.button { &:hover { color: blue; } } 2`] = `
+
+Message:
+> 1 | .button.active { color: red !important; } .active.button { &:hover { color: blue; } }
+    |                                                                      ^^^^^^^^^^^ \`color\` cannot override the declaration on line 1 because it is marked \`!important\`.
 
 `;
 
@@ -280,6 +322,20 @@ Message:
 
 `;
 
+exports[`invalid(12): .toolbar { .button.active { color: red !important; } } .toolbar .active.button:hover { color: blue; } 1`] = `
+
+  1 | .toolbar { .button.active { color: red !important; } } .toolbar .active.button:hover { color: blue; }
+
+`;
+
+exports[`invalid(12): .toolbar { .button.active { color: red !important; } } .toolbar .active.button:hover { color: blue; } 2`] = `
+
+Message:
+> 1 | .toolbar { .button.active { color: red !important; } } .toolbar .active.button:hover { color: blue; }
+    |                                                                                        ^^^^^^^^^^^ \`color\` cannot override the declaration on line 1 because it is marked \`!important\`.
+
+`;
+
 exports[`invalid(12): @media screen { @media screen { .button { color: red !important; } } } @supports (display: grid) { @media screen { .button { color: blue; } } } 1`] = `
 
   1 | @media screen { @media screen { .button { color: red !important; } } } @supports (display: grid) { @media screen { .button { color: blue; } } }
@@ -305,6 +361,20 @@ exports[`invalid(12): \\61 { color: red !important; } a:hover { color: blue; } 2
 Message:
 > 1 | \\61 { color: red !important; } a:hover { color: blue; }
     |                                          ^^^^^^^^^^^ \`color\` cannot override the declaration on line 1 because it is marked \`!important\`.
+
+`;
+
+exports[`invalid(13): .\\62 utton.active { COLOR: red !important; } .active.button:HOVER { color: blue; } 1`] = `
+
+  1 | .\\62 utton.active { COLOR: red !important; } .active.button:HOVER { color: blue; }
+
+`;
+
+exports[`invalid(13): .\\62 utton.active { COLOR: red !important; } .active.button:HOVER { color: blue; } 2`] = `
+
+Message:
+> 1 | .\\62 utton.active { COLOR: red !important; } .active.button:HOVER { color: blue; }
+    |                                                                     ^^^^^^^^^^^ \`color\` cannot override the declaration on line 1 because it is marked \`!important\`.
 
 `;
 
@@ -638,6 +708,20 @@ Message:
 
 `;
 
+exports[`invalid(2): :hover.button { color: red !important; } .button:hover:focus { color: blue; } 1`] = `
+
+  1 | :hover.button { color: red !important; } .button:hover:focus { color: blue; }
+
+`;
+
+exports[`invalid(2): :hover.button { color: red !important; } .button:hover:focus { color: blue; } 2`] = `
+
+Message:
+> 1 | :hover.button { color: red !important; } .button:hover:focus { color: blue; }
+    |                                                                ^^^^^^^^^^^ \`color\` cannot override the declaration on line 1 because it is marked \`!important\`.
+
+`;
+
 exports[`invalid(2): @layer components { .button { margin-top: 0 !important; margin: revert; } } .button:hover { margin-top: 1px !important; } 1`] = `
 
   1 | @layer components { .button { margin-top: 0 !important; margin: revert; } } .button:hover { margin-top: 1px !important; }
@@ -873,6 +957,20 @@ exports[`invalid(3): .button:hover { color: red !important; &:focus { color: blu
 Message:
 > 1 | .button:hover { color: red !important; &:focus { color: blue; } }
     |                                                  ^^^^^^^^^^^ \`color\` cannot override the declaration on line 1 because it is marked \`!important\`.
+
+`;
+
+exports[`invalid(3): .button:hover:focus { color: red !important; } .button:focus:hover:active { color: blue; } 1`] = `
+
+  1 | .button:hover:focus { color: red !important; } .button:focus:hover:active { color: blue; }
+
+`;
+
+exports[`invalid(3): .button:hover:focus { color: red !important; } .button:focus:hover:active { color: blue; } 2`] = `
+
+Message:
+> 1 | .button:hover:focus { color: red !important; } .button:focus:hover:active { color: blue; }
+    |                                                                             ^^^^^^^^^^^ \`color\` cannot override the declaration on line 1 because it is marked \`!important\`.
 
 `;
 
@@ -1114,6 +1212,20 @@ Message:
 
 `;
 
+exports[`invalid(4): .button[disabled] { color: red !important; } [disabled].button.active { color: gray; } 1`] = `
+
+  1 | .button[disabled] { color: red !important; } [disabled].button.active { color: gray; }
+
+`;
+
+exports[`invalid(4): .button[disabled] { color: red !important; } [disabled].button.active { color: gray; } 2`] = `
+
+Message:
+> 1 | .button[disabled] { color: red !important; } [disabled].button.active { color: gray; }
+    |                                                                         ^^^^^^^^^^^ \`color\` cannot override the declaration on line 1 because it is marked \`!important\`.
+
+`;
+
 exports[`invalid(4): .toolbar:hover > .button { color: red !important; &.is-disabled { color: gray; } } 1`] = `
 
   1 | .toolbar:hover > .button { color: red !important; &.is-disabled { color: gray; } }
@@ -1309,6 +1421,20 @@ exports[`invalid(5): .button { color: red !important; } .button[disabled][data-s
 Message:
 > 1 | .button { color: red !important; } .button[disabled][data-state="open"] { color: gray; }
     |                                                                           ^^^^^^^^^^^ \`color\` cannot override the declaration on line 1 because it is marked \`!important\`.
+
+`;
+
+exports[`invalid(5): .button.active { color: red !important; } .button[disabled].active:hover { color: gray; } 1`] = `
+
+  1 | .button.active { color: red !important; } .button[disabled].active:hover { color: gray; }
+
+`;
+
+exports[`invalid(5): .button.active { color: red !important; } .button[disabled].active:hover { color: gray; } 2`] = `
+
+Message:
+> 1 | .button.active { color: red !important; } .button[disabled].active:hover { color: gray; }
+    |                                                                            ^^^^^^^^^^^ \`color\` cannot override the declaration on line 1 because it is marked \`!important\`.
 
 `;
 
@@ -1564,6 +1690,20 @@ Message:
 
 `;
 
+exports[`invalid(6): .toolbar > .button.active { color: red !important; } .toolbar > .active.button:hover { color: blue; } 1`] = `
+
+  1 | .toolbar > .button.active { color: red !important; } .toolbar > .active.button:hover { color: blue; }
+
+`;
+
+exports[`invalid(6): .toolbar > .button.active { color: red !important; } .toolbar > .active.button:hover { color: blue; } 2`] = `
+
+Message:
+> 1 | .toolbar > .button.active { color: red !important; } .toolbar > .active.button:hover { color: blue; }
+    |                                                                                        ^^^^^^^^^^^ \`color\` cannot override the declaration on line 1 because it is marked \`!important\`.
+
+`;
+
 exports[`invalid(7): .button { all: revert !important; --theme: red !important; } .button:hover { --theme: revert-layer; } 1`] = `
 
   1 | .button { all: revert !important; --theme: red !important; } .button:hover { --theme: revert-layer; }
@@ -1648,6 +1788,20 @@ Message:
 
 `;
 
+exports[`invalid(7): button#submit.active { color: red !important; } button.active#submit:hover { color: blue; } 1`] = `
+
+  1 | button#submit.active { color: red !important; } button.active#submit:hover { color: blue; }
+
+`;
+
+exports[`invalid(7): button#submit.active { color: red !important; } button.active#submit:hover { color: blue; } 2`] = `
+
+Message:
+> 1 | button#submit.active { color: red !important; } button.active#submit:hover { color: blue; }
+    |                                                                              ^^^^^^^^^^^ \`color\` cannot override the declaration on line 1 because it is marked \`!important\`.
+
+`;
+
 exports[`invalid(8): .button { COLOR: red !important; } .button:HOVER { color: blue; } 1`] = `
 
   1 | .button { COLOR: red !important; } .button:HOVER { color: blue; }
@@ -1687,6 +1841,20 @@ exports[`invalid(8): .button { color: red !important; &[aria-disabled=\"true\"] 
 Message:
 > 1 | .button { color: red !important; &[aria-disabled="true"] { color: gray; } }
     |                                                            ^^^^^^^^^^^ \`color\` cannot override the declaration on line 1 because it is marked \`!important\`.
+
+`;
+
+exports[`invalid(8): .button.active { color: red !important; } @media print { .active.button { color: blue; } } 1`] = `
+
+  1 | .button.active { color: red !important; } @media print { .active.button { color: blue; } }
+
+`;
+
+exports[`invalid(8): .button.active { color: red !important; } @media print { .active.button { color: blue; } } 2`] = `
+
+Message:
+> 1 | .button.active { color: red !important; } @media print { .active.button { color: blue; } }
+    |                                                                           ^^^^^^^^^^^ \`color\` cannot override the declaration on line 1 because it is marked \`!important\`.
 
 `;
 
@@ -1771,6 +1939,20 @@ exports[`invalid(9): .button, .link { @media print { color: red !important; &:ho
 Message:
 > 1 | .button, .link { @media print { color: red !important; &:hover { color: blue; } } }
     |                                                                  ^^^^^^^^^^^ \`color\` cannot override the declaration on line 1 because it is marked \`!important\`.
+
+`;
+
+exports[`invalid(9): .button.active { color: red; } @layer states { .active.button { color: blue; } } 1`] = `
+
+  1 | .button.active { color: red; } @layer states { .active.button { color: blue; } }
+
+`;
+
+exports[`invalid(9): .button.active { color: red; } @layer states { .active.button { color: blue; } } 2`] = `
+
+Message:
+> 1 | .button.active { color: red; } @layer states { .active.button { color: blue; } }
+    |                                                                 ^^^^^^^^^^^ \`color\` cannot override the declaration on line 1 because unlayered normal declarations take precedence over layered declarations.
 
 `;
 

@@ -298,3 +298,31 @@ test.snapshot({
 		'@SUPPORTS (display: grid) { .button { color: red !important; } } @media screen { @supports (display: grid) { .button { &:hover { color: blue; } } } }',
 	],
 });
+
+test.snapshot({
+	valid: [
+		'.button.active { color: red !important; } .active.button { color: blue; }',
+		'.button.active { color: red !important; } .active.button:hover { color: blue !important; }',
+		'.button.active { color: red !important; } .button:hover { color: blue; }',
+		'.toolbar.active > .button { color: red !important; } .active.toolbar > .button:hover { color: blue; }',
+		'.toolbar > .button.active { color: red !important; } .menu > .active.button:hover { color: blue; }',
+		'.toolbar > .button.active { color: red !important; } .toolbar .active.button:hover { color: blue; }',
+		'.button.active { color: red !important; } .active.button:hover, .link:hover { color: blue; }',
+		'.button:is(.active, .disabled) { color: red !important; } .button:is(.disabled, .active):hover { color: blue; }',
+	],
+	invalid: [
+		'.button.active { color: red !important; } .active.button:hover { color: blue; }',
+		':hover.button { color: red !important; } .button:hover:focus { color: blue; }',
+		'.button:hover:focus { color: red !important; } .button:focus:hover:active { color: blue; }',
+		'.button[disabled] { color: red !important; } [disabled].button.active { color: gray; }',
+		'.button.active { color: red !important; } .button[disabled].active:hover { color: gray; }',
+		'.toolbar > .button.active { color: red !important; } .toolbar > .active.button:hover { color: blue; }',
+		'button#submit.active { color: red !important; } button.active#submit:hover { color: blue; }',
+		'.button.active { color: red !important; } @media print { .active.button { color: blue; } }',
+		'.button.active { color: red; } @layer states { .active.button { color: blue; } }',
+		'@layer components { .button.active { color: red !important; } } .active.button:hover { color: blue !important; }',
+		'.button.active { color: red !important; } .active.button { &:hover { color: blue; } }',
+		'.toolbar { .button.active { color: red !important; } } .toolbar .active.button:hover { color: blue; }',
+		String.raw`.\62 utton.active { COLOR: red !important; } .active.button:HOVER { color: blue; }`,
+	],
+});
