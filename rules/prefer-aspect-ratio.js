@@ -150,7 +150,7 @@ function isRatioPadding(declaration, sourceCode) {
 		return false;
 	}
 
-	if (!children.every(node => isNonnegativeLengthOrPercentage(node, sourceCode) || isPositivePercentage(node))) {
+	if (children.some(node => !(isNonnegativeLengthOrPercentage(node, sourceCode) || isPositivePercentage(node)))) {
 		return false;
 	}
 
