@@ -7,11 +7,9 @@
 <!-- end auto-generated rule header -->
 <!-- Do not manually modify this header. Run: `npm run fix:eslint-docs` -->
 
-Percentage padding paired with `height: 0` is a common workaround for maintaining an aspect ratio in responsive videos, embeds, and cards. Prefer reviewing these layouts for migration to the native [`aspect-ratio`](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/aspect-ratio) property, which expresses the intent directly.
+This rule recommends native [`aspect-ratio`](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/aspect-ratio) for boxes with literal zero `height` and positive percentage `padding-top` or `padding-bottom`, including constant `calc()` values. It reports once per style block and also recognizes `padding` shorthands with literal zero horizontal padding and literal zero or positive percentage vertical padding. Zero height may be unitless or a valid length; percentage and calculated heights are ignored.
 
-This rule reports one problem per style declaration block containing an explicit literal zero `height` and positive percentage `padding-top` or `padding-bottom`. It also recognizes `padding` shorthands with literal zero horizontal padding and vertical components that are either literal zero or positive percentages. Zero height may be unitless or use a valid length unit, such as `0px`; percentage and calculated heights are excluded.
-
-The rule does not provide an autofix or editor suggestion. Percentage padding depends on the containing block's inline size, while `aspect-ratio` uses the element's own box dimensions. Migration usually requires removing both the zero height and ratio padding, and may require reviewing positioning, content, box sizing, or markup. At least one of `width` or `height` must remain automatic for `aspect-ratio` to affect sizing. If another declaration still sets a fixed height, reset it with `height: auto`. The examples below illustrate possible migrations, not guaranteed equivalent replacements. See [the browser comparison](https://web.dev/articles/aspect-ratio).
+No autofix or editor suggestions are provided: percentage padding uses the containing block's inline size, while `aspect-ratio` sizes the element's own box. Remove the zero height and ratio padding, leaving at least one dimension automatic (`height: auto` if needed). Review content, positioning, box sizing, and markup; the examples are not guaranteed equivalent. See [the browser comparison](https://web.dev/articles/aspect-ratio).
 
 ## Examples
 
@@ -56,21 +54,18 @@ The rule does not provide an autofix or editor suggestion. Percentage padding de
 
 ## Calculations
 
-Constant `calc()` expressions are recognized when they evaluate to a finite, positive percentage. Supported expressions can use numbers, percentages, addition, subtraction, multiplication, division, parentheses, and nested `calc()`, including negative intermediate values. For example, `calc(100% - 43.75%)`, `calc(100% / (16 / 9))`, and `calc(-50% * -1)` are recognized.
-
-Calculations with lengths, named constants, substitutions such as `var()` or `env()`, or other math functions are ignored. Invalid arithmetic, division by zero, non-finite results, and nonpositive results are also ignored. The rule does not derive or recommend a particular replacement ratio.
+Constant `calc()` expressions must produce a finite, positive percentage. Numbers, percentages, `+`, `-`, `*`, `/`, parentheses, nested `calc()`, and negative intermediate values are supported. Lengths, named constants, substitutions (`var()` or `env()`), other functions, invalid arithmetic, and division by zero are ignored.
 
 ## Detection boundaries
 
 The rule intentionally ignores:
 
-- Padding-only spacers, including pseudo-element techniques without explicit zero height.
-- Patterns with height and padding declared in separate blocks or selectors.
-- Blocks containing `aspect-ratio`, `all`, or logical padding properties.
-- Duplicate relevant declarations, or a `padding` shorthand mixed with `padding-top` or `padding-bottom`.
-- Padding shorthands with nonzero horizontal components or nonzero lengths in vertical components.
+- Padding-only patterns, or height and padding declared in separate blocks.
+- Blocks containing `aspect-ratio`, `all`, or logical padding.
+- Duplicate `height`, `padding`, `padding-top`, or `padding-bottom` declarations, or shorthands mixed with vertical longhands.
+- Shorthands with nonzero horizontal padding or nonzero vertical lengths.
 - Keyframes, descriptor blocks, and CSS Modules `:export` and `:import()` blocks.
-- Blocks enclosed by an `@supports` condition testing `aspect-ratio`, including positive, negative, and compound conditions.
+- Any enclosing `@supports` condition testing `aspect-ratio`, regardless of polarity.
 
 Explicit feature-query fallbacks are left alone:
 
@@ -84,4 +79,4 @@ Explicit feature-query fallbacks are left alone:
 }
 ```
 
-This rule identifies a likely layout workaround without resolving markup or the cascade across blocks. Intentional compatibility fallbacks outside an `aspect-ratio` feature query may need an ESLint disable comment.
+Other intentional compatibility fallbacks may need an ESLint disable comment.
