@@ -106,13 +106,15 @@ Compares identical properties when an override:
 
 Nesting supports a leading `&` or implicit nesting, skipping combinations of multiple parent and child branches. Lists are reported only when every branch is blocked.
 
+Compares ordinary selectors within one `@scope`, from outer into nested scopes, and from global rules into scopes. Separate blocks, scope-root selectors, direct scope declarations, and scopes inside style rules are skipped.
+
 ## Limitations
 
 Checks only this file. Deliberate browser fallbacks may be reported; suppress those diagnostics locally.
 
 - Does not resolve layer ordering, imports, shorthand/longhand or `all` interactions, aliases, computed values, or custom property registration.
 - Classes and existing-state refinements must be appended; attribute syntax (apart from value quoting and escapes) and pseudo-class arguments must have identical generated text.
-- Skips pseudo-elements, namespaced types, escaped wildcards, shadow-tree/scope selectors, unparsed arguments, and at-rules other than `@media`, `@supports`, `@container`, and `@layer`.
+- Skips pseudo-elements, namespaced types, escaped wildcards, shadow-tree selectors, unparsed arguments, and at-rules other than `@media`, `@supports`, `@container`, `@layer`, and `@scope`.
 - Invalid or unknown ordinary values and values with substitutions such as `var()` cannot block overrides.
 - `revert`/`revert-layer` disables blockers for that property and known shorthand components throughout the file, except important blockers when all rollbacks are normal. An `all` rollback excludes custom properties, `direction`, and `unicode-bidi`. Substitution rollbacks are not resolved.
 

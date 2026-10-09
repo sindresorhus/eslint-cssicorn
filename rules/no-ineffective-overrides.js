@@ -277,6 +277,9 @@ const create = context => {
 			const name = normalizeCssIdentifier(node.name);
 			if (name === 'layer') {
 				result = {...result, layered: true};
+			} else if (name === 'scope' && !result.selectors) {
+				// Scope identity preserves containment without interpreting roots or comparing separate blocks.
+				result = {...result, conditions: new Set([...result.conditions, JSON.stringify(['scope', sourceCode.getRange(node)[0]])])};
 			} else if (CONDITIONAL_RULES.has(name)) {
 				result = {...result, conditions: new Set([...result.conditions, JSON.stringify(getAtRuleContextPart(node, context))])};
 			} else {
