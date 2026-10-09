@@ -83,13 +83,15 @@ test.snapshot({
 		root + 'a { color: white; b {} @media (prefers-color-scheme: dark) { color: black; } }',
 		'@media (width > 1px) { ' + root + '} a { color: white; @media (prefers-color-scheme: dark) { color: black; } }',
 		'body { color-scheme: light dark; } a { color: white; @media (prefers-color-scheme: dark) { color: black; } }',
-		':root,html { color-scheme: light dark; } a { color: white; @media (prefers-color-scheme: dark) { color: black; } }',
 		root + ':root { color-scheme: light; } a { color: white; @media (prefers-color-scheme: dark) { color: black; } }',
 		root + ':root { all: initial; } a { color: white; @media (prefers-color-scheme: dark) { color: black; } }',
 		pair('color: white;', 'color-scheme: light dark; color-scheme: light dark; color: black;'),
 		root + ':export { color: white; } @media (prefers-color-scheme: dark) { :export { color: black; } }',
 		root + ':import("theme.css") { color: white; } @media (prefers-color-scheme: dark) { :import("theme.css") { color: black; } }',
 		root + '@keyframes foo { from { color: white; @media (prefers-color-scheme: dark) { color: black; } } }',
+		':root, .theme { color-scheme: light dark; } a { color: white; @media (prefers-color-scheme: dark) { color: black; } }',
+		root + ':root,html { color-scheme: light; } a { color: white; @media (prefers-color-scheme: dark) { color: black; } }',
+		root + ':root,html { all: initial; } a { color: white; @media (prefers-color-scheme: dark) { color: black; } }',
 	],
 	invalid: [
 		pair('color: white;', 'color: black;'),
@@ -130,6 +132,7 @@ test.snapshot({
 		pair('background: linear-gradient(RED,  BLUE) center / cover white;', 'background: linear-gradient(RED,  BLUE) center / cover black;'),
 		pair('--color: rgb(none 0 0);', '--color: rgb(0 0 0);'),
 		pair('fill: url(#paint) white;', 'fill: url(#paint) black;'),
+		':root,html { color-scheme: light dark; } a { color: white; @media (prefers-color-scheme: dark) { color: black; } }',
 	],
 });
 

@@ -6,10 +6,12 @@ export {default as getPseudoSelectorArgument} from './get-pseudo-selector-argume
 export {default as getSingleValueIdentifier} from './get-single-value-identifier.js';
 export {default as hasCommentInRange} from './has-comment-in-range.js';
 export {default as hasSubstitutionOrRandomFunction} from './has-substitution-or-random-function.js';
+export {default as isBareRootRule} from './is-bare-root-rule.js';
 export {default as isCssModulesInteropDeclaration} from './is-css-modules-interop-declaration.js';
 export {default as isCssWideKeyword} from './is-css-wide-keyword.js';
 export {default as isKeyframesAtRule} from './is-keyframes-at-rule.js';
 export {default as isStyleBlock} from './is-style-block.js';
+export {default as isStyleDeclaration} from './is-style-declaration.js';
 export {default as isSubstitutionFunction} from './is-substitution-function.js';
 export {decodeCssIdentifier, default as normalizeCssIdentifier, toAsciiLowerCase} from './normalize-css-identifier.js';
 export {default as toLocation} from './to-location.js';

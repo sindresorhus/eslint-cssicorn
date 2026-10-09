@@ -13,13 +13,14 @@ import {
 	hasCommentInRange,
 	isCssModulesInteropDeclaration,
 	isCssWideKeyword,
+	isStyleDeclaration,
 	isSubstitutionFunction,
 	normalizeCssIdentifier,
 	toLocation,
 } from './utils/index.js';
 
 /**
-@import {CssLocationRange, CssNodePlain, DeclarationPlain, Dimension, FunctionNodePlain, Hash, NumberNode, ParenthesesPlain, Percentage, ValuePlain} from '@eslint/css-tree';
+@import {CssLocationRange, CssNodePlain, Dimension, FunctionNodePlain, Hash, NumberNode, ParenthesesPlain, Percentage, ValuePlain} from '@eslint/css-tree';
 @import {CssicornContext} from './rule/cssicorn-context.js';
 @import {CssicornProblem} from './rule/to-eslint-problem.js';
 @import {CssicornRule} from './rule/to-eslint-rule.js';
@@ -39,7 +40,6 @@ const messages = {
 
 const colorFunctions = new Set([...colorFunctionsWithAlpha, 'color-mix', 'light-dark', 'device-cmyk', 'contrast-color', 'palette-mix']);
 const preservedFunctions = new Set(['random', 'element', '-moz-element', 'url']);
-const groupingAtRules = new Set(['media', 'supports', 'container', 'layer', 'scope', 'starting-style']);
 const componentTypes = new Set(['Hash', 'Dimension', 'Percentage', 'Function']);
 const openingTokens = new Map([
 	[tokenTypes.Function, tokenTypes.RightParenthesis],
@@ -279,32 +279,6 @@ function parseConfiguredValue(value, name) {
 }
 
 /**
-Check for a style declaration, including declarations directly inside nested grouping rules.
-@param {DeclarationPlain} declaration
-@param {CssicornContext['sourceCode']} sourceCode
-*/
-function isStyleDeclaration(declaration, sourceCode) {
-	let parent = sourceCode.getParent(declaration);
-	if (parent?.type !== 'Block') {
-		return false;
-	}
-
-	while (parent) {
-		if (parent.type === 'Rule') {
-			return true;
-		}
-
-		if (parent.type === 'Atrule' && !groupingAtRules.has(normalizeCssIdentifier(parent.name))) {
-			return false;
-		}
-
-		parent = sourceCode.getParent(parent);
-	}
-
-	return false;
-}
-
-/**
 @param {CssicornContext} context
 */
 const create = context => {
@@ -341,7 +315,7 @@ const create = context => {
 		if (
 			decodeCssIdentifier(declaration.property).startsWith('--')
 			|| declaration.value.type !== 'Value'
-			|| !isStyleDeclaration(declaration, sourceCode)
+			|| !isStyleDeclaration(declaration, context)
 			|| isCssModulesInteropDeclaration(declaration, context)
 		) {
 			return;
