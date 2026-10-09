@@ -21,7 +21,7 @@ test.snapshot({
 		'a { BORDER: 1PX SOLID RED; FLEX-FLOW: COLUMN WRAP; }',
 		'a { border: inherit; outline: initial; flex-flow: unset; box-shadow: none; text-shadow: revert; columns: revert-layer; }',
 		'a { border: var(--border); border: red var(--width) solid; }',
-		'a { box-shadow: red 0 0 calc(var(--blur) + 1px); }',
+		'a { box-shadow: 0 0 calc(var(--blur) + 1px) red; }',
 		'a { border: red solid env(border-width); }',
 		'a { border: red solid attr(data-width px); }',
 		'a { border: red solid calc(random(1px, 5px) + 1px); }',
@@ -29,7 +29,7 @@ test.snapshot({
 		'a { flex-flow: var(--direction, column) wrap; }',
 		'a { columns: 3 0; columns: auto 0; columns: -1 20em; columns: 1.5 20em; }',
 		'a { columns: calc(3) calc(20em); columns: auto calc(20em); columns: 3 unknown(); }',
-		'a { columns: 3 calc(var(--width)); columns: 3 calc(random(1px, 2px)); columns: 20em 3 / var(--height); }',
+		'a { columns: calc(var(--width)) 3; columns: 3 calc(random(1px, 2px)); columns: 20em 3 / var(--height); }',
 		'a { columns: 3 0 / 10em; columns: 20em 3 /; columns: 20em 3 / 10em / 2px; }',
 		'a { columns: 3 4 / var(--height); columns: var(--count) 20em / 10em; }',
 		'a { columns: 3 +0; columns: 3 -0; columns: 3 0.0; }',
@@ -404,6 +404,106 @@ test({
 			errors: 1,
 		},
 	],
+});
+
+test({
+	valid: [
+		'a { border: rgb(var(--channels)) solid calc(var(--width)); }',
+		'a { box-shadow: rgb(var(--channels)) calc(var(--x)) calc(var(--y)) inset; }',
+		'a { columns: sin(var(--angle)) calc(var(--width)); }',
+		'a { columns: calc(var(--count)) calc(var(--width)); }',
+		'a { border: red solid sin(var(--angle)); border: red solid calc-size(auto, var(--width)); }',
+		'a { border: red solid calc(var(--width, random(1px, 2px))); }',
+		'a { border: red solid min(1px, env(width, random-item(auto, 2px, 3px))); }',
+		'a { border: red solid random(var(--min), var(--max)); }',
+		'a { border: red solid calc(var(--width)) var(--extra); }',
+	],
+	invalid: [
+		...[
+			'calc(var(--width))',
+			'min(1px, var(--width))',
+			'max(var(--width), 1px)',
+			'clamp(1px, var(--width), 5px)',
+			'abs(var(--width))',
+			'hypot(var(--width), 1px)',
+			'mod(var(--width), 1px)',
+			'rem(var(--width), 1px)',
+			'round(up, var(--width), 1px)',
+		].map(width => ({
+			code: `a { border: red solid ${width}; }`,
+			output: `a { border: ${width} solid red; }`,
+			errors: 1,
+		})),
+		{
+			code: 'a { outline: red solid calc(env(width, 1px)); column-rule: blue dashed calc(attr(data-width px)); }',
+			output: 'a { outline: calc(env(width, 1px)) solid red; column-rule: calc(attr(data-width px)) dashed blue; }',
+			errors: 2,
+		},
+		{
+			code: 'a { border: red solid calc(--theme-width()); }',
+			output: 'a { border: calc(--theme-width()) solid red; }',
+			errors: 1,
+		},
+		{
+			code: 'a { text-decoration: red wavy underline calc(var(--thickness)); }',
+			output: 'a { text-decoration: underline calc(var(--thickness)) wavy red; }',
+			errors: 1,
+		},
+		{
+			code: 'a { box-shadow: red 0 0 calc(var(--blur) + 1px); }',
+			output: 'a { box-shadow: 0 0 calc(var(--blur) + 1px) red; }',
+			errors: 1,
+		},
+		{
+			code: 'a { columns: 3 calc(var(--width)); columns: calc(var(--count)) 20em / var(--height); }',
+			output: 'a { columns: calc(var(--width)) 3; columns: 20em calc(var(--count)) / var(--height); }',
+			errors: 2,
+		},
+		{
+			code: 'a { columns: sin(var(--angle)) 20em; }',
+			output: 'a { columns: 20em sin(var(--angle)); }',
+			errors: 1,
+		},
+		{
+			code: 'a {\r\n  -moz-box-shadow: RED CALC(VAR(--x))\r\n    MIN(VAR(--y), 2px) INSET !important;\r\n}',
+			output: 'a {\r\n  -moz-box-shadow: INSET CALC(VAR(--x))\r\n    MIN(VAR(--y), 2px) RED !important;\r\n}',
+			errors: 1,
+		},
+		{
+			code: 'a { border: red solid calc(var(--width) /* keep */); }',
+			errors: 1,
+		},
+		{
+			code: 'a { border: calc(var(--width) /* keep */) red solid; }',
+			output: 'a { border: calc(var(--width) /* keep */) solid red; }',
+			errors: 1,
+		},
+	],
+});
+
+nodeTest('math substitution fixes preserve unresolved component order', () => {
+	const linter = new Linter();
+	const config = {...plugin.configs.all, rules: {'cssicorn/consistent-value-order': 'error'}};
+	for (const [property, value, output] of [
+		['box-shadow', 'red calc(var(--x)) min(var(--y), 2px) inset', 'inset calc(var(--x)) min(var(--y), 2px) red'],
+		['text-shadow', 'red calc(var(--x)) calc(var(--y))', 'calc(var(--x)) calc(var(--y)) red'],
+		['box-shadow', 'calc(var(--x)) calc(var(--y)) rgb(var(--channels)) inset', 'inset calc(var(--x)) calc(var(--y)) rgb(var(--channels))'],
+		['text-decoration', 'wavy underline calc(var(--thickness)) rgb(var(--channels))', 'underline calc(var(--thickness)) wavy rgb(var(--channels))'],
+	]) {
+		const code = `a { ${property}: ${value}; }`;
+		const result = linter.verifyAndFix(code, config, {filename: 'test.css'});
+		assert.equal(result.output, `a { ${property}: ${output}; }`);
+		assert.deepEqual(result.messages, []);
+		assert.deepEqual(linter.verifyAndFix(result.output, config, {filename: 'test.css'}), {...result, fixed: false});
+		assert.deepEqual(result.output.match(/var\(--[\w-]+\)/gu), code.match(/var\(--[\w-]+\)/gu));
+	}
+
+	for (const code of [
+		'a { --red: random(0, 255); --width: random(1px, 2px); border: rgb(var(--red) 0 0) solid calc(var(--width)); }',
+		'a { --count: random(1, 3); --width: random(1px, 2px); columns: sin(var(--count)) calc(var(--width)); }',
+	]) {
+		assert.deepEqual(linter.verifyAndFix(code, config, {filename: 'test.css'}), {fixed: false, output: code, messages: []});
+	}
 });
 
 nodeTest('color substitution fixes preserve validity after channel expansion', () => {

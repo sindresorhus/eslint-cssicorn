@@ -1,5 +1,6 @@
 import {ident, tokenize, tokenTypes} from '@eslint/css-tree';
 import {colorFunctions} from './shared/css-color-functions.js';
+import mathFunctions from './shared/css-math-functions.js';
 import {getVendorPrefix} from './shared/css-shorthand-properties.js';
 import {
 	getCanonicalLexerNode,
@@ -64,16 +65,20 @@ const isColumnComponent = node => {
 };
 
 /**
-Use a color placeholder for matching when substitutions are confined to a known color function. The original component is retained for fixes.
+Use a matching placeholder when substitutions are confined to a known color or math function. The original component is retained for fixes.
 
 @param {CssNodePlain} node
 @param {CssicornContext} context
 @returns {CssNodePlain}
 */
 const getMatchingComponent = (node, context) => {
+	if (node.type !== 'Function') {
+		return node;
+	}
+
+	const name = normalizeCssIdentifier(node.name);
 	if (
-		node.type !== 'Function'
-		|| !colorFunctions.has(normalizeCssIdentifier(node.name))
+		(!colorFunctions.has(name) && !mathFunctions.has(name))
 		|| !hasSubstitutionOrRandomFunction(node)
 	) {
 		return node;
@@ -87,7 +92,13 @@ const getMatchingComponent = (node, context) => {
 			hasRandomFunction = true;
 		}
 	});
-	return hasRandomFunction ? node : {type: 'Identifier', name: 'transparent'};
+	if (hasRandomFunction) {
+		return node;
+	}
+
+	return colorFunctions.has(name)
+		? {type: 'Identifier', name: 'transparent'}
+		: {...node, children: [{type: 'Number', value: '1'}]};
 };
 
 const getGroupProblem = (nodes, canonicalNodes, {order, matchResult, property, context}) => {
@@ -103,6 +114,12 @@ const getGroupProblem = (nodes, canonicalNodes, {order, matchResult, property, c
 	const sortedComponents = components.toSorted((first, second) => first.rank - second.rank);
 	const firstChangedIndex = components.findIndex((component, index) => component !== sortedComponents[index]);
 	if (firstChangedIndex === -1) {
+		return;
+	}
+
+	// Substitutions can hide random functions whose cache keys depend on their occurrence order.
+	const substitutionComponents = components.filter(({node}) => hasSubstitutionOrRandomFunction(node));
+	if (substitutionComponents.some(({rank}, index) => index > 0 && rank < substitutionComponents[index - 1].rank)) {
 		return;
 	}
 

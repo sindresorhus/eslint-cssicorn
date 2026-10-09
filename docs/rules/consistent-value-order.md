@@ -26,19 +26,19 @@ Enforces these authoring orders for interchangeable value components:
 
 Checks shadow layers independently, preserving length order, layer order, and keyword order within each component. Single-keyword values remain unchanged.
 
-Supports casing, CSS escapes, vendor prefixes, recognized math and color functions, and substitutions inside known color functions such as `rgb(var(--channels))`. Fixes preserve original spelling and whitespace, adding spaces where needed to separate tokens.
+Supports casing, CSS escapes, vendor prefixes, recognized math and color functions, and substitutions inside them, such as `calc(var(--width))` and `rgb(var(--channels))`. Fixes preserve original spelling and whitespace, adding spaces where needed to separate tokens.
 
 ## Examples
 
 ```css
 /* ❌ */
 a {
-	border: rgb(var(--channels)) solid 1px;
+	border: red solid calc(var(--width));
 }
 
 /* ✅ */
 a {
-	border: 1px solid rgb(var(--channels));
+	border: calc(var(--width)) solid red;
 }
 ```
 
@@ -68,7 +68,7 @@ a {
 
 ## Limitations
 
-- Checks component structure without resolving substitutions inside color functions; it may report declarations browsers reject. White space trimming may require `languageOptions.customSyntax`.
-- Ignores custom properties and CSS Modules interop declarations. Skips component groups with substitutions outside known color functions, or random functions anywhere in the group.
+- Checks component structure without resolving substitutions; it may report declarations browsers reject. White space trimming may require `languageOptions.customSyntax`.
+- Ignores custom properties and CSS Modules interop declarations. Skips groups with substitutions outside known color or math functions, explicit random functions, or reordering that would exchange substitution-containing components.
 - Reports without fixing when the reordered span contains comments. Comments in unchanged components are preserved.
 - For `columns`, literal counts must be positive safe integers, and unitless zero is ignored; use `0px` for zero width. Ambiguous math component roles may go unreported.
