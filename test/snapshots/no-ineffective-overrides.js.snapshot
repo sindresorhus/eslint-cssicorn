@@ -1,3 +1,17 @@
+exports[`invalid(1): .button { color: \\72 ed !important; } .button:hover { color: blue; } 1`] = `
+
+  1 | .button { color: \\72 ed !important; } .button:hover { color: blue; }
+
+`;
+
+exports[`invalid(1): .button { color: \\72 ed !important; } .button:hover { color: blue; } 2`] = `
+
+Message:
+> 1 | .button { color: \\72 ed !important; } .button:hover { color: blue; }
+    |                                                       ^^^^^^^^^^^ \`color\` cannot override the declaration on line 1 because it is marked \`!important\`.
+
+`;
+
 exports[`invalid(1): .button { color: red !important; color: revert; } .button:hover { color: blue; } 1`] = `
 
   1 | .button { color: red !important; color: revert; } .button:hover { color: blue; }
@@ -1184,6 +1198,20 @@ Message:
 
 `;
 
+exports[`invalid(2): .button { color: \\72 gb(1 2 3) !important; } .button:hover { color: blue; } 1`] = `
+
+  1 | .button { color: \\72 gb(1 2 3) !important; } .button:hover { color: blue; }
+
+`;
+
+exports[`invalid(2): .button { color: \\72 gb(1 2 3) !important; } .button:hover { color: blue; } 2`] = `
+
+Message:
+> 1 | .button { color: \\72 gb(1 2 3) !important; } .button:hover { color: blue; }
+    |                                                              ^^^^^^^^^^^ \`color\` cannot override the declaration on line 1 because it is marked \`!important\`.
+
+`;
+
 exports[`invalid(2): .button { color: red !important; } .active.button { color: blue; } 1`] = `
 
   1 | .button { color: red !important; } .active.button { color: blue; }
@@ -1604,6 +1632,20 @@ Message:
 
 `;
 
+exports[`invalid(3): .button { width: 1\\70 x !important; } .button:hover { width: 2px; } 1`] = `
+
+  1 | .button { width: 1\\70 x !important; } .button:hover { width: 2px; }
+
+`;
+
+exports[`invalid(3): .button { width: 1\\70 x !important; } .button:hover { width: 2px; } 2`] = `
+
+Message:
+> 1 | .button { width: 1\\70 x !important; } .button:hover { width: 2px; }
+    |                                                       ^^^^^^^^^^ \`width\` cannot override the declaration on line 1 because it is marked \`!important\`.
+
+`;
+
 exports[`invalid(3): .button, #link { color: red !important; &:hover { color: blue; } } 1`] = `
 
   1 | .button, #link { color: red !important; &:hover { color: blue; } }
@@ -1867,6 +1909,20 @@ exports[`invalid(4): .button { --margin-top: 0 !important; margin: revert !impor
 Message:
 > 1 | .button { --margin-top: 0 !important; margin: revert !important; } .button:hover { --margin-top: 1px; }
     |                                                                                    ^^^^^^^^^^^^^^^^^ \`--margin-top\` cannot override the declaration on line 1 because it is marked \`!important\`.
+
+`;
+
+exports[`invalid(4): .button { -webkit-mask-composite: s\\6f urce-over !important; } .button:hover { mask-composite: subtract; } 1`] = `
+
+  1 | .button { -webkit-mask-composite: s\\6f urce-over !important; } .button:hover { mask-composite: subtract; }
+
+`;
+
+exports[`invalid(4): .button { -webkit-mask-composite: s\\6f urce-over !important; } .button:hover { mask-composite: subtract; } 2`] = `
+
+Message:
+> 1 | .button { -webkit-mask-composite: s\\6f urce-over !important; } .button:hover { mask-composite: subtract; }
+    |                                                                                ^^^^^^^^^^^^^^^^^^^^^^^^ \`mask-composite\` cannot override the declaration on line 1 because it is marked \`!important\`.
 
 `;
 
@@ -2205,6 +2261,20 @@ exports[`invalid(5): .\\62 utton::BEFORE { COLOR: red !important; } .button:HOVE
 Message:
 > 1 | .\\62 utton::BEFORE { COLOR: red !important; } .button:HOVER::before { color: blue; }
     |                                                                       ^^^^^^^^^^^ \`color\` cannot override the declaration on line 1 because it is marked \`!important\`.
+
+`;
+
+exports[`invalid(5): .button { --theme: !important; } .button:hover { --theme: blue; } 1`] = `
+
+  1 | .button { --theme: !important; } .button:hover { --theme: blue; }
+
+`;
+
+exports[`invalid(5): .button { --theme: !important; } .button:hover { --theme: blue; } 2`] = `
+
+Message:
+> 1 | .button { --theme: !important; } .button:hover { --theme: blue; }
+    |                                                  ^^^^^^^^^^^^^ \`--theme\` cannot override the declaration on line 1 because it is marked \`!important\`.
 
 `;
 

@@ -4,6 +4,21 @@ const {test} = getTester(import.meta);
 
 test.snapshot({
 	valid: [
+		String.raw`.button { color: \6e ot-a-color !important; } .button:hover { color: blue; }`,
+		String.raw`.button { color: \76 ar(--color) !important; } .button:hover { color: blue; }`,
+		String.raw`.button { width: 1\70 otato !important; } .button:hover { width: 2px; }`,
+	],
+	invalid: [
+		String.raw`.button { color: \72 ed !important; } .button:hover { color: blue; }`,
+		String.raw`.button { color: \72 gb(1 2 3) !important; } .button:hover { color: blue; }`,
+		String.raw`.button { width: 1\70 x !important; } .button:hover { width: 2px; }`,
+		String.raw`.button { -webkit-mask-composite: s\6f urce-over !important; } .button:hover { mask-composite: subtract; }`,
+		'.button { --theme: !important; } .button:hover { --theme: blue; }',
+	],
+});
+
+test.snapshot({
+	valid: [
 		'.button { @supports (color: red) { @layer states { color: blue; } } }',
 		'.button { @supports (color: red !important) { @media screen { color: blue; } } }',
 		'.button { @container style(--theme: red !important) { @media screen { --theme: blue; } } }',

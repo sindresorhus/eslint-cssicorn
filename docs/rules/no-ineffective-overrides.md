@@ -119,7 +119,7 @@ Checks only this file. Deliberate browser fallbacks may be reported; suppress th
 - Does not resolve layer ordering, imports, shorthand/longhand or `all` interactions, other aliases, computed values, or custom property registration.
 - Attribute syntax (apart from value quoting and escapes) and pseudo-class arguments must have identical generated text.
 - Skips other pseudo-element forms, namespaced types, escaped wildcards, shadow-tree selectors, unparsed arguments, and at-rules other than `@media`, `@supports`, `@container`, `@layer`, `@scope`, and `@starting-style`.
-- Invalid or unknown ordinary values and values with substitutions such as `var()` cannot block overrides.
+- Ordinary values rejected by the property grammar and values with substitutions such as `var()` cannot block overrides.
 - `revert`, `revert-layer`, and `revert-rule` disable blockers for that property and known shorthand components throughout the file, except important blockers when all rollbacks are normal. An `all` rollback excludes custom properties, `direction`, and `unicode-bidi`. Substitution rollbacks are not resolved.
 
 Related: [`no-descending-specificity`](./no-descending-specificity.md) checks selector ordering, [`no-ineffective-properties`](./no-ineffective-properties.md) checks incompatible properties, and [`consistent-layer-order`](./consistent-layer-order.md) checks layer statements.

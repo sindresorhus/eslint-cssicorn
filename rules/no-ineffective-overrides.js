@@ -12,6 +12,7 @@ import {canMatchSelector, LEGACY_PSEUDO_ELEMENTS} from './shared/css-selector-sp
 import {shorthandToAffectedProperties} from './shared/css-shorthand-properties.js';
 import {
 	getAtRuleContextPart,
+	getCanonicalLexerNode,
 	getSingleValueIdentifier,
 	hasSubstitutionOrRandomFunction,
 	isSubstitutionFunction,
@@ -309,7 +310,7 @@ const create = context => {
 			const {value} = declaration;
 			// Aliases can share cascade priority while accepting different value syntax.
 			const usable = !hasRollback && !hasUnresolvedValue(value)
-				&& (property.startsWith('--') || (value.type === 'Value' && !sourceCode.lexer.matchProperty(normalizeCssIdentifier(declaration.property), value).error));
+				&& (property.startsWith('--') || (value.type === 'Value' && !sourceCode.lexer.matchProperty(normalizeCssIdentifier(declaration.property), getCanonicalLexerNode(value)).error));
 			blockerValidity.set(declaration, usable);
 		}
 
