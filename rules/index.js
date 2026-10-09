@@ -2,6 +2,7 @@
 
 export {default as 'consistent-compound-selector-order'} from './consistent-compound-selector-order.js';
 export {default as 'consistent-layer-order'} from './consistent-layer-order.js';
+export {default as 'consistent-value-order'} from './consistent-value-order.js';
 export {default as lowercase} from './lowercase.js';
 export {default as 'no-clamped-values'} from './no-clamped-values.js';
 export {default as 'no-declarations-after-nested-rules'} from './no-declarations-after-nested-rules.js';

@@ -3,10 +3,14 @@
 import {ident} from '@eslint/css-tree';
 
 /**
-Canonicalize escaped keyword, function, and unit spellings for lexer matching without changing the source nodes.
+@import {CssNodePlain} from '@eslint/css-tree';
+*/
 
-@template {import('@eslint/css-tree').CssNodePlain} Node
-@param {Node} node
+/**
+Decode and re-encode escaped identifiers, function names, and units for CSS lexer matching without changing the source AST or source locations.
+
+@template {CssNodePlain} Node
+@param {Node} node - The CSS AST node to canonicalize.
 @returns {Node}
 */
 export default function getCanonicalLexerNode(node) {

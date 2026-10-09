@@ -1,0 +1,1572 @@
+exports[`invalid(1): a { border: red solid 1px; } 1`] = `
+
+  1 | a { border: red solid 1px; }
+
+`;
+
+exports[`invalid(1): a { border: red solid 1px; } 2`] = `
+
+Message:
+> 1 | a { border: red solid 1px; }
+    |             ^^^^^^^^^^^^^ Use consistent ordering for \`border\` value components.
+
+Output:
+  1 | a { border: 1px solid red; }
+
+`;
+
+exports[`invalid(10): a { border-inline-start: red solid 1px; } 1`] = `
+
+  1 | a { border-inline-start: red solid 1px; }
+
+`;
+
+exports[`invalid(10): a { border-inline-start: red solid 1px; } 2`] = `
+
+Message:
+> 1 | a { border-inline-start: red solid 1px; }
+    |                          ^^^^^^^^^^^^^ Use consistent ordering for \`border-inline-start\` value components.
+
+Output:
+  1 | a { border-inline-start: 1px solid red; }
+
+`;
+
+exports[`invalid(11): a { border-inline-end: red solid 1px; } 1`] = `
+
+  1 | a { border-inline-end: red solid 1px; }
+
+`;
+
+exports[`invalid(11): a { border-inline-end: red solid 1px; } 2`] = `
+
+Message:
+> 1 | a { border-inline-end: red solid 1px; }
+    |                        ^^^^^^^^^^^^^ Use consistent ordering for \`border-inline-end\` value components.
+
+Output:
+  1 | a { border-inline-end: 1px solid red; }
+
+`;
+
+exports[`invalid(12): a { outline: red solid 1px; } 1`] = `
+
+  1 | a { outline: red solid 1px; }
+
+`;
+
+exports[`invalid(12): a { outline: red solid 1px; } 2`] = `
+
+Message:
+> 1 | a { outline: red solid 1px; }
+    |              ^^^^^^^^^^^^^ Use consistent ordering for \`outline\` value components.
+
+Output:
+  1 | a { outline: 1px solid red; }
+
+`;
+
+exports[`invalid(13): a { column-rule: red solid 1px; } 1`] = `
+
+  1 | a { column-rule: red solid 1px; }
+
+`;
+
+exports[`invalid(13): a { column-rule: red solid 1px; } 2`] = `
+
+Message:
+> 1 | a { column-rule: red solid 1px; }
+    |                  ^^^^^^^^^^^^^ Use consistent ordering for \`column-rule\` value components.
+
+Output:
+  1 | a { column-rule: 1px solid red; }
+
+`;
+
+exports[`invalid(14): a { border: solid red 1px; } 1`] = `
+
+  1 | a { border: solid red 1px; }
+
+`;
+
+exports[`invalid(14): a { border: solid red 1px; } 2`] = `
+
+Message:
+> 1 | a { border: solid red 1px; }
+    |             ^^^^^^^^^^^^^ Use consistent ordering for \`border\` value components.
+
+Output:
+  1 | a { border: 1px solid red; }
+
+`;
+
+exports[`invalid(15): a { border: red 1px solid; } 1`] = `
+
+  1 | a { border: red 1px solid; }
+
+`;
+
+exports[`invalid(15): a { border: red 1px solid; } 2`] = `
+
+Message:
+> 1 | a { border: red 1px solid; }
+    |             ^^^^^^^^^^^^^ Use consistent ordering for \`border\` value components.
+
+Output:
+  1 | a { border: 1px solid red; }
+
+`;
+
+exports[`invalid(16): a { border: solid 1px red; } 1`] = `
+
+  1 | a { border: solid 1px red; }
+
+`;
+
+exports[`invalid(16): a { border: solid 1px red; } 2`] = `
+
+Message:
+> 1 | a { border: solid 1px red; }
+    |             ^^^^^^^^^^^^^ Use consistent ordering for \`border\` value components.
+
+Output:
+  1 | a { border: 1px solid red; }
+
+`;
+
+exports[`invalid(17): a { border: 1px red solid; } 1`] = `
+
+  1 | a { border: 1px red solid; }
+
+`;
+
+exports[`invalid(17): a { border: 1px red solid; } 2`] = `
+
+Message:
+> 1 | a { border: 1px red solid; }
+    |             ^^^^^^^^^^^^^ Use consistent ordering for \`border\` value components.
+
+Output:
+  1 | a { border: 1px solid red; }
+
+`;
+
+exports[`invalid(18): a { border: red solid; border: solid thin; border: red 0; } 1`] = `
+
+  1 | a { border: red solid; border: solid thin; border: red 0; }
+
+`;
+
+exports[`invalid(18): a { border: red solid; border: solid thin; border: red 0; } 2`] = `
+
+Message:
+> 1 | a { border: red solid; border: solid thin; border: red 0; }
+    |             ^^^^^^^^^ Use consistent ordering for \`border\` value components.
+
+Output:
+  1 | a { border: solid red; border: solid thin; border: red 0; }
+
+`;
+
+exports[`invalid(18): a { border: red solid; border: solid thin; border: red 0; } 3`] = `
+
+Message:
+> 1 | a { border: red solid; border: solid thin; border: red 0; }
+    |                                ^^^^^^^^^^ Use consistent ordering for \`border\` value components.
+
+Output:
+  1 | a { border: red solid; border: thin solid; border: red 0; }
+
+`;
+
+exports[`invalid(18): a { border: red solid; border: solid thin; border: red 0; } 4`] = `
+
+Message:
+> 1 | a { border: red solid; border: solid thin; border: red 0; }
+    |                                                    ^^^^^ Use consistent ordering for \`border\` value components.
+
+Output:
+  1 | a { border: red solid; border: solid thin; border: 0 red; }
+
+`;
+
+exports[`invalid(19): a { border: currentColor dashed thick; } 1`] = `
+
+  1 | a { border: currentColor dashed thick; }
+
+`;
+
+exports[`invalid(19): a { border: currentColor dashed thick; } 2`] = `
+
+Message:
+> 1 | a { border: currentColor dashed thick; }
+    |             ^^^^^^^^^^^^^^^^^^^^^^^^^ Use consistent ordering for \`border\` value components.
+
+Output:
+  1 | a { border: thick dashed currentColor; }
+
+`;
+
+exports[`invalid(2): a { border-top: red solid 1px; } 1`] = `
+
+  1 | a { border-top: red solid 1px; }
+
+`;
+
+exports[`invalid(2): a { border-top: red solid 1px; } 2`] = `
+
+Message:
+> 1 | a { border-top: red solid 1px; }
+    |                 ^^^^^^^^^^^^^ Use consistent ordering for \`border-top\` value components.
+
+Output:
+  1 | a { border-top: 1px solid red; }
+
+`;
+
+exports[`invalid(20): a { outline: auto solid 1px; } 1`] = `
+
+  1 | a { outline: auto solid 1px; }
+
+`;
+
+exports[`invalid(20): a { outline: auto solid 1px; } 2`] = `
+
+Message:
+> 1 | a { outline: auto solid 1px; }
+    |              ^^^^^^^^^^^^^^ Use consistent ordering for \`outline\` value components.
+
+Output:
+  1 | a { outline: 1px solid auto; }
+
+`;
+
+exports[`invalid(21): a { outline: red auto 1px; } 1`] = `
+
+  1 | a { outline: red auto 1px; }
+
+`;
+
+exports[`invalid(21): a { outline: red auto 1px; } 2`] = `
+
+Message:
+> 1 | a { outline: red auto 1px; }
+    |              ^^^^^^^^^^^^ Use consistent ordering for \`outline\` value components.
+
+Output:
+  1 | a { outline: 1px auto red; }
+
+`;
+
+exports[`invalid(22): a { column-rule: blue dotted 0.5em; } 1`] = `
+
+  1 | a { column-rule: blue dotted 0.5em; }
+
+`;
+
+exports[`invalid(22): a { column-rule: blue dotted 0.5em; } 2`] = `
+
+Message:
+> 1 | a { column-rule: blue dotted 0.5em; }
+    |                  ^^^^^^^^^^^^^^^^^ Use consistent ordering for \`column-rule\` value components.
+
+Output:
+  1 | a { column-rule: 0.5em dotted blue; }
+
+`;
+
+exports[`invalid(23): a { flex-flow: wrap column; flex-flow: wrap-reverse row-reverse; } 1`] = `
+
+  1 | a { flex-flow: wrap column; flex-flow: wrap-reverse row-reverse; }
+
+`;
+
+exports[`invalid(23): a { flex-flow: wrap column; flex-flow: wrap-reverse row-reverse; } 2`] = `
+
+Message:
+> 1 | a { flex-flow: wrap column; flex-flow: wrap-reverse row-reverse; }
+    |                ^^^^^^^^^^^ Use consistent ordering for \`flex-flow\` value components.
+
+Output:
+  1 | a { flex-flow: column wrap; flex-flow: wrap-reverse row-reverse; }
+
+`;
+
+exports[`invalid(23): a { flex-flow: wrap column; flex-flow: wrap-reverse row-reverse; } 3`] = `
+
+Message:
+> 1 | a { flex-flow: wrap column; flex-flow: wrap-reverse row-reverse; }
+    |                                        ^^^^^^^^^^^^^^^^^^^^^^^^ Use consistent ordering for \`flex-flow\` value components.
+
+Output:
+  1 | a { flex-flow: wrap column; flex-flow: row-reverse wrap-reverse; }
+
+`;
+
+exports[`invalid(24): a { box-shadow: red 1px 2px inset; } 1`] = `
+
+  1 | a { box-shadow: red 1px 2px inset; }
+
+`;
+
+exports[`invalid(24): a { box-shadow: red 1px 2px inset; } 2`] = `
+
+Message:
+> 1 | a { box-shadow: red 1px 2px inset; }
+    |                 ^^^^^^^^^^^^^^^^^ Use consistent ordering for \`box-shadow\` value components.
+
+Output:
+  1 | a { box-shadow: inset 1px 2px red; }
+
+`;
+
+exports[`invalid(25): a { box-shadow: red inset 1px 2px 3px -4px; } 1`] = `
+
+  1 | a { box-shadow: red inset 1px 2px 3px -4px; }
+
+`;
+
+exports[`invalid(25): a { box-shadow: red inset 1px 2px 3px -4px; } 2`] = `
+
+Message:
+> 1 | a { box-shadow: red inset 1px 2px 3px -4px; }
+    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^ Use consistent ordering for \`box-shadow\` value components.
+
+Output:
+  1 | a { box-shadow: inset 1px 2px 3px -4px red; }
+
+`;
+
+exports[`invalid(26): a { box-shadow: 1px 2px red inset; } 1`] = `
+
+  1 | a { box-shadow: 1px 2px red inset; }
+
+`;
+
+exports[`invalid(26): a { box-shadow: 1px 2px red inset; } 2`] = `
+
+Message:
+> 1 | a { box-shadow: 1px 2px red inset; }
+    |                 ^^^^^^^^^^^^^^^^^ Use consistent ordering for \`box-shadow\` value components.
+
+Output:
+  1 | a { box-shadow: inset 1px 2px red; }
+
+`;
+
+exports[`invalid(27): a { box-shadow: blue 5px 6px, red 1px 2px inset; } 1`] = `
+
+  1 | a { box-shadow: blue 5px 6px, red 1px 2px inset; }
+
+`;
+
+exports[`invalid(27): a { box-shadow: blue 5px 6px, red 1px 2px inset; } 2`] = `
+
+Message:
+> 1 | a { box-shadow: blue 5px 6px, red 1px 2px inset; }
+    |                 ^^^^^^^^^^^^ Use consistent ordering for \`box-shadow\` value components.
+
+Output:
+  1 | a { box-shadow: 5px 6px blue, red 1px 2px inset; }
+
+`;
+
+exports[`invalid(27): a { box-shadow: blue 5px 6px, red 1px 2px inset; } 3`] = `
+
+Message:
+> 1 | a { box-shadow: blue 5px 6px, red 1px 2px inset; }
+    |                               ^^^^^^^^^^^^^^^^^ Use consistent ordering for \`box-shadow\` value components.
+
+Output:
+  1 | a { box-shadow: blue 5px 6px, inset 1px 2px red; }
+
+`;
+
+exports[`invalid(28): a { box-shadow: red 0 0 0 0; } 1`] = `
+
+  1 | a { box-shadow: red 0 0 0 0; }
+
+`;
+
+exports[`invalid(28): a { box-shadow: red 0 0 0 0; } 2`] = `
+
+Message:
+> 1 | a { box-shadow: red 0 0 0 0; }
+    |                 ^^^^^^^^^^^ Use consistent ordering for \`box-shadow\` value components.
+
+Output:
+  1 | a { box-shadow: 0 0 0 0 red; }
+
+`;
+
+exports[`invalid(29): a { text-shadow: red 1px 2px 3px; } 1`] = `
+
+  1 | a { text-shadow: red 1px 2px 3px; }
+
+`;
+
+exports[`invalid(29): a { text-shadow: red 1px 2px 3px; } 2`] = `
+
+Message:
+> 1 | a { text-shadow: red 1px 2px 3px; }
+    |                  ^^^^^^^^^^^^^^^ Use consistent ordering for \`text-shadow\` value components.
+
+Output:
+  1 | a { text-shadow: 1px 2px 3px red; }
+
+`;
+
+exports[`invalid(3): a { border-right: red solid 1px; } 1`] = `
+
+  1 | a { border-right: red solid 1px; }
+
+`;
+
+exports[`invalid(3): a { border-right: red solid 1px; } 2`] = `
+
+Message:
+> 1 | a { border-right: red solid 1px; }
+    |                   ^^^^^^^^^^^^^ Use consistent ordering for \`border-right\` value components.
+
+Output:
+  1 | a { border-right: 1px solid red; }
+
+`;
+
+exports[`invalid(30): a { text-shadow: blue 5px 6px, red 1px 2px; } 1`] = `
+
+  1 | a { text-shadow: blue 5px 6px, red 1px 2px; }
+
+`;
+
+exports[`invalid(30): a { text-shadow: blue 5px 6px, red 1px 2px; } 2`] = `
+
+Message:
+> 1 | a { text-shadow: blue 5px 6px, red 1px 2px; }
+    |                  ^^^^^^^^^^^^ Use consistent ordering for \`text-shadow\` value components.
+
+Output:
+  1 | a { text-shadow: 5px 6px blue, red 1px 2px; }
+
+`;
+
+exports[`invalid(30): a { text-shadow: blue 5px 6px, red 1px 2px; } 3`] = `
+
+Message:
+> 1 | a { text-shadow: blue 5px 6px, red 1px 2px; }
+    |                                ^^^^^^^^^^^ Use consistent ordering for \`text-shadow\` value components.
+
+Output:
+  1 | a { text-shadow: blue 5px 6px, 1px 2px red; }
+
+`;
+
+exports[`invalid(31): a { box-shadow: color-mix(in srgb, red, blue) calc(1px + 2px) 0 inset; } 1`] = `
+
+  1 | a { box-shadow: color-mix(in srgb, red, blue) calc(1px + 2px) 0 inset; }
+
+`;
+
+exports[`invalid(31): a { box-shadow: color-mix(in srgb, red, blue) calc(1px + 2px) 0 inset; } 2`] = `
+
+Message:
+> 1 | a { box-shadow: color-mix(in srgb, red, blue) calc(1px + 2px) 0 inset; }
+    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Use consistent ordering for \`box-shadow\` value components.
+
+Output:
+  1 | a { box-shadow: inset calc(1px + 2px) 0 color-mix(in srgb, red, blue); }
+
+`;
+
+exports[`invalid(32): a { border: rgb(1 2 3) solid calc(1px + 2px); } 1`] = `
+
+  1 | a { border: rgb(1 2 3) solid calc(1px + 2px); }
+
+`;
+
+exports[`invalid(32): a { border: rgb(1 2 3) solid calc(1px + 2px); } 2`] = `
+
+Message:
+> 1 | a { border: rgb(1 2 3) solid calc(1px + 2px); }
+    |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Use consistent ordering for \`border\` value components.
+
+Output:
+  1 | a { border: calc(1px + 2px) solid rgb(1 2 3); }
+
+`;
+
+exports[`invalid(33): a { border: red solid min(1px, 2px); } 1`] = `
+
+  1 | a { border: red solid min(1px, 2px); }
+
+`;
+
+exports[`invalid(33): a { border: red solid min(1px, 2px); } 2`] = `
+
+Message:
+> 1 | a { border: red solid min(1px, 2px); }
+    |             ^^^^^^^^^^^^^^^^^^^^^^^ Use consistent ordering for \`border\` value components.
+
+Output:
+  1 | a { border: min(1px, 2px) solid red; }
+
+`;
+
+exports[`invalid(34): a { columns: 3 20em; columns: 3 auto; columns: auto 20em; columns: +3 0px; } 1`] = `
+
+  1 | a { columns: 3 20em; columns: 3 auto; columns: auto 20em; columns: +3 0px; }
+
+`;
+
+exports[`invalid(34): a { columns: 3 20em; columns: 3 auto; columns: auto 20em; columns: +3 0px; } 2`] = `
+
+Message:
+> 1 | a { columns: 3 20em; columns: 3 auto; columns: auto 20em; columns: +3 0px; }
+    |              ^^^^^^ Use consistent ordering for \`columns\` value components.
+
+Output:
+  1 | a { columns: 20em 3; columns: 3 auto; columns: auto 20em; columns: +3 0px; }
+
+`;
+
+exports[`invalid(34): a { columns: 3 20em; columns: 3 auto; columns: auto 20em; columns: +3 0px; } 3`] = `
+
+Message:
+> 1 | a { columns: 3 20em; columns: 3 auto; columns: auto 20em; columns: +3 0px; }
+    |                               ^^^^^^ Use consistent ordering for \`columns\` value components.
+
+Output:
+  1 | a { columns: 3 20em; columns: auto 3; columns: auto 20em; columns: +3 0px; }
+
+`;
+
+exports[`invalid(34): a { columns: 3 20em; columns: 3 auto; columns: auto 20em; columns: +3 0px; } 4`] = `
+
+Message:
+> 1 | a { columns: 3 20em; columns: 3 auto; columns: auto 20em; columns: +3 0px; }
+    |                                                ^^^^^^^^^ Use consistent ordering for \`columns\` value components.
+
+Output:
+  1 | a { columns: 3 20em; columns: 3 auto; columns: 20em auto; columns: +3 0px; }
+
+`;
+
+exports[`invalid(34): a { columns: 3 20em; columns: 3 auto; columns: auto 20em; columns: +3 0px; } 5`] = `
+
+Message:
+> 1 | a { columns: 3 20em; columns: 3 auto; columns: auto 20em; columns: +3 0px; }
+    |                                                                    ^^^^^^ Use consistent ordering for \`columns\` value components.
+
+Output:
+  1 | a { columns: 3 20em; columns: 3 auto; columns: auto 20em; columns: 0px +3; }
+
+`;
+
+exports[`invalid(35): a { BORDER: RED SOLID 1PX; FLEX-FLOW: WRAP COLUMN; BOX-SHADOW: RED 0 0 INSET; COLUMNS: 3 20EM; } 1`] = `
+
+  1 | a { BORDER: RED SOLID 1PX; FLEX-FLOW: WRAP COLUMN; BOX-SHADOW: RED 0 0 INSET; COLUMNS: 3 20EM; }
+
+`;
+
+exports[`invalid(35): a { BORDER: RED SOLID 1PX; FLEX-FLOW: WRAP COLUMN; BOX-SHADOW: RED 0 0 INSET; COLUMNS: 3 20EM; } 2`] = `
+
+Message:
+> 1 | a { BORDER: RED SOLID 1PX; FLEX-FLOW: WRAP COLUMN; BOX-SHADOW: RED 0 0 INSET; COLUMNS: 3 20EM; }
+    |             ^^^^^^^^^^^^^ Use consistent ordering for \`border\` value components.
+
+Output:
+  1 | a { BORDER: 1PX SOLID RED; FLEX-FLOW: WRAP COLUMN; BOX-SHADOW: RED 0 0 INSET; COLUMNS: 3 20EM; }
+
+`;
+
+exports[`invalid(35): a { BORDER: RED SOLID 1PX; FLEX-FLOW: WRAP COLUMN; BOX-SHADOW: RED 0 0 INSET; COLUMNS: 3 20EM; } 3`] = `
+
+Message:
+> 1 | a { BORDER: RED SOLID 1PX; FLEX-FLOW: WRAP COLUMN; BOX-SHADOW: RED 0 0 INSET; COLUMNS: 3 20EM; }
+    |                                       ^^^^^^^^^^^ Use consistent ordering for \`flex-flow\` value components.
+
+Output:
+  1 | a { BORDER: RED SOLID 1PX; FLEX-FLOW: COLUMN WRAP; BOX-SHADOW: RED 0 0 INSET; COLUMNS: 3 20EM; }
+
+`;
+
+exports[`invalid(35): a { BORDER: RED SOLID 1PX; FLEX-FLOW: WRAP COLUMN; BOX-SHADOW: RED 0 0 INSET; COLUMNS: 3 20EM; } 4`] = `
+
+Message:
+> 1 | a { BORDER: RED SOLID 1PX; FLEX-FLOW: WRAP COLUMN; BOX-SHADOW: RED 0 0 INSET; COLUMNS: 3 20EM; }
+    |                                                                ^^^^^^^^^^^^^ Use consistent ordering for \`box-shadow\` value components.
+
+Output:
+  1 | a { BORDER: RED SOLID 1PX; FLEX-FLOW: WRAP COLUMN; BOX-SHADOW: INSET 0 0 RED; COLUMNS: 3 20EM; }
+
+`;
+
+exports[`invalid(35): a { BORDER: RED SOLID 1PX; FLEX-FLOW: WRAP COLUMN; BOX-SHADOW: RED 0 0 INSET; COLUMNS: 3 20EM; } 5`] = `
+
+Message:
+> 1 | a { BORDER: RED SOLID 1PX; FLEX-FLOW: WRAP COLUMN; BOX-SHADOW: RED 0 0 INSET; COLUMNS: 3 20EM; }
+    |                                                                                        ^^^^^^ Use consistent ordering for \`columns\` value components.
+
+Output:
+  1 | a { BORDER: RED SOLID 1PX; FLEX-FLOW: WRAP COLUMN; BOX-SHADOW: RED 0 0 INSET; COLUMNS: 20EM 3; }
+
+`;
+
+exports[`invalid(36): a { \\62 order: r\\65 d \\73 olid 1p\\78; } 1`] = `
+
+  1 | a { \\62 order: r\\65 d \\73 olid 1p\\78; }
+
+`;
+
+exports[`invalid(36): a { \\62 order: r\\65 d \\73 olid 1p\\78; } 2`] = `
+
+Message:
+> 1 | a { \\62 order: r\\65 d \\73 olid 1p\\78; }
+    |                ^^^^^^^^^^^^^^^^^^^^^ Use consistent ordering for \`border\` value components.
+
+Output:
+  1 | a { \\62 order: 1p\\78  \\73 olid r\\65 d; }
+
+`;
+
+exports[`invalid(37): a { flex-flow: w\\72 ap c\\6f lumn; columns: a\\75 to 20e\\6d; } 1`] = `
+
+  1 | a { flex-flow: w\\72 ap c\\6f lumn; columns: a\\75 to 20e\\6d; }
+
+`;
+
+exports[`invalid(37): a { flex-flow: w\\72 ap c\\6f lumn; columns: a\\75 to 20e\\6d; } 2`] = `
+
+Message:
+> 1 | a { flex-flow: w\\72 ap c\\6f lumn; columns: a\\75 to 20e\\6d; }
+    |                ^^^^^^^^^^^^^^^^^ Use consistent ordering for \`flex-flow\` value components.
+
+Output:
+  1 | a { flex-flow: c\\6f lumn w\\72 ap; columns: a\\75 to 20e\\6d; }
+
+`;
+
+exports[`invalid(37): a { flex-flow: w\\72 ap c\\6f lumn; columns: a\\75 to 20e\\6d; } 3`] = `
+
+Message:
+> 1 | a { flex-flow: w\\72 ap c\\6f lumn; columns: a\\75 to 20e\\6d; }
+    |                                            ^^^^^^^^^^^^^^ Use consistent ordering for \`columns\` value components.
+
+Output:
+  1 | a { flex-flow: w\\72 ap c\\6f lumn; columns: 20e\\6d  a\\75 to; }
+
+`;
+
+exports[`invalid(38): a { box-shadow: r\\67 b(1 2 3) 0 0 in\\73 et; } 1`] = `
+
+  1 | a { box-shadow: r\\67 b(1 2 3) 0 0 in\\73 et; }
+
+`;
+
+exports[`invalid(38): a { box-shadow: r\\67 b(1 2 3) 0 0 in\\73 et; } 2`] = `
+
+Message:
+> 1 | a { box-shadow: r\\67 b(1 2 3) 0 0 in\\73 et; }
+    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^ Use consistent ordering for \`box-shadow\` value components.
+
+Output:
+  1 | a { box-shadow: in\\73 et 0 0 r\\67 b(1 2 3); }
+
+`;
+
+exports[`invalid(39): a { -webkit-flex-flow: wrap column; -moz-box-shadow: red 0 0; -webkit-columns: 3 20em; } 1`] = `
+
+  1 | a { -webkit-flex-flow: wrap column; -moz-box-shadow: red 0 0; -webkit-columns: 3 20em; }
+
+`;
+
+exports[`invalid(39): a { -webkit-flex-flow: wrap column; -moz-box-shadow: red 0 0; -webkit-columns: 3 20em; } 2`] = `
+
+Message:
+> 1 | a { -webkit-flex-flow: wrap column; -moz-box-shadow: red 0 0; -webkit-columns: 3 20em; }
+    |                        ^^^^^^^^^^^ Use consistent ordering for \`flex-flow\` value components.
+
+Output:
+  1 | a { -webkit-flex-flow: column wrap; -moz-box-shadow: red 0 0; -webkit-columns: 3 20em; }
+
+`;
+
+exports[`invalid(39): a { -webkit-flex-flow: wrap column; -moz-box-shadow: red 0 0; -webkit-columns: 3 20em; } 3`] = `
+
+Message:
+> 1 | a { -webkit-flex-flow: wrap column; -moz-box-shadow: red 0 0; -webkit-columns: 3 20em; }
+    |                                                      ^^^^^^^ Use consistent ordering for \`box-shadow\` value components.
+
+Output:
+  1 | a { -webkit-flex-flow: wrap column; -moz-box-shadow: 0 0 red; -webkit-columns: 3 20em; }
+
+`;
+
+exports[`invalid(39): a { -webkit-flex-flow: wrap column; -moz-box-shadow: red 0 0; -webkit-columns: 3 20em; } 4`] = `
+
+Message:
+> 1 | a { -webkit-flex-flow: wrap column; -moz-box-shadow: red 0 0; -webkit-columns: 3 20em; }
+    |                                                                                ^^^^^^ Use consistent ordering for \`columns\` value components.
+
+Output:
+  1 | a { -webkit-flex-flow: wrap column; -moz-box-shadow: red 0 0; -webkit-columns: 20em 3; }
+
+`;
+
+exports[`invalid(4): a { border-bottom: red solid 1px; } 1`] = `
+
+  1 | a { border-bottom: red solid 1px; }
+
+`;
+
+exports[`invalid(4): a { border-bottom: red solid 1px; } 2`] = `
+
+Message:
+> 1 | a { border-bottom: red solid 1px; }
+    |                    ^^^^^^^^^^^^^ Use consistent ordering for \`border-bottom\` value components.
+
+Output:
+  1 | a { border-bottom: 1px solid red; }
+
+`;
+
+exports[`invalid(40): a { border: red solid 1px !important; } 1`] = `
+
+  1 | a { border: red solid 1px !important; }
+
+`;
+
+exports[`invalid(40): a { border: red solid 1px !important; } 2`] = `
+
+Message:
+> 1 | a { border: red solid 1px !important; }
+    |             ^^^^^^^^^^^^^ Use consistent ordering for \`border\` value components.
+
+Output:
+  1 | a { border: 1px solid red !important; }
+
+`;
+
+exports[`invalid(41): a { border: /* before */ red solid 1px /* after */; } 1`] = `
+
+  1 | a { border: /* before */ red solid 1px /* after */; }
+
+`;
+
+exports[`invalid(41): a { border: /* before */ red solid 1px /* after */; } 2`] = `
+
+Message:
+> 1 | a { border: /* before */ red solid 1px /* after */; }
+    |                          ^^^^^^^^^^^^^ Use consistent ordering for \`border\` value components.
+
+Output:
+  1 | a { border: /* before */ 1px solid red /* after */; }
+
+`;
+
+exports[`invalid(42): a { border: red /* keep */ solid 1px; } 1`] = `
+
+  1 | a { border: red /* keep */ solid 1px; }
+
+`;
+
+exports[`invalid(42): a { border: red /* keep */ solid 1px; } 2`] = `
+
+Message:
+> 1 | a { border: red /* keep */ solid 1px; }
+    |             ^^^^^^^^^^^^^^^^^^^^^^^^ Use consistent ordering for \`border\` value components.
+
+Output:
+  1 | a { border: 1px /* keep */ solid red; }
+
+`;
+
+exports[`invalid(43): a { box-shadow: rgb(1 /* keep */ 2 3) 0 0 inset; } 1`] = `
+
+  1 | a { box-shadow: rgb(1 /* keep */ 2 3) 0 0 inset; }
+
+`;
+
+exports[`invalid(43): a { box-shadow: rgb(1 /* keep */ 2 3) 0 0 inset; } 2`] = `
+
+Message:
+> 1 | a { box-shadow: rgb(1 /* keep */ 2 3) 0 0 inset; }
+    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Use consistent ordering for \`box-shadow\` value components.
+
+`;
+
+exports[`invalid(44): a { border: rgb(1 2 3)solid 1px; } 1`] = `
+
+  1 | a { border: rgb(1 2 3)solid 1px; }
+
+`;
+
+exports[`invalid(44): a { border: rgb(1 2 3)solid 1px; } 2`] = `
+
+Message:
+> 1 | a { border: rgb(1 2 3)solid 1px; }
+    |             ^^^^^^^^^^^^^^^^^^^ Use consistent ordering for \`border\` value components.
+
+Output:
+  1 | a { border: 1px solid rgb(1 2 3); }
+
+`;
+
+exports[`invalid(45): a { border: #fff/**/solid 1px; } 1`] = `
+
+  1 | a { border: #fff/**/solid 1px; }
+
+`;
+
+exports[`invalid(45): a { border: #fff/**/solid 1px; } 2`] = `
+
+Message:
+> 1 | a { border: #fff/**/solid 1px; }
+    |             ^^^^^^^^^^^^^^^^^ Use consistent ordering for \`border\` value components.
+
+Output:
+  1 | a { border: 1px/**/solid #fff; }
+
+`;
+
+exports[`invalid(46): a { border: red  solid\n  1px; } 1`] = `
+
+  1 | a { border: red  solid
+  2 |   1px; }
+
+`;
+
+exports[`invalid(46): a { border: red  solid\n  1px; } 2`] = `
+
+Message:
+> 1 | a { border: red  solid
+    |             ^^^^^^^^^^
+> 2 |   1px; }
+    | ^^^^^ Use consistent ordering for \`border\` value components.
+
+Output:
+  1 | a { border: 1px  solid
+  2 |   red; }
+
+`;
+
+exports[`invalid(47): a {\r\n\tbox-shadow: red 0\r\n\t\t0 inset;\r\n} 1`] = `
+
+  1 | a {
+  2 | 	box-shadow: red 0
+  3 | 		0 inset;
+  4 | }
+
+`;
+
+exports[`invalid(47): a {\r\n\tbox-shadow: red 0\r\n\t\t0 inset;\r\n} 2`] = `
+
+Message:
+  1 | a {
+> 2 | 	box-shadow: red 0
+    | 	            ^^^^^
+> 3 | 		0 inset;
+    | ^^^^^^^^^ Use consistent ordering for \`box-shadow\` value components.
+  4 | }
+
+Output:
+  1 | a {
+  2 | 	box-shadow: inset 0
+  3 | 		0 red;
+  4 | }
+
+`;
+
+exports[`invalid(48): a { &:hover { border: red solid 1px; } } 1`] = `
+
+  1 | a { &:hover { border: red solid 1px; } }
+
+`;
+
+exports[`invalid(48): a { &:hover { border: red solid 1px; } } 2`] = `
+
+Message:
+> 1 | a { &:hover { border: red solid 1px; } }
+    |                       ^^^^^^^^^^^^^ Use consistent ordering for \`border\` value components.
+
+Output:
+  1 | a { &:hover { border: 1px solid red; } }
+
+`;
+
+exports[`invalid(49): @media (width > 0px) { a { border: red solid 1px; } } 1`] = `
+
+  1 | @media (width > 0px) { a { border: red solid 1px; } }
+
+`;
+
+exports[`invalid(49): @media (width > 0px) { a { border: red solid 1px; } } 2`] = `
+
+Message:
+> 1 | @media (width > 0px) { a { border: red solid 1px; } }
+    |                                    ^^^^^^^^^^^^^ Use consistent ordering for \`border\` value components.
+
+Output:
+  1 | @media (width > 0px) { a { border: 1px solid red; } }
+
+`;
+
+exports[`invalid(5): a { border-left: red solid 1px; } 1`] = `
+
+  1 | a { border-left: red solid 1px; }
+
+`;
+
+exports[`invalid(5): a { border-left: red solid 1px; } 2`] = `
+
+Message:
+> 1 | a { border-left: red solid 1px; }
+    |                  ^^^^^^^^^^^^^ Use consistent ordering for \`border-left\` value components.
+
+Output:
+  1 | a { border-left: 1px solid red; }
+
+`;
+
+exports[`invalid(50): @supports (display: grid) { a { flex-flow: wrap column; } } 1`] = `
+
+  1 | @supports (display: grid) { a { flex-flow: wrap column; } }
+
+`;
+
+exports[`invalid(50): @supports (display: grid) { a { flex-flow: wrap column; } } 2`] = `
+
+Message:
+> 1 | @supports (display: grid) { a { flex-flow: wrap column; } }
+    |                                            ^^^^^^^^^^^ Use consistent ordering for \`flex-flow\` value components.
+
+Output:
+  1 | @supports (display: grid) { a { flex-flow: column wrap; } }
+
+`;
+
+exports[`invalid(51): @container (width > 0px) { a { columns: 3 20em; } } 1`] = `
+
+  1 | @container (width > 0px) { a { columns: 3 20em; } }
+
+`;
+
+exports[`invalid(51): @container (width > 0px) { a { columns: 3 20em; } } 2`] = `
+
+Message:
+> 1 | @container (width > 0px) { a { columns: 3 20em; } }
+    |                                         ^^^^^^ Use consistent ordering for \`columns\` value components.
+
+Output:
+  1 | @container (width > 0px) { a { columns: 20em 3; } }
+
+`;
+
+exports[`invalid(52): @layer theme { a { box-shadow: red 0 0 inset; } } 1`] = `
+
+  1 | @layer theme { a { box-shadow: red 0 0 inset; } }
+
+`;
+
+exports[`invalid(52): @layer theme { a { box-shadow: red 0 0 inset; } } 2`] = `
+
+Message:
+> 1 | @layer theme { a { box-shadow: red 0 0 inset; } }
+    |                                ^^^^^^^^^^^^^ Use consistent ordering for \`box-shadow\` value components.
+
+Output:
+  1 | @layer theme { a { box-shadow: inset 0 0 red; } }
+
+`;
+
+exports[`invalid(53): @scope (.theme) { a { text-shadow: red 0 0; } } 1`] = `
+
+  1 | @scope (.theme) { a { text-shadow: red 0 0; } }
+
+`;
+
+exports[`invalid(53): @scope (.theme) { a { text-shadow: red 0 0; } } 2`] = `
+
+Message:
+> 1 | @scope (.theme) { a { text-shadow: red 0 0; } }
+    |                                    ^^^^^^^ Use consistent ordering for \`text-shadow\` value components.
+
+Output:
+  1 | @scope (.theme) { a { text-shadow: 0 0 red; } }
+
+`;
+
+exports[`invalid(54): @keyframes glow { to { box-shadow: red 0 0 inset; } } 1`] = `
+
+  1 | @keyframes glow { to { box-shadow: red 0 0 inset; } }
+
+`;
+
+exports[`invalid(54): @keyframes glow { to { box-shadow: red 0 0 inset; } } 2`] = `
+
+Message:
+> 1 | @keyframes glow { to { box-shadow: red 0 0 inset; } }
+    |                                    ^^^^^^^^^^^^^ Use consistent ordering for \`box-shadow\` value components.
+
+Output:
+  1 | @keyframes glow { to { box-shadow: inset 0 0 red; } }
+
+`;
+
+exports[`invalid(55): a { border: rgb(from red r g b / .4) solid 1px; } 1`] = `
+
+  1 | a { border: rgb(from red r g b / .4) solid 1px; }
+
+`;
+
+exports[`invalid(55): a { border: rgb(from red r g b / .4) solid 1px; } 2`] = `
+
+Message:
+> 1 | a { border: rgb(from red r g b / .4) solid 1px; }
+    |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Use consistent ordering for \`border\` value components.
+
+Output:
+  1 | a { border: 1px solid rgb(from red r g b / .4); }
+
+`;
+
+exports[`invalid(56): a { border: r\\67 b(1 2 3)solid calc(1p\\78); } 1`] = `
+
+  1 | a { border: r\\67 b(1 2 3)solid calc(1p\\78); }
+
+`;
+
+exports[`invalid(56): a { border: r\\67 b(1 2 3)solid calc(1p\\78); } 2`] = `
+
+Message:
+> 1 | a { border: r\\67 b(1 2 3)solid calc(1p\\78); }
+    |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Use consistent ordering for \`border\` value components.
+
+Output:
+  1 | a { border: calc(1p\\78) solid r\\67 b(1 2 3); }
+
+`;
+
+exports[`invalid(57): a { text-decoration: red wavy underline 2px; } 1`] = `
+
+  1 | a { text-decoration: red wavy underline 2px; }
+
+`;
+
+exports[`invalid(57): a { text-decoration: red wavy underline 2px; } 2`] = `
+
+Message:
+> 1 | a { text-decoration: red wavy underline 2px; }
+    |                      ^^^^^^^^^^^^^^^^^^^^^^ Use consistent ordering for \`text-decoration\` value components.
+
+Output:
+  1 | a { text-decoration: underline 2px wavy red; }
+
+`;
+
+exports[`invalid(58): a { text-decoration: red overline underline wavy 10%; } 1`] = `
+
+  1 | a { text-decoration: red overline underline wavy 10%; }
+
+`;
+
+exports[`invalid(58): a { text-decoration: red overline underline wavy 10%; } 2`] = `
+
+Message:
+> 1 | a { text-decoration: red overline underline wavy 10%; }
+    |                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Use consistent ordering for \`text-decoration\` value components.
+
+Output:
+  1 | a { text-decoration: overline underline 10% wavy red; }
+
+`;
+
+exports[`invalid(59): a { text-decoration: currentColor dotted underline from-font; } 1`] = `
+
+  1 | a { text-decoration: currentColor dotted underline from-font; }
+
+`;
+
+exports[`invalid(59): a { text-decoration: currentColor dotted underline from-font; } 2`] = `
+
+Message:
+> 1 | a { text-decoration: currentColor dotted underline from-font; }
+    |                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Use consistent ordering for \`text-decoration\` value components.
+
+Output:
+  1 | a { text-decoration: underline from-font dotted currentColor; }
+
+`;
+
+exports[`invalid(6): a { border-block: red solid 1px; } 1`] = `
+
+  1 | a { border-block: red solid 1px; }
+
+`;
+
+exports[`invalid(6): a { border-block: red solid 1px; } 2`] = `
+
+Message:
+> 1 | a { border-block: red solid 1px; }
+    |                   ^^^^^^^^^^^^^ Use consistent ordering for \`border-block\` value components.
+
+Output:
+  1 | a { border-block: 1px solid red; }
+
+`;
+
+exports[`invalid(60): a { text-decoration: red solid underline calc(1px + 2px); } 1`] = `
+
+  1 | a { text-decoration: red solid underline calc(1px + 2px); }
+
+`;
+
+exports[`invalid(60): a { text-decoration: red solid underline calc(1px + 2px); } 2`] = `
+
+Message:
+> 1 | a { text-decoration: red solid underline calc(1px + 2px); }
+    |                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Use consistent ordering for \`text-decoration\` value components.
+
+Output:
+  1 | a { text-decoration: underline calc(1px + 2px) solid red; }
+
+`;
+
+exports[`invalid(61): a { text-decoration: rgb(1 2 3)underline wavy auto; } 1`] = `
+
+  1 | a { text-decoration: rgb(1 2 3)underline wavy auto; }
+
+`;
+
+exports[`invalid(61): a { text-decoration: rgb(1 2 3)underline wavy auto; } 2`] = `
+
+Message:
+> 1 | a { text-decoration: rgb(1 2 3)underline wavy auto; }
+    |                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Use consistent ordering for \`text-decoration\` value components.
+
+Output:
+  1 | a { text-decoration: underline auto wavy rgb(1 2 3); }
+
+`;
+
+exports[`invalid(62): a { TEXT-DECORATION: RED WAVY UNDERLINE 2PX; -webkit-text-emphasis: RED OPEN CIRCLE; } 1`] = `
+
+  1 | a { TEXT-DECORATION: RED WAVY UNDERLINE 2PX; -webkit-text-emphasis: RED OPEN CIRCLE; }
+
+`;
+
+exports[`invalid(62): a { TEXT-DECORATION: RED WAVY UNDERLINE 2PX; -webkit-text-emphasis: RED OPEN CIRCLE; } 2`] = `
+
+Message:
+> 1 | a { TEXT-DECORATION: RED WAVY UNDERLINE 2PX; -webkit-text-emphasis: RED OPEN CIRCLE; }
+    |                      ^^^^^^^^^^^^^^^^^^^^^^ Use consistent ordering for \`text-decoration\` value components.
+
+Output:
+  1 | a { TEXT-DECORATION: UNDERLINE 2PX WAVY RED; -webkit-text-emphasis: RED OPEN CIRCLE; }
+
+`;
+
+exports[`invalid(62): a { TEXT-DECORATION: RED WAVY UNDERLINE 2PX; -webkit-text-emphasis: RED OPEN CIRCLE; } 3`] = `
+
+Message:
+> 1 | a { TEXT-DECORATION: RED WAVY UNDERLINE 2PX; -webkit-text-emphasis: RED OPEN CIRCLE; }
+    |                                                                     ^^^^^^^^^^^^^^^ Use consistent ordering for \`text-emphasis\` value components.
+
+Output:
+  1 | a { TEXT-DECORATION: RED WAVY UNDERLINE 2PX; -webkit-text-emphasis: OPEN CIRCLE RED; }
+
+`;
+
+exports[`invalid(63): a { text-decoration: r\\65 d \\75 nderline 2p\\78; } 1`] = `
+
+  1 | a { text-decoration: r\\65 d \\75 nderline 2p\\78; }
+
+`;
+
+exports[`invalid(63): a { text-decoration: r\\65 d \\75 nderline 2p\\78; } 2`] = `
+
+Message:
+> 1 | a { text-decoration: r\\65 d \\75 nderline 2p\\78; }
+    |                      ^^^^^^^^^^^^^^^^^^^^^^^^^ Use consistent ordering for \`text-decoration\` value components.
+
+Output:
+  1 | a { text-decoration: \\75 nderline 2p\\78  r\\65 d; }
+
+`;
+
+exports[`invalid(64): a { text-decoration: red /* keep */ underline 2px; } 1`] = `
+
+  1 | a { text-decoration: red /* keep */ underline 2px; }
+
+`;
+
+exports[`invalid(64): a { text-decoration: red /* keep */ underline 2px; } 2`] = `
+
+Message:
+> 1 | a { text-decoration: red /* keep */ underline 2px; }
+    |                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Use consistent ordering for \`text-decoration\` value components.
+
+Output:
+  1 | a { text-decoration: underline /* keep */ 2px red; }
+
+`;
+
+exports[`invalid(65): a { text-emphasis: red open circle; } 1`] = `
+
+  1 | a { text-emphasis: red open circle; }
+
+`;
+
+exports[`invalid(65): a { text-emphasis: red open circle; } 2`] = `
+
+Message:
+> 1 | a { text-emphasis: red open circle; }
+    |                    ^^^^^^^^^^^^^^^ Use consistent ordering for \`text-emphasis\` value components.
+
+Output:
+  1 | a { text-emphasis: open circle red; }
+
+`;
+
+exports[`invalid(66): a { text-emphasis: red \"\\2022\"; } 1`] = `
+
+  1 | a { text-emphasis: red "\\2022"; }
+
+`;
+
+exports[`invalid(66): a { text-emphasis: red \"\\2022\"; } 2`] = `
+
+Message:
+> 1 | a { text-emphasis: red "\\2022"; }
+    |                    ^^^^^^^^^^^ Use consistent ordering for \`text-emphasis\` value components.
+
+Output:
+  1 | a { text-emphasis: "\\2022" red; }
+
+`;
+
+exports[`invalid(67): a { text-emphasis: red \"/* mark */\"; } 1`] = `
+
+  1 | a { text-emphasis: red "/* mark */"; }
+
+`;
+
+exports[`invalid(67): a { text-emphasis: red \"/* mark */\"; } 2`] = `
+
+Message:
+> 1 | a { text-emphasis: red "/* mark */"; }
+    |                    ^^^^^^^^^^^^^^^^ Use consistent ordering for \`text-emphasis\` value components.
+
+Output:
+  1 | a { text-emphasis: "/* mark */" red; }
+
+`;
+
+exports[`invalid(68): a { text-emphasis: red c\\69 rcle op\\65 n; } 1`] = `
+
+  1 | a { text-emphasis: red c\\69 rcle op\\65 n; }
+
+`;
+
+exports[`invalid(68): a { text-emphasis: red c\\69 rcle op\\65 n; } 2`] = `
+
+Message:
+> 1 | a { text-emphasis: red c\\69 rcle op\\65 n; }
+    |                    ^^^^^^^^^^^^^^^^^^^^^ Use consistent ordering for \`text-emphasis\` value components.
+
+Output:
+  1 | a { text-emphasis: c\\69 rcle op\\65 n red; }
+
+`;
+
+exports[`invalid(69): a { text-emphasis: red /* keep */ circle; } 1`] = `
+
+  1 | a { text-emphasis: red /* keep */ circle; }
+
+`;
+
+exports[`invalid(69): a { text-emphasis: red /* keep */ circle; } 2`] = `
+
+Message:
+> 1 | a { text-emphasis: red /* keep */ circle; }
+    |                    ^^^^^^^^^^^^^^^^^^^^^ Use consistent ordering for \`text-emphasis\` value components.
+
+Output:
+  1 | a { text-emphasis: circle /* keep */ red; }
+
+`;
+
+exports[`invalid(7): a { border-inline: red solid 1px; } 1`] = `
+
+  1 | a { border-inline: red solid 1px; }
+
+`;
+
+exports[`invalid(7): a { border-inline: red solid 1px; } 2`] = `
+
+Message:
+> 1 | a { border-inline: red solid 1px; }
+    |                    ^^^^^^^^^^^^^ Use consistent ordering for \`border-inline\` value components.
+
+Output:
+  1 | a { border-inline: 1px solid red; }
+
+`;
+
+exports[`invalid(70): @media (width > 0px) { a { text-decoration: red underline 2px !important; } } 1`] = `
+
+  1 | @media (width > 0px) { a { text-decoration: red underline 2px !important; } }
+
+`;
+
+exports[`invalid(70): @media (width > 0px) { a { text-decoration: red underline 2px !important; } } 2`] = `
+
+Message:
+> 1 | @media (width > 0px) { a { text-decoration: red underline 2px !important; } }
+    |                                             ^^^^^^^^^^^^^^^^^ Use consistent ordering for \`text-decoration\` value components.
+
+Output:
+  1 | @media (width > 0px) { a { text-decoration: underline 2px red !important; } }
+
+`;
+
+exports[`invalid(71): a { text-wrap: pretty nowrap; text-wrap: stable wrap; text-wrap: auto nowrap; } 1`] = `
+
+  1 | a { text-wrap: pretty nowrap; text-wrap: stable wrap; text-wrap: auto nowrap; }
+
+`;
+
+exports[`invalid(71): a { text-wrap: pretty nowrap; text-wrap: stable wrap; text-wrap: auto nowrap; } 2`] = `
+
+Message:
+> 1 | a { text-wrap: pretty nowrap; text-wrap: stable wrap; text-wrap: auto nowrap; }
+    |                ^^^^^^^^^^^^^ Use consistent ordering for \`text-wrap\` value components.
+
+Output:
+  1 | a { text-wrap: nowrap pretty; text-wrap: stable wrap; text-wrap: auto nowrap; }
+
+`;
+
+exports[`invalid(71): a { text-wrap: pretty nowrap; text-wrap: stable wrap; text-wrap: auto nowrap; } 3`] = `
+
+Message:
+> 1 | a { text-wrap: pretty nowrap; text-wrap: stable wrap; text-wrap: auto nowrap; }
+    |                                          ^^^^^^^^^^^ Use consistent ordering for \`text-wrap\` value components.
+
+Output:
+  1 | a { text-wrap: pretty nowrap; text-wrap: wrap stable; text-wrap: auto nowrap; }
+
+`;
+
+exports[`invalid(71): a { text-wrap: pretty nowrap; text-wrap: stable wrap; text-wrap: auto nowrap; } 4`] = `
+
+Message:
+> 1 | a { text-wrap: pretty nowrap; text-wrap: stable wrap; text-wrap: auto nowrap; }
+    |                                                                  ^^^^^^^^^^^ Use consistent ordering for \`text-wrap\` value components.
+
+Output:
+  1 | a { text-wrap: pretty nowrap; text-wrap: stable wrap; text-wrap: nowrap auto; }
+
+`;
+
+exports[`invalid(72): a { white-space: wrap collapse; white-space: nowrap preserve-breaks; white-space: nowrap break-spaces; } 1`] = `
+
+  1 | a { white-space: wrap collapse; white-space: nowrap preserve-breaks; white-space: nowrap break-spaces; }
+
+`;
+
+exports[`invalid(72): a { white-space: wrap collapse; white-space: nowrap preserve-breaks; white-space: nowrap break-spaces; } 2`] = `
+
+Message:
+> 1 | a { white-space: wrap collapse; white-space: nowrap preserve-breaks; white-space: nowrap break-spaces; }
+    |                  ^^^^^^^^^^^^^ Use consistent ordering for \`white-space\` value components.
+
+Output:
+  1 | a { white-space: collapse wrap; white-space: nowrap preserve-breaks; white-space: nowrap break-spaces; }
+
+`;
+
+exports[`invalid(72): a { white-space: wrap collapse; white-space: nowrap preserve-breaks; white-space: nowrap break-spaces; } 3`] = `
+
+Message:
+> 1 | a { white-space: wrap collapse; white-space: nowrap preserve-breaks; white-space: nowrap break-spaces; }
+    |                                              ^^^^^^^^^^^^^^^^^^^^^^ Use consistent ordering for \`white-space\` value components.
+
+Output:
+  1 | a { white-space: wrap collapse; white-space: preserve-breaks nowrap; white-space: nowrap break-spaces; }
+
+`;
+
+exports[`invalid(72): a { white-space: wrap collapse; white-space: nowrap preserve-breaks; white-space: nowrap break-spaces; } 4`] = `
+
+Message:
+> 1 | a { white-space: wrap collapse; white-space: nowrap preserve-breaks; white-space: nowrap break-spaces; }
+    |                                                                                   ^^^^^^^^^^^^^^^^^^^ Use consistent ordering for \`white-space\` value components.
+
+Output:
+  1 | a { white-space: wrap collapse; white-space: nowrap preserve-breaks; white-space: break-spaces nowrap; }
+
+`;
+
+exports[`invalid(73): a { TEXT-WRAP: BALANCE WRAP; WHITE-SPACE: NOWRAP PRESERVE; } 1`] = `
+
+  1 | a { TEXT-WRAP: BALANCE WRAP; WHITE-SPACE: NOWRAP PRESERVE; }
+
+`;
+
+exports[`invalid(73): a { TEXT-WRAP: BALANCE WRAP; WHITE-SPACE: NOWRAP PRESERVE; } 2`] = `
+
+Message:
+> 1 | a { TEXT-WRAP: BALANCE WRAP; WHITE-SPACE: NOWRAP PRESERVE; }
+    |                ^^^^^^^^^^^^ Use consistent ordering for \`text-wrap\` value components.
+
+Output:
+  1 | a { TEXT-WRAP: WRAP BALANCE; WHITE-SPACE: NOWRAP PRESERVE; }
+
+`;
+
+exports[`invalid(73): a { TEXT-WRAP: BALANCE WRAP; WHITE-SPACE: NOWRAP PRESERVE; } 3`] = `
+
+Message:
+> 1 | a { TEXT-WRAP: BALANCE WRAP; WHITE-SPACE: NOWRAP PRESERVE; }
+    |                                           ^^^^^^^^^^^^^^^ Use consistent ordering for \`white-space\` value components.
+
+Output:
+  1 | a { TEXT-WRAP: BALANCE WRAP; WHITE-SPACE: PRESERVE NOWRAP; }
+
+`;
+
+exports[`invalid(74): a { \\74 ext-wrap: b\\61 lance w\\72 ap; white-space: n\\6f wrap pr\\65 serve; } 1`] = `
+
+  1 | a { \\74 ext-wrap: b\\61 lance w\\72 ap; white-space: n\\6f wrap pr\\65 serve; }
+
+`;
+
+exports[`invalid(74): a { \\74 ext-wrap: b\\61 lance w\\72 ap; white-space: n\\6f wrap pr\\65 serve; } 2`] = `
+
+Message:
+> 1 | a { \\74 ext-wrap: b\\61 lance w\\72 ap; white-space: n\\6f wrap pr\\65 serve; }
+    |                   ^^^^^^^^^^^^^^^^^^ Use consistent ordering for \`text-wrap\` value components.
+
+Output:
+  1 | a { \\74 ext-wrap: w\\72 ap b\\61 lance; white-space: n\\6f wrap pr\\65 serve; }
+
+`;
+
+exports[`invalid(74): a { \\74 ext-wrap: b\\61 lance w\\72 ap; white-space: n\\6f wrap pr\\65 serve; } 3`] = `
+
+Message:
+> 1 | a { \\74 ext-wrap: b\\61 lance w\\72 ap; white-space: n\\6f wrap pr\\65 serve; }
+    |                                                    ^^^^^^^^^^^^^^^^^^^^^ Use consistent ordering for \`white-space\` value components.
+
+Output:
+  1 | a { \\74 ext-wrap: b\\61 lance w\\72 ap; white-space: pr\\65 serve n\\6f wrap; }
+
+`;
+
+exports[`invalid(75): a { text-wrap: balance /* keep */ wrap; white-space: nowrap /* keep */ preserve; } 1`] = `
+
+  1 | a { text-wrap: balance /* keep */ wrap; white-space: nowrap /* keep */ preserve; }
+
+`;
+
+exports[`invalid(75): a { text-wrap: balance /* keep */ wrap; white-space: nowrap /* keep */ preserve; } 2`] = `
+
+Message:
+> 1 | a { text-wrap: balance /* keep */ wrap; white-space: nowrap /* keep */ preserve; }
+    |                ^^^^^^^^^^^^^^^^^^^^^^^ Use consistent ordering for \`text-wrap\` value components.
+
+Output:
+  1 | a { text-wrap: wrap /* keep */ balance; white-space: nowrap /* keep */ preserve; }
+
+`;
+
+exports[`invalid(75): a { text-wrap: balance /* keep */ wrap; white-space: nowrap /* keep */ preserve; } 3`] = `
+
+Message:
+> 1 | a { text-wrap: balance /* keep */ wrap; white-space: nowrap /* keep */ preserve; }
+    |                                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^ Use consistent ordering for \`white-space\` value components.
+
+Output:
+  1 | a { text-wrap: balance /* keep */ wrap; white-space: preserve /* keep */ nowrap; }
+
+`;
+
+exports[`invalid(76): @media (width > 0px) { a { text-wrap: balance wrap !important; white-space: nowrap preserve !important; } } 1`] = `
+
+  1 | @media (width > 0px) { a { text-wrap: balance wrap !important; white-space: nowrap preserve !important; } }
+
+`;
+
+exports[`invalid(76): @media (width > 0px) { a { text-wrap: balance wrap !important; white-space: nowrap preserve !important; } } 2`] = `
+
+Message:
+> 1 | @media (width > 0px) { a { text-wrap: balance wrap !important; white-space: nowrap preserve !important; } }
+    |                                       ^^^^^^^^^^^^ Use consistent ordering for \`text-wrap\` value components.
+
+Output:
+  1 | @media (width > 0px) { a { text-wrap: wrap balance !important; white-space: nowrap preserve !important; } }
+
+`;
+
+exports[`invalid(76): @media (width > 0px) { a { text-wrap: balance wrap !important; white-space: nowrap preserve !important; } } 3`] = `
+
+Message:
+> 1 | @media (width > 0px) { a { text-wrap: balance wrap !important; white-space: nowrap preserve !important; } }
+    |                                                                             ^^^^^^^^^^^^^^^ Use consistent ordering for \`white-space\` value components.
+
+Output:
+  1 | @media (width > 0px) { a { text-wrap: balance wrap !important; white-space: preserve nowrap !important; } }
+
+`;
+
+exports[`invalid(77): a { white-space: discard-after discard-before nowrap preserve; } 1`] = `
+
+  1 | a { white-space: discard-after discard-before nowrap preserve; }
+
+`;
+
+exports[`invalid(77): a { white-space: discard-after discard-before nowrap preserve; } 2`] = `
+
+Message:
+> 1 | a { white-space: discard-after discard-before nowrap preserve; }
+    |                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Use consistent ordering for \`white-space\` value components.
+
+Output:
+  1 | a { white-space: preserve nowrap discard-after discard-before; }
+
+`;
+
+exports[`invalid(8): a { border-block-start: red solid 1px; } 1`] = `
+
+  1 | a { border-block-start: red solid 1px; }
+
+`;
+
+exports[`invalid(8): a { border-block-start: red solid 1px; } 2`] = `
+
+Message:
+> 1 | a { border-block-start: red solid 1px; }
+    |                         ^^^^^^^^^^^^^ Use consistent ordering for \`border-block-start\` value components.
+
+Output:
+  1 | a { border-block-start: 1px solid red; }
+
+`;
+
+exports[`invalid(9): a { border-block-end: red solid 1px; } 1`] = `
+
+  1 | a { border-block-end: red solid 1px; }
+
+`;
+
+exports[`invalid(9): a { border-block-end: red solid 1px; } 2`] = `
+
+Message:
+> 1 | a { border-block-end: red solid 1px; }
+    |                       ^^^^^^^^^^^^^ Use consistent ordering for \`border-block-end\` value components.
+
+Output:
+  1 | a { border-block-end: 1px solid red; }
+
+`;
