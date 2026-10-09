@@ -99,27 +99,27 @@ Responsive declarations and native nesting:
 
 ## Supported relationships
 
-Compares identical properties and [known name aliases](../../rules/shared/css-property-name-aliases.js), such as `word-wrap`/`overflow-wrap`, when an override:
+Compares the same property or a [known name alias](../../rules/shared/css-property-name-aliases.js) when an override:
 
-- Adds classes, attributes, or pseudo-classes to the same element in any order, retaining every base condition and keeping ancestors unchanged: `.button.primary` → `.disabled.primary.button:hover`. Repeated conditions alone do not count as refinements.
-- Reuses a selector under additional `@media`, `@supports`, `@container`, or `@starting-style` conditions, or across layered/unlayered contexts. Every base condition must appear unchanged among the override's conditions; nesting order does not matter.
+- Adds classes, attributes, or pseudo-classes while retaining every base condition and unchanged ancestors: `.button.primary` → `.disabled.primary.button:hover`. Condition order is irrelevant; duplicates alone do not count.
+- Adds `@media`, `@supports`, `@container`, or `@starting-style` conditions, retaining base conditions exactly, or changes layered/unlayered context. Conditional nesting order is irrelevant.
 
-Nesting supports a leading `&` or implicit nesting, skipping combinations of multiple parent and child branches. Lists are reported only when every branch is blocked.
+Native nesting supports leading `&` and implicit nesting, except combinations of multiple parent and child branches. Every selector branch must be blocked.
 
-Supports matching terminal `::before` and `::after`; selector refinements require explicit originating-element selectors. Nested style rules under pseudo-element parents are skipped.
+Matching terminal `::before`/`::after` is supported; refinements require explicit originating-element selectors. Nested style rules under pseudo-element parents are skipped.
 
-`@starting-style` declarations cannot block ordinary declarations. The parser does not support style rules inside nested `@starting-style`.
+Ordinary selectors work within a `@scope`, from outer to nested scopes, and from global rules into scopes. Separate scope blocks, scope-root selectors, direct `@scope` declarations, and scopes inside style rules are skipped.
 
-Compares ordinary selectors within one `@scope`, from outer into nested scopes, and from global rules into scopes. Separate blocks, scope-root selectors, direct scope declarations, and scopes inside style rules are skipped.
+`@starting-style` cannot block ordinary declarations. Style rules inside nested `@starting-style` are unsupported by the parser.
 
 ## Limitations
 
-Checks only this file. Deliberate browser fallbacks may be reported; suppress those diagnostics locally.
+Checks this file only; intentional browser fallbacks may need local suppression.
 
-- Does not resolve layer ordering, imports, shorthand/longhand or `all` interactions, other aliases, computed values, or custom property registration.
-- Attribute syntax (apart from value quoting and escapes) and pseudo-class arguments must have identical generated text.
-- Skips other pseudo-element forms, namespaced types, escaped wildcards, shadow-tree selectors, unparsed arguments, and at-rules other than `@media`, `@supports`, `@container`, `@layer`, `@scope`, and `@starting-style`.
-- Ordinary values rejected by the property grammar and values with substitutions such as `var()` cannot block overrides.
-- `revert`, `revert-layer`, and `revert-rule` disable blockers for that property and known shorthand components throughout the file, except important blockers when all rollbacks are normal. An `all` rollback excludes custom properties, `direction`, and `unicode-bidi`. Substitution rollbacks are not resolved.
+- Does not resolve imports, layer ordering, shorthand/longhand or `all` interactions, other aliases, computed values, or custom property registration.
+- Attribute syntax (except value quoting/escapes) and pseudo-class arguments must generate identical text.
+- Skips other pseudo-elements, namespaced types, escaped wildcards, shadow-tree selectors, unparsed arguments, and unlisted at-rules.
+- Ordinary blockers must match the property grammar. Values containing substitutions such as `var()` cannot block overrides.
+- `revert`, `revert-layer`, and `revert-rule` suppress blockers of equal or lower importance for that property and known shorthand components throughout the file. `all` excludes custom properties, `direction`, and `unicode-bidi`. Substituted rollbacks are unresolved.
 
 Related: [`no-descending-specificity`](./no-descending-specificity.md) checks selector ordering, [`no-ineffective-properties`](./no-ineffective-properties.md) checks incompatible properties, and [`consistent-layer-order`](./consistent-layer-order.md) checks layer statements.
