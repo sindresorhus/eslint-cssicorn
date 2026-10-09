@@ -59,18 +59,18 @@ Component definitions qualify within their own declaration block and its nested 
 
 ## Matching
 
-- Requires a complete direct definition of `rgb(var(--channels))` or `hsl(var(--channels))`, including their `rgba()` and `hsla()` aliases. Alpha may be omitted or explicitly set to the literal value `1` or `100%`. The channel reference must have no fallback or additional components.
-- Unconditional rules whose selectors are all bare `:root` or `html` qualify throughout the file, including inside `@layer`. Other definitions qualify within their own declaration block and its nested grouping rules, stopping at a nested selector rule.
-- Chooses a unique matching token from the nearest qualifying block, or from qualifying roots when no local block has that relationship. Ambiguity in the chosen scope is skipped. Repeated equivalent definitions are accepted; a conflicting or unsupported definition of the destination token anywhere in the file disqualifies it.
-- Handles numeric, percentage, and functional alpha values in comma- and slash-separated variants. Preserves all text after the separator verbatim, including spacing and comments, and uses relative RGB or HSL syntax matching the relationship.
-- Checks ordinary and custom-property declaration values, including colors in gradients and shadows. Definitions may appear after consumers. Custom-property names are decoded and case-sensitive.
+- Requires `rgb(var(--channels))` or `hsl(var(--channels))`, including `rgba()`/`hsla()` aliases, with no fallback or extra components. Alpha must be omitted, `1`, or `100%`.
+- Unconditional rules containing only bare `:root`/`html` selectors qualify file-wide, including inside `@layer`. Other definitions qualify in their block and nested grouping rules, stopping at nested selectors.
+- Uses the nearest block with a matching relationship, or roots if none. Ambiguous matches are skipped. Equivalent definitions are allowed; conflicting or unsupported definitions anywhere in the file disqualify a token.
+- Supports comma/slash alpha variants in ordinary and custom-property values, including gradients and shadows. Preserves all text after the separator and uses the matching RGB/HSL family.
+- Definitions may follow consumers. Token names are decoded and case-sensitive.
 
 ## Limitations
 
-The rule does not discover imported definitions, guess token names, compare literal colors, or analyze the cascade. Suggestions require review: an inherited full-color token can retain its original channels when a descendant overrides only the channel token, so the suggested expression may produce a different color. See [custom-property inheritance](https://www.w3.org/TR/css-variables-1/#defining-variables).
+Only explicit, same-file relationships are discovered. Cascade equivalence is not checked: overriding channels in a descendant can leave an inherited full-color token unchanged. Review suggestions for [custom-property inheritance](https://www.w3.org/TR/css-variables-1/#defining-variables).
 
-Local relationships do not cross nested selector rules or propagate from a conditional block to its parent or siblings. Conditional root definitions do not establish a file-wide relationship.
+Conditional definitions do not qualify outside their block.
 
-Existing relative colors, including `alpha(from …)`, channel references with fallbacks, self-references, substitution fallbacks, strings, URLs, at-rule preludes, descriptor blocks, and CSS Modules `:export`/`:import()` declarations are ignored. A suggestion is also skipped if the rewritten function prefix through the slash or comma separator contains a comment.
+Skips existing relative colors (including `alpha(from …)`), self-references, substitution fallbacks, strings, URLs, at-rule preludes, descriptor blocks, and CSS Modules interop declarations. Comments in the function prefix through the alpha separator prevent a suggestion.
 
-`color-mix()` is not rewritten. Mixing with transparent scales a color's existing alpha, while an explicit alpha in relative color syntax replaces it. Channel-based colors nested inside a mix can still receive suggestions.
+`color-mix()` itself is not rewritten: mixing with transparent scales alpha rather than replacing it. Channel-based colors inside a mix can still receive suggestions.
