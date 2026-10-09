@@ -81,15 +81,26 @@ const create = context => {
 		}
 	});
 
-	context.on('Atrule', atRule => {
-		if (normalizeCssIdentifier(atRule.name) !== 'import') {
+	context.on('Atrule', function * (atRule) {
+		const name = normalizeCssIdentifier(atRule.name);
+		if (name === 'supports-condition') {
+			for (const declaration of atRule.block?.children ?? []) {
+				if (declaration.type === 'Declaration') {
+					yield getDeclarationProblem(declaration);
+				}
+			}
+
+			return;
+		}
+
+		if (name !== 'import') {
 			return;
 		}
 
 		const supports = atRule.prelude?.children?.find(node => node.type === 'Function' && normalizeCssIdentifier(node.name) === 'supports');
 		const declaration = supports?.children?.find(node => node.type === 'Declaration');
 		if (declaration) {
-			return getDeclarationProblem(declaration);
+			yield getDeclarationProblem(declaration);
 		}
 	});
 };

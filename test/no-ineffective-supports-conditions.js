@@ -44,6 +44,11 @@ test.snapshot({
 		'@supports (background: var(--image, url("oklch.png"))) {}',
 		String.raw`@supports (color: \\var(--brand, oklch(60% 0.2 20))) {}`,
 		String.raw`@supports (color: \\var(--brand) oklch(60% 0.2 20)) {}`,
+		'@supports-condition --modern-color { color: oklch(60% 0.2 20); }',
+		'@supports-condition --probes { --probe: red; color: var(--brand); color: oklch(60% 0.2 20); }',
+		'@supports-condition --theme { --probe: theme(oklch(60% 0.2 20)); }',
+		'@supports-condition --empty {}',
+		'@supports-condition --nested { a { --brand: oklch(60% 0.2 20); color: oklch(var(--lightness) 0.2 20); } }',
 	],
 	invalid: [
 		'@supports (--brand: oklch(60% 0.2 20)) {}',
@@ -94,6 +99,12 @@ test.snapshot({
 			code: '@supports (--brand: future-color(red)) {}',
 			languageOptions: {customSyntax: {types: {'future-color()': 'future-color( <color> )'}}},
 		},
+		'@supports-condition --modern-color { --brand: oklch(60% 0.2 20); }',
+		'@supports-condition --modern-color { color: oklch(var(--lightness) 0.2 20); }',
+		'@supports-condition --modern-color { color: var(--brand, oklch(60% 0.2 20)); }',
+		'@SUPPORTS-CONDITION --modern-color { --BRAND: OKLCH(60% 0.2 20); }',
+		'@supports-condition --modern { --brand: oklch(60% 0.2 20); width: calc(var(--size) + 1px); }',
+		'@media screen { @supports-condition --modern-color { --brand: oklch(60% 0.2 20); } }',
 	],
 });
 

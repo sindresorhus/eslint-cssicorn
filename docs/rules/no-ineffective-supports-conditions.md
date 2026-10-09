@@ -13,7 +13,7 @@ Custom-property tests check whether the value is accepted as tokens. They do not
 
 For ordinary properties, substitutions such as `var()`, `env()`, and `attr()` defer value validation. A condition containing them does not establish support for surrounding functions or functions in their fallbacks. Similarly, `first-valid()` can succeed through another alternative without establishing support for each function in its arguments.
 
-This rule reports these conditions in both `@supports` and `@import supports()`. It reports at most once per declaration condition, identifying the first affected function.
+This rule reports these conditions in `@supports`, `@import supports()`, and direct declarations in `@supports-condition` blocks. It reports at most once per declaration condition, identifying the first affected function.
 
 ## Examples
 
@@ -49,6 +49,20 @@ To test both substitution support and a value function, use separate declaration
 
 /* ✅ */
 @import "theme.css" supports(color: oklch(60% 0.2 20));
+```
+
+The draft [`@supports-condition` syntax](https://drafts.csswg.org/css-conditional-5/#at-supports-condition) defines named support queries. Direct declarations in its block are checked:
+
+```css
+/* ❌ */
+@supports-condition --modern-color {
+	--brand: oklch(60% 0.2 20);
+}
+
+/* ✅ */
+@supports-condition --modern-color {
+	color: oklch(60% 0.2 20);
+}
 ```
 
 ## Deliberate support probes

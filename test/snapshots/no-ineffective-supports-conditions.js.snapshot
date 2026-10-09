@@ -658,6 +658,98 @@ Message:
 
 `;
 
+exports[`invalid(51): @supports-condition --modern-color { --brand: oklch(60% 0.2 20); } 1`] = `
+
+  1 | @supports-condition --modern-color { --brand: oklch(60% 0.2 20); }
+
+`;
+
+exports[`invalid(51): @supports-condition --modern-color { --brand: oklch(60% 0.2 20); } 2`] = `
+
+Message:
+> 1 | @supports-condition --modern-color { --brand: oklch(60% 0.2 20); }
+    |                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^ This condition does not test support for \`oklch()\`. Custom properties accept their values as tokens.
+
+`;
+
+exports[`invalid(52): @supports-condition --modern-color { color: oklch(var(--lightness) 0.2 20); } 1`] = `
+
+  1 | @supports-condition --modern-color { color: oklch(var(--lightness) 0.2 20); }
+
+`;
+
+exports[`invalid(52): @supports-condition --modern-color { color: oklch(var(--lightness) 0.2 20); } 2`] = `
+
+Message:
+> 1 | @supports-condition --modern-color { color: oklch(var(--lightness) 0.2 20); }
+    |                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ This condition does not establish support for \`oklch()\` when its value uses \`var()\`.
+
+`;
+
+exports[`invalid(53): @supports-condition --modern-color { color: var(--brand, oklch(60% 0.2 20)); } 1`] = `
+
+  1 | @supports-condition --modern-color { color: var(--brand, oklch(60% 0.2 20)); }
+
+`;
+
+exports[`invalid(53): @supports-condition --modern-color { color: var(--brand, oklch(60% 0.2 20)); } 2`] = `
+
+Message:
+> 1 | @supports-condition --modern-color { color: var(--brand, oklch(60% 0.2 20)); }
+    |                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ This condition does not establish support for \`oklch()\` when its value uses \`var()\`.
+
+`;
+
+exports[`invalid(54): @SUPPORTS-CONDITION --modern-color { --BRAND: OKLCH(60% 0.2 20); } 1`] = `
+
+  1 | @SUPPORTS-CONDITION --modern-color { --BRAND: OKLCH(60% 0.2 20); }
+
+`;
+
+exports[`invalid(54): @SUPPORTS-CONDITION --modern-color { --BRAND: OKLCH(60% 0.2 20); } 2`] = `
+
+Message:
+> 1 | @SUPPORTS-CONDITION --modern-color { --BRAND: OKLCH(60% 0.2 20); }
+    |                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^ This condition does not test support for \`OKLCH()\`. Custom properties accept their values as tokens.
+
+`;
+
+exports[`invalid(55): @supports-condition --modern { --brand: oklch(60% 0.2 20); width: calc(var(--size) + 1px); } 1`] = `
+
+  1 | @supports-condition --modern { --brand: oklch(60% 0.2 20); width: calc(var(--size) + 1px); }
+
+`;
+
+exports[`invalid(55): @supports-condition --modern { --brand: oklch(60% 0.2 20); width: calc(var(--size) + 1px); } 2`] = `
+
+Message:
+> 1 | @supports-condition --modern { --brand: oklch(60% 0.2 20); width: calc(var(--size) + 1px); }
+    |                                ^^^^^^^^^^^^^^^^^^^^^^^^^^ This condition does not test support for \`oklch()\`. Custom properties accept their values as tokens.
+
+`;
+
+exports[`invalid(55): @supports-condition --modern { --brand: oklch(60% 0.2 20); width: calc(var(--size) + 1px); } 3`] = `
+
+Message:
+> 1 | @supports-condition --modern { --brand: oklch(60% 0.2 20); width: calc(var(--size) + 1px); }
+    |                                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ This condition does not establish support for \`calc()\` when its value uses \`var()\`.
+
+`;
+
+exports[`invalid(56): @media screen { @supports-condition --modern-color { --brand: oklch(60% 0.2 20); } } 1`] = `
+
+  1 | @media screen { @supports-condition --modern-color { --brand: oklch(60% 0.2 20); } }
+
+`;
+
+exports[`invalid(56): @media screen { @supports-condition --modern-color { --brand: oklch(60% 0.2 20); } } 2`] = `
+
+Message:
+> 1 | @media screen { @supports-condition --modern-color { --brand: oklch(60% 0.2 20); } }
+    |                                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^ This condition does not test support for \`oklch()\`. Custom properties accept their values as tokens.
+
+`;
+
 exports[`invalid(6): @supports (--size: min(1px, max(2px, 3px))) {} 1`] = `
 
   1 | @supports (--size: min(1px, max(2px, 3px))) {}
