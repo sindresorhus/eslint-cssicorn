@@ -1,0 +1,807 @@
+exports[`invalid(1): @supports (--brand: oklch(60% 0.2 20)) {} 1`] = `
+
+  1 | @supports (--brand: oklch(60% 0.2 20)) {}
+
+`;
+
+exports[`invalid(1): @supports (--brand: oklch(60% 0.2 20)) {} 2`] = `
+
+Message:
+> 1 | @supports (--brand: oklch(60% 0.2 20)) {}
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^ This condition does not test support for \`oklch()\`. Custom properties accept their values as tokens.
+
+`;
+
+exports[`invalid(10): @supports (width: calc(var(--width) + 1px)) {} 1`] = `
+
+  1 | @supports (width: calc(var(--width) + 1px)) {}
+
+`;
+
+exports[`invalid(10): @supports (width: calc(var(--width) + 1px)) {} 2`] = `
+
+Message:
+> 1 | @supports (width: calc(var(--width) + 1px)) {}
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ This condition does not establish support for \`calc()\` when its value uses \`var()\`.
+
+`;
+
+exports[`invalid(11): @supports (color: var(--brand, oklch(60% 0.2 20))) {} 1`] = `
+
+  1 | @supports (color: var(--brand, oklch(60% 0.2 20))) {}
+
+`;
+
+exports[`invalid(11): @supports (color: var(--brand, oklch(60% 0.2 20))) {} 2`] = `
+
+Message:
+> 1 | @supports (color: var(--brand, oklch(60% 0.2 20))) {}
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ This condition does not establish support for \`oklch()\` when its value uses \`var()\`.
+
+`;
+
+exports[`invalid(12): @supports (--brand: var(--color, oklch(60% 0.2 20))) {} 1`] = `
+
+  1 | @supports (--brand: var(--color, oklch(60% 0.2 20))) {}
+
+`;
+
+exports[`invalid(12): @supports (--brand: var(--color, oklch(60% 0.2 20))) {} 2`] = `
+
+Message:
+> 1 | @supports (--brand: var(--color, oklch(60% 0.2 20))) {}
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ This condition does not test support for \`oklch()\`. Custom properties accept their values as tokens.
+
+`;
+
+exports[`invalid(13): @supports (color: var(--brand, var(--fallback, oklch(60% 0.2 20)))) {} 1`] = `
+
+  1 | @supports (color: var(--brand, var(--fallback, oklch(60% 0.2 20)))) {}
+
+`;
+
+exports[`invalid(13): @supports (color: var(--brand, var(--fallback, oklch(60% 0.2 20)))) {} 2`] = `
+
+Message:
+> 1 | @supports (color: var(--brand, var(--fallback, oklch(60% 0.2 20)))) {}
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ This condition does not establish support for \`oklch()\` when its value uses \`var()\`.
+
+`;
+
+exports[`invalid(14): @supports (width: calc(env(safe-area-inset-left) + 1px)) {} 1`] = `
+
+  1 | @supports (width: calc(env(safe-area-inset-left) + 1px)) {}
+
+`;
+
+exports[`invalid(14): @supports (width: calc(env(safe-area-inset-left) + 1px)) {} 2`] = `
+
+Message:
+> 1 | @supports (width: calc(env(safe-area-inset-left) + 1px)) {}
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ This condition does not establish support for \`calc()\` when its value uses \`env()\`.
+
+`;
+
+exports[`invalid(15): @supports (width: calc(attr(data-width px) + 1px)) {} 1`] = `
+
+  1 | @supports (width: calc(attr(data-width px) + 1px)) {}
+
+`;
+
+exports[`invalid(15): @supports (width: calc(attr(data-width px) + 1px)) {} 2`] = `
+
+Message:
+> 1 | @supports (width: calc(attr(data-width px) + 1px)) {}
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ This condition does not establish support for \`calc()\` when its value uses \`attr()\`.
+
+`;
+
+exports[`invalid(16): @supports (--probe: oklch(attr(data-lightness type(<number>)) 0.2 20)) {} 1`] = `
+
+  1 | @supports (--probe: oklch(attr(data-lightness type(<number>)) 0.2 20)) {}
+
+`;
+
+exports[`invalid(16): @supports (--probe: oklch(attr(data-lightness type(<number>)) 0.2 20)) {} 2`] = `
+
+Message:
+> 1 | @supports (--probe: oklch(attr(data-lightness type(<number>)) 0.2 20)) {}
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ This condition does not test support for \`oklch()\`. Custom properties accept their values as tokens.
+
+`;
+
+exports[`invalid(17): @supports (--probe: attr(data-color type(<color>), oklch(60% 0.2 20))) {} 1`] = `
+
+  1 | @supports (--probe: attr(data-color type(<color>), oklch(60% 0.2 20))) {}
+
+`;
+
+exports[`invalid(17): @supports (--probe: attr(data-color type(<color>), oklch(60% 0.2 20))) {} 2`] = `
+
+Message:
+> 1 | @supports (--probe: attr(data-color type(<color>), oklch(60% 0.2 20))) {}
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ This condition does not test support for \`oklch()\`. Custom properties accept their values as tokens.
+
+`;
+
+exports[`invalid(18): @supports (--probe: if(supports(color: oklch(60% 0.2 20)): oklch(60% 0.2 20); else: blue)) {} 1`] = `
+
+  1 | @supports (--probe: if(supports(color: oklch(60% 0.2 20)): oklch(60% 0.2 20); else: blue)) {}
+
+`;
+
+exports[`invalid(18): @supports (--probe: if(supports(color: oklch(60% 0.2 20)): oklch(60% 0.2 20); else: blue)) {} 2`] = `
+
+Message:
+> 1 | @supports (--probe: if(supports(color: oklch(60% 0.2 20)): oklch(60% 0.2 20); else: blue)) {}
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ This condition does not test support for \`oklch()\`. Custom properties accept their values as tokens.
+
+`;
+
+exports[`invalid(19): @supports (--probe: if(supports(color: oklch(60% 0.2 20)): red; else: rgb(0 0 0))) {} 1`] = `
+
+  1 | @supports (--probe: if(supports(color: oklch(60% 0.2 20)): red; else: rgb(0 0 0))) {}
+
+`;
+
+exports[`invalid(19): @supports (--probe: if(supports(color: oklch(60% 0.2 20)): red; else: rgb(0 0 0))) {} 2`] = `
+
+Message:
+> 1 | @supports (--probe: if(supports(color: oklch(60% 0.2 20)): red; else: rgb(0 0 0))) {}
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ This condition does not test support for \`rgb()\`. Custom properties accept their values as tokens.
+
+`;
+
+exports[`invalid(2): @supports (--brand: rgb(0 0 0)) {} 1`] = `
+
+  1 | @supports (--brand: rgb(0 0 0)) {}
+
+`;
+
+exports[`invalid(2): @supports (--brand: rgb(0 0 0)) {} 2`] = `
+
+Message:
+> 1 | @supports (--brand: rgb(0 0 0)) {}
+    |            ^^^^^^^^^^^^^^^^^^^ This condition does not test support for \`rgb()\`. Custom properties accept their values as tokens.
+
+`;
+
+exports[`invalid(20): @supports (color: first-valid(oklch(60% 0.2 20), red)) {} 1`] = `
+
+  1 | @supports (color: first-valid(oklch(60% 0.2 20), red)) {}
+
+`;
+
+exports[`invalid(20): @supports (color: first-valid(oklch(60% 0.2 20), red)) {} 2`] = `
+
+Message:
+> 1 | @supports (color: first-valid(oklch(60% 0.2 20), red)) {}
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ This condition does not establish support for \`oklch()\` when its value uses \`first-valid()\`.
+
+`;
+
+exports[`invalid(21): @supports (width: calc(--size() + 1px)) {} 1`] = `
+
+  1 | @supports (width: calc(--size() + 1px)) {}
+
+`;
+
+exports[`invalid(21): @supports (width: calc(--size() + 1px)) {} 2`] = `
+
+Message:
+> 1 | @supports (width: calc(--size() + 1px)) {}
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^ This condition does not establish support for \`calc()\` when its value uses \`--size()\`.
+
+`;
+
+exports[`invalid(22): @SUPPORTS (--BRAND: OKLCH(60% 0.2 20)) {} 1`] = `
+
+  1 | @SUPPORTS (--BRAND: OKLCH(60% 0.2 20)) {}
+
+`;
+
+exports[`invalid(22): @SUPPORTS (--BRAND: OKLCH(60% 0.2 20)) {} 2`] = `
+
+Message:
+> 1 | @SUPPORTS (--BRAND: OKLCH(60% 0.2 20)) {}
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^ This condition does not test support for \`OKLCH()\`. Custom properties accept their values as tokens.
+
+`;
+
+exports[`invalid(23): @supports (COLOR: OKLCH(VAR(--lightness) 0.2 20)) {} 1`] = `
+
+  1 | @supports (COLOR: OKLCH(VAR(--lightness) 0.2 20)) {}
+
+`;
+
+exports[`invalid(23): @supports (COLOR: OKLCH(VAR(--lightness) 0.2 20)) {} 2`] = `
+
+Message:
+> 1 | @supports (COLOR: OKLCH(VAR(--lightness) 0.2 20)) {}
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ This condition does not establish support for \`OKLCH()\` when its value uses \`VAR()\`.
+
+`;
+
+exports[`invalid(24): @supports not (--brand: oklch(60% 0.2 20)) {} 1`] = `
+
+  1 | @supports not (--brand: oklch(60% 0.2 20)) {}
+
+`;
+
+exports[`invalid(24): @supports not (--brand: oklch(60% 0.2 20)) {} 2`] = `
+
+Message:
+> 1 | @supports not (--brand: oklch(60% 0.2 20)) {}
+    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^ This condition does not test support for \`oklch()\`. Custom properties accept their values as tokens.
+
+`;
+
+exports[`invalid(25): @supports ((--brand: oklch(60% 0.2 20)) and (display: grid)) {} 1`] = `
+
+  1 | @supports ((--brand: oklch(60% 0.2 20)) and (display: grid)) {}
+
+`;
+
+exports[`invalid(25): @supports ((--brand: oklch(60% 0.2 20)) and (display: grid)) {} 2`] = `
+
+Message:
+> 1 | @supports ((--brand: oklch(60% 0.2 20)) and (display: grid)) {}
+    |             ^^^^^^^^^^^^^^^^^^^^^^^^^^ This condition does not test support for \`oklch()\`. Custom properties accept their values as tokens.
+
+`;
+
+exports[`invalid(26): @supports (--brand: oklch(60% 0.2 20)) or (--size: clamp(1px, 2vw, 3px)) {} 1`] = `
+
+  1 | @supports (--brand: oklch(60% 0.2 20)) or (--size: clamp(1px, 2vw, 3px)) {}
+
+`;
+
+exports[`invalid(26): @supports (--brand: oklch(60% 0.2 20)) or (--size: clamp(1px, 2vw, 3px)) {} 2`] = `
+
+Message:
+> 1 | @supports (--brand: oklch(60% 0.2 20)) or (--size: clamp(1px, 2vw, 3px)) {}
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^ This condition does not test support for \`oklch()\`. Custom properties accept their values as tokens.
+
+`;
+
+exports[`invalid(26): @supports (--brand: oklch(60% 0.2 20)) or (--size: clamp(1px, 2vw, 3px)) {} 3`] = `
+
+Message:
+> 1 | @supports (--brand: oklch(60% 0.2 20)) or (--size: clamp(1px, 2vw, 3px)) {}
+    |                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ This condition does not test support for \`clamp()\`. Custom properties accept their values as tokens.
+
+`;
+
+exports[`invalid(27): @supports (--probe: oklch(60% 0.2 20) rgb(0 0 0)) {} 1`] = `
+
+  1 | @supports (--probe: oklch(60% 0.2 20) rgb(0 0 0)) {}
+
+`;
+
+exports[`invalid(27): @supports (--probe: oklch(60% 0.2 20) rgb(0 0 0)) {} 2`] = `
+
+Message:
+> 1 | @supports (--probe: oklch(60% 0.2 20) rgb(0 0 0)) {}
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ This condition does not test support for \`oklch()\`. Custom properties accept their values as tokens.
+
+`;
+
+exports[`invalid(28): @supports (--probe: theme((nested(oklch(60% 0.2 20)))) clamp(1px, 2vw, 3px)) {} 1`] = `
+
+  1 | @supports (--probe: theme((nested(oklch(60% 0.2 20)))) clamp(1px, 2vw, 3px)) {}
+
+`;
+
+exports[`invalid(28): @supports (--probe: theme((nested(oklch(60% 0.2 20)))) clamp(1px, 2vw, 3px)) {} 2`] = `
+
+Message:
+> 1 | @supports (--probe: theme((nested(oklch(60% 0.2 20)))) clamp(1px, 2vw, 3px)) {}
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ This condition does not test support for \`clamp()\`. Custom properties accept their values as tokens.
+
+`;
+
+exports[`invalid(29): @supports (width: var(--size, theme((nested(clamp(1px, 2vw, 3px))))) calc(1px + 2px)) {} 1`] = `
+
+  1 | @supports (width: var(--size, theme((nested(clamp(1px, 2vw, 3px))))) calc(1px + 2px)) {}
+
+`;
+
+exports[`invalid(29): @supports (width: var(--size, theme((nested(clamp(1px, 2vw, 3px))))) calc(1px + 2px)) {} 2`] = `
+
+Message:
+> 1 | @supports (width: var(--size, theme((nested(clamp(1px, 2vw, 3px))))) calc(1px + 2px)) {}
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ This condition does not establish support for \`calc()\` when its value uses \`var()\`.
+
+`;
+
+exports[`invalid(3): @supports (--background: linear-gradient(red, blue)) {} 1`] = `
+
+  1 | @supports (--background: linear-gradient(red, blue)) {}
+
+`;
+
+exports[`invalid(3): @supports (--background: linear-gradient(red, blue)) {} 2`] = `
+
+Message:
+> 1 | @supports (--background: linear-gradient(red, blue)) {}
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ This condition does not test support for \`linear-gradient()\`. Custom properties accept their values as tokens.
+
+`;
+
+exports[`invalid(30): @supports (--brand: /* keep */ oklch(60% 0.2 20) /* keep */) {} 1`] = `
+
+  1 | @supports (--brand: /* keep */ oklch(60% 0.2 20) /* keep */) {}
+
+`;
+
+exports[`invalid(30): @supports (--brand: /* keep */ oklch(60% 0.2 20) /* keep */) {} 2`] = `
+
+Message:
+> 1 | @supports (--brand: /* keep */ oklch(60% 0.2 20) /* keep */) {}
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ This condition does not test support for \`oklch()\`. Custom properties accept their values as tokens.
+
+`;
+
+exports[`invalid(31): @property --brand { syntax: \"<color>\"; inherits: false; initial-value: red; } @supports (--brand: oklch(60% 0.2 20)) {} 1`] = `
+
+  1 | @property --brand { syntax: "<color>"; inherits: false; initial-value: red; } @supports (--brand: oklch(60% 0.2 20)) {}
+
+`;
+
+exports[`invalid(31): @property --brand { syntax: \"<color>\"; inherits: false; initial-value: red; } @supports (--brand: oklch(60% 0.2 20)) {} 2`] = `
+
+Message:
+> 1 | @property --brand { syntax: "<color>"; inherits: false; initial-value: red; } @supports (--brand: oklch(60% 0.2 20)) {}
+    |                                                                                          ^^^^^^^^^^^^^^^^^^^^^^^^^^ This condition does not test support for \`oklch()\`. Custom properties accept their values as tokens.
+
+`;
+
+exports[`invalid(32): @supports (--brand: oklch(60% 0.2 20)) {} @property --brand { syntax: \"<color>\"; inherits: false; initial-value: red; } 1`] = `
+
+  1 | @supports (--brand: oklch(60% 0.2 20)) {} @property --brand { syntax: "<color>"; inherits: false; initial-value: red; }
+
+`;
+
+exports[`invalid(32): @supports (--brand: oklch(60% 0.2 20)) {} @property --brand { syntax: \"<color>\"; inherits: false; initial-value: red; } 2`] = `
+
+Message:
+> 1 | @supports (--brand: oklch(60% 0.2 20)) {} @property --brand { syntax: "<color>"; inherits: false; initial-value: red; }
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^ This condition does not test support for \`oklch()\`. Custom properties accept their values as tokens.
+
+`;
+
+exports[`invalid(33): @media screen { @supports (--brand: oklch(60% 0.2 20)) {} } 1`] = `
+
+  1 | @media screen { @supports (--brand: oklch(60% 0.2 20)) {} }
+
+`;
+
+exports[`invalid(33): @media screen { @supports (--brand: oklch(60% 0.2 20)) {} } 2`] = `
+
+Message:
+> 1 | @media screen { @supports (--brand: oklch(60% 0.2 20)) {} }
+    |                            ^^^^^^^^^^^^^^^^^^^^^^^^^^ This condition does not test support for \`oklch()\`. Custom properties accept their values as tokens.
+
+`;
+
+exports[`invalid(34): @supports (display: grid) { @supports (--brand: oklch(60% 0.2 20)) {} } 1`] = `
+
+  1 | @supports (display: grid) { @supports (--brand: oklch(60% 0.2 20)) {} }
+
+`;
+
+exports[`invalid(34): @supports (display: grid) { @supports (--brand: oklch(60% 0.2 20)) {} } 2`] = `
+
+Message:
+> 1 | @supports (display: grid) { @supports (--brand: oklch(60% 0.2 20)) {} }
+    |                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^ This condition does not test support for \`oklch()\`. Custom properties accept their values as tokens.
+
+`;
+
+exports[`invalid(35): @container (width > 1px) { @supports (--brand: oklch(60% 0.2 20)) {} } 1`] = `
+
+  1 | @container (width > 1px) { @supports (--brand: oklch(60% 0.2 20)) {} }
+
+`;
+
+exports[`invalid(35): @container (width > 1px) { @supports (--brand: oklch(60% 0.2 20)) {} } 2`] = `
+
+Message:
+> 1 | @container (width > 1px) { @supports (--brand: oklch(60% 0.2 20)) {} }
+    |                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^ This condition does not test support for \`oklch()\`. Custom properties accept their values as tokens.
+
+`;
+
+exports[`invalid(36): @layer theme { @supports (--brand: oklch(60% 0.2 20)) {} } 1`] = `
+
+  1 | @layer theme { @supports (--brand: oklch(60% 0.2 20)) {} }
+
+`;
+
+exports[`invalid(36): @layer theme { @supports (--brand: oklch(60% 0.2 20)) {} } 2`] = `
+
+Message:
+> 1 | @layer theme { @supports (--brand: oklch(60% 0.2 20)) {} }
+    |                           ^^^^^^^^^^^^^^^^^^^^^^^^^^ This condition does not test support for \`oklch()\`. Custom properties accept their values as tokens.
+
+`;
+
+exports[`invalid(37): @scope (.theme) { @supports (--brand: oklch(60% 0.2 20)) {} } 1`] = `
+
+  1 | @scope (.theme) { @supports (--brand: oklch(60% 0.2 20)) {} }
+
+`;
+
+exports[`invalid(37): @scope (.theme) { @supports (--brand: oklch(60% 0.2 20)) {} } 2`] = `
+
+Message:
+> 1 | @scope (.theme) { @supports (--brand: oklch(60% 0.2 20)) {} }
+    |                              ^^^^^^^^^^^^^^^^^^^^^^^^^^ This condition does not test support for \`oklch()\`. Custom properties accept their values as tokens.
+
+`;
+
+exports[`invalid(38): a { @supports (--brand: oklch(60% 0.2 20)) {} } 1`] = `
+
+  1 | a { @supports (--brand: oklch(60% 0.2 20)) {} }
+
+`;
+
+exports[`invalid(38): a { @supports (--brand: oklch(60% 0.2 20)) {} } 2`] = `
+
+Message:
+> 1 | a { @supports (--brand: oklch(60% 0.2 20)) {} }
+    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^ This condition does not test support for \`oklch()\`. Custom properties accept their values as tokens.
+
+`;
+
+exports[`invalid(39): @import \"theme.css\" supports(--brand: oklch(60% 0.2 20)); 1`] = `
+
+  1 | @import "theme.css" supports(--brand: oklch(60% 0.2 20));
+
+`;
+
+exports[`invalid(39): @import \"theme.css\" supports(--brand: oklch(60% 0.2 20)); 2`] = `
+
+Message:
+> 1 | @import "theme.css" supports(--brand: oklch(60% 0.2 20));
+    |                              ^^^^^^^^^^^^^^^^^^^^^^^^^^ This condition does not test support for \`oklch()\`. Custom properties accept their values as tokens.
+
+`;
+
+exports[`invalid(4): @supports (--size: clamp(1px, 2vw, 3px)) {} 1`] = `
+
+  1 | @supports (--size: clamp(1px, 2vw, 3px)) {}
+
+`;
+
+exports[`invalid(4): @supports (--size: clamp(1px, 2vw, 3px)) {} 2`] = `
+
+Message:
+> 1 | @supports (--size: clamp(1px, 2vw, 3px)) {}
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ This condition does not test support for \`clamp()\`. Custom properties accept their values as tokens.
+
+`;
+
+exports[`invalid(40): @import url(\"theme.css\") supports((--brand: oklch(60% 0.2 20))); 1`] = `
+
+  1 | @import url("theme.css") supports((--brand: oklch(60% 0.2 20)));
+
+`;
+
+exports[`invalid(40): @import url(\"theme.css\") supports((--brand: oklch(60% 0.2 20))); 2`] = `
+
+Message:
+> 1 | @import url("theme.css") supports((--brand: oklch(60% 0.2 20)));
+    |                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^ This condition does not test support for \`oklch()\`. Custom properties accept their values as tokens.
+
+`;
+
+exports[`invalid(41): @import \"theme.css\" supports(color: var(--brand, oklch(60% 0.2 20))); 1`] = `
+
+  1 | @import "theme.css" supports(color: var(--brand, oklch(60% 0.2 20)));
+
+`;
+
+exports[`invalid(41): @import \"theme.css\" supports(color: var(--brand, oklch(60% 0.2 20))); 2`] = `
+
+Message:
+> 1 | @import "theme.css" supports(color: var(--brand, oklch(60% 0.2 20)));
+    |                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ This condition does not establish support for \`oklch()\` when its value uses \`var()\`.
+
+`;
+
+exports[`invalid(42): @IMPORT \"theme.css\" SUPPORTS(--BRAND: OKLCH(60% 0.2 20)); 1`] = `
+
+  1 | @IMPORT "theme.css" SUPPORTS(--BRAND: OKLCH(60% 0.2 20));
+
+`;
+
+exports[`invalid(42): @IMPORT \"theme.css\" SUPPORTS(--BRAND: OKLCH(60% 0.2 20)); 2`] = `
+
+Message:
+> 1 | @IMPORT "theme.css" SUPPORTS(--BRAND: OKLCH(60% 0.2 20));
+    |                              ^^^^^^^^^^^^^^^^^^^^^^^^^^ This condition does not test support for \`OKLCH()\`. Custom properties accept their values as tokens.
+
+`;
+
+exports[`invalid(43): @import \"theme.css\" supports((--brand: oklch(60% 0.2 20)) and (width: calc(var(--size) + 1px))); 1`] = `
+
+  1 | @import "theme.css" supports((--brand: oklch(60% 0.2 20)) and (width: calc(var(--size) + 1px)));
+
+`;
+
+exports[`invalid(43): @import \"theme.css\" supports((--brand: oklch(60% 0.2 20)) and (width: calc(var(--size) + 1px))); 2`] = `
+
+Message:
+> 1 | @import "theme.css" supports((--brand: oklch(60% 0.2 20)) and (width: calc(var(--size) + 1px)));
+    |                               ^^^^^^^^^^^^^^^^^^^^^^^^^^ This condition does not test support for \`oklch()\`. Custom properties accept their values as tokens.
+
+`;
+
+exports[`invalid(43): @import \"theme.css\" supports((--brand: oklch(60% 0.2 20)) and (width: calc(var(--size) + 1px))); 3`] = `
+
+Message:
+> 1 | @import "theme.css" supports((--brand: oklch(60% 0.2 20)) and (width: calc(var(--size) + 1px)));
+    |                                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ This condition does not establish support for \`calc()\` when its value uses \`var()\`.
+
+`;
+
+exports[`invalid(44): @supports (--transform: rotateX(30deg)) {} 1`] = `
+
+  1 | @supports (--transform: rotateX(30deg)) {}
+
+`;
+
+exports[`invalid(44): @supports (--transform: rotateX(30deg)) {} 2`] = `
+
+Message:
+> 1 | @supports (--transform: rotateX(30deg)) {}
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^ This condition does not test support for \`rotateX()\`. Custom properties accept their values as tokens.
+
+`;
+
+exports[`invalid(45): @supports (--transform: SCALEY(2)) {} 1`] = `
+
+  1 | @supports (--transform: SCALEY(2)) {}
+
+`;
+
+exports[`invalid(45): @supports (--transform: SCALEY(2)) {} 2`] = `
+
+Message:
+> 1 | @supports (--transform: SCALEY(2)) {}
+    |            ^^^^^^^^^^^^^^^^^^^^^^ This condition does not test support for \`SCALEY()\`. Custom properties accept their values as tokens.
+
+`;
+
+exports[`invalid(46): @supports (transform: translatez(var(--depth))) {} 1`] = `
+
+  1 | @supports (transform: translatez(var(--depth))) {}
+
+`;
+
+exports[`invalid(46): @supports (transform: translatez(var(--depth))) {} 2`] = `
+
+Message:
+> 1 | @supports (transform: translatez(var(--depth))) {}
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ This condition does not establish support for \`translatez()\` when its value uses \`var()\`.
+
+`;
+
+exports[`invalid(47): @supports (color: oklch(v\\61 r(--lightness) 0.2 20)) {} 1`] = `
+
+  1 | @supports (color: oklch(v\\61 r(--lightness) 0.2 20)) {}
+
+`;
+
+exports[`invalid(47): @supports (color: oklch(v\\61 r(--lightness) 0.2 20)) {} 2`] = `
+
+Message:
+> 1 | @supports (color: oklch(v\\61 r(--lightness) 0.2 20)) {}
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ This condition does not establish support for \`oklch()\` when its value uses \`v\\61 r()\`.
+
+`;
+
+exports[`invalid(48): @import \"theme.css\" layer(theme) supports(--brand: oklch(60% 0.2 20)) screen and (width > 1px); 1`] = `
+
+  1 | @import "theme.css" layer(theme) supports(--brand: oklch(60% 0.2 20)) screen and (width > 1px);
+
+`;
+
+exports[`invalid(48): @import \"theme.css\" layer(theme) supports(--brand: oklch(60% 0.2 20)) screen and (width > 1px); 2`] = `
+
+Message:
+> 1 | @import "theme.css" layer(theme) supports(--brand: oklch(60% 0.2 20)) screen and (width > 1px);
+    |                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^ This condition does not test support for \`oklch()\`. Custom properties accept their values as tokens.
+
+`;
+
+exports[`invalid(49): @import \"theme.css\" layer(theme) supports((--brand: oklch(60% 0.2 20))) screen and (width > 1px); 1`] = `
+
+  1 | @import "theme.css" layer(theme) supports((--brand: oklch(60% 0.2 20))) screen and (width > 1px);
+
+`;
+
+exports[`invalid(49): @import \"theme.css\" layer(theme) supports((--brand: oklch(60% 0.2 20))) screen and (width > 1px); 2`] = `
+
+Message:
+> 1 | @import "theme.css" layer(theme) supports((--brand: oklch(60% 0.2 20))) screen and (width > 1px);
+    |                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^ This condition does not test support for \`oklch()\`. Custom properties accept their values as tokens.
+
+`;
+
+exports[`invalid(5): @supports (--size: calc(1px + 2px)) {} 1`] = `
+
+  1 | @supports (--size: calc(1px + 2px)) {}
+
+`;
+
+exports[`invalid(5): @supports (--size: calc(1px + 2px)) {} 2`] = `
+
+Message:
+> 1 | @supports (--size: calc(1px + 2px)) {}
+    |            ^^^^^^^^^^^^^^^^^^^^^^^ This condition does not test support for \`calc()\`. Custom properties accept their values as tokens.
+
+`;
+
+exports[`invalid(50): @supports (--brand: future-color(red)) {} 1`] = `
+
+  1 | @supports (--brand: future-color(red)) {}
+
+`;
+
+exports[`invalid(50): @supports (--brand: future-color(red)) {} 2`] = `
+
+Message:
+> 1 | @supports (--brand: future-color(red)) {}
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^ This condition does not test support for \`future-color()\`. Custom properties accept their values as tokens.
+
+`;
+
+exports[`invalid(51): @supports-condition --modern-color { --brand: oklch(60% 0.2 20); } 1`] = `
+
+  1 | @supports-condition --modern-color { --brand: oklch(60% 0.2 20); }
+
+`;
+
+exports[`invalid(51): @supports-condition --modern-color { --brand: oklch(60% 0.2 20); } 2`] = `
+
+Message:
+> 1 | @supports-condition --modern-color { --brand: oklch(60% 0.2 20); }
+    |                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^ This condition does not test support for \`oklch()\`. Custom properties accept their values as tokens.
+
+`;
+
+exports[`invalid(52): @supports-condition --modern-color { color: oklch(var(--lightness) 0.2 20); } 1`] = `
+
+  1 | @supports-condition --modern-color { color: oklch(var(--lightness) 0.2 20); }
+
+`;
+
+exports[`invalid(52): @supports-condition --modern-color { color: oklch(var(--lightness) 0.2 20); } 2`] = `
+
+Message:
+> 1 | @supports-condition --modern-color { color: oklch(var(--lightness) 0.2 20); }
+    |                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ This condition does not establish support for \`oklch()\` when its value uses \`var()\`.
+
+`;
+
+exports[`invalid(53): @supports-condition --modern-color { color: var(--brand, oklch(60% 0.2 20)); } 1`] = `
+
+  1 | @supports-condition --modern-color { color: var(--brand, oklch(60% 0.2 20)); }
+
+`;
+
+exports[`invalid(53): @supports-condition --modern-color { color: var(--brand, oklch(60% 0.2 20)); } 2`] = `
+
+Message:
+> 1 | @supports-condition --modern-color { color: var(--brand, oklch(60% 0.2 20)); }
+    |                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ This condition does not establish support for \`oklch()\` when its value uses \`var()\`.
+
+`;
+
+exports[`invalid(54): @SUPPORTS-CONDITION --modern-color { --BRAND: OKLCH(60% 0.2 20); } 1`] = `
+
+  1 | @SUPPORTS-CONDITION --modern-color { --BRAND: OKLCH(60% 0.2 20); }
+
+`;
+
+exports[`invalid(54): @SUPPORTS-CONDITION --modern-color { --BRAND: OKLCH(60% 0.2 20); } 2`] = `
+
+Message:
+> 1 | @SUPPORTS-CONDITION --modern-color { --BRAND: OKLCH(60% 0.2 20); }
+    |                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^ This condition does not test support for \`OKLCH()\`. Custom properties accept their values as tokens.
+
+`;
+
+exports[`invalid(55): @supports-condition --modern { --brand: oklch(60% 0.2 20); width: calc(var(--size) + 1px); } 1`] = `
+
+  1 | @supports-condition --modern { --brand: oklch(60% 0.2 20); width: calc(var(--size) + 1px); }
+
+`;
+
+exports[`invalid(55): @supports-condition --modern { --brand: oklch(60% 0.2 20); width: calc(var(--size) + 1px); } 2`] = `
+
+Message:
+> 1 | @supports-condition --modern { --brand: oklch(60% 0.2 20); width: calc(var(--size) + 1px); }
+    |                                ^^^^^^^^^^^^^^^^^^^^^^^^^^ This condition does not test support for \`oklch()\`. Custom properties accept their values as tokens.
+
+`;
+
+exports[`invalid(55): @supports-condition --modern { --brand: oklch(60% 0.2 20); width: calc(var(--size) + 1px); } 3`] = `
+
+Message:
+> 1 | @supports-condition --modern { --brand: oklch(60% 0.2 20); width: calc(var(--size) + 1px); }
+    |                                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ This condition does not establish support for \`calc()\` when its value uses \`var()\`.
+
+`;
+
+exports[`invalid(56): @media screen { @supports-condition --modern-color { --brand: oklch(60% 0.2 20); } } 1`] = `
+
+  1 | @media screen { @supports-condition --modern-color { --brand: oklch(60% 0.2 20); } }
+
+`;
+
+exports[`invalid(56): @media screen { @supports-condition --modern-color { --brand: oklch(60% 0.2 20); } } 2`] = `
+
+Message:
+> 1 | @media screen { @supports-condition --modern-color { --brand: oklch(60% 0.2 20); } }
+    |                                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^ This condition does not test support for \`oklch()\`. Custom properties accept their values as tokens.
+
+`;
+
+exports[`invalid(6): @supports (--size: min(1px, max(2px, 3px))) {} 1`] = `
+
+  1 | @supports (--size: min(1px, max(2px, 3px))) {}
+
+`;
+
+exports[`invalid(6): @supports (--size: min(1px, max(2px, 3px))) {} 2`] = `
+
+Message:
+> 1 | @supports (--size: min(1px, max(2px, 3px))) {}
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ This condition does not test support for \`min()\`. Custom properties accept their values as tokens.
+
+`;
+
+exports[`invalid(7): @supports (--size: calc(1px + 2px) !important) {} 1`] = `
+
+  1 | @supports (--size: calc(1px + 2px) !important) {}
+
+`;
+
+exports[`invalid(7): @supports (--size: calc(1px + 2px) !important) {} 2`] = `
+
+Message:
+> 1 | @supports (--size: calc(1px + 2px) !important) {}
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ This condition does not test support for \`calc()\`. Custom properties accept their values as tokens.
+
+`;
+
+exports[`invalid(8): @supports (color: oklch(var(--lightness) 0.2 20)) {} 1`] = `
+
+  1 | @supports (color: oklch(var(--lightness) 0.2 20)) {}
+
+`;
+
+exports[`invalid(8): @supports (color: oklch(var(--lightness) 0.2 20)) {} 2`] = `
+
+Message:
+> 1 | @supports (color: oklch(var(--lightness) 0.2 20)) {}
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ This condition does not establish support for \`oklch()\` when its value uses \`var()\`.
+
+`;
+
+exports[`invalid(9): @supports (background: linear-gradient(var(--stops))) {} 1`] = `
+
+  1 | @supports (background: linear-gradient(var(--stops))) {}
+
+`;
+
+exports[`invalid(9): @supports (background: linear-gradient(var(--stops))) {} 2`] = `
+
+Message:
+> 1 | @supports (background: linear-gradient(var(--stops))) {}
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ This condition does not establish support for \`linear-gradient()\` when its value uses \`var()\`.
+
+`;
