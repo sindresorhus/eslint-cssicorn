@@ -85,14 +85,26 @@ function isRootDefinition(declaration, {sourceCode}) {
 }
 
 /**
-Get the relationship key of a complete alpha-free custom-property definition.
+Get the relationship key of a complete custom-property definition with omitted or explicitly opaque alpha.
 @param {ValuePlain | undefined} value
 @param {string} property
 */
 function getDefinitionKey(value, property) {
 	const node = value?.children.length === 1 ? value.children.at(0) : undefined;
-	if (node?.type !== 'Function' || node.children.length !== 1) {
+	if (node?.type !== 'Function') {
 		return;
+	}
+
+	if (node.children.length !== 1) {
+		if (node.children.length !== 3) {
+			return;
+		}
+
+		const [, separator, alpha] = node.children;
+		const isOpaque = (alpha.type === 'Number' && Number(alpha.value) === 1) || (alpha.type === 'Percentage' && Number(alpha.value) === 100);
+		if (separator.type !== 'Operator' || !['/', ','].includes(separator.value) || !isOpaque) {
+			return;
+		}
 	}
 
 	const color = getChannelColor(node);
@@ -103,27 +115,33 @@ function getDefinitionKey(value, property) {
 Build a suggestion for a channel-based alpha variant with an unambiguous destination.
 @param {FunctionNodePlain} node
 @param {DeclarationPlain} declaration
-@param {{candidates: Candidates | undefined, rootCandidates: Candidates}} destinations
+@param {{candidateScopes: Candidates[], rootCandidates: Candidates}} destinations
 @param {CssicornContext} context
 @returns {CssicornProblem | undefined}
 */
-function getColorProblem(node, declaration, {candidates, rootCandidates}, context) {
+function getColorProblem(node, declaration, {candidateScopes, rootCandidates}, context) {
 	const color = getChannelColor(node);
 	const [, separator, alpha] = node.children;
 	if (!color || node.children.length !== 3 || separator.type !== 'Operator' || !['/', ','].includes(separator.value) || !['Number', 'Percentage', 'Function'].includes(alpha.type)) {
 		return;
 	}
 
-	const destination = candidates?.has(color.key) ? candidates.get(color.key) : rootCandidates.get(color.key);
+	const candidates = candidateScopes.find(scope => scope.has(color.key));
+	const destination = candidates ? candidates.get(color.key) : rootCandidates.get(color.key);
+	if (destination === undefined || destination === decodeCssIdentifier(declaration.property)) {
+		return;
+	}
+
 	const {sourceCode} = context;
 	const range = sourceCode.getRange(node);
-	if (destination === undefined || hasCommentInRange(context, range)) {
+	const alphaStart = sourceCode.getRange(alpha)[0];
+	if (hasCommentInRange(context, [range[0], alphaStart])) {
 		return;
 	}
 
 	const components = color.family === 'rgb' ? 'r g b' : 'h s l';
-	const alphaText = sourceCode.getText(alpha);
-	const replacement = `${color.family}(from var(${ident.encode(destination)}) ${components} / ${alphaText})`;
+	const prefix = `${color.family}(from var(${ident.encode(destination)}) ${components} / `;
+	const replacement = prefix + sourceCode.text.slice(alphaStart, range[1]);
 	return {
 		node: declaration,
 		loc: toLocation(range, context),
@@ -135,7 +153,7 @@ function getColorProblem(node, declaration, {candidates, rootCandidates}, contex
 			/**
 			@param {Parameters<CssicornRuleFixer>[0]} fixer
 			*/
-			fix: fixer => fixer.replaceTextRange(range, replacement),
+			fix: fixer => fixer.replaceTextRange([range[0], alphaStart], prefix),
 		}],
 	};
 }
@@ -248,8 +266,22 @@ const create = context => {
 		}
 
 		for (const declaration of declarations) {
-			const candidates = blockCandidates.get(/** @type {BlockPlain} */ (sourceCode.getParent(declaration)));
-			if (!candidates && rootCandidates.size === 0) {
+			/**
+			@type {Candidates[]}
+			*/
+			const candidateScopes = [];
+			for (let ancestor = sourceCode.getParent(declaration); ancestor && ancestor.type !== 'Rule'; ancestor = sourceCode.getParent(ancestor)) {
+				if (ancestor.type !== 'Block') {
+					continue;
+				}
+
+				const candidates = blockCandidates.get(ancestor);
+				if (candidates) {
+					candidateScopes.push(candidates);
+				}
+			}
+
+			if (candidateScopes.length === 0 && rootCandidates.size === 0) {
 				continue;
 			}
 
@@ -272,7 +304,7 @@ const create = context => {
 					}
 
 					if (colorFamilies.has(name)) {
-						const problem = getColorProblem(node, declaration, {candidates, rootCandidates}, context);
+						const problem = getColorProblem(node, declaration, {candidateScopes, rootCandidates}, context);
 						if (problem) {
 							yield problem;
 						}
