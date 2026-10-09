@@ -99,7 +99,7 @@ Responsive declarations and native nesting:
 
 ## Supported relationships
 
-Compares identical properties when an override:
+Compares identical properties and [known name aliases](../../rules/shared/css-property-name-aliases.js), such as `word-wrap`/`overflow-wrap`, when an override:
 
 - Adds classes, attributes, or pseudo-classes to the same element, keeping ancestors unchanged: `.button` → `.button.is-disabled` or `.button:hover` → `.button:hover:focus`. Retained conditions on that element may be reordered.
 - Reuses a selector under additional `@media`, `@supports`, `@container`, or `@starting-style` conditions, or across layered/unlayered contexts. Every base condition must appear unchanged among the override's conditions; nesting order does not matter.
@@ -116,7 +116,7 @@ Compares ordinary selectors within one `@scope`, from outer into nested scopes, 
 
 Checks only this file. Deliberate browser fallbacks may be reported; suppress those diagnostics locally.
 
-- Does not resolve layer ordering, imports, shorthand/longhand or `all` interactions, aliases, computed values, or custom property registration.
+- Does not resolve layer ordering, imports, shorthand/longhand or `all` interactions, other aliases, computed values, or custom property registration.
 - Classes and existing-state refinements must be appended; attribute syntax (apart from value quoting and escapes) and pseudo-class arguments must have identical generated text.
 - Skips other pseudo-element forms, namespaced types, escaped wildcards, shadow-tree selectors, unparsed arguments, and at-rules other than `@media`, `@supports`, `@container`, `@layer`, `@scope`, and `@starting-style`.
 - Invalid or unknown ordinary values and values with substitutions such as `var()` cannot block overrides.

@@ -7,6 +7,7 @@ import {
 	tokenize,
 	tokenTypes,
 } from '@eslint/css-tree';
+import {propertyNameAliases} from './shared/css-property-name-aliases.js';
 import {canMatchSelector, LEGACY_PSEUDO_ELEMENTS} from './shared/css-selector-specificity.js';
 import {shorthandToAffectedProperties} from './shared/css-shorthand-properties.js';
 import {
@@ -44,7 +45,12 @@ const ALL_EXCLUDED_PROPERTIES = new Set(['direction', 'unicode-bidi']);
 */
 const getPropertyKey = property => {
 	const decoded = ident.decode(property);
-	return decoded.startsWith('--') ? decoded : normalizeCssIdentifier(property);
+	if (decoded.startsWith('--')) {
+		return decoded;
+	}
+
+	const normalized = normalizeCssIdentifier(property);
+	return propertyNameAliases.get(normalized) ?? normalized;
 };
 
 /**
@@ -318,8 +324,9 @@ const create = context => {
 			const hasRollback = (propertyRollback !== undefined && (!important || propertyRollback))
 				|| (allRollback !== undefined && (!important || allRollback));
 			const {value} = declaration;
+			// Aliases can share cascade priority while accepting different value syntax.
 			const usable = !hasRollback && !hasUnresolvedValue(value)
-				&& (property.startsWith('--') || (value.type === 'Value' && !sourceCode.lexer.matchProperty(property, value).error));
+				&& (property.startsWith('--') || (value.type === 'Value' && !sourceCode.lexer.matchProperty(normalizeCssIdentifier(declaration.property), value).error));
 			blockerValidity.set(declaration, usable);
 		}
 
@@ -333,7 +340,8 @@ const create = context => {
 		const keyword = getValueKeyword(declaration);
 		if (keyword && ROLLBACK_KEYWORDS.has(keyword)) {
 			for (const affectedProperty of [property, ...(shorthandToAffectedProperties.get(property) ?? [])]) {
-				rollbackProperties.set(affectedProperty, important || rollbackProperties.get(affectedProperty) === true);
+				const key = getPropertyKey(affectedProperty);
+				rollbackProperties.set(key, important || rollbackProperties.get(key) === true);
 			}
 		}
 

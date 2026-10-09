@@ -154,6 +154,20 @@ Message:
 
 `;
 
+exports[`invalid(1): .card { word-wrap: normal !important; } .card:hover { overflow-wrap: anywhere; } 1`] = `
+
+  1 | .card { word-wrap: normal !important; } .card:hover { overflow-wrap: anywhere; }
+
+`;
+
+exports[`invalid(1): .card { word-wrap: normal !important; } .card:hover { overflow-wrap: anywhere; } 2`] = `
+
+Message:
+> 1 | .card { word-wrap: normal !important; } .card:hover { overflow-wrap: anywhere; }
+    |                                                       ^^^^^^^^^^^^^^^^^^^^^^^ \`overflow-wrap\` cannot override the declaration on line 1 because it is marked \`!important\`.
+
+`;
+
 exports[`invalid(10): .\\62 utton { OPACITY: 1 !important; @STARTING-STYLE { opacity: 0; } } 1`] = `
 
   1 | .\\62 utton { OPACITY: 1 !important; @STARTING-STYLE { opacity: 0; } }
@@ -221,6 +235,20 @@ exports[`invalid(10): .button:hover { color: red !important; } .link[disabled] {
 Message:
 > 1 | .button:hover { color: red !important; } .link[disabled] { color: red !important; } .button:hover:focus, .link[disabled].active { color: blue; }
     |                                                                                                                                   ^^^^^^^^^^^ \`color\` cannot override the declaration on line 1 because it is marked \`!important\`.
+
+`;
+
+exports[`invalid(10): .card { word-wrap: normal !important; overflow-wrap: revert; } .card:hover { overflow-wrap: anywhere; } 1`] = `
+
+  1 | .card { word-wrap: normal !important; overflow-wrap: revert; } .card:hover { overflow-wrap: anywhere; }
+
+`;
+
+exports[`invalid(10): .card { word-wrap: normal !important; overflow-wrap: revert; } .card:hover { overflow-wrap: anywhere; } 2`] = `
+
+Message:
+> 1 | .card { word-wrap: normal !important; overflow-wrap: revert; } .card:hover { overflow-wrap: anywhere; }
+    |                                                                              ^^^^^^^^^^^^^^^^^^^^^^^ \`overflow-wrap\` cannot override the declaration on line 1 because it is marked \`!important\`.
 
 `;
 
@@ -350,6 +378,20 @@ Message:
 
 `;
 
+exports[`invalid(11): .card { word-wrap: normal !important; } @media print { .card { overflow-wrap: anywhere; } } 1`] = `
+
+  1 | .card { word-wrap: normal !important; } @media print { .card { overflow-wrap: anywhere; } }
+
+`;
+
+exports[`invalid(11): .card { word-wrap: normal !important; } @media print { .card { overflow-wrap: anywhere; } } 2`] = `
+
+Message:
+> 1 | .card { word-wrap: normal !important; } @media print { .card { overflow-wrap: anywhere; } }
+    |                                                                ^^^^^^^^^^^^^^^^^^^^^^^ \`overflow-wrap\` cannot override the declaration on line 1 because it is marked \`!important\`.
+
+`;
+
 exports[`invalid(11): .toolbar > .button { color: red !important; } @scope (.panel) { .toolbar > .button:hover { color: blue; } } 1`] = `
 
   1 | .toolbar > .button { color: red !important; } @scope (.panel) { .toolbar > .button:hover { color: blue; } }
@@ -431,6 +473,20 @@ exports[`invalid(12): .button { color: red !important; } .button[/* state */ ari
 Message:
 > 1 | .button { color: red !important; } .button[/* state */ aria-disabled="TRUE" i] { color: gray; }
     |                                                                                  ^^^^^^^^^^^ \`color\` cannot override the declaration on line 1 because it is marked \`!important\`.
+
+`;
+
+exports[`invalid(12): .card { word-wrap: normal !important; &:hover { overflow-wrap: anywhere; } } 1`] = `
+
+  1 | .card { word-wrap: normal !important; &:hover { overflow-wrap: anywhere; } }
+
+`;
+
+exports[`invalid(12): .card { word-wrap: normal !important; &:hover { overflow-wrap: anywhere; } } 2`] = `
+
+Message:
+> 1 | .card { word-wrap: normal !important; &:hover { overflow-wrap: anywhere; } }
+    |                                                 ^^^^^^^^^^^^^^^^^^^^^^^ \`overflow-wrap\` cannot override the declaration on line 1 because it is marked \`!important\`.
 
 `;
 
@@ -574,6 +630,20 @@ Message:
 
 `;
 
+exports[`invalid(13): .card::before { word-wrap: normal !important; } .card:hover::before { overflow-wrap: anywhere; } 1`] = `
+
+  1 | .card::before { word-wrap: normal !important; } .card:hover::before { overflow-wrap: anywhere; }
+
+`;
+
+exports[`invalid(13): .card::before { word-wrap: normal !important; } .card:hover::before { overflow-wrap: anywhere; } 2`] = `
+
+Message:
+> 1 | .card::before { word-wrap: normal !important; } .card:hover::before { overflow-wrap: anywhere; }
+    |                                                                       ^^^^^^^^^^^^^^^^^^^^^^^ \`overflow-wrap\` cannot override the declaration on line 1 because it is marked \`!important\`.
+
+`;
+
 exports[`invalid(13): @SUPPORTS (display: grid) { .button { color: red !important; } } @media screen { @supports (display: grid) { .button { &:hover { color: blue; } } } } 1`] = `
 
   1 | @SUPPORTS (display: grid) { .button { color: red !important; } } @media screen { @supports (display: grid) { .button { &:hover { color: blue; } } } }
@@ -641,6 +711,20 @@ exports[`invalid(14): .button, .button::before { color: red !important; } .butto
 Message:
 > 1 | .button, .button::before { color: red !important; } .button:hover, .button:hover::before { color: blue; }
     |                                                                                            ^^^^^^^^^^^ \`color\` cannot override the declaration on line 1 because it is marked \`!important\`.
+
+`;
+
+exports[`invalid(14): .card { word-wrap: normal !important; } @scope (.panel) { .card:hover { overflow-wrap: anywhere; } } 1`] = `
+
+  1 | .card { word-wrap: normal !important; } @scope (.panel) { .card:hover { overflow-wrap: anywhere; } }
+
+`;
+
+exports[`invalid(14): .card { word-wrap: normal !important; } @scope (.panel) { .card:hover { overflow-wrap: anywhere; } } 2`] = `
+
+Message:
+> 1 | .card { word-wrap: normal !important; } @scope (.panel) { .card:hover { overflow-wrap: anywhere; } }
+    |                                                                         ^^^^^^^^^^^^^^^^^^^^^^^ \`overflow-wrap\` cannot override the declaration on line 1 because it is marked \`!important\`.
 
 `;
 
@@ -742,6 +826,20 @@ Message:
 
 `;
 
+exports[`invalid(15): .card { word-wrap: normal; } @layer states { .card:hover { overflow-wrap: anywhere; } } 1`] = `
+
+  1 | .card { word-wrap: normal; } @layer states { .card:hover { overflow-wrap: anywhere; } }
+
+`;
+
+exports[`invalid(15): .card { word-wrap: normal; } @layer states { .card:hover { overflow-wrap: anywhere; } } 2`] = `
+
+Message:
+> 1 | .card { word-wrap: normal; } @layer states { .card:hover { overflow-wrap: anywhere; } }
+    |                                                            ^^^^^^^^^^^^^^^^^^^^^^^ \`overflow-wrap\` cannot override the declaration on line 1 because unlayered normal declarations take precedence over layered declarations.
+
+`;
+
 exports[`invalid(16): .button { /* base */ color: red /* value */ !important; } .button:hover { color: /* state */ blue; } 1`] = `
 
   1 | .button { /* base */ color: red /* value */ !important; } .button:hover { color: /* state */ blue; }
@@ -795,6 +893,20 @@ exports[`invalid(16): @layer components { .button { color: red !important; } } @
 Message:
 > 1 | @layer components { .button { color: red !important; } } @scope (.panel) { .button:hover { color: blue !important; } }
     |                                                                                            ^^^^^^^^^^^^^^^^^^^^^^ \`color\` cannot override the declaration on line 1 because layered important declarations take precedence over unlayered important declarations.
+
+`;
+
+exports[`invalid(16): @layer components { .card { word-wrap: normal !important; } } .card:hover { overflow-wrap: anywhere !important; } 1`] = `
+
+  1 | @layer components { .card { word-wrap: normal !important; } } .card:hover { overflow-wrap: anywhere !important; }
+
+`;
+
+exports[`invalid(16): @layer components { .card { word-wrap: normal !important; } } .card:hover { overflow-wrap: anywhere !important; } 2`] = `
+
+Message:
+> 1 | @layer components { .card { word-wrap: normal !important; } } .card:hover { overflow-wrap: anywhere !important; }
+    |                                                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`overflow-wrap\` cannot override the declaration on line 1 because layered important declarations take precedence over unlayered important declarations.
 
 `;
 
@@ -1013,6 +1125,20 @@ exports[`invalid(2): .button[data-state=\"open\"] { color: red !important; } .bu
 Message:
 > 1 | .button[data-state="open"] { color: red !important; } .button[data-state=open]:hover { color: blue; }
     |                                                                                        ^^^^^^^^^^^ \`color\` cannot override the declaration on line 1 because it is marked \`!important\`.
+
+`;
+
+exports[`invalid(2): .card { overflow-wrap: normal !important; } .card:hover { word-wrap: break-word; } 1`] = `
+
+  1 | .card { overflow-wrap: normal !important; } .card:hover { word-wrap: break-word; }
+
+`;
+
+exports[`invalid(2): .card { overflow-wrap: normal !important; } .card:hover { word-wrap: break-word; } 2`] = `
+
+Message:
+> 1 | .card { overflow-wrap: normal !important; } .card:hover { word-wrap: break-word; }
+    |                                                           ^^^^^^^^^^^^^^^^^^^^^ \`word-wrap\` cannot override the declaration on line 1 because it is marked \`!important\`.
 
 `;
 
@@ -1324,6 +1450,20 @@ Message:
 
 `;
 
+exports[`invalid(3): .card { -webkit-transform: none !important; } .card:hover { transform: scale(2); } 1`] = `
+
+  1 | .card { -webkit-transform: none !important; } .card:hover { transform: scale(2); }
+
+`;
+
+exports[`invalid(3): .card { -webkit-transform: none !important; } .card:hover { transform: scale(2); } 2`] = `
+
+Message:
+> 1 | .card { -webkit-transform: none !important; } .card:hover { transform: scale(2); }
+    |                                                             ^^^^^^^^^^^^^^^^^^^ \`transform\` cannot override the declaration on line 1 because it is marked \`!important\`.
+
+`;
+
 exports[`invalid(3): @scope (.page) { .button { color: red !important; } .button:hover { color: blue; } } 1`] = `
 
   1 | @scope (.page) { .button { color: red !important; } .button:hover { color: blue; } }
@@ -1601,6 +1741,20 @@ exports[`invalid(4): .button[disabled] { color: red !important; } [disabled].but
 Message:
 > 1 | .button[disabled] { color: red !important; } [disabled].button.active { color: gray; }
     |                                                                         ^^^^^^^^^^^ \`color\` cannot override the declaration on line 1 because it is marked \`!important\`.
+
+`;
+
+exports[`invalid(4): .card { transform: none !important; } .card:hover { -webkit-transform: scale(2); } 1`] = `
+
+  1 | .card { transform: none !important; } .card:hover { -webkit-transform: scale(2); }
+
+`;
+
+exports[`invalid(4): .card { transform: none !important; } .card:hover { -webkit-transform: scale(2); } 2`] = `
+
+Message:
+> 1 | .card { transform: none !important; } .card:hover { -webkit-transform: scale(2); }
+    |                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`-webkit-transform\` cannot override the declaration on line 1 because it is marked \`!important\`.
 
 `;
 
@@ -1886,6 +2040,20 @@ Message:
 
 `;
 
+exports[`invalid(5): .card { WORD-WRAP: normal !important; } .card:hover { overflow-wrap: anywhere; } 1`] = `
+
+  1 | .card { WORD-WRAP: normal !important; } .card:hover { overflow-wrap: anywhere; }
+
+`;
+
+exports[`invalid(5): .card { WORD-WRAP: normal !important; } .card:hover { overflow-wrap: anywhere; } 2`] = `
+
+Message:
+> 1 | .card { WORD-WRAP: normal !important; } .card:hover { overflow-wrap: anywhere; }
+    |                                                       ^^^^^^^^^^^^^^^^^^^^^^^ \`overflow-wrap\` cannot override the declaration on line 1 because it is marked \`!important\`.
+
+`;
+
 exports[`invalid(5): .toolbar, .menu { .button { color: red !important; &:hover { color: blue; } } } 1`] = `
 
   1 | .toolbar, .menu { .button { color: red !important; &:hover { color: blue; } } }
@@ -2138,6 +2306,20 @@ Message:
 
 `;
 
+exports[`invalid(6): .card { -webkit-mask-composite: source-over !important; } .card:hover { mask-composite: subtract; } 1`] = `
+
+  1 | .card { -webkit-mask-composite: source-over !important; } .card:hover { mask-composite: subtract; }
+
+`;
+
+exports[`invalid(6): .card { -webkit-mask-composite: source-over !important; } .card:hover { mask-composite: subtract; } 2`] = `
+
+Message:
+> 1 | .card { -webkit-mask-composite: source-over !important; } .card:hover { mask-composite: subtract; }
+    |                                                                         ^^^^^^^^^^^^^^^^^^^^^^^^ \`mask-composite\` cannot override the declaration on line 1 because it is marked \`!important\`.
+
+`;
+
 exports[`invalid(6): .toolbar > .button, .menu > .button { color: red !important; } .toolbar, .menu { > .button:hover { color: blue; } } 1`] = `
 
   1 | .toolbar > .button, .menu > .button { color: red !important; } .toolbar, .menu { > .button:hover { color: blue; } }
@@ -2233,6 +2415,20 @@ exports[`invalid(7): .button[data-state~=open] { color: red !important; } .butto
 Message:
 > 1 | .button[data-state~=open] { color: red !important; } .button[data-state~="open"]:hover { color: blue; }
     |                                                                                          ^^^^^^^^^^^ \`color\` cannot override the declaration on line 1 because it is marked \`!important\`.
+
+`;
+
+exports[`invalid(7): .card { mask-composite: add !important; } .card:hover { -webkit-mask-composite: xor; } 1`] = `
+
+  1 | .card { mask-composite: add !important; } .card:hover { -webkit-mask-composite: xor; }
+
+`;
+
+exports[`invalid(7): .card { mask-composite: add !important; } .card:hover { -webkit-mask-composite: xor; } 2`] = `
+
+Message:
+> 1 | .card { mask-composite: add !important; } .card:hover { -webkit-mask-composite: xor; }
+    |                                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`-webkit-mask-composite\` cannot override the declaration on line 1 because it is marked \`!important\`.
 
 `;
 
@@ -2446,6 +2642,20 @@ Message:
 
 `;
 
+exports[`invalid(8): .card { -webkit-animation: none !important; } .card:hover { animation: fade 1s; } 1`] = `
+
+  1 | .card { -webkit-animation: none !important; } .card:hover { animation: fade 1s; }
+
+`;
+
+exports[`invalid(8): .card { -webkit-animation: none !important; } .card:hover { animation: fade 1s; } 2`] = `
+
+Message:
+> 1 | .card { -webkit-animation: none !important; } .card:hover { animation: fade 1s; }
+    |                                                             ^^^^^^^^^^^^^^^^^^ \`animation\` cannot override the declaration on line 1 because it is marked \`!important\`.
+
+`;
+
 exports[`invalid(8): @layer components { .button { color: red !important; } } .other { color: revert; } .button:hover { color: blue !important; } 1`] = `
 
   1 | @layer components { .button { color: red !important; } } .other { color: revert; } .button:hover { color: blue !important; }
@@ -2597,6 +2807,20 @@ exports[`invalid(9): .button[data-state=open] { color: red; } @layer states { .b
 Message:
 > 1 | .button[data-state=open] { color: red; } @layer states { .button[data-state="open"] { color: blue; } }
     |                                                                                       ^^^^^^^^^^^ \`color\` cannot override the declaration on line 1 because unlayered normal declarations take precedence over layered declarations.
+
+`;
+
+exports[`invalid(9): .card { -webkit-transform: none !important; } .card:hover { transform: var(--transform); } 1`] = `
+
+  1 | .card { -webkit-transform: none !important; } .card:hover { transform: var(--transform); }
+
+`;
+
+exports[`invalid(9): .card { -webkit-transform: none !important; } .card:hover { transform: var(--transform); } 2`] = `
+
+Message:
+> 1 | .card { -webkit-transform: none !important; } .card:hover { transform: var(--transform); }
+    |                                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`transform\` cannot override the declaration on line 1 because it is marked \`!important\`.
 
 `;
 

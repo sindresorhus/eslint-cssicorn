@@ -1,3 +1,4 @@
+import {propertyNameAliases} from './shared/css-property-name-aliases.js';
 import {nonAnimatableProperties, discreteProperties} from './shared/css-property-animation-types.js';
 import {shorthandToAffectedProperties} from './shared/css-shorthand-properties.js';
 import {
@@ -32,67 +33,13 @@ const transitionProperties = new Set(['transition', 'transition-property', 'tran
 const longhandProperties = ['transition-property', 'transition-behavior'];
 
 const propertyAliases = new Map([
-	// https://www.w3.org/TR/css-text-3/#overflow-wrap-property
-	['word-wrap', 'overflow-wrap'],
-	// Explicit legacy name aliases: https://compat.spec.whatwg.org/#css-property-aliases
-	...[
-		'align-content',
-		'align-items',
-		'align-self',
-		'animation',
-		'animation-delay',
-		'animation-direction',
-		'animation-duration',
-		'animation-fill-mode',
-		'animation-iteration-count',
-		'animation-name',
-		'animation-play-state',
-		'animation-timing-function',
-		'backface-visibility',
-		'background-clip',
-		'background-origin',
-		'border-bottom-left-radius',
-		'border-bottom-right-radius',
-		'border-radius',
-		'border-top-left-radius',
-		'border-top-right-radius',
-		'box-shadow',
-		'box-sizing',
-		'filter',
-		'flex',
-		'flex-basis',
-		'flex-direction',
-		'flex-flow',
-		'flex-grow',
-		'flex-shrink',
-		'flex-wrap',
-		'justify-content',
-		'mask',
-		'mask-clip',
-		'mask-composite',
-		'mask-image',
-		'mask-origin',
-		'mask-position',
-		'mask-repeat',
-		'mask-size',
-		'order',
-		'perspective',
-		'perspective-origin',
-		'transform',
-		'transform-origin',
-		'transform-style',
-		'transition',
-		'transition-delay',
-		'transition-duration',
-		'transition-property',
-		'transition-timing-function',
-	].map(name => [`-webkit-${name}`, name]),
+	...propertyNameAliases,
+	// Legacy shorthand mappings used to classify transition targets.
+	['-webkit-border-radius', 'border-radius'],
+	['-webkit-mask', 'mask'],
+	['-webkit-mask-position', 'mask-position'],
+	['-webkit-perspective', 'perspective'],
 	['-webkit-mask-box-image', 'mask-border'],
-	['-webkit-mask-box-image-outset', 'mask-border-outset'],
-	['-webkit-mask-box-image-repeat', 'mask-border-repeat'],
-	['-webkit-mask-box-image-slice', 'mask-border-slice'],
-	['-webkit-mask-box-image-source', 'mask-border-source'],
-	['-webkit-mask-box-image-width', 'mask-border-width'],
 ]);
 
 const getTransitionLists = (declaration, property, lexer) => {
