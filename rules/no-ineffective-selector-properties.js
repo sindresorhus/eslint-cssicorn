@@ -70,7 +70,7 @@ const commonProperties = new Set([
 	'background-position-x',
 	'background-position-y',
 	'background-size',
-	'background-repeat',
+	...getPropertyNames(['background-repeat']),
 	'background-origin',
 	'background-clip',
 	'background-attachment',

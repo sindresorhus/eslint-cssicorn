@@ -583,3 +583,28 @@ test({
 		},
 	],
 });
+
+test({
+	valid: [
+		...['video::cue', 'video::cue(b)', 'video::cue-region', 'video::cue-region(#captions)'].map(selector => `${selector} { background-repeat-x: repeat; background-repeat-y: no-repeat; }`),
+		'::selection, .ordinary { background-repeat-x: repeat; }',
+		'::selection, video::cue { background-repeat-y: no-repeat; }',
+		'::marker { background-repeat-future: repeat; -webkit-background-repeat-x: repeat; }',
+	],
+	invalid: [
+		...['::selection', '::marker', ':visited'].flatMap(selector => ['background-repeat-x', 'background-repeat-y'].map(property => ({
+			code: `${selector} { ${property}: no-repeat; color: red; }`,
+			output: `${selector} {  color: red; }`,
+			errors: [{messageId: 'no-ineffective-selector-properties', data: {property, selectors: selector}}],
+		}))),
+		{
+			code: '::SELECTION { BACKGROUND-REPEAT-X: var(--repeat) !important; color: red; }',
+			output: '::SELECTION {  color: red; }',
+			errors: [{messageId: 'no-ineffective-selector-properties', data: {property: 'background-repeat-x', selectors: '::selection'}}],
+		},
+		{
+			code: '::marker { background-repeat-y: /* retain */ no-repeat; }',
+			errors: 1,
+		},
+	],
+});

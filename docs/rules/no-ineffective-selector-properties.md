@@ -61,7 +61,7 @@ Checks [highlights](https://www.w3.org/TR/css-pseudo-4/#highlight-styling) (`::s
 Reports a finite list of common ineffective properties:
 
 - Highlights, markers, cues, cue regions, and visited links: margins, padding, physical and logical sizes and insets, `display`, `position`, transforms, `box-shadow`, and border widths, styles, and radii.
-- Highlights, markers, and visited links: `opacity` and background image and positioning properties.
+- Highlights, markers, and visited links: `opacity` and background image, sizing, tiling, and positioning properties.
 - Highlights and visited links: font properties and `line-height`.
 - Highlights, markers, cues, and cue regions: border colors and color-bearing border shorthands.
 - Markers: `background` and `background-color`.
