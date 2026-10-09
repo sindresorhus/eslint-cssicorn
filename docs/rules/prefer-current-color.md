@@ -9,9 +9,9 @@
 <!-- end auto-generated rule header -->
 <!-- Do not manually modify this header. Run: `npm run fix:eslint-docs` -->
 
-Suggest `currentcolor` when another declaration repeats the block's foreground color. This expresses a relationship to `color`, so borders, decorations, backgrounds, and SVG paint can follow foreground changes in states and themes.
+Suggest [`currentcolor`](https://www.w3.org/TR/css-color-4/#currentcolor-color) when a declaration repeats the same block's foreground color. Unlike [`prefer-existing-custom-properties`](./prefer-existing-custom-properties.md), which follows a configured token, this follows the element's `color`.
 
-This rule provides suggestions instead of autofixes because matching literals do not prove that the author wants those colors to stay linked.
+Uses suggestions because linking colors can change state, theme, and inheritance behavior. Inherited paint such as `fill` can follow descendants' foregrounds. Review suggestions when colors should change independently.
 
 ## Examples
 
@@ -29,21 +29,7 @@ a {
 }
 ```
 
-The rule checks all color positions recognized by the CSS grammar, including gradients, shadows, SVG paint fallbacks, color mixing, and relative-color origins.
-
-```css
-/* ❌ */
-.icon {
-	color: red;
-	fill: red;
-}
-
-/* ✅ */
-.icon {
-	color: red;
-	fill: currentcolor;
-}
-```
+Checks all grammar-recognized color positions, including backgrounds, gradients, shadows, SVG paint fallbacks, color mixing, and relative-color origins.
 
 ```css
 /* ❌ */
@@ -59,20 +45,12 @@ The rule checks all color positions recognized by the CSS grammar, including gra
 }
 ```
 
-## Matching
+## Matching and limitations
 
-Only direct declarations within the same style block are compared. Among `color` and `all` declarations, `!important` takes priority, then source order. The winning declaration must set `color` to one static named, hexadecimal, or absolute functional color. Nested style rules and grouping blocks are checked independently.
+- Compares direct declarations in each style block independently. Among `color` and `all`, `!important` takes priority, then source order. The winner must set `color` to one static named, hex, or absolute functional color.
+- Matches equivalent named, hex, and RGB colors across representations without approximate comparisons. Other colors match structurally, allowing case, whitespace, some equivalent numeric spellings, and function aliases.
+- Never replaces `color` or custom-property values. Skips keyframes, descriptors, CSS Modules interop blocks, winning resets, system colors, dynamic foregrounds, and foregrounds with missing components (`none`).
+- Skips target declarations whose complete grammar cannot be matched, including values containing `var()` or unknown syntax.
+- Preserves comments. A comment inside a matched color prevents the suggestion, but not the report.
 
-Colors are compared conservatively within the same representation. Case, whitespace, some equivalent numeric spellings, and function aliases can match, but equivalent colors written in different representations do not: `red` does not match `#f00`, and `#fff` does not match `#ffffff`.
-
-The rule never replaces `color` declarations or custom-property values. It skips keyframes, descriptors, CSS Modules interop blocks, winning resets, system colors, dynamic foreground values, and foreground functions with missing components (`none`). Target declarations are skipped when their complete CSS grammar cannot be matched, including values containing `var()` or unknown syntax.
-
-Comments surrounding a replaced color are preserved. If a comment is inside the color being replaced, the rule reports it without a suggestion.
-
-## Relationship changes
-
-Accepting a suggestion makes the target follow the element's foreground color. Another CSS rule, a state, or a theme can change that foreground independently of the original literal. For inherited properties such as `fill` and `text-shadow`, descendants can start following their own foreground color instead of inheriting the fixed literal.
-
-The rule does not infer inherited foregrounds, inspect other blocks, resolve custom properties, or model browser-specific fallback support. Review each suggestion when the colors are intended to change independently.
-
-See [the `currentcolor` specification](https://www.w3.org/TR/css-color-4/#currentcolor-color). Unlike `prefer-existing-custom-properties`, which suggests configured tokens, this rule suggests following the element's foreground.
+Does not infer inherited foregrounds, inspect other blocks, resolve custom properties, or model browser-specific fallback support.

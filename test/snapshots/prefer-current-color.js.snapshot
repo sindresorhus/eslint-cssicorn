@@ -1115,6 +1115,125 @@ Suggestion 1/1: Replace with \`currentcolor\`.:
 
 `;
 
+exports[`invalid(63): a { color: red; border-color: #f00; } 1`] = `
+
+  1 | a { color: red; border-color: #f00; }
+
+`;
+
+exports[`invalid(63): a { color: red; border-color: #f00; } 2`] = `
+
+Message:
+> 1 | a { color: red; border-color: #f00; }
+    |                               ^^^^ Prefer \`currentcolor\` over repeating the foreground color.
+
+Suggestion 1/1: Replace with \`currentcolor\`.:
+  1 | a { color: red; border-color: currentcolor; }
+
+`;
+
+exports[`invalid(64): a { color: #f00; border-color: red; } 1`] = `
+
+  1 | a { color: #f00; border-color: red; }
+
+`;
+
+exports[`invalid(64): a { color: #f00; border-color: red; } 2`] = `
+
+Message:
+> 1 | a { color: #f00; border-color: red; }
+    |                                ^^^ Prefer \`currentcolor\` over repeating the foreground color.
+
+Suggestion 1/1: Replace with \`currentcolor\`.:
+  1 | a { color: #f00; border-color: currentcolor; }
+
+`;
+
+exports[`invalid(65): a { color: #fff; border-color: #ffffff; } 1`] = `
+
+  1 | a { color: #fff; border-color: #ffffff; }
+
+`;
+
+exports[`invalid(65): a { color: #fff; border-color: #ffffff; } 2`] = `
+
+Message:
+> 1 | a { color: #fff; border-color: #ffffff; }
+    |                                ^^^^^^^ Prefer \`currentcolor\` over repeating the foreground color.
+
+Suggestion 1/1: Replace with \`currentcolor\`.:
+  1 | a { color: #fff; border-color: currentcolor; }
+
+`;
+
+exports[`invalid(66): a { color: #ffffff; border-color: #fff; } 1`] = `
+
+  1 | a { color: #ffffff; border-color: #fff; }
+
+`;
+
+exports[`invalid(66): a { color: #ffffff; border-color: #fff; } 2`] = `
+
+Message:
+> 1 | a { color: #ffffff; border-color: #fff; }
+    |                                   ^^^^ Prefer \`currentcolor\` over repeating the foreground color.
+
+Suggestion 1/1: Replace with \`currentcolor\`.:
+  1 | a { color: #ffffff; border-color: currentcolor; }
+
+`;
+
+exports[`invalid(67): a { color: #abcd; border-color: #aabbccdd; } 1`] = `
+
+  1 | a { color: #abcd; border-color: #aabbccdd; }
+
+`;
+
+exports[`invalid(67): a { color: #abcd; border-color: #aabbccdd; } 2`] = `
+
+Message:
+> 1 | a { color: #abcd; border-color: #aabbccdd; }
+    |                                 ^^^^^^^^^ Prefer \`currentcolor\` over repeating the foreground color.
+
+Suggestion 1/1: Replace with \`currentcolor\`.:
+  1 | a { color: #abcd; border-color: currentcolor; }
+
+`;
+
+exports[`invalid(68): a { color: #aabbccdd; border-color: #abcd; } 1`] = `
+
+  1 | a { color: #aabbccdd; border-color: #abcd; }
+
+`;
+
+exports[`invalid(68): a { color: #aabbccdd; border-color: #abcd; } 2`] = `
+
+Message:
+> 1 | a { color: #aabbccdd; border-color: #abcd; }
+    |                                     ^^^^^ Prefer \`currentcolor\` over repeating the foreground color.
+
+Suggestion 1/1: Replace with \`currentcolor\`.:
+  1 | a { color: #aabbccdd; border-color: currentcolor; }
+
+`;
+
+exports[`invalid(69): a { color: rgb(255 0 0); border-color: rgb(255, 0, 0); } 1`] = `
+
+  1 | a { color: rgb(255 0 0); border-color: rgb(255, 0, 0); }
+
+`;
+
+exports[`invalid(69): a { color: rgb(255 0 0); border-color: rgb(255, 0, 0); } 2`] = `
+
+Message:
+> 1 | a { color: rgb(255 0 0); border-color: rgb(255, 0, 0); }
+    |                                        ^^^^^^^^^^^^^^ Prefer \`currentcolor\` over repeating the foreground color.
+
+Suggestion 1/1: Replace with \`currentcolor\`.:
+  1 | a { color: rgb(255 0 0); border-color: currentcolor; }
+
+`;
+
 exports[`invalid(7): a { color: rgb(255 0 0); border-color: rgb(255 0 0); } 1`] = `
 
   1 | a { color: rgb(255 0 0); border-color: rgb(255 0 0); }
@@ -1132,6 +1251,176 @@ Suggestion 1/1: Replace with \`currentcolor\`.:
 
 `;
 
+exports[`invalid(70): a { color: rgb(255, 0, 0); border-color: rgb(255 0 0); } 1`] = `
+
+  1 | a { color: rgb(255, 0, 0); border-color: rgb(255 0 0); }
+
+`;
+
+exports[`invalid(70): a { color: rgb(255, 0, 0); border-color: rgb(255 0 0); } 2`] = `
+
+Message:
+> 1 | a { color: rgb(255, 0, 0); border-color: rgb(255 0 0); }
+    |                                          ^^^^^^^^^^^^ Prefer \`currentcolor\` over repeating the foreground color.
+
+Suggestion 1/1: Replace with \`currentcolor\`.:
+  1 | a { color: rgb(255, 0, 0); border-color: currentcolor; }
+
+`;
+
+exports[`invalid(71): a { color: rgb(255 0 0); border-color: rgb(100% 0% 0%); } 1`] = `
+
+  1 | a { color: rgb(255 0 0); border-color: rgb(100% 0% 0%); }
+
+`;
+
+exports[`invalid(71): a { color: rgb(255 0 0); border-color: rgb(100% 0% 0%); } 2`] = `
+
+Message:
+> 1 | a { color: rgb(255 0 0); border-color: rgb(100% 0% 0%); }
+    |                                        ^^^^^^^^^^^^^^^ Prefer \`currentcolor\` over repeating the foreground color.
+
+Suggestion 1/1: Replace with \`currentcolor\`.:
+  1 | a { color: rgb(255 0 0); border-color: currentcolor; }
+
+`;
+
+exports[`invalid(72): a { color: rgb(100% 0% 0%); border-color: rgb(255 0 0); } 1`] = `
+
+  1 | a { color: rgb(100% 0% 0%); border-color: rgb(255 0 0); }
+
+`;
+
+exports[`invalid(72): a { color: rgb(100% 0% 0%); border-color: rgb(255 0 0); } 2`] = `
+
+Message:
+> 1 | a { color: rgb(100% 0% 0%); border-color: rgb(255 0 0); }
+    |                                           ^^^^^^^^^^^^ Prefer \`currentcolor\` over repeating the foreground color.
+
+Suggestion 1/1: Replace with \`currentcolor\`.:
+  1 | a { color: rgb(100% 0% 0%); border-color: currentcolor; }
+
+`;
+
+exports[`invalid(73): a { color: #f00; border-color: rgba(255, 0, 0, 1); } 1`] = `
+
+  1 | a { color: #f00; border-color: rgba(255, 0, 0, 1); }
+
+`;
+
+exports[`invalid(73): a { color: #f00; border-color: rgba(255, 0, 0, 1); } 2`] = `
+
+Message:
+> 1 | a { color: #f00; border-color: rgba(255, 0, 0, 1); }
+    |                                ^^^^^^^^^^^^^^^^^^ Prefer \`currentcolor\` over repeating the foreground color.
+
+Suggestion 1/1: Replace with \`currentcolor\`.:
+  1 | a { color: #f00; border-color: currentcolor; }
+
+`;
+
+exports[`invalid(74): a { color: rgba(255, 0, 0, 1); border-color: #f00; } 1`] = `
+
+  1 | a { color: rgba(255, 0, 0, 1); border-color: #f00; }
+
+`;
+
+exports[`invalid(74): a { color: rgba(255, 0, 0, 1); border-color: #f00; } 2`] = `
+
+Message:
+> 1 | a { color: rgba(255, 0, 0, 1); border-color: #f00; }
+    |                                              ^^^^ Prefer \`currentcolor\` over repeating the foreground color.
+
+Suggestion 1/1: Replace with \`currentcolor\`.:
+  1 | a { color: rgba(255, 0, 0, 1); border-color: currentcolor; }
+
+`;
+
+exports[`invalid(75): a { color: rgb(0 0 0 / 50%); border-color: rgba(0, 0, 0, .5); } 1`] = `
+
+  1 | a { color: rgb(0 0 0 / 50%); border-color: rgba(0, 0, 0, .5); }
+
+`;
+
+exports[`invalid(75): a { color: rgb(0 0 0 / 50%); border-color: rgba(0, 0, 0, .5); } 2`] = `
+
+Message:
+> 1 | a { color: rgb(0 0 0 / 50%); border-color: rgba(0, 0, 0, .5); }
+    |                                            ^^^^^^^^^^^^^^^^^ Prefer \`currentcolor\` over repeating the foreground color.
+
+Suggestion 1/1: Replace with \`currentcolor\`.:
+  1 | a { color: rgb(0 0 0 / 50%); border-color: currentcolor; }
+
+`;
+
+exports[`invalid(76): a { color: rgba(0, 0, 0, .5); border-color: rgb(0 0 0 / 50%); } 1`] = `
+
+  1 | a { color: rgba(0, 0, 0, .5); border-color: rgb(0 0 0 / 50%); }
+
+`;
+
+exports[`invalid(76): a { color: rgba(0, 0, 0, .5); border-color: rgb(0 0 0 / 50%); } 2`] = `
+
+Message:
+> 1 | a { color: rgba(0, 0, 0, .5); border-color: rgb(0 0 0 / 50%); }
+    |                                             ^^^^^^^^^^^^^^^^ Prefer \`currentcolor\` over repeating the foreground color.
+
+Suggestion 1/1: Replace with \`currentcolor\`.:
+  1 | a { color: rgba(0, 0, 0, .5); border-color: currentcolor; }
+
+`;
+
+exports[`invalid(77): a { color: gray; border-color: grey; } 1`] = `
+
+  1 | a { color: gray; border-color: grey; }
+
+`;
+
+exports[`invalid(77): a { color: gray; border-color: grey; } 2`] = `
+
+Message:
+> 1 | a { color: gray; border-color: grey; }
+    |                                ^^^^ Prefer \`currentcolor\` over repeating the foreground color.
+
+Suggestion 1/1: Replace with \`currentcolor\`.:
+  1 | a { color: gray; border-color: currentcolor; }
+
+`;
+
+exports[`invalid(78): a { color: grey; border-color: gray; } 1`] = `
+
+  1 | a { color: grey; border-color: gray; }
+
+`;
+
+exports[`invalid(78): a { color: grey; border-color: gray; } 2`] = `
+
+Message:
+> 1 | a { color: grey; border-color: gray; }
+    |                                ^^^^ Prefer \`currentcolor\` over repeating the foreground color.
+
+Suggestion 1/1: Replace with \`currentcolor\`.:
+  1 | a { color: grey; border-color: currentcolor; }
+
+`;
+
+exports[`invalid(79): a { color: transparent; border-color: #0000; } 1`] = `
+
+  1 | a { color: transparent; border-color: #0000; }
+
+`;
+
+exports[`invalid(79): a { color: transparent; border-color: #0000; } 2`] = `
+
+Message:
+> 1 | a { color: transparent; border-color: #0000; }
+    |                                       ^^^^^ Prefer \`currentcolor\` over repeating the foreground color.
+
+Suggestion 1/1: Replace with \`currentcolor\`.:
+  1 | a { color: transparent; border-color: currentcolor; }
+
+`;
+
 exports[`invalid(8): a { color: rgba(255, 0, 0, .5); border-color: rgba(255, 0, 0, .5); } 1`] = `
 
   1 | a { color: rgba(255, 0, 0, .5); border-color: rgba(255, 0, 0, .5); }
@@ -1146,6 +1435,99 @@ Message:
 
 Suggestion 1/1: Replace with \`currentcolor\`.:
   1 | a { color: rgba(255, 0, 0, .5); border-color: currentcolor; }
+
+`;
+
+exports[`invalid(80): a { color: #0000; border-color: transparent; } 1`] = `
+
+  1 | a { color: #0000; border-color: transparent; }
+
+`;
+
+exports[`invalid(80): a { color: #0000; border-color: transparent; } 2`] = `
+
+Message:
+> 1 | a { color: #0000; border-color: transparent; }
+    |                                 ^^^^^^^^^^^ Prefer \`currentcolor\` over repeating the foreground color.
+
+Suggestion 1/1: Replace with \`currentcolor\`.:
+  1 | a { color: #0000; border-color: currentcolor; }
+
+`;
+
+exports[`invalid(81): a { color: rgb(300 -10 0 / 2); border-color: red; } 1`] = `
+
+  1 | a { color: rgb(300 -10 0 / 2); border-color: red; }
+
+`;
+
+exports[`invalid(81): a { color: rgb(300 -10 0 / 2); border-color: red; } 2`] = `
+
+Message:
+> 1 | a { color: rgb(300 -10 0 / 2); border-color: red; }
+    |                                              ^^^ Prefer \`currentcolor\` over repeating the foreground color.
+
+Suggestion 1/1: Replace with \`currentcolor\`.:
+  1 | a { color: rgb(300 -10 0 / 2); border-color: currentcolor; }
+
+`;
+
+exports[`invalid(82): a { color: red; background-color: color-mix(in srgb, #f00, rgb(from rgb(100% 0% 0%) r g b)); } 1`] = `
+
+  1 | a { color: red; background-color: color-mix(in srgb, #f00, rgb(from rgb(100% 0% 0%) r g b)); }
+
+`;
+
+exports[`invalid(82): a { color: red; background-color: color-mix(in srgb, #f00, rgb(from rgb(100% 0% 0%) r g b)); } 2`] = `
+
+Message:
+> 1 | a { color: red; background-color: color-mix(in srgb, #f00, rgb(from rgb(100% 0% 0%) r g b)); }
+    |                                                      ^^^^ Prefer \`currentcolor\` over repeating the foreground color.
+
+Suggestion 1/1: Replace with \`currentcolor\`.:
+  1 | a { color: red; background-color: color-mix(in srgb, currentcolor, rgb(from rgb(100% 0% 0%) r g b)); }
+
+`;
+
+exports[`invalid(82): a { color: red; background-color: color-mix(in srgb, #f00, rgb(from rgb(100% 0% 0%) r g b)); } 3`] = `
+
+Message:
+> 1 | a { color: red; background-color: color-mix(in srgb, #f00, rgb(from rgb(100% 0% 0%) r g b)); }
+    |                                                                     ^^^^^^^^^^^^^^^ Prefer \`currentcolor\` over repeating the foreground color.
+
+Suggestion 1/1: Replace with \`currentcolor\`.:
+  1 | a { color: red; background-color: color-mix(in srgb, #f00, rgb(from currentcolor r g b)); }
+
+`;
+
+exports[`invalid(83): a { color: #f00; border-color: rgb(255 /* keep */ 0 0); } 1`] = `
+
+  1 | a { color: #f00; border-color: rgb(255 /* keep */ 0 0); }
+
+`;
+
+exports[`invalid(83): a { color: #f00; border-color: rgb(255 /* keep */ 0 0); } 2`] = `
+
+Message:
+> 1 | a { color: #f00; border-color: rgb(255 /* keep */ 0 0); }
+    |                                ^^^^^^^^^^^^^^^^^^^^^^^ Prefer \`currentcolor\` over repeating the foreground color.
+
+`;
+
+exports[`invalid(84): a { color: #F00; border-color: r\\65 d; } 1`] = `
+
+  1 | a { color: #F00; border-color: r\\65 d; }
+
+`;
+
+exports[`invalid(84): a { color: #F00; border-color: r\\65 d; } 2`] = `
+
+Message:
+> 1 | a { color: #F00; border-color: r\\65 d; }
+    |                                ^^^^^^ Prefer \`currentcolor\` over repeating the foreground color.
+
+Suggestion 1/1: Replace with \`currentcolor\`.:
+  1 | a { color: #F00; border-color: currentcolor; }
 
 `;
 

@@ -1,7 +1,7 @@
 // @ts-check
 
 import {generate} from '@eslint/css-tree';
-import {areEqualLiteralColors, isLiteralColor} from './shared/css-colors.js';
+import {areEquivalentColors, isLiteralColor} from './shared/css-colors.js';
 import {
 	getCanonicalLexerNode,
 	hasCommentInRange,
@@ -77,7 +77,7 @@ function getMatchingColors(value, foreground) {
 	@param {CssNodePlain} node
 	*/
 	const visit = node => {
-		if (node.type === foreground.type && areEqualLiteralColors(foreground, node)) {
+		if (['Identifier', 'Hash', 'Function'].includes(node.type) && areEquivalentColors(foreground, node)) {
 			colors.push(node);
 			return;
 		}
@@ -123,6 +123,7 @@ const create = context => {
 				colors = getMatchingColors(value, foreground);
 			}
 
+			// TODO: Add a regression test for contrast-color() arguments once the bundled lexer supports its grammar.
 			const match = sourceCode.lexer.matchProperty(property, value);
 			if (!match.matched) {
 				continue;
