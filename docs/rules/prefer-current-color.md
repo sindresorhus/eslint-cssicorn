@@ -63,7 +63,7 @@ The rule checks all color positions recognized by the CSS grammar, including gra
 
 Only direct declarations within the same style block are compared. Among `color` and `all` declarations, `!important` takes priority, then source order. The winning declaration must set `color` to one static named, hexadecimal, or absolute functional color. Nested style rules and grouping blocks are checked independently.
 
-Colors are compared conservatively within the same representation. Case, whitespace, numeric spellings, and function aliases can match, but equivalent colors written in different representations do not: `red` does not match `#f00`, and `#fff` does not match `#ffffff`.
+Colors are compared conservatively within the same representation. Case, whitespace, some equivalent numeric spellings, and function aliases can match, but equivalent colors written in different representations do not: `red` does not match `#f00`, and `#fff` does not match `#ffffff`.
 
 The rule never replaces `color` declarations or custom-property values. It skips keyframes, descriptors, CSS Modules interop blocks, winning resets, system colors, dynamic foreground values, and foreground functions with missing components (`none`). Target declarations are skipped when their complete CSS grammar cannot be matched, including values containing `var()` or unknown syntax.
 
@@ -71,7 +71,7 @@ Comments surrounding a replaced color are preserved. If a comment is inside the 
 
 ## Relationship changes
 
-Accepting a suggestion makes the target follow the element's foreground color. Another rule, a state, or a theme can change that foreground independently of the original literal. For inherited properties such as `fill` and `text-shadow`, descendants can start following their own foreground color instead of inheriting the fixed literal.
+Accepting a suggestion makes the target follow the element's foreground color. Another CSS rule, a state, or a theme can change that foreground independently of the original literal. For inherited properties such as `fill` and `text-shadow`, descendants can start following their own foreground color instead of inheriting the fixed literal.
 
 The rule does not infer inherited foregrounds, inspect other blocks, resolve custom properties, or model browser-specific fallback support. Review each suggestion when the colors are intended to change independently.
 

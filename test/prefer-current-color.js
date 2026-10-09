@@ -161,6 +161,32 @@ test({
 	}, {
 		code: String.raw`a { color: color(srgb 1 0 0); border-color: color(s\72 gb /* keep */ 1 0 0); }`,
 		errors: [{messageId: 'prefer-current-color/error', suggestions: []}],
+	}, {
+		code: 'a { color: red; custom-paint: red; custom-label: red; }',
+		languageOptions: {
+			customSyntax: {
+				properties: {
+					'custom-paint': '<color>',
+					'custom-label': '<custom-ident>',
+				},
+			},
+		},
+		errors: [{
+			messageId: 'prefer-current-color/error',
+			suggestions: [{
+				messageId: 'prefer-current-color/suggestion',
+				output: 'a { color: red; custom-paint: currentcolor; custom-label: red; }',
+			}],
+		}],
+	}, {
+		code: 'a { color: rgb(255 0 0); background-color: alpha(from rgb(255 0 0) / calc(alpha * .5)); }',
+		errors: [{
+			messageId: 'prefer-current-color/error',
+			suggestions: [{
+				messageId: 'prefer-current-color/suggestion',
+				output: 'a { color: rgb(255 0 0); background-color: alpha(from currentcolor / calc(alpha * .5)); }',
+			}],
+		}],
 	}],
 });
 
