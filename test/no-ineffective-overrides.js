@@ -50,6 +50,11 @@ test({
 			message: '`color` cannot override the declaration on line 3 because it is marked `!important`.',
 			line: 4,
 		}],
+	}, {
+		code: String.raw`.button { --theme: url(var\(--fake\)) !important; } .button:hover { --theme: blue; }`,
+		errors: [{
+			message: '`--theme` cannot override the declaration on line 1 because it is marked `!important`.',
+		}],
 	}],
 });
 
