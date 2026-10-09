@@ -123,11 +123,11 @@ const getGroupProblem = (nodes, canonicalNodes, {order, matchResult, property, c
 		@param {Parameters<CssicornRuleFixer>[0]} fixer
 		*/
 		fix(fixer, {abort}) {
-			if (hasCommentInRange(context, fixRange)) {
+			if (components.some((component, index) => component !== sortedComponents[index] && hasCommentInRange(context, sourceCode.getRange(component.node)))) {
 				return abort();
 			}
 
-			// Leave unchanged components and their comments outside the replacement.
+			// Leave unchanged prefix and suffix components and their comments outside the replacement.
 			let replacement = firstChangedIndex > 0 && !getSeparator(firstChangedIndex) ? ' ' : '';
 			for (let index = firstChangedIndex; index <= lastChangedIndex; index++) {
 				if (index > firstChangedIndex) {

@@ -192,7 +192,7 @@ test({
 		},
 		{
 			code: 'a { box-shadow: red /* keep */ 0 0, blue 1px 2px; }',
-			output: 'a { box-shadow: red /* keep */ 0 0, 1px 2px blue; }',
+			output: 'a { box-shadow: 0 /* keep */ 0 red, 1px 2px blue; }',
 			errors: 2,
 		},
 		{
@@ -222,7 +222,7 @@ test({
 		},
 		{
 			code: 'a { box-shadow: red /* keep */ 0 0, var(--other), blue 1px 2px; }',
-			output: 'a { box-shadow: red /* keep */ 0 0, var(--other), 1px 2px blue; }',
+			output: 'a { box-shadow: 0 /* keep */ 0 red, var(--other), 1px 2px blue; }',
 			errors: 2,
 		},
 		{
@@ -267,6 +267,7 @@ test({
 		},
 		{
 			code: 'a { columns: 3 /* count */ calc(20em) / 10em; }',
+			output: 'a { columns: calc(20em) /* count */ 3 / 10em; }',
 			errors: 1,
 		},
 		{
@@ -321,6 +322,7 @@ test({
 		},
 		{
 			code: 'a { text-decoration: underline red /* keep */ wavy; }',
+			output: 'a { text-decoration: underline wavy /* keep */ red; }',
 			errors: 1,
 		},
 		{
@@ -713,6 +715,34 @@ test({
 			errors: 1,
 		},
 	],
+});
+
+nodeTest('fixes preserve comment slots and unchanged components', () => {
+	const linter = new Linter();
+	const config = {...plugin.configs.all, rules: {'cssicorn/consistent-value-order': 'error'}};
+	for (const [code, output] of [
+		[
+			'a { text-decoration: red /* first */ calc(/* thickness */ 2px) /* second */ underline; }',
+			'a { text-decoration: underline /* first */ calc(/* thickness */ 2px) /* second */ red; }',
+		],
+		[
+			'a { text-decoration: calc(/* thickness */ 2px)rgb(0 0 0)/**/wavy; }',
+			'a { text-decoration: calc(/* thickness */ 2px) wavy/**/rgb(0 0 0); }',
+		],
+		[
+			'a {\r\n  border: red\r\n    /* keep */ solid\r\n    1px !important;\r\n}',
+			'a {\r\n  border: 1px\r\n    /* keep */ solid\r\n    red !important;\r\n}',
+		],
+		[
+			'a { text-decoration: rgb(random(0, 255) 0 0) /* keep */ underline random(1px, 5px); }',
+			'a { text-decoration: rgb(random(0, 255) 0 0) /* keep */ underline random(1px, 5px); }',
+		],
+	]) {
+		const result = linter.verifyAndFix(code, config, {filename: 'test.css'});
+		assert.equal(result.output, output);
+		assert.deepEqual(result.messages, []);
+		assert.deepEqual(linter.verifyAndFix(output, config, {filename: 'test.css'}), {...result, fixed: false});
+	}
 });
 
 nodeTest('shadow fixes preserve random-function order', () => {

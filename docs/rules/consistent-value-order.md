@@ -33,12 +33,12 @@ Supports casing, CSS escapes, vendor prefixes, recognized math and color functio
 ```css
 /* ❌ */
 a {
-	border: red solid random(1px, 5px);
+	border: red /* keep */ solid 1px;
 }
 
 /* ✅ */
 a {
-	border: random(1px, 5px) solid red;
+	border: 1px /* keep */ solid red;
 }
 ```
 
@@ -70,5 +70,5 @@ a {
 
 - Checks component structure without resolving substitutions; it may report declarations browsers reject. White space trimming may require `languageOptions.customSyntax`.
 - Ignores custom properties and CSS Modules interop declarations. Skips groups with substitutions outside known color or math functions, or reordering that would exchange components containing substitutions or random functions.
-- Reports without fixing when the reordered span contains comments. Comments in unchanged components are preserved.
+- Reports without fixing when a component that must move contains comments. Comments between components and inside unchanged components are preserved.
 - For `columns`, literal counts must be positive safe integers, and unitless zero is ignored; use `0px` for zero width. Ambiguous math component roles may go unreported.

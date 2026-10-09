@@ -776,6 +776,9 @@ Message:
 > 1 | a { border: red /* keep */ solid 1px; }
     |             ^^^^^^^^^^^^^^^^^^^^^^^^ Use consistent ordering for \`border\` value components.
 
+Output:
+  1 | a { border: 1px /* keep */ solid red; }
+
 `;
 
 exports[`invalid(43): a { box-shadow: rgb(1 /* keep */ 2 3) 0 0 inset; } 1`] = `
@@ -820,6 +823,9 @@ exports[`invalid(45): a { border: #fff/**/solid 1px; } 2`] = `
 Message:
 > 1 | a { border: #fff/**/solid 1px; }
     |             ^^^^^^^^^^^^^^^^^ Use consistent ordering for \`border\` value components.
+
+Output:
+  1 | a { border: 1px/**/solid #fff; }
 
 `;
 
@@ -1200,6 +1206,9 @@ Message:
 > 1 | a { text-decoration: red /* keep */ underline 2px; }
     |                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Use consistent ordering for \`text-decoration\` value components.
 
+Output:
+  1 | a { text-decoration: underline /* keep */ 2px red; }
+
 `;
 
 exports[`invalid(65): a { text-emphasis: red open circle; } 1`] = `
@@ -1281,6 +1290,9 @@ exports[`invalid(69): a { text-emphasis: red /* keep */ circle; } 2`] = `
 Message:
 > 1 | a { text-emphasis: red /* keep */ circle; }
     |                    ^^^^^^^^^^^^^^^^^^^^^ Use consistent ordering for \`text-emphasis\` value components.
+
+Output:
+  1 | a { text-emphasis: circle /* keep */ red; }
 
 `;
 
@@ -1464,6 +1476,9 @@ Message:
 > 1 | a { text-wrap: balance /* keep */ wrap; white-space: nowrap /* keep */ preserve; }
     |                ^^^^^^^^^^^^^^^^^^^^^^^ Use consistent ordering for \`text-wrap\` value components.
 
+Output:
+  1 | a { text-wrap: wrap /* keep */ balance; white-space: nowrap /* keep */ preserve; }
+
 `;
 
 exports[`invalid(75): a { text-wrap: balance /* keep */ wrap; white-space: nowrap /* keep */ preserve; } 3`] = `
@@ -1471,6 +1486,9 @@ exports[`invalid(75): a { text-wrap: balance /* keep */ wrap; white-space: nowra
 Message:
 > 1 | a { text-wrap: balance /* keep */ wrap; white-space: nowrap /* keep */ preserve; }
     |                                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^ Use consistent ordering for \`white-space\` value components.
+
+Output:
+  1 | a { text-wrap: balance /* keep */ wrap; white-space: preserve /* keep */ nowrap; }
 
 `;
 
