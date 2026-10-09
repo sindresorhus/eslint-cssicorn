@@ -118,10 +118,15 @@ function isPositivePercentage(node) {
 }
 
 /**
-Check a literal zero, validating dimension units as CSS lengths.
+Check a nonnegative literal length or percentage, validating dimension units as CSS lengths.
 */
-function isZeroLiteral(node, sourceCode) {
-	if (!node || !['Number', 'Percentage', 'Dimension'].includes(node.type) || Number(node.value) !== 0) {
+function isNonnegativeLengthOrPercentage(node, sourceCode) {
+	if (!node || !['Number', 'Percentage', 'Dimension'].includes(node.type)) {
+		return false;
+	}
+
+	const value = Number(node.value);
+	if (!Number.isFinite(value) || value < 0 || (node.type === 'Number' && value !== 0)) {
 		return false;
 	}
 
@@ -129,7 +134,7 @@ function isZeroLiteral(node, sourceCode) {
 }
 
 /**
-Check physical padding, limiting shorthands to zero horizontal padding and ratio-only vertical padding.
+Check physical padding for a positive vertical percentage, allowing additional nonnegative spacing in shorthands.
 */
 function isRatioPadding(declaration, sourceCode) {
 	if (declaration.value.type !== 'Value') {
@@ -145,16 +150,12 @@ function isRatioPadding(declaration, sourceCode) {
 		return false;
 	}
 
-	const [top, right = top, bottom = top, left = right] = children;
-	if (!isZeroLiteral(right, sourceCode) || !isZeroLiteral(left, sourceCode)) {
+	if (!children.every(node => isNonnegativeLengthOrPercentage(node, sourceCode) || isPositivePercentage(node))) {
 		return false;
 	}
 
-	const hasPositiveTopPadding = isPositivePercentage(top);
-	const hasPositiveBottomPadding = isPositivePercentage(bottom);
-	return (hasPositiveTopPadding || hasPositiveBottomPadding)
-		&& (hasPositiveTopPadding || isZeroLiteral(top, sourceCode))
-		&& (hasPositiveBottomPadding || isZeroLiteral(bottom, sourceCode));
+	const [top, , bottom = top] = children;
+	return isPositivePercentage(top) || isPositivePercentage(bottom);
 }
 
 /**
@@ -211,7 +212,7 @@ const create = context => {
 		}
 
 		const [heightValue] = height.value.children;
-		if (heightValue.type === 'Percentage' || !isZeroLiteral(heightValue, sourceCode)) {
+		if (heightValue.type === 'Percentage' || Number(heightValue.value) !== 0 || !isNonnegativeLengthOrPercentage(heightValue, sourceCode)) {
 			return;
 		}
 

@@ -48,7 +48,23 @@ test.snapshot({
 		].map(value => `a { height: 0; padding-top: ${value}; }`),
 		'a { height: 0; padding-left: 50%; padding-right: 50%; }',
 		'a { height: 0; --padding-top: 50%; }',
-		...['50%', '50% 10px', '50% 0 10px', '50% 0 0 10%', '50% 0 0 0 0', '0 0 0 0', '50% 0deg'].map(value => `a { height: 0; padding: ${value}; }`),
+		...[
+			'50% 0 0 0 0',
+			'0 0 0 0',
+			'10px 50%',
+			'50% 0deg',
+			'50% 1',
+			'50% -10px',
+			'-10px 0 50%',
+			'50% -10%',
+			'50% 10unknown',
+			'50% 1e999px',
+			'50% var(--spacing)',
+			'50% env(spacing)',
+			'50% calc(10px)',
+			'50% calc(1)',
+			'50% calc(25% - 50%)',
+		].map(value => `a { height: 0; padding: ${value}; }`),
 		'a { height: 0; padding: 50% calc(0%); }',
 		'a { height: 0; padding: calc(-25%) 0 50%; }',
 		'a { height: 0; height: auto; padding-top: 50%; }',
@@ -138,6 +154,17 @@ test.snapshot({
 		'a { height: 0; padding-top: calc((50% - 25%) * 3); }',
 		'a { height: 0; padding-top: calc((25% - 75%) * -1); }',
 		'a { height: 0; padding-top: calc(1 / 2% * 50% * 50%); }',
+		...[
+			'50%',
+			'50% 10px',
+			'50% 0 10px',
+			'50% 0 0 10%',
+			'25px 0 56.25%',
+			'25px 8px 56.25% 12px',
+			'25PX 8EM 56.25% 12REM',
+			'0 8px calc(9 / 16 * 100%)',
+			'50% calc(25% + 25%)',
+		].map(value => `a { height: 0; padding: ${value}; }`),
 	],
 });
 
@@ -147,6 +174,13 @@ test({
 		{
 			code: 'a { height: 0; padding-bottom: 50%; @supports (aspect-ratio: 1) { height: 0; padding-bottom: 50%; } }',
 			errors: [{messageId: 'prefer-aspect-ratio', column: 16}],
+		},
+		{
+			code: 'a { height: 0; padding-top: 25px; padding-right: 8px; padding-bottom: 56.25%; padding-left: 12px; } b { height: 0; padding: 25px 8px 56.25% 12px; }',
+			errors: [
+				{messageId: 'prefer-aspect-ratio', column: 55},
+				{messageId: 'prefer-aspect-ratio', column: 116},
+			],
 		},
 	],
 });
