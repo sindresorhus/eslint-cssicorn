@@ -57,8 +57,7 @@ const getComponentRank = (node, order, matchResult) => order.findIndex(component
 
 const isColumnComponent = node => {
 	if (node.type === 'Number') {
-		const number = Number(node.value);
-		return Number.isSafeInteger(number) && number > 0;
+		return Number(node.value) > 0;
 	}
 
 	return ['Identifier', 'Dimension', 'Function'].includes(node.type);

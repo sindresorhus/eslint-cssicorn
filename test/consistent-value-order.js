@@ -33,7 +33,8 @@ test.snapshot({
 		'a { columns: 3 0 / 10em; columns: 20em 3 /; columns: 20em 3 / 10em / 2px; }',
 		'a { columns: 3 4 / var(--height); columns: var(--count) 20em / 10em; }',
 		'a { columns: 3 +0; columns: 3 -0; columns: 3 0.0; }',
-		'a { columns: 9007199254740992 20em; }',
+		'a { columns: 20em 9007199254740992; }',
+		'a { columns: 9007199254740992.5 20em; columns: 1.0 20em; columns: 1e2 20em; }',
 		'a { border: red solid unknown; flex-flow: wrap column unknown; box-shadow: red 1px; columns: 3 4; }',
 		'a { border: 1px red solid blue; box-shadow: red 0 blue 0; }',
 		'a { margin: 4px 3px 2px 1px; padding: 2px 1px; border-radius: 4px 3px / 2px 1px; }',
@@ -773,6 +774,19 @@ nodeTest('shadow fixes preserve random-function order', () => {
 			assert.deepEqual(result.messages, []);
 			assert.deepEqual(linter.verifyAndFix(result.output, config, {filename: 'test.css'}), {...result, fixed: false});
 		}
+	}
+});
+
+nodeTest('columns fixes preserve large integer counts', () => {
+	const linter = new Linter();
+	const config = {...plugin.configs.all, rules: {'cssicorn/consistent-value-order': 'error'}};
+	for (const count of ['9007199254740993', '9'.repeat(400)]) {
+		const code = `a { columns: ${count} 20em; }`;
+		const output = `a { columns: 20em ${count}; }`;
+		const result = linter.verifyAndFix(code, config, {filename: 'test.css'});
+		assert.equal(result.output, output);
+		assert.deepEqual(result.messages, []);
+		assert.deepEqual(linter.verifyAndFix(output, config, {filename: 'test.css'}), {...result, fixed: false});
 	}
 });
 
