@@ -42,7 +42,8 @@ const MAXIMUM_TERMINAL_KEYS = 64;
 const MAXIMUM_TERMINAL_KEY_LENGTH = 1024;
 const MAXIMUM_TERMINAL_KEY_ASSOCIATIONS = 256;
 
-const getDeclarationRecordKey = ({contextIdentifier, property}) => JSON.stringify([contextIdentifier, property]);
+// The context identifier is a number, so the separator is unambiguous.
+const getDeclarationRecordKey = ({contextIdentifier, property}) => `${contextIdentifier}:${property}`;
 
 const canCompareAsLaterSelector = (selector, parentRule) => !parentRule && selector.children.every(node => {
 	if (node.type === 'PseudoClassSelector') {
@@ -275,7 +276,7 @@ function * getSelectorProblems(analyses, record, entriesByTerminalKey, reportedS
 			messageId: MESSAGE_ID,
 			data: {
 				selector: analysis.selectorText,
-				previousSelector: previousEntry.selector,
+				previousSelector: previousEntry.selectorText,
 				line: String(previousEntry.line),
 				property,
 			},
@@ -283,19 +284,10 @@ function * getSelectorProblems(analyses, record, entriesByTerminalKey, reportedS
 	}
 }
 
-const addEntry = (analysis, record, entriesByTerminalKey) => {
+// The analysis is the entry, as it has the rule, line, and specificity of the selector.
+const addEntry = (entry, record, entriesByTerminalKey) => {
 	const {property, important} = record;
-	const entry = {
-		rule: record.rule,
-		// Only built when a problem is reported.
-		get selector() {
-			return analysis.selectorText;
-		},
-		line: analysis.line,
-		specificity: analysis.specificity,
-	};
-
-	for (const terminalKey of analysis.terminalKeys) {
+	for (const terminalKey of entry.terminalKeys) {
 		let entriesByProperty = entriesByTerminalKey.get(terminalKey);
 		if (!entriesByProperty) {
 			entriesByProperty = new Map();
@@ -400,6 +392,7 @@ const create = context => {
 				analyses.push({
 					canCompareAsLaterSelector: canCompareAsLaterSelector(selector, parentRule),
 					line: sourceCode.getLoc(selector).start.line,
+					rule,
 					selector,
 					// Only built when a problem is reported.
 					get selectorText() {

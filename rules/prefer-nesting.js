@@ -711,6 +711,16 @@ const getRelatedRule = (parents, rule, context, canNestStyleRules = true) => {
 	return blockText === undefined ? undefined : {rule, inner, blockText};
 };
 
+// A backward scan, because a `$`-anchored regex tries every position of the text, which can be a large rule.
+const trimCssWhitespaceEnd = text => {
+	let end = text.length;
+	while (end > 0 && '\t\n\f\r '.includes(text[end - 1])) {
+		end--;
+	}
+
+	return text.slice(0, end);
+};
+
 const getMergedReplacement = (parentRule, parents, relatedRules, context) => {
 	const {sourceCode} = context;
 	const range = [sourceCode.getRange(parentRule)[0], sourceCode.getRange(relatedRules.at(-1).rule)[1]];
@@ -734,7 +744,7 @@ const getMergedReplacement = (parentRule, parents, relatedRules, context) => {
 	const parentText = sourceCode.getText(parentRule);
 	const isMultiline = /[\n\f\r]/v.test(parentText);
 	const parentFormatting = isMultiline ? getIndentation(parentRule, sourceCode) : undefined;
-	let replacement = hasExistingParent ? parentText.slice(0, -1) : `${getParentText(parents, sourceCode)} {`;
+	const replacementParts = [hasExistingParent ? parentText.slice(0, -1) : `${getParentText(parents, sourceCode)} {`];
 	for (const relatedRule of relatedRules) {
 		const {rule} = relatedRule;
 		const childIsMultiline = /[\n\f\r]/v.test(sourceCode.getText(rule));
@@ -756,10 +766,11 @@ const getMergedReplacement = (parentRule, parents, relatedRules, context) => {
 			return;
 		}
 
-		replacement = replacement.replace(/[\t\n\f\r ]+$/v, '') + content;
+		// Trim only the previous part, as trimming the whole growing replacement is quadratic. Each part has non-whitespace text.
+		replacementParts.push(trimCssWhitespaceEnd(replacementParts.pop()), content);
 	}
 
-	return `${replacement}}`;
+	return `${replacementParts.join('')}}`;
 };
 
 const getRelatedRules = (children, startIndex, parents, context) => {

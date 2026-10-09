@@ -1,6 +1,6 @@
 // @ts-check
 
-import {parse} from '@eslint/css-tree';
+import {parse} from './parse.js';
 
 /**
 @import {CssicornContext} from '../rule/cssicorn-context.js';

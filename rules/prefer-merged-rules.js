@@ -197,6 +197,10 @@ const hasMalformedContent = rule => Boolean(find(rule.block, node => (
 	node.type === 'Rule' && node.prelude.type !== 'SelectorList'
 )));
 
+// A cheap check before building keys, which most adjacent rules fail. Style rule keys list every declaration, so their counts must match.
+const canHaveSameMergeKey = (first, second) => first.type === second.type
+	&& (first.type === 'Atrule' || first.block?.children?.length === second.block?.children?.length);
+
 const getMergeKey = (rule, context) => {
 	if (!rule.block?.children?.length) {
 		return;
@@ -330,7 +334,8 @@ const create = context => {
 		return selectorEligibility.get(rule);
 	};
 
-	const canMergeWith = (previousRule, nextRule) => getKey(previousRule) === getKey(nextRule)
+	const canMergeWith = (previousRule, nextRule) => canHaveSameMergeKey(previousRule, nextRule)
+		&& getKey(previousRule) === getKey(nextRule)
 		&& canMerge(nextRule)
 		&& /^[\t\n\f\r ]*$/v.test(sourceCode.text.slice(sourceCode.getRange(previousRule)[1], sourceCode.getRange(nextRule)[0]));
 
@@ -338,6 +343,10 @@ const create = context => {
 		const children = container.children ?? [];
 		for (let index = 0; index < children.length - 1; index++) {
 			const firstRule = children[index];
+			if (!canHaveSameMergeKey(firstRule, children[index + 1])) {
+				continue;
+			}
+
 			const key = getKey(firstRule);
 			if (key === undefined || key !== getKey(children[index + 1]) || !canMerge(firstRule)) {
 				continue;

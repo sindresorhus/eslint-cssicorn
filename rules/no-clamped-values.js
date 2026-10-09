@@ -1,4 +1,4 @@
-import {parse, walk} from '@eslint/css-tree';
+import {walk} from '@eslint/css-tree';
 import colorFunctionsWithAlpha from './shared/css-color-functions.js';
 import {
 	evaluateCssMath,
@@ -9,6 +9,7 @@ import {
 	isCssModulesInteropDeclaration,
 	isSubstitutionFunction,
 	normalizeCssIdentifier,
+	parse,
 } from './utils/index.js';
 
 /**

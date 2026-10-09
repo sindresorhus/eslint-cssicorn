@@ -1,10 +1,11 @@
-import {parse, tokenize, tokenTypes} from '@eslint/css-tree';
+import {tokenize, tokenTypes} from '@eslint/css-tree';
 import {colorFunctions as standardColorFunctions} from './shared/css-color-functions.js';
 import {
 	decodeCssIdentifier,
 	getSingleValueIdentifier,
 	isCssModulesInteropDeclaration,
 	normalizeCssIdentifier,
+	parse,
 	toAsciiLowerCase,
 	toLocation,
 } from './utils/index.js';

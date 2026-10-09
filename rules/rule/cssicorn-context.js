@@ -32,18 +32,23 @@ Create a better `Context` object with `on` and `onExit` method to add listeners
 @returns {CssicornContext}
 */
 export default function createCssicornContext(eslintContext, listeners) {
+	// A plain object instead of a `Proxy`, because rules read `context.sourceCode` very often, and a `Proxy` makes every property read slow. Inheriting from the ESLint context with `Object.create()` is also slower, as it turns each ESLint context into a prototype.
 	/**
 	@type {CssicornContext}
 	*/
-	const context = new Proxy(/** @type {CssicornContext} */ (eslintContext), {
-		get(target, property, receiver) {
-			if (property === 'on' || property === 'onExit') {
-				return listeners[property].bind(listeners);
-			}
-
-			return Reflect.get(target, property, receiver);
-		},
-	});
+	const context = {
+		cwd: eslintContext.cwd,
+		filename: eslintContext.filename,
+		physicalFilename: eslintContext.physicalFilename,
+		sourceCode: eslintContext.sourceCode,
+		settings: eslintContext.settings,
+		languageOptions: eslintContext.languageOptions,
+		id: eslintContext.id,
+		options: eslintContext.options,
+		report: eslintContext.report,
+		on: listeners.on.bind(listeners),
+		onExit: listeners.onExit.bind(listeners),
+	};
 
 	return context;
 }

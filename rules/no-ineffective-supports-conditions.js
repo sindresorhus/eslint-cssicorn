@@ -13,12 +13,23 @@ const messages = {
 	[MESSAGE_ID_SUBSTITUTION]: 'This condition does not establish support for `{{functionName}}()` when its value uses `{{substitutionName}}()`.',
 };
 
+// Built once per lexer, as files share the lexer unless they use a custom syntax.
+const valueFunctionNamesByLexer = new WeakMap();
+const getValueFunctionNames = lexer => {
+	let valueFunctionNames = valueFunctionNamesByLexer.get(lexer);
+	if (!valueFunctionNames) {
+		valueFunctionNames = new Set(Object.keys(lexer.types).filter(name => name.endsWith('()')).map(name => normalizeCssIdentifier(name.slice(0, -2))));
+		valueFunctionNamesByLexer.set(lexer, valueFunctionNames);
+	}
+
+	return valueFunctionNames;
+};
+
 /**
 @param {CssicornContext} context
 */
 const create = context => {
 	const {sourceCode} = context;
-	const valueFunctionNames = new Set(Object.keys(sourceCode.lexer.types).filter(name => name.endsWith('()')).map(name => normalizeCssIdentifier(name.slice(0, -2))));
 
 	const getDeclarationProblem = declaration => {
 		const valueText = sourceCode.getText(declaration.value);
@@ -26,6 +37,7 @@ const create = context => {
 			return;
 		}
 
+		const valueFunctionNames = getValueFunctionNames(sourceCode.lexer);
 		let ignoredDepth = 0;
 		let functionName;
 		let substitutionName;

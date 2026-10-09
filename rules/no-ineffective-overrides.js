@@ -88,12 +88,14 @@ const getSelectorAnalysis = sourceNodes => {
 	// Conditions within the final compound are simultaneous; preserve ancestor order and source nodes.
 	// `.disabled.primary.button:hover` refines `.button.primary`; prefix matching would miss it.
 	const terminalKeys = new Set(nodeKeys.slice(terminalStart));
+	const ancestorKey = JSON.stringify([pseudoElement, ...nodeKeys.slice(0, terminalStart)]);
 
 	return {
-		ancestorKey: JSON.stringify([pseudoElement, ...nodeKeys.slice(0, terminalStart)]),
+		// One key per condition of the final compound, built once instead of for every declaration.
+		// The first condition is the anchor: a matching override must retain it, regardless of selector order.
+		// Bare pseudo-elements only compare with other bare pseudo-elements.
+		lookupKeys: [...(terminalKeys.size > 0 ? terminalKeys : [undefined])].map(anchor => JSON.stringify([ancestorKey, anchor])),
 		terminalKeys,
-		// A matching override must retain this condition, regardless of selector order.
-		anchor: terminalKeys.values().next().value,
 		nodes: sourceNodes,
 	};
 };
@@ -242,9 +244,9 @@ const create = context => {
 	*/
 	const records = [];
 	/**
-	@type {Map<string, {record: DeclarationRecord, selector: SelectorAnalysis}[]>}
+	@type {Map<string, Map<string, {record: DeclarationRecord, selector: SelectorAnalysis}[]>>}
 	*/
-	const recordsByKey = new Map();
+	const recordsByProperty = new Map();
 	/**
 	@type {Map<string, boolean>}
 	*/
@@ -341,12 +343,18 @@ const create = context => {
 			...declarationContext, selectors: declarationContext.selectors, declaration, property, important,
 		};
 		records.push(record);
+		let recordsByLookupKey = recordsByProperty.get(property);
+		if (!recordsByLookupKey) {
+			recordsByLookupKey = new Map();
+			recordsByProperty.set(property, recordsByLookupKey);
+		}
+
 		for (const selector of record.selectors) {
-			const key = JSON.stringify([property, selector.ancestorKey, selector.anchor]);
-			let entries = recordsByKey.get(key);
+			const [key] = selector.lookupKeys;
+			let entries = recordsByLookupKey.get(key);
 			if (!entries) {
 				entries = [];
-				recordsByKey.set(key, entries);
+				recordsByLookupKey.set(key, entries);
 			}
 
 			entries.push({record, selector});
@@ -358,10 +366,10 @@ const create = context => {
 	@param {SelectorAnalysis} selector
 	*/
 	const getBlocker = (override, selector) => {
-		// Bare pseudo-elements only compare with other bare pseudo-elements.
 		// Probe every condition: a base's anchor may occur anywhere in the override.
-		for (const anchor of selector.terminalKeys.size > 0 ? selector.terminalKeys : [undefined]) {
-			const entries = recordsByKey.get(JSON.stringify([override.property, selector.ancestorKey, anchor])) ?? [];
+		const recordsByLookupKey = recordsByProperty.get(override.property);
+		for (const lookupKey of selector.lookupKeys) {
+			const entries = recordsByLookupKey?.get(lookupKey) ?? [];
 			const blocker = entries.find(({record: base, selector: baseSelector}) => base.declaration !== override.declaration
 				&& getBlockingReason(base, override)
 				&& base.conditions.isSubsetOf(override.conditions)

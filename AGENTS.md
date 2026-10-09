@@ -104,7 +104,7 @@ Every rule must declare the official [`meta.languages`](https://eslint.org/docs/
 
 Before writing helpers, check these:
 
-- **`@eslint/css-tree`** - `ident.decode()` for CSS escapes, `tokenize()`/`tokenTypes`, `parse()`, `walk()`, `generate()`, and `keyword()` for vendor prefixes.
+- **`@eslint/css-tree`** - `ident.decode()` for CSS escapes, `tokenize()`/`tokenTypes`, `walk()`, `generate()`, and `keyword()` for vendor prefixes. For `parse()`, use `parse` from `rules/utils/` instead, because the `@eslint/css-tree` parser gets slow after `@eslint/css` parses a large file with it.
 - **`rules/utils/`** - Small helpers for rules. See `rules/utils/index.js` for the list; each one has a doc comment.
 - **`rules/shared/`** - Larger shared CSS logic and data, like selector specificity and shorthand properties.
 

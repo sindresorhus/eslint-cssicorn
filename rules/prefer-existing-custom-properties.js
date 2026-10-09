@@ -2,7 +2,6 @@
 
 import {
 	ident,
-	parse,
 	tokenize,
 	tokenTypes,
 	toPlainObject,
@@ -17,6 +16,7 @@ import {
 	isStyleDeclaration,
 	isSubstitutionFunction,
 	normalizeCssIdentifier,
+	parse,
 	toLocation,
 } from './utils/index.js';
 

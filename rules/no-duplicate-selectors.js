@@ -99,13 +99,20 @@ const getContextKey = (rule, context) => {
 const create = context => {
 	const {sourceCode} = context;
 	const selectorListsByContext = new Map();
+	// Rules in the same block share the context key.
+	const contextKeysByParent = new WeakMap();
 
 	context.on('Rule', function * (rule) {
 		if (rule.prelude.type !== 'SelectorList') {
 			return;
 		}
 
-		const contextKey = getContextKey(rule, context);
+		const parent = sourceCode.getParent(rule);
+		if (!contextKeysByParent.has(parent)) {
+			contextKeysByParent.set(parent, getContextKey(rule, context));
+		}
+
+		const contextKey = contextKeysByParent.get(parent);
 		if (contextKey === undefined) {
 			return;
 		}

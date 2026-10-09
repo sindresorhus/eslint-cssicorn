@@ -1,6 +1,6 @@
 // @ts-check
 
-import {parse} from '@eslint/css-tree';
+import {parse} from './parse.js';
 
 /**
 Parse a value with absolute positions, for example the raw value of a custom property. Values of custom properties need not be valid, so invalid values are not an error.

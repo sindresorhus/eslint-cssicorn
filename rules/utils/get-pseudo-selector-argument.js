@@ -1,5 +1,6 @@
-import {parse, toPlainObject} from '@eslint/css-tree';
+import {toPlainObject} from '@eslint/css-tree';
 import getPseudoSelectorName from './get-pseudo-selector-name.js';
+import {parse} from './parse.js';
 
 /**
 Get a pseudo-selector's selector argument, parsing arguments of escaped names while preserving their source ranges.

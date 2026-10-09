@@ -26,6 +26,11 @@ const messages = {
 };
 
 const slashShorthands = new Set(['grid-area', 'grid-column', 'grid-row']);
+// Group the catalog by the first component, so a block only checks the shorthands of its own properties.
+const shorthandsByFirstComponent = Map.groupBy(
+	shorthandProperties.entries().map(([shorthand, definition], catalogIndex) => ({shorthand, definition, catalogIndex})),
+	({definition}) => definition.components[0],
+);
 const additionalResetProperties = new Map([
 	['animation', ['animation-composition', 'animation-trigger']],
 	['background', ['background-blend-mode']],
@@ -583,19 +588,19 @@ const create = context => {
 
 		const properties = new Set(block.children.filter(child => child.type === 'Declaration').map(child => toAsciiLowerCase(child.property)));
 		const candidates = [];
-		let catalogIndex = 0;
-		for (const [shorthand, definition] of shorthandProperties) {
-			// These shorthands need dedicated serializers for slash-separated values and comma-separated ranges.
-			if (
-				!ignoredShorthands.has(shorthand)
-				&& !['mask-border', 'animation-range'].includes(shorthand)
-				// A candidate needs every component, so skip the shorthand early.
-				&& definition.components.every(component => properties.has(component))
-			) {
-				candidates.push(...getCandidates(block.children, {shorthand, definition, catalogIndex}, sourceCode));
+		for (const property of properties) {
+			for (const entry of shorthandsByFirstComponent.get(property) ?? []) {
+				const {shorthand, definition} = entry;
+				// These shorthands need dedicated serializers for slash-separated values and comma-separated ranges.
+				if (
+					!ignoredShorthands.has(shorthand)
+					&& !['mask-border', 'animation-range'].includes(shorthand)
+					// A candidate needs every component, so skip the shorthand early.
+					&& definition.components.every(component => properties.has(component))
+				) {
+					candidates.push(...getCandidates(block.children, entry, sourceCode));
+				}
 			}
-
-			catalogIndex++;
 		}
 
 		const usedDeclarations = new Set();

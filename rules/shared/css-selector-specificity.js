@@ -240,8 +240,26 @@ function isSelectorRepresentable(selector, allowPseudoElements, allowLeadingComb
 		&& selector.children.every(node => isPseudoSelectorRepresentable(node, allowPseudoElements));
 }
 
-const canMatchSelector = selector => isSelectorRepresentable(selector, true, true);
-const canBeRepresentedByNestingSelector = (selector, allowLeadingCombinator = true) => isSelectorRepresentable(selector, false, allowLeadingCombinator);
+// Several rules check the same selector nodes, so the results are cached by node.
+const cacheBySelector = isRepresentable => {
+	const results = new WeakMap();
+	return selector => {
+		let result = results.get(selector);
+		if (result === undefined) {
+			result = isRepresentable(selector);
+			results.set(selector, result);
+		}
+
+		return result;
+	};
+};
+
+const canMatchSelector = cacheBySelector(selector => isSelectorRepresentable(selector, true, true));
+const canBeRepresentedWithLeadingCombinator = cacheBySelector(selector => isSelectorRepresentable(selector, false, true));
+const canBeRepresentedWithoutLeadingCombinator = cacheBySelector(selector => isSelectorRepresentable(selector, false, false));
+const canBeRepresentedByNestingSelector = (selector, allowLeadingCombinator = true) => allowLeadingCombinator
+	? canBeRepresentedWithLeadingCombinator(selector)
+	: canBeRepresentedWithoutLeadingCombinator(selector);
 
 const hasNestingSelectorInRawArgument = argument => argument?.type === 'Raw' && hasDelimToken(argument.value, '&');
 
