@@ -106,15 +106,15 @@ function getCalculationValue(node) {
 }
 
 /**
-Check whether a value is a positive, purely proportional percentage.
+Get a constant, purely proportional percentage value.
 */
-function isPositivePercentage(node) {
+function getPercentageValue(node) {
 	if (!node || (node.type !== 'Percentage' && !(node.type === 'Function' && normalizeCssIdentifier(node.name) === 'calc'))) {
-		return false;
+		return;
 	}
 
 	const result = getCalculationValue(node);
-	return result !== undefined && result.percentagePower === 1 && result.value > 0;
+	return result?.percentagePower === 1 ? result.value : undefined;
 }
 
 /**
@@ -143,19 +143,34 @@ function isRatioPadding(declaration, sourceCode) {
 
 	const {children} = declaration.value;
 	if (normalizeCssIdentifier(declaration.property) !== 'padding') {
-		return children.length === 1 && isPositivePercentage(children[0]);
+		return children.length === 1 && getPercentageValue(children[0]) > 0;
 	}
 
 	if (children.length === 0 || children.length > 4) {
 		return false;
 	}
 
-	if (children.some(node => !(isNonnegativeLengthOrPercentage(node, sourceCode) || isPositivePercentage(node)))) {
+	if (children.some(node => !(isNonnegativeLengthOrPercentage(node, sourceCode) || getPercentageValue(node) >= 0))) {
 		return false;
 	}
 
 	const [top, , bottom = top] = children;
-	return isPositivePercentage(top) || isPositivePercentage(bottom);
+	return getPercentageValue(top) > 0 || getPercentageValue(bottom) > 0;
+}
+
+/**
+Check a literal zero padding reset overridden by later vertical longhands with matching importance.
+*/
+function isZeroPaddingReset(declaration, verticalPadding, sourceCode) {
+	if (declaration.value.type !== 'Value') {
+		return false;
+	}
+
+	const {children} = declaration.value;
+	return children.length > 0
+		&& children.length <= 4
+		&& children.every(node => Number(node.value) === 0 && isNonnegativeLengthOrPercentage(node, sourceCode))
+		&& verticalPadding.every(node => node.important === declaration.important && sourceCode.getRange(node)[0] > sourceCode.getRange(declaration)[0]);
 }
 
 /**
@@ -216,8 +231,12 @@ const create = context => {
 			return;
 		}
 
-		if (declarations.has('padding') && (declarations.has('padding-top') || declarations.has('padding-bottom'))) {
-			return;
+		const shorthand = declarations.get('padding');
+		if (shorthand) {
+			const verticalPadding = [declarations.get('padding-top'), declarations.get('padding-bottom')].filter(Boolean);
+			if (verticalPadding.length > 0 && !isZeroPaddingReset(shorthand, verticalPadding, sourceCode)) {
+				return;
+			}
 		}
 
 		const padding = declarations.values().find(node => node !== height && isRatioPadding(node, sourceCode));

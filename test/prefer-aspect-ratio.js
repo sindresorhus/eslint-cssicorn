@@ -65,7 +65,13 @@ test.snapshot({
 			'50% calc(1)',
 			'50% calc(25% - 50%)',
 		].map(value => `a { height: 0; padding: ${value}; }`),
-		'a { height: 0; padding: 50% calc(0%); }',
+		...[
+			'calc(0%)',
+			'calc(0%) 50%',
+			'calc(0%) 0 calc(50% - 50%)',
+			'50% calc(0)',
+			'50% calc(0% / 0)',
+		].map(value => `a { height: 0; padding: ${value}; }`),
 		'a { height: 0; padding: calc(-25%) 0 50%; }',
 		'a { height: 0; height: auto; padding-top: 50%; }',
 		'a { height: 0; HEIGHT: 0 !important; padding-top: 50%; }',
@@ -74,6 +80,17 @@ test.snapshot({
 		'a { height: 0; padding: 50% 0; padding: 25% 0; }',
 		'a { height: 0; padding: 50% 0; padding-top: 50%; }',
 		'a { height: 0; padding-bottom: 50%; padding: 0; }',
+		...[
+			'padding: 0 !important; padding-bottom: 50%',
+			'padding: 0; padding-bottom: 50% !important',
+			'padding-top: 0; padding: 0; padding-bottom: 50%',
+			'padding: 10px; padding-bottom: 50%',
+			'padding: 0deg; padding-bottom: 50%',
+			'padding: calc(0%); padding-bottom: 50%',
+			'padding: 0 0 0 0 0; padding-bottom: 50%',
+			'padding: 0; padding-top: 0 !important; padding-bottom: 50%',
+			'padding: 0; padding-bottom: 50%; padding-bottom: 50%',
+		].map(declarations => `a { height: 0; ${declarations}; }`),
 		...[
 			'aspect-ratio: auto',
 			'ASPECT-RATIO: 2 / 1',
@@ -165,6 +182,20 @@ test.snapshot({
 			'0 8px calc(9 / 16 * 100%)',
 			'50% calc(25% + 25%)',
 		].map(value => `a { height: 0; padding: ${value}; }`),
+		...[
+			'50% calc(0%)',
+			'calc(50% - 50%) 0 56.25%',
+			'50% calc(25% - 25%) 0 calc(0% * -1)',
+			'CALC(0%) 0 50%',
+		].map(value => `a { height: 0; padding: ${value}; }`),
+		...[
+			'padding: 0; padding-bottom: 56.25%',
+			'padding: 0; padding-top: 56.25%',
+			'PADDING: -0PX 0% +0EM 0; PADDING-BOTTOM: 50%',
+			'padding: 0 !important; padding-bottom: 50% !important',
+			'padding: 0; padding-top: 25%; padding-bottom: 25%',
+			'padding: /* reset */ 0; padding-top: 0; padding-bottom: calc(9 / 16 * 100%)',
+		].map(declarations => `a { height: 0; ${declarations}; }`),
 	],
 });
 
@@ -186,7 +217,12 @@ test({
 });
 
 nodeTest('reports once per block without changing CSS or offering suggestions', () => {
-	const code = 'a { height: 0; padding-bottom: 25%; padding-top: 25%; } b { height: 0; padding: 50% 0; }';
+	const code = [
+		'a { height: 0; padding-bottom: 25%; padding-top: 25%; }',
+		'b { height: 0; padding: 50% 0; }',
+		'c { height: 0; padding: 0; padding-top: 25%; padding-bottom: 25%; }',
+		'd { height: 0; padding: calc(0%) 0 50%; }',
+	].join(' ');
 	const result = new Linter().verifyAndFix(code, {
 		files: ['**/*.css'],
 		language: 'css/css',
@@ -196,8 +232,9 @@ nodeTest('reports once per block without changing CSS or offering suggestions', 
 
 	assert.equal(result.fixed, false);
 	assert.equal(result.output, code);
-	assert.equal(result.messages.length, 2);
+	assert.equal(result.messages.length, 4);
 	assert.equal(result.messages[0].column, code.indexOf('padding-bottom') + 1);
+	assert.equal(result.messages[2].column, code.indexOf('padding-top', code.indexOf('c {')) + 1);
 	for (const message of result.messages) {
 		assert.equal(message.messageId, 'prefer-aspect-ratio');
 		assert.equal(message.fix, undefined);
