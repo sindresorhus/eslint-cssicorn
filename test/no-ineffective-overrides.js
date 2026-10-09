@@ -4,6 +4,36 @@ const {test} = getTester(import.meta);
 
 test.snapshot({
 	valid: [
+		'.button { @supports (color: red) { @layer states { color: blue; } } }',
+		'.button { @supports (color: red !important) { @media screen { color: blue; } } }',
+		'.button { @container style(--theme: red !important) { @media screen { --theme: blue; } } }',
+		'.button { color: revert-rule !important; } .button:hover { color: blue; }',
+		'.button { color: red !important; color: REVERT-RULE !important; } .button:hover { color: blue; }',
+		'.button { --color: red !important; --color: revert-rule !important; } .button:hover { --color: blue; }',
+		'.button { margin-top: 0 !important; margin: revert-rule !important; } .button:hover { margin-top: 1px; }',
+		'.button { color: red !important; all: revert-rule !important; } .button:hover { color: blue; }',
+	],
+	invalid: [
+		'@supports (color: revert !important) {} .button { color: red !important; } .button:hover { color: blue; }',
+		'@container style(--theme: revert-layer !important) {} .button { --theme: red !important; } .button:hover { --theme: blue; }',
+		'.button { @supports (color: red) { color: red !important; @media screen { color: blue; } } }',
+		'.button { color: red !important; color: revert-rule; } .button:hover { color: blue; }',
+	],
+});
+
+test({
+	valid: [],
+	invalid: [{
+		code: '.button.primary { color: red !important; }\n.button.secondary { color: red !important; }\n.active.secondary.button:hover { color: blue; }',
+		errors: [{
+			message: '`color` cannot override the declaration on line 2 because it is marked `!important`.',
+			line: 3,
+		}],
+	}],
+});
+
+test.snapshot({
+	valid: [
 		'.button[data-state=open] { color: red !important; } .button[data-state="closed"]:hover { color: blue; }',
 		'.button[data-state=open] { color: red !important; } .button[data-state="OPEN"]:hover { color: blue; }',
 		'.button[data-state=open i] { color: red !important; } .button[data-state="open" s]:hover { color: blue; }',

@@ -37,7 +37,7 @@ const messages = {
 const CONDITIONAL_RULES = new Set(['media', 'supports', 'container', 'starting-style']);
 const SUPPORTED_PSEUDO_ELEMENTS = new Set(['before', 'after']);
 const UNSUPPORTED_PSEUDO_CLASSES = new Set(['host', 'host-context', 'scope']);
-const ROLLBACK_KEYWORDS = new Set(['revert', 'revert-layer']);
+const ROLLBACK_KEYWORDS = new Set(['revert', 'revert-layer', 'revert-rule']);
 const ALL_EXCLUDED_PROPERTIES = new Set(['direction', 'unicode-bidi']);
 
 /**
@@ -317,6 +317,12 @@ const create = context => {
 	};
 
 	context.on('Declaration', declaration => {
+		const parent = sourceCode.getParent(declaration);
+		// Query tests in @supports and @container also contain Declaration nodes, but do not apply styles or roll back the cascade.
+		if (parent?.type !== 'Block') {
+			return;
+		}
+
 		const property = getPropertyKey(declaration.property);
 		const important = Boolean(declaration.important);
 		// Rollback can remove a blocker elsewhere in the cascade. Track its highest importance rather than simulate the entire cascade.
@@ -328,7 +334,7 @@ const create = context => {
 			}
 		}
 
-		const declarationContext = getContext(sourceCode.getParent(declaration));
+		const declarationContext = getContext(parent);
 		if (!declarationContext?.selectors) {
 			return;
 		}

@@ -182,6 +182,20 @@ Message:
 
 `;
 
+exports[`invalid(1): @supports (color: revert !important) {} .button { color: red !important; } .button:hover { color: blue; } 1`] = `
+
+  1 | @supports (color: revert !important) {} .button { color: red !important; } .button:hover { color: blue; }
+
+`;
+
+exports[`invalid(1): @supports (color: revert !important) {} .button { color: red !important; } .button:hover { color: blue; } 2`] = `
+
+Message:
+> 1 | @supports (color: revert !important) {} .button { color: red !important; } .button:hover { color: blue; }
+    |                                                                                            ^^^^^^^^^^^ \`color\` cannot override the declaration on line 1 because it is marked \`!important\`.
+
+`;
+
 exports[`invalid(10): .\\62 utton { OPACITY: 1 !important; @STARTING-STYLE { opacity: 0; } } 1`] = `
 
   1 | .\\62 utton { OPACITY: 1 !important; @STARTING-STYLE { opacity: 0; } }
@@ -1338,6 +1352,20 @@ Message:
 
 `;
 
+exports[`invalid(2): @container style(--theme: revert-layer !important) {} .button { --theme: red !important; } .button:hover { --theme: blue; } 1`] = `
+
+  1 | @container style(--theme: revert-layer !important) {} .button { --theme: red !important; } .button:hover { --theme: blue; }
+
+`;
+
+exports[`invalid(2): @container style(--theme: revert-layer !important) {} .button { --theme: red !important; } .button:hover { --theme: blue; } 2`] = `
+
+Message:
+> 1 | @container style(--theme: revert-layer !important) {} .button { --theme: red !important; } .button:hover { --theme: blue; }
+    |                                                                                                            ^^^^^^^^^^^^^ \`--theme\` cannot override the declaration on line 1 because it is marked \`!important\`.
+
+`;
+
 exports[`invalid(2): @layer components { .button { margin-top: 0 !important; margin: revert; } } .button:hover { margin-top: 1px !important; } 1`] = `
 
   1 | @layer components { .button { margin-top: 0 !important; margin: revert; } } .button:hover { margin-top: 1px !important; }
@@ -1489,6 +1517,20 @@ exports[`invalid(29): @media print { .button { color: red !important; } @support
 Message:
 > 1 | @media print { .button { color: red !important; } @supports (display: grid) { .button { color: blue; } } }
     |                                                                                         ^^^^^^^^^^^ \`color\` cannot override the declaration on line 1 because it is marked \`!important\`.
+
+`;
+
+exports[`invalid(3): .button { @supports (color: red) { color: red !important; @media screen { color: blue; } } } 1`] = `
+
+  1 | .button { @supports (color: red) { color: red !important; @media screen { color: blue; } } }
+
+`;
+
+exports[`invalid(3): .button { @supports (color: red) { color: red !important; @media screen { color: blue; } } } 2`] = `
+
+Message:
+> 1 | .button { @supports (color: red) { color: red !important; @media screen { color: blue; } } }
+    |                                                                           ^^^^^^^^^^^ \`color\` cannot override the declaration on line 1 because it is marked \`!important\`.
 
 `;
 
@@ -1839,6 +1881,20 @@ exports[`invalid(4): .button { all: revert-layer; color: red !important; } .butt
 Message:
 > 1 | .button { all: revert-layer; color: red !important; } .button:hover { color: blue; }
     |                                                                       ^^^^^^^^^^^ \`color\` cannot override the declaration on line 1 because it is marked \`!important\`.
+
+`;
+
+exports[`invalid(4): .button { color: red !important; color: revert-rule; } .button:hover { color: blue; } 1`] = `
+
+  1 | .button { color: red !important; color: revert-rule; } .button:hover { color: blue; }
+
+`;
+
+exports[`invalid(4): .button { color: red !important; color: revert-rule; } .button:hover { color: blue; } 2`] = `
+
+Message:
+> 1 | .button { color: red !important; color: revert-rule; } .button:hover { color: blue; }
+    |                                                                        ^^^^^^^^^^^ \`color\` cannot override the declaration on line 1 because it is marked \`!important\`.
 
 `;
 
