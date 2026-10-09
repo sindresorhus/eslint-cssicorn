@@ -11,7 +11,7 @@ Percentage padding paired with `height: 0` is a common workaround for maintainin
 
 This rule reports one problem per style declaration block containing an explicit literal zero `height` and positive percentage `padding-top` or `padding-bottom`. It also recognizes `padding` shorthands with literal zero horizontal padding and vertical components that are either literal zero or positive percentages. Zero height may be unitless or use a valid length unit, such as `0px`; percentage and calculated heights are excluded.
 
-The rule does not provide an autofix or editor suggestion. Percentage padding depends on the containing block's inline size, while `aspect-ratio` uses the element's own box dimensions. Migration usually requires removing both the zero height and ratio padding, and may require reviewing positioning, content, box sizing, or markup. The examples below illustrate possible migrations, not guaranteed equivalent replacements. See [the browser comparison](https://web.dev/articles/aspect-ratio).
+The rule does not provide an autofix or editor suggestion. Percentage padding depends on the containing block's inline size, while `aspect-ratio` uses the element's own box dimensions. Migration usually requires removing both the zero height and ratio padding, and may require reviewing positioning, content, box sizing, or markup. At least one of `width` or `height` must remain automatic for `aspect-ratio` to affect sizing. If another declaration still sets a fixed height, reset it with `height: auto`. The examples below illustrate possible migrations, not guaranteed equivalent replacements. See [the browser comparison](https://web.dev/articles/aspect-ratio).
 
 ## Examples
 

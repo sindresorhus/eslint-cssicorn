@@ -141,6 +141,16 @@ test.snapshot({
 	],
 });
 
+test({
+	valid: [],
+	invalid: [
+		{
+			code: 'a { height: 0; padding-bottom: 50%; @supports (aspect-ratio: 1) { height: 0; padding-bottom: 50%; } }',
+			errors: [{messageId: 'prefer-aspect-ratio', column: 16}],
+		},
+	],
+});
+
 nodeTest('reports once per block without changing CSS or offering suggestions', () => {
 	const code = 'a { height: 0; padding-bottom: 25%; padding-top: 25%; } b { height: 0; padding: 50% 0; }';
 	const result = new Linter().verifyAndFix(code, {
