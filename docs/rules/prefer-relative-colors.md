@@ -61,8 +61,8 @@ Component definitions qualify within their own declaration block:
 
 - Requires a complete direct definition of `rgb(var(--channels))` or `hsl(var(--channels))`, including their `rgba()` and `hsla()` aliases. The channel reference must have no fallback, and the definition must have no alpha or additional components.
 - Unconditional bare `:root` and `html` rules qualify throughout the file, including inside `@layer`. Other definitions qualify only within their own declaration block.
-- Prefers a unique same-block relationship over a root relationship. Ambiguous relationships are skipped. Repeated identical definitions are accepted; a conflicting or unsupported definition of the destination token anywhere in the file disqualifies it.
-- Handles comma- and slash-separated alpha variants, including functions such as `var()` and `calc()` for alpha. Preserves the alpha expression verbatim and uses relative RGB or HSL syntax matching the relationship.
+- Chooses a unique matching token from the same block, or from qualifying roots when the block has no matching relationship. Ambiguity in the chosen scope is skipped. Repeated identical definitions are accepted; a conflicting or unsupported definition of the destination token anywhere in the file disqualifies it.
+- Handles numeric, percentage, and functional alpha values in comma- and slash-separated variants. Preserves the alpha expression verbatim and uses relative RGB or HSL syntax matching the relationship.
 - Checks ordinary and custom-property declaration values, including colors in gradients and shadows. Definitions may appear after consumers. Custom-property names are decoded and case-sensitive.
 
 ## Limitations
@@ -71,6 +71,6 @@ The rule does not discover imported definitions, guess token names, compare lite
 
 Only the exact declaration block establishes a local relationship; nested blocks do not inherit discovery from an outer component block. Conditional root definitions do not establish a file-wide relationship.
 
-Existing relative colors, channel references with fallbacks, commented replacements, self-references, substitution fallbacks, strings, URLs, at-rule preludes, descriptor blocks, and CSS Modules `:export`/`:import()` declarations are ignored.
+Existing relative colors, including `alpha(from …)`, channel references with fallbacks, commented replacements, self-references, substitution fallbacks, strings, URLs, at-rule preludes, descriptor blocks, and CSS Modules `:export`/`:import()` declarations are ignored.
 
 `color-mix()` is not rewritten. Mixing with transparent scales a color's existing alpha, while an explicit alpha in relative color syntax replaces it. Channel-based colors nested inside a mix can still receive suggestions.

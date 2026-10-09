@@ -55,6 +55,8 @@ test.snapshot({
 		withRoot('a { --variant: rgb(/* keep */ var(--channels) / .5); }'),
 		withRoot('a { color: hwb(from rgb(var(--channels) / .5) h w b); }'),
 		'@starting-style { :root { --brand: rgb(var(--channels)); } } a { color: rgb(var(--channels) / .5); }',
+		withRoot('a { color: alpha(from rgb(var(--channels) / .5) / .25); }'),
+		withRoot('a { --variant: alpha(from rgb(var(--channels) / .5) / .25); }'),
 	],
 	invalid: [
 		withRoot('a { color: rgb(var(--channels) / .5); }'),
@@ -97,6 +99,18 @@ test.snapshot({
 		withRoot(':root { --second: rgb(var(--channels)); } .theme { --second: red; } a { color: rgb(var(--channels) / .5); }'),
 		withRoot('a { @starting-style { --local: rgb(var(--channels)); color: rgb(var(--channels) / .5); } }'),
 		':root { --brand: HSLA(VAR(--channels)) !important; } a { --variant: HSL(VAR(--channels) / clamp(.1, VAR(--alpha), .8)) !important; }',
+		[
+			':root { --rgb: rgb(var(--channels)); --hsl: hsl(var(--channels)); }',
+			'a { background: linear-gradient(rgb(var(--channels) / .2), hsl(var(--channels) / .8)); }',
+		].join('\n'),
+		[
+			':root {',
+			'  --brand: rgb(var(--brand-channels));',
+			'  --accent: rgb(var(--accent-channels));',
+			'  --other-accent: rgb(var(--accent-channels));',
+			'}',
+			'a { background: linear-gradient(rgb(var(--brand-channels) / .2), rgb(var(--accent-channels) / .8)); }',
+		].join('\n'),
 	],
 });
 

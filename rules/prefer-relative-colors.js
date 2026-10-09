@@ -266,7 +266,7 @@ const create = context => {
 				if (node.type === 'Function') {
 					const name = normalizeCssIdentifier(node.name);
 					const firstChild = node.children.at(0);
-					const isRelativeColor = colorFunctionsWithAlpha.has(name) && firstChild?.type === 'Identifier' && normalizeCssIdentifier(firstChild.name) === 'from';
+					const isRelativeColor = (name === 'alpha' || colorFunctionsWithAlpha.has(name)) && firstChild?.type === 'Identifier' && normalizeCssIdentifier(firstChild.name) === 'from';
 					if (isSubstitutionFunction(node) || preservedFunctions.has(name) || isRelativeColor) {
 						return;
 					}
