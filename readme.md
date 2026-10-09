@@ -48,7 +48,7 @@ export default defineConfig([
 
 ## Embedded CSS
 
-To lint fenced CSS blocks in Markdown, configure the [`@eslint/markdown` processor](https://github.com/eslint/markdown/blob/main/docs/processors/markdown.md). It extracts virtual `.css` files, which the preset configs match. This processes the fenced CSS, while Markdown prose rules require a separate run.
+To lint fenced CSS blocks in Markdown, configure the [`@eslint/markdown` processor](https://github.com/eslint/markdown/blob/main/docs/processors/markdown.md). The presets match its extracted `.css` files. Lint Markdown prose separately.
 
 ```js
 import markdown from '@eslint/markdown';
