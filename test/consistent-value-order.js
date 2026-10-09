@@ -54,7 +54,7 @@ test.snapshot({
 		':export { border: rgb(var(--channels)) solid 1px; }',
 		'a { box-shadow: 0 0 red, calc(random(1px, 2px)) 0 blue; }',
 		'a { text-shadow: blue RANDOM-ITEM(auto, 1px, 2px) 0 0, 1px 2px red; }',
-		'a { box-shadow: red random(1px, 2px) 0, blue 0 random(3px, 4px); }',
+		'a { box-shadow: random(1px, 2px) 0 red, 0 random(3px, 4px) blue; }',
 		'a { box-shadow: red var(--x) 0, blue 0 0 var(--blur); }',
 		'a { text-decoration: underline 2px wavy red; text-decoration: overline underline 10% dotted blue; }',
 		'a { text-decoration: underline from-font solid; text-decoration: none; text-emphasis: open circle red; text-emphasis: circle open red; }',
@@ -408,7 +408,6 @@ test({
 		'a { columns: sin(var(--angle)) calc(var(--width)); }',
 		'a { columns: calc(var(--count)) calc(var(--width)); }',
 		'a { border: red solid sin(var(--angle)); border: red solid calc-size(auto, var(--width)); }',
-		'a { border: red solid random(var(--min), var(--max)); }',
 		'a { border: red solid calc(var(--width)) var(--extra); }',
 	],
 	invalid: [
@@ -638,10 +637,18 @@ test({
 		'a { border: rgb(random(0, 255) 0 0) solid calc(var(--width)); }',
 		'a { border: rgb(env(channels, random(0, 255))) solid calc(var(--width, random(1px, 2px))); }',
 		'a { border: rgb(random(0, 255) 0 0) solid 1px var(--extra); }',
+		'a { border: rgb(random(0, 255) 0 0) solid random(1px, 5px); }',
+		'a { border: rgb(var(--channels)) solid random(1px, 5px); }',
+		'a { columns: random(1, 3) random(10em, 20em); }',
+		'a { border: red solid random-item(auto, 1px, 2px); }',
 	],
 	invalid: [
 		...[
 			'calc(random(1px, 5px) + 1px)',
+			'random(1px, 5px)',
+			'random(--width, 1px, 5px, 1px)',
+			'random(var(--min), var(--max))',
+			'RANDOM(auto, 1PX, 5PX)',
 			'calc(var(--width, random(1px, 2px)))',
 			'min(1px, env(width, random-item(auto, 2px, 3px)))',
 		].map(width => ({
@@ -662,6 +669,25 @@ test({
 			output: `a { border: 1px solid ${color}; }`,
 			errors: 1,
 		})),
+		{
+			code: 'a { columns: 3 random(10em, 20em) / var(--height); columns: random(2, 5) 20em; }',
+			output: 'a { columns: random(10em, 20em) 3 / var(--height); columns: 20em random(2, 5); }',
+			errors: 2,
+		},
+		{
+			code: 'a { border: red solid random(1px, 5px) /* keep */; }',
+			output: 'a { border: random(1px, 5px) solid red /* keep */; }',
+			errors: 1,
+		},
+		{
+			code: 'a { border: red solid random(1px, /* keep */ 5px); }',
+			errors: 1,
+		},
+		{
+			code: 'a { text-decoration: wavy random(1px, 5px) underline rgb(random(0, 255) 0 0); }',
+			output: 'a { text-decoration: underline random(1px, 5px) wavy rgb(random(0, 255) 0 0); }',
+			errors: 1,
+		},
 		{
 			code: 'a { columns: 3 calc(random(1px, 2px)) / random(5em, 10em); }',
 			output: 'a { columns: calc(random(1px, 2px)) 3 / random(5em, 10em); }',
@@ -696,7 +722,7 @@ nodeTest('shadow fixes preserve random-function order', () => {
 		for (const [value, output] of [
 			[
 				'blue random(1px, 2px) random(3px, 4px), red 0 0, green random(5px, 6px) 0',
-				'blue random(1px, 2px) random(3px, 4px), 0 0 red, green random(5px, 6px) 0',
+				'random(1px, 2px) random(3px, 4px) blue, 0 0 red, random(5px, 6px) 0 green',
 			],
 			[
 				'var(--other, red random(1px, 2px) 0), blue 3px 4px, random-item(auto, green 5px 6px, purple 7px 8px)',

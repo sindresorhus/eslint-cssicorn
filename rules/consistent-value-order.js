@@ -65,7 +65,7 @@ const isColumnComponent = node => {
 };
 
 /**
-Use a matching placeholder when substitutions or random functions are confined to a known color or math function. The original component is retained for fixes.
+Use a matching placeholder for known color or math functions containing substitutions or randomness. Match random() as calc() because the lexer does not recognize it. The original component is retained for fixes.
 
 @param {CssNodePlain} node
 @returns {CssNodePlain}
@@ -85,7 +85,7 @@ const getMatchingComponent = node => {
 
 	return colorFunctions.has(name)
 		? {type: 'Identifier', name: 'transparent'}
-		: {...node, children: [{type: 'Number', value: '1'}]};
+		: {...node, name: name === 'random' ? 'calc' : node.name, children: [{type: 'Number', value: '1'}]};
 };
 
 const getGroupProblem = (nodes, canonicalNodes, {order, matchResult, property, context}) => {
