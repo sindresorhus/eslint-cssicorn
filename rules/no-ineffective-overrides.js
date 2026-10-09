@@ -57,6 +57,10 @@ const getNodeKey = node => {
 			return JSON.stringify([node.type, ident.decode(node.name)]);
 		}
 
+		case 'AttributeSelector': {
+			return generate({...node, value: node.value?.type === 'Identifier' ? {type: 'String', value: ident.decode(node.value.name)} : node.value});
+		}
+
 		case 'PseudoClassSelector': {
 			return generate({...node, name: normalizeCssIdentifier(node.name)});
 		}

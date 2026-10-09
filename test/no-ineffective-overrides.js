@@ -4,6 +4,29 @@ const {test} = getTester(import.meta);
 
 test.snapshot({
 	valid: [
+		'.button[data-state=open] { color: red !important; } .button[data-state="closed"]:hover { color: blue; }',
+		'.button[data-state=open] { color: red !important; } .button[data-state="OPEN"]:hover { color: blue; }',
+		'.button[data-state=open i] { color: red !important; } .button[data-state="open" s]:hover { color: blue; }',
+		'.button[data-state=open] { color: red !important; } .button[data-state~="open"]:hover { color: blue; }',
+		'.button[data-state=open] { color: red !important; } .button[data-status="open"]:hover { color: blue; }',
+		'.button[data-state=open] { color: red !important; } .button[data-state="open"] .icon:hover { color: blue; }',
+		'.button[data-state=open] { color: red !important; } .button[data-state="open"]:hover, .link:hover { color: blue; }',
+	],
+	invalid: [
+		'.button[data-state=open] { color: red !important; } .button[data-state="open"]:hover { color: blue; }',
+		'.button[data-state="open"] { color: red !important; } .button[data-state=open]:hover { color: blue; }',
+		String.raw`.button[data-state=\6f pen] { color: red !important; } .button[data-state="open"]:hover { color: blue; }`,
+		String.raw`.button[data-state="\6f pen"] { color: red !important; } .button[data-state=open]:hover { color: blue; }`,
+		'[data-state=open] .button { color: red !important; } [data-state="open"] .button:hover { color: blue; }',
+		'.button[data-state=open i] { color: red !important; } .button[data-state="open" i]:hover { color: blue; }',
+		'.button[data-state~=open] { color: red !important; } .button[data-state~="open"]:hover { color: blue; }',
+		'.button[data-state="open"] { color: red !important; } .button[data-state=open] { &:hover { color: blue; } }',
+		'.button[data-state=open] { color: red; } @layer states { .button[data-state="open"] { color: blue; } }',
+	],
+});
+
+test.snapshot({
+	valid: [
 		'.button { margin-top: 0 !important; margin: revert !important; } .button:hover { margin-top: 1px; }',
 		'@layer components { .button { margin-top: 0 !important; margin: revert-layer !important; } } .button:hover { margin-top: 1px !important; }',
 		'.button { margin-top: 0; margin: revert-layer; } @layer states { .button:hover { margin-top: 1px; } }',
