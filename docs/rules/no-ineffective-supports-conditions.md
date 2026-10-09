@@ -30,8 +30,10 @@ This rule reports these conditions in both `@supports` and `@import supports()`.
 @supports (color: oklch(var(--lightness) 0.2 20)) {}
 
 /* ✅ */
-@supports (color: oklch(60% 0.2 20)) {}
+@supports (color: var(--brand)) and (color: oklch(60% 0.2 20)) {}
 ```
+
+To test both substitution support and a value function, use separate declaration conditions joined with `and`.
 
 ```css
 /* ❌ */
@@ -64,9 +66,11 @@ A function-bearing custom-property probe can be intentional. The rule still repo
 
 ## Detection limits
 
-Detection is conservative and uses the parser's existing catalogue of known value functions. Keywords, units, unknown functions and their contents, strings, comments, and URLs are ignored. For example, `(--probe: 1cqi)` is allowed even though it does not test support for the `cqi` unit.
+Detection is conservative and uses the parser's existing catalogue of known value functions. The catalogue is not exhaustive; for example, `repeat()` and `shape()` are currently not recognized.
 
-Actual inner queries and typed `attr()` argument syntax are ignored:
+Keywords, units, unknown functions and their contents, strings, comments, and URLs are ignored. For example, `(--probe: 1cqi)` is allowed even though it does not test support for the `cqi` unit.
+
+Queries inside `if()`, including `supports()` queries, are outside this rule's scope. Typed `attr()` argument syntax is also ignored:
 
 ```css
 @supports (--probe: attr(data-width type(<length>))) {}
