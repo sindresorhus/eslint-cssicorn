@@ -198,3 +198,4 @@ export default defineConfig([
 - [eslint-plugin-unicorn](https://github.com/sindresorhus/eslint-plugin-unicorn) — More than 300 powerful ESLint rules. Some of them also lint CSS.
 - [eslint-node-test](https://github.com/sindresorhus/eslint-node-test) — ESLint rules for the Node.js built-in test runner.
 - [eslint-package-json](https://github.com/sindresorhus/eslint-package-json) — Powerful ESLint rules for `package.json`.
+- [eslint-soml](https://github.com/soml-lang/eslint-soml) — ESLint rules for SOML config files.

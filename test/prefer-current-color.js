@@ -15,6 +15,7 @@ test.snapshot({
 		'a { color: red; color: red; }',
 		'a { color: red; --border: red; }',
 		'a { color: red; font-family: red; animation: red 1s; container-name: red; }',
+		'a { color: red; transition: red 1s; transition-property: red; }',
 		'a { color: red; content: "red"; background: url(red); fill: url(#red); }',
 		'a { color: red; border: var(--width) solid red; }',
 		'a { color: red; border-color: var(--border, red); }',
@@ -153,6 +154,8 @@ test.snapshot({
 		'a { color: red; background-color: color-mix(in srgb, #f00, rgb(from rgb(100% 0% 0%) r g b)); }',
 		'a { color: #f00; border-color: rgb(255 /* keep */ 0 0); }',
 		String.raw`a { color: #F00; border-color: r\65 d; }`,
+		'a { color: red; caret-color: red; }',
+		'a { color: red; scrollbar-color: red red; }',
 	],
 });
 

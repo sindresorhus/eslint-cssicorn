@@ -108,6 +108,39 @@ test.snapshot({
 		'@container (orientation > portrait) {}',
 		'@media (/* before */ width /* name */: /* value */ 10px) {}',
 		'.element { @media (width: 10px) { color: red; } }',
+		// Valid values and notation not covered above
+		'@media (min-height: 100px) {}',
+		'@media (max-aspect-ratio: 16 / 9) {}',
+		'@media (min-resolution: 2dppx) and (max-resolution: 300dpi) {}',
+		'@media (resolution: 1x) {}',
+		'@media (device-width >= 1024px) {}',
+		'@media (min-device-aspect-ratio: 1 / 1) {}',
+		'@media (min-device-width: 10px) {}',
+		'@media (shape: rect) {}',
+		// At-rule name, feature name, unit, and keyword are ASCII case-insensitive
+		'@MEDIA (WIDTH: 10PX) {}',
+		'@media (HOVER: NONE) {}',
+		// Math functions and env() are checked on a best-effort basis
+		'@media (width: min(10px, 2em)) {}',
+		'@media (width: clamp(1px, 2vw, 3px)) {}',
+		'@media (width: round(up, 10px, 1px)) {}',
+		'@media (aspect-ratio: calc(16 / 9)) {}',
+		'@media (width: calc(2s)) {}',
+		'@media (width: env(safe-area-inset-left, 10px)) {}',
+		'@media (resolution: fo(2dppx)) {}',
+		// Media query lists, modifiers, and nesting
+		'@media screen and (width: 10px) {}',
+		'@media only screen and (min-width: 10px) {}',
+		'@media not all and (min-width: 10px) {}',
+		'@media (min-width: 10px) and (max-width: 20px) and (orientation: landscape) {}',
+		'@import "theme.css" screen and (min-width: 10px);',
+		'@supports (display: grid) { .element { @media (width: 10px) { color: red; } } }',
+		'@media screen { .element { @media (width: 10px) { color: red; } } }',
+		'@media (--x) and (width: 10px) {}',
+		// Vendor-prefixed features are ignored, even without a value
+		'@media (-webkit-device-pixel-ratio: 2.5) {}',
+		'@media (-ms-high-contrast: active) {}',
+		'@media (-webkit-min-device-pixel-ratio) {}',
 	],
 	invalid: [
 		'@media (unknown-feature) {}',
@@ -170,6 +203,43 @@ test.snapshot({
 		'@media (grid: -1) {}',
 		'@media (grid: 1.0) {}',
 		'@media (theme(--minimum) < width < red) {}',
+		// Unknown feature names
+		'@media (widht: 10px) {}',
+		'@media (heigth) {}',
+		'@media not all and (unknown-feature: 1px) {}',
+		'@media (width: 10px) and (unknown-feature: 2px) {}',
+		// Invalid values for known features
+		'@media (color-index: 1.5) {}',
+		'@media (color: rgb(0, 0, 0)) {}',
+		'@media (scan: interlaced) {}',
+		'@media (update: quick) {}',
+		'@media (overflow-block: auto) {}',
+		'@media (pointer: touch) {}',
+		'@media (hover: yes) {}',
+		'@media (prefers-color-scheme: dark-mode) {}',
+		'@media (prefers-reduced-motion: 0) {}',
+		'@media (scripting: yes) {}',
+		'@media (color-gamut: rgb) {}',
+		'@media (nav-controls: forward) {}',
+		'@media (display-state: open) {}',
+		'@media (horizontal-viewport-segments: 0.5) {}',
+		// Range notation is not allowed for discrete features
+		'@media (color-gamut > srgb) {}',
+		'@media (scan > progressive) {}',
+		'@media (update >= slow) {}',
+		'@media (pointer <= fine) {}',
+		// Features prefixed with min- or max- require plain notation with a value
+		'@media (max-height <= 20px) {}',
+		'@media (10px < min-device-width) {}',
+		'@media (min-resolution) {}',
+		// Chained comparisons
+		'@media (10px <= width > 20px) {}',
+		'@media (10px > width < 20px) {}',
+		'@media (20px > width > red) {}',
+		'@media (10px < width < 20px) and (20px < height > 10px) {}',
+		// Nested and imported media queries
+		'@media screen { .element { @media (min-width) { color: red; } } }',
+		'@import "theme.css" (width: red);',
 	],
 });
 

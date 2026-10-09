@@ -69,6 +69,16 @@ test.snapshot({
 		'@media screen { :root, html { --brand: rgb(var(--channels)); } } a { color: rgb(var(--channels) / .5); }',
 		withRoot('a { color: rgb(var(--channels) /* keep */ / .5); }'),
 		withRoot('a { color: rgb(var(--channels /* keep */) / .5); }'),
+		// A registered `@property` initial value is not a discoverable definition
+		'@property --brand { syntax: "<color>"; inherits: true; initial-value: rgb(var(--channels)); } a { color: rgb(var(--channels) / .5); }',
+		// The definition belongs only to its own block
+		'a { --brand: rgb(var(--channels)); } b { color: rgb(var(--channels) / .5); }',
+		// Conflicting definitions of the same token disqualify it
+		':root { --brand: rgb(var(--channels)); --brand: rgb(var(--other)); } a { color: rgb(var(--channels) / .5); }',
+		// A selector list containing more than a bare root selector does not qualify file-wide
+		':root, a { --brand: rgb(var(--channels)); } b { color: rgb(var(--channels) / .5); }',
+		// A conditional definition does not qualify outside its block
+		'@media screen { a { --brand: rgb(var(--channels)); } } b { color: rgb(var(--channels) / .5); }',
 	],
 	invalid: [
 		withRoot('a { color: rgb(var(--channels) / .5); }'),
@@ -140,6 +150,28 @@ test.snapshot({
 		withRoot('a { color: rgb(var(--channels) / /* keep */ .5); }'),
 		withRoot('a { color: rgba(var(--channels),.5); }'),
 		withRoot('a { --variant: rgba(var(--channels),/* keep */.5); }'),
+		// An HSL definition and consumer in a non-root block
+		'a { --brand: hsl(var(--channels)); color: hsl(var(--channels) / .5); }',
+		// The consumer is nested in a grouping rule of the definition's block
+		'a { --brand: rgb(var(--channels)); @media screen { color: rgb(var(--channels) / .5); } }',
+		// Multiple alpha variants in one declaration are each reported
+		'a { --brand: rgb(var(--channels)); background: linear-gradient(rgb(var(--channels) / .1), rgb(var(--channels) / .2)); }',
+		withRoot('a { background: rgb(var(--channels) / .5) rgb(var(--channels) / .7); }'),
+		// Alpha spellings: percentage, exponent, and sign
+		withRoot('a { color: rgb(var(--channels) / 50%); }'),
+		withRoot('a { color: rgb(var(--channels) / 5e-1); }'),
+		withRoot('a { color: rgb(var(--channels) / +0.5); }'),
+		// No whitespace around the slash
+		withRoot('a { color: rgb(var(--channels)/.5); }'),
+		// The consumer inside a scoped, nested, or shadow function
+		withRoot('@scope (.card) { a { color: rgb(var(--channels) / .5); } }'),
+		withRoot('a { filter: drop-shadow(0 0 1px rgb(var(--channels) / .5)); }'),
+		// A definition inside a container query block
+		'@container (width > 1px) { a { --brand: rgb(var(--channels)); color: rgb(var(--channels) / .5); } }',
+		// A custom-property consumer with `!important`
+		withRoot('a { --variant: rgb(var(--channels) / .5) !important; }'),
+		// A pseudo-class block scopes the definition and consumer
+		'a:hover { --brand: rgb(var(--channels)); color: rgb(var(--channels) / .5); }',
 	],
 });
 

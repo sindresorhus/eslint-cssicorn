@@ -90,6 +90,36 @@ test.snapshot({
 				}
 			}
 		`,
+		// Equal-specificity parents
+		'.dialog, .modal { & .close {} }',
+		'.btn:hover, .btn:focus { & .icon {} }',
+		'[data-state], :focus-visible { & .close {} }',
+		':is(.a, .b) { & .c {} }',
+		':HOVER, .dialog { & .close {} }',
+		String.raw`.foo\:bar, .other { & .close {} }`,
+		// Ordinary selector lists without nesting are allowed
+		'#dialog, .dialog, span {}',
+		// `:where()` neutralizes a nested selector list
+		'.card:where(:is(.active, #id)) {}',
+		// Selector-list arguments with equal specificity
+		':is(.a.b, .c:hover) {}',
+		':is(#a, #b) {}',
+		':not([a], [b]) {}',
+		'.x:has(> .a, + .b) {}',
+		// Ignored pseudo-element argument leaves only one representable selector
+		':is(::before, #featured) {}',
+		// Comment inside an equal-specificity parent list
+		'.dialog, /* keep */ .modal { & .close {} }',
+		// Transparent at-rules
+		'@supports (display: grid) { .dialog, .modal { & .close {} } }',
+		'@layer base { .dialog, .modal { & .close {} } }',
+		// `@scope` stops parent resolution
+		'@scope (.root) { .dialog, .modal { & .close {} } }',
+		// Direct pseudo-element parent branch is ignored
+		'::marker { .a, #b { .c {} } }',
+		'.root { &::after { .a, #b { .c {} } } }',
+		// Non-standard pseudo-class is not representable, so it is ignored
+		':-webkit-autofill, #dialog { & .close {} }',
 	],
 	invalid: [
 		'#dialog, .dialog { & .close {} }',
@@ -172,6 +202,36 @@ test.snapshot({
 		'::slotted(:is(.item, #featured)) {}',
 		'.root, #root { :is(&, #featured) {} }',
 		'@namespace svg url("http://www.w3.org/2000/svg"); :is(svg|*, svg|circle) {}',
+		// Nested rules under a mixed-specificity parent list
+		'#dialog, .dialog { .close { .icon {} } }',
+		':matches(.dialog, #dialog), .modal { & .close {} }',
+		'#dialog, /* keep */ .dialog { & .close {} }',
+		':nth-child(2n of .item), #modal { & .close {} }',
+		':HOVER, #dialog { & .close {} }',
+		String.raw`.foo\:bar, #baz { & .close {} }`,
+		// Transparent at-rules resolve the parent
+		'@supports (display: grid) { #dialog, .dialog { & .close {} } }',
+		'@container (width > 40rem) { #dialog, .dialog { & .close {} } }',
+		'@layer components { #dialog, .dialog { & .close {} } }',
+		'@media (width > 40rem) { @supports (display: grid) { #dialog, .dialog { & .close {} } } }',
+		// Selector-list pseudo-classes with mixed-specificity arguments
+		':is(:where(#featured), .button) {}',
+		':is(.a, #b, .c) {}',
+		':is(.a, .b.c) {}',
+		':is(#a, [b]) {}',
+		':not(:where(.a, #b), #c) {}',
+		':is(.a, ::before, #b) {}',
+		':is(a b, #c) {}',
+		':is(.a, #b):not(.c, #d) {}',
+		// A single parent selector is never mixed, only its arguments report
+		':is(.a, #b) { & .c {} }',
+		// A parent selector list across lines
+		outdent`
+			#dialog,
+			.dialog {
+				& .close {}
+			}
+		`,
 	],
 });
 

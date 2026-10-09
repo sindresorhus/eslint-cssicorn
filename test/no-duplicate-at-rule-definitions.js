@@ -61,6 +61,8 @@ test.snapshot({
 		'@keyframes upper-roman {} @keyframes UPPER-ROMAN {}',
 		'@layer theme { @counter-style upper-roman {} } @layer theme { @counter-style UPPER-ROMAN {} }',
 		'a { --definition: "@keyframes fade {} @keyframes fade {}"; background: url("@keyframes fade {}"); }',
+		'@keyframes fade-out {} @keyframes fade {}',
+		'@media (width > 40rem) { @-webkit-keyframes fade {} @keyframes fade {} }',
 		'@property --color {}\n/* eslint-disable-next-line rule-to-test/no-duplicate-at-rule-definitions */\n@property --color {}',
 		{
 			code: '@keyframes f|ade {} @keyframes f|ade {}',
@@ -122,6 +124,10 @@ test.snapshot({
 		'@counter-style decimal {} @counter-style DECIMAL {}',
 		String.raw`@counter-style \75 pper-roman {} @counter-style UPPER-ROMAN {}`,
 		'@media (width > 40rem) { @counter-style upper-roman {} @counter-style UPPER-ROMAN {} }',
+		'a { @keyframes fade {} @keyframes fade {} }',
+		'@keyframes fade {} @keyframes fade-out {} @keyframes fade {}',
+		'@keyframes none {} @keyframes "none" {}',
+		'@property --color, /* keep */ --size {} @property --size {}',
 	],
 });
 

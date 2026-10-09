@@ -5,7 +5,7 @@
 @import {CssRuleContext} from '../rule/cssicorn-context.js';
 */
 
-const cssWhitespacePattern = /[\t\n\f\r ]/u;
+const cssWhitespacePattern = /[\t\n\f\r ]/v;
 
 /**
 Get the range of the name of a media or container feature, like `width` in `( width: 1px)`. The node starts at the `(`, which can be followed by whitespace and comments before the name.

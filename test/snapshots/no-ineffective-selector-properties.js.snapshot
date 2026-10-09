@@ -797,13 +797,27 @@ Output:
 
 `;
 
-exports[`invalid(141): ::selection { font: bold 1rem serif; } 1`] = `
+exports[`invalid(141): ::selection { padding: 1rem /* keep */; color: red; } 1`] = `
+
+  1 | ::selection { padding: 1rem /* keep */; color: red; }
+
+`;
+
+exports[`invalid(141): ::selection { padding: 1rem /* keep */; color: red; } 2`] = `
+
+Message:
+> 1 | ::selection { padding: 1rem /* keep */; color: red; }
+    |               ^^^^^^^^^^^^^^^^^^^^^^^^ \`padding\` has no effect on the targets selected by ::selection.
+
+`;
+
+exports[`invalid(142): ::selection { font: bold 1rem serif; } 1`] = `
 
   1 | ::selection { font: bold 1rem serif; }
 
 `;
 
-exports[`invalid(141): ::selection { font: bold 1rem serif; } 2`] = `
+exports[`invalid(142): ::selection { font: bold 1rem serif; } 2`] = `
 
 Message:
 > 1 | ::selection { font: bold 1rem serif; }
@@ -814,13 +828,13 @@ Output:
 
 `;
 
-exports[`invalid(142): ::selection { font-family: serif; } 1`] = `
+exports[`invalid(143): ::selection { font-family: serif; } 1`] = `
 
   1 | ::selection { font-family: serif; }
 
 `;
 
-exports[`invalid(142): ::selection { font-family: serif; } 2`] = `
+exports[`invalid(143): ::selection { font-family: serif; } 2`] = `
 
 Message:
 > 1 | ::selection { font-family: serif; }
@@ -831,13 +845,13 @@ Output:
 
 `;
 
-exports[`invalid(143): ::selection { font-size: 1rem; } 1`] = `
+exports[`invalid(144): ::selection { font-size: 1rem; } 1`] = `
 
   1 | ::selection { font-size: 1rem; }
 
 `;
 
-exports[`invalid(143): ::selection { font-size: 1rem; } 2`] = `
+exports[`invalid(144): ::selection { font-size: 1rem; } 2`] = `
 
 Message:
 > 1 | ::selection { font-size: 1rem; }
@@ -848,13 +862,13 @@ Output:
 
 `;
 
-exports[`invalid(144): ::selection { font-weight: bold; } 1`] = `
+exports[`invalid(145): ::selection { font-weight: bold; } 1`] = `
 
   1 | ::selection { font-weight: bold; }
 
 `;
 
-exports[`invalid(144): ::selection { font-weight: bold; } 2`] = `
+exports[`invalid(145): ::selection { font-weight: bold; } 2`] = `
 
 Message:
 > 1 | ::selection { font-weight: bold; }
@@ -865,13 +879,13 @@ Output:
 
 `;
 
-exports[`invalid(145): ::selection { font-variant: small-caps; } 1`] = `
+exports[`invalid(146): ::selection { font-variant: small-caps; } 1`] = `
 
   1 | ::selection { font-variant: small-caps; }
 
 `;
 
-exports[`invalid(145): ::selection { font-variant: small-caps; } 2`] = `
+exports[`invalid(146): ::selection { font-variant: small-caps; } 2`] = `
 
 Message:
 > 1 | ::selection { font-variant: small-caps; }
@@ -882,13 +896,13 @@ Output:
 
 `;
 
-exports[`invalid(146): ::selection { font-variant-numeric: tabular-nums; } 1`] = `
+exports[`invalid(147): ::selection { font-variant-numeric: tabular-nums; } 1`] = `
 
   1 | ::selection { font-variant-numeric: tabular-nums; }
 
 `;
 
-exports[`invalid(146): ::selection { font-variant-numeric: tabular-nums; } 2`] = `
+exports[`invalid(147): ::selection { font-variant-numeric: tabular-nums; } 2`] = `
 
 Message:
 > 1 | ::selection { font-variant-numeric: tabular-nums; }
@@ -899,13 +913,13 @@ Output:
 
 `;
 
-exports[`invalid(147): ::selection { font-variation-settings: \"wght\" 700; } 1`] = `
+exports[`invalid(148): ::selection { font-variation-settings: \"wght\" 700; } 1`] = `
 
   1 | ::selection { font-variation-settings: "wght" 700; }
 
 `;
 
-exports[`invalid(147): ::selection { font-variation-settings: \"wght\" 700; } 2`] = `
+exports[`invalid(148): ::selection { font-variation-settings: \"wght\" 700; } 2`] = `
 
 Message:
 > 1 | ::selection { font-variation-settings: "wght" 700; }
@@ -916,34 +930,17 @@ Output:
 
 `;
 
-exports[`invalid(148): ::selection { font-kerning: none; } 1`] = `
+exports[`invalid(149): ::selection { font-kerning: none; } 1`] = `
 
   1 | ::selection { font-kerning: none; }
 
 `;
 
-exports[`invalid(148): ::selection { font-kerning: none; } 2`] = `
+exports[`invalid(149): ::selection { font-kerning: none; } 2`] = `
 
 Message:
 > 1 | ::selection { font-kerning: none; }
     |               ^^^^^^^^^^^^^^^^^^ \`font-kerning\` has no effect on the targets selected by ::selection.
-
-Output:
-  1 | ::selection {  }
-
-`;
-
-exports[`invalid(149): ::selection { font-synthesis: none; } 1`] = `
-
-  1 | ::selection { font-synthesis: none; }
-
-`;
-
-exports[`invalid(149): ::selection { font-synthesis: none; } 2`] = `
-
-Message:
-> 1 | ::selection { font-synthesis: none; }
-    |               ^^^^^^^^^^^^^^^^^^^^ \`font-synthesis\` has no effect on the targets selected by ::selection.
 
 Output:
   1 | ::selection {  }
@@ -967,13 +964,30 @@ Output:
 
 `;
 
-exports[`invalid(150): ::selection { font-synthesis-weight: none; } 1`] = `
+exports[`invalid(150): ::selection { font-synthesis: none; } 1`] = `
+
+  1 | ::selection { font-synthesis: none; }
+
+`;
+
+exports[`invalid(150): ::selection { font-synthesis: none; } 2`] = `
+
+Message:
+> 1 | ::selection { font-synthesis: none; }
+    |               ^^^^^^^^^^^^^^^^^^^^ \`font-synthesis\` has no effect on the targets selected by ::selection.
+
+Output:
+  1 | ::selection {  }
+
+`;
+
+exports[`invalid(151): ::selection { font-synthesis-weight: none; } 1`] = `
 
   1 | ::selection { font-synthesis-weight: none; }
 
 `;
 
-exports[`invalid(150): ::selection { font-synthesis-weight: none; } 2`] = `
+exports[`invalid(151): ::selection { font-synthesis-weight: none; } 2`] = `
 
 Message:
 > 1 | ::selection { font-synthesis-weight: none; }
@@ -984,13 +998,13 @@ Output:
 
 `;
 
-exports[`invalid(151): ::selection { line-height: 2; } 1`] = `
+exports[`invalid(152): ::selection { line-height: 2; } 1`] = `
 
   1 | ::selection { line-height: 2; }
 
 `;
 
-exports[`invalid(151): ::selection { line-height: 2; } 2`] = `
+exports[`invalid(152): ::selection { line-height: 2; } 2`] = `
 
 Message:
 > 1 | ::selection { line-height: 2; }
@@ -1001,13 +1015,13 @@ Output:
 
 `;
 
-exports[`invalid(152): a:visited { font: bold 1rem serif; } 1`] = `
+exports[`invalid(153): a:visited { font: bold 1rem serif; } 1`] = `
 
   1 | a:visited { font: bold 1rem serif; }
 
 `;
 
-exports[`invalid(152): a:visited { font: bold 1rem serif; } 2`] = `
+exports[`invalid(153): a:visited { font: bold 1rem serif; } 2`] = `
 
 Message:
 > 1 | a:visited { font: bold 1rem serif; }
@@ -1018,13 +1032,13 @@ Output:
 
 `;
 
-exports[`invalid(153): a:visited { font-family: serif; } 1`] = `
+exports[`invalid(154): a:visited { font-family: serif; } 1`] = `
 
   1 | a:visited { font-family: serif; }
 
 `;
 
-exports[`invalid(153): a:visited { font-family: serif; } 2`] = `
+exports[`invalid(154): a:visited { font-family: serif; } 2`] = `
 
 Message:
 > 1 | a:visited { font-family: serif; }
@@ -1035,13 +1049,13 @@ Output:
 
 `;
 
-exports[`invalid(154): a:visited { font-size: 1rem; } 1`] = `
+exports[`invalid(155): a:visited { font-size: 1rem; } 1`] = `
 
   1 | a:visited { font-size: 1rem; }
 
 `;
 
-exports[`invalid(154): a:visited { font-size: 1rem; } 2`] = `
+exports[`invalid(155): a:visited { font-size: 1rem; } 2`] = `
 
 Message:
 > 1 | a:visited { font-size: 1rem; }
@@ -1052,13 +1066,13 @@ Output:
 
 `;
 
-exports[`invalid(155): a:visited { font-weight: bold; } 1`] = `
+exports[`invalid(156): a:visited { font-weight: bold; } 1`] = `
 
   1 | a:visited { font-weight: bold; }
 
 `;
 
-exports[`invalid(155): a:visited { font-weight: bold; } 2`] = `
+exports[`invalid(156): a:visited { font-weight: bold; } 2`] = `
 
 Message:
 > 1 | a:visited { font-weight: bold; }
@@ -1069,13 +1083,13 @@ Output:
 
 `;
 
-exports[`invalid(156): a:visited { font-variant: small-caps; } 1`] = `
+exports[`invalid(157): a:visited { font-variant: small-caps; } 1`] = `
 
   1 | a:visited { font-variant: small-caps; }
 
 `;
 
-exports[`invalid(156): a:visited { font-variant: small-caps; } 2`] = `
+exports[`invalid(157): a:visited { font-variant: small-caps; } 2`] = `
 
 Message:
 > 1 | a:visited { font-variant: small-caps; }
@@ -1086,13 +1100,13 @@ Output:
 
 `;
 
-exports[`invalid(157): a:visited { font-variant-numeric: tabular-nums; } 1`] = `
+exports[`invalid(158): a:visited { font-variant-numeric: tabular-nums; } 1`] = `
 
   1 | a:visited { font-variant-numeric: tabular-nums; }
 
 `;
 
-exports[`invalid(157): a:visited { font-variant-numeric: tabular-nums; } 2`] = `
+exports[`invalid(158): a:visited { font-variant-numeric: tabular-nums; } 2`] = `
 
 Message:
 > 1 | a:visited { font-variant-numeric: tabular-nums; }
@@ -1103,34 +1117,17 @@ Output:
 
 `;
 
-exports[`invalid(158): a:visited { font-variation-settings: \"wght\" 700; } 1`] = `
+exports[`invalid(159): a:visited { font-variation-settings: \"wght\" 700; } 1`] = `
 
   1 | a:visited { font-variation-settings: "wght" 700; }
 
 `;
 
-exports[`invalid(158): a:visited { font-variation-settings: \"wght\" 700; } 2`] = `
+exports[`invalid(159): a:visited { font-variation-settings: \"wght\" 700; } 2`] = `
 
 Message:
 > 1 | a:visited { font-variation-settings: "wght" 700; }
     |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`font-variation-settings\` has no effect on the targets selected by :visited.
-
-Output:
-  1 | a:visited {  }
-
-`;
-
-exports[`invalid(159): a:visited { font-kerning: none; } 1`] = `
-
-  1 | a:visited { font-kerning: none; }
-
-`;
-
-exports[`invalid(159): a:visited { font-kerning: none; } 2`] = `
-
-Message:
-> 1 | a:visited { font-kerning: none; }
-    |             ^^^^^^^^^^^^^^^^^^ \`font-kerning\` has no effect on the targets selected by :visited.
 
 Output:
   1 | a:visited {  }
@@ -1154,13 +1151,30 @@ Output:
 
 `;
 
-exports[`invalid(160): a:visited { font-synthesis: none; } 1`] = `
+exports[`invalid(160): a:visited { font-kerning: none; } 1`] = `
+
+  1 | a:visited { font-kerning: none; }
+
+`;
+
+exports[`invalid(160): a:visited { font-kerning: none; } 2`] = `
+
+Message:
+> 1 | a:visited { font-kerning: none; }
+    |             ^^^^^^^^^^^^^^^^^^ \`font-kerning\` has no effect on the targets selected by :visited.
+
+Output:
+  1 | a:visited {  }
+
+`;
+
+exports[`invalid(161): a:visited { font-synthesis: none; } 1`] = `
 
   1 | a:visited { font-synthesis: none; }
 
 `;
 
-exports[`invalid(160): a:visited { font-synthesis: none; } 2`] = `
+exports[`invalid(161): a:visited { font-synthesis: none; } 2`] = `
 
 Message:
 > 1 | a:visited { font-synthesis: none; }
@@ -1171,13 +1185,13 @@ Output:
 
 `;
 
-exports[`invalid(161): a:visited { font-synthesis-weight: none; } 1`] = `
+exports[`invalid(162): a:visited { font-synthesis-weight: none; } 1`] = `
 
   1 | a:visited { font-synthesis-weight: none; }
 
 `;
 
-exports[`invalid(161): a:visited { font-synthesis-weight: none; } 2`] = `
+exports[`invalid(162): a:visited { font-synthesis-weight: none; } 2`] = `
 
 Message:
 > 1 | a:visited { font-synthesis-weight: none; }
@@ -1188,13 +1202,13 @@ Output:
 
 `;
 
-exports[`invalid(162): a:visited { line-height: 2; } 1`] = `
+exports[`invalid(163): a:visited { line-height: 2; } 1`] = `
 
   1 | a:visited { line-height: 2; }
 
 `;
 
-exports[`invalid(162): a:visited { line-height: 2; } 2`] = `
+exports[`invalid(163): a:visited { line-height: 2; } 2`] = `
 
 Message:
 > 1 | a:visited { line-height: 2; }
@@ -1205,13 +1219,13 @@ Output:
 
 `;
 
-exports[`invalid(163): ::selection { border: 1px solid red; } 1`] = `
+exports[`invalid(164): ::selection { border: 1px solid red; } 1`] = `
 
   1 | ::selection { border: 1px solid red; }
 
 `;
 
-exports[`invalid(163): ::selection { border: 1px solid red; } 2`] = `
+exports[`invalid(164): ::selection { border: 1px solid red; } 2`] = `
 
 Message:
 > 1 | ::selection { border: 1px solid red; }
@@ -1222,13 +1236,13 @@ Output:
 
 `;
 
-exports[`invalid(164): ::selection { border-color: red; } 1`] = `
+exports[`invalid(165): ::selection { border-color: red; } 1`] = `
 
   1 | ::selection { border-color: red; }
 
 `;
 
-exports[`invalid(164): ::selection { border-color: red; } 2`] = `
+exports[`invalid(165): ::selection { border-color: red; } 2`] = `
 
 Message:
 > 1 | ::selection { border-color: red; }
@@ -1239,13 +1253,13 @@ Output:
 
 `;
 
-exports[`invalid(165): ::selection { border-left: 1px solid red; } 1`] = `
+exports[`invalid(166): ::selection { border-left: 1px solid red; } 1`] = `
 
   1 | ::selection { border-left: 1px solid red; }
 
 `;
 
-exports[`invalid(165): ::selection { border-left: 1px solid red; } 2`] = `
+exports[`invalid(166): ::selection { border-left: 1px solid red; } 2`] = `
 
 Message:
 > 1 | ::selection { border-left: 1px solid red; }
@@ -1256,13 +1270,13 @@ Output:
 
 `;
 
-exports[`invalid(166): ::selection { border-block: 1px solid red; } 1`] = `
+exports[`invalid(167): ::selection { border-block: 1px solid red; } 1`] = `
 
   1 | ::selection { border-block: 1px solid red; }
 
 `;
 
-exports[`invalid(166): ::selection { border-block: 1px solid red; } 2`] = `
+exports[`invalid(167): ::selection { border-block: 1px solid red; } 2`] = `
 
 Message:
 > 1 | ::selection { border-block: 1px solid red; }
@@ -1273,13 +1287,13 @@ Output:
 
 `;
 
-exports[`invalid(167): ::selection { border-inline-end-color: red; } 1`] = `
+exports[`invalid(168): ::selection { border-inline-end-color: red; } 1`] = `
 
   1 | ::selection { border-inline-end-color: red; }
 
 `;
 
-exports[`invalid(167): ::selection { border-inline-end-color: red; } 2`] = `
+exports[`invalid(168): ::selection { border-inline-end-color: red; } 2`] = `
 
 Message:
 > 1 | ::selection { border-inline-end-color: red; }
@@ -1290,34 +1304,17 @@ Output:
 
 `;
 
-exports[`invalid(168): li::marker { border: 1px solid red; } 1`] = `
+exports[`invalid(169): li::marker { border: 1px solid red; } 1`] = `
 
   1 | li::marker { border: 1px solid red; }
 
 `;
 
-exports[`invalid(168): li::marker { border: 1px solid red; } 2`] = `
+exports[`invalid(169): li::marker { border: 1px solid red; } 2`] = `
 
 Message:
 > 1 | li::marker { border: 1px solid red; }
     |              ^^^^^^^^^^^^^^^^^^^^^ \`border\` has no effect on the targets selected by ::marker.
-
-Output:
-  1 | li::marker {  }
-
-`;
-
-exports[`invalid(169): li::marker { border-color: red; } 1`] = `
-
-  1 | li::marker { border-color: red; }
-
-`;
-
-exports[`invalid(169): li::marker { border-color: red; } 2`] = `
-
-Message:
-> 1 | li::marker { border-color: red; }
-    |              ^^^^^^^^^^^^^^^^^ \`border-color\` has no effect on the targets selected by ::marker.
 
 Output:
   1 | li::marker {  }
@@ -1341,13 +1338,30 @@ Output:
 
 `;
 
-exports[`invalid(170): li::marker { border-left: 1px solid red; } 1`] = `
+exports[`invalid(170): li::marker { border-color: red; } 1`] = `
+
+  1 | li::marker { border-color: red; }
+
+`;
+
+exports[`invalid(170): li::marker { border-color: red; } 2`] = `
+
+Message:
+> 1 | li::marker { border-color: red; }
+    |              ^^^^^^^^^^^^^^^^^ \`border-color\` has no effect on the targets selected by ::marker.
+
+Output:
+  1 | li::marker {  }
+
+`;
+
+exports[`invalid(171): li::marker { border-left: 1px solid red; } 1`] = `
 
   1 | li::marker { border-left: 1px solid red; }
 
 `;
 
-exports[`invalid(170): li::marker { border-left: 1px solid red; } 2`] = `
+exports[`invalid(171): li::marker { border-left: 1px solid red; } 2`] = `
 
 Message:
 > 1 | li::marker { border-left: 1px solid red; }
@@ -1358,13 +1372,13 @@ Output:
 
 `;
 
-exports[`invalid(171): li::marker { border-block: 1px solid red; } 1`] = `
+exports[`invalid(172): li::marker { border-block: 1px solid red; } 1`] = `
 
   1 | li::marker { border-block: 1px solid red; }
 
 `;
 
-exports[`invalid(171): li::marker { border-block: 1px solid red; } 2`] = `
+exports[`invalid(172): li::marker { border-block: 1px solid red; } 2`] = `
 
 Message:
 > 1 | li::marker { border-block: 1px solid red; }
@@ -1375,13 +1389,13 @@ Output:
 
 `;
 
-exports[`invalid(172): li::marker { border-inline-end-color: red; } 1`] = `
+exports[`invalid(173): li::marker { border-inline-end-color: red; } 1`] = `
 
   1 | li::marker { border-inline-end-color: red; }
 
 `;
 
-exports[`invalid(172): li::marker { border-inline-end-color: red; } 2`] = `
+exports[`invalid(173): li::marker { border-inline-end-color: red; } 2`] = `
 
 Message:
 > 1 | li::marker { border-inline-end-color: red; }
@@ -1392,13 +1406,13 @@ Output:
 
 `;
 
-exports[`invalid(173): li::marker { background: red; background-color: yellow; } 1`] = `
+exports[`invalid(174): li::marker { background: red; background-color: yellow; } 1`] = `
 
   1 | li::marker { background: red; background-color: yellow; }
 
 `;
 
-exports[`invalid(173): li::marker { background: red; background-color: yellow; } 2`] = `
+exports[`invalid(174): li::marker { background: red; background-color: yellow; } 2`] = `
 
 Message:
 > 1 | li::marker { background: red; background-color: yellow; }
@@ -1409,7 +1423,7 @@ Output:
 
 `;
 
-exports[`invalid(173): li::marker { background: red; background-color: yellow; } 3`] = `
+exports[`invalid(174): li::marker { background: red; background-color: yellow; } 3`] = `
 
 Message:
 > 1 | li::marker { background: red; background-color: yellow; }
@@ -1420,13 +1434,13 @@ Output:
 
 `;
 
-exports[`invalid(174): a:visited { text-shadow: 1px 1px red; } 1`] = `
+exports[`invalid(175): a:visited { text-shadow: 1px 1px red; } 1`] = `
 
   1 | a:visited { text-shadow: 1px 1px red; }
 
 `;
 
-exports[`invalid(174): a:visited { text-shadow: 1px 1px red; } 2`] = `
+exports[`invalid(175): a:visited { text-shadow: 1px 1px red; } 2`] = `
 
 Message:
 > 1 | a:visited { text-shadow: 1px 1px red; }
@@ -1437,13 +1451,13 @@ Output:
 
 `;
 
-exports[`invalid(175): ::selection, li::marker, a:visited { padding: var(--padding); } 1`] = `
+exports[`invalid(176): ::selection, li::marker, a:visited { padding: var(--padding); } 1`] = `
 
   1 | ::selection, li::marker, a:visited { padding: var(--padding); }
 
 `;
 
-exports[`invalid(175): ::selection, li::marker, a:visited { padding: var(--padding); } 2`] = `
+exports[`invalid(176): ::selection, li::marker, a:visited { padding: var(--padding); } 2`] = `
 
 Message:
 > 1 | ::selection, li::marker, a:visited { padding: var(--padding); }
@@ -1454,13 +1468,13 @@ Output:
 
 `;
 
-exports[`invalid(176): ::selection, ::highlight(example) { font-size: 1rem; } 1`] = `
+exports[`invalid(177): ::selection, ::highlight(example) { font-size: 1rem; } 1`] = `
 
   1 | ::selection, ::highlight(example) { font-size: 1rem; }
 
 `;
 
-exports[`invalid(176): ::selection, ::highlight(example) { font-size: 1rem; } 2`] = `
+exports[`invalid(177): ::selection, ::highlight(example) { font-size: 1rem; } 2`] = `
 
 Message:
 > 1 | ::selection, ::highlight(example) { font-size: 1rem; }
@@ -1471,13 +1485,13 @@ Output:
 
 `;
 
-exports[`invalid(177): ::selection, a:visited { font-weight: bold; } 1`] = `
+exports[`invalid(178): ::selection, a:visited { font-weight: bold; } 1`] = `
 
   1 | ::selection, a:visited { font-weight: bold; }
 
 `;
 
-exports[`invalid(177): ::selection, a:visited { font-weight: bold; } 2`] = `
+exports[`invalid(178): ::selection, a:visited { font-weight: bold; } 2`] = `
 
 Message:
 > 1 | ::selection, a:visited { font-weight: bold; }
@@ -1488,13 +1502,13 @@ Output:
 
 `;
 
-exports[`invalid(178): li::before::marker { padding: 1rem; } 1`] = `
+exports[`invalid(179): li::before::marker { padding: 1rem; } 1`] = `
 
   1 | li::before::marker { padding: 1rem; }
 
 `;
 
-exports[`invalid(178): li::before::marker { padding: 1rem; } 2`] = `
+exports[`invalid(179): li::before::marker { padding: 1rem; } 2`] = `
 
 Message:
 > 1 | li::before::marker { padding: 1rem; }
@@ -1502,23 +1516,6 @@ Message:
 
 Output:
   1 | li::before::marker {  }
-
-`;
-
-exports[`invalid(179): :is(.first, .second)::marker { padding: 1rem; } 1`] = `
-
-  1 | :is(.first, .second)::marker { padding: 1rem; }
-
-`;
-
-exports[`invalid(179): :is(.first, .second)::marker { padding: 1rem; } 2`] = `
-
-Message:
-> 1 | :is(.first, .second)::marker { padding: 1rem; }
-    |                                ^^^^^^^^^^^^^ \`padding\` has no effect on the targets selected by ::marker.
-
-Output:
-  1 | :is(.first, .second)::marker {  }
 
 `;
 
@@ -1539,13 +1536,30 @@ Output:
 
 `;
 
-exports[`invalid(180): a:visited:not(.ordinary) { font-weight: bold; } 1`] = `
+exports[`invalid(180): :is(.first, .second)::marker { padding: 1rem; } 1`] = `
+
+  1 | :is(.first, .second)::marker { padding: 1rem; }
+
+`;
+
+exports[`invalid(180): :is(.first, .second)::marker { padding: 1rem; } 2`] = `
+
+Message:
+> 1 | :is(.first, .second)::marker { padding: 1rem; }
+    |                                ^^^^^^^^^^^^^ \`padding\` has no effect on the targets selected by ::marker.
+
+Output:
+  1 | :is(.first, .second)::marker {  }
+
+`;
+
+exports[`invalid(181): a:visited:not(.ordinary) { font-weight: bold; } 1`] = `
 
   1 | a:visited:not(.ordinary) { font-weight: bold; }
 
 `;
 
-exports[`invalid(180): a:visited:not(.ordinary) { font-weight: bold; } 2`] = `
+exports[`invalid(181): a:visited:not(.ordinary) { font-weight: bold; } 2`] = `
 
 Message:
 > 1 | a:visited:not(.ordinary) { font-weight: bold; }
@@ -1556,13 +1570,13 @@ Output:
 
 `;
 
-exports[`invalid(181): LI::MARKER { MARGIN-RIGHT: 1rem !IMPORTANT; } 1`] = `
+exports[`invalid(182): LI::MARKER { MARGIN-RIGHT: 1rem !IMPORTANT; } 1`] = `
 
   1 | LI::MARKER { MARGIN-RIGHT: 1rem !IMPORTANT; }
 
 `;
 
-exports[`invalid(181): LI::MARKER { MARGIN-RIGHT: 1rem !IMPORTANT; } 2`] = `
+exports[`invalid(182): LI::MARKER { MARGIN-RIGHT: 1rem !IMPORTANT; } 2`] = `
 
 Message:
 > 1 | LI::MARKER { MARGIN-RIGHT: 1rem !IMPORTANT; }
@@ -1573,13 +1587,13 @@ Output:
 
 `;
 
-exports[`invalid(182): ::SELECTION { FONT-WEIGHT: bold; } 1`] = `
+exports[`invalid(183): ::SELECTION { FONT-WEIGHT: bold; } 1`] = `
 
   1 | ::SELECTION { FONT-WEIGHT: bold; }
 
 `;
 
-exports[`invalid(182): ::SELECTION { FONT-WEIGHT: bold; } 2`] = `
+exports[`invalid(183): ::SELECTION { FONT-WEIGHT: bold; } 2`] = `
 
 Message:
 > 1 | ::SELECTION { FONT-WEIGHT: bold; }
@@ -1590,13 +1604,13 @@ Output:
 
 `;
 
-exports[`invalid(183): li::m\\61 rker { p\\61 dding: 1rem; } 1`] = `
+exports[`invalid(184): li::m\\61 rker { p\\61 dding: 1rem; } 1`] = `
 
   1 | li::m\\61 rker { p\\61 dding: 1rem; }
 
 `;
 
-exports[`invalid(183): li::m\\61 rker { p\\61 dding: 1rem; } 2`] = `
+exports[`invalid(184): li::m\\61 rker { p\\61 dding: 1rem; } 2`] = `
 
 Message:
 > 1 | li::m\\61 rker { p\\61 dding: 1rem; }
@@ -1607,13 +1621,13 @@ Output:
 
 `;
 
-exports[`invalid(184): a:vi\\73 ited { font-\\77 eight: bold; } 1`] = `
+exports[`invalid(185): a:vi\\73 ited { font-\\77 eight: bold; } 1`] = `
 
   1 | a:vi\\73 ited { font-\\77 eight: bold; }
 
 `;
 
-exports[`invalid(184): a:vi\\73 ited { font-\\77 eight: bold; } 2`] = `
+exports[`invalid(185): a:vi\\73 ited { font-\\77 eight: bold; } 2`] = `
 
 Message:
 > 1 | a:vi\\73 ited { font-\\77 eight: bold; }
@@ -1624,13 +1638,13 @@ Output:
 
 `;
 
-exports[`invalid(185): ::\\73 election { margin: 1rem; } 1`] = `
+exports[`invalid(186): ::\\73 election { margin: 1rem; } 1`] = `
 
   1 | ::\\73 election { margin: 1rem; }
 
 `;
 
-exports[`invalid(185): ::\\73 election { margin: 1rem; } 2`] = `
+exports[`invalid(186): ::\\73 election { margin: 1rem; } 2`] = `
 
 Message:
 > 1 | ::\\73 election { margin: 1rem; }
@@ -1641,13 +1655,13 @@ Output:
 
 `;
 
-exports[`invalid(186): ::selection { padding: inherit; margin: initial; width: unset; height: revert; } 1`] = `
+exports[`invalid(187): ::selection { padding: inherit; margin: initial; width: unset; height: revert; } 1`] = `
 
   1 | ::selection { padding: inherit; margin: initial; width: unset; height: revert; }
 
 `;
 
-exports[`invalid(186): ::selection { padding: inherit; margin: initial; width: unset; height: revert; } 2`] = `
+exports[`invalid(187): ::selection { padding: inherit; margin: initial; width: unset; height: revert; } 2`] = `
 
 Message:
 > 1 | ::selection { padding: inherit; margin: initial; width: unset; height: revert; }
@@ -1658,7 +1672,7 @@ Output:
 
 `;
 
-exports[`invalid(186): ::selection { padding: inherit; margin: initial; width: unset; height: revert; } 3`] = `
+exports[`invalid(187): ::selection { padding: inherit; margin: initial; width: unset; height: revert; } 3`] = `
 
 Message:
 > 1 | ::selection { padding: inherit; margin: initial; width: unset; height: revert; }
@@ -1669,7 +1683,7 @@ Output:
 
 `;
 
-exports[`invalid(186): ::selection { padding: inherit; margin: initial; width: unset; height: revert; } 4`] = `
+exports[`invalid(187): ::selection { padding: inherit; margin: initial; width: unset; height: revert; } 4`] = `
 
 Message:
 > 1 | ::selection { padding: inherit; margin: initial; width: unset; height: revert; }
@@ -1680,7 +1694,7 @@ Output:
 
 `;
 
-exports[`invalid(186): ::selection { padding: inherit; margin: initial; width: unset; height: revert; } 5`] = `
+exports[`invalid(187): ::selection { padding: inherit; margin: initial; width: unset; height: revert; } 5`] = `
 
 Message:
 > 1 | ::selection { padding: inherit; margin: initial; width: unset; height: revert; }
@@ -1691,13 +1705,13 @@ Output:
 
 `;
 
-exports[`invalid(187): ::selection { all: initial; padding: 1rem; } 1`] = `
+exports[`invalid(188): ::selection { all: initial; padding: 1rem; } 1`] = `
 
   1 | ::selection { all: initial; padding: 1rem; }
 
 `;
 
-exports[`invalid(187): ::selection { all: initial; padding: 1rem; } 2`] = `
+exports[`invalid(188): ::selection { all: initial; padding: 1rem; } 2`] = `
 
 Message:
 > 1 | ::selection { all: initial; padding: 1rem; }
@@ -1708,13 +1722,13 @@ Output:
 
 `;
 
-exports[`invalid(188): .list { &::marker { margin: 1rem; } } 1`] = `
+exports[`invalid(189): .list { &::marker { margin: 1rem; } } 1`] = `
 
   1 | .list { &::marker { margin: 1rem; } }
 
 `;
 
-exports[`invalid(188): .list { &::marker { margin: 1rem; } } 2`] = `
+exports[`invalid(189): .list { &::marker { margin: 1rem; } } 2`] = `
 
 Message:
 > 1 | .list { &::marker { margin: 1rem; } }
@@ -1722,23 +1736,6 @@ Message:
 
 Output:
   1 | .list { &::marker {  } }
-
-`;
-
-exports[`invalid(189): .links { &:visited { font-weight: bold; } } 1`] = `
-
-  1 | .links { &:visited { font-weight: bold; } }
-
-`;
-
-exports[`invalid(189): .links { &:visited { font-weight: bold; } } 2`] = `
-
-Message:
-> 1 | .links { &:visited { font-weight: bold; } }
-    |                      ^^^^^^^^^^^^^^^^^ \`font-weight\` has no effect on the targets selected by :visited.
-
-Output:
-  1 | .links { &:visited {  } }
 
 `;
 
@@ -1759,13 +1756,30 @@ Output:
 
 `;
 
-exports[`invalid(190): .parent { ::selection { padding: 1rem; } } 1`] = `
+exports[`invalid(190): .links { &:visited { font-weight: bold; } } 1`] = `
+
+  1 | .links { &:visited { font-weight: bold; } }
+
+`;
+
+exports[`invalid(190): .links { &:visited { font-weight: bold; } } 2`] = `
+
+Message:
+> 1 | .links { &:visited { font-weight: bold; } }
+    |                      ^^^^^^^^^^^^^^^^^ \`font-weight\` has no effect on the targets selected by :visited.
+
+Output:
+  1 | .links { &:visited {  } }
+
+`;
+
+exports[`invalid(191): .parent { ::selection { padding: 1rem; } } 1`] = `
 
   1 | .parent { ::selection { padding: 1rem; } }
 
 `;
 
-exports[`invalid(190): .parent { ::selection { padding: 1rem; } } 2`] = `
+exports[`invalid(191): .parent { ::selection { padding: 1rem; } } 2`] = `
 
 Message:
 > 1 | .parent { ::selection { padding: 1rem; } }
@@ -1776,13 +1790,13 @@ Output:
 
 `;
 
-exports[`invalid(191): @media (width > 1px) { @supports (display: grid) { ::selection { padding: 1rem; } } } 1`] = `
+exports[`invalid(192): @media (width > 1px) { @supports (display: grid) { ::selection { padding: 1rem; } } } 1`] = `
 
   1 | @media (width > 1px) { @supports (display: grid) { ::selection { padding: 1rem; } } }
 
 `;
 
-exports[`invalid(191): @media (width > 1px) { @supports (display: grid) { ::selection { padding: 1rem; } } } 2`] = `
+exports[`invalid(192): @media (width > 1px) { @supports (display: grid) { ::selection { padding: 1rem; } } } 2`] = `
 
 Message:
 > 1 | @media (width > 1px) { @supports (display: grid) { ::selection { padding: 1rem; } } }
@@ -1793,13 +1807,13 @@ Output:
 
 `;
 
-exports[`invalid(192): ::selection { @media (width > 1px) { padding: 1rem; } } 1`] = `
+exports[`invalid(193): ::selection { @media (width > 1px) { padding: 1rem; } } 1`] = `
 
   1 | ::selection { @media (width > 1px) { padding: 1rem; } }
 
 `;
 
-exports[`invalid(192): ::selection { @media (width > 1px) { padding: 1rem; } } 2`] = `
+exports[`invalid(193): ::selection { @media (width > 1px) { padding: 1rem; } } 2`] = `
 
 Message:
 > 1 | ::selection { @media (width > 1px) { padding: 1rem; } }
@@ -1810,13 +1824,13 @@ Output:
 
 `;
 
-exports[`invalid(193): ::selection { @supports (display: grid) { padding: 1rem; } } 1`] = `
+exports[`invalid(194): ::selection { @supports (display: grid) { padding: 1rem; } } 1`] = `
 
   1 | ::selection { @supports (display: grid) { padding: 1rem; } }
 
 `;
 
-exports[`invalid(193): ::selection { @supports (display: grid) { padding: 1rem; } } 2`] = `
+exports[`invalid(194): ::selection { @supports (display: grid) { padding: 1rem; } } 2`] = `
 
 Message:
 > 1 | ::selection { @supports (display: grid) { padding: 1rem; } }
@@ -1827,13 +1841,13 @@ Output:
 
 `;
 
-exports[`invalid(194): ::selection { @container (width > 1px) { padding: 1rem; } } 1`] = `
+exports[`invalid(195): ::selection { @container (width > 1px) { padding: 1rem; } } 1`] = `
 
   1 | ::selection { @container (width > 1px) { padding: 1rem; } }
 
 `;
 
-exports[`invalid(194): ::selection { @container (width > 1px) { padding: 1rem; } } 2`] = `
+exports[`invalid(195): ::selection { @container (width > 1px) { padding: 1rem; } } 2`] = `
 
 Message:
 > 1 | ::selection { @container (width > 1px) { padding: 1rem; } }
@@ -1844,13 +1858,13 @@ Output:
 
 `;
 
-exports[`invalid(195): ::selection { @layer example { padding: 1rem; } } 1`] = `
+exports[`invalid(196): ::selection { @layer example { padding: 1rem; } } 1`] = `
 
   1 | ::selection { @layer example { padding: 1rem; } }
 
 `;
 
-exports[`invalid(195): ::selection { @layer example { padding: 1rem; } } 2`] = `
+exports[`invalid(196): ::selection { @layer example { padding: 1rem; } } 2`] = `
 
 Message:
 > 1 | ::selection { @layer example { padding: 1rem; } }
@@ -1861,13 +1875,13 @@ Output:
 
 `;
 
-exports[`invalid(196): ::selection { @starting-style { padding: 1rem; } } 1`] = `
+exports[`invalid(197): ::selection { @starting-style { padding: 1rem; } } 1`] = `
 
   1 | ::selection { @starting-style { padding: 1rem; } }
 
 `;
 
-exports[`invalid(196): ::selection { @starting-style { padding: 1rem; } } 2`] = `
+exports[`invalid(197): ::selection { @starting-style { padding: 1rem; } } 2`] = `
 
 Message:
 > 1 | ::selection { @starting-style { padding: 1rem; } }
@@ -1878,13 +1892,13 @@ Output:
 
 `;
 
-exports[`invalid(197): ::selection { @MEDIA (width > 1px) { @supports (display: grid) { padding: 1rem; } } } 1`] = `
+exports[`invalid(198): ::selection { @MEDIA (width > 1px) { @supports (display: grid) { padding: 1rem; } } } 1`] = `
 
   1 | ::selection { @MEDIA (width > 1px) { @supports (display: grid) { padding: 1rem; } } }
 
 `;
 
-exports[`invalid(197): ::selection { @MEDIA (width > 1px) { @supports (display: grid) { padding: 1rem; } } } 2`] = `
+exports[`invalid(198): ::selection { @MEDIA (width > 1px) { @supports (display: grid) { padding: 1rem; } } } 2`] = `
 
 Message:
 > 1 | ::selection { @MEDIA (width > 1px) { @supports (display: grid) { padding: 1rem; } } }
@@ -1895,13 +1909,13 @@ Output:
 
 `;
 
-exports[`invalid(198): @scope (.root) { ::selection { padding: 1rem; } } 1`] = `
+exports[`invalid(199): @scope (.root) { ::selection { padding: 1rem; } } 1`] = `
 
   1 | @scope (.root) { ::selection { padding: 1rem; } }
 
 `;
 
-exports[`invalid(198): @scope (.root) { ::selection { padding: 1rem; } } 2`] = `
+exports[`invalid(199): @scope (.root) { ::selection { padding: 1rem; } } 2`] = `
 
 Message:
 > 1 | @scope (.root) { ::selection { padding: 1rem; } }
@@ -1909,23 +1923,6 @@ Message:
 
 Output:
   1 | @scope (.root) { ::selection {  } }
-
-`;
-
-exports[`invalid(199): ::selection { @media (width > 1px) { .ordinary { padding: 1rem; } } padding: 1rem; } 1`] = `
-
-  1 | ::selection { @media (width > 1px) { .ordinary { padding: 1rem; } } padding: 1rem; }
-
-`;
-
-exports[`invalid(199): ::selection { @media (width > 1px) { .ordinary { padding: 1rem; } } padding: 1rem; } 2`] = `
-
-Message:
-> 1 | ::selection { @media (width > 1px) { .ordinary { padding: 1rem; } } padding: 1rem; }
-    |                                                                     ^^^^^^^^^^^^^ \`padding\` has no effect on the targets selected by ::selection.
-
-Output:
-  1 | ::selection { @media (width > 1px) { .ordinary { padding: 1rem; } }  }
 
 `;
 
@@ -1963,13 +1960,30 @@ Output:
 
 `;
 
-exports[`invalid(200): ::selection { font-optical-sizing: none; } 1`] = `
+exports[`invalid(200): ::selection { @media (width > 1px) { .ordinary { padding: 1rem; } } padding: 1rem; } 1`] = `
+
+  1 | ::selection { @media (width > 1px) { .ordinary { padding: 1rem; } } padding: 1rem; }
+
+`;
+
+exports[`invalid(200): ::selection { @media (width > 1px) { .ordinary { padding: 1rem; } } padding: 1rem; } 2`] = `
+
+Message:
+> 1 | ::selection { @media (width > 1px) { .ordinary { padding: 1rem; } } padding: 1rem; }
+    |                                                                     ^^^^^^^^^^^^^ \`padding\` has no effect on the targets selected by ::selection.
+
+Output:
+  1 | ::selection { @media (width > 1px) { .ordinary { padding: 1rem; } }  }
+
+`;
+
+exports[`invalid(201): ::selection { font-optical-sizing: none; } 1`] = `
 
   1 | ::selection { font-optical-sizing: none; }
 
 `;
 
-exports[`invalid(200): ::selection { font-optical-sizing: none; } 2`] = `
+exports[`invalid(201): ::selection { font-optical-sizing: none; } 2`] = `
 
 Message:
 > 1 | ::selection { font-optical-sizing: none; }
@@ -1980,13 +1994,13 @@ Output:
 
 `;
 
-exports[`invalid(201): ::selection { @media (width > 1px) { font-feature-settings: \"kern\"; } } 1`] = `
+exports[`invalid(202): ::selection { @media (width > 1px) { font-feature-settings: \"kern\"; } } 1`] = `
 
   1 | ::selection { @media (width > 1px) { font-feature-settings: "kern"; } }
 
 `;
 
-exports[`invalid(201): ::selection { @media (width > 1px) { font-feature-settings: \"kern\"; } } 2`] = `
+exports[`invalid(202): ::selection { @media (width > 1px) { font-feature-settings: \"kern\"; } } 2`] = `
 
 Message:
 > 1 | ::selection { @media (width > 1px) { font-feature-settings: "kern"; } }
@@ -1997,13 +2011,13 @@ Output:
 
 `;
 
-exports[`invalid(202): ::search-text:current { padding: 1rem; } 1`] = `
+exports[`invalid(203): ::search-text:current { padding: 1rem; } 1`] = `
 
   1 | ::search-text:current { padding: 1rem; }
 
 `;
 
-exports[`invalid(202): ::search-text:current { padding: 1rem; } 2`] = `
+exports[`invalid(203): ::search-text:current { padding: 1rem; } 2`] = `
 
 Message:
 > 1 | ::search-text:current { padding: 1rem; }
@@ -2014,13 +2028,13 @@ Output:
 
 `;
 
-exports[`invalid(203): a:visited:lang(en) { font-weight: bold; } 1`] = `
+exports[`invalid(204): a:visited:lang(en) { font-weight: bold; } 1`] = `
 
   1 | a:visited:lang(en) { font-weight: bold; }
 
 `;
 
-exports[`invalid(203): a:visited:lang(en) { font-weight: bold; } 2`] = `
+exports[`invalid(204): a:visited:lang(en) { font-weight: bold; } 2`] = `
 
 Message:
 > 1 | a:visited:lang(en) { font-weight: bold; }
@@ -2028,6 +2042,68 @@ Message:
 
 Output:
   1 | a:visited:lang(en) {  }
+
+`;
+
+exports[`invalid(205): a:visited[href] { font-weight: bold; } 1`] = `
+
+  1 | a:visited[href] { font-weight: bold; }
+
+`;
+
+exports[`invalid(205): a:visited[href] { font-weight: bold; } 2`] = `
+
+Message:
+> 1 | a:visited[href] { font-weight: bold; }
+    |                   ^^^^^^^^^^^^^^^^^ \`font-weight\` has no effect on the targets selected by :visited.
+
+Output:
+  1 | a:visited[href] {  }
+
+`;
+
+exports[`invalid(206): li::marker:hover { margin: 1rem; } 1`] = `
+
+  1 | li::marker:hover { margin: 1rem; }
+
+`;
+
+exports[`invalid(206): li::marker:hover { margin: 1rem; } 2`] = `
+
+Message:
+> 1 | li::marker:hover { margin: 1rem; }
+    |                    ^^^^^^^^^^^^ \`margin\` has no effect on the targets selected by ::marker.
+
+Output:
+  1 | li::marker:hover {  }
+
+`;
+
+exports[`invalid(207): ::selection { padding: 1rem; @media print { margin: 1rem; } } 1`] = `
+
+  1 | ::selection { padding: 1rem; @media print { margin: 1rem; } }
+
+`;
+
+exports[`invalid(207): ::selection { padding: 1rem; @media print { margin: 1rem; } } 2`] = `
+
+Message:
+> 1 | ::selection { padding: 1rem; @media print { margin: 1rem; } }
+    |               ^^^^^^^^^^^^^ \`padding\` has no effect on the targets selected by ::selection.
+
+Output:
+  1 | ::selection {  @media print { margin: 1rem; } }
+
+`;
+
+exports[`invalid(207): ::selection { padding: 1rem; @media print { margin: 1rem; } } 3`] = `
+
+Message:
+> 1 | ::selection { padding: 1rem; @media print { margin: 1rem; } }
+    |                                             ^^^^^^^^^^^^ \`margin\` has no effect on the targets selected by ::selection.
+
+Output:
+  1 | ::selection { padding: 1rem; @media print {  } }
 
 `;
 

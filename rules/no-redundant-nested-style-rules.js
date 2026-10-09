@@ -1,5 +1,4 @@
-import {getParentStyleRule, LEGACY_PSEUDO_ELEMENTS} from './shared/css-selector-specificity.js';
-import {normalizeCssIdentifier} from './utils/index.js';
+import {getParentStyleRule, isPseudoElementNode} from './shared/css-selector-specificity.js';
 
 /**
 @import * as ESLint from 'eslint';
@@ -10,7 +9,7 @@ const messages = {
 	[MESSAGE_ID]: 'Remove the redundant nested `&` style rule.',
 };
 
-const trimCssWhitespace = string => string.replaceAll(/^[\t\n\f\r ]+|[\t\n\f\r ]+$/gu, '');
+const trimCssWhitespace = string => string.replaceAll(/^[\t\n\f\r ]+|[\t\n\f\r ]+$/gv, '');
 
 const getSingleSelector = rule => rule.prelude.type === 'SelectorList' && rule.prelude.children.length === 1
 	? rule.prelude.children.at(0)
@@ -26,21 +25,19 @@ const isNestingSelectorOnly = node => {
 const canFlattenInto = rule => {
 	const selector = getSingleSelector(rule);
 	return selector !== undefined
-		&& selector.children.every(node =>
-			node.type !== 'PseudoElementSelector'
-			&& !(node.type === 'PseudoClassSelector' && LEGACY_PSEUDO_ELEMENTS.has(normalizeCssIdentifier(node.name))));
+		&& selector.children.every(node => !isPseudoElementNode(node));
 };
 
-const getLineBreak = string => string.match(/\r\n|[\n\f\r]/u)?.[0] ?? '\n';
+const getLineBreak = string => string.match(/\r\n|[\n\f\r]/v)?.[0] ?? '\n';
 
 const stripCssIndent = string => {
-	const lineParts = string.split(/(\r\n|[\n\f\r])/u);
+	const lineParts = string.split(/(\r\n|[\n\f\r])/v);
 	let minimumIndent = Infinity;
 
 	for (let index = 0; index < lineParts.length; index += 2) {
 		const line = lineParts[index];
-		if (/[^\t ]/u.test(line)) {
-			minimumIndent = Math.min(minimumIndent, line.match(/^[\t ]*/u)[0].length);
+		if (/[^\t ]/v.test(line)) {
+			minimumIndent = Math.min(minimumIndent, line.match(/^[\t ]*/v)[0].length);
 		}
 	}
 
@@ -50,7 +47,7 @@ const stripCssIndent = string => {
 
 	for (let index = 0; index < lineParts.length; index += 2) {
 		const line = lineParts[index];
-		if (line.match(/^[\t ]*/u)[0].length >= minimumIndent) {
+		if (line.match(/^[\t ]*/v)[0].length >= minimumIndent) {
 			lineParts[index] = line.slice(minimumIndent);
 		}
 	}
@@ -68,7 +65,7 @@ const formatPart = (part, indentation) => {
 		].filter(Boolean).join(lineBreak)
 		: trimCssWhitespace(stripCssIndent(part));
 
-	return formatted.replaceAll(/(^|\r\n|[\n\f\r])(?=[\t ]*[^\t\n\f\r ])/gu, lineBreak => lineBreak + indentation);
+	return formatted.replaceAll(/(^|\r\n|[\n\f\r])(?=[\t ]*[^\t\n\f\r ])/gv, lineBreak => lineBreak + indentation);
 };
 
 const getMultilineUnsafeRanges = context => {
@@ -107,7 +104,7 @@ const isFixUnsafe = (node, sourceCode, multilineUnsafeRanges) => {
 		return false;
 	}
 
-	if (/\\[\n\f\r]/u.test(sourceCode.getText(node))) {
+	if (/\\[\n\f\r]/v.test(sourceCode.getText(node))) {
 		return true;
 	}
 
@@ -116,7 +113,7 @@ const isFixUnsafe = (node, sourceCode, multilineUnsafeRanges) => {
 };
 
 const getDeclarationSeparatorIndex = content => {
-	const trailingWhitespace = content.match(/[\t\n\f\r ]*$/u)[0];
+	const trailingWhitespace = content.match(/[\t\n\f\r ]*$/v)[0];
 	let separatorIndex = content.length - trailingWhitespace.length;
 	if (trailingWhitespace === '') {
 		return separatorIndex;
@@ -161,10 +158,10 @@ const getReplacement = (node, sourceCode) => {
 	const lineStart = nodeStart - (start.column - 1);
 	const indentation = sourceCode.text.slice(lineStart, nodeStart);
 
-	if (start.line === end.line || /[^\t\n\f\r ]/u.test(indentation)) {
+	if (start.line === end.line || /[^\t\n\f\r ]/v.test(indentation)) {
 		const removeLeadingSpace = parts.length === 0
-			&& /[\t ]/u.test(sourceCode.text[nodeStart - 1])
-			&& /[\t ]/u.test(sourceCode.text[nodeEnd]);
+			&& /[\t ]/v.test(sourceCode.text[nodeStart - 1])
+			&& /[\t ]/v.test(sourceCode.text[nodeEnd]);
 
 		return {
 			fixRange: [removeLeadingSpace ? nodeStart - 1 : nodeStart, nodeEnd],

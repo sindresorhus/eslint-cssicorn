@@ -151,6 +151,34 @@ Message:
 
 `;
 
+exports[`invalid(18): .foo > & {} 1`] = `
+
+  1 | .foo > & {}
+
+`;
+
+exports[`invalid(18): .foo > & {} 2`] = `
+
+Message:
+> 1 | .foo > & {}
+    |        ^ Do not use a CSS nesting selector unless an ancestor scoping context applies.
+
+`;
+
+exports[`invalid(19): &:is(.foo) {} 1`] = `
+
+  1 | &:is(.foo) {}
+
+`;
+
+exports[`invalid(19): &:is(.foo) {} 2`] = `
+
+Message:
+> 1 | &:is(.foo) {}
+    | ^ Do not use a CSS nesting selector unless an ancestor scoping context applies.
+
+`;
+
 exports[`invalid(2): & {} 1`] = `
 
   1 | & {}
@@ -181,6 +209,42 @@ exports[`invalid(2): @k content-body { & p {} } 2`] = `
 Message:
 > 1 | @k content-body { & p {} }
     |                   ^ Do not use a CSS nesting selector unless an ancestor scoping context applies.
+
+`;
+
+exports[`invalid(20): & + & {} 1`] = `
+
+  1 | & + & {}
+
+`;
+
+exports[`invalid(20): & + & {} 2`] = `
+
+Message:
+> 1 | & + & {}
+    | ^ Do not use a CSS nesting selector unless an ancestor scoping context applies.
+
+`;
+
+exports[`invalid(20): & + & {} 3`] = `
+
+Message:
+> 1 | & + & {}
+    |     ^ Do not use a CSS nesting selector unless an ancestor scoping context applies.
+
+`;
+
+exports[`invalid(21): @media all { @layer components { & {} } } 1`] = `
+
+  1 | @media all { @layer components { & {} } }
+
+`;
+
+exports[`invalid(21): @media all { @layer components { & {} } } 2`] = `
+
+Message:
+> 1 | @media all { @layer components { & {} } }
+    |                                  ^ Do not use a CSS nesting selector unless an ancestor scoping context applies.
 
 `;
 

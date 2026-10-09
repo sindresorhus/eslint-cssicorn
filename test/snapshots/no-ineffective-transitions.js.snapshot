@@ -1018,6 +1018,74 @@ Suggestion 1/1: Allow discrete transitions for all targets using this behavior e
 
 `;
 
+exports[`invalid(66): a { transition: display 1s, display 2s; } 1`] = `
+
+  1 | a { transition: display 1s, display 2s; }
+
+`;
+
+exports[`invalid(66): a { transition: display 1s, display 2s; } 2`] = `
+
+Message:
+> 1 | a { transition: display 1s, display 2s; }
+    |                             ^^^^^^^ Transitioning \`display\` requires \`allow-discrete\` behavior.
+
+Suggestion 1/1: Allow discrete transitions for all targets using this behavior entry.:
+  1 | a { transition: display 1s, allow-discrete display 2s; }
+
+`;
+
+exports[`invalid(67): a { transition-property: display, display; transition-behavior: normal; } 1`] = `
+
+  1 | a { transition-property: display, display; transition-behavior: normal; }
+
+`;
+
+exports[`invalid(67): a { transition-property: display, display; transition-behavior: normal; } 2`] = `
+
+Message:
+> 1 | a { transition-property: display, display; transition-behavior: normal; }
+    |                                   ^^^^^^^ Transitioning \`display\` requires \`allow-discrete\` behavior.
+
+Suggestion 1/1: Allow discrete transitions for all targets using this behavior entry.:
+  1 | a { transition-property: display, display; transition-behavior: allow-discrete; }
+
+`;
+
+exports[`invalid(68): a { transition-property: none; transition-property: display; transition-behavior: normal; } 1`] = `
+
+  1 | a { transition-property: none; transition-property: display; transition-behavior: normal; }
+
+`;
+
+exports[`invalid(68): a { transition-property: none; transition-property: display; transition-behavior: normal; } 2`] = `
+
+Message:
+> 1 | a { transition-property: none; transition-property: display; transition-behavior: normal; }
+    |                                                     ^^^^^^^ Transitioning \`display\` requires \`allow-discrete\` behavior.
+
+Suggestion 1/1: Allow discrete transitions for all targets using this behavior entry.:
+  1 | a { transition-property: none; transition-property: display; transition-behavior: allow-discrete; }
+
+`;
+
+exports[`invalid(69): a { transition: all 1s; transition-property: display; transition-behavior: normal; } 1`] = `
+
+  1 | a { transition: all 1s; transition-property: display; transition-behavior: normal; }
+
+`;
+
+exports[`invalid(69): a { transition: all 1s; transition-property: display; transition-behavior: normal; } 2`] = `
+
+Message:
+> 1 | a { transition: all 1s; transition-property: display; transition-behavior: normal; }
+    |                                              ^^^^^^^ Transitioning \`display\` requires \`allow-discrete\` behavior.
+
+Suggestion 1/1: Allow discrete transitions for all targets using this behavior entry.:
+  1 | a { transition: all 1s; transition-property: display; transition-behavior: allow-discrete; }
+
+`;
+
 exports[`invalid(7): a { transition: display 1s allow-discrete; transition-behavior: normal; } 1`] = `
 
   1 | a { transition: display 1s allow-discrete; transition-behavior: normal; }
@@ -1032,6 +1100,104 @@ Message:
 
 Suggestion 1/1: Allow discrete transitions for all targets using this behavior entry.:
   1 | a { transition: display 1s allow-discrete; transition-behavior: allow-discrete; }
+
+`;
+
+exports[`invalid(70): a { transition-property: display, will-change; transition-behavior: normal, normal; } 1`] = `
+
+  1 | a { transition-property: display, will-change; transition-behavior: normal, normal; }
+
+`;
+
+exports[`invalid(70): a { transition-property: display, will-change; transition-behavior: normal, normal; } 2`] = `
+
+Message:
+> 1 | a { transition-property: display, will-change; transition-behavior: normal, normal; }
+    |                          ^^^^^^^ Transitioning \`display\` requires \`allow-discrete\` behavior.
+
+Suggestion 1/1: Allow discrete transitions for all targets using this behavior entry.:
+  1 | a { transition-property: display, will-change; transition-behavior: allow-discrete, normal; }
+
+`;
+
+exports[`invalid(70): a { transition-property: display, will-change; transition-behavior: normal, normal; } 3`] = `
+
+Message:
+> 1 | a { transition-property: display, will-change; transition-behavior: normal, normal; }
+    |                                   ^^^^^^^^^^^ Property \`will-change\` cannot be transitioned.
+
+`;
+
+exports[`invalid(71): a { transition: display 1s normal, content-visibility 1s normal; } 1`] = `
+
+  1 | a { transition: display 1s normal, content-visibility 1s normal; }
+
+`;
+
+exports[`invalid(71): a { transition: display 1s normal, content-visibility 1s normal; } 2`] = `
+
+Message:
+> 1 | a { transition: display 1s normal, content-visibility 1s normal; }
+    |                 ^^^^^^^ Transitioning \`display\` requires \`allow-discrete\` behavior.
+
+Suggestion 1/1: Allow discrete transitions for all targets using this behavior entry.:
+  1 | a { transition: display 1s allow-discrete, content-visibility 1s normal; }
+
+`;
+
+exports[`invalid(71): a { transition: display 1s normal, content-visibility 1s normal; } 3`] = `
+
+Message:
+> 1 | a { transition: display 1s normal, content-visibility 1s normal; }
+    |                                    ^^^^^^^^^^^^^^^^^^ Transitioning \`content-visibility\` requires \`allow-discrete\` behavior.
+
+Suggestion 1/1: Allow discrete transitions for all targets using this behavior entry.:
+  1 | a { transition: display 1s normal, content-visibility 1s allow-discrete; }
+
+`;
+
+exports[`invalid(72): a { transition: display 1s normal, opacity 2s allow-discrete, content-visibility 1s; } 1`] = `
+
+  1 | a { transition: display 1s normal, opacity 2s allow-discrete, content-visibility 1s; }
+
+`;
+
+exports[`invalid(72): a { transition: display 1s normal, opacity 2s allow-discrete, content-visibility 1s; } 2`] = `
+
+Message:
+> 1 | a { transition: display 1s normal, opacity 2s allow-discrete, content-visibility 1s; }
+    |                 ^^^^^^^ Transitioning \`display\` requires \`allow-discrete\` behavior.
+
+Suggestion 1/1: Allow discrete transitions for all targets using this behavior entry.:
+  1 | a { transition: display 1s allow-discrete, opacity 2s allow-discrete, content-visibility 1s; }
+
+`;
+
+exports[`invalid(72): a { transition: display 1s normal, opacity 2s allow-discrete, content-visibility 1s; } 3`] = `
+
+Message:
+> 1 | a { transition: display 1s normal, opacity 2s allow-discrete, content-visibility 1s; }
+    |                                                               ^^^^^^^^^^^^^^^^^^ Transitioning \`content-visibility\` requires \`allow-discrete\` behavior.
+
+Suggestion 1/1: Allow discrete transitions for all targets using this behavior entry.:
+  1 | a { transition: display 1s normal, opacity 2s allow-discrete, allow-discrete content-visibility 1s; }
+
+`;
+
+exports[`invalid(73): a { transition-behavior: allow-discrete, normal; transition-property: display, position; } 1`] = `
+
+  1 | a { transition-behavior: allow-discrete, normal; transition-property: display, position; }
+
+`;
+
+exports[`invalid(73): a { transition-behavior: allow-discrete, normal; transition-property: display, position; } 2`] = `
+
+Message:
+> 1 | a { transition-behavior: allow-discrete, normal; transition-property: display, position; }
+    |                                                                                ^^^^^^^^ Transitioning \`position\` requires \`allow-discrete\` behavior.
+
+Suggestion 1/1: Allow discrete transitions for all targets using this behavior entry.:
+  1 | a { transition-behavior: allow-discrete, allow-discrete; transition-property: display, position; }
 
 `;
 

@@ -5,7 +5,7 @@ import {
 	hasNestingSelectorInRawArgument,
 	hasScopeAncestor,
 } from './shared/css-selector-specificity.js';
-import {getPseudoSelectorArgument, isKeyframesAtRule, normalizeCssIdentifier} from './utils/index.js';
+import {getPseudoSelectorArgument, hasKeyframesAncestor, normalizeCssIdentifier} from './utils/index.js';
 
 /**
 @import {CssNodePlain} from '@eslint/css-tree';
@@ -80,13 +80,12 @@ const hasExplicitNestingSelector = selector => Boolean(find(selector, node => no
 @param {CssicornContext} context
 */
 const create = context => {
-	const {sourceCode} = context;
 	const scopedRules = new WeakMap();
 
 	context.on('Rule', function * (rule) {
 		if (
 			rule.prelude.type !== 'SelectorList'
-			|| sourceCode.getAncestors(rule).some(ancestor => isKeyframesAtRule(ancestor))
+			|| hasKeyframesAncestor(rule, context)
 		) {
 			return;
 		}

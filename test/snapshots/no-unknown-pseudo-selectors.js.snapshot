@@ -109,6 +109,70 @@ Message:
 
 `;
 
+exports[`invalid(16): :hoverr {} 1`] = `
+
+  1 | :hoverr {}
+
+`;
+
+exports[`invalid(16): :hoverr {} 2`] = `
+
+Message:
+> 1 | :hoverr {}
+    | ^^^^^^^ Unknown pseudo-selector ':hoverr'.
+
+`;
+
+exports[`invalid(17): ::befor::after {} 1`] = `
+
+  1 | ::befor::after {}
+
+`;
+
+exports[`invalid(17): ::befor::after {} 2`] = `
+
+Message:
+> 1 | ::befor::after {}
+    | ^^^^^^^ Unknown pseudo-selector '::befor'.
+
+`;
+
+exports[`invalid(18): :foucs(.bar) {} 1`] = `
+
+  1 | :foucs(.bar) {}
+
+`;
+
+exports[`invalid(18): :foucs(.bar) {} 2`] = `
+
+Message:
+> 1 | :foucs(.bar) {}
+    | ^^^^^^^^^^^^ Unknown pseudo-selector ':foucs'.
+
+`;
+
+exports[`invalid(19): :where(:foucs, :hovr) {} 1`] = `
+
+  1 | :where(:foucs, :hovr) {}
+
+`;
+
+exports[`invalid(19): :where(:foucs, :hovr) {} 2`] = `
+
+Message:
+> 1 | :where(:foucs, :hovr) {}
+    |        ^^^^^^ Unknown pseudo-selector ':foucs'.
+
+`;
+
+exports[`invalid(19): :where(:foucs, :hovr) {} 3`] = `
+
+Message:
+> 1 | :where(:foucs, :hovr) {}
+    |                ^^^^^ Unknown pseudo-selector ':hovr'.
+
+`;
+
 exports[`invalid(2): :hovr::befor {} 1`] = `
 
   1 | :hovr::befor {}
@@ -128,6 +192,98 @@ exports[`invalid(2): :hovr::befor {} 3`] = `
 Message:
 > 1 | :hovr::befor {}
     |      ^^^^^^^ Unknown pseudo-selector '::befor'.
+
+`;
+
+exports[`invalid(20): :\\66 oucs {} 1`] = `
+
+  1 | :\\66 oucs {}
+
+`;
+
+exports[`invalid(20): :\\66 oucs {} 2`] = `
+
+Message:
+> 1 | :\\66 oucs {}
+    | ^^^^^^^^^ Unknown pseudo-selector ':\\66 oucs'.
+
+`;
+
+exports[`invalid(21): ::theme-part, ::theme-other {} 1`] = `
+
+  1 | ::theme-part, ::theme-other {}
+
+`;
+
+exports[`invalid(21): ::theme-part, ::theme-other {} 2`] = `
+
+Message:
+> 1 | ::theme-part, ::theme-other {}
+    | ^^^^^^^^^^^^ Unknown pseudo-selector '::theme-part'.
+
+`;
+
+exports[`invalid(21): ::theme-part, ::theme-other {} 3`] = `
+
+Message:
+> 1 | ::theme-part, ::theme-other {}
+    |               ^^^^^^^^^^^^^ Unknown pseudo-selector '::theme-other'.
+
+`;
+
+exports[`invalid(22): .foo { &:foucs {} } 1`] = `
+
+  1 | .foo { &:foucs {} }
+
+`;
+
+exports[`invalid(22): .foo { &:foucs {} } 2`] = `
+
+Message:
+> 1 | .foo { &:foucs {} }
+    |         ^^^^^^ Unknown pseudo-selector ':foucs'.
+
+`;
+
+exports[`invalid(23): @media (width > 0px) { :foucs {} } 1`] = `
+
+  1 | @media (width > 0px) { :foucs {} }
+
+`;
+
+exports[`invalid(23): @media (width > 0px) { :foucs {} } 2`] = `
+
+Message:
+> 1 | @media (width > 0px) { :foucs {} }
+    |                        ^^^^^^ Unknown pseudo-selector ':foucs'.
+
+`;
+
+exports[`invalid(24): @layer theme { :hovr {} } 1`] = `
+
+  1 | @layer theme { :hovr {} }
+
+`;
+
+exports[`invalid(24): @layer theme { :hovr {} } 2`] = `
+
+Message:
+> 1 | @layer theme { :hovr {} }
+    |                ^^^^^ Unknown pseudo-selector ':hovr'.
+
+`;
+
+exports[`invalid(25): @scope (.card) { :foucs {} } 1`] = `
+
+  1 | @scope (.card) { :foucs {} }
+
+`;
+
+exports[`invalid(25): @scope (.card) { :foucs {} } 2`] = `
+
+Message:
+> 1 | @scope (.card) { :foucs {} }
+    |                  ^^^^^^ Unknown pseudo-selector ':foucs'.
 
 `;
 

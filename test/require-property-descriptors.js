@@ -31,6 +31,15 @@ test.snapshot({
 		'@font-face { font-family: brand; src: url(brand.woff2); }',
 		'a { syntax: "<color>"; inherits: false; }',
 		'@custom { syntax: "<color>"; inherits: false; }',
+		// `initial-value` is only required for a single non-universal string syntax.
+		'@property --brand { syntax: "*"; inherits: false; initial-value: 0; }',
+		'@property --brand { syntax: "<color>" "<length>"; inherits: false; }',
+		'@property --brand { syntax: rgb(0, 0, 0); inherits: false; }',
+		'@property --brand { syntax: 0; inherits: false; }',
+		// Comments and extra descriptors do not matter.
+		'@property --brand { syntax: "*"; /* keep */ inherits: false; }',
+		'@property --brand { syntax: "<color>"; inherits: false; initial-value: red; unknown: blue; }',
+		'@media (width > 0px) { @property --brand { syntax: "*"; inherits: false; } }',
 	],
 	invalid: [
 		'@property --brand {}',
@@ -65,6 +74,12 @@ test.snapshot({
 		`,
 		'@property --first { syntax: "<color>"; inherits: false; initial-value: red; } @property --second {}',
 		'@property --brand { @custom { syntax: "<color>"; inherits: false; initial-value: red; } }',
+		'@property --brand { syntax: " "; inherits: false; }',
+		'@property --brand { syntax: "**"; inherits: false; }',
+		String.raw`@property --brand { S\59 NTAX: "<color>"; inherits: false; }`,
+		'@supports (display: grid) { @property --brand { inherits: false; } }',
+		'@media (width > 0px) { @property --brand { syntax: "<color>"; inherits: false; } }',
+		'@layer theme { @property --brand {} }',
 	],
 });
 

@@ -1,6 +1,7 @@
-import {keyword} from '@eslint/css-tree';
 import {
+	getBasePropertyName,
 	getCanonicalLexerNode,
+	getCssWideKeyword,
 	getSingleValueIdentifier,
 	hasSubstitutionOrRandomFunction,
 	isCssModulesInteropDeclaration,
@@ -210,7 +211,7 @@ const getControllingValue = (declarationsByProperty, properties, sourceCode) => 
 
 	const keywords = node.value.children.map(child => child.type === 'Identifier' ? normalizeCssIdentifier(child.name) : '');
 	// Only ordinary ASCII keywords are supported, so joining decoded names cannot introduce extra tokens or escape syntax.
-	if (keywords.some(keyword => !/^[a-z][-a-z]*$/u.test(keyword))) {
+	if (keywords.some(keyword => !/^[a-z][\-a-z]*$/v.test(keyword))) {
 		return;
 	}
 
@@ -249,8 +250,10 @@ Get the problem for a container property given the explicit layout controls in i
 @param {ReturnType<typeof getBlockControls>} controls
 */
 const getContainerProblem = (node, property, {display, hasVisibleDisplay, isFlex, isGrid, isTable, hasCollapsedTable}) => {
-	if (hasVisibleDisplay && ((flexProperties.has(property) && !isFlex) || (gridProperties.has(property) && !isGrid) || (property === 'table-layout' && !isTable))) {
-		const layout = flexProperties.has(property) ? 'flex' : (gridProperties.has(property) ? 'grid' : 'table');
+	const isFlexProperty = flexProperties.has(property);
+	const isGridProperty = gridProperties.has(property);
+	if (hasVisibleDisplay && ((isFlexProperty && !isFlex) || (isGridProperty && !isGrid) || (property === 'table-layout' && !isTable))) {
+		const layout = isFlexProperty ? 'flex' : (isGridProperty ? 'grid' : 'table');
 		return {node, messageId: MESSAGE_ID_DISPLAY, data: {property, display, layout}};
 	}
 
@@ -322,7 +325,7 @@ const getOmittedShorthandProblems = function * (declarations, sourceCode) {
 		return;
 	}
 
-	const declarationsByProperty = Map.groupBy(declarations, ({property}) => keyword(property).basename);
+	const declarationsByProperty = Map.groupBy(declarations, ({property}) => getBasePropertyName(property));
 	for (const group of shorthandPropertyGroups) {
 		const controllingDeclarations = group.controllingProperties.flatMap(property => declarationsByProperty.get(property) ?? []);
 		if (controllingDeclarations.length !== 1) {
@@ -330,11 +333,10 @@ const getOmittedShorthandProblems = function * (declarations, sourceCode) {
 		}
 
 		const [{node, property}] = controllingDeclarations;
-		const identifier = getSingleValueIdentifier(node);
 		if (
 			!group.properties.includes(property)
 			|| node.value.type !== 'Value'
-			|| isCssWideKeyword(identifier && normalizeCssIdentifier(identifier.name))
+			|| getCssWideKeyword(node) !== undefined
 			|| hasSubstitutionOrRandomFunction(node.value)
 		) {
 			continue;
@@ -425,7 +427,7 @@ const getBlockControls = (declarationsByProperty, sourceCode) => {
 	const isGrid = hasVisibleDisplay && (display === 'inline-grid' || display.split(' ').includes('grid'));
 	const isTable = hasVisibleDisplay && (display === 'inline-table' || display.split(' ').includes('table'));
 	const wrapping = isFlex ? getControllingValue(declarationsByProperty, ['flex-wrap', 'flex-flow', '-webkit-flex-wrap', '-webkit-flex-flow'], sourceCode) : undefined;
-	const hasExplicitNowrap = wrapping?.split(' ').includes('nowrap') === true;
+	const hasExplicitNowrap = Boolean(wrapping?.split(' ').includes('nowrap'));
 	const position = getControllingValue(declarationsByProperty, ['position'], sourceCode);
 	const overflow = getControllingValue(declarationsByProperty, overflowProperties, sourceCode);
 	// Only the shorthand establishes both axes without needing writing-mode or computed-value inference.

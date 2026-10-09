@@ -136,10 +136,38 @@ for (const [shorthand, properties] of additionalAffectedPropertyEntries) {
 	]));
 }
 
-const getVendorPrefix = property => property.match(/^-\w+-/u)?.[0] ?? '';
+const getVendorPrefix = property => property.match(/^-\w+-/v)?.[0] ?? '';
+
+// Shorthands with two values, which can be condensed to one when both are equal, like `margin-block: 1px 1px`.
+const pairShorthands = new Set([
+	'border-block-color',
+	'border-block-style',
+	'border-block-width',
+	'border-inline-color',
+	'border-inline-style',
+	'border-inline-width',
+	'gap',
+	'inset-block',
+	'inset-inline',
+	'margin-block',
+	'margin-inline',
+	'overflow',
+	'overscroll-behavior',
+	'padding-block',
+	'padding-inline',
+	'scroll-margin-block',
+	'scroll-margin-inline',
+	'scroll-padding-block',
+	'scroll-padding-inline',
+]);
+
+// Shorthands whose values are `<top> <right> <bottom> <left>`.
+const fourSideShorthands = new Set(['border-color', 'border-style', 'border-width', 'inset', 'margin', 'padding', 'scroll-margin', 'scroll-padding']);
 
 export {
+	fourSideShorthands,
 	getVendorPrefix,
+	pairShorthands,
 	shorthandProperties,
 	shorthandToAffectedProperties,
 };

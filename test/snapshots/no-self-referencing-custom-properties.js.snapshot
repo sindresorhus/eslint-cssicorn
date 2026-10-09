@@ -668,6 +668,64 @@ Message:
 
 `;
 
+exports[`invalid(43): @starting-style { a { --a: var(--b); --b: var(--a); } } 1`] = `
+
+  1 | @starting-style { a { --a: var(--b); --b: var(--a); } }
+
+`;
+
+exports[`invalid(43): @starting-style { a { --a: var(--b); --b: var(--a); } } 2`] = `
+
+Message:
+> 1 | @starting-style { a { --a: var(--b); --b: var(--a); } }
+    |                                ^^^ Custom property \`--a\` is part of a dependency cycle.
+
+`;
+
+exports[`invalid(43): @starting-style { a { --a: var(--b); --b: var(--a); } } 3`] = `
+
+Message:
+> 1 | @starting-style { a { --a: var(--b); --b: var(--a); } }
+    |                                               ^^^ Custom property \`--b\` is part of a dependency cycle.
+
+`;
+
+exports[`invalid(44): @position-try --test { --a: var(--b); --b: var(--a); } 1`] = `
+
+  1 | @position-try --test { --a: var(--b); --b: var(--a); }
+
+`;
+
+exports[`invalid(44): @position-try --test { --a: var(--b); --b: var(--a); } 2`] = `
+
+Message:
+> 1 | @position-try --test { --a: var(--b); --b: var(--a); }
+    |                                 ^^^ Custom property \`--a\` is part of a dependency cycle.
+
+`;
+
+exports[`invalid(44): @position-try --test { --a: var(--b); --b: var(--a); } 3`] = `
+
+Message:
+> 1 | @position-try --test { --a: var(--b); --b: var(--a); }
+    |                                                ^^^ Custom property \`--b\` is part of a dependency cycle.
+
+`;
+
+exports[`invalid(45): a { --a: random(1px, var(--a)); } 1`] = `
+
+  1 | a { --a: random(1px, var(--a)); }
+
+`;
+
+exports[`invalid(45): a { --a: random(1px, var(--a)); } 2`] = `
+
+Message:
+> 1 | a { --a: random(1px, var(--a)); }
+    |                          ^^^ Custom property \`--a\` must not reference itself.
+
+`;
+
 exports[`invalid(5): a { --a: var(--b); --b: var(--a); --c: var(--d); --d: var(--c); } 1`] = `
 
   1 | a { --a: var(--b); --b: var(--a); --c: var(--d); --d: var(--c); }

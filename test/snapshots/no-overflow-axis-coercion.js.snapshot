@@ -642,6 +642,118 @@ Message:
 
 `;
 
+exports[`invalid(50): a { overflow-x: scroll; overflow-y: visible; } 1`] = `
+
+  1 | a { overflow-x: scroll; overflow-y: visible; }
+
+`;
+
+exports[`invalid(50): a { overflow-x: scroll; overflow-y: visible; } 2`] = `
+
+Message:
+> 1 | a { overflow-x: scroll; overflow-y: visible; }
+    |                                     ^^^^^^^ \`overflow-y: visible\` computes to \`auto\` because \`overflow-x\` is \`scroll\`. Result: \`overflow-x: scroll\` and \`overflow-y: auto\`.
+
+`;
+
+exports[`invalid(51): a { overflow: visible; overflow-y: hidden; } 1`] = `
+
+  1 | a { overflow: visible; overflow-y: hidden; }
+
+`;
+
+exports[`invalid(51): a { overflow: visible; overflow-y: hidden; } 2`] = `
+
+Message:
+> 1 | a { overflow: visible; overflow-y: hidden; }
+    |               ^^^^^^^ \`overflow-x: visible\` computes to \`auto\` because \`overflow-y\` is \`hidden\`. Result: \`overflow-x: auto\` and \`overflow-y: hidden\`.
+
+`;
+
+exports[`invalid(52): a { overflow-inline: visible; overflow-block: overlay; } 1`] = `
+
+  1 | a { overflow-inline: visible; overflow-block: overlay; }
+
+`;
+
+exports[`invalid(52): a { overflow-inline: visible; overflow-block: overlay; } 2`] = `
+
+Message:
+> 1 | a { overflow-inline: visible; overflow-block: overlay; }
+    |                      ^^^^^^^ \`overflow-inline: visible\` computes to \`auto\` because \`overflow-block\` is \`overlay\`. Result: \`overflow-block: auto\` and \`overflow-inline: auto\`.
+
+`;
+
+exports[`invalid(53): a { overflow-x: hidden !important; overflow-y: visible; } 1`] = `
+
+  1 | a { overflow-x: hidden !important; overflow-y: visible; }
+
+`;
+
+exports[`invalid(53): a { overflow-x: hidden !important; overflow-y: visible; } 2`] = `
+
+Message:
+> 1 | a { overflow-x: hidden !important; overflow-y: visible; }
+    |                                                ^^^^^^^ \`overflow-y: visible\` computes to \`auto\` because \`overflow-x\` is \`hidden\`. Result: \`overflow-x: hidden\` and \`overflow-y: auto\`.
+
+`;
+
+exports[`invalid(54): a { overflow-block: visible; overflow-inline: hidden; } 1`] = `
+
+  1 | a { overflow-block: visible; overflow-inline: hidden; }
+
+`;
+
+exports[`invalid(54): a { overflow-block: visible; overflow-inline: hidden; } 2`] = `
+
+Message:
+> 1 | a { overflow-block: visible; overflow-inline: hidden; }
+    |                     ^^^^^^^ \`overflow-block: visible\` computes to \`auto\` because \`overflow-inline\` is \`hidden\`. Result: \`overflow-block: auto\` and \`overflow-inline: hidden\`.
+
+`;
+
+exports[`invalid(55): a { overflow: hidden; overflow-x: visible; } 1`] = `
+
+  1 | a { overflow: hidden; overflow-x: visible; }
+
+`;
+
+exports[`invalid(55): a { overflow: hidden; overflow-x: visible; } 2`] = `
+
+Message:
+> 1 | a { overflow: hidden; overflow-x: visible; }
+    |                                   ^^^^^^^ \`overflow-x: visible\` computes to \`auto\` because \`overflow-y\` is \`hidden\`. Result: \`overflow-x: auto\` and \`overflow-y: hidden\`.
+
+`;
+
+exports[`invalid(56): a { all: initial; overflow-x: hidden; overflow-y: visible; } 1`] = `
+
+  1 | a { all: initial; overflow-x: hidden; overflow-y: visible; }
+
+`;
+
+exports[`invalid(56): a { all: initial; overflow-x: hidden; overflow-y: visible; } 2`] = `
+
+Message:
+> 1 | a { all: initial; overflow-x: hidden; overflow-y: visible; }
+    |                                                   ^^^^^^^ \`overflow-y: visible\` computes to \`auto\` because \`overflow-x\` is \`hidden\`. Result: \`overflow-x: hidden\` and \`overflow-y: auto\`.
+
+`;
+
+exports[`invalid(57): @media screen { a { overflow: visible auto; } } 1`] = `
+
+  1 | @media screen { a { overflow: visible auto; } }
+
+`;
+
+exports[`invalid(57): @media screen { a { overflow: visible auto; } } 2`] = `
+
+Message:
+> 1 | @media screen { a { overflow: visible auto; } }
+    |                               ^^^^^^^ \`overflow-x: visible\` computes to \`auto\` because \`overflow-y\` is \`auto\`. Result: \`overflow-x: auto\` and \`overflow-y: auto\`.
+
+`;
+
 exports[`invalid(6): a { overflow: auto visible; } 1`] = `
 
   1 | a { overflow: auto visible; }

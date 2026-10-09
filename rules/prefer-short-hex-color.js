@@ -1,5 +1,11 @@
-import {ident, tokenize, tokenTypes} from '@eslint/css-tree';
-import {isCssModulesInteropDeclaration, normalizeCssIdentifier, toLocation} from './utils/index.js';
+import {tokenize, tokenTypes} from '@eslint/css-tree';
+import {nonColorFunctions} from './shared/css-color-functions.js';
+import {
+	decodeCssIdentifier,
+	isCssModulesInteropDeclaration,
+	normalizeCssIdentifier,
+	toLocation,
+} from './utils/index.js';
 
 /**
 @import * as ESLint from 'eslint';
@@ -10,8 +16,7 @@ const messages = {
 	[MESSAGE_ID]: 'Prefer `{{replacement}}` over `{{value}}`.',
 };
 
-const longHexColorPattern = /^(?:[\da-f]{6}|[\da-f]{8})$/iu;
-const nonColorFunctionNames = new Set(['-moz-element', 'element', 'url']);
+const longHexColorPattern = /^(?:[\da-f]{6}|[\da-f]{8})$/iv;
 
 function getShortHexColor(value) {
 	if (!longHexColorPattern.test(value)) {
@@ -54,7 +59,7 @@ const create = context => {
 		tokenize(valueText, (type, start, end) => {
 			if (type === tokenTypes.Function) {
 				const functionName = normalizeCssIdentifier(valueText.slice(start, end - 1));
-				nonColorFunctionStack.push(nonColorFunctionStack.at(-1) === true || nonColorFunctionNames.has(functionName));
+				nonColorFunctionStack.push(nonColorFunctionStack.at(-1) === true || nonColorFunctions.has(functionName));
 				return;
 			}
 
@@ -73,7 +78,7 @@ const create = context => {
 			}
 
 			const value = valueText.slice(start + 1, end);
-			const replacement = getShortHexColor(ident.decode(value));
+			const replacement = getShortHexColor(decodeCssIdentifier(value));
 			if (!replacement) {
 				return;
 			}

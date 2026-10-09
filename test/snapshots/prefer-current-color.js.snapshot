@@ -1531,6 +1531,51 @@ Suggestion 1/1: Replace with \`currentcolor\`.:
 
 `;
 
+exports[`invalid(85): a { color: red; caret-color: red; } 1`] = `
+
+  1 | a { color: red; caret-color: red; }
+
+`;
+
+exports[`invalid(85): a { color: red; caret-color: red; } 2`] = `
+
+Message:
+> 1 | a { color: red; caret-color: red; }
+    |                              ^^^ Prefer \`currentcolor\` over repeating the foreground color.
+
+Suggestion 1/1: Replace with \`currentcolor\`.:
+  1 | a { color: red; caret-color: currentcolor; }
+
+`;
+
+exports[`invalid(86): a { color: red; scrollbar-color: red red; } 1`] = `
+
+  1 | a { color: red; scrollbar-color: red red; }
+
+`;
+
+exports[`invalid(86): a { color: red; scrollbar-color: red red; } 2`] = `
+
+Message:
+> 1 | a { color: red; scrollbar-color: red red; }
+    |                                  ^^^ Prefer \`currentcolor\` over repeating the foreground color.
+
+Suggestion 1/1: Replace with \`currentcolor\`.:
+  1 | a { color: red; scrollbar-color: currentcolor red; }
+
+`;
+
+exports[`invalid(86): a { color: red; scrollbar-color: red red; } 3`] = `
+
+Message:
+> 1 | a { color: red; scrollbar-color: red red; }
+    |                                      ^^^ Prefer \`currentcolor\` over repeating the foreground color.
+
+Suggestion 1/1: Replace with \`currentcolor\`.:
+  1 | a { color: red; scrollbar-color: red currentcolor; }
+
+`;
+
 exports[`invalid(9): a { color: hsl(0 100% 50%); border-color: hsl(0 100% 50%); } 1`] = `
 
   1 | a { color: hsl(0 100% 50%); border-color: hsl(0 100% 50%); }

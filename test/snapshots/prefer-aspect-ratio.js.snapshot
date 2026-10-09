@@ -984,6 +984,104 @@ Message:
 
 `;
 
+exports[`invalid(73): @container style(aspect-ratio: 1 / 1) { a { height: 0; padding-top: 50%; } } 1`] = `
+
+  1 | @container style(aspect-ratio: 1 / 1) { a { height: 0; padding-top: 50%; } }
+
+`;
+
+exports[`invalid(73): @container style(aspect-ratio: 1 / 1) { a { height: 0; padding-top: 50%; } } 2`] = `
+
+Message:
+> 1 | @container style(aspect-ratio: 1 / 1) { a { height: 0; padding-top: 50%; } }
+    |                                                        ^^^^^^^^^^^^^^^^ Consider using \`aspect-ratio\` instead of this zero-height percentage-padding workaround.
+
+`;
+
+exports[`invalid(74): a { height: 0.0; padding-top: 50%; } 1`] = `
+
+  1 | a { height: 0.0; padding-top: 50%; }
+
+`;
+
+exports[`invalid(74): a { height: 0.0; padding-top: 50%; } 2`] = `
+
+Message:
+> 1 | a { height: 0.0; padding-top: 50%; }
+    |                  ^^^^^^^^^^^^^^^^ Consider using \`aspect-ratio\` instead of this zero-height percentage-padding workaround.
+
+`;
+
+exports[`invalid(75): a { height: 0e0; padding-top: 50%; } 1`] = `
+
+  1 | a { height: 0e0; padding-top: 50%; }
+
+`;
+
+exports[`invalid(75): a { height: 0e0; padding-top: 50%; } 2`] = `
+
+Message:
+> 1 | a { height: 0e0; padding-top: 50%; }
+    |                  ^^^^^^^^^^^^^^^^ Consider using \`aspect-ratio\` instead of this zero-height percentage-padding workaround.
+
+`;
+
+exports[`invalid(76): a { height: 0Q; padding-top: 50%; } 1`] = `
+
+  1 | a { height: 0Q; padding-top: 50%; }
+
+`;
+
+exports[`invalid(76): a { height: 0Q; padding-top: 50%; } 2`] = `
+
+Message:
+> 1 | a { height: 0Q; padding-top: 50%; }
+    |                 ^^^^^^^^^^^^^^^^ Consider using \`aspect-ratio\` instead of this zero-height percentage-padding workaround.
+
+`;
+
+exports[`invalid(77): a { height: 0vmin; padding-top: 50%; } 1`] = `
+
+  1 | a { height: 0vmin; padding-top: 50%; }
+
+`;
+
+exports[`invalid(77): a { height: 0vmin; padding-top: 50%; } 2`] = `
+
+Message:
+> 1 | a { height: 0vmin; padding-top: 50%; }
+    |                    ^^^^^^^^^^^^^^^^ Consider using \`aspect-ratio\` instead of this zero-height percentage-padding workaround.
+
+`;
+
+exports[`invalid(78): a { height: -0px; padding-top: 50%; } 1`] = `
+
+  1 | a { height: -0px; padding-top: 50%; }
+
+`;
+
+exports[`invalid(78): a { height: -0px; padding-top: 50%; } 2`] = `
+
+Message:
+> 1 | a { height: -0px; padding-top: 50%; }
+    |                   ^^^^^^^^^^^^^^^^ Consider using \`aspect-ratio\` instead of this zero-height percentage-padding workaround.
+
+`;
+
+exports[`invalid(79): a { height: +0; padding-top: 50%; } 1`] = `
+
+  1 | a { height: +0; padding-top: 50%; }
+
+`;
+
+exports[`invalid(79): a { height: +0; padding-top: 50%; } 2`] = `
+
+Message:
+> 1 | a { height: +0; padding-top: 50%; }
+    |                 ^^^^^^^^^^^^^^^^ Consider using \`aspect-ratio\` instead of this zero-height percentage-padding workaround.
+
+`;
+
 exports[`invalid(8): a { height: 0 !important; padding-top: 50%; } 1`] = `
 
   1 | a { height: 0 !important; padding-top: 50%; }
@@ -995,6 +1093,76 @@ exports[`invalid(8): a { height: 0 !important; padding-top: 50%; } 2`] = `
 Message:
 > 1 | a { height: 0 !important; padding-top: 50%; }
     |                           ^^^^^^^^^^^^^^^^ Consider using \`aspect-ratio\` instead of this zero-height percentage-padding workaround.
+
+`;
+
+exports[`invalid(80): a { height: 0; padding: 50% 0 0 0; } 1`] = `
+
+  1 | a { height: 0; padding: 50% 0 0 0; }
+
+`;
+
+exports[`invalid(80): a { height: 0; padding: 50% 0 0 0; } 2`] = `
+
+Message:
+> 1 | a { height: 0; padding: 50% 0 0 0; }
+    |                ^^^^^^^^^^^^^^^^^^ Consider using \`aspect-ratio\` instead of this zero-height percentage-padding workaround.
+
+`;
+
+exports[`invalid(81): a { height: 0; padding: 25% 0 25% 0; } 1`] = `
+
+  1 | a { height: 0; padding: 25% 0 25% 0; }
+
+`;
+
+exports[`invalid(81): a { height: 0; padding: 25% 0 25% 0; } 2`] = `
+
+Message:
+> 1 | a { height: 0; padding: 25% 0 25% 0; }
+    |                ^^^^^^^^^^^^^^^^^^^^ Consider using \`aspect-ratio\` instead of this zero-height percentage-padding workaround.
+
+`;
+
+exports[`invalid(82): a { height: 0; padding: calc(50%) 0; } 1`] = `
+
+  1 | a { height: 0; padding: calc(50%) 0; }
+
+`;
+
+exports[`invalid(82): a { height: 0; padding: calc(50%) 0; } 2`] = `
+
+Message:
+> 1 | a { height: 0; padding: calc(50%) 0; }
+    |                ^^^^^^^^^^^^^^^^^^^^ Consider using \`aspect-ratio\` instead of this zero-height percentage-padding workaround.
+
+`;
+
+exports[`invalid(83): a { height: 0; padding-top: 0%; padding-bottom: 50%; } 1`] = `
+
+  1 | a { height: 0; padding-top: 0%; padding-bottom: 50%; }
+
+`;
+
+exports[`invalid(83): a { height: 0; padding-top: 0%; padding-bottom: 50%; } 2`] = `
+
+Message:
+> 1 | a { height: 0; padding-top: 0%; padding-bottom: 50%; }
+    |                                 ^^^^^^^^^^^^^^^^^^^ Consider using \`aspect-ratio\` instead of this zero-height percentage-padding workaround.
+
+`;
+
+exports[`invalid(84): a { height: 0; padding-top: 50%; margin: 0; } 1`] = `
+
+  1 | a { height: 0; padding-top: 50%; margin: 0; }
+
+`;
+
+exports[`invalid(84): a { height: 0; padding-top: 50%; margin: 0; } 2`] = `
+
+Message:
+> 1 | a { height: 0; padding-top: 50%; margin: 0; }
+    |                ^^^^^^^^^^^^^^^^ Consider using \`aspect-ratio\` instead of this zero-height percentage-padding workaround.
 
 `;
 

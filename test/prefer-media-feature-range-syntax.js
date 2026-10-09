@@ -32,6 +32,10 @@ test.snapshot({
 		'@media (min-pointer: 1) {}',
 		'@media (min-unknown-feature: 1px) {}',
 		'@container (min-width: 500px) {}',
+		'@media (orientation: landscape) {}',
+		'@media (prefers-color-scheme: dark) {}',
+		// A feature without a value has no bound to rewrite.
+		'@media (min-width) {}',
 		'@import url("layout.css") (min-width: 500px);',
 		{code: '@custom-media --narrow (max-width: 30em);', languageOptions: {tolerant: true}},
 	],
@@ -54,6 +58,12 @@ test.snapshot({
 		'@media screen and (min-width: 500px) {}',
 		'@media print, (max-width: 999px) {}',
 		'@media (min-width: 500px) { @media (max-height: 999px) {} }',
+		'@media (max-height: 100px) {}',
+		'@media (min-width: 30em) {}',
+		'@media (min-width: 0px) {}',
+		'@media not all and (max-width: 999px) {}',
+		'@media screen and (max-width: 999px) {}',
+		'@supports (display: grid) { @media (min-width: 500px) {} }',
 	],
 });
 
@@ -77,6 +87,11 @@ test.snapshot({
 		String.raw`@media (min-width: 500px) and (max-width: 999P\58) {}`,
 		'@media (min-width: 500px) and (max-width: 999px), (min-height: 300px) and (max-height: 599px) {}',
 		'@media (min-width: 500px) and (max-width: 999px) and (min-height: 300px) and (max-height: 599px) {}',
+		'@media (max-width: 999.5px) and (min-width: 500px) {}',
+		'@media (min-height: 30em) and (max-height: 50em) {}',
+		'@media (min-width: 500px) and (max-width: 999.0px) {}',
+		'@media (min-width: 500px) and (max-width: 0px) {}',
+		'@media (min-width: 500px) and (max-width: 000999px) {}',
 	],
 });
 
@@ -91,6 +106,11 @@ test.snapshot({
 		'@media (min-width /* keep */: 500px) {}',
 		'@media (min-width /* keep */: 500px) and (max-width: 999px) {}',
 		'@media (min-width: 500px) and (max-width: /* keep */ 999px) {}',
+		'@media (min-aspect-ratio: 4/3) and (max-width: 999px) {}',
+		'@media (min-width: 500px) and (orientation: landscape) {}',
+		// Comments outside the feature do not block the fix.
+		'@media /* before */ (min-width: 500px) {}',
+		'@media (min-width: 500px) /* after */ {}',
 		outdent`
 			@media (min-width: 500px)
 				and /* keep */ (max-width: 999px) {}

@@ -1,6 +1,10 @@
-import {ident} from '@eslint/css-tree';
+import {getVendorPrefix} from './shared/css-shorthand-properties.js';
 import standardPseudoSelectors from './shared/standard-pseudo-selectors.js';
-import {normalizeCssIdentifier} from './utils/index.js';
+import {
+	decodeCssIdentifier,
+	isDashedIdentifier,
+	normalizeCssIdentifier,
+} from './utils/index.js';
 
 /**
 @import * as ESLint from 'eslint';
@@ -36,8 +40,8 @@ const frameworkPseudoSelectors = [
 const knownPseudoSelectorKeys = new Set([...standardPseudoSelectors, ...frameworkPseudoSelectors].map(pseudoSelector => getPseudoSelectorKey(pseudoSelector)));
 
 const getPseudoSelector = node => `${node.type === 'PseudoElementSelector' ? '::' : ':'}${node.name}`;
-const isCustomSelector = node => node.type === 'PseudoClassSelector' && ident.decode(node.name).startsWith('--');
-const isVendorPrefixed = node => /^-\w+-/.test(ident.decode(node.name));
+const isCustomSelector = node => node.type === 'PseudoClassSelector' && isDashedIdentifier(node.name);
+const isVendorPrefixed = node => getVendorPrefix(decodeCssIdentifier(node.name)) !== '';
 
 const getProblem = (node, allowedPseudoSelectorKeys) => {
 	if (

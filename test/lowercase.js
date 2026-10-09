@@ -63,6 +63,36 @@ test.snapshot({
 		// Function names that the CSS grammar does not know can be case-sensitive, like PostCSS functions.
 		'a { width: myFunc(1px); color: themeColor(x); }',
 		'@media (width > myFunc(1px)) {}',
+		// Unknown property names and their values can be author-defined, so they are not changed.
+		'a { My-Custom-Flag: ENABLED; Unknown-Property: VALUE; }',
+		// Percent has no case.
+		'a { width: 50%; flex-basis: 25.5%; }',
+		// Custom property names and values are never changed.
+		'a { --Fallback-Color: HotPink; --My-Grid: Main-Sidebar; }',
+		'a { counter-increment: MyCounter 2; counter-reset: MySection; }',
+		'a { animation-name: MyFadeIn, Spin; }',
+		'a { font-family: "Fira Sans", Helvetica Neue, Arial; }',
+		'a { grid-template-areas: "Header Header" "Side Main"; grid-row: Header-Start / Header-End; }',
+		// Payloads of functions that preserve their payload keep their casing.
+		'a { width: env(SAFE-AREA-INSET-TOP, 0px); }',
+		'a { width: attr(DATA-Width px); }',
+		'a { background: paint(MyPainter); }',
+		'a { background: url(Image.PNG#Fragment); }',
+		// A substitution can determine whether an identifier is a keyword or a case-sensitive name.
+		'a { border-color: var(--Color) RED; }',
+		'a { color: var(--Color, RED); }',
+		'a { transition: var(--Duration) EASE-IN; }',
+		// `@property` initial values are user data, so they are not changed.
+		'@property --Theme { syntax: "*"; inherits: false; initial-value: FOO(1PX) #ABC; }',
+		// Keyframe selectors are not value keywords, so their casing is kept.
+		'@keyframes FadeIn { FROM { opacity: 0; } 50% { opacity: 1; } TO { opacity: 0; } }',
+		'a { display: block !IMPORTANT; }',
+		'a { content: "UPPER" "Lower"; }',
+		// An unknown declaration property means its value cannot be matched against a grammar.
+		'@supports (My-Prop: VALUE) {}',
+		// Unknown function names and their arguments can be case-sensitive.
+		'a { background-image: linearGradient(0deg, RED, BLUE); }',
+		'linearGradient.Theme#Main[data-mode="DARK"] { color: red; }',
 	],
 	invalid: [
 		outdent`
@@ -101,6 +131,39 @@ test.snapshot({
 		'@page { MARGIN: 0; } @font-face { FONT-DISPLAY: swap; }',
 		'.a:export { Color: Red; } :export .a { Color: Red; } :export { .a { Color: Red; } }',
 		'a { color: RGBA(0, 0, 0, 0.5); width: CALC(1PX + 2px); height: myFunc(1PX); }',
+		// A known property is lowercased, an unknown one is left alone.
+		'a { COLOR: RED; My-Prop: VALUE; }',
+		// Units: `0PX`, `40REM`, `10EM`, `90DEG`, `2S`.
+		'a { margin: 0PX auto; width: 40REM; font-size: 10EM; transform: rotate(90DEG); transition: color 2S; }',
+		'a { grid-template-columns: 1FR 2FR; }',
+		'a { filter: BLUR(1PX); }',
+		'a { background: LINEAR-GRADIENT(RED, BLUE); }',
+		// The 12 camelCase transform functions get their spec casing.
+		'a { transform: ROTATEY(1DEG) ROTATEZ(1deg) SKEWY(1DEG) SCALEZ(1) TRANSLATEZ(1PX); }',
+		// Known functions, units, and colors are checked even inside an unknown function.
+		'a { width: CALC(myFunc(1PX)); }',
+		'a:NOT(:HOVER) {}',
+		'a:FIRST-CHILD {} a:-WEBKIT-ANY-LINK {}',
+		'a::PART(MyPart) {}',
+		// A media feature value has no declaration, so it is not treated as a value keyword.
+		'@media (ORIENTATION: LANDSCAPE) and (MIN-RESOLUTION: 2DPPX) {}',
+		'a { border-color: COLOR-MIX(IN SRGB, #ABCD, RED); }',
+		String.raw`a { color: \52 ED; }`,
+		String.raw`a { width: 1P\58; }`,
+		// Property, function, and unit are checked, but the value identifier next to `var()` is not.
+		'a { COLOR: CALC(1PX) var(--X); }',
+		'a { display: BLOCK !IMPORTANT; }',
+		// Multiple occurrences of the same unit in one declaration.
+		'a { padding: 1PX 2PX 3PX 4PX; }',
+		'a { font: ITALIC BOLD 1EM Arial, SANS-SERIF; }',
+		'@supports NOT (DISPLAY: GRID) {}',
+		'@layer Theme { a { COLOR: RED; } }',
+		'a { --x: RED; COLOR: BLUE; }',
+		'@font-face { FONT-FAMILY: "Font", SERIF; }',
+		'@counter-style Thumbs { SYSTEM: CYCLIC; }',
+		'a { background: IMAGE-SET(URL(a.png) 1X); }',
+		'a { transition: ALL 1S EASE-IN-OUT; }',
+		'a { color: RGB(1 2 3); background: HSL(0DEG 0% 0%); }',
 	],
 });
 

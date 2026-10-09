@@ -1,13 +1,14 @@
 // @ts-check
 
-import {keyword} from '@eslint/css-tree';
 import {
+	easingFunctions,
 	getAnimationName,
-	getCanonicalLexerNode,
 	getGroupAnimationNameNodes,
 	getKeyframesName,
 } from './shared/css-animations.js';
 import {
+	getBasePropertyName,
+	getCanonicalLexerNode,
 	getCommaSeparatedGroups,
 	getSingleValueIdentifier,
 	isCssModulesInteropDeclaration,
@@ -17,7 +18,7 @@ import {
 } from './utils/index.js';
 
 /**
-@import {AtrulePlain, BlockPlain, CssNodePlain, DeclarationPlain, Identifier, Lexer, ValuePlain} from '@eslint/css-tree';
+@import {AtrulePlain, BlockPlain, CssNodePlain, DeclarationPlain, Dimension, Identifier, Lexer, ValuePlain} from '@eslint/css-tree';
 @import {CssicornProblem} from './rule/to-eslint-problem.js';
 @import {CssicornContext} from './rule/cssicorn-context.js';
 @import {CssicornRule} from './rule/to-eslint-rule.js';
@@ -33,7 +34,6 @@ const targetProperties = new Set([...animationProperties, 'transition', 'transit
 const transitionControllerProperties = new Set(['transition', 'transition-property', '-webkit-transition', '-webkit-transition-property']);
 const resetKeywords = new Set(['initial', 'unset']);
 const transitionKeywords = new Set(['ease', 'ease-in', 'ease-out', 'ease-in-out', 'linear', 'step-start', 'step-end', 'normal', 'allow-discrete']);
-const easingFunctions = new Set(['cubic-bezier', 'steps', 'linear']);
 
 /**
 Check whether a parsed media expression guarantees an explicit positive motion preference.
@@ -104,7 +104,7 @@ function hasOnlyNonMotionKeyframes(block, lexer) {
 			}
 
 			const property = normalizeCssIdentifier(declaration.property);
-			return keyword(property).basename === 'animation-timing-function' || isNonMotionProperty(property, lexer);
+			return getBasePropertyName(property) === 'animation-timing-function' || isNonMotionProperty(property, lexer);
 		}));
 }
 
@@ -128,12 +128,18 @@ function hasOnlyNonMotionTransitionTargets(nodes, property, lexer) {
 }
 
 /**
+@param {CssNodePlain} node
+@returns {node is Dimension}
+*/
+const isTimeDimension = node => node.type === 'Dimension' && ['s', 'ms'].includes(normalizeCssIdentifier(node.unit));
+
+/**
 Check the first time component, distinguishing an explicit zero duration from a delay or an unresolved duration.
 
 @param {CssNodePlain[]} nodes
 */
 function hasZeroTransitionDuration(nodes) {
-	const duration = nodes.find(node => (node.type === 'Dimension' && ['s', 'ms'].includes(normalizeCssIdentifier(node.unit)))
+	const duration = nodes.find(node => isTimeDimension(node)
 		|| (node.type === 'Function' && !easingFunctions.has(normalizeCssIdentifier(node.name))));
 	return duration === undefined || (duration.type === 'Dimension' && Number(duration.value) === 0);
 }
@@ -160,7 +166,7 @@ function hasNonMotionTransitionController(block, lexer) {
 		return false;
 	}
 
-	const property = keyword(normalizeCssIdentifier(controller.property)).basename;
+	const property = getBasePropertyName(controller.property);
 	return getCommaSeparatedGroups(controller.value).every(({nodes}) => hasOnlyNonMotionTransitionTargets(nodes, property, lexer));
 }
 
@@ -237,12 +243,12 @@ const create = context => {
 		const name = getKeyframesName(atRule, lexer);
 		if (name !== undefined) {
 			// `getKeyframesName` verifies that the definition has a block.
-			nonMotionAnimations.set(name, nonMotionAnimations.get(name) !== false && hasOnlyNonMotionKeyframes(/** @type {BlockPlain} */ (atRule.block), lexer));
+			nonMotionAnimations.set(name, (nonMotionAnimations.get(name) ?? true) && hasOnlyNonMotionKeyframes(/** @type {BlockPlain} */ (atRule.block), lexer));
 		}
 	});
 
 	context.on('Declaration', (declaration, parent) => {
-		const property = keyword(normalizeCssIdentifier(declaration.property)).basename;
+		const property = getBasePropertyName(declaration.property);
 		if (!targetProperties.has(property) || declaration.value.type !== 'Value' || parent?.type !== 'Block') {
 			return;
 		}
@@ -279,7 +285,7 @@ const create = context => {
 
 		if (property === 'transition-duration') {
 			const hasOnlyZeroDurations = declaration.value.children.every(node => (node.type === 'Operator' && node.value === ',')
-				|| (node.type === 'Dimension' && ['s', 'ms'].includes(normalizeCssIdentifier(node.unit)) && Number(node.value) === 0));
+				|| (isTimeDimension(node) && Number(node.value) === 0));
 			return hasOnlyZeroDurations || hasNonMotionTransitionController(parent, lexer) ? undefined : getProblem(declaration, property);
 		}
 

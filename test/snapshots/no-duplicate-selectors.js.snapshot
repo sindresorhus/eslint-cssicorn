@@ -392,6 +392,48 @@ Message:
 
 `;
 
+exports[`invalid(27): a  b { color: red; } a b { color: blue; } 1`] = `
+
+  1 | a  b { color: red; } a b { color: blue; }
+
+`;
+
+exports[`invalid(27): a  b { color: red; } a b { color: blue; } 2`] = `
+
+Message:
+> 1 | a  b { color: red; } a b { color: blue; }
+    |                      ^^^ This selector list duplicates the selector list on line 1.
+
+`;
+
+exports[`invalid(28): a > b, c > d { color: red; } a>b, c>d { color: blue; } 1`] = `
+
+  1 | a > b, c > d { color: red; } a>b, c>d { color: blue; }
+
+`;
+
+exports[`invalid(28): a > b, c > d { color: red; } a>b, c>d { color: blue; } 2`] = `
+
+Message:
+> 1 | a > b, c > d { color: red; } a>b, c>d { color: blue; }
+    |                              ^^^^^^^^ This selector list duplicates the selector list on line 1.
+
+`;
+
+exports[`invalid(29): :where(.a,.b) { color: red; } :where(.a, .b) { color: blue; } 1`] = `
+
+  1 | :where(.a,.b) { color: red; } :where(.a, .b) { color: blue; }
+
+`;
+
+exports[`invalid(29): :where(.a,.b) { color: red; } :where(.a, .b) { color: blue; } 2`] = `
+
+Message:
+> 1 | :where(.a,.b) { color: red; } :where(.a, .b) { color: blue; }
+    |                               ^^^^^^^^^^^^^^ This selector list duplicates the selector list on line 1.
+
+`;
+
 exports[`invalid(3): .card, .featured { color: red; } .card,.featured { color: blue; } 1`] = `
 
   1 | .card, .featured { color: red; } .card,.featured { color: blue; }
@@ -403,6 +445,200 @@ exports[`invalid(3): .card, .featured { color: red; } .card,.featured { color: b
 Message:
 > 1 | .card, .featured { color: red; } .card,.featured { color: blue; }
     |                                  ^^^^^^^^^^^^^^^ This selector list duplicates the selector list on line 1.
+
+`;
+
+exports[`invalid(30): a, a, b, b { color: red; } 1`] = `
+
+  1 | a, a, b, b { color: red; }
+
+`;
+
+exports[`invalid(30): a, a, b, b { color: red; } 2`] = `
+
+Message:
+> 1 | a, a, b, b { color: red; }
+    |    ^ This selector duplicates the selector on line 1.
+
+Output:
+  1 | a, b { color: red; }
+
+`;
+
+exports[`invalid(30): a, a, b, b { color: red; } 3`] = `
+
+Message:
+> 1 | a, a, b, b { color: red; }
+    |          ^ This selector duplicates the selector on line 1.
+
+Output:
+  1 | a, b { color: red; }
+
+`;
+
+exports[`invalid(31): .a, .a, .a, .a { } 1`] = `
+
+  1 | .a, .a, .a, .a { }
+
+`;
+
+exports[`invalid(31): .a, .a, .a, .a { } 2`] = `
+
+Message:
+> 1 | .a, .a, .a, .a { }
+    |     ^^ This selector duplicates the selector on line 1.
+
+Output:
+  1 | .a { }
+
+`;
+
+exports[`invalid(31): .a, .a, .a, .a { } 3`] = `
+
+Message:
+> 1 | .a, .a, .a, .a { }
+    |         ^^ This selector duplicates the selector on line 1.
+
+Output:
+  1 | .a { }
+
+`;
+
+exports[`invalid(31): .a, .a, .a, .a { } 4`] = `
+
+Message:
+> 1 | .a, .a, .a, .a { }
+    |             ^^ This selector duplicates the selector on line 1.
+
+Output:
+  1 | .a { }
+
+`;
+
+exports[`invalid(32): foo bar, foo bar { color: red; } 1`] = `
+
+  1 | foo bar, foo bar { color: red; }
+
+`;
+
+exports[`invalid(32): foo bar, foo bar { color: red; } 2`] = `
+
+Message:
+> 1 | foo bar, foo bar { color: red; }
+    |          ^^^^^^^ This selector duplicates the selector on line 1.
+
+Output:
+  1 | foo bar { color: red; }
+
+`;
+
+exports[`invalid(33): *, * { color: red; } 1`] = `
+
+  1 | *, * { color: red; }
+
+`;
+
+exports[`invalid(33): *, * { color: red; } 2`] = `
+
+Message:
+> 1 | *, * { color: red; }
+    |    ^ This selector duplicates the selector on line 1.
+
+Output:
+  1 | * { color: red; }
+
+`;
+
+exports[`invalid(34): :root, :root { color: red; } 1`] = `
+
+  1 | :root, :root { color: red; }
+
+`;
+
+exports[`invalid(34): :root, :root { color: red; } 2`] = `
+
+Message:
+> 1 | :root, :root { color: red; }
+    |        ^^^^^ This selector duplicates the selector on line 1.
+
+Output:
+  1 | :root { color: red; }
+
+`;
+
+exports[`invalid(35): .a, .b, .c, .a { color: red; } 1`] = `
+
+  1 | .a, .b, .c, .a { color: red; }
+
+`;
+
+exports[`invalid(35): .a, .b, .c, .a { color: red; } 2`] = `
+
+Message:
+> 1 | .a, .b, .c, .a { color: red; }
+    |             ^^ This selector duplicates the selector on line 1.
+
+Output:
+  1 | .a, .b, .c { color: red; }
+
+`;
+
+exports[`invalid(36): a, b { } a, b, a { } 1`] = `
+
+  1 | a, b { } a, b, a { }
+
+`;
+
+exports[`invalid(36): a, b { } a, b, a { } 2`] = `
+
+Message:
+> 1 | a, b { } a, b, a { }
+    |                ^ This selector duplicates the selector on line 1.
+
+Output:
+  1 | a, b { } a, b { }
+
+`;
+
+exports[`invalid(37): .foo\\:bar { color: red; } .foo\\:bar { color: blue; } 1`] = `
+
+  1 | .foo\\:bar { color: red; } .foo\\:bar { color: blue; }
+
+`;
+
+exports[`invalid(37): .foo\\:bar { color: red; } .foo\\:bar { color: blue; } 2`] = `
+
+Message:
+> 1 | .foo\\:bar { color: red; } .foo\\:bar { color: blue; }
+    |                           ^^^^^^^^^ This selector list duplicates the selector list on line 1.
+
+`;
+
+exports[`invalid(38): @supports (display: grid) { .card { color: red; } .card { color: blue; } } 1`] = `
+
+  1 | @supports (display: grid) { .card { color: red; } .card { color: blue; } }
+
+`;
+
+exports[`invalid(38): @supports (display: grid) { .card { color: red; } .card { color: blue; } } 2`] = `
+
+Message:
+> 1 | @supports (display: grid) { .card { color: red; } .card { color: blue; } }
+    |                                                   ^^^^^ This selector list duplicates the selector list on line 1.
+
+`;
+
+exports[`invalid(39): .parent { & .child { color: red; } & .child { color: blue; } } 1`] = `
+
+  1 | .parent { & .child { color: red; } & .child { color: blue; } }
+
+`;
+
+exports[`invalid(39): .parent { & .child { color: red; } & .child { color: blue; } } 2`] = `
+
+Message:
+> 1 | .parent { & .child { color: red; } & .child { color: blue; } }
+    |                                    ^^^^^^^^ This selector list duplicates the selector list on line 1.
 
 `;
 
@@ -420,6 +656,64 @@ Message:
 
 Output:
   1 | .button { padding: 8px; }
+
+`;
+
+exports[`invalid(40): .parent { & .child, & .child { color: red; } } 1`] = `
+
+  1 | .parent { & .child, & .child { color: red; } }
+
+`;
+
+exports[`invalid(40): .parent { & .child, & .child { color: red; } } 2`] = `
+
+Message:
+> 1 | .parent { & .child, & .child { color: red; } }
+    |                     ^^^^^^^^ This selector duplicates the selector on line 1.
+
+Output:
+  1 | .parent { & .child { color: red; } }
+
+`;
+
+exports[`invalid(41): .a { color: red; } .a { color: blue; } .a { color: green; } 1`] = `
+
+  1 | .a { color: red; } .a { color: blue; } .a { color: green; }
+
+`;
+
+exports[`invalid(41): .a { color: red; } .a { color: blue; } .a { color: green; } 2`] = `
+
+Message:
+> 1 | .a { color: red; } .a { color: blue; } .a { color: green; }
+    |                    ^^ This selector list duplicates the selector list on line 1.
+
+`;
+
+exports[`invalid(41): .a { color: red; } .a { color: blue; } .a { color: green; } 3`] = `
+
+Message:
+> 1 | .a { color: red; } .a { color: blue; } .a { color: green; }
+    |                                        ^^ This selector list duplicates the selector list on line 1.
+
+`;
+
+exports[`invalid(42): a\n,a { color: red; } 1`] = `
+
+  1 | a
+  2 | ,a { color: red; }
+
+`;
+
+exports[`invalid(42): a\n,a { color: red; } 2`] = `
+
+Message:
+  1 | a
+> 2 | ,a { color: red; }
+    |  ^ This selector duplicates the selector on line 1.
+
+Output:
+  1 | a { color: red; }
 
 `;
 

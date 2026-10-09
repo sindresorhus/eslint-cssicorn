@@ -1,8 +1,9 @@
 import {
-	getSingleValueIdentifier,
+	getCssWideKeyword,
+	groupingAtRules,
 	hasSubstitutionOrRandomFunction,
 	isCssModulesInteropDeclaration,
-	isCssWideKeyword,
+	isImportantDeclaration,
 	normalizeCssIdentifier,
 } from './utils/index.js';
 
@@ -21,13 +22,11 @@ const logicalProperties = ['overflow-block', 'overflow-inline'];
 const overflowProperties = new Set(['overflow', ...physicalProperties, ...logicalProperties]);
 const scrollableValues = new Set(['hidden', 'auto', 'scroll', 'overlay']);
 const overflowValues = new Set(['visible', 'clip', ...scrollableValues]);
-const groupAtRules = new Set(['media', 'supports', 'container', 'layer', 'scope', 'starting-style']);
 
 // An empty array represents an unknown value that still overrides earlier declarations.
 const getOverflowValues = (declaration, property) => {
-	const identifier = getSingleValueIdentifier(declaration);
 	if (
-		(identifier && isCssWideKeyword(normalizeCssIdentifier(identifier.name)))
+		getCssWideKeyword(declaration) !== undefined
 		|| hasSubstitutionOrRandomFunction(declaration.value)
 	) {
 		return [];
@@ -60,10 +59,11 @@ const getOverflowValues = (declaration, property) => {
 	return values;
 };
 
+// A `Rule` also matches keyframe selectors, like `from`, so every ancestor at-rule must be checked.
 const isStyleBlock = (block, sourceCode) => {
 	const ancestors = sourceCode.getAncestors(block);
 	return ancestors.some(node => node.type === 'Rule')
-		&& ancestors.every(node => node.type !== 'Atrule' || groupAtRules.has(normalizeCssIdentifier(node.name)));
+		&& ancestors.every(node => node.type !== 'Atrule' || groupingAtRules.has(normalizeCssIdentifier(node.name)));
 };
 
 const getOverflowAxes = (declarations, properties) => {
@@ -74,8 +74,7 @@ const getOverflowAxes = (declarations, properties) => {
 			continue;
 		}
 
-		const important = declaration.important === true
-			|| (typeof declaration.important === 'string' && normalizeCssIdentifier(declaration.important) === 'important');
+		const important = isImportantDeclaration(declaration);
 		const affectedProperties = property === 'overflow' || property === 'all' ? properties : [property];
 		for (const [index, affectedProperty] of affectedProperties.entries()) {
 			if (axes.get(affectedProperty)?.important && !important) {
@@ -144,8 +143,7 @@ const create = context => {
 		}
 
 		if (
-			(!hasPhysicalProperties && !hasLogicalProperties)
-			|| (hasPhysicalProperties && hasLogicalProperties)
+			hasPhysicalProperties === hasLogicalProperties
 			|| !isStyleBlock(block, sourceCode)
 			|| isCssModulesInteropDeclaration(declarations[0].declaration, context)
 		) {

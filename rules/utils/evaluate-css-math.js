@@ -251,6 +251,13 @@ function getArithmetic(first, second, operator) {
 }
 
 /**
+Check for negative or signed zero, which CSS treats as signed.
+
+@param {number} value
+*/
+const isNegativeNumber = value => value < 0 || Object.is(value, -0);
+
+/**
 Round to a multiple, including CSS signed zero and infinite interval rules.
 
 @param {number} value
@@ -276,7 +283,7 @@ function getRoundedValue(value, interval, strategy) {
 			return -Infinity;
 		}
 
-		return value < 0 || Object.is(value, -0) ? -0 : 0;
+		return isNegativeNumber(value) ? -0 : 0;
 	}
 
 	interval = Math.abs(interval);
@@ -302,12 +309,8 @@ function getModulus(value, interval) {
 		return NaN;
 	}
 
-	/**
-	@param {number} value
-	*/
-	const isNegative = value => value < 0 || Object.is(value, -0);
 	if (!Number.isFinite(interval)) {
-		return isNegative(value) === isNegative(interval) ? value : NaN;
+		return isNegativeNumber(value) === isNegativeNumber(interval) ? value : NaN;
 	}
 
 	const remainder = value % interval;
@@ -315,7 +318,7 @@ function getModulus(value, interval) {
 		return interval < 0 ? -0 : 0;
 	}
 
-	return isNegative(remainder) === isNegative(interval) ? remainder : remainder + interval;
+	return isNegativeNumber(remainder) === isNegativeNumber(interval) ? remainder : remainder + interval;
 }
 
 /**
@@ -573,7 +576,7 @@ export default function evaluateCssMath(node, {percentageBasis} = {}) {
 	*/
 	let basis;
 	if (percentageBasis !== undefined) {
-		if (!Number.isFinite(percentageBasis?.value) || percentageBasis.unit === '%') {
+		if (!Number.isFinite(percentageBasis.value) || percentageBasis.unit === '%') {
 			return;
 		}
 
@@ -608,30 +611,32 @@ export default function evaluateCssMath(node, {percentageBasis} = {}) {
 		*/
 		function evaluateProduct() {
 			let value = evaluate(children[index++], depth, true);
-			while (value && (getOperator() === '*' || getOperator() === '/')) {
+			let operator = getOperator();
+			while (value && (operator === '*' || operator === '/')) {
 				if (--remainingNodes < 0) {
 					return;
 				}
 
-				const operator = /** @type {string} */ (getOperator());
 				index++;
 				const next = evaluate(children[index++], depth, true);
 				value = next && getArithmetic(value, next, operator);
+				operator = getOperator();
 			}
 
 			return value;
 		}
 
 		let value = evaluateProduct();
-		while (value && (getOperator() === '+' || getOperator() === '-')) {
+		let operator = getOperator();
+		while (value && (operator === '+' || operator === '-')) {
 			if (--remainingNodes < 0) {
 				return;
 			}
 
-			const operator = /** @type {string} */ (getOperator());
 			index++;
 			const next = evaluateProduct();
 			value = next && getArithmetic(value, next, operator);
+			operator = getOperator();
 		}
 
 		return index === children.length ? value : undefined;

@@ -62,20 +62,6 @@ Message:
 
 `;
 
-exports[`invalid(10): @media (width > 1px) { a { &:hover { filter: blur(calc(-1px)); } } } 1`] = `
-
-  1 | @media (width > 1px) { a { &:hover { filter: blur(calc(-1px)); } } }
-
-`;
-
-exports[`invalid(10): @media (width > 1px) { a { &:hover { filter: blur(calc(-1px)); } } } 2`] = `
-
-Message:
-> 1 | @media (width > 1px) { a { &:hover { filter: blur(calc(-1px)); } } }
-    |                                                   ^^^^^^^^^^ 'blur()' evaluates to -1px, which the browser clamps to 0px.
-
-`;
-
 exports[`invalid(10): a { FONT-STYLE: OBLIQUE CALC(120DEG) !important; } 1`] = `
 
   1 | a { FONT-STYLE: OBLIQUE CALC(120DEG) !important; }
@@ -101,6 +87,20 @@ exports[`invalid(10): a { fill-opacity: 50; } 2`] = `
 Message:
 > 1 | a { fill-opacity: 50; }
     |                   ^^ 'fill-opacity' evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
+
+`;
+
+exports[`invalid(10): a { filter: bl\\75 r(calc(-1px)); } 1`] = `
+
+  1 | a { filter: bl\\75 r(calc(-1px)); }
+
+`;
+
+exports[`invalid(10): a { filter: bl\\75 r(calc(-1px)); } 2`] = `
+
+Message:
+> 1 | a { filter: bl\\75 r(calc(-1px)); }
+    |                     ^^^^^^^^^^ 'blur()' evaluates to -1px, which the browser clamps to 0px.
 
 `;
 
@@ -257,6 +257,20 @@ exports[`invalid(109): a { color: color(--profile 2 0 0 / 50); } 3`] = `
 Message:
 > 1 | a { color: color(--profile 2 0 0 / 50); }
     |                                    ^^ 'color() alpha' evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
+
+`;
+
+exports[`invalid(11): @media (width > 1px) { a { &:hover { filter: blur(calc(-1px)); } } } 1`] = `
+
+  1 | @media (width > 1px) { a { &:hover { filter: blur(calc(-1px)); } } }
+
+`;
+
+exports[`invalid(11): @media (width > 1px) { a { &:hover { filter: blur(calc(-1px)); } } } 2`] = `
+
+Message:
+> 1 | @media (width > 1px) { a { &:hover { filter: blur(calc(-1px)); } } }
+    |                                                   ^^^^^^^^^^ 'blur()' evaluates to -1px, which the browser clamps to 0px.
 
 `;
 
@@ -1121,6 +1135,48 @@ exports[`invalid(153): a { & .b { opacity: 50; } } @keyframes fade { to { filter
 Message:
 > 1 | a { & .b { opacity: 50; } } @keyframes fade { to { filter: grayscale(50); } }
     |                                                                      ^^ 'grayscale() amount' evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
+
+`;
+
+exports[`invalid(154): a { color: rgba(0, 0, 0, 150%); } 1`] = `
+
+  1 | a { color: rgba(0, 0, 0, 150%); }
+
+`;
+
+exports[`invalid(154): a { color: rgba(0, 0, 0, 150%); } 2`] = `
+
+Message:
+> 1 | a { color: rgba(0, 0, 0, 150%); }
+    |                          ^^^^ 'rgba() alpha' evaluates to 150%, which the browser clamps to 100%.
+
+`;
+
+exports[`invalid(155): a { text-decoration-thickness: 0%; } 1`] = `
+
+  1 | a { text-decoration-thickness: 0%; }
+
+`;
+
+exports[`invalid(155): a { text-decoration-thickness: 0%; } 2`] = `
+
+Message:
+> 1 | a { text-decoration-thickness: 0%; }
+    |                                ^^ 'text-decoration-thickness' evaluates to 0%, which the browser floors to one device pixel.
+
+`;
+
+exports[`invalid(156): a { -webkit-filter: grayscale(50); } 1`] = `
+
+  1 | a { -webkit-filter: grayscale(50); }
+
+`;
+
+exports[`invalid(156): a { -webkit-filter: grayscale(50); } 2`] = `
+
+Message:
+> 1 | a { -webkit-filter: grayscale(50); }
+    |                               ^^ 'grayscale() amount' evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
 
 `;
 

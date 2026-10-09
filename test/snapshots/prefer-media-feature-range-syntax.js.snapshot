@@ -94,6 +94,23 @@ Suggestion 1/1: Replace \`(min-width: 500px) and (max-width: -1px)\` with \`(500
 
 `;
 
+exports[`invalid(10): @media (min-width: 500px) and (orientation: landscape) {} 1`] = `
+
+  1 | @media (min-width: 500px) and (orientation: landscape) {}
+
+`;
+
+exports[`invalid(10): @media (min-width: 500px) and (orientation: landscape) {} 2`] = `
+
+Message:
+> 1 | @media (min-width: 500px) and (orientation: landscape) {}
+    |        ^^^^^^^^^^^^^^^^^^ Prefer \`(width >= 500px)\` over \`(min-width: 500px)\`.
+
+Output:
+  1 | @media (width >= 500px) and (orientation: landscape) {}
+
+`;
+
 exports[`invalid(11): @media (max-device-height: 1024px) {} 1`] = `
 
   1 | @media (max-device-height: 1024px) {}
@@ -128,6 +145,23 @@ Suggestion 1/1: Replace \`(min-width: 500px) and (max-width: -1e-400px)\` with \
 
 `;
 
+exports[`invalid(11): @media /* before */ (min-width: 500px) {} 1`] = `
+
+  1 | @media /* before */ (min-width: 500px) {}
+
+`;
+
+exports[`invalid(11): @media /* before */ (min-width: 500px) {} 2`] = `
+
+Message:
+> 1 | @media /* before */ (min-width: 500px) {}
+    |                     ^^^^^^^^^^^^^^^^^^ Prefer \`(width >= 500px)\` over \`(min-width: 500px)\`.
+
+Output:
+  1 | @media /* before */ (width >= 500px) {}
+
+`;
+
 exports[`invalid(12): @media (max-device-aspect-ratio: 16/9) {} 1`] = `
 
   1 | @media (max-device-aspect-ratio: 16/9) {}
@@ -142,6 +176,23 @@ Message:
 
 Output:
   1 | @media (device-aspect-ratio <= 16/9) {}
+
+`;
+
+exports[`invalid(12): @media (min-width: 500px) /* after */ {} 1`] = `
+
+  1 | @media (min-width: 500px) /* after */ {}
+
+`;
+
+exports[`invalid(12): @media (min-width: 500px) /* after */ {} 2`] = `
+
+Message:
+> 1 | @media (min-width: 500px) /* after */ {}
+    |        ^^^^^^^^^^^^^^^^^^ Prefer \`(width >= 500px)\` over \`(min-width: 500px)\`.
+
+Output:
+  1 | @media (width >= 500px) /* after */ {}
 
 `;
 
@@ -176,6 +227,39 @@ Message:
 
 Suggestion 1/1: Replace \`(min-width: 500px) and (max-width: 9007199254740992px)\` with \`(500px <= width <= 9007199254740992px)\`.:
   1 | @media (500px <= width <= 9007199254740992px) {}
+
+`;
+
+exports[`invalid(13): @media (min-width: 500px)\n\tand /* keep */ (max-width: 999px) {} 1`] = `
+
+  1 | @media (min-width: 500px)
+  2 | 	and /* keep */ (max-width: 999px) {}
+
+`;
+
+exports[`invalid(13): @media (min-width: 500px)\n\tand /* keep */ (max-width: 999px) {} 2`] = `
+
+Message:
+> 1 | @media (min-width: 500px)
+    |        ^^^^^^^^^^^^^^^^^^ Prefer \`(width >= 500px)\` over \`(min-width: 500px)\`.
+  2 | 	and /* keep */ (max-width: 999px) {}
+
+Output:
+  1 | @media (width >= 500px)
+  2 | 	and /* keep */ (max-width: 999px) {}
+
+`;
+
+exports[`invalid(13): @media (min-width: 500px)\n\tand /* keep */ (max-width: 999px) {} 3`] = `
+
+Message:
+  1 | @media (min-width: 500px)
+> 2 | 	and /* keep */ (max-width: 999px) {}
+    | 	               ^^^^^^^^^^^^^^^^^^ Prefer \`(width <= 999px)\` over \`(max-width: 999px)\`.
+
+Output:
+  1 | @media (min-width: 500px)
+  2 | 	and /* keep */ (width <= 999px) {}
 
 `;
 
@@ -354,6 +438,23 @@ Output:
 
 `;
 
+exports[`invalid(18): @media (max-width: 999.5px) and (min-width: 500px) {} 1`] = `
+
+  1 | @media (max-width: 999.5px) and (min-width: 500px) {}
+
+`;
+
+exports[`invalid(18): @media (max-width: 999.5px) and (min-width: 500px) {} 2`] = `
+
+Message:
+> 1 | @media (max-width: 999.5px) and (min-width: 500px) {}
+    |        ^^^^^^^^^^^^^^^^^^^^ Prefer \`(500px <= width <= 999.5px)\` over \`(max-width: 999.5px) and (min-width: 500px)\`.
+
+Suggestion 1/1: Replace \`(max-width: 999.5px) and (min-width: 500px)\` with \`(500px <= width <= 999.5px)\`.:
+  1 | @media (500px <= width <= 999.5px) {}
+
+`;
+
 exports[`invalid(18): @media (min-width: 500px) { @media (max-height: 999px) {} } 1`] = `
 
   1 | @media (min-width: 500px) { @media (max-height: 999px) {} }
@@ -379,6 +480,40 @@ Message:
 
 Output:
   1 | @media (min-width: 500px) { @media (height <= 999px) {} }
+
+`;
+
+exports[`invalid(19): @media (max-height: 100px) {} 1`] = `
+
+  1 | @media (max-height: 100px) {}
+
+`;
+
+exports[`invalid(19): @media (max-height: 100px) {} 2`] = `
+
+Message:
+> 1 | @media (max-height: 100px) {}
+    |        ^^^^^^^^^^^^^^^^^^^ Prefer \`(height <= 100px)\` over \`(max-height: 100px)\`.
+
+Output:
+  1 | @media (height <= 100px) {}
+
+`;
+
+exports[`invalid(19): @media (min-height: 30em) and (max-height: 50em) {} 1`] = `
+
+  1 | @media (min-height: 30em) and (max-height: 50em) {}
+
+`;
+
+exports[`invalid(19): @media (min-height: 30em) and (max-height: 50em) {} 2`] = `
+
+Message:
+> 1 | @media (min-height: 30em) and (max-height: 50em) {}
+    |        ^^^^^^^^^^^^^^^^^^ Prefer \`(30em <= height <= 50em)\` over \`(min-height: 30em) and (max-height: 50em)\`.
+
+Suggestion 1/1: Replace \`(min-height: 30em) and (max-height: 50em)\` with \`(30em <= height <= 50em)\`.:
+  1 | @media (30em <= height <= 50em) {}
 
 `;
 
@@ -441,6 +576,142 @@ Message:
 
 Output:
   1 | @media (min-width: 500px) and (width >= 600px) {}
+
+`;
+
+exports[`invalid(20): @media (min-width: 30em) {} 1`] = `
+
+  1 | @media (min-width: 30em) {}
+
+`;
+
+exports[`invalid(20): @media (min-width: 30em) {} 2`] = `
+
+Message:
+> 1 | @media (min-width: 30em) {}
+    |        ^^^^^^^^^^^^^^^^^ Prefer \`(width >= 30em)\` over \`(min-width: 30em)\`.
+
+Output:
+  1 | @media (width >= 30em) {}
+
+`;
+
+exports[`invalid(20): @media (min-width: 500px) and (max-width: 999.0px) {} 1`] = `
+
+  1 | @media (min-width: 500px) and (max-width: 999.0px) {}
+
+`;
+
+exports[`invalid(20): @media (min-width: 500px) and (max-width: 999.0px) {} 2`] = `
+
+Message:
+> 1 | @media (min-width: 500px) and (max-width: 999.0px) {}
+    |        ^^^^^^^^^^^^^^^^^^ Prefer \`(500px <= width <= 999.0px)\` over \`(min-width: 500px) and (max-width: 999.0px)\`.
+
+Suggestion 1/1: Replace \`(min-width: 500px) and (max-width: 999.0px)\` with \`(500px <= width <= 999.0px)\`.:
+  1 | @media (500px <= width <= 999.0px) {}
+
+`;
+
+exports[`invalid(21): @media (min-width: 0px) {} 1`] = `
+
+  1 | @media (min-width: 0px) {}
+
+`;
+
+exports[`invalid(21): @media (min-width: 0px) {} 2`] = `
+
+Message:
+> 1 | @media (min-width: 0px) {}
+    |        ^^^^^^^^^^^^^^^^ Prefer \`(width >= 0px)\` over \`(min-width: 0px)\`.
+
+Output:
+  1 | @media (width >= 0px) {}
+
+`;
+
+exports[`invalid(21): @media (min-width: 500px) and (max-width: 0px) {} 1`] = `
+
+  1 | @media (min-width: 500px) and (max-width: 0px) {}
+
+`;
+
+exports[`invalid(21): @media (min-width: 500px) and (max-width: 0px) {} 2`] = `
+
+Message:
+> 1 | @media (min-width: 500px) and (max-width: 0px) {}
+    |        ^^^^^^^^^^^^^^^^^^ Prefer \`(500px <= width < 1px)\` over \`(min-width: 500px) and (max-width: 0px)\`.
+
+Suggestion 1/1: Replace \`(min-width: 500px) and (max-width: 0px)\` with \`(500px <= width < 1px)\`.:
+  1 | @media (500px <= width < 1px) {}
+
+`;
+
+exports[`invalid(22): @media (min-width: 500px) and (max-width: 000999px) {} 1`] = `
+
+  1 | @media (min-width: 500px) and (max-width: 000999px) {}
+
+`;
+
+exports[`invalid(22): @media (min-width: 500px) and (max-width: 000999px) {} 2`] = `
+
+Message:
+> 1 | @media (min-width: 500px) and (max-width: 000999px) {}
+    |        ^^^^^^^^^^^^^^^^^^ Prefer \`(500px <= width < 1000px)\` over \`(min-width: 500px) and (max-width: 000999px)\`.
+
+Suggestion 1/1: Replace \`(min-width: 500px) and (max-width: 000999px)\` with \`(500px <= width < 1000px)\`.:
+  1 | @media (500px <= width < 1000px) {}
+
+`;
+
+exports[`invalid(22): @media not all and (max-width: 999px) {} 1`] = `
+
+  1 | @media not all and (max-width: 999px) {}
+
+`;
+
+exports[`invalid(22): @media not all and (max-width: 999px) {} 2`] = `
+
+Message:
+> 1 | @media not all and (max-width: 999px) {}
+    |                    ^^^^^^^^^^^^^^^^^^ Prefer \`(width <= 999px)\` over \`(max-width: 999px)\`.
+
+Output:
+  1 | @media not all and (width <= 999px) {}
+
+`;
+
+exports[`invalid(23): @media screen and (max-width: 999px) {} 1`] = `
+
+  1 | @media screen and (max-width: 999px) {}
+
+`;
+
+exports[`invalid(23): @media screen and (max-width: 999px) {} 2`] = `
+
+Message:
+> 1 | @media screen and (max-width: 999px) {}
+    |                   ^^^^^^^^^^^^^^^^^^ Prefer \`(width <= 999px)\` over \`(max-width: 999px)\`.
+
+Output:
+  1 | @media screen and (width <= 999px) {}
+
+`;
+
+exports[`invalid(24): @supports (display: grid) { @media (min-width: 500px) {} } 1`] = `
+
+  1 | @supports (display: grid) { @media (min-width: 500px) {} }
+
+`;
+
+exports[`invalid(24): @supports (display: grid) { @media (min-width: 500px) {} } 2`] = `
+
+Message:
+> 1 | @supports (display: grid) { @media (min-width: 500px) {} }
+    |                                    ^^^^^^^^^^^^^^^^^^ Prefer \`(width >= 500px)\` over \`(min-width: 500px)\`.
+
+Output:
+  1 | @supports (display: grid) { @media (width >= 500px) {} }
 
 `;
 
@@ -791,6 +1062,34 @@ Output:
 
 `;
 
+exports[`invalid(9): @media (min-aspect-ratio: 4/3) and (max-width: 999px) {} 1`] = `
+
+  1 | @media (min-aspect-ratio: 4/3) and (max-width: 999px) {}
+
+`;
+
+exports[`invalid(9): @media (min-aspect-ratio: 4/3) and (max-width: 999px) {} 2`] = `
+
+Message:
+> 1 | @media (min-aspect-ratio: 4/3) and (max-width: 999px) {}
+    |        ^^^^^^^^^^^^^^^^^^^^^^^ Prefer \`(aspect-ratio >= 4/3)\` over \`(min-aspect-ratio: 4/3)\`.
+
+Output:
+  1 | @media (aspect-ratio >= 4/3) and (max-width: 999px) {}
+
+`;
+
+exports[`invalid(9): @media (min-aspect-ratio: 4/3) and (max-width: 999px) {} 3`] = `
+
+Message:
+> 1 | @media (min-aspect-ratio: 4/3) and (max-width: 999px) {}
+    |                                    ^^^^^^^^^^^^^^^^^^ Prefer \`(width <= 999px)\` over \`(max-width: 999px)\`.
+
+Output:
+  1 | @media (min-aspect-ratio: 4/3) and (width <= 999px) {}
+
+`;
+
 exports[`invalid(9): @media (min-width: 500px) and (max-width: 999.0000000000000001px) {} 1`] = `
 
   1 | @media (min-width: 500px) and (max-width: 999.0000000000000001px) {}
@@ -805,38 +1104,5 @@ Message:
 
 Suggestion 1/1: Replace \`(min-width: 500px) and (max-width: 999.0000000000000001px)\` with \`(500px <= width <= 999.0000000000000001px)\`.:
   1 | @media (500px <= width <= 999.0000000000000001px) {}
-
-`;
-
-exports[`invalid(9): @media (min-width: 500px)\n\tand /* keep */ (max-width: 999px) {} 1`] = `
-
-  1 | @media (min-width: 500px)
-  2 | 	and /* keep */ (max-width: 999px) {}
-
-`;
-
-exports[`invalid(9): @media (min-width: 500px)\n\tand /* keep */ (max-width: 999px) {} 2`] = `
-
-Message:
-> 1 | @media (min-width: 500px)
-    |        ^^^^^^^^^^^^^^^^^^ Prefer \`(width >= 500px)\` over \`(min-width: 500px)\`.
-  2 | 	and /* keep */ (max-width: 999px) {}
-
-Output:
-  1 | @media (width >= 500px)
-  2 | 	and /* keep */ (max-width: 999px) {}
-
-`;
-
-exports[`invalid(9): @media (min-width: 500px)\n\tand /* keep */ (max-width: 999px) {} 3`] = `
-
-Message:
-  1 | @media (min-width: 500px)
-> 2 | 	and /* keep */ (max-width: 999px) {}
-    | 	               ^^^^^^^^^^^^^^^^^^ Prefer \`(width <= 999px)\` over \`(max-width: 999px)\`.
-
-Output:
-  1 | @media (min-width: 500px)
-  2 | 	and /* keep */ (width <= 999px) {}
 
 `;

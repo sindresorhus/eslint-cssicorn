@@ -17,6 +17,8 @@ const messages = {
 };
 
 const targetProperties = new Set(['height', 'padding', 'padding-top', 'padding-bottom']);
+// Declarations that reset earlier component values, so a later `aspect-ratio` cannot rely on them.
+const resetProperties = new Set(['all', 'aspect-ratio']);
 const operatorPrecedence = new Map([['+', 1], ['-', 1], ['*', 2], ['/', 2]]);
 
 /**
@@ -206,7 +208,7 @@ const create = context => {
 			}
 
 			const property = normalizeCssIdentifier(node.property);
-			if (['all', 'aspect-ratio'].includes(property) || property.startsWith('padding-block') || property.startsWith('padding-inline')) {
+			if (resetProperties.has(property) || property.startsWith('padding-block') || property.startsWith('padding-inline')) {
 				return;
 			}
 

@@ -1,7 +1,13 @@
 // @ts-check
 
 import {tokenize, tokenTypes} from '@eslint/css-tree';
-import {decodeCssIdentifier, normalizeCssIdentifier, toLocation} from './utils/index.js';
+import {
+	decodeCssIdentifier,
+	isImportantDeclaration,
+	normalizeCssIdentifier,
+	substitutionFunctions,
+	toLocation,
+} from './utils/index.js';
 
 /**
 @import {CSSSourceCode} from '@eslint/css';
@@ -22,6 +28,9 @@ const messages = {
 	[MESSAGE_ID]: 'Custom property `{{property}}` must not reference itself.',
 	[MESSAGE_ID_CYCLE]: 'Custom property `{{property}}` is part of a dependency cycle.',
 };
+
+const openingBracketTypes = new Set([tokenTypes.Function, tokenTypes.LeftParenthesis, tokenTypes.LeftSquareBracket, tokenTypes.LeftCurlyBracket]);
+const closingBracketTypes = new Set([tokenTypes.RightParenthesis, tokenTypes.RightSquareBracket, tokenTypes.RightCurlyBracket]);
 
 /**
 @param {Value} left
@@ -86,9 +95,9 @@ const getEvaluator = (declaration, sourceCode) => {
 
 		const index = tokens.length;
 		tokens.push({type, start, end});
-		if ([tokenTypes.Function, tokenTypes.LeftParenthesis, tokenTypes.LeftSquareBracket, tokenTypes.LeftCurlyBracket].includes(type)) {
+		if (openingBracketTypes.has(type)) {
 			openingTokens.push(index);
-		} else if ([tokenTypes.RightParenthesis, tokenTypes.RightSquareBracket, tokenTypes.RightCurlyBracket].includes(type)) {
+		} else if (closingBracketTypes.has(type)) {
 			const opening = openingTokens.pop();
 			if (opening !== undefined) {
 				tokens[opening].closing = index;
@@ -125,7 +134,7 @@ const getEvaluator = (declaration, sourceCode) => {
 
 			const name = normalizeCssIdentifier(text.slice(token.start, token.end - 1));
 			const closing = token.closing ?? frame.end;
-			if (['if', 'env', 'attr', 'inherit', 'first-valid', 'random-item', 'ident'].includes(name) || name.startsWith('--')) {
+			if ((substitutionFunctions.has(name) && name !== 'var') || name.startsWith('--')) {
 				frame.index = closing + 1;
 				frame.value = combineValues(frame.value, 'unknown');
 				continue;
@@ -296,8 +305,7 @@ const create = context => {
 				continue;
 			}
 
-			const important = declaration.important === true
-				|| (typeof declaration.important === 'string' && normalizeCssIdentifier(declaration.important) === 'important');
+			const important = isImportantDeclaration(declaration);
 			const entry = {
 				declaration, important, evaluate: getEvaluator(declaration, sourceCode),
 			};

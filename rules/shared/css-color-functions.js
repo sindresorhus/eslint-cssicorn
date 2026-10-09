@@ -6,4 +6,7 @@ const colorFunctionsWithAlpha = new Set(['rgb', 'rgba', 'hsl', 'hsla', 'hwb', 'l
 // Color-producing functions, including functions that combine or select colors.
 export const colorFunctions = new Set([...colorFunctionsWithAlpha, 'color-mix', 'light-dark', 'device-cmyk', 'contrast-color']);
 
+// Functions whose arguments can contain non-color tokens, so the value is not a literal color and must not be rewritten.
+export const nonColorFunctions = new Set(['element', '-moz-element', 'url']);
+
 export default colorFunctionsWithAlpha;

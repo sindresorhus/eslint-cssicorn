@@ -404,6 +404,51 @@ Suggestion 1/1: Remove the duplicate declaration.:
 
 `;
 
+exports[`invalid(28): a { -webkit-user-select: none; user-select: none; -webkit-user-select: text; user-select: text; } 1`] = `
+
+  1 | a { -webkit-user-select: none; user-select: none; -webkit-user-select: text; user-select: text; }
+
+`;
+
+exports[`invalid(28): a { -webkit-user-select: none; user-select: none; -webkit-user-select: text; user-select: text; } 2`] = `
+
+Message:
+> 1 | a { -webkit-user-select: none; user-select: none; -webkit-user-select: text; user-select: text; }
+    |                                                   ^^^^^^^^^^^^^^^^^^^ Duplicate property \`-webkit-user-select\`. The first declaration is on line 1.
+
+Suggestion 1/1: Remove the duplicate declaration.:
+  1 | a { -webkit-user-select: none; user-select: none; user-select: text; }
+
+`;
+
+exports[`invalid(28): a { -webkit-user-select: none; user-select: none; -webkit-user-select: text; user-select: text; } 3`] = `
+
+Message:
+> 1 | a { -webkit-user-select: none; user-select: none; -webkit-user-select: text; user-select: text; }
+    |                                                                              ^^^^^^^^^^^ Duplicate property \`user-select\`. The first declaration is on line 1.
+
+Suggestion 1/1: Remove the duplicate declaration.:
+  1 | a { -webkit-user-select: none; user-select: none; -webkit-user-select: text; }
+
+`;
+
+exports[`invalid(29): @font-face { src: url(a.woff2); src: url(a.woff2); } 1`] = `
+
+  1 | @font-face { src: url(a.woff2); src: url(a.woff2); }
+
+`;
+
+exports[`invalid(29): @font-face { src: url(a.woff2); src: url(a.woff2); } 2`] = `
+
+Message:
+> 1 | @font-face { src: url(a.woff2); src: url(a.woff2); }
+    |                                 ^^^ Duplicate property \`src\`. The first declaration is on line 1.
+
+Suggestion 1/1: Remove the duplicate declaration.:
+  1 | @font-face { src: url(a.woff2); }
+
+`;
+
 exports[`invalid(3): a { \\43 olor: red; color: red; } 1`] = `
 
   1 | a { \\43 olor: red; color: red; }
@@ -418,6 +463,57 @@ Message:
 
 Suggestion 1/1: Remove the duplicate declaration.:
   1 | a { \\43 olor: red; }
+
+`;
+
+exports[`invalid(30): a { color: red; & b { color: blue; } color: red; } 1`] = `
+
+  1 | a { color: red; & b { color: blue; } color: red; }
+
+`;
+
+exports[`invalid(30): a { color: red; & b { color: blue; } color: red; } 2`] = `
+
+Message:
+> 1 | a { color: red; & b { color: blue; } color: red; }
+    |                                      ^^^^^ Duplicate property \`color\`. The first declaration is on line 1.
+
+Suggestion 1/1: Remove the duplicate declaration.:
+  1 | a { color: red; & b { color: blue; } }
+
+`;
+
+exports[`invalid(31): a { --theme: red; /* keep */ --theme: blue; } 1`] = `
+
+  1 | a { --theme: red; /* keep */ --theme: blue; }
+
+`;
+
+exports[`invalid(31): a { --theme: red; /* keep */ --theme: blue; } 2`] = `
+
+Message:
+> 1 | a { --theme: red; /* keep */ --theme: blue; }
+    |                              ^^^^^^^ Duplicate property \`--theme\`. The first declaration is on line 1.
+
+Suggestion 1/1: Remove the duplicate declaration.:
+  1 | a { --theme: red; /* keep */ }
+
+`;
+
+exports[`invalid(32): @keyframes pulse { from { color: red !important; color: red !important; } } 1`] = `
+
+  1 | @keyframes pulse { from { color: red !important; color: red !important; } }
+
+`;
+
+exports[`invalid(32): @keyframes pulse { from { color: red !important; color: red !important; } } 2`] = `
+
+Message:
+> 1 | @keyframes pulse { from { color: red !important; color: red !important; } }
+    |                                                  ^^^^^ Duplicate property \`color\`. The first declaration is on line 1.
+
+Suggestion 1/1: Remove the duplicate declaration.:
+  1 | @keyframes pulse { from { color: red !important; } }
 
 `;
 

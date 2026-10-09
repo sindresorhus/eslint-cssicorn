@@ -103,6 +103,8 @@ test.snapshot({
 		`,
 		'a { & { color: red; } & { background: blue; } }',
 		'a { & { & { color: red; } } }',
+		'a { & { color: red !important; } }',
+		'a { & { /* only a comment */ } }',
 		'@scope (.component) { a { & { color: red; } } }',
 	],
 });

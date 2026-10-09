@@ -1,5 +1,11 @@
 import {keyword} from '@eslint/css-tree';
-import {isCssModulesInteropDeclaration, isCssWideKeyword, normalizeCssIdentifier} from './utils/index.js';
+import {
+	getBasePropertyName,
+	getDescriptorAtRule,
+	isCssModulesInteropDeclaration,
+	isCssWideKeyword,
+	normalizeCssIdentifier,
+} from './utils/index.js';
 
 /**
 @import {CssicornContext} from './rule/cssicorn-context.js';
@@ -61,7 +67,7 @@ const create = context => {
 	const {lexer} = sourceCode;
 
 	context.on('Declaration', function * (declaration, parent) {
-		const property = keyword(normalizeCssIdentifier(declaration.property)).basename;
+		const property = getBasePropertyName(declaration.property);
 		if (
 			!exemptIdentifiersByProperty.has(property)
 			|| declaration.value.type !== 'Value'
@@ -71,8 +77,7 @@ const create = context => {
 			return;
 		}
 
-		const owner = sourceCode.getParent(parent);
-		if (owner?.type === 'Atrule' && lexer.getAtrule(normalizeCssIdentifier(owner.name))?.descriptors) {
+		if (getDescriptorAtRule(declaration, context)) {
 			return;
 		}
 

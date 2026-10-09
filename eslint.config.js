@@ -40,7 +40,6 @@ const config = [
 		files: ['**/*.js'],
 		rules: {
 			'no-sequences': ['error', {allowInParentheses: false}],
-			'require-unicode-regexp': 'off',
 			'no-shadow': 'off',
 			'no-unused-vars': 'off',
 			'no-undef': 'off',

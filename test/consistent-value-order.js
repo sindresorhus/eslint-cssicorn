@@ -490,7 +490,7 @@ nodeTest('math substitution fixes preserve unresolved component order', () => {
 		assert.equal(result.output, `a { ${property}: ${output}; }`);
 		assert.deepEqual(result.messages, []);
 		assert.deepEqual(linter.verifyAndFix(result.output, config, {filename: 'test.css'}), {...result, fixed: false});
-		assert.deepEqual(result.output.match(/var\(--[\w-]+\)/gu), code.match(/var\(--[\w-]+\)/gu));
+		assert.deepEqual(result.output.match(/var\(--[\w\-]+\)/gv), code.match(/var\(--[\w\-]+\)/gv));
 	}
 
 	for (const code of [
@@ -770,7 +770,7 @@ nodeTest('shadow fixes preserve random-function order', () => {
 		]) {
 			const result = linter.verifyAndFix(`a { ${property}: ${value}; }`, config, {filename: 'test.css'});
 			assert.equal(result.output, `a { ${property}: ${output}; }`);
-			assert.deepEqual(result.output.match(/(?:random|random-item|var)\([^()]*\)/gu), value.match(/(?:random|random-item|var)\([^()]*\)/gu));
+			assert.deepEqual(result.output.match(/(?:random|random-item|var)\([^\(\)]*\)/gv), value.match(/(?:random|random-item|var)\([^\(\)]*\)/gv));
 			assert.deepEqual(result.messages, []);
 			assert.deepEqual(linter.verifyAndFix(result.output, config, {filename: 'test.css'}), {...result, fixed: false});
 		}

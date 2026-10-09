@@ -55,6 +55,9 @@ test.snapshot({
 		'.foo::before#id {}',
 		'.foo:before#id {}',
 		'a { content: ".foo#id"; --selector: .foo#id; background: url(".foo#id"); }',
+		'svg|*#id.foo[data-x]:hover {}',
+		'#id.foo[data-x="open" i]:hover {}',
+		String.raw`#foo.\31 23 {}`,
 	],
 	invalid: [
 		'.foo#a {}',
@@ -104,6 +107,13 @@ test.snapshot({
 		'@layer theme { .foo#id {} }',
 		'@scope (.foo#id) { .bar#other {} }',
 		'@supports selector(.foo#id) { .bar#other {} }',
+		'*.foo#id {}',
+		'svg|*.foo#id {}',
+		'[data-x="open" i].foo#id {}',
+		String.raw`.\31 23#foo {}`,
+		'[data-x].bar::cue(.foo#id) {}',
+		':is(a > .foo#id, b) {}',
+		'[foo|bar].baz#id {}',
 	],
 });
 

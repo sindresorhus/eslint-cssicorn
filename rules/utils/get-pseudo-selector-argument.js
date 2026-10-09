@@ -1,5 +1,5 @@
 import {parse, toPlainObject} from '@eslint/css-tree';
-import normalizeCssIdentifier from './normalize-css-identifier.js';
+import getPseudoSelectorName from './get-pseudo-selector-name.js';
 
 /**
 Get a pseudo-selector's selector argument, parsing arguments of escaped names while preserving their source ranges.
@@ -16,7 +16,7 @@ export default function getPseudoSelectorArgument(node, context) {
 	let [argument] = node.children;
 	// CSSTree leaves arguments of escaped pseudo-selector names unparsed.
 	if (argument.type === 'Raw') {
-		const prefix = `${node.type === 'PseudoElementSelector' ? '::' : ':'}${normalizeCssIdentifier(node.name)}(`;
+		const prefix = `${getPseudoSelectorName(node)}(`;
 		try {
 			const selector = toPlainObject(parse(`${prefix}${argument.value})`, {
 				context: 'selector',

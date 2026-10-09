@@ -790,6 +790,146 @@ Message:
 
 `;
 
+exports[`invalid(60): @media (widht: 10px) {} 1`] = `
+
+  1 | @media (widht: 10px) {}
+
+`;
+
+exports[`invalid(60): @media (widht: 10px) {} 2`] = `
+
+Message:
+> 1 | @media (widht: 10px) {}
+    |         ^^^^^ Unknown media feature \`widht\`.
+
+`;
+
+exports[`invalid(61): @media (heigth) {} 1`] = `
+
+  1 | @media (heigth) {}
+
+`;
+
+exports[`invalid(61): @media (heigth) {} 2`] = `
+
+Message:
+> 1 | @media (heigth) {}
+    |         ^^^^^^ Unknown media feature \`heigth\`.
+
+`;
+
+exports[`invalid(62): @media not all and (unknown-feature: 1px) {} 1`] = `
+
+  1 | @media not all and (unknown-feature: 1px) {}
+
+`;
+
+exports[`invalid(62): @media not all and (unknown-feature: 1px) {} 2`] = `
+
+Message:
+> 1 | @media not all and (unknown-feature: 1px) {}
+    |                     ^^^^^^^^^^^^^^^ Unknown media feature \`unknown-feature\`.
+
+`;
+
+exports[`invalid(63): @media (width: 10px) and (unknown-feature: 2px) {} 1`] = `
+
+  1 | @media (width: 10px) and (unknown-feature: 2px) {}
+
+`;
+
+exports[`invalid(63): @media (width: 10px) and (unknown-feature: 2px) {} 2`] = `
+
+Message:
+> 1 | @media (width: 10px) and (unknown-feature: 2px) {}
+    |                           ^^^^^^^^^^^^^^^ Unknown media feature \`unknown-feature\`.
+
+`;
+
+exports[`invalid(64): @media (color-index: 1.5) {} 1`] = `
+
+  1 | @media (color-index: 1.5) {}
+
+`;
+
+exports[`invalid(64): @media (color-index: 1.5) {} 2`] = `
+
+Message:
+> 1 | @media (color-index: 1.5) {}
+    |                      ^^^ Invalid value \`1.5\` for media feature \`color-index\`. Expected <integer>.
+
+`;
+
+exports[`invalid(65): @media (color: rgb(0, 0, 0)) {} 1`] = `
+
+  1 | @media (color: rgb(0, 0, 0)) {}
+
+`;
+
+exports[`invalid(65): @media (color: rgb(0, 0, 0)) {} 2`] = `
+
+Message:
+> 1 | @media (color: rgb(0, 0, 0)) {}
+    |                ^^^^^^^^^^^^ Invalid value \`rgb(0, 0, 0)\` for media feature \`color\`. Expected <integer>.
+
+`;
+
+exports[`invalid(66): @media (scan: interlaced) {} 1`] = `
+
+  1 | @media (scan: interlaced) {}
+
+`;
+
+exports[`invalid(66): @media (scan: interlaced) {} 2`] = `
+
+Message:
+> 1 | @media (scan: interlaced) {}
+    |               ^^^^^^^^^^ Invalid value \`interlaced\` for media feature \`scan\`. Expected interlace | progressive.
+
+`;
+
+exports[`invalid(67): @media (update: quick) {} 1`] = `
+
+  1 | @media (update: quick) {}
+
+`;
+
+exports[`invalid(67): @media (update: quick) {} 2`] = `
+
+Message:
+> 1 | @media (update: quick) {}
+    |                 ^^^^^ Invalid value \`quick\` for media feature \`update\`. Expected none | slow | fast.
+
+`;
+
+exports[`invalid(68): @media (overflow-block: auto) {} 1`] = `
+
+  1 | @media (overflow-block: auto) {}
+
+`;
+
+exports[`invalid(68): @media (overflow-block: auto) {} 2`] = `
+
+Message:
+> 1 | @media (overflow-block: auto) {}
+    |                         ^^^^ Invalid value \`auto\` for media feature \`overflow-block\`. Expected none | scroll | paged.
+
+`;
+
+exports[`invalid(69): @media (pointer: touch) {} 1`] = `
+
+  1 | @media (pointer: touch) {}
+
+`;
+
+exports[`invalid(69): @media (pointer: touch) {} 2`] = `
+
+Message:
+> 1 | @media (pointer: touch) {}
+    |                  ^^^^^ Invalid value \`touch\` for media feature \`pointer\`. Expected none | coarse | fine.
+
+`;
+
 exports[`invalid(7): @media (light-level: normal) {} 1`] = `
 
   1 | @media (light-level: normal) {}
@@ -801,6 +941,146 @@ exports[`invalid(7): @media (light-level: normal) {} 2`] = `
 Message:
 > 1 | @media (light-level: normal) {}
     |         ^^^^^^^^^^^ Unknown media feature \`light-level\`.
+
+`;
+
+exports[`invalid(70): @media (hover: yes) {} 1`] = `
+
+  1 | @media (hover: yes) {}
+
+`;
+
+exports[`invalid(70): @media (hover: yes) {} 2`] = `
+
+Message:
+> 1 | @media (hover: yes) {}
+    |                ^^^ Invalid value \`yes\` for media feature \`hover\`. Expected none | hover.
+
+`;
+
+exports[`invalid(71): @media (prefers-color-scheme: dark-mode) {} 1`] = `
+
+  1 | @media (prefers-color-scheme: dark-mode) {}
+
+`;
+
+exports[`invalid(71): @media (prefers-color-scheme: dark-mode) {} 2`] = `
+
+Message:
+> 1 | @media (prefers-color-scheme: dark-mode) {}
+    |                               ^^^^^^^^^ Invalid value \`dark-mode\` for media feature \`prefers-color-scheme\`. Expected light | dark.
+
+`;
+
+exports[`invalid(72): @media (prefers-reduced-motion: 0) {} 1`] = `
+
+  1 | @media (prefers-reduced-motion: 0) {}
+
+`;
+
+exports[`invalid(72): @media (prefers-reduced-motion: 0) {} 2`] = `
+
+Message:
+> 1 | @media (prefers-reduced-motion: 0) {}
+    |                                 ^ Invalid value \`0\` for media feature \`prefers-reduced-motion\`. Expected no-preference | reduce.
+
+`;
+
+exports[`invalid(73): @media (scripting: yes) {} 1`] = `
+
+  1 | @media (scripting: yes) {}
+
+`;
+
+exports[`invalid(73): @media (scripting: yes) {} 2`] = `
+
+Message:
+> 1 | @media (scripting: yes) {}
+    |                    ^^^ Invalid value \`yes\` for media feature \`scripting\`. Expected none | initial-only | enabled.
+
+`;
+
+exports[`invalid(74): @media (color-gamut: rgb) {} 1`] = `
+
+  1 | @media (color-gamut: rgb) {}
+
+`;
+
+exports[`invalid(74): @media (color-gamut: rgb) {} 2`] = `
+
+Message:
+> 1 | @media (color-gamut: rgb) {}
+    |                      ^^^ Invalid value \`rgb\` for media feature \`color-gamut\`. Expected srgb | p3 | rec2020.
+
+`;
+
+exports[`invalid(75): @media (nav-controls: forward) {} 1`] = `
+
+  1 | @media (nav-controls: forward) {}
+
+`;
+
+exports[`invalid(75): @media (nav-controls: forward) {} 2`] = `
+
+Message:
+> 1 | @media (nav-controls: forward) {}
+    |                       ^^^^^^^ Invalid value \`forward\` for media feature \`nav-controls\`. Expected none | back.
+
+`;
+
+exports[`invalid(76): @media (display-state: open) {} 1`] = `
+
+  1 | @media (display-state: open) {}
+
+`;
+
+exports[`invalid(76): @media (display-state: open) {} 2`] = `
+
+Message:
+> 1 | @media (display-state: open) {}
+    |                        ^^^^ Invalid value \`open\` for media feature \`display-state\`. Expected normal | minimized | maximized | fullscreen.
+
+`;
+
+exports[`invalid(77): @media (horizontal-viewport-segments: 0.5) {} 1`] = `
+
+  1 | @media (horizontal-viewport-segments: 0.5) {}
+
+`;
+
+exports[`invalid(77): @media (horizontal-viewport-segments: 0.5) {} 2`] = `
+
+Message:
+> 1 | @media (horizontal-viewport-segments: 0.5) {}
+    |                                       ^^^ Invalid value \`0.5\` for media feature \`horizontal-viewport-segments\`. Expected <integer>.
+
+`;
+
+exports[`invalid(78): @media (color-gamut > srgb) {} 1`] = `
+
+  1 | @media (color-gamut > srgb) {}
+
+`;
+
+exports[`invalid(78): @media (color-gamut > srgb) {} 2`] = `
+
+Message:
+> 1 | @media (color-gamut > srgb) {}
+    |         ^^^^^^^^^^^ Media feature \`color-gamut\` does not support range notation.
+
+`;
+
+exports[`invalid(79): @media (scan > progressive) {} 1`] = `
+
+  1 | @media (scan > progressive) {}
+
+`;
+
+exports[`invalid(79): @media (scan > progressive) {} 2`] = `
+
+Message:
+> 1 | @media (scan > progressive) {}
+    |         ^^^^ Media feature \`scan\` does not support range notation.
 
 `;
 
@@ -818,6 +1098,146 @@ Message:
 
 `;
 
+exports[`invalid(80): @media (update >= slow) {} 1`] = `
+
+  1 | @media (update >= slow) {}
+
+`;
+
+exports[`invalid(80): @media (update >= slow) {} 2`] = `
+
+Message:
+> 1 | @media (update >= slow) {}
+    |         ^^^^^^ Media feature \`update\` does not support range notation.
+
+`;
+
+exports[`invalid(81): @media (pointer <= fine) {} 1`] = `
+
+  1 | @media (pointer <= fine) {}
+
+`;
+
+exports[`invalid(81): @media (pointer <= fine) {} 2`] = `
+
+Message:
+> 1 | @media (pointer <= fine) {}
+    |         ^^^^^^^ Media feature \`pointer\` does not support range notation.
+
+`;
+
+exports[`invalid(82): @media (max-height <= 20px) {} 1`] = `
+
+  1 | @media (max-height <= 20px) {}
+
+`;
+
+exports[`invalid(82): @media (max-height <= 20px) {} 2`] = `
+
+Message:
+> 1 | @media (max-height <= 20px) {}
+    |         ^^^^^^^^^^ Media feature \`max-height\` does not support range notation.
+
+`;
+
+exports[`invalid(83): @media (10px < min-device-width) {} 1`] = `
+
+  1 | @media (10px < min-device-width) {}
+
+`;
+
+exports[`invalid(83): @media (10px < min-device-width) {} 2`] = `
+
+Message:
+> 1 | @media (10px < min-device-width) {}
+    |                ^^^^^^^^^^^^^^^^ Media feature \`min-device-width\` does not support range notation.
+
+`;
+
+exports[`invalid(84): @media (min-resolution) {} 1`] = `
+
+  1 | @media (min-resolution) {}
+
+`;
+
+exports[`invalid(84): @media (min-resolution) {} 2`] = `
+
+Message:
+> 1 | @media (min-resolution) {}
+    |         ^^^^^^^^^^^^^^ Media feature \`min-resolution\` requires a value in plain notation.
+
+`;
+
+exports[`invalid(85): @media (10px <= width > 20px) {} 1`] = `
+
+  1 | @media (10px <= width > 20px) {}
+
+`;
+
+exports[`invalid(85): @media (10px <= width > 20px) {} 2`] = `
+
+Message:
+> 1 | @media (10px <= width > 20px) {}
+    |        ^^^^^^^^^^^^^^^^^^^^^^ Chained media feature comparisons must place the feature between two values and use the same comparison direction.
+
+`;
+
+exports[`invalid(86): @media (10px > width < 20px) {} 1`] = `
+
+  1 | @media (10px > width < 20px) {}
+
+`;
+
+exports[`invalid(86): @media (10px > width < 20px) {} 2`] = `
+
+Message:
+> 1 | @media (10px > width < 20px) {}
+    |        ^^^^^^^^^^^^^^^^^^^^^ Chained media feature comparisons must place the feature between two values and use the same comparison direction.
+
+`;
+
+exports[`invalid(87): @media (20px > width > red) {} 1`] = `
+
+  1 | @media (20px > width > red) {}
+
+`;
+
+exports[`invalid(87): @media (20px > width > red) {} 2`] = `
+
+Message:
+> 1 | @media (20px > width > red) {}
+    |                        ^^^ Invalid value \`red\` for media feature \`width\`. Expected <length>.
+
+`;
+
+exports[`invalid(88): @media (10px < width < 20px) and (20px < height > 10px) {} 1`] = `
+
+  1 | @media (10px < width < 20px) and (20px < height > 10px) {}
+
+`;
+
+exports[`invalid(88): @media (10px < width < 20px) and (20px < height > 10px) {} 2`] = `
+
+Message:
+> 1 | @media (10px < width < 20px) and (20px < height > 10px) {}
+    |                                  ^^^^^^^^^^^^^^^^^^^^^^ Chained media feature comparisons must place the feature between two values and use the same comparison direction.
+
+`;
+
+exports[`invalid(89): @media screen { .element { @media (min-width) { color: red; } } } 1`] = `
+
+  1 | @media screen { .element { @media (min-width) { color: red; } } }
+
+`;
+
+exports[`invalid(89): @media screen { .element { @media (min-width) { color: red; } } } 2`] = `
+
+Message:
+> 1 | @media screen { .element { @media (min-width) { color: red; } } }
+    |                                    ^^^^^^^^^ Media feature \`min-width\` requires a value in plain notation.
+
+`;
+
 exports[`invalid(9): @media (width: 10pixels) {} 1`] = `
 
   1 | @media (width: 10pixels) {}
@@ -829,5 +1249,19 @@ exports[`invalid(9): @media (width: 10pixels) {} 2`] = `
 Message:
 > 1 | @media (width: 10pixels) {}
     |                ^^^^^^^^ Invalid value \`10pixels\` for media feature \`width\`. Expected <length>.
+
+`;
+
+exports[`invalid(90): @import \"theme.css\" (width: red); 1`] = `
+
+  1 | @import "theme.css" (width: red);
+
+`;
+
+exports[`invalid(90): @import \"theme.css\" (width: red); 2`] = `
+
+Message:
+> 1 | @import "theme.css" (width: red);
+    |                             ^^^ Invalid value \`red\` for media feature \`width\`. Expected <length>.
 
 `;

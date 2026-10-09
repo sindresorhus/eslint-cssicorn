@@ -1,10 +1,10 @@
-import {getVendorPrefix} from './shared/css-shorthand-properties.js';
+import {fourSideShorthands, pairShorthands} from './shared/css-shorthand-properties.js';
 import {areEqualValues, getCondensedValueCount} from './shared/css-shorthand-values.js';
 import {
+	getBasePropertyName,
 	hasCommentInRange,
 	hasSubstitutionOrRandomFunction,
 	isCssModulesInteropDeclaration,
-	normalizeCssIdentifier,
 } from './utils/index.js';
 
 const MESSAGE_ID = 'no-redundant-shorthand-values';
@@ -12,39 +12,8 @@ const messages = {
 	[MESSAGE_ID]: 'Simplify this shorthand value to `{{replacement}}`.',
 };
 
-const fourSideProperties = new Set([
-	'border-color',
-	'border-style',
-	'border-width',
-	'inset',
-	'margin',
-	'padding',
-	'scroll-margin',
-	'scroll-padding',
-]);
-
-const twoSideProperties = new Set([
-	'border-block-color',
-	'border-block-style',
-	'border-block-width',
-	'border-inline-color',
-	'border-inline-style',
-	'border-inline-width',
-	'gap',
-	'grid-gap',
-	'inset-block',
-	'inset-inline',
-	'margin-block',
-	'margin-inline',
-	'overflow',
-	'overscroll-behavior',
-	'padding-block',
-	'padding-inline',
-	'scroll-margin-block',
-	'scroll-margin-inline',
-	'scroll-padding-block',
-	'scroll-padding-inline',
-]);
+// `grid-gap` is excluded from the shared set because `grid-row-gap`/`grid-column-gap` are reported as `gap` instead.
+const twoSideProperties = new Set([...pairShorthands, 'grid-gap']);
 
 const placeProperties = new Set([
 	'place-content',
@@ -146,11 +115,9 @@ const create = context => {
 			return;
 		}
 
-		const normalizedProperty = normalizeCssIdentifier(declaration.property);
-		const vendorPrefix = getVendorPrefix(normalizedProperty);
-		const property = normalizedProperty.slice(vendorPrefix.length);
+		const property = getBasePropertyName(declaration.property);
 		if (
-			!fourSideProperties.has(property)
+			!fourSideShorthands.has(property)
 			&& !twoSideProperties.has(property)
 			&& property !== 'border-radius'
 			&& !placeProperties.has(property)
@@ -172,7 +139,7 @@ const create = context => {
 		} else {
 			const reduction = placeProperties.has(property)
 				? getPlaceReduction(values, sourceCode)
-				: getSimpleReduction(values, fourSideProperties.has(property), sourceCode);
+				: getSimpleReduction(values, fourSideShorthands.has(property), sourceCode);
 			result = reduction && {
 				reductions: [reduction],
 				replacement: reduction.replacement,

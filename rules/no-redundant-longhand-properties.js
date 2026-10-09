@@ -1,11 +1,19 @@
-import {getVendorPrefix, shorthandProperties, shorthandToAffectedProperties} from './shared/css-shorthand-properties.js';
 import {
-	getSingleValueIdentifier,
+	fourSideShorthands,
+	getVendorPrefix,
+	pairShorthands,
+	shorthandProperties,
+	shorthandToAffectedProperties,
+} from './shared/css-shorthand-properties.js';
+import {getCondensedValueCount} from './shared/css-shorthand-values.js';
+import {
+	getCssWideKeyword,
 	hasCommentInRange,
 	hasSubstitutionOrRandomFunction,
 	isCssModulesInteropDeclaration,
 	isCssWideKeyword,
 	normalizeCssIdentifier,
+	toAsciiLowerCase,
 } from './utils/index.js';
 
 /**
@@ -18,28 +26,6 @@ const messages = {
 };
 
 const slashShorthands = new Set(['grid-area', 'grid-column', 'grid-row']);
-const pairShorthands = new Set([
-	'border-block-color',
-	'border-block-style',
-	'border-block-width',
-	'border-inline-color',
-	'border-inline-style',
-	'border-inline-width',
-	'gap',
-	'inset-block',
-	'inset-inline',
-	'margin-block',
-	'margin-inline',
-	'overflow',
-	'overscroll-behavior',
-	'padding-block',
-	'padding-inline',
-	'scroll-margin-block',
-	'scroll-margin-inline',
-	'scroll-padding-block',
-	'scroll-padding-inline',
-]);
-const fourSideShorthands = new Set(['border-color', 'border-style', 'border-width', 'inset', 'margin', 'padding', 'scroll-margin', 'scroll-padding']);
 const additionalResetProperties = new Map([
 	['animation', ['animation-composition', 'animation-trigger']],
 	['background', ['background-blend-mode']],
@@ -57,13 +43,10 @@ const additionalAffectedProperties = new Map([
 
 const getValue = (declaration, sourceCode) => sourceCode.getText(declaration.value).trim();
 
-const getCssWideKeyword = declaration => {
-	const identifier = getSingleValueIdentifier(declaration);
-	const keyword = identifier && normalizeCssIdentifier(identifier.name);
-	return isCssWideKeyword(keyword) ? keyword : undefined;
-};
-
 const getValueParts = (value, sourceCode) => [...value.children].map(node => sourceCode.getText(node).trim());
+
+// The shared condensing logic, applied to the source text of shorthand components.
+const serializeCondensedValues = values => values.slice(0, getCondensedValueCount(values, false, (first, second) => first === second)).join(' ');
 
 const splitCommaList = (value, sourceCode) => {
 	const [start, end] = sourceCode.getRange(value);
@@ -84,20 +67,6 @@ const splitCommaList = (value, sourceCode) => {
 	return parts;
 };
 
-const serializePair = values => values[0] === values[1] ? values[0] : values.join(' ');
-
-const serializeFourSides = values => {
-	if (values.every(value => value === values[0])) {
-		return values[0];
-	}
-
-	if (values[2] === values[0] && values[3] === values[1]) {
-		return values.slice(0, 2).join(' ');
-	}
-
-	return values[3] === values[1] ? values.slice(0, 3).join(' ') : values.join(' ');
-};
-
 const serializeBorderRadius = (declarations, sourceCode) => {
 	const horizontal = [];
 	const vertical = [];
@@ -112,14 +81,14 @@ const serializeBorderRadius = (declarations, sourceCode) => {
 		vertical.push(parts[1] ?? parts[0]);
 	}
 
-	const horizontalValue = serializeFourSides(horizontal);
+	const horizontalValue = serializeCondensedValues(horizontal);
 	return horizontal.every((value, index) => value === vertical[index])
 		? horizontalValue
-		: `${horizontalValue} / ${serializeFourSides(vertical)}`;
+		: `${horizontalValue} / ${serializeCondensedValues(vertical)}`;
 };
 
 const serializeBorderImage = values => `${values[0]} ${values[1]} / ${values[2]} / ${values[3]} ${values[4]}`;
-const serializeColumns = values => values[2].toLowerCase() === 'auto' ? values.slice(0, 2).join(' ') : undefined;
+const serializeColumns = values => toAsciiLowerCase(values[2]) === 'auto' ? values.slice(0, 2).join(' ') : undefined;
 const serializeFont = values => `${values.slice(0, 4).join(' ')} ${values[4]} / ${values[5]} ${values[6]}`;
 
 const serializeFontSynthesis = values => {
@@ -132,11 +101,11 @@ const serializeFontSynthesis = values => {
 };
 
 const serializeFontVariant = values => {
-	if (values.at(-1).toLowerCase() !== 'normal') {
+	if (toAsciiLowerCase(values.at(-1)) !== 'normal') {
 		return;
 	}
 
-	const nonNormalValues = values.filter(value => value.toLowerCase() !== 'normal');
+	const nonNormalValues = values.filter(value => toAsciiLowerCase(value) !== 'normal');
 	return nonNormalValues.length > 0 ? nonNormalValues.join(' ') : 'normal';
 };
 
@@ -146,7 +115,7 @@ const serializeGridTemplate = (declarations, sourceCode) => {
 	const columns = getValue(columnsDeclaration, sourceCode);
 	const areas = getValue(areasDeclaration, sourceCode);
 
-	if (areas.toLowerCase() === 'none') {
+	if (toAsciiLowerCase(areas) === 'none') {
 		return `${rows} / ${columns}`;
 	}
 
@@ -155,7 +124,7 @@ const serializeGridTemplate = (declarations, sourceCode) => {
 	if (
 		areaParts.length !== rowParts.length
 		|| areaParts.some(node => node.type !== 'String')
-		|| rowParts.some(node => node.type === 'Brackets' || (node.type === 'Function' && node.name.toLowerCase() === 'repeat'))
+		|| rowParts.some(node => node.type === 'Brackets' || (node.type === 'Function' && normalizeCssIdentifier(node.name) === 'repeat'))
 	) {
 		return;
 	}
@@ -167,12 +136,12 @@ const serializeGridTemplate = (declarations, sourceCode) => {
 const serializeGrid = (declarations, sourceCode) => {
 	const values = declarations.map(declaration => getValue(declaration, sourceCode));
 	const [rows, columns, areas, autoRows, autoColumns, autoFlow] = values;
-	const normalizedAutoFlow = new Set(autoFlow.toLowerCase().split(/\s+/u));
+	const normalizedAutoFlow = new Set(toAsciiLowerCase(autoFlow).split(/\s+/v));
 
 	if (
-		autoRows.toLowerCase() === 'auto'
-		&& autoColumns.toLowerCase() === 'auto'
-		&& autoFlow.toLowerCase() === 'row'
+		toAsciiLowerCase(autoRows) === 'auto'
+		&& toAsciiLowerCase(autoColumns) === 'auto'
+		&& toAsciiLowerCase(autoFlow) === 'row'
 	) {
 		return serializeGridTemplate(declarations.slice(0, 3), sourceCode);
 	}
@@ -180,18 +149,18 @@ const serializeGrid = (declarations, sourceCode) => {
 	const dense = normalizedAutoFlow.has('dense') ? ' dense' : '';
 
 	if (
-		areas.toLowerCase() === 'none'
-		&& columns.toLowerCase() === 'none'
-		&& autoRows.toLowerCase() === 'auto'
+		toAsciiLowerCase(areas) === 'none'
+		&& toAsciiLowerCase(columns) === 'none'
+		&& toAsciiLowerCase(autoRows) === 'auto'
 		&& normalizedAutoFlow.has('column')
 	) {
 		return `${rows} / auto-flow${dense} ${autoColumns}`;
 	}
 
 	if (
-		areas.toLowerCase() === 'none'
-		&& rows.toLowerCase() === 'none'
-		&& autoColumns.toLowerCase() === 'auto'
+		toAsciiLowerCase(areas) === 'none'
+		&& toAsciiLowerCase(rows) === 'none'
+		&& toAsciiLowerCase(autoColumns) === 'auto'
 		&& !normalizedAutoFlow.has('column')
 	) {
 		return `auto-flow${dense} ${autoRows} / ${columns}`;
@@ -224,13 +193,13 @@ const serializeAnimation = (declarations, sourceCode) => {
 	const timelineValues = splitCommaList(declarations.at(-1).value, sourceCode);
 	if (
 		timelineValues.length > splitCommaList(animationNameDeclaration.value, sourceCode).length
-		|| timelineValues.some(value => value.toLowerCase() !== 'auto')
-		|| splitCommaList(declarations[0].value, sourceCode).some(value => value.toLowerCase() === 'auto')
+		|| timelineValues.some(value => toAsciiLowerCase(value) !== 'auto')
+		|| splitCommaList(declarations[0].value, sourceCode).some(value => toAsciiLowerCase(value) === 'auto')
 	) {
 		return;
 	}
 
-	if (animationNameDeclaration.value.children.some(node => node.type === 'Identifier' && (node.name.toLowerCase() === 'auto' || node.name.startsWith('--') || node.name.includes('\\')))) {
+	if (animationNameDeclaration.value.children.some(node => node.type === 'Identifier' && (normalizeCssIdentifier(node.name) === 'auto' || node.name.startsWith('--') || node.name.includes('\\')))) {
 		return;
 	}
 
@@ -288,7 +257,7 @@ const serializers = new Map([
 	['border-radius', serializeBorderRadius],
 	['columns', (declarations, sourceCode) => serializeColumns(declarations.map(declaration => getValue(declaration, sourceCode)))],
 	['font', (declarations, sourceCode) => serializeFont(declarations.map(declaration => getValue(declaration, sourceCode)))],
-	['font-synthesis', (declarations, sourceCode) => serializeFontSynthesis(declarations.map(declaration => getValue(declaration, sourceCode).toLowerCase()))],
+	['font-synthesis', (declarations, sourceCode) => serializeFontSynthesis(declarations.map(declaration => toAsciiLowerCase(getValue(declaration, sourceCode))))],
 	['font-variant', (declarations, sourceCode) => serializeFontVariant(declarations.map(declaration => getValue(declaration, sourceCode)))],
 	['grid', serializeGrid],
 	['grid-template', serializeGridTemplate],
@@ -307,16 +276,12 @@ const serializeShorthand = (shorthand, declarations, sourceCode) => {
 		return values.join(' / ');
 	}
 
-	if (pairShorthands.has(shorthand)) {
-		return serializePair(values);
-	}
-
-	if (fourSideShorthands.has(shorthand)) {
-		return serializeFourSides(values);
+	if (pairShorthands.has(shorthand) || fourSideShorthands.has(shorthand)) {
+		return serializeCondensedValues(values);
 	}
 
 	if (shorthand === 'list-style') {
-		if (['inside', 'outside'].includes(values[0].toLowerCase())) {
+		if (['inside', 'outside'].includes(toAsciiLowerCase(values[0]))) {
 			return;
 		}
 
@@ -327,40 +292,42 @@ const serializeShorthand = (shorthand, declarations, sourceCode) => {
 	return serializer ? serializer(declarations, sourceCode) : values.join(' ');
 };
 
+const physicalSidesPattern = /^(?:top|right|bottom|left)$/v;
+
 const getLogicalPropertyMapping = property => {
-	if (/^(?:top|right|bottom|left)$/u.test(property)) {
+	if (physicalSidesPattern.test(property)) {
 		return {group: 'inset', mapping: 'physical'};
 	}
 
-	const overflowMatch = property.match(/^(overflow|overscroll-behavior)-(x|y|block|inline)$/u);
+	const overflowMatch = property.match(/^(overflow|overscroll-behavior)-(x|y|block|inline)$/v);
 	if (overflowMatch) {
 		return {
 			group: overflowMatch[1],
-			mapping: /^(?:x|y)$/u.test(overflowMatch[2]) ? 'physical' : 'logical',
+			mapping: /^(?:x|y)$/v.test(overflowMatch[2]) ? 'physical' : 'logical',
 		};
 	}
 
-	const boxMatch = property.match(/^(margin|padding|inset|scroll-margin|scroll-padding)-(top|right|bottom|left|block-start|block-end|inline-start|inline-end)$/u);
+	const boxMatch = property.match(/^(margin|padding|inset|scroll-margin|scroll-padding)-(top|right|bottom|left|block-start|block-end|inline-start|inline-end)$/v);
 	if (boxMatch) {
 		return {
 			group: boxMatch[1],
-			mapping: /^(?:top|right|bottom|left)$/u.test(boxMatch[2]) ? 'physical' : 'logical',
+			mapping: physicalSidesPattern.test(boxMatch[2]) ? 'physical' : 'logical',
 		};
 	}
 
-	const borderMatch = property.match(/^border-(top|right|bottom|left|block-start|block-end|inline-start|inline-end)-(width|style|color)$/u);
+	const borderMatch = property.match(/^border-(top|right|bottom|left|block-start|block-end|inline-start|inline-end)-(width|style|color)$/v);
 	if (borderMatch) {
 		return {
 			group: `border-${borderMatch[2]}`,
-			mapping: /^(?:top|right|bottom|left)$/u.test(borderMatch[1]) ? 'physical' : 'logical',
+			mapping: physicalSidesPattern.test(borderMatch[1]) ? 'physical' : 'logical',
 		};
 	}
 
-	if (/^border-(?:top|right|bottom|left)-.+-radius$/u.test(property)) {
+	if (/^border-(?:top|right|bottom|left)-.+-radius$/v.test(property)) {
 		return {group: 'border-radius', mapping: 'physical'};
 	}
 
-	if (/^border-(?:start|end)-(?:start|end)-radius$/u.test(property)) {
+	if (/^border-(?:start|end)-(?:start|end)-radius$/v.test(property)) {
 		return {group: 'border-radius', mapping: 'logical'};
 	}
 };
@@ -441,7 +408,7 @@ const getCandidates = (children, {shorthand, definition, catalogIndex}, sourceCo
 		const componentDeclarations = components.map(component => declarations.get(component));
 		const resetStateValues = resetStates.values().toArray();
 		// Some browsers do not reset this property with `background`, so preserve an explicit declaration.
-		const resetDeclarations = resetStateValues.filter(({declaration}) => declaration.property.toLowerCase() !== 'background-blend-mode').map(({declaration}) => declaration);
+		const resetDeclarations = resetStateValues.filter(({declaration}) => normalizeCssIdentifier(declaration.property) !== 'background-blend-mode').map(({declaration}) => declaration);
 		// The longhands fully override an earlier shorthand, so merge it instead of leaving a dead declaration.
 		const overriddenShorthands = shorthandDeclaration?.important === componentDeclarations[0].important ? [shorthandDeclaration] : [];
 		const sourceDeclarationSet = new Set([...overriddenShorthands, ...componentDeclarations, ...resetDeclarations]);
@@ -468,7 +435,8 @@ const getCandidates = (children, {shorthand, definition, catalogIndex}, sourceCo
 			continue;
 		}
 
-		const property = child.property.toLowerCase();
+		// Escaped property names are skipped, keeping them out of shorthand matching.
+		const property = toAsciiLowerCase(child.property);
 		const childVendorPrefix = getVendorPrefix(property);
 		const unprefixedProperty = property.slice(childVendorPrefix.length);
 
@@ -576,7 +544,7 @@ const getFix = (candidate, block, context) => {
 	const [start] = sourceCode.getRange(candidate.sourceDeclarations[0]);
 	const lastDeclaration = candidate.sourceDeclarations.at(-1);
 	const [, declarationEnd] = sourceCode.getRange(lastDeclaration);
-	const trailingWhitespaceLength = sourceCode.getText(lastDeclaration).match(/[\t\n\f\r ]*$/u)[0].length;
+	const trailingWhitespaceLength = sourceCode.getText(lastDeclaration).match(/[\t\n\f\r ]*$/v)[0].length;
 	const end = declarationEnd - trailingWhitespaceLength;
 	if (hasCommentInRange(context, [start, end])) {
 		return;
@@ -607,13 +575,13 @@ const create = context => {
 
 		const parent = sourceCode.getParent(block);
 		if (parent?.type === 'Atrule') {
-			const atRule = sourceCode.lexer.getAtrule(parent.name.toLowerCase());
+			const atRule = sourceCode.lexer.getAtrule(normalizeCssIdentifier(parent.name));
 			if (!atRule || atRule.descriptors !== null) {
 				return;
 			}
 		}
 
-		const properties = new Set(block.children.filter(child => child.type === 'Declaration').map(child => child.property.toLowerCase()));
+		const properties = new Set(block.children.filter(child => child.type === 'Declaration').map(child => toAsciiLowerCase(child.property)));
 		const candidates = [];
 		let catalogIndex = 0;
 		for (const [shorthand, definition] of shorthandProperties) {

@@ -1,6 +1,10 @@
-import {ident} from '@eslint/css-tree';
 import mathFunctions from './shared/css-math-functions.js';
-import {isCssModulesInteropDeclaration, normalizeCssIdentifier, toLocation} from './utils/index.js';
+import {
+	decodeCssIdentifier,
+	isCssModulesInteropDeclaration,
+	normalizeCssIdentifier,
+	toLocation,
+} from './utils/index.js';
 
 /**
 @import * as ESLint from 'eslint';
@@ -63,7 +67,7 @@ const isSupportedContext = (node, ancestors, context) => {
 
 		return Boolean(
 			sourceCode.lexer.matchDeclaration(declaration).matched
-			|| (sourceCode.getParent(node) === declaration.value && sourceCode.lexer.matchProperty(ident.decode(declaration.property), node).matched),
+			|| (sourceCode.getParent(node) === declaration.value && sourceCode.lexer.matchProperty(decodeCssIdentifier(declaration.property), node).matched),
 		);
 	}
 

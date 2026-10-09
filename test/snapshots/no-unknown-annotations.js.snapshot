@@ -284,6 +284,91 @@ Suggestion 1/1: Replace with \`!important\`.:
 
 `;
 
+exports[`invalid(25): a { COLOR: RED !IMPORTANT; } 1`] = `
+
+  1 | a { COLOR: RED !IMPORTANT; }
+
+`;
+
+exports[`invalid(25): a { COLOR: RED !IMPORTANT; } 2`] = `
+
+Message:
+> 1 | a { COLOR: RED !IMPORTANT; }
+    |                ^^^^^^^^^^ CSS annotations must use the canonical form \`!important\`.
+
+Suggestion 1/1: Replace with \`!important\`.:
+  1 | a { COLOR: RED !important; }
+
+`;
+
+exports[`invalid(26): @supports (display: grid) { a { color: red !ImPoRtAnT; } } 1`] = `
+
+  1 | @supports (display: grid) { a { color: red !ImPoRtAnT; } }
+
+`;
+
+exports[`invalid(26): @supports (display: grid) { a { color: red !ImPoRtAnT; } } 2`] = `
+
+Message:
+> 1 | @supports (display: grid) { a { color: red !ImPoRtAnT; } }
+    |                                            ^^^^^^^^^^ CSS annotations must use the canonical form \`!important\`.
+
+Suggestion 1/1: Replace with \`!important\`.:
+  1 | @supports (display: grid) { a { color: red !important; } }
+
+`;
+
+exports[`invalid(27): @layer theme { a { color: red !IMPORTANT; } } 1`] = `
+
+  1 | @layer theme { a { color: red !IMPORTANT; } }
+
+`;
+
+exports[`invalid(27): @layer theme { a { color: red !IMPORTANT; } } 2`] = `
+
+Message:
+> 1 | @layer theme { a { color: red !IMPORTANT; } }
+    |                               ^^^^^^^^^^ CSS annotations must use the canonical form \`!important\`.
+
+Suggestion 1/1: Replace with \`!important\`.:
+  1 | @layer theme { a { color: red !important; } }
+
+`;
+
+exports[`invalid(28): a { &:hover { color: red !IMPORTANT; } } 1`] = `
+
+  1 | a { &:hover { color: red !IMPORTANT; } }
+
+`;
+
+exports[`invalid(28): a { &:hover { color: red !IMPORTANT; } } 2`] = `
+
+Message:
+> 1 | a { &:hover { color: red !IMPORTANT; } }
+    |                          ^^^^^^^^^^ CSS annotations must use the canonical form \`!important\`.
+
+Suggestion 1/1: Replace with \`!important\`.:
+  1 | a { &:hover { color: red !important; } }
+
+`;
+
+exports[`invalid(29): @keyframes fade { 50% { opacity: 1 !IMPORTANT; } } 1`] = `
+
+  1 | @keyframes fade { 50% { opacity: 1 !IMPORTANT; } }
+
+`;
+
+exports[`invalid(29): @keyframes fade { 50% { opacity: 1 !IMPORTANT; } } 2`] = `
+
+Message:
+> 1 | @keyframes fade { 50% { opacity: 1 !IMPORTANT; } }
+    |                                    ^^^^^^^^^^ CSS annotations must use the canonical form \`!important\`.
+
+Suggestion 1/1: Replace with \`!important\`.:
+  1 | @keyframes fade { 50% { opacity: 1 !important; } }
+
+`;
+
 exports[`invalid(3): a { color: red !\\69mportant; } 1`] = `
 
   1 | a { color: red !\\69mportant; }
@@ -295,6 +380,91 @@ exports[`invalid(3): a { color: red !\\69mportant; } 2`] = `
 Message:
 > 1 | a { color: red !\\69mportant; }
     |                ^^^^^^^^^^^^ CSS annotations must use the canonical form \`!important\`.
+
+Suggestion 1/1: Replace with \`!important\`.:
+  1 | a { color: red !important; }
+
+`;
+
+exports[`invalid(30): @property --brand { syntax: \"*\"; inherits: false; initial-value: red !IMPORTANT; } 1`] = `
+
+  1 | @property --brand { syntax: "*"; inherits: false; initial-value: red !IMPORTANT; }
+
+`;
+
+exports[`invalid(30): @property --brand { syntax: \"*\"; inherits: false; initial-value: red !IMPORTANT; } 2`] = `
+
+Message:
+> 1 | @property --brand { syntax: "*"; inherits: false; initial-value: red !IMPORTANT; }
+    |                                                                      ^^^^^^^^^^ CSS annotations must use the canonical form \`!important\`.
+
+Suggestion 1/1: Replace with \`!important\`.:
+  1 | @property --brand { syntax: "*"; inherits: false; initial-value: red !important; }
+
+`;
+
+exports[`invalid(31): a { color: red /* before */ !imprtant; } 1`] = `
+
+  1 | a { color: red /* before */ !imprtant; }
+
+`;
+
+exports[`invalid(31): a { color: red /* before */ !imprtant; } 2`] = `
+
+Message:
+> 1 | a { color: red /* before */ !imprtant; }
+    |                             ^^^^^^^^^ CSS annotations must use the canonical form \`!important\`.
+
+Suggestion 1/1: Replace with \`!important\`.:
+  1 | a { color: red /* before */ !important; }
+
+`;
+
+exports[`invalid(32): a { color: red !IMPORTANT /* trailing */; } 1`] = `
+
+  1 | a { color: red !IMPORTANT /* trailing */; }
+
+`;
+
+exports[`invalid(32): a { color: red !IMPORTANT /* trailing */; } 2`] = `
+
+Message:
+> 1 | a { color: red !IMPORTANT /* trailing */; }
+    |                ^^^^^^^^^^ CSS annotations must use the canonical form \`!important\`.
+
+Suggestion 1/1: Replace with \`!important\`.:
+  1 | a { color: red !important /* trailing */; }
+
+`;
+
+exports[`invalid(33): a { color: red !importan\\74; } 1`] = `
+
+  1 | a { color: red !importan\\74; }
+
+`;
+
+exports[`invalid(33): a { color: red !importan\\74; } 2`] = `
+
+Message:
+> 1 | a { color: red !importan\\74; }
+    |                ^^^^^^^^^^^^ CSS annotations must use the canonical form \`!important\`.
+
+Suggestion 1/1: Replace with \`!important\`.:
+  1 | a { color: red !important; }
+
+`;
+
+exports[`invalid(34): a { color: red ! \\69mportant; } 1`] = `
+
+  1 | a { color: red ! \\69mportant; }
+
+`;
+
+exports[`invalid(34): a { color: red ! \\69mportant; } 2`] = `
+
+Message:
+> 1 | a { color: red ! \\69mportant; }
+    |                ^^^^^^^^^^^^^ CSS annotations must use the canonical form \`!important\`.
 
 Suggestion 1/1: Replace with \`!important\`.:
   1 | a { color: red !important; }

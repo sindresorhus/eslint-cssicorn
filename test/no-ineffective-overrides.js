@@ -7,6 +7,8 @@ test.snapshot({
 		String.raw`.button { color: \6e ot-a-color !important; } .button:hover { color: blue; }`,
 		String.raw`.button { color: \76 ar(--color) !important; } .button:hover { color: blue; }`,
 		String.raw`.button { width: 1\70 otato !important; } .button:hover { width: 2px; }`,
+		// Only `!important` marks a declaration as important. Browsers drop `!`-hacks like `!ie`, so they cannot block an override.
+		'.button { color: red !ie; } .button:hover { color: blue; }',
 	],
 	invalid: [
 		String.raw`.button { color: \72 ed !important; } .button:hover { color: blue; }`,
@@ -14,6 +16,8 @@ test.snapshot({
 		String.raw`.button { width: 1\70 x !important; } .button:hover { width: 2px; }`,
 		String.raw`.button { -webkit-mask-composite: s\6f urce-over !important; } .button:hover { mask-composite: subtract; }`,
 		'.button { --theme: !important; } .button:hover { --theme: blue; }',
+		'.button { color: red !IMPORTANT; } .button:hover { color: blue; }',
+		'.button { color: red !important; } .button:hover { color: blue !ie; }',
 	],
 });
 
@@ -177,6 +181,7 @@ test.snapshot({
 			languageOptions: {customSyntax: {properties: {'future-property': '<length>'}}},
 		},
 		'.button { color: red !important; }\n.link { color: red; }\n@layer states { .button:hover, .link:focus, .other:hover { color: blue; } }',
+		'@media (width > 40rem) { .button { color: red !important; } } @container (width > 40rem) { .button:hover { color: blue; } }',
 	],
 	invalid: [
 		'.button { color: red !important; }\n.button:hover { color: blue; }',
@@ -239,6 +244,9 @@ test.snapshot({
 		'.button { --Color: revert-layer; --color: red !important; } .button:hover { --color: blue; }',
 		'.button:hover { color: red !important; } .button:hover:focus { color: blue; }',
 		'@supports (display: grid) { .button { color: red !important; } } @media print { @supports (display: grid) { .button:hover { color: blue; } } }',
+		'@container (width > 40rem) { .button { color: red !important; } } @container (width > 40rem) { .button:hover { color: blue; } }',
+		'.button:nth-child(even) { color: red !important; } .button:nth-child(even):hover { color: blue; }',
+		'.button:lang(en) { color: red !important; } .button:lang(en):hover { color: blue; }',
 	],
 });
 

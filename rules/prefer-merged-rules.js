@@ -5,8 +5,20 @@ import {
 	tokenize,
 	tokenTypes,
 } from '@eslint/css-tree';
-import {canMatchSelector, hasAncestorStyleRule, isStyleRule} from './shared/css-selector-specificity.js';
-import {decodeCssIdentifier, hasCommentInRange, normalizeCssIdentifier} from './utils/index.js';
+import {
+	canMatchSelector,
+	hasAncestorStyleRule,
+	hasNamedNamespace,
+	isStyleRule,
+} from './shared/css-selector-specificity.js';
+import {
+	getNodesRange,
+	getPseudoSelectorName,
+	hasCommentInRange,
+	isDashedIdentifier,
+	normalizeCssIdentifier,
+	normalizePropertyName,
+} from './utils/index.js';
 
 /**
 @import {CssicornContext} from './rule/cssicorn-context.js';
@@ -99,12 +111,9 @@ const FUNCTIONAL_PSEUDOS = new Set([
 	':where',
 ]);
 
-const hasNamedNamespace = name => name.includes('|') && !name.startsWith('*|') && !name.startsWith('|');
-const isCustomProperty = property => decodeCssIdentifier(property).startsWith('--');
-
 const isUncertainPseudo = node => {
 	const name = normalizeCssIdentifier(node.name);
-	const pseudo = (node.type === 'PseudoElementSelector' ? '::' : ':') + name;
+	const pseudo = getPseudoSelectorName(node);
 	if (node.children === null) {
 		return !NON_FUNCTIONAL_PSEUDOS.has(pseudo);
 	}
@@ -183,7 +192,7 @@ const hasRandomFunction = value => {
 const hasMalformedContent = rule => Boolean(find(rule.block, node => (
 	node.type === 'Block' && node.children.some(child => child.type === 'Raw')
 ) || (
-	node.type === 'Declaration' && node.value.type === 'Raw' && !isCustomProperty(node.property)
+	node.type === 'Declaration' && node.value.type === 'Raw' && !isDashedIdentifier(node.property)
 ) || (
 	node.type === 'Rule' && node.prelude.type !== 'SelectorList'
 )));
@@ -208,7 +217,7 @@ const getMergeKey = (rule, context) => {
 
 	const declarations = [];
 	for (const declaration of rule.block.children) {
-		const customProperty = isCustomProperty(declaration.property);
+		const customProperty = isDashedIdentifier(declaration.property);
 		// Escaped leading dashes can make the parser treat opaque custom-property text as a regular value.
 		if (customProperty && declaration.value.type !== 'Raw') {
 			return;
@@ -219,7 +228,7 @@ const getMergeKey = (rule, context) => {
 		}
 
 		declarations.push([
-			customProperty ? decodeCssIdentifier(declaration.property) : normalizeCssIdentifier(declaration.property),
+			normalizePropertyName(declaration.property),
 			generate(declaration.value),
 			declaration.important,
 		]);
@@ -323,7 +332,7 @@ const create = context => {
 
 	const canMergeWith = (previousRule, nextRule) => getKey(previousRule) === getKey(nextRule)
 		&& canMerge(nextRule)
-		&& /^[\t\n\f\r ]*$/u.test(sourceCode.text.slice(sourceCode.getRange(previousRule)[1], sourceCode.getRange(nextRule)[0]));
+		&& /^[\t\n\f\r ]*$/v.test(sourceCode.text.slice(sourceCode.getRange(previousRule)[1], sourceCode.getRange(nextRule)[0]));
 
 	context.on(['StyleSheet', 'Block'], function * (container) {
 		const children = container.children ?? [];
@@ -344,7 +353,7 @@ const create = context => {
 				continue;
 			}
 
-			const range = [sourceCode.getRange(firstRule)[0], sourceCode.getRange(rules.at(-1))[1]];
+			const range = getNodesRange(rules, {sourceCode});
 			const isConditional = firstRule.type === 'Atrule';
 			yield {
 				node: rules[1].prelude,

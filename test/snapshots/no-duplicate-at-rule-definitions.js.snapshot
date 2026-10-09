@@ -722,6 +722,62 @@ Message:
 
 `;
 
+exports[`invalid(54): a { @keyframes fade {} @keyframes fade {} } 1`] = `
+
+  1 | a { @keyframes fade {} @keyframes fade {} }
+
+`;
+
+exports[`invalid(54): a { @keyframes fade {} @keyframes fade {} } 2`] = `
+
+Message:
+> 1 | a { @keyframes fade {} @keyframes fade {} }
+    |                                   ^^^^ Duplicate \`@keyframes\` definition \`fade\`. The first definition is on line 1.
+
+`;
+
+exports[`invalid(55): @keyframes fade {} @keyframes fade-out {} @keyframes fade {} 1`] = `
+
+  1 | @keyframes fade {} @keyframes fade-out {} @keyframes fade {}
+
+`;
+
+exports[`invalid(55): @keyframes fade {} @keyframes fade-out {} @keyframes fade {} 2`] = `
+
+Message:
+> 1 | @keyframes fade {} @keyframes fade-out {} @keyframes fade {}
+    |                                                      ^^^^ Duplicate \`@keyframes\` definition \`fade\`. The first definition is on line 1.
+
+`;
+
+exports[`invalid(56): @keyframes none {} @keyframes \"none\" {} 1`] = `
+
+  1 | @keyframes none {} @keyframes "none" {}
+
+`;
+
+exports[`invalid(56): @keyframes none {} @keyframes \"none\" {} 2`] = `
+
+Message:
+> 1 | @keyframes none {} @keyframes "none" {}
+    |                               ^^^^^^ Duplicate \`@keyframes\` definition \`none\`. The first definition is on line 1.
+
+`;
+
+exports[`invalid(57): @property --color, /* keep */ --size {} @property --size {} 1`] = `
+
+  1 | @property --color, /* keep */ --size {} @property --size {}
+
+`;
+
+exports[`invalid(57): @property --color, /* keep */ --size {} @property --size {} 2`] = `
+
+Message:
+> 1 | @property --color, /* keep */ --size {} @property --size {}
+    |                                                   ^^^^^^ Duplicate \`@property\` definition \`--size\`. The first definition is on line 1.
+
+`;
+
 exports[`invalid(6): @keyframes fade {}\n@keyframes fade {}\n@keyframes fade {} 1`] = `
 
   1 | @keyframes fade {}

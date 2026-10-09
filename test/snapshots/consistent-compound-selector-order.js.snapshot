@@ -780,6 +780,40 @@ Output:
 
 `;
 
+exports[`invalid(48): *.foo#id {} 1`] = `
+
+  1 | *.foo#id {}
+
+`;
+
+exports[`invalid(48): *.foo#id {} 2`] = `
+
+Message:
+> 1 | *.foo#id {}
+    | ^^^^^^^^ Use consistent ordering for compound selector components.
+
+Output:
+  1 | *#id.foo {}
+
+`;
+
+exports[`invalid(49): svg|*.foo#id {} 1`] = `
+
+  1 | svg|*.foo#id {}
+
+`;
+
+exports[`invalid(49): svg|*.foo#id {} 2`] = `
+
+Message:
+> 1 | svg|*.foo#id {}
+    | ^^^^^^^^^^^^ Use consistent ordering for compound selector components.
+
+Output:
+  1 | svg|*#id.foo {}
+
+`;
+
 exports[`invalid(5): :hover.foo {} 1`] = `
 
   1 | :hover.foo {}
@@ -794,6 +828,91 @@ Message:
 
 Output:
   1 | .foo:hover {}
+
+`;
+
+exports[`invalid(50): [data-x=\"open\" i].foo#id {} 1`] = `
+
+  1 | [data-x="open" i].foo#id {}
+
+`;
+
+exports[`invalid(50): [data-x=\"open\" i].foo#id {} 2`] = `
+
+Message:
+> 1 | [data-x="open" i].foo#id {}
+    | ^^^^^^^^^^^^^^^^^^^^^^^^ Use consistent ordering for compound selector components.
+
+Output:
+  1 | #id.foo[data-x="open" i] {}
+
+`;
+
+exports[`invalid(51): .\\31 23#foo {} 1`] = `
+
+  1 | .\\31 23#foo {}
+
+`;
+
+exports[`invalid(51): .\\31 23#foo {} 2`] = `
+
+Message:
+> 1 | .\\31 23#foo {}
+    | ^^^^^^^^^^^ Use consistent ordering for compound selector components.
+
+Output:
+  1 | #foo.\\31 23 {}
+
+`;
+
+exports[`invalid(52): [data-x].bar::cue(.foo#id) {} 1`] = `
+
+  1 | [data-x].bar::cue(.foo#id) {}
+
+`;
+
+exports[`invalid(52): [data-x].bar::cue(.foo#id) {} 2`] = `
+
+Message:
+> 1 | [data-x].bar::cue(.foo#id) {}
+    | ^^^^^^^^^^^^ Use consistent ordering for compound selector components.
+
+Output:
+  1 | .bar[data-x]::cue(.foo#id) {}
+
+`;
+
+exports[`invalid(53): :is(a > .foo#id, b) {} 1`] = `
+
+  1 | :is(a > .foo#id, b) {}
+
+`;
+
+exports[`invalid(53): :is(a > .foo#id, b) {} 2`] = `
+
+Message:
+> 1 | :is(a > .foo#id, b) {}
+    |         ^^^^^^^ Use consistent ordering for compound selector components.
+
+Output:
+  1 | :is(a > #id.foo, b) {}
+
+`;
+
+exports[`invalid(54): [foo|bar].baz#id {} 1`] = `
+
+  1 | [foo|bar].baz#id {}
+
+`;
+
+exports[`invalid(54): [foo|bar].baz#id {} 2`] = `
+
+Message:
+> 1 | [foo|bar].baz#id {}
+    | ^^^^^^^^^^^^^^^^ Use consistent ordering for compound selector components.
+
+Output:
+  1 | #id.baz[foo|bar] {}
 
 `;
 

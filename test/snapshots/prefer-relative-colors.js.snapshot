@@ -1036,6 +1036,198 @@ Suggestion 1/1: Replace with \`rgb(from var(--brand) r g b / var(--alpha, .25))\
 
 `;
 
+exports[`invalid(60): a { --brand: hsl(var(--channels)); color: hsl(var(--channels) / .5); } 1`] = `
+
+  1 | a { --brand: hsl(var(--channels)); color: hsl(var(--channels) / .5); }
+
+`;
+
+exports[`invalid(60): a { --brand: hsl(var(--channels)); color: hsl(var(--channels) / .5); } 2`] = `
+
+Message:
+> 1 | a { --brand: hsl(var(--channels)); color: hsl(var(--channels) / .5); }
+    |                                           ^^^^^^^^^^^^^^^^^^^^^^^^^ Prefer \`hsl(from var(--brand) h s l / .5)\` to derive this alpha variant from an existing color custom property.
+
+Suggestion 1/1: Replace with \`hsl(from var(--brand) h s l / .5)\`.:
+  1 | a { --brand: hsl(var(--channels)); color: hsl(from var(--brand) h s l / .5); }
+
+`;
+
+exports[`invalid(61): a { --brand: rgb(var(--channels)); @media screen { color: rgb(var(--channels) / .5); } } 1`] = `
+
+  1 | a { --brand: rgb(var(--channels)); @media screen { color: rgb(var(--channels) / .5); } }
+
+`;
+
+exports[`invalid(61): a { --brand: rgb(var(--channels)); @media screen { color: rgb(var(--channels) / .5); } } 2`] = `
+
+Message:
+> 1 | a { --brand: rgb(var(--channels)); @media screen { color: rgb(var(--channels) / .5); } }
+    |                                                           ^^^^^^^^^^^^^^^^^^^^^^^^^ Prefer \`rgb(from var(--brand) r g b / .5)\` to derive this alpha variant from an existing color custom property.
+
+Suggestion 1/1: Replace with \`rgb(from var(--brand) r g b / .5)\`.:
+  1 | a { --brand: rgb(var(--channels)); @media screen { color: rgb(from var(--brand) r g b / .5); } }
+
+`;
+
+exports[`invalid(62): a { --brand: rgb(var(--channels)); background: linear-gradient(rgb(var(--channels) / .1), rgb(var(--channels) / .2)); } 1`] = `
+
+  1 | a { --brand: rgb(var(--channels)); background: linear-gradient(rgb(var(--channels) / .1), rgb(var(--channels) / .2)); }
+
+`;
+
+exports[`invalid(62): a { --brand: rgb(var(--channels)); background: linear-gradient(rgb(var(--channels) / .1), rgb(var(--channels) / .2)); } 2`] = `
+
+Message:
+> 1 | a { --brand: rgb(var(--channels)); background: linear-gradient(rgb(var(--channels) / .1), rgb(var(--channels) / .2)); }
+    |                                                                ^^^^^^^^^^^^^^^^^^^^^^^^^ Prefer \`rgb(from var(--brand) r g b / .1)\` to derive this alpha variant from an existing color custom property.
+
+Suggestion 1/1: Replace with \`rgb(from var(--brand) r g b / .1)\`.:
+  1 | a { --brand: rgb(var(--channels)); background: linear-gradient(rgb(from var(--brand) r g b / .1), rgb(var(--channels) / .2)); }
+
+`;
+
+exports[`invalid(62): a { --brand: rgb(var(--channels)); background: linear-gradient(rgb(var(--channels) / .1), rgb(var(--channels) / .2)); } 3`] = `
+
+Message:
+> 1 | a { --brand: rgb(var(--channels)); background: linear-gradient(rgb(var(--channels) / .1), rgb(var(--channels) / .2)); }
+    |                                                                                           ^^^^^^^^^^^^^^^^^^^^^^^^^ Prefer \`rgb(from var(--brand) r g b / .2)\` to derive this alpha variant from an existing color custom property.
+
+Suggestion 1/1: Replace with \`rgb(from var(--brand) r g b / .2)\`.:
+  1 | a { --brand: rgb(var(--channels)); background: linear-gradient(rgb(var(--channels) / .1), rgb(from var(--brand) r g b / .2)); }
+
+`;
+
+exports[`invalid(63): :root { --brand: rgb(var(--channels)); } a { background: rgb(var(--channels) / .5) rgb(var(--channels) / .7); } 1`] = `
+
+  1 | :root { --brand: rgb(var(--channels)); } a { background: rgb(var(--channels) / .5) rgb(var(--channels) / .7); }
+
+`;
+
+exports[`invalid(63): :root { --brand: rgb(var(--channels)); } a { background: rgb(var(--channels) / .5) rgb(var(--channels) / .7); } 2`] = `
+
+Message:
+> 1 | :root { --brand: rgb(var(--channels)); } a { background: rgb(var(--channels) / .5) rgb(var(--channels) / .7); }
+    |                                                          ^^^^^^^^^^^^^^^^^^^^^^^^^ Prefer \`rgb(from var(--brand) r g b / .5)\` to derive this alpha variant from an existing color custom property.
+
+Suggestion 1/1: Replace with \`rgb(from var(--brand) r g b / .5)\`.:
+  1 | :root { --brand: rgb(var(--channels)); } a { background: rgb(from var(--brand) r g b / .5) rgb(var(--channels) / .7); }
+
+`;
+
+exports[`invalid(63): :root { --brand: rgb(var(--channels)); } a { background: rgb(var(--channels) / .5) rgb(var(--channels) / .7); } 3`] = `
+
+Message:
+> 1 | :root { --brand: rgb(var(--channels)); } a { background: rgb(var(--channels) / .5) rgb(var(--channels) / .7); }
+    |                                                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^ Prefer \`rgb(from var(--brand) r g b / .7)\` to derive this alpha variant from an existing color custom property.
+
+Suggestion 1/1: Replace with \`rgb(from var(--brand) r g b / .7)\`.:
+  1 | :root { --brand: rgb(var(--channels)); } a { background: rgb(var(--channels) / .5) rgb(from var(--brand) r g b / .7); }
+
+`;
+
+exports[`invalid(64): :root { --brand: rgb(var(--channels)); } a { color: rgb(var(--channels) / 50%); } 1`] = `
+
+  1 | :root { --brand: rgb(var(--channels)); } a { color: rgb(var(--channels) / 50%); }
+
+`;
+
+exports[`invalid(64): :root { --brand: rgb(var(--channels)); } a { color: rgb(var(--channels) / 50%); } 2`] = `
+
+Message:
+> 1 | :root { --brand: rgb(var(--channels)); } a { color: rgb(var(--channels) / 50%); }
+    |                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^ Prefer \`rgb(from var(--brand) r g b / 50%)\` to derive this alpha variant from an existing color custom property.
+
+Suggestion 1/1: Replace with \`rgb(from var(--brand) r g b / 50%)\`.:
+  1 | :root { --brand: rgb(var(--channels)); } a { color: rgb(from var(--brand) r g b / 50%); }
+
+`;
+
+exports[`invalid(65): :root { --brand: rgb(var(--channels)); } a { color: rgb(var(--channels) / 5e-1); } 1`] = `
+
+  1 | :root { --brand: rgb(var(--channels)); } a { color: rgb(var(--channels) / 5e-1); }
+
+`;
+
+exports[`invalid(65): :root { --brand: rgb(var(--channels)); } a { color: rgb(var(--channels) / 5e-1); } 2`] = `
+
+Message:
+> 1 | :root { --brand: rgb(var(--channels)); } a { color: rgb(var(--channels) / 5e-1); }
+    |                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^ Prefer \`rgb(from var(--brand) r g b / 5e-1)\` to derive this alpha variant from an existing color custom property.
+
+Suggestion 1/1: Replace with \`rgb(from var(--brand) r g b / 5e-1)\`.:
+  1 | :root { --brand: rgb(var(--channels)); } a { color: rgb(from var(--brand) r g b / 5e-1); }
+
+`;
+
+exports[`invalid(66): :root { --brand: rgb(var(--channels)); } a { color: rgb(var(--channels) / +0.5); } 1`] = `
+
+  1 | :root { --brand: rgb(var(--channels)); } a { color: rgb(var(--channels) / +0.5); }
+
+`;
+
+exports[`invalid(66): :root { --brand: rgb(var(--channels)); } a { color: rgb(var(--channels) / +0.5); } 2`] = `
+
+Message:
+> 1 | :root { --brand: rgb(var(--channels)); } a { color: rgb(var(--channels) / +0.5); }
+    |                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^ Prefer \`rgb(from var(--brand) r g b / +0.5)\` to derive this alpha variant from an existing color custom property.
+
+Suggestion 1/1: Replace with \`rgb(from var(--brand) r g b / +0.5)\`.:
+  1 | :root { --brand: rgb(var(--channels)); } a { color: rgb(from var(--brand) r g b / +0.5); }
+
+`;
+
+exports[`invalid(67): :root { --brand: rgb(var(--channels)); } a { color: rgb(var(--channels)/.5); } 1`] = `
+
+  1 | :root { --brand: rgb(var(--channels)); } a { color: rgb(var(--channels)/.5); }
+
+`;
+
+exports[`invalid(67): :root { --brand: rgb(var(--channels)); } a { color: rgb(var(--channels)/.5); } 2`] = `
+
+Message:
+> 1 | :root { --brand: rgb(var(--channels)); } a { color: rgb(var(--channels)/.5); }
+    |                                                     ^^^^^^^^^^^^^^^^^^^^^^^ Prefer \`rgb(from var(--brand) r g b /.5)\` to derive this alpha variant from an existing color custom property.
+
+Suggestion 1/1: Replace with \`rgb(from var(--brand) r g b /.5)\`.:
+  1 | :root { --brand: rgb(var(--channels)); } a { color: rgb(from var(--brand) r g b /.5); }
+
+`;
+
+exports[`invalid(68): :root { --brand: rgb(var(--channels)); } @scope (.card) { a { color: rgb(var(--channels) / .5); } } 1`] = `
+
+  1 | :root { --brand: rgb(var(--channels)); } @scope (.card) { a { color: rgb(var(--channels) / .5); } }
+
+`;
+
+exports[`invalid(68): :root { --brand: rgb(var(--channels)); } @scope (.card) { a { color: rgb(var(--channels) / .5); } } 2`] = `
+
+Message:
+> 1 | :root { --brand: rgb(var(--channels)); } @scope (.card) { a { color: rgb(var(--channels) / .5); } }
+    |                                                                      ^^^^^^^^^^^^^^^^^^^^^^^^^ Prefer \`rgb(from var(--brand) r g b / .5)\` to derive this alpha variant from an existing color custom property.
+
+Suggestion 1/1: Replace with \`rgb(from var(--brand) r g b / .5)\`.:
+  1 | :root { --brand: rgb(var(--channels)); } @scope (.card) { a { color: rgb(from var(--brand) r g b / .5); } }
+
+`;
+
+exports[`invalid(69): :root { --brand: rgb(var(--channels)); } a { filter: drop-shadow(0 0 1px rgb(var(--channels) / .5)); } 1`] = `
+
+  1 | :root { --brand: rgb(var(--channels)); } a { filter: drop-shadow(0 0 1px rgb(var(--channels) / .5)); }
+
+`;
+
+exports[`invalid(69): :root { --brand: rgb(var(--channels)); } a { filter: drop-shadow(0 0 1px rgb(var(--channels) / .5)); } 2`] = `
+
+Message:
+> 1 | :root { --brand: rgb(var(--channels)); } a { filter: drop-shadow(0 0 1px rgb(var(--channels) / .5)); }
+    |                                                                          ^^^^^^^^^^^^^^^^^^^^^^^^^ Prefer \`rgb(from var(--brand) r g b / .5)\` to derive this alpha variant from an existing color custom property.
+
+Suggestion 1/1: Replace with \`rgb(from var(--brand) r g b / .5)\`.:
+  1 | :root { --brand: rgb(var(--channels)); } a { filter: drop-shadow(0 0 1px rgb(from var(--brand) r g b / .5)); }
+
+`;
+
 exports[`invalid(7): :root { --brand: rgb(var(--channels)); } a { color: rgb(var(--channels) / calc(var(--alpha) * .5)); } 1`] = `
 
   1 | :root { --brand: rgb(var(--channels)); } a { color: rgb(var(--channels) / calc(var(--alpha) * .5)); }
@@ -1050,6 +1242,57 @@ Message:
 
 Suggestion 1/1: Replace with \`rgb(from var(--brand) r g b / calc(var(--alpha) * .5))\`.:
   1 | :root { --brand: rgb(var(--channels)); } a { color: rgb(from var(--brand) r g b / calc(var(--alpha) * .5)); }
+
+`;
+
+exports[`invalid(70): @container (width > 1px) { a { --brand: rgb(var(--channels)); color: rgb(var(--channels) / .5); } } 1`] = `
+
+  1 | @container (width > 1px) { a { --brand: rgb(var(--channels)); color: rgb(var(--channels) / .5); } }
+
+`;
+
+exports[`invalid(70): @container (width > 1px) { a { --brand: rgb(var(--channels)); color: rgb(var(--channels) / .5); } } 2`] = `
+
+Message:
+> 1 | @container (width > 1px) { a { --brand: rgb(var(--channels)); color: rgb(var(--channels) / .5); } }
+    |                                                                      ^^^^^^^^^^^^^^^^^^^^^^^^^ Prefer \`rgb(from var(--brand) r g b / .5)\` to derive this alpha variant from an existing color custom property.
+
+Suggestion 1/1: Replace with \`rgb(from var(--brand) r g b / .5)\`.:
+  1 | @container (width > 1px) { a { --brand: rgb(var(--channels)); color: rgb(from var(--brand) r g b / .5); } }
+
+`;
+
+exports[`invalid(71): :root { --brand: rgb(var(--channels)); } a { --variant: rgb(var(--channels) / .5) !important; } 1`] = `
+
+  1 | :root { --brand: rgb(var(--channels)); } a { --variant: rgb(var(--channels) / .5) !important; }
+
+`;
+
+exports[`invalid(71): :root { --brand: rgb(var(--channels)); } a { --variant: rgb(var(--channels) / .5) !important; } 2`] = `
+
+Message:
+> 1 | :root { --brand: rgb(var(--channels)); } a { --variant: rgb(var(--channels) / .5) !important; }
+    |                                                         ^^^^^^^^^^^^^^^^^^^^^^^^^ Prefer \`rgb(from var(--brand) r g b / .5)\` to derive this alpha variant from an existing color custom property.
+
+Suggestion 1/1: Replace with \`rgb(from var(--brand) r g b / .5)\`.:
+  1 | :root { --brand: rgb(var(--channels)); } a { --variant: rgb(from var(--brand) r g b / .5) !important; }
+
+`;
+
+exports[`invalid(72): a:hover { --brand: rgb(var(--channels)); color: rgb(var(--channels) / .5); } 1`] = `
+
+  1 | a:hover { --brand: rgb(var(--channels)); color: rgb(var(--channels) / .5); }
+
+`;
+
+exports[`invalid(72): a:hover { --brand: rgb(var(--channels)); color: rgb(var(--channels) / .5); } 2`] = `
+
+Message:
+> 1 | a:hover { --brand: rgb(var(--channels)); color: rgb(var(--channels) / .5); }
+    |                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^ Prefer \`rgb(from var(--brand) r g b / .5)\` to derive this alpha variant from an existing color custom property.
+
+Suggestion 1/1: Replace with \`rgb(from var(--brand) r g b / .5)\`.:
+  1 | a:hover { --brand: rgb(var(--channels)); color: rgb(from var(--brand) r g b / .5); }
 
 `;
 

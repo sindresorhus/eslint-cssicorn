@@ -51,6 +51,14 @@ test.snapshot({
 		'@unknown fade { to { animation-duration: 1s; opacity: 1 !important; } }',
 		'@keyframes fade {}',
 		'@keyframes fade;',
+		// Vendor-prefixed controls are a different property name and are not checked
+		'@keyframes fade { to { -moz-animation-duration: 2s; -o-animation-play-state: paused; } }',
+		// A mixed keyframe that includes the terminal offset is not a final keyframe
+		'@keyframes fade { 0%, 50%, 100% { animation-timing-function: linear; } }',
+		// A fractional offset near but not at the end is not terminal
+		'@keyframes fade { 99.5% { animation-timing-function: linear; } }',
+		// Duplicate terminal blocks disable the terminal easing check
+		'@keyframes fade { 100%, to { animation-timing-function: ease; } to { opacity: 1; } }',
 	],
 	invalid: [
 		...animationControls.map(([property, value]) => `@keyframes fade { from { ${property}: ${value}; } }`),
@@ -96,6 +104,17 @@ test.snapshot({
 				}
 			}
 		`,
+		// A keyframes rule nested in a layer or scope is still checked
+		'@layer a { @keyframes fade { from { animation-duration: 2s; } } }',
+		'@scope (.a) { @keyframes fade { to { animation-name: fade; } } }',
+		// A selector list that includes an ordinary offset is a control declaration
+		'@keyframes fade { from, 50% { animation-duration: 2s; } }',
+		// `!important` is reported even on an otherwise allowed property
+		'@keyframes fade { from { animation-composition: add !important; } }',
+		// Terminal easing remains reported when another block is empty
+		'@keyframes fade { to { animation-timing-function: ease-in; } 0% {} }',
+		// A control on the first block and easing on the single terminal block
+		'@keyframes fade { 0% { animation-duration: 2s; } 100% { animation-timing-function: ease; } }',
 	],
 });
 

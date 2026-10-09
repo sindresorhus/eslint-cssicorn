@@ -532,6 +532,57 @@ Output:
 
 `;
 
+exports[`invalid(37): a { width: min(100px, max(calc(10px), 5vw)); } 1`] = `
+
+  1 | a { width: min(100px, max(calc(10px), 5vw)); }
+
+`;
+
+exports[`invalid(37): a { width: min(100px, max(calc(10px), 5vw)); } 2`] = `
+
+Message:
+> 1 | a { width: min(100px, max(calc(10px), 5vw)); }
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Prefer \`clamp()\` over nested \`min()\` and \`max()\`.
+
+Output:
+  1 | a { width: clamp(calc(10px), 5vw, 100px); }
+
+`;
+
+exports[`invalid(38): @keyframes slide { to { width: max(10px, min(5vw, 100px)); } } 1`] = `
+
+  1 | @keyframes slide { to { width: max(10px, min(5vw, 100px)); } }
+
+`;
+
+exports[`invalid(38): @keyframes slide { to { width: max(10px, min(5vw, 100px)); } } 2`] = `
+
+Message:
+> 1 | @keyframes slide { to { width: max(10px, min(5vw, 100px)); } }
+    |                                ^^^^^^^^^^^^^^^^^^^^^^^^^^ Prefer \`clamp()\` over nested \`min()\` and \`max()\`.
+
+Output:
+  1 | @keyframes slide { to { width: clamp(10px, 5vw, 100px); } }
+
+`;
+
+exports[`invalid(39): a { @starting-style { width: max(10px, min(5vw, 100px)); } } 1`] = `
+
+  1 | a { @starting-style { width: max(10px, min(5vw, 100px)); } }
+
+`;
+
+exports[`invalid(39): a { @starting-style { width: max(10px, min(5vw, 100px)); } } 2`] = `
+
+Message:
+> 1 | a { @starting-style { width: max(10px, min(5vw, 100px)); } }
+    |                              ^^^^^^^^^^^^^^^^^^^^^^^^^^ Prefer \`clamp()\` over nested \`min()\` and \`max()\`.
+
+Output:
+  1 | a { @starting-style { width: clamp(10px, 5vw, 100px); } }
+
+`;
+
 exports[`invalid(4): a { width: max(10% + 1px, min(5vw * 2, 100px - 1px)); } 1`] = `
 
   1 | a { width: max(10% + 1px, min(5vw * 2, 100px - 1px)); }

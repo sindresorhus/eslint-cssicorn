@@ -237,12 +237,13 @@ const create = context => {
 			return;
 		}
 
+		const hasUndeclaredRank = references.some(reference => reference.ranks.includes(undefined));
 		yield {
 			node: /** @type {AtrulePreludePlain} */ (atRule.prelude),
 			messageId: MESSAGE_ID,
 			data: inversion,
 			* fix(fixer, {abort}) {
-				if (references.some(reference => reference.ranks.includes(undefined)) || hasCommentInRange(context, sourceCode.getRange(atRule))) {
+				if (hasUndeclaredRank || hasCommentInRange(context, sourceCode.getRange(atRule))) {
 					abort();
 				}
 

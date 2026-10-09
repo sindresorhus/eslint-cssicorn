@@ -9,7 +9,7 @@ import * as ruleModules from '../rules/index.js';
 const sourceRuleIds = Object.keys(ruleModules);
 const renamableRules = sourceRuleIds.filter(ruleId => ruleId.includes('-'));
 const resolveFile = file => new URL(`../${file}`, import.meta.url);
-const isValidRuleId = ruleId => typeof ruleId === 'string' && /^[a-z][\d\-a-z]*$/.test(ruleId);
+const isValidRuleId = ruleId => typeof ruleId === 'string' && /^[a-z][\d\-a-z]*$/v.test(ruleId);
 
 function checkFiles(ruleId) {
 	const files = [
@@ -48,7 +48,7 @@ function sortReadmeRuleRows(text, ruleId) {
 		return text;
 	}
 
-	const rowPattern = /^\| \[([^\]]+)\]\(/v;
+	const rowPattern = /^\| \[(?<ruleId>[^\]]+)\]\(/v;
 	const [row] = lines.splice(rowIndex, 1);
 	const ruleRowIndexes = lines
 		.map((line, index) => rowPattern.test(line) ? index : undefined)
@@ -56,7 +56,7 @@ function sortReadmeRuleRows(text, ruleId) {
 
 	let insertAt = lines.findIndex(line => {
 		const match = line.match(rowPattern);
-		return match && match[1] > ruleId;
+		return match && match.groups.ruleId > ruleId;
 	});
 	if (insertAt === -1) {
 		insertAt = ruleRowIndexes.at(-1) + 1;
@@ -75,7 +75,7 @@ function replaceRuleIdInRulesIndex(text, from, to) {
 }
 
 function replaceRuleId(text, from, to) {
-	const pattern = new RegExp(String.raw`(?<![\w-])${from}(?![\w-])`, 'gu');
+	const pattern = new RegExp(String.raw`(?<![\w\-])${from}(?![\w\-])`, 'gv');
 	return text.replaceAll(pattern, () => to);
 }
 

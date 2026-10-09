@@ -472,6 +472,48 @@ Message:
 
 `;
 
+exports[`invalid(37): a { animation: 1s ease-in-out missing; } 1`] = `
+
+  1 | a { animation: 1s ease-in-out missing; }
+
+`;
+
+exports[`invalid(37): a { animation: 1s ease-in-out missing; } 2`] = `
+
+Message:
+> 1 | a { animation: 1s ease-in-out missing; }
+    |                               ^^^^^^^ Unknown animation \`missing\`.
+
+`;
+
+exports[`invalid(38): @media screen { a { animation-name: missing; } } 1`] = `
+
+  1 | @media screen { a { animation-name: missing; } }
+
+`;
+
+exports[`invalid(38): @media screen { a { animation-name: missing; } } 2`] = `
+
+Message:
+> 1 | @media screen { a { animation-name: missing; } }
+    |                                     ^^^^^^^ Unknown animation \`missing\`.
+
+`;
+
+exports[`invalid(39): a { animation-name: \"Fade\"; } @keyframes fade {} 1`] = `
+
+  1 | a { animation-name: "Fade"; } @keyframes fade {}
+
+`;
+
+exports[`invalid(39): a { animation-name: \"Fade\"; } @keyframes fade {} 2`] = `
+
+Message:
+> 1 | a { animation-name: "Fade"; } @keyframes fade {}
+    |                     ^^^^^^ Unknown animation \`Fade\`.
+
+`;
+
 exports[`invalid(4): a { animation-name: auto; } 1`] = `
 
   1 | a { animation-name: auto; }
@@ -497,6 +539,48 @@ exports[`invalid(4): a { animation: --timeline --missing; } 2`] = `
 Message:
 > 1 | a { animation: --timeline --missing; }
     |                           ^^^^^^^^^ Unknown animation \`--missing\`.
+
+`;
+
+exports[`invalid(40): a { animation: missing, slide; } @keyframes slide {} 1`] = `
+
+  1 | a { animation: missing, slide; } @keyframes slide {}
+
+`;
+
+exports[`invalid(40): a { animation: missing, slide; } @keyframes slide {} 2`] = `
+
+Message:
+> 1 | a { animation: missing, slide; } @keyframes slide {}
+    |                ^^^^^^^ Unknown animation \`missing\`.
+
+`;
+
+exports[`invalid(41): a { animation: 1s missing, fade 2s; } @keyframes fade {} 1`] = `
+
+  1 | a { animation: 1s missing, fade 2s; } @keyframes fade {}
+
+`;
+
+exports[`invalid(41): a { animation: 1s missing, fade 2s; } @keyframes fade {} 2`] = `
+
+Message:
+> 1 | a { animation: 1s missing, fade 2s; } @keyframes fade {}
+    |                   ^^^^^^^ Unknown animation \`missing\`.
+
+`;
+
+exports[`invalid(42): a { animation-name: missing !important; } 1`] = `
+
+  1 | a { animation-name: missing !important; }
+
+`;
+
+exports[`invalid(42): a { animation-name: missing !important; } 2`] = `
+
+Message:
+> 1 | a { animation-name: missing !important; }
+    |                     ^^^^^^^ Unknown animation \`missing\`.
 
 `;
 

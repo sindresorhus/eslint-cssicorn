@@ -7,12 +7,13 @@ import {
 	tokenTypes,
 	toPlainObject,
 } from '@eslint/css-tree';
-import {colorFunctions} from './shared/css-color-functions.js';
+import {colorFunctions, nonColorFunctions} from './shared/css-color-functions.js';
 import {
 	decodeCssIdentifier,
 	hasCommentInRange,
 	isCssModulesInteropDeclaration,
 	isCssWideKeyword,
+	isDashedIdentifier,
 	isStyleDeclaration,
 	isSubstitutionFunction,
 	normalizeCssIdentifier,
@@ -39,7 +40,7 @@ const messages = {
 };
 
 const colorAndPaletteFunctions = new Set([...colorFunctions, 'palette-mix']);
-const preservedFunctions = new Set(['random', 'element', '-moz-element', 'url']);
+const preservedFunctions = new Set([...nonColorFunctions, 'random']);
 const componentTypes = new Set(['Hash', 'Dimension', 'Percentage', 'Function']);
 const openingTokens = new Map([
 	[tokenTypes.Function, tokenTypes.RightParenthesis],
@@ -54,7 +55,7 @@ Get the RGBA channels of a hexadecimal color.
 */
 function getHexColorChannels(node) {
 	let value = decodeCssIdentifier(node.value);
-	if (!/^(?:[\da-f]{3,4}|[\da-f]{6}|[\da-f]{8})$/iu.test(value)) {
+	if (!/^(?:[\da-f]{3,4}|[\da-f]{6}|[\da-f]{8})$/iv.test(value)) {
 		return;
 	}
 
@@ -179,7 +180,7 @@ function getNumericFingerprint(node) {
 	}
 
 	if (node.type === 'Number') {
-		return ['Number', /^[+-]?\d+$/u.test(node.value), value];
+		return ['Number', /^[+\-]?\d+$/v.test(node.value), value];
 	}
 
 	return ['Percentage', value];
@@ -313,7 +314,7 @@ const create = context => {
 
 	context.on('Declaration', declaration => {
 		if (
-			decodeCssIdentifier(declaration.property).startsWith('--')
+			isDashedIdentifier(declaration.property)
 			|| declaration.value.type !== 'Value'
 			|| !isStyleDeclaration(declaration, context)
 			|| isCssModulesInteropDeclaration(declaration, context)

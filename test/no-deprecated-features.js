@@ -28,6 +28,14 @@ test.snapshot({
 			}],
 		},
 		{code: String.raw`@v\69 ewport { ACRONYM:m\61 tches(a) { w\6f rd-break: break-word; } }`, options: [{allow: ['@viewport', 'acronym', ':matches', 'word-break: break-word']}]},
+		// Deprecated system colors are checked only for the listed color properties
+		'a { background: menu; border: 1px solid activecaption; }',
+		// Deprecated size keywords are not inspected inside functions for non-color properties
+		'a { width: min(intrinsic, 5px); }',
+		// `overlay` is only deprecated for the overflow properties
+		'a { transition: overlay; }',
+		// Substitution functions hide the real value
+		'a { color: var(--x, activecaption); }',
 	],
 	invalid: [
 		'@viewport { color: red; }',
@@ -70,6 +78,28 @@ test.snapshot({
 		'p { page-break-inside: avoid; } div { break-inside: avoid; }',
 		'p { grid-column-gap: 1rem; -webkit-column-gap: 1rem; --column-gap: 1rem; }',
 		'.a:export { grid-gap: 1px; }',
+		// Fixes preserve `!important`
+		'a { word-wrap: break-word !important; }',
+		'a { grid-gap: 1rem !important; }',
+		// `page-break-before` only maps the `always` value, so other values keep the property replacement
+		'a { page-break-before: right; }',
+		// Deprecated system color in a listed color property
+		'a { outline-color: activecaption; }',
+		// Deprecated system colors are checked inside recognized color functions
+		'a { color: color-mix(in srgb, activecaption, red); }',
+		// Properties with no direct replacement get no fix or suggestion
+		'a { ime-mode: disabled; }',
+		'a { scroll-snap-type-x: mandatory; }',
+		'a { -webkit-box-pack: center; -webkit-box-lines: multiple; }',
+		'a { -webkit-box-orient: horizontal; }',
+		'a { -webkit-box-orient: HORIZONTAL; }',
+		// Deprecated size value keywords on both nested properties
+		'a { min-width: intrinsic; max-width: min-intrinsic; }',
+		// Deprecated media types in compound and `only` queries
+		'@media tv and (color) { a { color: red; } }',
+		'@media only tv { a { color: red; } }',
+		// A deprecated property used as a feature inside `@supports`
+		'@supports (position-try-options: --x) { a { color: red; } }',
 	],
 });
 

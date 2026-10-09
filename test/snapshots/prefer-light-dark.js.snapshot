@@ -791,6 +791,187 @@ Suggestion 1/1: Combine the colors with \`light-dark()\` and remove the override
 
 `;
 
+exports[`invalid(50): :root { color-scheme: light dark; } .card { color: white; } @media (prefers-color-scheme: dark) { .card { color: black; } } 1`] = `
+
+  1 | :root { color-scheme: light dark; } .card { color: white; } @media (prefers-color-scheme: dark) { .card { color: black; } }
+
+`;
+
+exports[`invalid(50): :root { color-scheme: light dark; } .card { color: white; } @media (prefers-color-scheme: dark) { .card { color: black; } } 2`] = `
+
+Message:
+> 1 | :root { color-scheme: light dark; } .card { color: white; } @media (prefers-color-scheme: dark) { .card { color: black; } }
+    |                                                                                                           ^^^^^^^^^^^^ Prefer \`light-dark()\` for the paired colors in \`color\`.
+
+Suggestion 1/1: Combine the colors with \`light-dark()\` and remove the override declaration.:
+  1 | :root { color-scheme: light dark; } .card { color: light-dark(white, black); } 
+
+`;
+
+exports[`invalid(51): :root { color-scheme: light dark; } .card { color-scheme: light dark; border: 1px solid white; @media (prefers-color-scheme: dark) { border: 1px solid black; } } 1`] = `
+
+  1 | :root { color-scheme: light dark; } .card { color-scheme: light dark; border: 1px solid white; @media (prefers-color-scheme: dark) { border: 1px solid black; } }
+
+`;
+
+exports[`invalid(51): :root { color-scheme: light dark; } .card { color-scheme: light dark; border: 1px solid white; @media (prefers-color-scheme: dark) { border: 1px solid black; } } 2`] = `
+
+Message:
+> 1 | :root { color-scheme: light dark; } .card { color-scheme: light dark; border: 1px solid white; @media (prefers-color-scheme: dark) { border: 1px solid black; } }
+    |                                                                                                                                      ^^^^^^^^^^^^^^^^^^^^^^^ Prefer \`light-dark()\` for the paired colors in \`border\`.
+
+Suggestion 1/1: Combine the colors with \`light-dark()\` and remove the override declaration.:
+  1 | :root { color-scheme: light dark; } .card { color-scheme: light dark; border: 1px solid light-dark(white, black);  }
+
+`;
+
+exports[`invalid(52): :root { color-scheme: light dark; } .card { color-scheme: light dark; --surface: white; @media (prefers-color-scheme: dark) { --surface: black; } } 1`] = `
+
+  1 | :root { color-scheme: light dark; } .card { color-scheme: light dark; --surface: white; @media (prefers-color-scheme: dark) { --surface: black; } }
+
+`;
+
+exports[`invalid(52): :root { color-scheme: light dark; } .card { color-scheme: light dark; --surface: white; @media (prefers-color-scheme: dark) { --surface: black; } } 2`] = `
+
+Message:
+> 1 | :root { color-scheme: light dark; } .card { color-scheme: light dark; --surface: white; @media (prefers-color-scheme: dark) { --surface: black; } }
+    |                                                                                                                               ^^^^^^^^^^^^^^^^ Prefer \`light-dark()\` for the paired colors in \`--surface\`.
+
+Suggestion 1/1: Combine the colors with \`light-dark()\` and remove the override declaration.:
+  1 | :root { color-scheme: light dark; } .card { color-scheme: light dark; --surface: light-dark(white, black);  }
+
+`;
+
+exports[`invalid(53): :root { color-scheme: light dark; } a { --surface: white; } @media (prefers-color-scheme: dark) { a { --surface: black; } } 1`] = `
+
+  1 | :root { color-scheme: light dark; } a { --surface: white; } @media (prefers-color-scheme: dark) { a { --surface: black; } }
+
+`;
+
+exports[`invalid(53): :root { color-scheme: light dark; } a { --surface: white; } @media (prefers-color-scheme: dark) { a { --surface: black; } } 2`] = `
+
+Message:
+> 1 | :root { color-scheme: light dark; } a { --surface: white; } @media (prefers-color-scheme: dark) { a { --surface: black; } }
+    |                                                                                                       ^^^^^^^^^^^^^^^^ Prefer \`light-dark()\` for the paired colors in \`--surface\`.
+
+Suggestion 1/1: Combine the colors with \`light-dark()\` and remove the override declaration.:
+  1 | :root { color-scheme: light dark; } a { --surface: light-dark(white, black); } 
+
+`;
+
+exports[`invalid(54): html { color-scheme: light dark; } a { color: white; } @media (prefers-color-scheme: dark) { a { color: black; } } 1`] = `
+
+  1 | html { color-scheme: light dark; } a { color: white; } @media (prefers-color-scheme: dark) { a { color: black; } }
+
+`;
+
+exports[`invalid(54): html { color-scheme: light dark; } a { color: white; } @media (prefers-color-scheme: dark) { a { color: black; } } 2`] = `
+
+Message:
+> 1 | html { color-scheme: light dark; } a { color: white; } @media (prefers-color-scheme: dark) { a { color: black; } }
+    |                                                                                                  ^^^^^^^^^^^^ Prefer \`light-dark()\` for the paired colors in \`color\`.
+
+Suggestion 1/1: Combine the colors with \`light-dark()\` and remove the override declaration.:
+  1 | html { color-scheme: light dark; } a { color: light-dark(white, black); } 
+
+`;
+
+exports[`invalid(55): html { color-scheme: only light dark; } a { color: white; @media (prefers-color-scheme: dark) { color: black; } } 1`] = `
+
+  1 | html { color-scheme: only light dark; } a { color: white; @media (prefers-color-scheme: dark) { color: black; } }
+
+`;
+
+exports[`invalid(55): html { color-scheme: only light dark; } a { color: white; @media (prefers-color-scheme: dark) { color: black; } } 2`] = `
+
+Message:
+> 1 | html { color-scheme: only light dark; } a { color: white; @media (prefers-color-scheme: dark) { color: black; } }
+    |                                                                                                 ^^^^^^^^^^^^ Prefer \`light-dark()\` for the paired colors in \`color\`.
+
+Suggestion 1/1: Combine the colors with \`light-dark()\` and remove the override declaration.:
+  1 | html { color-scheme: only light dark; } a { color: light-dark(white, black);  }
+
+`;
+
+exports[`invalid(56): @layer base { :root { color-scheme: light dark; } } a { color: white; } @media (prefers-color-scheme: dark) { a { color: black; } } 1`] = `
+
+  1 | @layer base { :root { color-scheme: light dark; } } a { color: white; } @media (prefers-color-scheme: dark) { a { color: black; } }
+
+`;
+
+exports[`invalid(56): @layer base { :root { color-scheme: light dark; } } a { color: white; } @media (prefers-color-scheme: dark) { a { color: black; } } 2`] = `
+
+Message:
+> 1 | @layer base { :root { color-scheme: light dark; } } a { color: white; } @media (prefers-color-scheme: dark) { a { color: black; } }
+    |                                                                                                                   ^^^^^^^^^^^^ Prefer \`light-dark()\` for the paired colors in \`color\`.
+
+Suggestion 1/1: Combine the colors with \`light-dark()\` and remove the override declaration.:
+  1 | @layer base { :root { color-scheme: light dark; } } a { color: light-dark(white, black); } 
+
+`;
+
+exports[`invalid(57): a { color-scheme: dark light; color: white; @media (prefers-color-scheme: dark) { color: black; } } 1`] = `
+
+  1 | a { color-scheme: dark light; color: white; @media (prefers-color-scheme: dark) { color: black; } }
+
+`;
+
+exports[`invalid(57): a { color-scheme: dark light; color: white; @media (prefers-color-scheme: dark) { color: black; } } 2`] = `
+
+Message:
+> 1 | a { color-scheme: dark light; color: white; @media (prefers-color-scheme: dark) { color: black; } }
+    |                                                                                   ^^^^^^^^^^^^ Prefer \`light-dark()\` for the paired colors in \`color\`.
+
+Suggestion 1/1: Combine the colors with \`light-dark()\` and remove the override declaration.:
+  1 | a { color-scheme: dark light; color: light-dark(white, black);  }
+
+`;
+
+exports[`invalid(58): :root { color-scheme: light dark; } a { color: red; } @media (prefers-color-scheme: dark) { a { color: black; } } b { color: white; } @media (prefers-color-scheme: light) { b { color: blue; } } 1`] = `
+
+  1 | :root { color-scheme: light dark; } a { color: red; } @media (prefers-color-scheme: dark) { a { color: black; } } b { color: white; } @media (prefers-color-scheme: light) { b { color: blue; } }
+
+`;
+
+exports[`invalid(58): :root { color-scheme: light dark; } a { color: red; } @media (prefers-color-scheme: dark) { a { color: black; } } b { color: white; } @media (prefers-color-scheme: light) { b { color: blue; } } 2`] = `
+
+Message:
+> 1 | :root { color-scheme: light dark; } a { color: red; } @media (prefers-color-scheme: dark) { a { color: black; } } b { color: white; } @media (prefers-color-scheme: light) { b { color: blue; } }
+    |                                                                                                 ^^^^^^^^^^^^ Prefer \`light-dark()\` for the paired colors in \`color\`.
+
+Suggestion 1/1: Combine the colors with \`light-dark()\` and remove the override declaration.:
+  1 | :root { color-scheme: light dark; } a { color: light-dark(red, black); }  b { color: white; } @media (prefers-color-scheme: light) { b { color: blue; } }
+
+`;
+
+exports[`invalid(58): :root { color-scheme: light dark; } a { color: red; } @media (prefers-color-scheme: dark) { a { color: black; } } b { color: white; } @media (prefers-color-scheme: light) { b { color: blue; } } 3`] = `
+
+Message:
+> 1 | :root { color-scheme: light dark; } a { color: red; } @media (prefers-color-scheme: dark) { a { color: black; } } b { color: white; } @media (prefers-color-scheme: light) { b { color: blue; } }
+    |                                                                                                                                                                                  ^^^^^^^^^^^ Prefer \`light-dark()\` for the paired colors in \`color\`.
+
+Suggestion 1/1: Combine the colors with \`light-dark()\` and remove the override declaration.:
+  1 | :root { color-scheme: light dark; } a { color: red; } @media (prefers-color-scheme: dark) { a { color: black; } } b { color: light-dark(blue, white); } 
+
+`;
+
+exports[`invalid(59): :root { color-scheme: light dark; } a { color: #FFF; } @media (prefers-color-scheme: dark) { a { color: #000; } } 1`] = `
+
+  1 | :root { color-scheme: light dark; } a { color: #FFF; } @media (prefers-color-scheme: dark) { a { color: #000; } }
+
+`;
+
+exports[`invalid(59): :root { color-scheme: light dark; } a { color: #FFF; } @media (prefers-color-scheme: dark) { a { color: #000; } } 2`] = `
+
+Message:
+> 1 | :root { color-scheme: light dark; } a { color: #FFF; } @media (prefers-color-scheme: dark) { a { color: #000; } }
+    |                                                                                                  ^^^^^^^^^^^ Prefer \`light-dark()\` for the paired colors in \`color\`.
+
+Suggestion 1/1: Combine the colors with \`light-dark()\` and remove the override declaration.:
+  1 | :root { color-scheme: light dark; } a { color: light-dark(#FFF, #000); } 
+
+`;
+
 exports[`invalid(6): :root { color-scheme: light dark; } a { --Color: white; } @media (prefers-color-scheme: dark) { a { --Color: black; } } 1`] = `
 
   1 | :root { color-scheme: light dark; } a { --Color: white; } @media (prefers-color-scheme: dark) { a { --Color: black; } }
@@ -808,6 +989,184 @@ Suggestion 1/1: Combine the colors with \`light-dark()\` and remove the override
 
 `;
 
+exports[`invalid(60): :root { color-scheme: light dark; } a { color: WHITE; } @media (prefers-color-scheme: dark) { a { color: black; } } 1`] = `
+
+  1 | :root { color-scheme: light dark; } a { color: WHITE; } @media (prefers-color-scheme: dark) { a { color: black; } }
+
+`;
+
+exports[`invalid(60): :root { color-scheme: light dark; } a { color: WHITE; } @media (prefers-color-scheme: dark) { a { color: black; } } 2`] = `
+
+Message:
+> 1 | :root { color-scheme: light dark; } a { color: WHITE; } @media (prefers-color-scheme: dark) { a { color: black; } }
+    |                                                                                                   ^^^^^^^^^^^^ Prefer \`light-dark()\` for the paired colors in \`color\`.
+
+Suggestion 1/1: Combine the colors with \`light-dark()\` and remove the override declaration.:
+  1 | :root { color-scheme: light dark; } a { color: light-dark(WHITE, black); } 
+
+`;
+
+exports[`invalid(61): :root { color-scheme: light dark; } a { color: Red; } @media (prefers-color-scheme: dark) { a { color: #00f; } } 1`] = `
+
+  1 | :root { color-scheme: light dark; } a { color: Red; } @media (prefers-color-scheme: dark) { a { color: #00f; } }
+
+`;
+
+exports[`invalid(61): :root { color-scheme: light dark; } a { color: Red; } @media (prefers-color-scheme: dark) { a { color: #00f; } } 2`] = `
+
+Message:
+> 1 | :root { color-scheme: light dark; } a { color: Red; } @media (prefers-color-scheme: dark) { a { color: #00f; } }
+    |                                                                                                 ^^^^^^^^^^^ Prefer \`light-dark()\` for the paired colors in \`color\`.
+
+Suggestion 1/1: Combine the colors with \`light-dark()\` and remove the override declaration.:
+  1 | :root { color-scheme: light dark; } a { color: light-dark(Red, #00f); } 
+
+`;
+
+exports[`invalid(62): :root { color-scheme: light dark; } .c\\61 rd { color: white; } @media (prefers-color-scheme: dark) { .c\\61 rd { color: black; } } 1`] = `
+
+  1 | :root { color-scheme: light dark; } .c\\61 rd { color: white; } @media (prefers-color-scheme: dark) { .c\\61 rd { color: black; } }
+
+`;
+
+exports[`invalid(62): :root { color-scheme: light dark; } .c\\61 rd { color: white; } @media (prefers-color-scheme: dark) { .c\\61 rd { color: black; } } 2`] = `
+
+Message:
+> 1 | :root { color-scheme: light dark; } .c\\61 rd { color: white; } @media (prefers-color-scheme: dark) { .c\\61 rd { color: black; } }
+    |                                                                                                                 ^^^^^^^^^^^^ Prefer \`light-dark()\` for the paired colors in \`color\`.
+
+Suggestion 1/1: Combine the colors with \`light-dark()\` and remove the override declaration.:
+  1 | :root { color-scheme: light dark; } .c\\61 rd { color: light-dark(white, black); } 
+
+`;
+
+exports[`invalid(63): :root { color-scheme: light dark; } a { color: white /* light */; } @media (prefers-color-scheme: dark) { a { color: black; } } 1`] = `
+
+  1 | :root { color-scheme: light dark; } a { color: white /* light */; } @media (prefers-color-scheme: dark) { a { color: black; } }
+
+`;
+
+exports[`invalid(63): :root { color-scheme: light dark; } a { color: white /* light */; } @media (prefers-color-scheme: dark) { a { color: black; } } 2`] = `
+
+Message:
+> 1 | :root { color-scheme: light dark; } a { color: white /* light */; } @media (prefers-color-scheme: dark) { a { color: black; } }
+    |                                                                                                               ^^^^^^^^^^^^ Prefer \`light-dark()\` for the paired colors in \`color\`.
+
+`;
+
+exports[`invalid(64): :root { color-scheme: light dark; } a { color: white !important; } @media (prefers-color-scheme: dark) { a { color: black !important; } } 1`] = `
+
+  1 | :root { color-scheme: light dark; } a { color: white !important; } @media (prefers-color-scheme: dark) { a { color: black !important; } }
+
+`;
+
+exports[`invalid(64): :root { color-scheme: light dark; } a { color: white !important; } @media (prefers-color-scheme: dark) { a { color: black !important; } } 2`] = `
+
+Message:
+> 1 | :root { color-scheme: light dark; } a { color: white !important; } @media (prefers-color-scheme: dark) { a { color: black !important; } }
+    |                                                                                                              ^^^^^^^^^^^^^^^^^^^^^^^ Prefer \`light-dark()\` for the paired colors in \`color\`.
+
+Suggestion 1/1: Combine the colors with \`light-dark()\` and remove the override declaration.:
+  1 | :root { color-scheme: light dark; } a { color: light-dark(white, black) !important; } 
+
+`;
+
+exports[`invalid(65): :root { color-scheme: light dark; } a { color: white; border-color: red; @media (prefers-color-scheme: dark) { color: black; border-color: blue; } } 1`] = `
+
+  1 | :root { color-scheme: light dark; } a { color: white; border-color: red; @media (prefers-color-scheme: dark) { color: black; border-color: blue; } }
+
+`;
+
+exports[`invalid(65): :root { color-scheme: light dark; } a { color: white; border-color: red; @media (prefers-color-scheme: dark) { color: black; border-color: blue; } } 2`] = `
+
+Message:
+> 1 | :root { color-scheme: light dark; } a { color: white; border-color: red; @media (prefers-color-scheme: dark) { color: black; border-color: blue; } }
+    |                                                                                                                ^^^^^^^^^^^^ Prefer \`light-dark()\` for the paired colors in \`color\`.
+
+Suggestion 1/1: Combine the colors with \`light-dark()\` and remove the override declaration.:
+  1 | :root { color-scheme: light dark; } a { color: light-dark(white, black); border-color: red; @media (prefers-color-scheme: dark) {  border-color: blue; } }
+
+`;
+
+exports[`invalid(65): :root { color-scheme: light dark; } a { color: white; border-color: red; @media (prefers-color-scheme: dark) { color: black; border-color: blue; } } 3`] = `
+
+Message:
+> 1 | :root { color-scheme: light dark; } a { color: white; border-color: red; @media (prefers-color-scheme: dark) { color: black; border-color: blue; } }
+    |                                                                                                                              ^^^^^^^^^^^^^^^^^^ Prefer \`light-dark()\` for the paired colors in \`border-color\`.
+
+Suggestion 1/1: Combine the colors with \`light-dark()\` and remove the override declaration.:
+  1 | :root { color-scheme: light dark; } a { color: white; border-color: light-dark(red, blue); @media (prefers-color-scheme: dark) { color: black;  } }
+
+`;
+
+exports[`invalid(66): @supports (color: red) { a { color-scheme: light dark; color: white; @media (prefers-color-scheme: dark) { color: black; } } } 1`] = `
+
+  1 | @supports (color: red) { a { color-scheme: light dark; color: white; @media (prefers-color-scheme: dark) { color: black; } } }
+
+`;
+
+exports[`invalid(66): @supports (color: red) { a { color-scheme: light dark; color: white; @media (prefers-color-scheme: dark) { color: black; } } } 2`] = `
+
+Message:
+> 1 | @supports (color: red) { a { color-scheme: light dark; color: white; @media (prefers-color-scheme: dark) { color: black; } } }
+    |                                                                                                            ^^^^^^^^^^^^ Prefer \`light-dark()\` for the paired colors in \`color\`.
+
+Suggestion 1/1: Combine the colors with \`light-dark()\` and remove the override declaration.:
+  1 | @supports (color: red) { a { color-scheme: light dark; color: light-dark(white, black);  } }
+
+`;
+
+exports[`invalid(67): @container (width > 1px) { a { color-scheme: light dark; color: white; @media (prefers-color-scheme: dark) { color: black; } } } 1`] = `
+
+  1 | @container (width > 1px) { a { color-scheme: light dark; color: white; @media (prefers-color-scheme: dark) { color: black; } } }
+
+`;
+
+exports[`invalid(67): @container (width > 1px) { a { color-scheme: light dark; color: white; @media (prefers-color-scheme: dark) { color: black; } } } 2`] = `
+
+Message:
+> 1 | @container (width > 1px) { a { color-scheme: light dark; color: white; @media (prefers-color-scheme: dark) { color: black; } } }
+    |                                                                                                              ^^^^^^^^^^^^ Prefer \`light-dark()\` for the paired colors in \`color\`.
+
+Suggestion 1/1: Combine the colors with \`light-dark()\` and remove the override declaration.:
+  1 | @container (width > 1px) { a { color-scheme: light dark; color: light-dark(white, black);  } }
+
+`;
+
+exports[`invalid(68): @media (width > 1px) { a { color-scheme: light dark; color: white; @media (prefers-color-scheme: dark) { color: black; } } } 1`] = `
+
+  1 | @media (width > 1px) { a { color-scheme: light dark; color: white; @media (prefers-color-scheme: dark) { color: black; } } }
+
+`;
+
+exports[`invalid(68): @media (width > 1px) { a { color-scheme: light dark; color: white; @media (prefers-color-scheme: dark) { color: black; } } } 2`] = `
+
+Message:
+> 1 | @media (width > 1px) { a { color-scheme: light dark; color: white; @media (prefers-color-scheme: dark) { color: black; } } }
+    |                                                                                                          ^^^^^^^^^^^^ Prefer \`light-dark()\` for the paired colors in \`color\`.
+
+Suggestion 1/1: Combine the colors with \`light-dark()\` and remove the override declaration.:
+  1 | @media (width > 1px) { a { color-scheme: light dark; color: light-dark(white, black);  } }
+
+`;
+
+exports[`invalid(69): :root { color-scheme: light dark; } a { border: 1px solid white; } @media (prefers-color-scheme: dark) { a { border: 1px solid black; } } 1`] = `
+
+  1 | :root { color-scheme: light dark; } a { border: 1px solid white; } @media (prefers-color-scheme: dark) { a { border: 1px solid black; } }
+
+`;
+
+exports[`invalid(69): :root { color-scheme: light dark; } a { border: 1px solid white; } @media (prefers-color-scheme: dark) { a { border: 1px solid black; } } 2`] = `
+
+Message:
+> 1 | :root { color-scheme: light dark; } a { border: 1px solid white; } @media (prefers-color-scheme: dark) { a { border: 1px solid black; } }
+    |                                                                                                              ^^^^^^^^^^^^^^^^^^^^^^^ Prefer \`light-dark()\` for the paired colors in \`border\`.
+
+Suggestion 1/1: Combine the colors with \`light-dark()\` and remove the override declaration.:
+  1 | :root { color-scheme: light dark; } a { border: 1px solid light-dark(white, black); } 
+
+`;
+
 exports[`invalid(7): :root { color-scheme: light dark; } a { \\2d -Color: white; } @media (prefers-color-scheme: dark) { a { --Color: black; } } 1`] = `
 
   1 | :root { color-scheme: light dark; } a { \\2d -Color: white; } @media (prefers-color-scheme: dark) { a { --Color: black; } }
@@ -822,6 +1181,57 @@ Message:
 
 Suggestion 1/1: Combine the colors with \`light-dark()\` and remove the override declaration.:
   1 | :root { color-scheme: light dark; } a { \\2d -Color: light-dark(white, black); } 
+
+`;
+
+exports[`invalid(70): :root { color-scheme: light dark; } a { text-shadow: 0 1px white; } @media (prefers-color-scheme: dark) { a { text-shadow: 0 1px black; } } 1`] = `
+
+  1 | :root { color-scheme: light dark; } a { text-shadow: 0 1px white; } @media (prefers-color-scheme: dark) { a { text-shadow: 0 1px black; } }
+
+`;
+
+exports[`invalid(70): :root { color-scheme: light dark; } a { text-shadow: 0 1px white; } @media (prefers-color-scheme: dark) { a { text-shadow: 0 1px black; } } 2`] = `
+
+Message:
+> 1 | :root { color-scheme: light dark; } a { text-shadow: 0 1px white; } @media (prefers-color-scheme: dark) { a { text-shadow: 0 1px black; } }
+    |                                                                                                               ^^^^^^^^^^^^^^^^^^^^^^^^ Prefer \`light-dark()\` for the paired colors in \`text-shadow\`.
+
+Suggestion 1/1: Combine the colors with \`light-dark()\` and remove the override declaration.:
+  1 | :root { color-scheme: light dark; } a { text-shadow: 0 1px light-dark(white, black); } 
+
+`;
+
+exports[`invalid(71): a { color-scheme: light dark; color: white; } @media (prefers-color-scheme: dark) { a { color-scheme: light dark; color: black; } } 1`] = `
+
+  1 | a { color-scheme: light dark; color: white; } @media (prefers-color-scheme: dark) { a { color-scheme: light dark; color: black; } }
+
+`;
+
+exports[`invalid(71): a { color-scheme: light dark; color: white; } @media (prefers-color-scheme: dark) { a { color-scheme: light dark; color: black; } } 2`] = `
+
+Message:
+> 1 | a { color-scheme: light dark; color: white; } @media (prefers-color-scheme: dark) { a { color-scheme: light dark; color: black; } }
+    |                                                                                                                   ^^^^^^^^^^^^ Prefer \`light-dark()\` for the paired colors in \`color\`.
+
+Suggestion 1/1: Combine the colors with \`light-dark()\` and remove the override declaration.:
+  1 | a { color-scheme: light dark; color: light-dark(white, black); } @media (prefers-color-scheme: dark) { a { color-scheme: light dark;  } }
+
+`;
+
+exports[`invalid(72): @layer theme { :root { color-scheme: light dark; } a { color: white; } @media (prefers-color-scheme: dark) { a { color: black; } } } 1`] = `
+
+  1 | @layer theme { :root { color-scheme: light dark; } a { color: white; } @media (prefers-color-scheme: dark) { a { color: black; } } }
+
+`;
+
+exports[`invalid(72): @layer theme { :root { color-scheme: light dark; } a { color: white; } @media (prefers-color-scheme: dark) { a { color: black; } } } 2`] = `
+
+Message:
+> 1 | @layer theme { :root { color-scheme: light dark; } a { color: white; } @media (prefers-color-scheme: dark) { a { color: black; } } }
+    |                                                                                                                  ^^^^^^^^^^^^ Prefer \`light-dark()\` for the paired colors in \`color\`.
+
+Suggestion 1/1: Combine the colors with \`light-dark()\` and remove the override declaration.:
+  1 | @layer theme { :root { color-scheme: light dark; } a { color: light-dark(white, black); }  }
 
 `;
 

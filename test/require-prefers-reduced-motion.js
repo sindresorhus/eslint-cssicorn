@@ -153,6 +153,7 @@ test.snapshot({
 		'a { transition: transform calc(0s); }',
 		'@container (width > 20rem) { @scope (.card) { :scope { animation: slide 1s; transition: transform 1s; scroll-behavior: smooth; } } }',
 		'a { @starting-style { transition: transform 200ms; } }',
+		'.button { @variant hover { animation: spin 1s; transition: transform 1s; } }',
 		'@property --offset { syntax: "<length>"; inherits: false; initial-value: 0; } a { translate: var(--offset); transition: --offset 200ms; }',
 		'a { -future-transition-property: opacity; transition-duration: 1s; }',
 		'a { -future-transition: color 1s; transition-duration: 1s; }',

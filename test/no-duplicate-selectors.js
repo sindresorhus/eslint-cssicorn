@@ -71,6 +71,18 @@ test.snapshot({
 		'.a:hover { color: red; } .a:focus { color: blue; }',
 		'.a:before { color: red; } .a::after { color: blue; }',
 		'.a:first-line { color: red; } .a::first-letter { color: blue; }',
+		// Different matching at-rule contexts do not share a selector-context key
+		'@media screen { .card { color: red; } } @supports (display: grid) { .card { color: blue; } }',
+		'@layer a { .card { color: red; } } @layer b { .card { color: blue; } }',
+		'@container sidebar (width > 10px) { .card { color: red; } } @container main (width > 10px) { .card { color: blue; } }',
+		// A grouping rule and the top level are separate contexts
+		'@media screen { .card { color: red; } } .card { color: blue; }',
+		// Nested rules under different parent selectors are separate contexts
+		'.a { .b { color: red; } } .c { .b { color: blue; } }',
+		// Attribute selector values are case-sensitive
+		'a[href="x"] { color: red; } a[href="X"] { color: blue; }',
+		// Partially overlapping lists are not duplicates
+		'.a, .b { color: red; } .a { color: blue; } .b { color: green; }',
 	],
 	invalid: [
 		'.card { color: red; } .other { color: green; } .card { color: blue; }',
@@ -162,6 +174,28 @@ test.snapshot({
 		'.a:AFTER { color: red; } .a::after { color: blue; }',
 		'.a::AFTER { color: red; } .a:after { color: blue; }',
 		String.raw`.a:\61 fter { color: red; } .a::after { color: blue; }`,
+		// Insignificant whitespace is normalized when comparing selector lists
+		'a  b { color: red; } a b { color: blue; }',
+		'a > b, c > d { color: red; } a>b, c>d { color: blue; }',
+		':where(.a,.b) { color: red; } :where(.a, .b) { color: blue; }',
+		// Multiple duplicate selectors in one list are all reported and removed
+		'a, a, b, b { color: red; }',
+		'.a, .a, .a, .a { }',
+		'foo bar, foo bar { color: red; }',
+		'*, * { color: red; }',
+		':root, :root { color: red; }',
+		// A duplicate that is not adjacent to its first occurrence
+		'.a, .b, .c, .a { color: red; }',
+		'a, b { } a, b, a { }',
+		// Escaped class names with the same source text
+		String.raw`.foo\:bar { color: red; } .foo\:bar { color: blue; }`,
+		// Duplicate selector lists inside grouping and nested rules
+		'@supports (display: grid) { .card { color: red; } .card { color: blue; } }',
+		'.parent { & .child { color: red; } & .child { color: blue; } }',
+		'.parent { & .child, & .child { color: red; } }',
+		'.a { color: red; } .a { color: blue; } .a { color: green; }',
+		// Separators may span lines
+		'a\n,a { color: red; }',
 	],
 });
 

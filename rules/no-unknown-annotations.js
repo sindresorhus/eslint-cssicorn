@@ -1,5 +1,9 @@
-import {ident, tokenize, tokenTypes} from '@eslint/css-tree';
-import {hasCommentInRange, toLocation} from './utils/index.js';
+import {tokenize, tokenTypes} from '@eslint/css-tree';
+import {
+	hasCommentInRange,
+	isDashedIdentifier,
+	toLocation,
+} from './utils/index.js';
 
 /**
 @import * as ESLint from 'eslint';
@@ -22,7 +26,7 @@ const create = context => {
 		const {important, property} = declaration;
 		if (
 			!important
-			|| ident.decode(property).startsWith('--')
+			|| isDashedIdentifier(property)
 		) {
 			return;
 		}

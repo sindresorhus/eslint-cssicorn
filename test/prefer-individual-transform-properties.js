@@ -54,6 +54,17 @@ const conversions = [
 	['rotateY(0)', 'rotate: y 0deg'],
 	['rotateZ(0)', 'rotate: 0deg'],
 	['rotate3d(1, 0, 0, -0)', 'rotate: 1 0 0 -0deg'],
+	['rotate(0.25turn)', 'rotate: 0.25turn'],
+	['translate(1e2px)', 'translate: 1e2px'],
+	['translate(0px)', 'translate: 0px'],
+	['translate(10%, 20%)', 'translate: 10% 20%'],
+	['scale(1, 1)', 'scale: 1 1'],
+	['translateX(calc(1px + 2px))', 'translate: calc(1px + 2px)'],
+	['scale(calc(0.5 + 0.5))', 'scale: calc(0.5 + 0.5)'],
+	['translate(10%) rotate(45deg)', 'translate: 10%; rotate: 45deg'],
+	['translate(10px, 20px) scale(2)', 'translate: 10px 20px; scale: 2'],
+	['translatE(10px)', 'translate: 10px'],
+	['TRANSLATE(1px, 2px)', 'translate: 1px 2px'],
 ];
 
 ruleTest({
@@ -132,11 +143,22 @@ ruleTest({
 		':export { transform: scale(2); }',
 		':import("./theme.css") { transform: scale(2); }',
 		{code: 'a { transform: #; }', languageOptions: {tolerant: true}},
+		// An operation repeated after a later operation is not in the required order
+		'a { transform: translate(10px) rotate(45deg) scale(2) translateX(5px); }',
+		'a { transform: translate(10px) scale(2) rotate(45deg); }',
+		// A repeated operation
+		'a { transform: scale(2) scaleX(2); }',
+		'a { transform: rotate(45deg) rotate(45deg); }',
+		'a { transform: translate(10px) translateY(20px); }',
+		// Three comma-separated arguments cannot be represented by the `translate` property
+		'a { transform: translate(1px, 2px, 3px); }',
 	],
-	invalid: conversions.map(([value, replacement]) => ({
-		code: `a { transform: ${value}; }`,
-		errors: [{messageId: 'prefer-individual-transform-properties/error', suggestions: [{messageId: 'prefer-individual-transform-properties/suggestion', output: `a { ${replacement}; }`}]}],
-	})),
+	invalid: [
+		...conversions.map(([value, replacement]) => ({
+			code: `a { transform: ${value}; }`,
+			errors: [{messageId: 'prefer-individual-transform-properties/error', suggestions: [{messageId: 'prefer-individual-transform-properties/suggestion', output: `a { ${replacement}; }`}]}],
+		})),
+	],
 });
 
 ruleTest({

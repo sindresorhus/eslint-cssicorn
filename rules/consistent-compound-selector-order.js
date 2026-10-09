@@ -1,4 +1,9 @@
-import {hasCommentInRange, normalizeCssIdentifier, toLocation} from './utils/index.js';
+import {
+	getNodesRange,
+	hasCommentInRange,
+	normalizeCssIdentifier,
+	toLocation,
+} from './utils/index.js';
 import {LEGACY_PSEUDO_ELEMENTS} from './shared/css-selector-specificity.js';
 
 /**
@@ -71,7 +76,7 @@ const getCompoundProblem = (children, selector, context) => {
 	/**
 	@type {[number, number]}
 	*/
-	const range = [sourceCode.getRange(compound[0])[0], sourceCode.getRange(compound.at(-1))[1]];
+	const range = getNodesRange(compound, {sourceCode});
 
 	return {
 		node: selector,

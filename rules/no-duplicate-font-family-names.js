@@ -1,7 +1,8 @@
-import {ident} from '@eslint/css-tree/utils';
 import {hasAncestorStyleRule} from './shared/css-selector-specificity.js';
 import {
+	decodeCssIdentifier,
 	getCommaSeparatedGroups,
+	getNodesRange,
 	hasCommentInRange,
 	isCssModulesInteropDeclaration,
 	isCssWideKeyword,
@@ -52,7 +53,7 @@ const reservedFontFamilyNames = new Set([
 const formatFontFamilyName = name => JSON.stringify(name)
 	.slice(1, -1)
 	.replaceAll(
-		/[\p{Control}\p{Format}\p{Line_Separator}\p{Paragraph_Separator}]/gu,
+		/[\p{Control}\p{Format}\p{Line_Separator}\p{Paragraph_Separator}]/gv,
 		character => String.raw`\u{${character.codePointAt(0).toString(16)}}`,
 	);
 
@@ -66,7 +67,7 @@ const getGenericFunctionName = node => {
 		return;
 	}
 
-	return `generic(${ident.decode(node.children.at(0).name)})`;
+	return `generic(${decodeCssIdentifier(node.children.at(0).name)})`;
 };
 
 const getFontFamily = nodes => {
@@ -86,7 +87,7 @@ const getFontFamily = nodes => {
 		return;
 	}
 
-	const identifierNames = nodes.map(node => ident.decode(node.name));
+	const identifierNames = nodes.map(node => decodeCssIdentifier(node.name));
 	const normalizedIdentifierNames = identifierNames.map(name => name.toLowerCase());
 	if (normalizedIdentifierNames.some(name => isCssWideKeyword(name) || reservedFontFamilyNames.has(name) || (nodes.length > 1 && genericFontFamilyNames.has(name)))) {
 		return;
@@ -153,8 +154,7 @@ const create = context => {
 			}
 
 			const firstNode = group.nodes[0];
-			const lastNode = group.nodes.at(-1);
-			const familyRange = [sourceCode.getRange(firstNode)[0], sourceCode.getRange(lastNode)[1]];
+			const familyRange = getNodesRange(group.nodes, {sourceCode});
 			const previousCommaStart = sourceCode.getRange(group.previousComma)[0];
 			const nextCommaStart = group.nextComma ? sourceCode.getRange(group.nextComma)[0] : familyRange[1];
 			const commentRangeEnd = group.nextComma ? nextCommaStart : sourceCode.getRange(declaration.value)[1];

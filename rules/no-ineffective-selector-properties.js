@@ -1,9 +1,14 @@
 // @ts-check
 
+import sizeProperties from './shared/css-size-properties.js';
 import {shorthandToAffectedProperties} from './shared/css-shorthand-properties.js';
-import {getSelectorArgument, LEGACY_PSEUDO_ELEMENTS} from './shared/css-selector-specificity.js';
-import {functionalPseudoSelectors, nonFunctionalPseudoSelectors} from './shared/standard-pseudo-selectors.js';
-import {hasCommentInRange, normalizeCssIdentifier} from './utils/index.js';
+import {
+	getSelectorArgument,
+	getTerminalCompoundNodes,
+	isPseudoElementNode,
+	isStandardPseudoSelector,
+} from './shared/css-selector-specificity.js';
+import {getDeclarationRemovalRange, normalizeCssIdentifier, transparentGroupingAtRules} from './utils/index.js';
 
 /**
 @import {BlockPlain, RulePlain, SelectorPlain, PseudoElementSelectorPlain, PseudoClassSelectorPlain} from '@eslint/css-tree';
@@ -44,18 +49,7 @@ const commonProperties = new Set([
 		'border-inline-style',
 		'border-radius',
 	]),
-	'width',
-	'height',
-	'min-width',
-	'min-height',
-	'max-width',
-	'max-height',
-	'inline-size',
-	'block-size',
-	'min-inline-size',
-	'min-block-size',
-	'max-inline-size',
-	'max-block-size',
+	...sizeProperties,
 	'display',
 	'position',
 	'opacity',
@@ -106,9 +100,6 @@ for (const property of ['opacity', ...getPropertyNames(['background']), 'backgro
 // Browsers may apply other properties to first-line and placeholder text, but these are explicitly excluded.
 const firstLineProperties = new Set(['writing-mode', 'direction', 'text-orientation']);
 const highlightSelectors = new Set(['selection', 'target-text', 'spelling-error', 'grammar-error', 'search-text', 'highlight']);
-const transparentAtRules = new Set(['media', 'supports', 'container', 'layer', 'starting-style']);
-const standardFunctionalPseudoSelectors = new Set(functionalPseudoSelectors);
-const standardNonFunctionalPseudoSelectors = new Set(nonFunctionalPseudoSelectors);
 
 /**
 Check whether a pseudo-class requires its target to be a visited link.
@@ -145,16 +136,13 @@ const getSelectorRestriction = (selector, parentIsVisited = false) => {
 			continue;
 		}
 
-		const prefix = node.type === 'PseudoElementSelector' ? '::' : ':';
-		const standardPseudoSelectors = node.children === null ? standardNonFunctionalPseudoSelectors : standardFunctionalPseudoSelectors;
-		if (!standardPseudoSelectors.has(`${prefix}${normalizeCssIdentifier(node.name)}`)) {
+		if (!isStandardPseudoSelector(node)) {
 			return;
 		}
 	}
 
-	const compound = selector.children.slice(selector.children.findLastIndex(node => node.type === 'Combinator') + 1);
-	const pseudoElement = /** @type {PseudoElementSelectorPlain | PseudoClassSelectorPlain | undefined} */ (compound.findLast(node => node.type === 'PseudoElementSelector'
-		|| (node.type === 'PseudoClassSelector' && LEGACY_PSEUDO_ELEMENTS.has(normalizeCssIdentifier(node.name)))));
+	const compound = getTerminalCompoundNodes(selector);
+	const pseudoElement = /** @type {PseudoElementSelectorPlain | PseudoClassSelectorPlain | undefined} */ (compound.findLast(node => isPseudoElementNode(node)));
 	if (pseudoElement) {
 		const name = normalizeCssIdentifier(pseudoElement.name);
 		if (highlightSelectors.has(name)) {
@@ -206,7 +194,7 @@ const getEnclosingRestrictions = (node, sourceCode) => {
 			return restrictions.length > 0 && restrictions.every(restriction => restriction !== undefined) ? restrictions : undefined;
 		}
 
-		if (parent.type === 'Atrule' && !transparentAtRules.has(normalizeCssIdentifier(parent.name))) {
+		if (parent.type === 'Atrule' && !transparentGroupingAtRules.has(normalizeCssIdentifier(parent.name))) {
 			return;
 		}
 
@@ -244,12 +232,13 @@ const create = context => {
 				@type {CssicornRuleFixer}
 				*/
 				fix(fixer, {abort}) {
-					const [start, end] = sourceCode.getRange(node);
-					if (hasCommentInRange(context, [start, end])) {
+					const range = getDeclarationRemovalRange(node, context);
+					if (range === undefined) {
 						abort();
+						return;
 					}
 
-					return fixer.removeRange([start, end + (sourceCode.text[end] === ';' ? 1 : 0)]);
+					return fixer.removeRange(range);
 				},
 			};
 		}

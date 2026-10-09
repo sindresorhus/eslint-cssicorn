@@ -83,6 +83,12 @@ ruleTest.snapshot({
 		'@NAMESPACE url("http://www.w3.org/2000/svg"); :is(.foo) {}',
 		String.raw`@SCOPE (.root) { :\69 s(.foo > .bar) {} }`,
 		String.raw`:\69 s(.foo ?) {}`,
+		// A complex argument is kept when the containing selector has more than the wrapper
+		':is(.a .b) .c {}',
+		// Multiple arguments keep the wrapper
+		':is(.a, .b) .c {}',
+		// A wrapper inside a `::part()` argument is not a style-rule selector
+		'::part(:is(x)) {}',
 	],
 	invalid: [
 		':is(.foo) {}',
@@ -125,6 +131,23 @@ ruleTest.snapshot({
 		String.raw`:\69 s(.foo > .bar) {}`,
 		':is([data-label="& :is(.foo) /* text */"]) {}',
 		':is(:nth-last-of-type(2n + 1)) {}',
+		// A simple wrapper followed by other compound parts
+		':is(.foo) .bar {}',
+		':is(.a):hover {}',
+		':is(.a):not(.b) {}',
+		':is(div.foo) {}',
+		':is(.a) > .b {}',
+		// Each wrapper in a compound/complex selector is independent
+		':is(.a) > :is(.b) {}',
+		':is(.a):where(.b):is(.c) {}',
+		// A wrapper containing a complex selector is kept, its simple sibling is not
+		':is(.a):is(.b .c) {}',
+		':is(.a) :is(.b .c) {}',
+		// Simple wrappers of the three basic selector types
+		':is(*) {}',
+		':is([href]) {}',
+		':is(#id) {}',
+		'.foo:is(.bar) .baz {}',
 	],
 });
 

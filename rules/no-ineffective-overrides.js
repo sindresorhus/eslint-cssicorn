@@ -3,7 +3,6 @@
 import {
 	find,
 	generate,
-	ident,
 	tokenize,
 	tokenTypes,
 } from '@eslint/css-tree';
@@ -11,12 +10,15 @@ import {propertyNameAliases} from './shared/css-property-name-aliases.js';
 import {canMatchSelector, LEGACY_PSEUDO_ELEMENTS} from './shared/css-selector-specificity.js';
 import {shorthandToAffectedProperties} from './shared/css-shorthand-properties.js';
 import {
+	decodeCssIdentifier,
 	getAtRuleContextPart,
 	getCanonicalLexerNode,
 	getSingleValueIdentifier,
 	hasSubstitutionOrRandomFunction,
+	isImportantDeclaration,
 	isSubstitutionFunction,
 	normalizeCssIdentifier,
+	normalizePropertyName,
 } from './utils/index.js';
 
 /**
@@ -45,13 +47,8 @@ const ALL_EXCLUDED_PROPERTIES = new Set(['direction', 'unicode-bidi']);
 @param {string} property
 */
 const getPropertyKey = property => {
-	const decoded = ident.decode(property);
-	if (decoded.startsWith('--')) {
-		return decoded;
-	}
-
-	const normalized = normalizeCssIdentifier(property);
-	return propertyNameAliases.get(normalized) ?? normalized;
+	const normalized = normalizePropertyName(property);
+	return normalized.startsWith('--') ? normalized : propertyNameAliases.get(normalized) ?? normalized;
 };
 
 /**
@@ -62,11 +59,11 @@ const getNodeKey = node => {
 		case 'ClassSelector':
 		case 'IdSelector':
 		case 'TypeSelector': {
-			return JSON.stringify([node.type, ident.decode(node.name)]);
+			return JSON.stringify([node.type, decodeCssIdentifier(node.name)]);
 		}
 
 		case 'AttributeSelector': {
-			return generate({...node, value: node.value?.type === 'Identifier' ? {type: 'String', value: ident.decode(node.value.name)} : node.value});
+			return generate({...node, value: node.value?.type === 'Identifier' ? {type: 'String', value: decodeCssIdentifier(node.value.name)} : node.value});
 		}
 
 		case 'PseudoClassSelector': {
@@ -129,7 +126,7 @@ const getResolvedSelectors = (rule, parentSelectors) => {
 			}
 
 			if (node.type === 'TypeSelector') {
-				const name = ident.decode(node.name);
+				const name = decodeCssIdentifier(node.name);
 				return name.includes('|') || (name === '*' && node.name !== '*');
 			}
 
@@ -325,7 +322,7 @@ const create = context => {
 		}
 
 		const property = getPropertyKey(declaration.property);
-		const important = Boolean(declaration.important);
+		const important = isImportantDeclaration(declaration);
 		// Rollback can remove a blocker elsewhere in the cascade. Track its highest importance rather than simulate the entire cascade.
 		const keyword = getValueKeyword(declaration);
 		if (keyword && ROLLBACK_KEYWORDS.has(keyword)) {

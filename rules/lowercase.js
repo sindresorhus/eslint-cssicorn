@@ -6,8 +6,13 @@ import {
 } from '@eslint/css-tree';
 import {
 	decodeCssIdentifier,
+	getBlockOwner,
+	getContainingAtRule,
+	getContainingDeclaration,
+	getDescriptorAtRule,
 	getFeatureNameRange,
 	isCssModulesInteropDeclaration,
+	isDashedIdentifier,
 	normalizeCssIdentifier,
 	toAsciiLowerCase,
 	toLocation,
@@ -24,7 +29,7 @@ const messages = {
 	[MESSAGE_ID_SPECIFICATION_CASE]: 'Use `{{replacement}}` for CSS {{type}} `{{value}}`.',
 };
 
-const hexadecimalColorPattern = /^(?:[\da-f]{3,4}|[\da-f]{6}|[\da-f]{8})$/iu;
+const hexadecimalColorPattern = /^(?:[\da-f]{3,4}|[\da-f]{6}|[\da-f]{8})$/iv;
 const queryFeatureKinds = new Set(['container', 'media']);
 const fontFeatureValueAtRules = new Set([
 	'annotation',
@@ -57,8 +62,6 @@ const camelCaseFunctionNames = new Map([
 	'translateY',
 	'translateZ',
 ].map(name => [toAsciiLowerCase(name), name]));
-
-const isCustomIdentifier = value => decodeCssIdentifier(value).startsWith('--');
 
 function getProblem(node, range, {type, value, replacement}, context) {
 	return {
@@ -118,26 +121,22 @@ function getIdentifierProblem(node, range, type, context) {
 	return getProblem(node, range, {type, value, replacement: ident.encode(canonicalValue)}, context);
 }
 
-function getDeclaration(node, sourceCode) {
-	return sourceCode.getAncestors(node).findLast(ancestor => ancestor.type === 'Declaration');
-}
-
 function isInPreservedContext(node, context) {
 	const {sourceCode} = context;
 	return sourceCode.getAncestors(node).some(ancestor => {
 		if (ancestor.type === 'Atrule') {
-			return isCustomIdentifier(ancestor.name);
+			return isDashedIdentifier(ancestor.name);
 		}
 
 		if (ancestor.type === 'Declaration') {
 			if (
-				isCustomIdentifier(ancestor.property)
+				isDashedIdentifier(ancestor.property)
 				|| isCssModulesInteropDeclaration(ancestor, context)
 			) {
 				return true;
 			}
 
-			const owner = getBlockOwner(ancestor, sourceCode);
+			const owner = getBlockOwner(ancestor, {sourceCode});
 			return normalizeCssIdentifier(ancestor.property) === 'initial-value'
 				&& owner?.type === 'Atrule'
 				&& normalizeCssIdentifier(owner.name) === 'property';
@@ -156,13 +155,8 @@ function isInPreservedContext(node, context) {
 	});
 }
 
-function getBlockOwner(node, sourceCode) {
-	const parent = sourceCode.getParent(node);
-	return parent?.type === 'Block' ? sourceCode.getParent(parent) : undefined;
-}
-
 function isFontFeatureValueDefinition(declaration, sourceCode) {
-	const owner = getBlockOwner(declaration, sourceCode);
+	const owner = getBlockOwner(declaration, {sourceCode});
 	if (
 		owner?.type !== 'Atrule'
 		|| !fontFeatureValueAtRules.has(normalizeCssIdentifier(owner.name))
@@ -170,20 +164,13 @@ function isFontFeatureValueDefinition(declaration, sourceCode) {
 		return false;
 	}
 
-	const outerOwner = getBlockOwner(owner, sourceCode);
+	const outerOwner = getBlockOwner(owner, {sourceCode});
 	return outerOwner?.type === 'Atrule' && normalizeCssIdentifier(outerOwner.name) === 'font-feature-values';
 }
 
 function getDescriptorOwnerName(declaration, sourceCode) {
-	const owner = getBlockOwner(declaration, sourceCode);
-	if (owner?.type !== 'Atrule') {
-		return;
-	}
-
-	const ownerName = normalizeCssIdentifier(owner.name);
-	if (sourceCode.lexer.getAtrule(ownerName)?.descriptors) {
-		return ownerName;
-	}
+	const owner = getDescriptorAtRule(declaration, {sourceCode});
+	return owner && normalizeCssIdentifier(owner.name);
 }
 
 function getDeclarationMatcher(declaration, sourceCode) {
@@ -363,7 +350,7 @@ const create = context => {
 		if (
 			!problem
 			|| isInPreservedContext(node, context)
-			|| isCustomIdentifier(node.property)
+			|| isDashedIdentifier(node.property)
 			|| isCssModulesInteropDeclaration(node, context)
 			|| isFontFeatureValueDefinition(node, sourceCode)
 			|| !isKnownDeclarationName(node, sourceCode)
@@ -381,7 +368,7 @@ const create = context => {
 			if (
 				!problem
 				|| isInPreservedContext(node, context)
-				|| isCustomIdentifier(node.name)
+				|| isDashedIdentifier(node.name)
 				|| normalizeCssIdentifier(node.name) === 'charset'
 			) {
 				return;
@@ -415,7 +402,7 @@ const create = context => {
 			if (
 				!problem
 				|| isInPreservedContext(node, context)
-				|| isCustomIdentifier(name)
+				|| isDashedIdentifier(name)
 				// Unknown function names can be case-sensitive, like PostCSS plugin functions.
 				|| !getKnownFunctionNames(sourceCode.lexer).has(normalizeCssIdentifier(name))
 			) {
@@ -451,7 +438,7 @@ const create = context => {
 			if (
 				!problem
 				|| isInPreservedContext(node, context)
-				|| isCustomIdentifier(node.name)
+				|| isDashedIdentifier(node.name)
 			) {
 				return;
 			}
@@ -469,7 +456,7 @@ const create = context => {
 		if (
 			!problem
 			|| isInPreservedContext(node, context)
-			|| isCustomIdentifier(node.name)
+			|| isDashedIdentifier(node.name)
 		) {
 			return;
 		}
@@ -485,7 +472,7 @@ const create = context => {
 			return;
 		}
 
-		const atRule = sourceCode.getAncestors(node).findLast(ancestor => ancestor.type === 'Atrule');
+		const atRule = getContainingAtRule(node, context);
 		if (!atRule) {
 			return;
 		}
@@ -499,7 +486,7 @@ const create = context => {
 			if (
 				candidate?.type !== 'Identifier'
 				|| !match.isType(candidate, 'mf-name')
-				|| isCustomIdentifier(candidate.name)
+				|| isDashedIdentifier(candidate.name)
 			) {
 				continue;
 			}
@@ -517,15 +504,15 @@ const create = context => {
 		if (
 			!problem
 			|| isInPreservedContext(node, context)
-			|| isCustomIdentifier(node.name)
+			|| isDashedIdentifier(node.name)
 		) {
 			return;
 		}
 
-		const declaration = getDeclaration(node, sourceCode);
+		const declaration = getContainingDeclaration(node, context);
 		if (
 			!declaration
-			|| isCustomIdentifier(declaration.property)
+			|| isDashedIdentifier(declaration.property)
 			|| !isValueKeyword(node, declaration, sourceCode)
 		) {
 			return;

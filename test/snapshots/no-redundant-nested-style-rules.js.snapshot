@@ -203,13 +203,47 @@ Output:
 
 `;
 
-exports[`invalid(16): @scope (.component) { a { & { color: red; } } } 1`] = `
+exports[`invalid(16): a { & { color: red !important; } } 1`] = `
+
+  1 | a { & { color: red !important; } }
+
+`;
+
+exports[`invalid(16): a { & { color: red !important; } } 2`] = `
+
+Message:
+> 1 | a { & { color: red !important; } }
+    |     ^ Remove the redundant nested \`&\` style rule.
+
+Output:
+  1 | a { color: red !important; }
+
+`;
+
+exports[`invalid(17): a { & { /* only a comment */ } } 1`] = `
+
+  1 | a { & { /* only a comment */ } }
+
+`;
+
+exports[`invalid(17): a { & { /* only a comment */ } } 2`] = `
+
+Message:
+> 1 | a { & { /* only a comment */ } }
+    |     ^ Remove the redundant nested \`&\` style rule.
+
+Output:
+  1 | a { /* only a comment */ }
+
+`;
+
+exports[`invalid(18): @scope (.component) { a { & { color: red; } } } 1`] = `
 
   1 | @scope (.component) { a { & { color: red; } } }
 
 `;
 
-exports[`invalid(16): @scope (.component) { a { & { color: red; } } } 2`] = `
+exports[`invalid(18): @scope (.component) { a { & { color: red; } } } 2`] = `
 
 Message:
 > 1 | @scope (.component) { a { & { color: red; } } }

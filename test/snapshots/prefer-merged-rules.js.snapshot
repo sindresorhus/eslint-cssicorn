@@ -722,6 +722,74 @@ Output:
 
 `;
 
+exports[`invalid(46): @supports not (display: grid) { .a { color: red; } } @supports not (display: grid) { .b { color: blue; } } 1`] = `
+
+  1 | @supports not (display: grid) { .a { color: red; } } @supports not (display: grid) { .b { color: blue; } }
+
+`;
+
+exports[`invalid(46): @supports not (display: grid) { .a { color: red; } } @supports not (display: grid) { .b { color: blue; } } 2`] = `
+
+Message:
+> 1 | @supports not (display: grid) { .a { color: red; } } @supports not (display: grid) { .b { color: blue; } }
+    |                                                                ^^^^^^^^^^^^^^^^^^^ Merge these adjacent \`@supports\` rules with the same condition.
+
+Output:
+  1 | @supports not (display: grid) { .a { color: red; } .b { color: blue; } }
+
+`;
+
+exports[`invalid(47): @media (width > 1px) and (color) { .a {} } @media (width > 1px) and (color) { .b {} } 1`] = `
+
+  1 | @media (width > 1px) and (color) { .a {} } @media (width > 1px) and (color) { .b {} }
+
+`;
+
+exports[`invalid(47): @media (width > 1px) and (color) { .a {} } @media (width > 1px) and (color) { .b {} } 2`] = `
+
+Message:
+> 1 | @media (width > 1px) and (color) { .a {} } @media (width > 1px) and (color) { .b {} }
+    |                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^ Merge these adjacent \`@media\` rules with the same condition.
+
+Output:
+  1 | @media (width > 1px) and (color) { .a {} .b {} }
+
+`;
+
+exports[`invalid(48): @container style(--theme: dark) { .a { color: red; } } @container style(--theme: dark) { .b { color: blue; } } 1`] = `
+
+  1 | @container style(--theme: dark) { .a { color: red; } } @container style(--theme: dark) { .b { color: blue; } }
+
+`;
+
+exports[`invalid(48): @container style(--theme: dark) { .a { color: red; } } @container style(--theme: dark) { .b { color: blue; } } 2`] = `
+
+Message:
+> 1 | @container style(--theme: dark) { .a { color: red; } } @container style(--theme: dark) { .b { color: blue; } }
+    |                                                                   ^^^^^^^^^^^^^^^^^^^^ Merge these adjacent \`@container\` rules with the same condition.
+
+Output:
+  1 | @container style(--theme: dark) { .a { color: red; } .b { color: blue; } }
+
+`;
+
+exports[`invalid(49): @media not screen and (color) { .a {} } @media not screen and (color) { .b {} } 1`] = `
+
+  1 | @media not screen and (color) { .a {} } @media not screen and (color) { .b {} }
+
+`;
+
+exports[`invalid(49): @media not screen and (color) { .a {} } @media not screen and (color) { .b {} } 2`] = `
+
+Message:
+> 1 | @media not screen and (color) { .a {} } @media not screen and (color) { .b {} }
+    |                                                ^^^^^^^^^^^^^^^^^^^^^^^ Merge these adjacent \`@media\` rules with the same condition.
+
+Output:
+  1 | @media not screen and (color) { .a {} .b {} }
+
+`;
+
 exports[`invalid(5): .a { \\63 olor: red; } .b { color: red; } 1`] = `
 
   1 | .a { \\63 olor: red; } .b { color: red; }
@@ -736,6 +804,23 @@ Message:
 
 Output:
   1 | .a, .b { \\63 olor: red; }
+
+`;
+
+exports[`invalid(50): .a + .b { color: red; } .c ~ .d { color: red; } 1`] = `
+
+  1 | .a + .b { color: red; } .c ~ .d { color: red; }
+
+`;
+
+exports[`invalid(50): .a + .b { color: red; } .c ~ .d { color: red; } 2`] = `
+
+Message:
+> 1 | .a + .b { color: red; } .c ~ .d { color: red; }
+    |                         ^^^^^^^ Merge these adjacent rules with identical declarations.
+
+Output:
+  1 | .a + .b, .c ~ .d { color: red; }
 
 `;
 

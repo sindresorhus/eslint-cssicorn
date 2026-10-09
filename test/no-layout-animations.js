@@ -208,6 +208,8 @@ test.snapshot({
 		'@keyframes example { to { transition: width 1s; transition-property: height; } }',
 		'@keyframes example {}',
 		'@keyframes example;',
+		'a { transition: min(width, height) 1s; }',
+		'a { transition-duration: width; }',
 		{
 			code: '@custom-descriptors { transition: width 1s; transition-property: height; }',
 			languageOptions: {customSyntax: {atrules: {'custom-descriptors': {descriptors: {transition: '<custom-ident>'}}}}},
@@ -262,6 +264,8 @@ test.snapshot({
 		'a { transition: width 1s allow-discrete, opacity 1s; }',
 		'a { transition: linear(0, 0.5 25%, 1) 1s width; }',
 		String.raw`a { -WEBKIT-TR\41 NSITION-PROPERTY: \57 IDTH, --height, var(--name, height); }`,
+		'@keyframes example { to { flex: 1; } }',
+		'@keyframes example { to { width: 1px !important; width: 1px; } }',
 	],
 });
 

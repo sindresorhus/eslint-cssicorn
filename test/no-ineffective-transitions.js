@@ -306,6 +306,9 @@ test.snapshot({
 			code: '@custom-descriptors { transition: display 1s; }',
 			languageOptions: {customSyntax: {atrules: {'custom-descriptors': {descriptors: {transition: '<custom-ident>'}}}}},
 		},
+		'a { transition-behavior: allow-discrete !IMPORTANT; transition: display 1s; }',
+		'a { transition: display 1s, opacity 1s allow-discrete, overlay 2s; transition-behavior: allow-discrete; }',
+		'a { transition-property: display, display; transition-behavior: allow-discrete; }',
 	],
 	invalid: [
 		'a { transition: display 200ms; transition-behavior: normal; }',
@@ -351,6 +354,14 @@ test.snapshot({
 		...['media (width > 1px)', 'supports (display: grid)', 'container (width > 1px)', 'layer components', 'scope (.card)'].map(atRule => `@${atRule} { a { transition: display 1s; } }`),
 		'a { @media print { transition: display 1s; } }',
 		'a { @starting-style { transition: display 1s; } }',
+		'a { transition: display 1s, display 2s; }',
+		'a { transition-property: display, display; transition-behavior: normal; }',
+		'a { transition-property: none; transition-property: display; transition-behavior: normal; }',
+		'a { transition: all 1s; transition-property: display; transition-behavior: normal; }',
+		'a { transition-property: display, will-change; transition-behavior: normal, normal; }',
+		'a { transition: display 1s normal, content-visibility 1s normal; }',
+		'a { transition: display 1s normal, opacity 2s allow-discrete, content-visibility 1s; }',
+		'a { transition-behavior: allow-discrete, normal; transition-property: display, position; }',
 	],
 });
 

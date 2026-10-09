@@ -750,6 +750,48 @@ Message:
 
 `;
 
+exports[`invalid(57): @supports (--probe: rgb(0 0 0) oklch(60% 0.2 20)) {} 1`] = `
+
+  1 | @supports (--probe: rgb(0 0 0) oklch(60% 0.2 20)) {}
+
+`;
+
+exports[`invalid(57): @supports (--probe: rgb(0 0 0) oklch(60% 0.2 20)) {} 2`] = `
+
+Message:
+> 1 | @supports (--probe: rgb(0 0 0) oklch(60% 0.2 20)) {}
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ This condition does not test support for \`rgb()\`. Custom properties accept their values as tokens.
+
+`;
+
+exports[`invalid(58): @supports (--probe: theme(oklch(60% 0.2 20)) rgb(0 0 0)) {} 1`] = `
+
+  1 | @supports (--probe: theme(oklch(60% 0.2 20)) rgb(0 0 0)) {}
+
+`;
+
+exports[`invalid(58): @supports (--probe: theme(oklch(60% 0.2 20)) rgb(0 0 0)) {} 2`] = `
+
+Message:
+> 1 | @supports (--probe: theme(oklch(60% 0.2 20)) rgb(0 0 0)) {}
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ This condition does not test support for \`rgb()\`. Custom properties accept their values as tokens.
+
+`;
+
+exports[`invalid(59): @supports (--probe: RGB(0 0 0)) {} 1`] = `
+
+  1 | @supports (--probe: RGB(0 0 0)) {}
+
+`;
+
+exports[`invalid(59): @supports (--probe: RGB(0 0 0)) {} 2`] = `
+
+Message:
+> 1 | @supports (--probe: RGB(0 0 0)) {}
+    |            ^^^^^^^^^^^^^^^^^^^ This condition does not test support for \`RGB()\`. Custom properties accept their values as tokens.
+
+`;
+
 exports[`invalid(6): @supports (--size: min(1px, max(2px, 3px))) {} 1`] = `
 
   1 | @supports (--size: min(1px, max(2px, 3px))) {}
@@ -761,6 +803,84 @@ exports[`invalid(6): @supports (--size: min(1px, max(2px, 3px))) {} 2`] = `
 Message:
 > 1 | @supports (--size: min(1px, max(2px, 3px))) {}
     |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ This condition does not test support for \`min()\`. Custom properties accept their values as tokens.
+
+`;
+
+exports[`invalid(60): @supports (--probe: color-mix(in srgb, red, blue)) {} 1`] = `
+
+  1 | @supports (--probe: color-mix(in srgb, red, blue)) {}
+
+`;
+
+exports[`invalid(60): @supports (--probe: color-mix(in srgb, red, blue)) {} 2`] = `
+
+Message:
+> 1 | @supports (--probe: color-mix(in srgb, red, blue)) {}
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ This condition does not test support for \`color-mix()\`. Custom properties accept their values as tokens.
+
+`;
+
+exports[`invalid(61): @supports (color: var(--brand, rgb(0 0 0))) {} 1`] = `
+
+  1 | @supports (color: var(--brand, rgb(0 0 0))) {}
+
+`;
+
+exports[`invalid(61): @supports (color: var(--brand, rgb(0 0 0))) {} 2`] = `
+
+Message:
+> 1 | @supports (color: var(--brand, rgb(0 0 0))) {}
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ This condition does not establish support for \`rgb()\` when its value uses \`var()\`.
+
+`;
+
+exports[`invalid(62): @supports (--a: oklch(60% 0.2 20)) and (--b: rgb(0 0 0)) {} 1`] = `
+
+  1 | @supports (--a: oklch(60% 0.2 20)) and (--b: rgb(0 0 0)) {}
+
+`;
+
+exports[`invalid(62): @supports (--a: oklch(60% 0.2 20)) and (--b: rgb(0 0 0)) {} 2`] = `
+
+Message:
+> 1 | @supports (--a: oklch(60% 0.2 20)) and (--b: rgb(0 0 0)) {}
+    |            ^^^^^^^^^^^^^^^^^^^^^^ This condition does not test support for \`oklch()\`. Custom properties accept their values as tokens.
+
+`;
+
+exports[`invalid(62): @supports (--a: oklch(60% 0.2 20)) and (--b: rgb(0 0 0)) {} 3`] = `
+
+Message:
+> 1 | @supports (--a: oklch(60% 0.2 20)) and (--b: rgb(0 0 0)) {}
+    |                                         ^^^^^^^^^^^^^^^ This condition does not test support for \`rgb()\`. Custom properties accept their values as tokens.
+
+`;
+
+exports[`invalid(63): @import \"theme.css\" supports(--brand: rgb(0 0 0)); 1`] = `
+
+  1 | @import "theme.css" supports(--brand: rgb(0 0 0));
+
+`;
+
+exports[`invalid(63): @import \"theme.css\" supports(--brand: rgb(0 0 0)); 2`] = `
+
+Message:
+> 1 | @import "theme.css" supports(--brand: rgb(0 0 0));
+    |                              ^^^^^^^^^^^^^^^^^^^ This condition does not test support for \`rgb()\`. Custom properties accept their values as tokens.
+
+`;
+
+exports[`invalid(64): @supports-condition --x { --brand: rgb(0 0 0); } 1`] = `
+
+  1 | @supports-condition --x { --brand: rgb(0 0 0); }
+
+`;
+
+exports[`invalid(64): @supports-condition --x { --brand: rgb(0 0 0); } 2`] = `
+
+Message:
+> 1 | @supports-condition --x { --brand: rgb(0 0 0); }
+    |                           ^^^^^^^^^^^^^^^^^^^ This condition does not test support for \`rgb()\`. Custom properties accept their values as tokens.
 
 `;
 

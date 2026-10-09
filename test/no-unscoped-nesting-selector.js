@@ -81,6 +81,12 @@ test.snapshot({
 			code: '@utility content-body { & p {} }',
 			options: [{}],
 		},
+		'a { b { & {} } }',
+		'@scope (.x) { a { & {} } }',
+		'a { @media all { @layer components { & {} } } }',
+		'a { @layer components { @media all { & {} } } }',
+		'@utility x { @media all { & {} } }',
+		'a { &:hover { & {} } }',
 	],
 	invalid: [
 		// A top-level `@variant` compiles to a media query, so `&` stays unscoped.
@@ -115,6 +121,10 @@ test.snapshot({
 		'@-ms-keyframes foo { & {} }',
 		String.raw`a { @\4B EYFRAMES foo { from { & {} } } }`,
 		'@scope { @keyframes foo { from { & {} } } }',
+		'.foo > & {}',
+		'&:is(.foo) {}',
+		'& + & {}',
+		'@media all { @layer components { & {} } }',
 	],
 });
 

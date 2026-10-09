@@ -158,6 +158,10 @@ test.snapshot({
 		String.raw`.a { width: r\61ndom(1px, 2px); } .b { width: r\61ndom(1px, 2px); }`,
 		{code: '.a { color: ???; } .b { color: ???; }', languageOptions: {tolerant: true}},
 		{code: '.a { color: red; } #1foo { color: red; }', languageOptions: {tolerant: true}},
+		'@media (width > 1px) { .a {} } @media (WIDTH > 1px) { .b {} }',
+		'@font-face { font-family: example; } @font-face { font-family: example; }',
+		'.a { color: RED; } .b { color: red; }',
+		'@supports (display: grid) and (color) { .a {} } @supports (color) and (display: grid) { .b {} }',
 	],
 	invalid: [
 		'.a{color:red}.b{color:red}.c{color:red}',
@@ -205,6 +209,11 @@ test.snapshot({
 		'@media /* keep */ (width > 1px) { .a {} } @media (width > 1px) { .b {} }',
 		'.parent { @media (width > 1px) { & .a { color: red; } } @media (width > 1px) { & .b { color: red; } } }',
 		'.parent { @container card (width > 1px) { color: red; } @container card (width > 1px) { background: blue; } }',
+		'@supports not (display: grid) { .a { color: red; } } @supports not (display: grid) { .b { color: blue; } }',
+		'@media (width > 1px) and (color) { .a {} } @media (width > 1px) and (color) { .b {} }',
+		'@container style(--theme: dark) { .a { color: red; } } @container style(--theme: dark) { .b { color: blue; } }',
+		'@media not screen and (color) { .a {} } @media not screen and (color) { .b {} }',
+		'.a + .b { color: red; } .c ~ .d { color: red; }',
 	],
 });
 

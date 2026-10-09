@@ -7,6 +7,8 @@ test.snapshot({
 		'a { --a: var(--base, var(--b)); --b: var(--a); }',
 		'a { --base: 1px; --a: var(--base, calc(var(--other, var(--b)) + 1px)); --b: var(--a); }',
 		'a { --a: if(style(--enabled: yes): 1px; else: var(--b)); --b: var(--a); }',
+		// Other substitution functions are not checked.
+		'a { --a: random-item(--x, var(--a)); --c: inherit(--c, var(--c)); }',
 		'a { --spacing: var(--other, var(--spacing)); }',
 		'a { --other: 1px; --spacing: var(--other, var(--spacing)); }',
 		'a { --spacing: var(--other, calc(var(--base, var(--spacing)) + 1px)); }',
@@ -55,6 +57,7 @@ test.snapshot({
 		'a { --a: var(--base, --b); --b: var(--a); }',
 		'a { --a: var(--b extra); --b: var(--a); }',
 		'a { --a: var(--b) var(--c); --b: var(--c); --c: 1px; }',
+		'a { --a: attr(data-x, var(--a)); }',
 	],
 	invalid: [
 		'a { --one: var(--two); --two: var(--one); }',
@@ -99,6 +102,9 @@ test.snapshot({
 		String.raw`a { \2d\2d spacing: var(--spacing); }`,
 		'a { --間隔: var(--間隔); }',
 		'a {\n\t--spacing: calc(\n\t\tvar(--spacing) + 1px\n\t);\n}',
+		'@starting-style { a { --a: var(--b); --b: var(--a); } }',
+		'@position-try --test { --a: var(--b); --b: var(--a); }',
+		'a { --a: random(1px, var(--a)); }',
 	],
 });
 

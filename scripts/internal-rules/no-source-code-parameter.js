@@ -62,23 +62,25 @@ const config = {
 					parameter = parameter.left;
 				}
 
-				if (parameter.type === 'Identifier' && parameter.name === 'sourceCode') {
-					const variable = context.sourceCode.getDeclaredVariables(functionNode)
-						.find(variable => variable.defs.length === 1 && variable.defs[0].name === parameter);
-
-					context.report({
-						node: parameter,
-						messageId: messageIdError,
-						suggest: [
-							suggestionDestructuringInBody,
-							suggestionMemberAccess,
-							suggestionDestructuringInParameter,
-						].map(type => ({
-							messageId: type,
-							fix: fix(context, variable, functionNode, type),
-						})),
-					});
+				if (parameter.type !== 'Identifier' || parameter.name !== 'sourceCode') {
+					continue;
 				}
+
+				const variable = context.sourceCode.getDeclaredVariables(functionNode)
+					.find(variable => variable.defs.length === 1 && variable.defs[0].name === parameter);
+
+				context.report({
+					node: parameter,
+					messageId: messageIdError,
+					suggest: [
+						suggestionDestructuringInBody,
+						suggestionMemberAccess,
+						suggestionDestructuringInParameter,
+					].map(type => ({
+						messageId: type,
+						fix: fix(context, variable, functionNode, type),
+					})),
+				});
 			}
 		},
 	}),

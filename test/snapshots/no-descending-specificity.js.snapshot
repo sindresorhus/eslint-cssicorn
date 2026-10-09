@@ -950,6 +950,56 @@ Message:
 
 `;
 
+exports[`invalid(63): :is(b, c) a { color: red; } a { color: blue; } 1`] = `
+
+  1 | :is(b, c) a { color: red; } a { color: blue; }
+
+`;
+
+exports[`invalid(63): :is(b, c) a { color: red; } a { color: blue; } 2`] = `
+
+Message:
+> 1 | :is(b, c) a { color: red; } a { color: blue; }
+    |                             ^ Expected selector \`a\` to come before \`:is(b,c) a\` on line 1 because both set \`color\`.
+
+`;
+
+exports[`invalid(64): b > a { color: red; } a { color: blue; } 1`] = `
+
+  1 | b > a { color: red; } a { color: blue; }
+
+`;
+
+exports[`invalid(64): b > a { color: red; } a { color: blue; } 2`] = `
+
+Message:
+> 1 | b > a { color: red; } a { color: blue; }
+    |                       ^ Expected selector \`a\` to come before \`b>a\` on line 1 because both set \`color\`.
+
+`;
+
+exports[`invalid(65): b a { color: red; } a { color: blue; } a { color: green; } 1`] = `
+
+  1 | b a { color: red; } a { color: blue; } a { color: green; }
+
+`;
+
+exports[`invalid(65): b a { color: red; } a { color: blue; } a { color: green; } 2`] = `
+
+Message:
+> 1 | b a { color: red; } a { color: blue; } a { color: green; }
+    |                     ^ Expected selector \`a\` to come before \`b a\` on line 1 because both set \`color\`.
+
+`;
+
+exports[`invalid(65): b a { color: red; } a { color: blue; } a { color: green; } 3`] = `
+
+Message:
+> 1 | b a { color: red; } a { color: blue; } a { color: green; }
+    |                                        ^ Expected selector \`a\` to come before \`b a\` on line 1 because both set \`color\`.
+
+`;
+
 exports[`invalid(7): b a { color: red !important; } a { color: blue; color: green !important; } 1`] = `
 
   1 | b a { color: red !important; } a { color: blue; color: green !important; }

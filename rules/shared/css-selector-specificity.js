@@ -1,5 +1,10 @@
-import {find, tokenize, tokenTypes} from '@eslint/css-tree';
-import {isKeyframesAtRule, normalizeCssIdentifier} from '../utils/index.js';
+import {find} from '@eslint/css-tree';
+import {
+	getPseudoSelectorName,
+	hasDelimToken,
+	isKeyframesAtRule,
+	normalizeCssIdentifier,
+} from '../utils/index.js';
 import {functionalPseudoSelectors, nonFunctionalPseudoSelectors} from './standard-pseudo-selectors.js';
 
 /**
@@ -47,6 +52,42 @@ const LEGACY_PSEUDO_ELEMENTS = new Set([
 ]);
 const FUNCTIONAL_PSEUDO_SELECTORS = new Set(functionalPseudoSelectors);
 const NON_FUNCTIONAL_PSEUDO_SELECTORS = new Set(nonFunctionalPseudoSelectors);
+
+/**
+Check whether a type selector or attribute selector name has a namespace that must match exactly, like `svg|circle`. Namespaces affect whether selectors can match in HTML documents.
+
+@param {string} name - The raw selector name.
+@returns {boolean}
+*/
+const hasNamedNamespace = name => name.includes('|') && !name.startsWith('*|') && !name.startsWith('|');
+
+/**
+Get the nodes of the final compound selector, after the last combinator.
+
+@param {SelectorPlain} selector
+@returns {SelectorPlain['children']}
+*/
+const getTerminalCompoundNodes = selector => selector.children.slice(selector.children.findLastIndex(node => node.type === 'Combinator') + 1);
+
+/**
+Check whether a node is a pseudo-element, including legacy single-colon pseudo-elements like `:before`.
+
+@param {import('@eslint/css-tree').CssNodePlain} node
+@returns {boolean}
+*/
+const isPseudoElementNode = node => node.type === 'PseudoElementSelector'
+	|| (node.type === 'PseudoClassSelector' && LEGACY_PSEUDO_ELEMENTS.has(normalizeCssIdentifier(node.name)));
+
+/**
+Check whether a pseudo-selector is in the standard pseudo-selector catalogs, like `:hover` or `::part()`.
+
+@param {import('@eslint/css-tree').PseudoClassSelectorPlain | import('@eslint/css-tree').PseudoElementSelectorPlain} node
+@returns {boolean}
+*/
+const isStandardPseudoSelector = node => {
+	const supportedPseudoSelectors = node.children === null ? NON_FUNCTIONAL_PSEUDO_SELECTORS : FUNCTIONAL_PSEUDO_SELECTORS;
+	return supportedPseudoSelectors.has(getPseudoSelectorName(node));
+};
 
 const addSpecificity = (first, second) => first.map((value, index) => value + second[index]);
 
@@ -114,8 +155,7 @@ const hasInvalidCompound = selector => {
 			continue;
 		}
 
-		const isPseudoElement = node.type === 'PseudoElementSelector'
-			|| (node.type === 'PseudoClassSelector' && LEGACY_PSEUDO_ELEMENTS.has(normalizeCssIdentifier(node.name)));
+		const isPseudoElement = isPseudoElementNode(node);
 		if (isPseudoElement) {
 			if (hasPseudoElement) {
 				return true;
@@ -166,12 +206,7 @@ const isPseudoSelectorRepresentable = (node, allowPseudoElements) => {
 	}
 
 	const name = normalizeCssIdentifier(node.name);
-	const prefix = node.type === 'PseudoElementSelector' ? '::' : ':';
-	const pseudoSelector = `${prefix}${name}`;
-	const supportedPseudoSelectors = node.children === null
-		? NON_FUNCTIONAL_PSEUDO_SELECTORS
-		: FUNCTIONAL_PSEUDO_SELECTORS;
-	if (!supportedPseudoSelectors.has(pseudoSelector)) {
+	if (!isStandardPseudoSelector(node)) {
 		return false;
 	}
 
@@ -208,18 +243,7 @@ function isSelectorRepresentable(selector, allowPseudoElements, allowLeadingComb
 const canMatchSelector = selector => isSelectorRepresentable(selector, true, true);
 const canBeRepresentedByNestingSelector = (selector, allowLeadingCombinator = true) => isSelectorRepresentable(selector, false, allowLeadingCombinator);
 
-const hasNestingSelectorInRawArgument = argument => {
-	if (argument?.type !== 'Raw') {
-		return false;
-	}
-
-	let hasNestingSelector = false;
-	tokenize(argument.value, (type, start) => {
-		hasNestingSelector ||= type === tokenTypes.Delim && argument.value[start] === '&';
-	});
-
-	return hasNestingSelector;
-};
+const hasNestingSelectorInRawArgument = argument => argument?.type === 'Raw' && hasDelimToken(argument.value, '&');
 
 /**
 Calculate selector specificity without adding an implicit nesting selector.
@@ -382,6 +406,20 @@ const getParentStyleRule = (rule, context) => {
 	}
 };
 
+/**
+Get the style rule that directly owns a selector node, meaning the node is inside that rule's selector.
+
+@param {import('@eslint/css-tree').CssNodePlain} node
+@param {import('../rule/cssicorn-context.js').CssicornContext} context
+@returns {import('@eslint/css-tree').RulePlain | undefined}
+*/
+const getOwningStyleRule = (node, context) => {
+	const {sourceCode} = context;
+	const ancestors = sourceCode.getAncestors(node);
+	const owner = ancestors.findLast(ancestor => ancestor.type === 'Rule' || ancestor.type === 'Atrule');
+	return owner?.prelude && isStyleRule(owner, context) && ancestors.includes(owner.prelude) ? owner : undefined;
+};
+
 const hasAncestorStyleRule = (rule, context) => {
 	const {sourceCode} = context;
 	let ancestor = sourceCode.getParent(rule);
@@ -420,15 +458,20 @@ export {
 	canMatchSelector,
 	compareSpecificity,
 	getMaximumSpecificity,
+	getOwningStyleRule,
 	getParentStyleRule,
 	getRuleSelectorSpecificity,
 	getRuleSpecificities,
 	getSelectorArgument,
 	getSelectorSpecificity,
+	getTerminalCompoundNodes,
 	hasAncestorStyleRule,
 	hasLeadingCombinator,
+	hasNamedNamespace,
 	hasNestingSelectorInRawArgument,
 	hasScopeAncestor,
+	isPseudoElementNode,
+	isStandardPseudoSelector,
 	isStyleRule,
 	LEGACY_PSEUDO_ELEMENTS,
 };

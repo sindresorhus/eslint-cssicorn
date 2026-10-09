@@ -835,6 +835,147 @@ Output:
 
 `;
 
+exports[`invalid(53): a { font-family: \"Arial\", \"ARIAL\", sans-serif; } 1`] = `
+
+  1 | a { font-family: "Arial", "ARIAL", sans-serif; }
+
+`;
+
+exports[`invalid(53): a { font-family: \"Arial\", \"ARIAL\", sans-serif; } 2`] = `
+
+Message:
+> 1 | a { font-family: "Arial", "ARIAL", sans-serif; }
+    |                           ^^^^^^^ Remove duplicate font family name \`ARIAL\`.
+
+Output:
+  1 | a { font-family: "Arial", sans-serif; }
+
+`;
+
+exports[`invalid(54): a { font-family: Helvetica, \"helvetica\", sans-serif; } 1`] = `
+
+  1 | a { font-family: Helvetica, "helvetica", sans-serif; }
+
+`;
+
+exports[`invalid(54): a { font-family: Helvetica, \"helvetica\", sans-serif; } 2`] = `
+
+Message:
+> 1 | a { font-family: Helvetica, "helvetica", sans-serif; }
+    |                             ^^^^^^^^^^^ Remove duplicate font family name \`helvetica\`.
+
+Output:
+  1 | a { font-family: Helvetica, sans-serif; }
+
+`;
+
+exports[`invalid(55): a { font: 12px/1.5 \"Roboto\", Roboto, sans-serif; } 1`] = `
+
+  1 | a { font: 12px/1.5 "Roboto", Roboto, sans-serif; }
+
+`;
+
+exports[`invalid(55): a { font: 12px/1.5 \"Roboto\", Roboto, sans-serif; } 2`] = `
+
+Message:
+> 1 | a { font: 12px/1.5 "Roboto", Roboto, sans-serif; }
+    |                              ^^^^^^ Remove duplicate font family name \`Roboto\`.
+
+Output:
+  1 | a { font: 12px/1.5 "Roboto", sans-serif; }
+
+`;
+
+exports[`invalid(56): a { font-family: Arial, Arial, Arial; } 1`] = `
+
+  1 | a { font-family: Arial, Arial, Arial; }
+
+`;
+
+exports[`invalid(56): a { font-family: Arial, Arial, Arial; } 2`] = `
+
+Message:
+> 1 | a { font-family: Arial, Arial, Arial; }
+    |                         ^^^^^ Remove duplicate font family name \`Arial\`.
+
+Output:
+  1 | a { font-family: Arial, Arial; }
+
+`;
+
+exports[`invalid(56): a { font-family: Arial, Arial, Arial; } 3`] = `
+
+Message:
+> 1 | a { font-family: Arial, Arial, Arial; }
+    |                                ^^^^^ Remove duplicate font family name \`Arial\`.
+
+Output:
+  1 | a { font-family: Arial, Arial; }
+
+`;
+
+exports[`invalid(57): a { font-family: \"Times New Roman\", Times New Roman, Times New Roman; } 1`] = `
+
+  1 | a { font-family: "Times New Roman", Times New Roman, Times New Roman; }
+
+`;
+
+exports[`invalid(57): a { font-family: \"Times New Roman\", Times New Roman, Times New Roman; } 2`] = `
+
+Message:
+> 1 | a { font-family: "Times New Roman", Times New Roman, Times New Roman; }
+    |                                     ^^^^^^^^^^^^^^^ Remove duplicate font family name \`Times New Roman\`.
+
+Output:
+  1 | a { font-family: "Times New Roman", Times New Roman; }
+
+`;
+
+exports[`invalid(57): a { font-family: \"Times New Roman\", Times New Roman, Times New Roman; } 3`] = `
+
+Message:
+> 1 | a { font-family: "Times New Roman", Times New Roman, Times New Roman; }
+    |                                                      ^^^^^^^^^^^^^^^ Remove duplicate font family name \`Times New Roman\`.
+
+Output:
+  1 | a { font-family: "Times New Roman", Times New Roman; }
+
+`;
+
+exports[`invalid(58): a { font-family: Arial, \\41 rial, sans-serif; } 1`] = `
+
+  1 | a { font-family: Arial, \\41 rial, sans-serif; }
+
+`;
+
+exports[`invalid(58): a { font-family: Arial, \\41 rial, sans-serif; } 2`] = `
+
+Message:
+> 1 | a { font-family: Arial, \\41 rial, sans-serif; }
+    |                         ^^^^^^^^ Remove duplicate font family name \`Arial\`.
+
+Output:
+  1 | a { font-family: Arial, sans-serif; }
+
+`;
+
+exports[`invalid(59): a { font-family: serif, SERIF; } 1`] = `
+
+  1 | a { font-family: serif, SERIF; }
+
+`;
+
+exports[`invalid(59): a { font-family: serif, SERIF; } 2`] = `
+
+Message:
+> 1 | a { font-family: serif, SERIF; }
+    |                         ^^^^^ Remove duplicate font family name \`SERIF\`.
+
+Output:
+  1 | a { font-family: serif; }
+
+`;
+
 exports[`invalid(6): a { f\\6f nt: 16px Arial, Arial, sans-serif; } 1`] = `
 
   1 | a { f\\6f nt: 16px Arial, Arial, sans-serif; }
@@ -849,6 +990,102 @@ Message:
 
 Output:
   1 | a { f\\6f nt: 16px Arial, sans-serif; }
+
+`;
+
+exports[`invalid(60): a { font-family: Cursive, cursive; } 1`] = `
+
+  1 | a { font-family: Cursive, cursive; }
+
+`;
+
+exports[`invalid(60): a { font-family: Cursive, cursive; } 2`] = `
+
+Message:
+> 1 | a { font-family: Cursive, cursive; }
+    |                           ^^^^^^^ Remove duplicate font family name \`cursive\`.
+
+Output:
+  1 | a { font-family: Cursive; }
+
+`;
+
+exports[`invalid(61): a { font-family: \"Arial Black\", Arial Black; } 1`] = `
+
+  1 | a { font-family: "Arial Black", Arial Black; }
+
+`;
+
+exports[`invalid(61): a { font-family: \"Arial Black\", Arial Black; } 2`] = `
+
+Message:
+> 1 | a { font-family: "Arial Black", Arial Black; }
+    |                                 ^^^^^^^^^^^ Remove duplicate font family name \`Arial Black\`.
+
+Output:
+  1 | a { font-family: "Arial Black"; }
+
+`;
+
+exports[`invalid(62): a { font-family: Arial, Arial !important; } 1`] = `
+
+  1 | a { font-family: Arial, Arial !important; }
+
+`;
+
+exports[`invalid(62): a { font-family: Arial, Arial !important; } 2`] = `
+
+Message:
+> 1 | a { font-family: Arial, Arial !important; }
+    |                         ^^^^^ Remove duplicate font family name \`Arial\`.
+
+Output:
+  1 | a { font-family: Arial !important; }
+
+`;
+
+exports[`invalid(63): a { font-family: Arial, Arial; font-family: Helvetica, Helvetica; } 1`] = `
+
+  1 | a { font-family: Arial, Arial; font-family: Helvetica, Helvetica; }
+
+`;
+
+exports[`invalid(63): a { font-family: Arial, Arial; font-family: Helvetica, Helvetica; } 2`] = `
+
+Message:
+> 1 | a { font-family: Arial, Arial; font-family: Helvetica, Helvetica; }
+    |                         ^^^^^ Remove duplicate font family name \`Arial\`.
+
+Output:
+  1 | a { font-family: Arial; font-family: Helvetica, Helvetica; }
+
+`;
+
+exports[`invalid(63): a { font-family: Arial, Arial; font-family: Helvetica, Helvetica; } 3`] = `
+
+Message:
+> 1 | a { font-family: Arial, Arial; font-family: Helvetica, Helvetica; }
+    |                                                        ^^^^^^^^^ Remove duplicate font family name \`Helvetica\`.
+
+Output:
+  1 | a { font-family: Arial, Arial; font-family: Helvetica; }
+
+`;
+
+exports[`invalid(64): @keyframes x { from { font-family: Inter, Inter; } } 1`] = `
+
+  1 | @keyframes x { from { font-family: Inter, Inter; } }
+
+`;
+
+exports[`invalid(64): @keyframes x { from { font-family: Inter, Inter; } } 2`] = `
+
+Message:
+> 1 | @keyframes x { from { font-family: Inter, Inter; } }
+    |                                           ^^^^^ Remove duplicate font family name \`Inter\`.
+
+Output:
+  1 | @keyframes x { from { font-family: Inter; } }
 
 `;
 

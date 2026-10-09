@@ -8,6 +8,7 @@ import {
 	hasSubstitutionOrRandomFunction,
 	isCssModulesInteropDeclaration,
 	isCssWideKeyword,
+	isImportantDeclaration,
 	isStyleBlock,
 	normalizeCssIdentifier,
 } from './utils/index.js';
@@ -108,8 +109,7 @@ const getTransitionLists = (declaration, property, lexer) => {
 const getBlockTransitions = (declarations, lexer) => {
 	const controls = new Map();
 	for (const {declaration, property} of declarations) {
-		const important = declaration.important === true
-			|| (typeof declaration.important === 'string' && normalizeCssIdentifier(declaration.important) === 'important');
+		const important = isImportantDeclaration(declaration);
 		const properties = property === 'transition' || property === 'all' ? longhandProperties : [property];
 		const lists = getTransitionLists(declaration, property, lexer);
 		for (const affectedProperty of properties) {

@@ -107,6 +107,13 @@ test.snapshot({
 		withTokens('a { color: rgb(100%100%100%); }', {'--color': '#fff'}),
 		withTokens(String.raw`:root { \2d -space: 8px; }`, {'--space': '8px'}),
 		{code: 'a { width: ???; }', options, languageOptions: {tolerant: true}},
+		// URLs and color functions are preserved, so their contents are not tokenized
+		withTokens('a { background: url(8px); }', {'--space': '8px'}),
+		withTokens('a { color: rgb(from red r g b); }', {'--red': 'red'}),
+		withTokens('a { color: light-dark(red, blue); }', {'--warm': 'red'}),
+		// Two configured tokens with the same value are ambiguous
+		withTokens('a { color: red; }', {'--brand': 'red', '--accent': 'red'}),
+		withTokens('a { margin: 8px; }', {'--space': '8px', '--gap': '8px'}),
 	],
 	invalid: [
 		withTokens('a { color: #fff; }', {'--white': '#ffffff'}),
@@ -137,6 +144,25 @@ test.snapshot({
 		withTokens(String.raw`a { margin: v\61r(--other, 8px) 8px; }`, {'--space': '8px'}),
 		withTokens(String.raw`a { color: h\73l(0 50% 50%); width: 50%; }`, {'--half': '50%'}),
 		withTokens('a { @starting-style { margin: 8px; } }', {'--space': '8px'}),
+		// Components inside non-color functions are inspected
+		withTokens('a { transform: translateX(8px); }', {'--space': '8px'}),
+		withTokens('a { transform: translateX(8px); }', {'--move': 'translateX(8px)'}),
+		withTokens('a { transform: translate(8px, 12px); }', {'--space': '8px'}),
+		withTokens('a { grid-template-columns: repeat(2, 8px); }', {'--space': '8px'}),
+		withTokens('a { width: clamp(8px, 50%, 12px); }', {'--small': '8px', '--large': '12px', '--half': '50%'}),
+		withTokens('a { background: paint(something); }', {'--paint': 'paint(something)'}),
+		// Comma-separated component lists report every match
+		withTokens('a { transition: opacity 200ms, color 200ms; }', {'--time': '.2s'}),
+		withTokens('a { color: #6750a4 #6750a4; }', {'--brand-color': '#6750a4'}),
+		withTokens('a { color: red; background: red; }', {'--brand': 'red'}),
+		// Uppercase hex digits and unit spellings match
+		withTokens('a { color: #FFF; }', {'--white': '#fff'}),
+		withTokens('a { border-radius: 12PX; }', {'--radius': '12px'}),
+		// A whole value containing operator spacing
+		withTokens('a { aspect-ratio: 16 / 9; }', {'--ratio': '16 / 9'}),
+		// A longhand and a skipped custom-property declaration in the same block
+		withTokens('a { margin-top: 8px; }', {'--space': '8px'}),
+		withTokens('a { --space: 8px; margin: 8px; }', {'--space': '8px'}),
 	],
 });
 
@@ -190,12 +216,12 @@ const lint = customProperties => new Linter().verify('a { color: red; }', {
 
 for (const value of ['', ' ', 'rgb(1 2 3', '8px)', '1px; color: red', '1px !important', 'red/*', 'red/*/', '"red', String.raw`"red\"`, 'url(foo', String.raw`url(foo\)`]) {
 	nodeTest(`reject malformed configured value: ${JSON.stringify(value)}`, () => {
-		assert.throws(() => lint({'--token': value}), /Invalid value for custom property/u);
+		assert.throws(() => lint({'--token': value}), /Invalid value for custom property/v);
 	});
 }
 
 for (const name of ['color', '--']) {
 	nodeTest(`reject invalid configured name: ${name}`, () => {
-		assert.throws(() => lint({[name]: 'red'}), /property name .* is invalid/u);
+		assert.throws(() => lint({[name]: 'red'}), /property name .* is invalid/v);
 	});
 }

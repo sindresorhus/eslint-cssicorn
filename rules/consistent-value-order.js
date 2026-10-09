@@ -1,10 +1,11 @@
-import {ident} from '@eslint/css-tree';
 import {colorFunctions} from './shared/css-color-functions.js';
 import mathFunctions from './shared/css-math-functions.js';
-import {getVendorPrefix} from './shared/css-shorthand-properties.js';
 import {
+	decodeCssIdentifier,
+	getBasePropertyName,
 	getCanonicalLexerNode,
 	getCommaSeparatedGroups,
+	getNodesRange,
 	hasCommentInRange,
 	hasSubstitutionOrRandomFunction,
 	isCssModulesInteropDeclaration,
@@ -75,14 +76,12 @@ const getMatchingComponent = node => {
 	}
 
 	const name = normalizeCssIdentifier(node.name);
-	if (
-		(!colorFunctions.has(name) && !mathFunctions.has(name))
-		|| !hasSubstitutionOrRandomFunction(node)
-	) {
+	const isColor = colorFunctions.has(name);
+	if ((!isColor && !mathFunctions.has(name)) || !hasSubstitutionOrRandomFunction(node)) {
 		return node;
 	}
 
-	return colorFunctions.has(name)
+	return isColor
 		? {type: 'Identifier', name: 'transparent'}
 		: {...node, name: name === 'random' ? 'calc' : node.name, children: [{type: 'Number', value: '1'}]};
 };
@@ -111,7 +110,7 @@ const getGroupProblem = (nodes, canonicalNodes, {order, matchResult, property, c
 
 	const lastChangedIndex = components.findLastIndex((component, index) => component !== sortedComponents[index]);
 	const {sourceCode} = context;
-	const range = [sourceCode.getRange(nodes[0])[0], sourceCode.getRange(nodes.at(-1))[1]];
+	const range = getNodesRange(nodes, {sourceCode});
 	const fixRange = [sourceCode.getRange(nodes[firstChangedIndex])[0], sourceCode.getRange(nodes[lastChangedIndex])[1]];
 	const getSeparator = index => sourceCode.text.slice(sourceCode.getRange(nodes[index - 1])[1], sourceCode.getRange(nodes[index])[0]);
 	return {
@@ -139,7 +138,7 @@ const getGroupProblem = (nodes, canonicalNodes, {order, matchResult, property, c
 				const text = sourceCode.getText(node);
 				replacement += text;
 				// A terminating hexadecimal escape consumes one whitespace character before the token separator.
-				if (index < sortedComponents.length - 1 && text.includes('\\') && ident.decode(`${text} `) === ident.decode(text)) {
+				if (index < sortedComponents.length - 1 && text.includes('\\') && decodeCssIdentifier(`${text} `) === decodeCssIdentifier(text)) {
 					replacement += ' ';
 				}
 			}
@@ -160,8 +159,7 @@ const create = context => {
 	const {sourceCode} = context;
 
 	context.on('Declaration', function * (declaration) {
-		const normalizedProperty = normalizeCssIdentifier(declaration.property);
-		const property = normalizedProperty.slice(getVendorPrefix(normalizedProperty).length);
+		const property = getBasePropertyName(declaration.property);
 		const order = propertyOrders.get(property);
 		const {value} = declaration;
 		if (

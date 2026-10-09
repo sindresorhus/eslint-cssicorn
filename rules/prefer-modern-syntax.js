@@ -1,10 +1,12 @@
-import {parse, walk} from '@eslint/css-tree';
+import {walk} from '@eslint/css-tree';
 import colorFunctionsWithAlpha from './shared/css-color-functions.js';
 import {LEGACY_PSEUDO_ELEMENTS} from './shared/css-selector-specificity.js';
 import {
+	getContainingDeclaration,
 	isCssModulesInteropDeclaration,
 	isSubstitutionFunction,
 	normalizeCssIdentifier,
+	parseCustomPropertyDeclaration,
 	toLocation,
 } from './utils/index.js';
 
@@ -22,8 +24,7 @@ const legacyColorFunctions = new Set(['rgb', 'rgba', 'hsl', 'hsla']);
 const colorFunctionPattern = /(?:rgba?|hsla?|hwb|lab|lch|color)\(|\\/iv;
 const decimalPattern = /^(?<sign>[+\-]?)(?<integer>\d*)(?:\.(?<fraction>\d+))?$/v;
 
-const getRange = (node, offset, sourceCode) => sourceCode.getRange(node).map(index => index + offset);
-const hasLinebreak = text => text.includes('\n') || text.includes('\r') || text.includes('\f');
+const hasLinebreak = text => /[\n\f\r]/v.test(text);
 const hasKnownColorComponents = (children, commas, slash) => (
 	(commas.length === 2 || commas.length === 3)
 	&& !slash
@@ -52,13 +53,13 @@ function getAlpha(children, commas, slash, hasKnownComponents) {
 	}
 }
 
-function getSeparatorFixes(children, commas, offset, sourceCode) {
+function getSeparatorFixes(children, commas, sourceCode) {
 	const fixes = [];
 	for (const comma of commas) {
 		const index = children.indexOf(comma);
-		const previousRange = getRange(children[index - 1], offset, sourceCode);
-		const nextRange = getRange(children[index + 1], offset, sourceCode);
-		const commaRange = getRange(comma, offset, sourceCode);
+		const previousRange = sourceCode.getRange(children[index - 1]);
+		const nextRange = sourceCode.getRange(children[index + 1]);
+		const commaRange = sourceCode.getRange(comma);
 		const betweenRange = [previousRange[1], nextRange[0]];
 		const between = sourceCode.text.slice(...betweenRange);
 		const isAlphaSeparator = comma === commas[2];
@@ -68,7 +69,7 @@ function getSeparatorFixes(children, commas, offset, sourceCode) {
 		}
 
 		if (hasLinebreak(between)) {
-			const afterComma = sourceCode.text.slice(commaRange[1], nextRange[0]).replace(/^[\t ]+(?=[\n\f\r])/u, '');
+			const afterComma = sourceCode.text.slice(commaRange[1], nextRange[0]).replace(/^[\t ]+(?=[\n\f\r])/v, '');
 			fixes.push({span: betweenRange, replacement: `${isAlphaSeparator ? ' /' : ''}${afterComma}`});
 		} else {
 			fixes.push({span: betweenRange, replacement: isAlphaSeparator ? ' / ' : ' '});
@@ -78,15 +79,15 @@ function getSeparatorFixes(children, commas, offset, sourceCode) {
 	return fixes;
 }
 
-function getColorFixes({node, name, children, commas, hasKnownComponents, alpha, offset, sourceCode}) {
-	const span = getRange(node, offset, sourceCode);
+function getColorFixes({node, name, children, commas, hasKnownComponents, alpha, sourceCode}) {
+	const span = sourceCode.getRange(node);
 	const fixes = [];
 	if (name === 'rgba' || name === 'hsla') {
 		fixes.push({span: [span[0], span[0] + node.name.length], replacement: name.slice(0, -1)});
 	}
 
 	if (hasKnownComponents) {
-		const separatorFixes = getSeparatorFixes(children, commas, offset, sourceCode);
+		const separatorFixes = getSeparatorFixes(children, commas, sourceCode);
 		if (separatorFixes.length === 0) {
 			return [];
 		}
@@ -97,14 +98,14 @@ function getColorFixes({node, name, children, commas, hasKnownComponents, alpha,
 	if (alpha?.type === 'Number') {
 		const replacement = toPercentage(alpha.value);
 		if (replacement) {
-			fixes.push({span: getRange(alpha, offset, sourceCode), replacement});
+			fixes.push({span: sourceCode.getRange(alpha), replacement});
 		}
 	}
 
 	return fixes;
 }
 
-function getColorProblem(node, offset, context, reportNode = node) {
+function getColorProblem(node, context, reportNode = node) {
 	const {sourceCode} = context;
 	const name = normalizeCssIdentifier(node.name);
 	if (!colorFunctionsWithAlpha.has(name)) {
@@ -129,7 +130,7 @@ function getColorProblem(node, offset, context, reportNode = node) {
 		return;
 	}
 
-	const span = getRange(node, offset, sourceCode);
+	const span = sourceCode.getRange(node);
 	const problem = {
 		node: reportNode,
 		loc: toLocation(span, context),
@@ -150,7 +151,6 @@ function getColorProblem(node, offset, context, reportNode = node) {
 		commas,
 		hasKnownComponents,
 		alpha,
-		offset,
 		sourceCode,
 	});
 	if (fixes.length === 0) {
@@ -172,12 +172,12 @@ function getColorProblem(node, offset, context, reportNode = node) {
 */
 const create = context => {
 	context.on('Function', node => {
-		const problem = getColorProblem(node, 0, context);
+		const problem = getColorProblem(node, context);
 		if (!problem) {
 			return;
 		}
 
-		const declaration = context.sourceCode.getAncestors(node).findLast(ancestor => ancestor.type === 'Declaration');
+		const declaration = getContainingDeclaration(node, context);
 		if (declaration && isCssModulesInteropDeclaration(declaration, context)) {
 			return;
 		}
@@ -196,29 +196,18 @@ const create = context => {
 			return;
 		}
 
-		let parsed;
-		try {
-			parsed = parse(context.sourceCode.getText(declaration), {
-				context: 'declaration',
-				parseCustomProperty: true,
-				positions: true,
-			});
-		} catch {
-			return;
-		}
-
-		if (parsed.value.type !== 'Value') {
+		const parsed = parseCustomPropertyDeclaration(declaration, context);
+		if (parsed?.value.type !== 'Value') {
 			return;
 		}
 
 		const problems = [];
-		const [offset] = context.sourceCode.getRange(declaration);
 		walk(parsed.value, node => {
 			if (node.type !== 'Function') {
 				return;
 			}
 
-			const problem = getColorProblem(node, offset, context, declaration);
+			const problem = getColorProblem(node, context, declaration);
 			if (problem) {
 				problems.push(problem);
 			}

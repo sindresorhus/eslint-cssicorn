@@ -6,7 +6,7 @@ Lowercase only ASCII letters. CSS keywords are ASCII case-insensitive, so other 
 @param {string} string
 @returns {string}
 */
-export const toAsciiLowerCase = string => /[A-Z]/.test(string) ? string.replaceAll(/[A-Z]/g, character => character.toLowerCase()) : string;
+export const toAsciiLowerCase = string => /[A-Z]/v.test(string) ? string.replaceAll(/[A-Z]/gv, character => character.toLowerCase()) : string;
 
 /**
 Decode CSS escapes, like `\63 olor` to `color`. Faster than `ident.decode()` for the common case without escapes.
@@ -27,4 +27,15 @@ Decode CSS escapes and lowercase ASCII letters, to compare a CSS identifier with
 */
 export default function normalizeCssIdentifier(identifier) {
 	return toAsciiLowerCase(decodeCssIdentifier(identifier));
+}
+
+/**
+Normalize a declaration property name for comparison: like `normalizeCssIdentifier`, but custom property names are case-sensitive, so they are only decoded.
+
+@param {string} property - The raw property name, for example `node.property`.
+@returns {string}
+*/
+export function normalizePropertyName(property) {
+	const decodedProperty = decodeCssIdentifier(property);
+	return decodedProperty.startsWith('--') ? decodedProperty : toAsciiLowerCase(decodedProperty);
 }

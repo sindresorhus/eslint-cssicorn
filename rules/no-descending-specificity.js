@@ -1,7 +1,6 @@
 import {
 	find,
 	generate,
-	ident,
 	tokenize,
 	tokenTypes,
 } from '@eslint/css-tree';
@@ -14,11 +13,19 @@ import {
 	getRuleSelectorSpecificity,
 	getRuleSpecificities,
 	hasAncestorStyleRule,
+	getTerminalCompoundNodes,
 	hasLeadingCombinator,
 	hasScopeAncestor,
 	LEGACY_PSEUDO_ELEMENTS,
 } from './shared/css-selector-specificity.js';
-import {getAtRuleContextPart, isKeyframesAtRule, normalizeCssIdentifier} from './utils/index.js';
+import {
+	decodeCssIdentifier,
+	getAtRuleContextPart,
+	hasDelimToken,
+	hasKeyframesAncestor,
+	normalizeCssIdentifier,
+	normalizePropertyName,
+} from './utils/index.js';
 
 const MESSAGE_ID = 'no-descending-specificity';
 const messages = {
@@ -35,31 +42,7 @@ const MAXIMUM_TERMINAL_KEYS = 64;
 const MAXIMUM_TERMINAL_KEY_LENGTH = 1024;
 const MAXIMUM_TERMINAL_KEY_ASSOCIATIONS = 256;
 
-const isInKeyframes = (rule, sourceCode) => {
-	let ancestor = sourceCode.getParent(rule);
-
-	while (ancestor) {
-		if (isKeyframesAtRule(ancestor)) {
-			return true;
-		}
-
-		ancestor = sourceCode.getParent(ancestor);
-	}
-
-	return false;
-};
-
-const normalizeProperty = property => {
-	const decodedProperty = ident.decode(property);
-	return decodedProperty.startsWith('--') ? decodedProperty : normalizeCssIdentifier(property);
-};
-
 const getDeclarationRecordKey = ({contextIdentifier, property}) => JSON.stringify([contextIdentifier, property]);
-
-const getTerminalCompoundNodes = selector => {
-	const lastCombinatorIndex = selector.children.findLastIndex(node => node.type === 'Combinator');
-	return selector.children.slice(lastCombinatorIndex + 1);
-};
 
 const canCompareAsLaterSelector = (selector, parentRule) => !parentRule && selector.children.every(node => {
 	if (node.type === 'PseudoClassSelector') {
@@ -78,12 +61,7 @@ const hasNamespaceSeparator = name => {
 		return false;
 	}
 
-	let hasSeparator = false;
-	tokenize(name, (type, start) => {
-		hasSeparator ||= type === tokenTypes.Delim && name[start] === '|';
-	});
-
-	return hasSeparator;
+	return hasDelimToken(name, '|');
 };
 
 const hasUnsupportedSelector = selector => Boolean(find(selector, node => {
@@ -106,7 +84,7 @@ const getTypeSelectorKey = name => {
 	const tokens = [];
 	tokenize(name, (type, start, end) => {
 		const value = name.slice(start, end);
-		tokens.push([type, type === tokenTypes.Ident ? ident.decode(value) : value]);
+		tokens.push([type, type === tokenTypes.Ident ? decodeCssIdentifier(value) : value]);
 	});
 
 	return JSON.stringify(tokens);
@@ -132,7 +110,7 @@ const getTerminalNodeKey = node => {
 
 		case 'ClassSelector':
 		case 'IdSelector': {
-			return `${node.type}:${ident.decode(node.name)}`;
+			return `${node.type}:${decodeCssIdentifier(node.name)}`;
 		}
 
 		case 'PseudoClassSelector': {
@@ -340,9 +318,7 @@ const addEntry = (analysis, record, entriesByTerminalKey) => {
 */
 const create = context => {
 	const {sourceCode} = context;
-	const ruleSpecificities = new WeakMap();
-	const ruleTerminalKeys = new WeakMap();
-	const analysesByRule = new WeakMap();
+	const analysisByRule = new WeakMap();
 	const declarationRecords = [];
 	const entriesByContext = new Map();
 	const contextIdentifierByNode = new WeakMap();
@@ -374,7 +350,7 @@ const create = context => {
 	// Show nested selectors with their parent, so the message does not say `a` when the selector is `.nav a`.
 	const getDisplaySelectorText = (selector, parentRule) => {
 		const selectorText = generate(selector);
-		const parentSelectorTexts = analysesByRule.get(parentRule)?.map(analysis => analysis.selectorText) ?? [];
+		const parentSelectorTexts = analysisByRule.get(parentRule)?.analyses.map(analysis => analysis.selectorText) ?? [];
 		if (parentSelectorTexts.length === 0) {
 			return selectorText;
 		}
@@ -391,14 +367,13 @@ const create = context => {
 	context.on('Rule', rule => {
 		if (
 			rule.prelude.type !== 'SelectorList'
-			|| isInKeyframes(rule, sourceCode)
+			|| hasKeyframesAncestor(rule, context)
 		) {
 			return;
 		}
 
 		const parentRule = getParentStyleRule(rule, context);
-		const parentSpecificities = parentRule && ruleSpecificities.get(parentRule);
-		const parentTerminalKeys = parentRule ? ruleTerminalKeys.get(parentRule) ?? [] : [];
+		const {specificities: parentSpecificities, terminalKeys: parentTerminalKeys = []} = parentRule ? analysisByRule.get(parentRule) ?? {} : {};
 		const nestingSpecificity = getMaximumSpecificity(parentSpecificities ?? []);
 		const hasUnresolvedParent = !parentRule && hasAncestorStyleRule(rule, context);
 		const isScoped = hasScopeAncestor(rule, context);
@@ -437,9 +412,7 @@ const create = context => {
 		}
 
 		const specificities = hasUnresolvedParent || hasUnresolvedSelectors || exceedsTerminalKeyBudget || parentSpecificities?.length === 0 ? [] : getNestingSpecificities(rule, nestingSpecificity);
-		ruleSpecificities.set(rule, specificities);
-		ruleTerminalKeys.set(rule, getRuleTerminalKeys(analyses));
-		analysesByRule.set(rule, analyses);
+		analysisByRule.set(rule, {analyses, specificities, terminalKeys: getRuleTerminalKeys(analyses)});
 	});
 
 	context.on('Declaration', declaration => {
@@ -450,14 +423,14 @@ const create = context => {
 			rule = sourceCode.getParent(rule);
 		}
 
-		if (isDirectlyScoped || !analysesByRule.has(rule)) {
+		if (isDirectlyScoped || !analysisByRule.has(rule)) {
 			return;
 		}
 
 		declarationRecords.push({
 			contextIdentifier: getAtRuleContextIdentifier(sourceCode.getParent(declaration)),
 			important: Boolean(declaration.important),
-			property: normalizeProperty(declaration.property),
+			property: normalizePropertyName(declaration.property),
 			rule,
 		});
 	});
@@ -479,7 +452,7 @@ const create = context => {
 		}
 
 		for (const record of declarationRecords) {
-			const {contextIdentifier, important, property, rule} = record;
+			const {contextIdentifier, important, rule} = record;
 			const key = getDeclarationRecordKey(record);
 			let entriesByTerminalKey = entriesByContext.get(contextIdentifier);
 			if (!entriesByTerminalKey) {
@@ -487,7 +460,7 @@ const create = context => {
 				entriesByContext.set(contextIdentifier, entriesByTerminalKey);
 			}
 
-			const analyses = analysesByRule.get(rule);
+			const {analyses} = analysisByRule.get(rule);
 			if (important || !importantKeysByRule.get(rule)?.has(key)) {
 				yield * getSelectorProblems(analyses, record, entriesByTerminalKey, reportedSelectors);
 			}

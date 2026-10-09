@@ -5,11 +5,17 @@ import {
 	compareSpecificity,
 	getRuleSelectorSpecificity,
 	hasAncestorStyleRule,
+	hasNamedNamespace,
 	hasNestingSelectorInRawArgument,
 	hasScopeAncestor,
 	isStyleRule,
 } from './shared/css-selector-specificity.js';
-import {hasCommentInRange, normalizeCssIdentifier} from './utils/index.js';
+import {
+	getNodesRange,
+	hasCommentInRange,
+	normalizeCssIdentifier,
+	transparentGroupingAtRules,
+} from './utils/index.js';
 
 /**
 @import {CssicornContext} from './rule/cssicorn-context.js';
@@ -61,8 +67,6 @@ const UNWRAPPABLE_PSEUDO_CLASSES = new Set([
 	'target',
 	'valid',
 ]);
-
-const hasNamedNamespace = name => name.includes('|') && !name.startsWith('*|') && !name.startsWith('|');
 
 const isDescendantCombinator = node => node?.type === 'Combinator' && node.name === ' ';
 
@@ -276,14 +280,14 @@ const getCandidate = (selector, rule, context) => {
 	};
 };
 
-const getNodesText = (nodes, sourceCode) => sourceCode.text.slice(sourceCode.getRange(nodes[0])[0], sourceCode.getRange(nodes.at(-1))[1]);
+const getNodesText = (nodes, sourceCode) => sourceCode.text.slice(...getNodesRange(nodes, {sourceCode}));
 
 const getIndentation = (rule, sourceCode) => {
 	const [ruleStart] = sourceCode.getRange(rule);
 	const indentation = sourceCode.text.slice(ruleStart - sourceCode.getLoc(rule).start.column + 1, ruleStart);
 	const content = sourceCode.getText(rule.block).slice(1, -1);
-	const bodyIndentation = content.match(/(?:\r\n|[\n\f\r])([\t ]*)[^\t\n\f\r ]/u)?.[1];
-	if (!/^[\t ]*$/u.test(indentation) || !bodyIndentation?.startsWith(indentation) || bodyIndentation.length <= indentation.length) {
+	const bodyIndentation = content.match(/(?:\r\n|[\n\f\r])([\t ]*)[^\t\n\f\r ]/v)?.[1];
+	if (!/^[\t ]*$/v.test(indentation) || !bodyIndentation?.startsWith(indentation) || bodyIndentation.length <= indentation.length) {
 		return;
 	}
 
@@ -303,7 +307,7 @@ const getConditionalBlock = (rule, nestedRules, context, indentationStep) => {
 
 		if (indentationStep) {
 			// Undo the child's added level so the complete retained subtree is indented only once.
-			const lineIndentation = /(\r\n|[\n\f\r])([\t ]*)/gu;
+			const lineIndentation = /(\r\n|[\n\f\r])([\t ]*)/gv;
 			for (const match of content.matchAll(lineIndentation)) {
 				if (match[2] && !match[2].startsWith(indentationStep)) {
 					return;
@@ -324,12 +328,12 @@ const getConditionalBlock = (rule, nestedRules, context, indentationStep) => {
 const getNestedContent = ({rule, inner, blockNode = rule.block, blockText, nestedRules}, context) => {
 	const {sourceCode} = context;
 	const ruleText = sourceCode.getText(rule);
-	if (hasCommentInRange(context, sourceCode.getRange(rule)) || /\\[\da-f]{0,6}[\n\f\r]/iu.test(ruleText)) {
+	if (hasCommentInRange(context, sourceCode.getRange(rule)) || /\\[\da-f]{0,6}[\n\f\r]/iv.test(ruleText)) {
 		return;
 	}
 
 	let block = blockText ?? sourceCode.getText(blockNode);
-	const lineBreak = ruleText.match(/\r\n|[\n\f\r]/u)?.[0];
+	const lineBreak = ruleText.match(/\r\n|[\n\f\r]/v)?.[0];
 	if (!lineBreak) {
 		if (nestedRules) {
 			block = getConditionalBlock(rule, nestedRules, context);
@@ -368,8 +372,8 @@ const getNestedContent = ({rule, inner, blockNode = rule.block, blockText, neste
 		}
 	}
 
-	const indentedInner = inner.replaceAll(/(\r\n|[\n\f\r])(?=[\t ]*[^\t\n\f\r ])/gu, lineBreak => lineBreak + indentationStep);
-	const indentedBlock = blockNode === rule.block ? block.replaceAll(/(\r\n|[\n\f\r])(?=[\t ]*[^\t\n\f\r ])/gu, lineBreak => lineBreak + indentationStep) : block;
+	const indentedInner = inner.replaceAll(/(\r\n|[\n\f\r])(?=[\t ]*[^\t\n\f\r ])/gv, lineBreak => lineBreak + indentationStep);
+	const indentedBlock = blockNode === rule.block ? block.replaceAll(/(\r\n|[\n\f\r])(?=[\t ]*[^\t\n\f\r ])/gv, lineBreak => lineBreak + indentationStep) : block;
 	return `${lineBreak}${indentation}${indentationStep}${indentedInner} ${indentedBlock}${lineBreak}${indentation}`;
 };
 
@@ -538,7 +542,7 @@ const getGroupedSelectorText = (parents, rule, context, getSelectorText = getRel
 		}
 
 		const matches = parents.map(parent => getSelectorText(parent, selector, rule, context));
-		const matchingIndices = matches.map((match, index) => match === undefined ? undefined : index).filter(index => index !== undefined);
+		const matchingIndices = matches.flatMap((match, index) => match === undefined ? [] : [index]);
 		if (matchingIndices.length !== 1) {
 			return;
 		}
@@ -622,7 +626,7 @@ const getGroupedCandidate = (rule, context) => {
 // Discovery follows the first child of grouping blocks; the matcher validates every moved child.
 const getFirstStyleRule = rule => {
 	let child = rule;
-	while (child?.type === 'Atrule' && ['media', 'supports', 'container', 'layer', 'starting-style'].includes(normalizeCssIdentifier(child.name)) && child.block?.children.length > 0) {
+	while (child?.type === 'Atrule' && transparentGroupingAtRules.has(normalizeCssIdentifier(child.name)) && child.block?.children.length > 0) {
 		[child] = child.block.children;
 	}
 
@@ -677,7 +681,7 @@ const getRelatedRule = (parents, rule, context, canNestStyleRules = true) => {
 	}
 
 	const name = normalizeCssIdentifier(rule.name);
-	if (!['media', 'supports', 'container', 'layer', 'starting-style'].includes(name)) {
+	if (!transparentGroupingAtRules.has(name)) {
 		return;
 	}
 
@@ -728,12 +732,12 @@ const getMergedReplacement = (parentRule, parents, relatedRules, context) => {
 	}
 
 	const parentText = sourceCode.getText(parentRule);
-	const isMultiline = /[\n\f\r]/u.test(parentText);
+	const isMultiline = /[\n\f\r]/v.test(parentText);
 	const parentFormatting = isMultiline ? getIndentation(parentRule, sourceCode) : undefined;
 	let replacement = hasExistingParent ? parentText.slice(0, -1) : `${getParentText(parents, sourceCode)} {`;
 	for (const relatedRule of relatedRules) {
 		const {rule} = relatedRule;
-		const childIsMultiline = /[\n\f\r]/u.test(sourceCode.getText(rule));
+		const childIsMultiline = /[\n\f\r]/v.test(sourceCode.getText(rule));
 		const childFormatting = childIsMultiline ? getIndentation(rule, sourceCode) : undefined;
 		if (
 			isMultiline !== childIsMultiline
@@ -752,7 +756,7 @@ const getMergedReplacement = (parentRule, parents, relatedRules, context) => {
 			return;
 		}
 
-		replacement = replacement.replace(/[\t\n\f\r ]+$/u, '') + content;
+		replacement = replacement.replace(/[\t\n\f\r ]+$/v, '') + content;
 	}
 
 	return `${replacement}}`;

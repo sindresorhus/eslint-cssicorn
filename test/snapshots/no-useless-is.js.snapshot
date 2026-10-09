@@ -630,6 +630,181 @@ Output:
 
 `;
 
+exports[`invalid(41): :is(.foo) .bar {} 1`] = `
+
+  1 | :is(.foo) .bar {}
+
+`;
+
+exports[`invalid(41): :is(.foo) .bar {} 2`] = `
+
+Message:
+> 1 | :is(.foo) .bar {}
+    | ^^^^^^^^^ Remove the unnecessary \`:is()\` wrapper.
+
+Output:
+  1 | .foo .bar {}
+
+`;
+
+exports[`invalid(42): :is(.a):hover {} 1`] = `
+
+  1 | :is(.a):hover {}
+
+`;
+
+exports[`invalid(42): :is(.a):hover {} 2`] = `
+
+Message:
+> 1 | :is(.a):hover {}
+    | ^^^^^^^ Remove the unnecessary \`:is()\` wrapper.
+
+Output:
+  1 | .a:hover {}
+
+`;
+
+exports[`invalid(43): :is(.a):not(.b) {} 1`] = `
+
+  1 | :is(.a):not(.b) {}
+
+`;
+
+exports[`invalid(43): :is(.a):not(.b) {} 2`] = `
+
+Message:
+> 1 | :is(.a):not(.b) {}
+    | ^^^^^^^ Remove the unnecessary \`:is()\` wrapper.
+
+Output:
+  1 | .a:not(.b) {}
+
+`;
+
+exports[`invalid(44): :is(div.foo) {} 1`] = `
+
+  1 | :is(div.foo) {}
+
+`;
+
+exports[`invalid(44): :is(div.foo) {} 2`] = `
+
+Message:
+> 1 | :is(div.foo) {}
+    | ^^^^^^^^^^^^ Remove the unnecessary \`:is()\` wrapper.
+
+Output:
+  1 | div.foo {}
+
+`;
+
+exports[`invalid(45): :is(.a) > .b {} 1`] = `
+
+  1 | :is(.a) > .b {}
+
+`;
+
+exports[`invalid(45): :is(.a) > .b {} 2`] = `
+
+Message:
+> 1 | :is(.a) > .b {}
+    | ^^^^^^^ Remove the unnecessary \`:is()\` wrapper.
+
+Output:
+  1 | .a > .b {}
+
+`;
+
+exports[`invalid(46): :is(.a) > :is(.b) {} 1`] = `
+
+  1 | :is(.a) > :is(.b) {}
+
+`;
+
+exports[`invalid(46): :is(.a) > :is(.b) {} 2`] = `
+
+Message:
+> 1 | :is(.a) > :is(.b) {}
+    | ^^^^^^^ Remove the unnecessary \`:is()\` wrapper.
+
+Output:
+  1 | .a > :is(.b) {}
+
+`;
+
+exports[`invalid(46): :is(.a) > :is(.b) {} 3`] = `
+
+Message:
+> 1 | :is(.a) > :is(.b) {}
+    |           ^^^^^^^ Remove the unnecessary \`:is()\` wrapper.
+
+Output:
+  1 | :is(.a) > .b {}
+
+`;
+
+exports[`invalid(47): :is(.a):where(.b):is(.c) {} 1`] = `
+
+  1 | :is(.a):where(.b):is(.c) {}
+
+`;
+
+exports[`invalid(47): :is(.a):where(.b):is(.c) {} 2`] = `
+
+Message:
+> 1 | :is(.a):where(.b):is(.c) {}
+    | ^^^^^^^ Remove the unnecessary \`:is()\` wrapper.
+
+Output:
+  1 | .a:where(.b):is(.c) {}
+
+`;
+
+exports[`invalid(47): :is(.a):where(.b):is(.c) {} 3`] = `
+
+Message:
+> 1 | :is(.a):where(.b):is(.c) {}
+    |                  ^^^^^^^ Remove the unnecessary \`:is()\` wrapper.
+
+Output:
+  1 | :is(.a):where(.b).c {}
+
+`;
+
+exports[`invalid(48): :is(.a):is(.b .c) {} 1`] = `
+
+  1 | :is(.a):is(.b .c) {}
+
+`;
+
+exports[`invalid(48): :is(.a):is(.b .c) {} 2`] = `
+
+Message:
+> 1 | :is(.a):is(.b .c) {}
+    | ^^^^^^^ Remove the unnecessary \`:is()\` wrapper.
+
+Output:
+  1 | .a:is(.b .c) {}
+
+`;
+
+exports[`invalid(49): :is(.a) :is(.b .c) {} 1`] = `
+
+  1 | :is(.a) :is(.b .c) {}
+
+`;
+
+exports[`invalid(49): :is(.a) :is(.b .c) {} 2`] = `
+
+Message:
+> 1 | :is(.a) :is(.b .c) {}
+    | ^^^^^^^ Remove the unnecessary \`:is()\` wrapper.
+
+Output:
+  1 | .a :is(.b .c) {}
+
+`;
+
 exports[`invalid(5): :is(.foo) a {} 1`] = `
 
   1 | :is(.foo) a {}
@@ -644,6 +819,74 @@ Message:
 
 Output:
   1 | .foo a {}
+
+`;
+
+exports[`invalid(50): :is(*) {} 1`] = `
+
+  1 | :is(*) {}
+
+`;
+
+exports[`invalid(50): :is(*) {} 2`] = `
+
+Message:
+> 1 | :is(*) {}
+    | ^^^^^^ Remove the unnecessary \`:is()\` wrapper.
+
+Output:
+  1 | * {}
+
+`;
+
+exports[`invalid(51): :is([href]) {} 1`] = `
+
+  1 | :is([href]) {}
+
+`;
+
+exports[`invalid(51): :is([href]) {} 2`] = `
+
+Message:
+> 1 | :is([href]) {}
+    | ^^^^^^^^^^^ Remove the unnecessary \`:is()\` wrapper.
+
+Output:
+  1 | [href] {}
+
+`;
+
+exports[`invalid(52): :is(#id) {} 1`] = `
+
+  1 | :is(#id) {}
+
+`;
+
+exports[`invalid(52): :is(#id) {} 2`] = `
+
+Message:
+> 1 | :is(#id) {}
+    | ^^^^^^^^ Remove the unnecessary \`:is()\` wrapper.
+
+Output:
+  1 | #id {}
+
+`;
+
+exports[`invalid(53): .foo:is(.bar) .baz {} 1`] = `
+
+  1 | .foo:is(.bar) .baz {}
+
+`;
+
+exports[`invalid(53): .foo:is(.bar) .baz {} 2`] = `
+
+Message:
+> 1 | .foo:is(.bar) .baz {}
+    |     ^^^^^^^^^ Remove the unnecessary \`:is()\` wrapper.
+
+Output:
+  1 | .foo.bar .baz {}
 
 `;
 

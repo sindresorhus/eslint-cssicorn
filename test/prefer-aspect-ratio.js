@@ -119,6 +119,12 @@ test.snapshot({
 		':import("./ratio.css") { height: 0; padding-top: 50%; }',
 		{code: 'a { height: ; padding-top: 50%; }', languageOptions: {tolerant: true}},
 		{code: 'a { height: 0; padding-top: ; }', languageOptions: {tolerant: true}},
+		// Shorthands where the vertical component resolves to zero
+		'a { height: 0; padding: 0 50%; }',
+		'a { height: 0; padding: 0 50% 0; }',
+		'a { height: 0; padding: 0 0 0 50%; }',
+		// An enclosing `@supports` testing `aspect-ratio` skips nested container queries too
+		'@supports (aspect-ratio: 1) { @container style(aspect-ratio: 1) { a { height: 0; padding-top: 50%; } } }',
 	],
 	invalid: [
 		'a { height: 0; padding-bottom: 56.25%; }',
@@ -196,6 +202,18 @@ test.snapshot({
 			'padding: 0; padding-top: 25%; padding-bottom: 25%',
 			'padding: /* reset */ 0; padding-top: 0; padding-bottom: calc(9 / 16 * 100%)',
 		].map(declarations => `a { height: 0; ${declarations}; }`),
+		// A container query testing `aspect-ratio` is not skipped like `@supports`
+		'@container style(aspect-ratio: 1 / 1) { a { height: 0; padding-top: 50%; } }',
+		// Zero height spellings: decimals, exponents, and zero-valued lengths
+		...['0.0', '0e0', '0Q', '0vmin', '-0px', '+0'].map(height => `a { height: ${height}; padding-top: 50%; }`),
+		// Vertical padding shorthands with a positive top or bottom
+		'a { height: 0; padding: 50% 0 0 0; }',
+		'a { height: 0; padding: 25% 0 25% 0; }',
+		'a { height: 0; padding: calc(50%) 0; }',
+		// The positive vertical longhand is reported, not the zero one
+		'a { height: 0; padding-top: 0%; padding-bottom: 50%; }',
+		// An unrelated declaration does not affect detection
+		'a { height: 0; padding-top: 50%; margin: 0; }',
 	],
 });
 

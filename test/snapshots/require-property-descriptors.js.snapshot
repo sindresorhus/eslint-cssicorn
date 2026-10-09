@@ -312,6 +312,48 @@ Message:
 
 `;
 
+exports[`invalid(27): @property --brand { syntax: \" \"; inherits: false; } 1`] = `
+
+  1 | @property --brand { syntax: " "; inherits: false; }
+
+`;
+
+exports[`invalid(27): @property --brand { syntax: \" \"; inherits: false; } 2`] = `
+
+Message:
+> 1 | @property --brand { syntax: " "; inherits: false; }
+    | ^^^^^^^^^ Missing required \`initial-value\` descriptor in \`@property\` rule.
+
+`;
+
+exports[`invalid(28): @property --brand { syntax: \"**\"; inherits: false; } 1`] = `
+
+  1 | @property --brand { syntax: "**"; inherits: false; }
+
+`;
+
+exports[`invalid(28): @property --brand { syntax: \"**\"; inherits: false; } 2`] = `
+
+Message:
+> 1 | @property --brand { syntax: "**"; inherits: false; }
+    | ^^^^^^^^^ Missing required \`initial-value\` descriptor in \`@property\` rule.
+
+`;
+
+exports[`invalid(29): @property --brand { S\\59 NTAX: \"<color>\"; inherits: false; } 1`] = `
+
+  1 | @property --brand { S\\59 NTAX: "<color>"; inherits: false; }
+
+`;
+
+exports[`invalid(29): @property --brand { S\\59 NTAX: \"<color>\"; inherits: false; } 2`] = `
+
+Message:
+> 1 | @property --brand { S\\59 NTAX: "<color>"; inherits: false; }
+    | ^^^^^^^^^ Missing required \`initial-value\` descriptor in \`@property\` rule.
+
+`;
+
 exports[`invalid(3): @property --brand { syntax: \"<color>\"; initial-value: red; } 1`] = `
 
   1 | @property --brand { syntax: "<color>"; initial-value: red; }
@@ -323,6 +365,56 @@ exports[`invalid(3): @property --brand { syntax: \"<color>\"; initial-value: red
 Message:
 > 1 | @property --brand { syntax: "<color>"; initial-value: red; }
     | ^^^^^^^^^ Missing required \`inherits\` descriptor in \`@property\` rule.
+
+`;
+
+exports[`invalid(30): @supports (display: grid) { @property --brand { inherits: false; } } 1`] = `
+
+  1 | @supports (display: grid) { @property --brand { inherits: false; } }
+
+`;
+
+exports[`invalid(30): @supports (display: grid) { @property --brand { inherits: false; } } 2`] = `
+
+Message:
+> 1 | @supports (display: grid) { @property --brand { inherits: false; } }
+    |                             ^^^^^^^^^ Missing required \`syntax\` descriptor in \`@property\` rule.
+
+`;
+
+exports[`invalid(31): @media (width > 0px) { @property --brand { syntax: \"<color>\"; inherits: false; } } 1`] = `
+
+  1 | @media (width > 0px) { @property --brand { syntax: "<color>"; inherits: false; } }
+
+`;
+
+exports[`invalid(31): @media (width > 0px) { @property --brand { syntax: \"<color>\"; inherits: false; } } 2`] = `
+
+Message:
+> 1 | @media (width > 0px) { @property --brand { syntax: "<color>"; inherits: false; } }
+    |                        ^^^^^^^^^ Missing required \`initial-value\` descriptor in \`@property\` rule.
+
+`;
+
+exports[`invalid(32): @layer theme { @property --brand {} } 1`] = `
+
+  1 | @layer theme { @property --brand {} }
+
+`;
+
+exports[`invalid(32): @layer theme { @property --brand {} } 2`] = `
+
+Message:
+> 1 | @layer theme { @property --brand {} }
+    |                ^^^^^^^^^ Missing required \`syntax\` descriptor in \`@property\` rule.
+
+`;
+
+exports[`invalid(32): @layer theme { @property --brand {} } 3`] = `
+
+Message:
+> 1 | @layer theme { @property --brand {} }
+    |                ^^^^^^^^^ Missing required \`inherits\` descriptor in \`@property\` rule.
 
 `;
 

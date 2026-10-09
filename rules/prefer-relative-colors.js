@@ -1,15 +1,17 @@
 // @ts-check
 
-import {ident, parse, toPlainObject} from '@eslint/css-tree';
-import colorFunctionsWithAlpha from './shared/css-color-functions.js';
+import {ident, toPlainObject} from '@eslint/css-tree';
+import colorFunctionsWithAlpha, {nonColorFunctions} from './shared/css-color-functions.js';
 import {
 	decodeCssIdentifier,
 	hasCommentInRange,
 	isBareRootRule,
 	isCssModulesInteropDeclaration,
+	isDashedIdentifier,
 	isStyleDeclaration,
 	isSubstitutionFunction,
 	normalizeCssIdentifier,
+	parseValue,
 	toLocation,
 } from './utils/index.js';
 
@@ -31,8 +33,12 @@ const messages = {
 };
 
 const colorFamilies = new Map([['rgb', 'rgb'], ['rgba', 'rgb'], ['hsl', 'hsl'], ['hsla', 'hsl']]);
-const preservedFunctions = new Set(['url', 'element', '-moz-element']);
-const colorFunctionPattern = /(?:rgba?|hsla?)\(|\\/iu;
+const colorFunctionPattern = /(?:rgba?|hsla?)\(|\\/iv;
+
+/**
+@param {CssNodePlain} separator
+*/
+const isSupportedSeparator = separator => separator.type === 'Operator' && ['/', ','].includes(separator.value);
 
 /**
 Get the color family and channel reference of a direct channel-based color function.
@@ -102,7 +108,7 @@ function getDefinitionKey(value, property) {
 
 		const [, separator, alpha] = node.children;
 		const isOpaque = (alpha.type === 'Number' && Number(alpha.value) === 1) || (alpha.type === 'Percentage' && Number(alpha.value) === 100);
-		if (separator.type !== 'Operator' || !['/', ','].includes(separator.value) || !isOpaque) {
+		if (!isSupportedSeparator(separator) || !isOpaque) {
 			return;
 		}
 	}
@@ -122,7 +128,7 @@ Build a suggestion for a channel-based alpha variant with an unambiguous destina
 function getColorProblem(node, declaration, {candidateScopes, rootCandidates}, context) {
 	const color = getChannelColor(node);
 	const [, separator, alpha] = node.children;
-	if (!color || node.children.length !== 3 || separator.type !== 'Operator' || !['/', ','].includes(separator.value) || !['Number', 'Percentage', 'Function'].includes(alpha.type)) {
+	if (!color || node.children.length !== 3 || !isSupportedSeparator(separator) || !['Number', 'Percentage', 'Function'].includes(alpha.type)) {
 		return;
 	}
 
@@ -189,16 +195,10 @@ const create = context => {
 		@type {ValuePlain | undefined}
 		*/
 		let value;
-		if (decodeCssIdentifier(declaration.property).startsWith('--') && colorFunctionPattern.test(sourceCode.getText(declaration.value))) {
-			try {
-				value = /** @type {ValuePlain} */ (toPlainObject(parse(sourceCode.getText(declaration.value), {
-					context: 'value',
-					positions: true,
-					offset: sourceCode.getRange(declaration.value)[0],
-				})));
-			} catch {
-				// Custom-property values need not be valid color expressions.
-			}
+		if (isDashedIdentifier(declaration.property) && colorFunctionPattern.test(sourceCode.getText(declaration.value))) {
+			const parsed = parseValue(sourceCode.getText(declaration.value), sourceCode.getRange(declaration.value)[0]);
+			// A plain tree is required for `children.length` on the parsed value.
+			value = parsed && /** @type {ValuePlain} */ (toPlainObject(parsed));
 		}
 
 		values.set(declaration, value);
@@ -299,7 +299,7 @@ const create = context => {
 					const name = normalizeCssIdentifier(node.name);
 					const firstChild = node.children.at(0);
 					const isRelativeColor = (name === 'alpha' || colorFunctionsWithAlpha.has(name)) && firstChild?.type === 'Identifier' && normalizeCssIdentifier(firstChild.name) === 'from';
-					if (isSubstitutionFunction(node) || preservedFunctions.has(name) || isRelativeColor) {
+					if (isSubstitutionFunction(node) || nonColorFunctions.has(name) || isRelativeColor) {
 						return;
 					}
 

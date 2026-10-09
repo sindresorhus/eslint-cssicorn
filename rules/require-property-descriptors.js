@@ -5,7 +5,7 @@ const messages = {
 	[MESSAGE_ID]: 'Missing required `{{descriptor}}` descriptor in `@property` rule.',
 };
 
-const universalSyntaxPattern = /^[\t\n\f\r ]*\*[\t\n\f\r ]*$/u;
+const universalSyntaxPattern = /^[\t\n\f\r ]*\*[\t\n\f\r ]*$/v;
 
 /**
 @param {import('eslint').Rule.RuleContext} context

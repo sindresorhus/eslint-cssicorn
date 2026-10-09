@@ -697,6 +697,85 @@ Suggestion 1/1: Allow browser pinch zoom.:
 
 `;
 
+exports[`invalid(46): a { touch-action: PAN-UP; } 1`] = `
+
+  1 | a { touch-action: PAN-UP; }
+
+`;
+
+exports[`invalid(46): a { touch-action: PAN-UP; } 2`] = `
+
+Message:
+> 1 | a { touch-action: PAN-UP; }
+    |                   ^^^^^^ This \`touch-action\` value disables browser pinch zoom.
+
+Suggestion 1/1: Allow browser pinch zoom.:
+  1 | a { touch-action: pinch-zoom PAN-UP; }
+
+`;
+
+exports[`invalid(47): a { touch-action: pan-y pan-\\78; } 1`] = `
+
+  1 | a { touch-action: pan-y pan-\\78; }
+
+`;
+
+exports[`invalid(47): a { touch-action: pan-y pan-\\78; } 2`] = `
+
+Message:
+> 1 | a { touch-action: pan-y pan-\\78; }
+    |                   ^^^^^^^^^^^^^ This \`touch-action\` value disables browser pinch zoom.
+
+Suggestion 1/1: Allow browser pinch zoom.:
+  1 | a { touch-action: pinch-zoom pan-y pan-\\78; }
+
+`;
+
+exports[`invalid(48): a { touch-action: pan-y; touch-action: pan-x; } 1`] = `
+
+  1 | a { touch-action: pan-y; touch-action: pan-x; }
+
+`;
+
+exports[`invalid(48): a { touch-action: pan-y; touch-action: pan-x; } 2`] = `
+
+Message:
+> 1 | a { touch-action: pan-y; touch-action: pan-x; }
+    |                   ^^^^^ This \`touch-action\` value disables browser pinch zoom.
+
+Suggestion 1/1: Allow browser pinch zoom.:
+  1 | a { touch-action: pinch-zoom pan-y; touch-action: pan-x; }
+
+`;
+
+exports[`invalid(48): a { touch-action: pan-y; touch-action: pan-x; } 3`] = `
+
+Message:
+> 1 | a { touch-action: pan-y; touch-action: pan-x; }
+    |                                        ^^^^^ This \`touch-action\` value disables browser pinch zoom.
+
+Suggestion 1/1: Allow browser pinch zoom.:
+  1 | a { touch-action: pan-y; touch-action: pinch-zoom pan-x; }
+
+`;
+
+exports[`invalid(49): a { touch-action: /* c1 */ pan-left /* c2 */; } 1`] = `
+
+  1 | a { touch-action: /* c1 */ pan-left /* c2 */; }
+
+`;
+
+exports[`invalid(49): a { touch-action: /* c1 */ pan-left /* c2 */; } 2`] = `
+
+Message:
+> 1 | a { touch-action: /* c1 */ pan-left /* c2 */; }
+    |                            ^^^^^^^^^^^^^^^^^ This \`touch-action\` value disables browser pinch zoom.
+
+Suggestion 1/1: Allow browser pinch zoom.:
+  1 | a { touch-action: /* c1 */ pinch-zoom pan-left /* c2 */; }
+
+`;
+
 exports[`invalid(5): a { touch-action: pan-up; } 1`] = `
 
   1 | a { touch-action: pan-up; }
@@ -711,6 +790,57 @@ Message:
 
 Suggestion 1/1: Allow browser pinch zoom.:
   1 | a { touch-action: pinch-zoom pan-up; }
+
+`;
+
+exports[`invalid(50): a { touch-action: pan-down /* between */ pan-right; } 1`] = `
+
+  1 | a { touch-action: pan-down /* between */ pan-right; }
+
+`;
+
+exports[`invalid(50): a { touch-action: pan-down /* between */ pan-right; } 2`] = `
+
+Message:
+> 1 | a { touch-action: pan-down /* between */ pan-right; }
+    |                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ This \`touch-action\` value disables browser pinch zoom.
+
+Suggestion 1/1: Allow browser pinch zoom.:
+  1 | a { touch-action: pinch-zoom pan-down /* between */ pan-right; }
+
+`;
+
+exports[`invalid(51): @layer gestures { @media (hover: none) { a { touch-action: none; } } } 1`] = `
+
+  1 | @layer gestures { @media (hover: none) { a { touch-action: none; } } }
+
+`;
+
+exports[`invalid(51): @layer gestures { @media (hover: none) { a { touch-action: none; } } } 2`] = `
+
+Message:
+> 1 | @layer gestures { @media (hover: none) { a { touch-action: none; } } }
+    |                                                            ^^^^ This \`touch-action\` value disables browser pinch zoom.
+
+Suggestion 1/1: Allow browser pinch zoom.:
+  1 | @layer gestures { @media (hover: none) { a { touch-action: pinch-zoom; } } }
+
+`;
+
+exports[`invalid(52): a { &:hover { touch-action: pan-y; } } 1`] = `
+
+  1 | a { &:hover { touch-action: pan-y; } }
+
+`;
+
+exports[`invalid(52): a { &:hover { touch-action: pan-y; } } 2`] = `
+
+Message:
+> 1 | a { &:hover { touch-action: pan-y; } }
+    |                             ^^^^^ This \`touch-action\` value disables browser pinch zoom.
+
+Suggestion 1/1: Allow browser pinch zoom.:
+  1 | a { &:hover { touch-action: pinch-zoom pan-y; } }
 
 `;
 

@@ -1,6 +1,14 @@
-import {keyword} from '@eslint/css-tree';
 import {shorthandToAffectedProperties} from './shared/css-shorthand-properties.js';
-import {isCssModulesInteropDeclaration, isKeyframesAtRule, normalizeCssIdentifier} from './utils/index.js';
+import sizeProperties from './shared/css-size-properties.js';
+import {
+	getBasePropertyName,
+	getDescriptorAtRule,
+	hasKeyframesAncestor,
+	isCssModulesInteropDeclaration,
+	isImportantDeclaration,
+	isKeyframesAtRule,
+	normalizeCssIdentifier,
+} from './utils/index.js';
 
 /**
 @import {CssicornContext} from './rule/cssicorn-context.js';
@@ -13,18 +21,7 @@ const messages = {
 };
 
 const layoutProperties = new Set([
-	'width',
-	'height',
-	'min-width',
-	'min-height',
-	'max-width',
-	'max-height',
-	'inline-size',
-	'block-size',
-	'min-inline-size',
-	'min-block-size',
-	'max-inline-size',
-	'max-block-size',
+	...sizeProperties,
 	'top',
 	'right',
 	'bottom',
@@ -82,10 +79,8 @@ for (const [shorthand, affectedProperties] of shorthandToAffectedProperties) {
 @param {CssicornContext} context
 */
 const create = context => {
-	const {sourceCode} = context;
-
 	context.on('Declaration', function * (declaration, parent) {
-		const property = keyword(normalizeCssIdentifier(declaration.property)).basename;
+		const property = getBasePropertyName(declaration.property);
 		if (
 			(property !== 'transition' && property !== 'transition-property')
 			|| declaration.value.type !== 'Value'
@@ -95,10 +90,9 @@ const create = context => {
 			return;
 		}
 
-		const owner = sourceCode.getParent(parent);
 		if (
-			(owner?.type === 'Atrule' && sourceCode.lexer.getAtrule(normalizeCssIdentifier(owner.name))?.descriptors)
-			|| sourceCode.getAncestors(declaration).some(node => isKeyframesAtRule(node))
+			getDescriptorAtRule(declaration, context)
+			|| hasKeyframesAncestor(declaration, context)
 		) {
 			return;
 		}
@@ -133,8 +127,7 @@ const create = context => {
 				const property = normalizeCssIdentifier(declaration.property);
 				if (
 					!layoutProperties.has(property)
-					|| declaration.important === true
-					|| (typeof declaration.important === 'string' && normalizeCssIdentifier(declaration.important) === 'important')
+					|| isImportantDeclaration(declaration)
 				) {
 					continue;
 				}

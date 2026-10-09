@@ -117,10 +117,12 @@ test.snapshot({
 			'::-webkit-selection',
 			'::unknown',
 		].map(selector => `${selector} { padding: 1rem; }`),
+		'::placeholder { opacity: 0.5; }',
 	],
 	invalid: [
 		...['::selection', 'li::marker', 'a:visited'].flatMap(selector => sharedDeclarations.map(declaration => `${selector} { ${declaration}; }`)),
 		...['::target-text', '::spelling-error', '::grammar-error', '::search-text', '::highlight(example)'].map(selector => `${selector} { padding: 1rem; }`),
+		'::selection { padding: 1rem /* keep */; color: red; }',
 		...['::selection', 'a:visited'].flatMap(selector => [
 			'font: bold 1rem serif',
 			'font-family: serif',
@@ -168,6 +170,9 @@ test.snapshot({
 		'::selection { @media (width > 1px) { font-feature-settings: "kern"; } }',
 		'::search-text:current { padding: 1rem; }',
 		'a:visited:lang(en) { font-weight: bold; }',
+		'a:visited[href] { font-weight: bold; }',
+		'li::marker:hover { margin: 1rem; }',
+		'::selection { padding: 1rem; @media print { margin: 1rem; } }',
 	],
 });
 

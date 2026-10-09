@@ -1,4 +1,9 @@
-import {hasCommentInRange, isKeyframesAtRule, normalizeCssIdentifier} from './utils/index.js';
+import {
+	getDeclarationRemovalRange,
+	isImportantDeclaration,
+	isKeyframesAtRule,
+	normalizeCssIdentifier,
+} from './utils/index.js';
 
 /**
 @import * as ESLint from 'eslint';
@@ -57,11 +62,8 @@ const getKeyframeOffsets = rule => rule.prelude?.type === 'SelectorList'
 	? rule.prelude.children.map(selector => getKeyframeOffset(selector))
 	: [undefined];
 
-const isImportant = declaration => declaration.important === true
-	|| (typeof declaration.important === 'string' && normalizeCssIdentifier(declaration.important) === 'important');
-
 const getMessageId = (declaration, property, isTerminalKeyframe) => {
-	if (isImportant(declaration)) {
+	if (isImportantDeclaration(declaration)) {
 		return MESSAGE_ID_IMPORTANT;
 	}
 
@@ -78,8 +80,6 @@ const getMessageId = (declaration, property, isTerminalKeyframe) => {
 @param {ESLint.Rule.RuleContext} context
 */
 const create = context => {
-	const {sourceCode} = context;
-
 	context.on('Atrule', function * (atRule) {
 		if (
 			!isKeyframesAtRule(atRule)
@@ -113,12 +113,13 @@ const create = context => {
 					messageId,
 					data: {property},
 					* fix(fixer, {abort}) {
-						const [start, end] = sourceCode.getRange(declaration);
-						if (hasCommentInRange(context, [start, end])) {
+						const range = getDeclarationRemovalRange(declaration, context);
+						if (range === undefined) {
 							abort();
+							return;
 						}
 
-						yield fixer.removeRange([start, end + (sourceCode.text[end] === ';' ? 1 : 0)]);
+						yield fixer.removeRange(range);
 					},
 				};
 			}

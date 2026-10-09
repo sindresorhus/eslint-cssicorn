@@ -1,3 +1,4 @@
+import getBlockOwner from './get-block-owner.js';
 import normalizeCssIdentifier from './normalize-css-identifier.js';
 
 /**
@@ -13,9 +14,7 @@ Check whether a declaration is inside a CSS Modules (ICSS) `:export` or `:import
 @returns {boolean}
 */
 export default function isCssModulesInteropDeclaration(declaration, context) {
-	const {sourceCode} = context;
-	const block = sourceCode.getParent(declaration);
-	const rule = block?.type === 'Block' ? sourceCode.getParent(block) : undefined;
+	const rule = getBlockOwner(declaration, context);
 	if (
 		rule?.type !== 'Rule'
 		|| rule.prelude.type !== 'SelectorList'

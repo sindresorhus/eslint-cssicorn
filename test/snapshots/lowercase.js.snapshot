@@ -1135,6 +1135,34 @@ Output:
 
 `;
 
+exports[`invalid(29): a { COLOR: RED; My-Prop: VALUE; } 1`] = `
+
+  1 | a { COLOR: RED; My-Prop: VALUE; }
+
+`;
+
+exports[`invalid(29): a { COLOR: RED; My-Prop: VALUE; } 2`] = `
+
+Message:
+> 1 | a { COLOR: RED; My-Prop: VALUE; }
+    |     ^^^^^ Use lowercase for CSS property \`COLOR\`.
+
+Output:
+  1 | a { color: RED; My-Prop: VALUE; }
+
+`;
+
+exports[`invalid(29): a { COLOR: RED; My-Prop: VALUE; } 3`] = `
+
+Message:
+> 1 | a { COLOR: RED; My-Prop: VALUE; }
+    |            ^^^ Use lowercase for CSS value keyword \`RED\`.
+
+Output:
+  1 | a { COLOR: red; My-Prop: VALUE; }
+
+`;
+
 exports[`invalid(3): @FONT-FACE { FONT-STYLE: OBLIQUE; src: LOCAL(\"Example\"), URL(font.WOFF2) FORMAT(\"WOFF2\"); } 1`] = `
 
   1 | @FONT-FACE { FONT-STYLE: OBLIQUE; src: LOCAL("Example"), URL(font.WOFF2) FORMAT("WOFF2"); }
@@ -1207,6 +1235,396 @@ Output:
 
 `;
 
+exports[`invalid(30): a { margin: 0PX auto; width: 40REM; font-size: 10EM; transform: rotate(90DEG); transition: color 2S; } 1`] = `
+
+  1 | a { margin: 0PX auto; width: 40REM; font-size: 10EM; transform: rotate(90DEG); transition: color 2S; }
+
+`;
+
+exports[`invalid(30): a { margin: 0PX auto; width: 40REM; font-size: 10EM; transform: rotate(90DEG); transition: color 2S; } 2`] = `
+
+Message:
+> 1 | a { margin: 0PX auto; width: 40REM; font-size: 10EM; transform: rotate(90DEG); transition: color 2S; }
+    |              ^^ Use lowercase for CSS unit \`PX\`.
+
+Output:
+  1 | a { margin: 0px auto; width: 40REM; font-size: 10EM; transform: rotate(90DEG); transition: color 2S; }
+
+`;
+
+exports[`invalid(30): a { margin: 0PX auto; width: 40REM; font-size: 10EM; transform: rotate(90DEG); transition: color 2S; } 3`] = `
+
+Message:
+> 1 | a { margin: 0PX auto; width: 40REM; font-size: 10EM; transform: rotate(90DEG); transition: color 2S; }
+    |                                ^^^ Use lowercase for CSS unit \`REM\`.
+
+Output:
+  1 | a { margin: 0PX auto; width: 40rem; font-size: 10EM; transform: rotate(90DEG); transition: color 2S; }
+
+`;
+
+exports[`invalid(30): a { margin: 0PX auto; width: 40REM; font-size: 10EM; transform: rotate(90DEG); transition: color 2S; } 4`] = `
+
+Message:
+> 1 | a { margin: 0PX auto; width: 40REM; font-size: 10EM; transform: rotate(90DEG); transition: color 2S; }
+    |                                                  ^^ Use lowercase for CSS unit \`EM\`.
+
+Output:
+  1 | a { margin: 0PX auto; width: 40REM; font-size: 10em; transform: rotate(90DEG); transition: color 2S; }
+
+`;
+
+exports[`invalid(30): a { margin: 0PX auto; width: 40REM; font-size: 10EM; transform: rotate(90DEG); transition: color 2S; } 5`] = `
+
+Message:
+> 1 | a { margin: 0PX auto; width: 40REM; font-size: 10EM; transform: rotate(90DEG); transition: color 2S; }
+    |                                                                          ^^^ Use lowercase for CSS unit \`DEG\`.
+
+Output:
+  1 | a { margin: 0PX auto; width: 40REM; font-size: 10EM; transform: rotate(90deg); transition: color 2S; }
+
+`;
+
+exports[`invalid(30): a { margin: 0PX auto; width: 40REM; font-size: 10EM; transform: rotate(90DEG); transition: color 2S; } 6`] = `
+
+Message:
+> 1 | a { margin: 0PX auto; width: 40REM; font-size: 10EM; transform: rotate(90DEG); transition: color 2S; }
+    |                                                                                                   ^ Use lowercase for CSS unit \`S\`.
+
+Output:
+  1 | a { margin: 0PX auto; width: 40REM; font-size: 10EM; transform: rotate(90DEG); transition: color 2s; }
+
+`;
+
+exports[`invalid(31): a { grid-template-columns: 1FR 2FR; } 1`] = `
+
+  1 | a { grid-template-columns: 1FR 2FR; }
+
+`;
+
+exports[`invalid(31): a { grid-template-columns: 1FR 2FR; } 2`] = `
+
+Message:
+> 1 | a { grid-template-columns: 1FR 2FR; }
+    |                             ^^ Use lowercase for CSS unit \`FR\`.
+
+Output:
+  1 | a { grid-template-columns: 1fr 2FR; }
+
+`;
+
+exports[`invalid(31): a { grid-template-columns: 1FR 2FR; } 3`] = `
+
+Message:
+> 1 | a { grid-template-columns: 1FR 2FR; }
+    |                                 ^^ Use lowercase for CSS unit \`FR\`.
+
+Output:
+  1 | a { grid-template-columns: 1FR 2fr; }
+
+`;
+
+exports[`invalid(32): a { filter: BLUR(1PX); } 1`] = `
+
+  1 | a { filter: BLUR(1PX); }
+
+`;
+
+exports[`invalid(32): a { filter: BLUR(1PX); } 2`] = `
+
+Message:
+> 1 | a { filter: BLUR(1PX); }
+    |             ^^^^ Use lowercase for CSS function name \`BLUR\`.
+
+Output:
+  1 | a { filter: blur(1PX); }
+
+`;
+
+exports[`invalid(32): a { filter: BLUR(1PX); } 3`] = `
+
+Message:
+> 1 | a { filter: BLUR(1PX); }
+    |                   ^^ Use lowercase for CSS unit \`PX\`.
+
+Output:
+  1 | a { filter: BLUR(1px); }
+
+`;
+
+exports[`invalid(33): a { background: LINEAR-GRADIENT(RED, BLUE); } 1`] = `
+
+  1 | a { background: LINEAR-GRADIENT(RED, BLUE); }
+
+`;
+
+exports[`invalid(33): a { background: LINEAR-GRADIENT(RED, BLUE); } 2`] = `
+
+Message:
+> 1 | a { background: LINEAR-GRADIENT(RED, BLUE); }
+    |                 ^^^^^^^^^^^^^^^ Use lowercase for CSS function name \`LINEAR-GRADIENT\`.
+
+Output:
+  1 | a { background: linear-gradient(RED, BLUE); }
+
+`;
+
+exports[`invalid(33): a { background: LINEAR-GRADIENT(RED, BLUE); } 3`] = `
+
+Message:
+> 1 | a { background: LINEAR-GRADIENT(RED, BLUE); }
+    |                                 ^^^ Use lowercase for CSS value keyword \`RED\`.
+
+Output:
+  1 | a { background: LINEAR-GRADIENT(red, BLUE); }
+
+`;
+
+exports[`invalid(33): a { background: LINEAR-GRADIENT(RED, BLUE); } 4`] = `
+
+Message:
+> 1 | a { background: LINEAR-GRADIENT(RED, BLUE); }
+    |                                      ^^^^ Use lowercase for CSS value keyword \`BLUE\`.
+
+Output:
+  1 | a { background: LINEAR-GRADIENT(RED, blue); }
+
+`;
+
+exports[`invalid(34): a { transform: ROTATEY(1DEG) ROTATEZ(1deg) SKEWY(1DEG) SCALEZ(1) TRANSLATEZ(1PX); } 1`] = `
+
+  1 | a { transform: ROTATEY(1DEG) ROTATEZ(1deg) SKEWY(1DEG) SCALEZ(1) TRANSLATEZ(1PX); }
+
+`;
+
+exports[`invalid(34): a { transform: ROTATEY(1DEG) ROTATEZ(1deg) SKEWY(1DEG) SCALEZ(1) TRANSLATEZ(1PX); } 2`] = `
+
+Message:
+> 1 | a { transform: ROTATEY(1DEG) ROTATEZ(1deg) SKEWY(1DEG) SCALEZ(1) TRANSLATEZ(1PX); }
+    |                ^^^^^^^ Use \`rotateY\` for CSS function name \`ROTATEY\`.
+
+Output:
+  1 | a { transform: rotateY(1DEG) ROTATEZ(1deg) SKEWY(1DEG) SCALEZ(1) TRANSLATEZ(1PX); }
+
+`;
+
+exports[`invalid(34): a { transform: ROTATEY(1DEG) ROTATEZ(1deg) SKEWY(1DEG) SCALEZ(1) TRANSLATEZ(1PX); } 3`] = `
+
+Message:
+> 1 | a { transform: ROTATEY(1DEG) ROTATEZ(1deg) SKEWY(1DEG) SCALEZ(1) TRANSLATEZ(1PX); }
+    |                         ^^^ Use lowercase for CSS unit \`DEG\`.
+
+Output:
+  1 | a { transform: ROTATEY(1deg) ROTATEZ(1deg) SKEWY(1DEG) SCALEZ(1) TRANSLATEZ(1PX); }
+
+`;
+
+exports[`invalid(34): a { transform: ROTATEY(1DEG) ROTATEZ(1deg) SKEWY(1DEG) SCALEZ(1) TRANSLATEZ(1PX); } 4`] = `
+
+Message:
+> 1 | a { transform: ROTATEY(1DEG) ROTATEZ(1deg) SKEWY(1DEG) SCALEZ(1) TRANSLATEZ(1PX); }
+    |                              ^^^^^^^ Use \`rotateZ\` for CSS function name \`ROTATEZ\`.
+
+Output:
+  1 | a { transform: ROTATEY(1DEG) rotateZ(1deg) SKEWY(1DEG) SCALEZ(1) TRANSLATEZ(1PX); }
+
+`;
+
+exports[`invalid(34): a { transform: ROTATEY(1DEG) ROTATEZ(1deg) SKEWY(1DEG) SCALEZ(1) TRANSLATEZ(1PX); } 5`] = `
+
+Message:
+> 1 | a { transform: ROTATEY(1DEG) ROTATEZ(1deg) SKEWY(1DEG) SCALEZ(1) TRANSLATEZ(1PX); }
+    |                                            ^^^^^ Use \`skewY\` for CSS function name \`SKEWY\`.
+
+Output:
+  1 | a { transform: ROTATEY(1DEG) ROTATEZ(1deg) skewY(1DEG) SCALEZ(1) TRANSLATEZ(1PX); }
+
+`;
+
+exports[`invalid(34): a { transform: ROTATEY(1DEG) ROTATEZ(1deg) SKEWY(1DEG) SCALEZ(1) TRANSLATEZ(1PX); } 6`] = `
+
+Message:
+> 1 | a { transform: ROTATEY(1DEG) ROTATEZ(1deg) SKEWY(1DEG) SCALEZ(1) TRANSLATEZ(1PX); }
+    |                                                   ^^^ Use lowercase for CSS unit \`DEG\`.
+
+Output:
+  1 | a { transform: ROTATEY(1DEG) ROTATEZ(1deg) SKEWY(1deg) SCALEZ(1) TRANSLATEZ(1PX); }
+
+`;
+
+exports[`invalid(34): a { transform: ROTATEY(1DEG) ROTATEZ(1deg) SKEWY(1DEG) SCALEZ(1) TRANSLATEZ(1PX); } 7`] = `
+
+Message:
+> 1 | a { transform: ROTATEY(1DEG) ROTATEZ(1deg) SKEWY(1DEG) SCALEZ(1) TRANSLATEZ(1PX); }
+    |                                                        ^^^^^^ Use \`scaleZ\` for CSS function name \`SCALEZ\`.
+
+Output:
+  1 | a { transform: ROTATEY(1DEG) ROTATEZ(1deg) SKEWY(1DEG) scaleZ(1) TRANSLATEZ(1PX); }
+
+`;
+
+exports[`invalid(34): a { transform: ROTATEY(1DEG) ROTATEZ(1deg) SKEWY(1DEG) SCALEZ(1) TRANSLATEZ(1PX); } 8`] = `
+
+Message:
+> 1 | a { transform: ROTATEY(1DEG) ROTATEZ(1deg) SKEWY(1DEG) SCALEZ(1) TRANSLATEZ(1PX); }
+    |                                                                  ^^^^^^^^^^ Use \`translateZ\` for CSS function name \`TRANSLATEZ\`.
+
+Output:
+  1 | a { transform: ROTATEY(1DEG) ROTATEZ(1deg) SKEWY(1DEG) SCALEZ(1) translateZ(1PX); }
+
+`;
+
+exports[`invalid(34): a { transform: ROTATEY(1DEG) ROTATEZ(1deg) SKEWY(1DEG) SCALEZ(1) TRANSLATEZ(1PX); } 9`] = `
+
+Message:
+> 1 | a { transform: ROTATEY(1DEG) ROTATEZ(1deg) SKEWY(1DEG) SCALEZ(1) TRANSLATEZ(1PX); }
+    |                                                                              ^^ Use lowercase for CSS unit \`PX\`.
+
+Output:
+  1 | a { transform: ROTATEY(1DEG) ROTATEZ(1deg) SKEWY(1DEG) SCALEZ(1) TRANSLATEZ(1px); }
+
+`;
+
+exports[`invalid(35): a { width: CALC(myFunc(1PX)); } 1`] = `
+
+  1 | a { width: CALC(myFunc(1PX)); }
+
+`;
+
+exports[`invalid(35): a { width: CALC(myFunc(1PX)); } 2`] = `
+
+Message:
+> 1 | a { width: CALC(myFunc(1PX)); }
+    |            ^^^^ Use lowercase for CSS function name \`CALC\`.
+
+Output:
+  1 | a { width: calc(myFunc(1PX)); }
+
+`;
+
+exports[`invalid(35): a { width: CALC(myFunc(1PX)); } 3`] = `
+
+Message:
+> 1 | a { width: CALC(myFunc(1PX)); }
+    |                         ^^ Use lowercase for CSS unit \`PX\`.
+
+Output:
+  1 | a { width: CALC(myFunc(1px)); }
+
+`;
+
+exports[`invalid(36): a:NOT(:HOVER) {} 1`] = `
+
+  1 | a:NOT(:HOVER) {}
+
+`;
+
+exports[`invalid(36): a:NOT(:HOVER) {} 2`] = `
+
+Message:
+> 1 | a:NOT(:HOVER) {}
+    |   ^^^ Use lowercase for CSS pseudo-class name \`NOT\`.
+
+Output:
+  1 | a:not(:HOVER) {}
+
+`;
+
+exports[`invalid(36): a:NOT(:HOVER) {} 3`] = `
+
+Message:
+> 1 | a:NOT(:HOVER) {}
+    |        ^^^^^ Use lowercase for CSS pseudo-class name \`HOVER\`.
+
+Output:
+  1 | a:NOT(:hover) {}
+
+`;
+
+exports[`invalid(37): a:FIRST-CHILD {} a:-WEBKIT-ANY-LINK {} 1`] = `
+
+  1 | a:FIRST-CHILD {} a:-WEBKIT-ANY-LINK {}
+
+`;
+
+exports[`invalid(37): a:FIRST-CHILD {} a:-WEBKIT-ANY-LINK {} 2`] = `
+
+Message:
+> 1 | a:FIRST-CHILD {} a:-WEBKIT-ANY-LINK {}
+    |   ^^^^^^^^^^^ Use lowercase for CSS pseudo-class name \`FIRST-CHILD\`.
+
+Output:
+  1 | a:first-child {} a:-WEBKIT-ANY-LINK {}
+
+`;
+
+exports[`invalid(37): a:FIRST-CHILD {} a:-WEBKIT-ANY-LINK {} 3`] = `
+
+Message:
+> 1 | a:FIRST-CHILD {} a:-WEBKIT-ANY-LINK {}
+    |                    ^^^^^^^^^^^^^^^^ Use lowercase for CSS pseudo-class name \`-WEBKIT-ANY-LINK\`.
+
+Output:
+  1 | a:FIRST-CHILD {} a:-webkit-any-link {}
+
+`;
+
+exports[`invalid(38): a::PART(MyPart) {} 1`] = `
+
+  1 | a::PART(MyPart) {}
+
+`;
+
+exports[`invalid(38): a::PART(MyPart) {} 2`] = `
+
+Message:
+> 1 | a::PART(MyPart) {}
+    |    ^^^^ Use lowercase for CSS pseudo-element name \`PART\`.
+
+Output:
+  1 | a::part(MyPart) {}
+
+`;
+
+exports[`invalid(39): @media (ORIENTATION: LANDSCAPE) and (MIN-RESOLUTION: 2DPPX) {} 1`] = `
+
+  1 | @media (ORIENTATION: LANDSCAPE) and (MIN-RESOLUTION: 2DPPX) {}
+
+`;
+
+exports[`invalid(39): @media (ORIENTATION: LANDSCAPE) and (MIN-RESOLUTION: 2DPPX) {} 2`] = `
+
+Message:
+> 1 | @media (ORIENTATION: LANDSCAPE) and (MIN-RESOLUTION: 2DPPX) {}
+    |         ^^^^^^^^^^^ Use lowercase for CSS media feature name \`ORIENTATION\`.
+
+Output:
+  1 | @media (orientation: LANDSCAPE) and (MIN-RESOLUTION: 2DPPX) {}
+
+`;
+
+exports[`invalid(39): @media (ORIENTATION: LANDSCAPE) and (MIN-RESOLUTION: 2DPPX) {} 3`] = `
+
+Message:
+> 1 | @media (ORIENTATION: LANDSCAPE) and (MIN-RESOLUTION: 2DPPX) {}
+    |                                      ^^^^^^^^^^^^^^ Use lowercase for CSS media feature name \`MIN-RESOLUTION\`.
+
+Output:
+  1 | @media (ORIENTATION: LANDSCAPE) and (min-resolution: 2DPPX) {}
+
+`;
+
+exports[`invalid(39): @media (ORIENTATION: LANDSCAPE) and (MIN-RESOLUTION: 2DPPX) {} 4`] = `
+
+Message:
+> 1 | @media (ORIENTATION: LANDSCAPE) and (MIN-RESOLUTION: 2DPPX) {}
+    |                                                       ^^^^ Use lowercase for CSS unit \`DPPX\`.
+
+Output:
+  1 | @media (ORIENTATION: LANDSCAPE) and (MIN-RESOLUTION: 2dppx) {}
+
+`;
+
 exports[`invalid(4): @font-feature-values Font { FONT-DISPLAY: SWAP; } 1`] = `
 
   1 | @font-feature-values Font { FONT-DISPLAY: SWAP; }
@@ -1232,6 +1650,341 @@ Message:
 
 Output:
   1 | @font-feature-values Font { FONT-DISPLAY: swap; }
+
+`;
+
+exports[`invalid(40): a { border-color: COLOR-MIX(IN SRGB, #ABCD, RED); } 1`] = `
+
+  1 | a { border-color: COLOR-MIX(IN SRGB, #ABCD, RED); }
+
+`;
+
+exports[`invalid(40): a { border-color: COLOR-MIX(IN SRGB, #ABCD, RED); } 2`] = `
+
+Message:
+> 1 | a { border-color: COLOR-MIX(IN SRGB, #ABCD, RED); }
+    |                   ^^^^^^^^^ Use lowercase for CSS function name \`COLOR-MIX\`.
+
+Output:
+  1 | a { border-color: color-mix(IN SRGB, #ABCD, RED); }
+
+`;
+
+exports[`invalid(40): a { border-color: COLOR-MIX(IN SRGB, #ABCD, RED); } 3`] = `
+
+Message:
+> 1 | a { border-color: COLOR-MIX(IN SRGB, #ABCD, RED); }
+    |                             ^^ Use lowercase for CSS value keyword \`IN\`.
+
+Output:
+  1 | a { border-color: COLOR-MIX(in SRGB, #ABCD, RED); }
+
+`;
+
+exports[`invalid(40): a { border-color: COLOR-MIX(IN SRGB, #ABCD, RED); } 4`] = `
+
+Message:
+> 1 | a { border-color: COLOR-MIX(IN SRGB, #ABCD, RED); }
+    |                                ^^^^ Use lowercase for CSS value keyword \`SRGB\`.
+
+Output:
+  1 | a { border-color: COLOR-MIX(IN srgb, #ABCD, RED); }
+
+`;
+
+exports[`invalid(40): a { border-color: COLOR-MIX(IN SRGB, #ABCD, RED); } 5`] = `
+
+Message:
+> 1 | a { border-color: COLOR-MIX(IN SRGB, #ABCD, RED); }
+    |                                       ^^^^ Use lowercase for CSS hexadecimal color \`#ABCD\`.
+
+Output:
+  1 | a { border-color: COLOR-MIX(IN SRGB, #abcd, RED); }
+
+`;
+
+exports[`invalid(40): a { border-color: COLOR-MIX(IN SRGB, #ABCD, RED); } 6`] = `
+
+Message:
+> 1 | a { border-color: COLOR-MIX(IN SRGB, #ABCD, RED); }
+    |                                             ^^^ Use lowercase for CSS value keyword \`RED\`.
+
+Output:
+  1 | a { border-color: COLOR-MIX(IN SRGB, #ABCD, red); }
+
+`;
+
+exports[`invalid(41): a { color: \\52 ED; } 1`] = `
+
+  1 | a { color: \\52 ED; }
+
+`;
+
+exports[`invalid(41): a { color: \\52 ED; } 2`] = `
+
+Message:
+> 1 | a { color: \\52 ED; }
+    |            ^^^^^^ Use lowercase for CSS value keyword \`\\52 ED\`.
+
+Output:
+  1 | a { color: red; }
+
+`;
+
+exports[`invalid(42): a { width: 1P\\58; } 1`] = `
+
+  1 | a { width: 1P\\58; }
+
+`;
+
+exports[`invalid(42): a { width: 1P\\58; } 2`] = `
+
+Message:
+> 1 | a { width: 1P\\58; }
+    |             ^^^^ Use lowercase for CSS unit \`P\\58\`.
+
+Output:
+  1 | a { width: 1px; }
+
+`;
+
+exports[`invalid(43): a { COLOR: CALC(1PX) var(--X); } 1`] = `
+
+  1 | a { COLOR: CALC(1PX) var(--X); }
+
+`;
+
+exports[`invalid(43): a { COLOR: CALC(1PX) var(--X); } 2`] = `
+
+Message:
+> 1 | a { COLOR: CALC(1PX) var(--X); }
+    |     ^^^^^ Use lowercase for CSS property \`COLOR\`.
+
+Output:
+  1 | a { color: CALC(1PX) var(--X); }
+
+`;
+
+exports[`invalid(43): a { COLOR: CALC(1PX) var(--X); } 3`] = `
+
+Message:
+> 1 | a { COLOR: CALC(1PX) var(--X); }
+    |            ^^^^ Use lowercase for CSS function name \`CALC\`.
+
+Output:
+  1 | a { COLOR: calc(1PX) var(--X); }
+
+`;
+
+exports[`invalid(43): a { COLOR: CALC(1PX) var(--X); } 4`] = `
+
+Message:
+> 1 | a { COLOR: CALC(1PX) var(--X); }
+    |                  ^^ Use lowercase for CSS unit \`PX\`.
+
+Output:
+  1 | a { COLOR: CALC(1px) var(--X); }
+
+`;
+
+exports[`invalid(44): a { display: BLOCK !IMPORTANT; } 1`] = `
+
+  1 | a { display: BLOCK !IMPORTANT; }
+
+`;
+
+exports[`invalid(44): a { display: BLOCK !IMPORTANT; } 2`] = `
+
+Message:
+> 1 | a { display: BLOCK !IMPORTANT; }
+    |              ^^^^^ Use lowercase for CSS value keyword \`BLOCK\`.
+
+Output:
+  1 | a { display: block !IMPORTANT; }
+
+`;
+
+exports[`invalid(45): a { padding: 1PX 2PX 3PX 4PX; } 1`] = `
+
+  1 | a { padding: 1PX 2PX 3PX 4PX; }
+
+`;
+
+exports[`invalid(45): a { padding: 1PX 2PX 3PX 4PX; } 2`] = `
+
+Message:
+> 1 | a { padding: 1PX 2PX 3PX 4PX; }
+    |               ^^ Use lowercase for CSS unit \`PX\`.
+
+Output:
+  1 | a { padding: 1px 2PX 3PX 4PX; }
+
+`;
+
+exports[`invalid(45): a { padding: 1PX 2PX 3PX 4PX; } 3`] = `
+
+Message:
+> 1 | a { padding: 1PX 2PX 3PX 4PX; }
+    |                   ^^ Use lowercase for CSS unit \`PX\`.
+
+Output:
+  1 | a { padding: 1PX 2px 3PX 4PX; }
+
+`;
+
+exports[`invalid(45): a { padding: 1PX 2PX 3PX 4PX; } 4`] = `
+
+Message:
+> 1 | a { padding: 1PX 2PX 3PX 4PX; }
+    |                       ^^ Use lowercase for CSS unit \`PX\`.
+
+Output:
+  1 | a { padding: 1PX 2PX 3px 4PX; }
+
+`;
+
+exports[`invalid(45): a { padding: 1PX 2PX 3PX 4PX; } 5`] = `
+
+Message:
+> 1 | a { padding: 1PX 2PX 3PX 4PX; }
+    |                           ^^ Use lowercase for CSS unit \`PX\`.
+
+Output:
+  1 | a { padding: 1PX 2PX 3PX 4px; }
+
+`;
+
+exports[`invalid(46): a { font: ITALIC BOLD 1EM Arial, SANS-SERIF; } 1`] = `
+
+  1 | a { font: ITALIC BOLD 1EM Arial, SANS-SERIF; }
+
+`;
+
+exports[`invalid(46): a { font: ITALIC BOLD 1EM Arial, SANS-SERIF; } 2`] = `
+
+Message:
+> 1 | a { font: ITALIC BOLD 1EM Arial, SANS-SERIF; }
+    |           ^^^^^^ Use lowercase for CSS value keyword \`ITALIC\`.
+
+Output:
+  1 | a { font: italic BOLD 1EM Arial, SANS-SERIF; }
+
+`;
+
+exports[`invalid(46): a { font: ITALIC BOLD 1EM Arial, SANS-SERIF; } 3`] = `
+
+Message:
+> 1 | a { font: ITALIC BOLD 1EM Arial, SANS-SERIF; }
+    |                  ^^^^ Use lowercase for CSS value keyword \`BOLD\`.
+
+Output:
+  1 | a { font: ITALIC bold 1EM Arial, SANS-SERIF; }
+
+`;
+
+exports[`invalid(46): a { font: ITALIC BOLD 1EM Arial, SANS-SERIF; } 4`] = `
+
+Message:
+> 1 | a { font: ITALIC BOLD 1EM Arial, SANS-SERIF; }
+    |                        ^^ Use lowercase for CSS unit \`EM\`.
+
+Output:
+  1 | a { font: ITALIC BOLD 1em Arial, SANS-SERIF; }
+
+`;
+
+exports[`invalid(46): a { font: ITALIC BOLD 1EM Arial, SANS-SERIF; } 5`] = `
+
+Message:
+> 1 | a { font: ITALIC BOLD 1EM Arial, SANS-SERIF; }
+    |                                  ^^^^^^^^^^ Use lowercase for CSS value keyword \`SANS-SERIF\`.
+
+Output:
+  1 | a { font: ITALIC BOLD 1EM Arial, sans-serif; }
+
+`;
+
+exports[`invalid(47): @supports NOT (DISPLAY: GRID) {} 1`] = `
+
+  1 | @supports NOT (DISPLAY: GRID) {}
+
+`;
+
+exports[`invalid(47): @supports NOT (DISPLAY: GRID) {} 2`] = `
+
+Message:
+> 1 | @supports NOT (DISPLAY: GRID) {}
+    |                ^^^^^^^ Use lowercase for CSS property \`DISPLAY\`.
+
+Output:
+  1 | @supports NOT (display: GRID) {}
+
+`;
+
+exports[`invalid(47): @supports NOT (DISPLAY: GRID) {} 3`] = `
+
+Message:
+> 1 | @supports NOT (DISPLAY: GRID) {}
+    |                         ^^^^ Use lowercase for CSS value keyword \`GRID\`.
+
+Output:
+  1 | @supports NOT (DISPLAY: grid) {}
+
+`;
+
+exports[`invalid(48): @layer Theme { a { COLOR: RED; } } 1`] = `
+
+  1 | @layer Theme { a { COLOR: RED; } }
+
+`;
+
+exports[`invalid(48): @layer Theme { a { COLOR: RED; } } 2`] = `
+
+Message:
+> 1 | @layer Theme { a { COLOR: RED; } }
+    |                    ^^^^^ Use lowercase for CSS property \`COLOR\`.
+
+Output:
+  1 | @layer Theme { a { color: RED; } }
+
+`;
+
+exports[`invalid(48): @layer Theme { a { COLOR: RED; } } 3`] = `
+
+Message:
+> 1 | @layer Theme { a { COLOR: RED; } }
+    |                           ^^^ Use lowercase for CSS value keyword \`RED\`.
+
+Output:
+  1 | @layer Theme { a { COLOR: red; } }
+
+`;
+
+exports[`invalid(49): a { --x: RED; COLOR: BLUE; } 1`] = `
+
+  1 | a { --x: RED; COLOR: BLUE; }
+
+`;
+
+exports[`invalid(49): a { --x: RED; COLOR: BLUE; } 2`] = `
+
+Message:
+> 1 | a { --x: RED; COLOR: BLUE; }
+    |               ^^^^^ Use lowercase for CSS property \`COLOR\`.
+
+Output:
+  1 | a { --x: RED; color: BLUE; }
+
+`;
+
+exports[`invalid(49): a { --x: RED; COLOR: BLUE; } 3`] = `
+
+Message:
+> 1 | a { --x: RED; COLOR: BLUE; }
+    |                      ^^^^ Use lowercase for CSS value keyword \`BLUE\`.
+
+Output:
+  1 | a { --x: RED; COLOR: blue; }
 
 `;
 
@@ -1282,6 +2035,168 @@ Message:
 
 Output:
   1 | @property --ThemeColor { SYNTAX: "<COLOR>"; INHERITS: FALSE; initial-value: #ABCDEF; }
+
+`;
+
+exports[`invalid(50): @font-face { FONT-FAMILY: \"Font\", SERIF; } 1`] = `
+
+  1 | @font-face { FONT-FAMILY: "Font", SERIF; }
+
+`;
+
+exports[`invalid(50): @font-face { FONT-FAMILY: \"Font\", SERIF; } 2`] = `
+
+Message:
+> 1 | @font-face { FONT-FAMILY: "Font", SERIF; }
+    |              ^^^^^^^^^^^ Use lowercase for CSS property \`FONT-FAMILY\`.
+
+Output:
+  1 | @font-face { font-family: "Font", SERIF; }
+
+`;
+
+exports[`invalid(51): @counter-style Thumbs { SYSTEM: CYCLIC; } 1`] = `
+
+  1 | @counter-style Thumbs { SYSTEM: CYCLIC; }
+
+`;
+
+exports[`invalid(51): @counter-style Thumbs { SYSTEM: CYCLIC; } 2`] = `
+
+Message:
+> 1 | @counter-style Thumbs { SYSTEM: CYCLIC; }
+    |                         ^^^^^^ Use lowercase for CSS property \`SYSTEM\`.
+
+Output:
+  1 | @counter-style Thumbs { system: CYCLIC; }
+
+`;
+
+exports[`invalid(51): @counter-style Thumbs { SYSTEM: CYCLIC; } 3`] = `
+
+Message:
+> 1 | @counter-style Thumbs { SYSTEM: CYCLIC; }
+    |                                 ^^^^^^ Use lowercase for CSS value keyword \`CYCLIC\`.
+
+Output:
+  1 | @counter-style Thumbs { SYSTEM: cyclic; }
+
+`;
+
+exports[`invalid(52): a { background: IMAGE-SET(URL(a.png) 1X); } 1`] = `
+
+  1 | a { background: IMAGE-SET(URL(a.png) 1X); }
+
+`;
+
+exports[`invalid(52): a { background: IMAGE-SET(URL(a.png) 1X); } 2`] = `
+
+Message:
+> 1 | a { background: IMAGE-SET(URL(a.png) 1X); }
+    |                 ^^^^^^^^^ Use lowercase for CSS function name \`IMAGE-SET\`.
+
+Output:
+  1 | a { background: image-set(URL(a.png) 1X); }
+
+`;
+
+exports[`invalid(52): a { background: IMAGE-SET(URL(a.png) 1X); } 3`] = `
+
+Message:
+> 1 | a { background: IMAGE-SET(URL(a.png) 1X); }
+    |                           ^^^ Use lowercase for CSS function name \`URL\`.
+
+Output:
+  1 | a { background: IMAGE-SET(url(a.png) 1X); }
+
+`;
+
+exports[`invalid(52): a { background: IMAGE-SET(URL(a.png) 1X); } 4`] = `
+
+Message:
+> 1 | a { background: IMAGE-SET(URL(a.png) 1X); }
+    |                                       ^ Use lowercase for CSS unit \`X\`.
+
+Output:
+  1 | a { background: IMAGE-SET(URL(a.png) 1x); }
+
+`;
+
+exports[`invalid(53): a { transition: ALL 1S EASE-IN-OUT; } 1`] = `
+
+  1 | a { transition: ALL 1S EASE-IN-OUT; }
+
+`;
+
+exports[`invalid(53): a { transition: ALL 1S EASE-IN-OUT; } 2`] = `
+
+Message:
+> 1 | a { transition: ALL 1S EASE-IN-OUT; }
+    |                 ^^^ Use lowercase for CSS value keyword \`ALL\`.
+
+Output:
+  1 | a { transition: all 1S EASE-IN-OUT; }
+
+`;
+
+exports[`invalid(53): a { transition: ALL 1S EASE-IN-OUT; } 3`] = `
+
+Message:
+> 1 | a { transition: ALL 1S EASE-IN-OUT; }
+    |                      ^ Use lowercase for CSS unit \`S\`.
+
+Output:
+  1 | a { transition: ALL 1s EASE-IN-OUT; }
+
+`;
+
+exports[`invalid(53): a { transition: ALL 1S EASE-IN-OUT; } 4`] = `
+
+Message:
+> 1 | a { transition: ALL 1S EASE-IN-OUT; }
+    |                        ^^^^^^^^^^^ Use lowercase for CSS value keyword \`EASE-IN-OUT\`.
+
+Output:
+  1 | a { transition: ALL 1S ease-in-out; }
+
+`;
+
+exports[`invalid(54): a { color: RGB(1 2 3); background: HSL(0DEG 0% 0%); } 1`] = `
+
+  1 | a { color: RGB(1 2 3); background: HSL(0DEG 0% 0%); }
+
+`;
+
+exports[`invalid(54): a { color: RGB(1 2 3); background: HSL(0DEG 0% 0%); } 2`] = `
+
+Message:
+> 1 | a { color: RGB(1 2 3); background: HSL(0DEG 0% 0%); }
+    |            ^^^ Use lowercase for CSS function name \`RGB\`.
+
+Output:
+  1 | a { color: rgb(1 2 3); background: HSL(0DEG 0% 0%); }
+
+`;
+
+exports[`invalid(54): a { color: RGB(1 2 3); background: HSL(0DEG 0% 0%); } 3`] = `
+
+Message:
+> 1 | a { color: RGB(1 2 3); background: HSL(0DEG 0% 0%); }
+    |                                    ^^^ Use lowercase for CSS function name \`HSL\`.
+
+Output:
+  1 | a { color: RGB(1 2 3); background: hsl(0DEG 0% 0%); }
+
+`;
+
+exports[`invalid(54): a { color: RGB(1 2 3); background: HSL(0DEG 0% 0%); } 4`] = `
+
+Message:
+> 1 | a { color: RGB(1 2 3); background: HSL(0DEG 0% 0%); }
+    |                                         ^^^ Use lowercase for CSS unit \`DEG\`.
+
+Output:
+  1 | a { color: RGB(1 2 3); background: HSL(0deg 0% 0%); }
 
 `;
 

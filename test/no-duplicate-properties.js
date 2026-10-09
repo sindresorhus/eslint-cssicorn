@@ -88,6 +88,11 @@ test.snapshot({
 			}
 		`,
 		'a { color: red; /* keep */ color: red; }',
+		'a { -webkit-user-select: none; user-select: none; -webkit-user-select: text; user-select: text; }',
+		'@font-face { src: url(a.woff2); src: url(a.woff2); }',
+		'a { color: red; & b { color: blue; } color: red; }',
+		'a { --theme: red; /* keep */ --theme: blue; }',
+		'@keyframes pulse { from { color: red !important; color: red !important; } }',
 	],
 });
 

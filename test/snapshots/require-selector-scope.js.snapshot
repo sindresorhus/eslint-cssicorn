@@ -674,6 +674,148 @@ Message:
 
 `;
 
+exports[`invalid(51): :is(:is(.card, button), #panel) {} 1`] = `
+
+  1 | :is(:is(.card, button), #panel) {}
+
+`;
+
+exports[`invalid(51): :is(:is(.card, button), #panel) {} 2`] = `
+
+Message:
+> 1 | :is(:is(.card, button), #panel) {}
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Require a positive scoping boundary for this selector.
+
+`;
+
+exports[`invalid(52): :where(button, a) {} 1`] = `
+
+  1 | :where(button, a) {}
+
+`;
+
+exports[`invalid(52): :where(button, a) {} 2`] = `
+
+Message:
+> 1 | :where(button, a) {}
+    | ^^^^^^^^^^^^^^^^^ Require a positive scoping boundary for this selector.
+
+`;
+
+exports[`invalid(53): ::slotted(:where(.card, button)) {} 1`] = `
+
+  1 | ::slotted(:where(.card, button)) {}
+
+`;
+
+exports[`invalid(53): ::slotted(:where(.card, button)) {} 2`] = `
+
+Message:
+> 1 | ::slotted(:where(.card, button)) {}
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Require a positive scoping boundary for this selector.
+
+`;
+
+exports[`invalid(54): :not(.card):not(#panel) {} 1`] = `
+
+  1 | :not(.card):not(#panel) {}
+
+`;
+
+exports[`invalid(54): :not(.card):not(#panel) {} 2`] = `
+
+Message:
+> 1 | :not(.card):not(#panel) {}
+    | ^^^^^^^^^^^^^^^^^^^^^^^ Require a positive scoping boundary for this selector.
+
+`;
+
+exports[`invalid(55): button, .card, a {} 1`] = `
+
+  1 | button, .card, a {}
+
+`;
+
+exports[`invalid(55): button, .card, a {} 2`] = `
+
+Message:
+> 1 | button, .card, a {}
+    | ^^^^^^ Require a positive scoping boundary for this selector.
+
+`;
+
+exports[`invalid(55): button, .card, a {} 3`] = `
+
+Message:
+> 1 | button, .card, a {}
+    |                ^ Require a positive scoping boundary for this selector.
+
+`;
+
+exports[`invalid(56): [data-x] {} 1`] = `
+
+  1 | [data-x] {}
+
+`;
+
+exports[`invalid(56): [data-x] {} 2`] = `
+
+Message:
+> 1 | [data-x] {}
+    | ^^^^^^^^ Require a positive scoping boundary for this selector.
+
+`;
+
+exports[`invalid(57): :has(:is(.card)) {} 1`] = `
+
+  1 | :has(:is(.card)) {}
+
+`;
+
+exports[`invalid(57): :has(:is(.card)) {} 2`] = `
+
+Message:
+> 1 | :has(:is(.card)) {}
+    | ^^^^^^^^^^^^^^^^ Require a positive scoping boundary for this selector.
+
+`;
+
+exports[`invalid(58): @media all { button, a {} } 1`] = `
+
+  1 | @media all { button, a {} }
+
+`;
+
+exports[`invalid(58): @media all { button, a {} } 2`] = `
+
+Message:
+> 1 | @media all { button, a {} }
+    |              ^^^^^^ Require a positive scoping boundary for this selector.
+
+`;
+
+exports[`invalid(58): @media all { button, a {} } 3`] = `
+
+Message:
+> 1 | @media all { button, a {} }
+    |                      ^ Require a positive scoping boundary for this selector.
+
+`;
+
+exports[`invalid(59): svg|* {} 1`] = `
+
+  1 | svg|* {}
+
+`;
+
+exports[`invalid(59): svg|* {} 2`] = `
+
+Message:
+> 1 | svg|* {}
+    | ^^^^^ Require a positive scoping boundary for this selector.
+
+`;
+
 exports[`invalid(6): ::before {} 1`] = `
 
   1 | ::before {}

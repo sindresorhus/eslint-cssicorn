@@ -1,13 +1,11 @@
+import {parse, tokenize, tokenTypes} from '@eslint/css-tree';
+import {colorFunctions as standardColorFunctions} from './shared/css-color-functions.js';
 import {
-	ident,
-	parse,
-	tokenize,
-	tokenTypes,
-} from '@eslint/css-tree';
-import {
+	decodeCssIdentifier,
 	getSingleValueIdentifier,
 	isCssModulesInteropDeclaration,
 	normalizeCssIdentifier,
+	toAsciiLowerCase,
 	toLocation,
 } from './utils/index.js';
 
@@ -166,7 +164,7 @@ const deprecatedValueKeywords = {
 };
 
 const fixableValueAliases = new Set(['overflow: overlay', 'overflow-x: overlay', 'overflow-y: overlay', 'text-orientation: sideways-right']);
-const colorFunctions = new Set(['color', 'color-contrast', 'color-mix', 'contrast-color', 'device-cmyk', 'hsl', 'hsla', 'hwb', 'lab', 'lch', 'light-dark', 'oklab', 'oklch', 'rgb', 'rgba']);
+const colorFunctions = new Set([...standardColorFunctions, 'color-contrast']);
 
 const deprecatedHtmlTypeSelectors = new Set([
 	'acronym',
@@ -262,8 +260,8 @@ const getDeprecatedTypeSelector = value => {
 		return;
 	}
 
-	const decodedName = ident.decode(identifier.value);
-	const htmlName = decodedName.toLowerCase();
+	const decodedName = decodeCssIdentifier(identifier.value);
+	const htmlName = toAsciiLowerCase(decodedName);
 	if (deprecatedHtmlTypeSelectors.has(htmlName)) {
 		return {name: htmlName, offsets: identifier.offsets};
 	}

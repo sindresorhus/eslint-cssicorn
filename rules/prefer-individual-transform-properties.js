@@ -1,10 +1,10 @@
 import {
 	clone,
 	generate,
-	keyword,
 	walk,
 } from '@eslint/css-tree';
 import {
+	getBasePropertyName,
 	getCommaSeparatedGroups,
 	hasCommentInRange,
 	hasSubstitutionOrRandomFunction,
@@ -117,14 +117,14 @@ function getTransformProperties(value, sourceCode) {
 
 function getReplacement(declaration, properties, sourceCode, lineEnding) {
 	const [start] = sourceCode.getRange(declaration);
-	const end = start + sourceCode.getText(declaration).replace(/[\t\n\f\r ]+$/u, '').length;
+	const end = start + sourceCode.getText(declaration).replace(/[\t\n\f\r ]+$/v, '').length;
 	const [valueStart] = sourceCode.getRange(declaration.value);
 	const [, valueEnd] = sourceCode.getRange(declaration.value.children.at(-1));
 	const colon = sourceCode.text.slice(start + declaration.property.length, valueStart);
 	const suffix = sourceCode.text.slice(valueEnd, end);
 	const lineStart = start - (sourceCode.getLoc(declaration).start.column - 1);
 	const indentation = sourceCode.text.slice(lineStart, start);
-	const separator = /^[\t ]*$/u.test(indentation) && lineEnding ? `;${lineEnding}${indentation}` : '; ';
+	const separator = /^[\t ]*$/v.test(indentation) && lineEnding ? `;${lineEnding}${indentation}` : '; ';
 	return {
 		fixRange: [start, end],
 		text: properties.map(({property, value}) => `${property}${colon}${value}${suffix}`).join(separator),
@@ -136,7 +136,7 @@ function getReplacement(declaration, properties, sourceCode, lineEnding) {
 */
 const create = context => {
 	const {sourceCode} = context;
-	const lineEnding = sourceCode.text.match(/\r\n|[\n\f\r]/u)?.[0];
+	const lineEnding = sourceCode.text.match(/\r\n|[\n\f\r]/v)?.[0];
 	context.on('Block', block => {
 		let declaration;
 		for (const child of block.children) {
@@ -149,7 +149,7 @@ const create = context => {
 				return;
 			}
 
-			if (!property.endsWith('transform') || keyword(property).basename !== 'transform') {
+			if (!property.endsWith('transform') || getBasePropertyName(property) !== 'transform') {
 				continue;
 			}
 

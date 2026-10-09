@@ -48,7 +48,7 @@ const getDuplicateSelectorRemovalRange = (selectors, index, block, context) => {
 	const removalRange = [previousSelectorEnd, selectorEnd];
 	const commentCheckRange = [previousSelectorEnd, commentCheckEnd];
 
-	if (!/^\s*,\s*$/u.test(separator) || hasCommentInRange(context, commentCheckRange)) {
+	if (!/^\s*,\s*$/v.test(separator) || hasCommentInRange(context, commentCheckRange)) {
 		return;
 	}
 

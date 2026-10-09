@@ -43,6 +43,22 @@ test.snapshot({
 			code: ':foo {}',
 			options: [{allow: [String.raw`:\66 oo`]}],
 		},
+		// Standard pseudo-classes and pseudo-elements.
+		':root, ::selection, :nth-of-type(2n), :dir(ltr), :lang(en) {}',
+		'::marker, ::placeholder, ::file-selector-button, ::backdrop, ::view-transition {}',
+		'::part(foo), ::slotted(.x), :host, :host-context(.x) {}',
+		':has(> :hover), :not(.a):where(.b) {}',
+		'@page :left, :right, :blank, :first {}',
+		String.raw`:r\6f ot, :h\6f ver {}`,
+		// `allow` matches case-insensitively and covers functional forms.
+		{
+			code: ':foo, ::bar {}',
+			options: [{allow: [':FOO', '::BAR']}],
+		},
+		{
+			code: ':foo(.bar) {}',
+			options: [{allow: [':foo']}],
+		},
 	],
 	invalid: [
 		':foucs {}',
@@ -64,5 +80,15 @@ test.snapshot({
 			code: '::foo {}',
 			options: [{allow: [':foo']}],
 		},
+		':hoverr {}',
+		'::befor::after {}',
+		':foucs(.bar) {}',
+		':where(:foucs, :hovr) {}',
+		String.raw`:\66 oucs {}`,
+		'::theme-part, ::theme-other {}',
+		'.foo { &:foucs {} }',
+		'@media (width > 0px) { :foucs {} }',
+		'@layer theme { :hovr {} }',
+		'@scope (.card) { :foucs {} }',
 	],
 });

@@ -2,7 +2,7 @@
 
 import {find} from '@eslint/css-tree';
 import {getParentStyleRule, hasNestingSelectorInRawArgument} from './shared/css-selector-specificity.js';
-import {decodeCssIdentifier} from './utils/index.js';
+import {isDashedIdentifier} from './utils/index.js';
 
 /**
 @import {SelectorPlain} from '@eslint/css-tree';
@@ -50,7 +50,7 @@ const create = context => {
 				// TODO: Remove the empty-namespace exclusion once the minimum supported parser accepts implicit nested |span selectors.
 				if (
 					firstRemainingNode.type === 'TypeSelector'
-					&& (firstRemainingNode.name.startsWith('|') || decodeCssIdentifier(firstRemainingNode.name).startsWith('--'))
+					&& (firstRemainingNode.name.startsWith('|') || isDashedIdentifier(firstRemainingNode.name))
 				) {
 					continue;
 				}
@@ -64,7 +64,7 @@ const create = context => {
 				*/
 				fix(fixer) {
 					const [start, end] = sourceCode.getRange(nestingSelector);
-					const whitespace = sourceCode.text.slice(end).match(/^[\t ]*/u)?.[0] ?? '';
+					const whitespace = sourceCode.text.slice(end).match(/^[\t ]*/v)?.[0] ?? '';
 					return fixer.removeRange([start, end + whitespace.length]);
 				},
 			};

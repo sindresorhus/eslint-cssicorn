@@ -81,3 +81,33 @@ test({
 		},
 	],
 });
+
+test.snapshot({
+	valid: [
+		// Wrong length or not hexadecimal.
+		'a { color: #ffff; }',
+		'a { color: #fffff; }',
+		'a { color: #fffffff; }',
+		'a { color: #gggggg; }',
+		// An escaped value is decoded before the pairs are compared.
+		String.raw`a { color: #\61 4a4a4; }`,
+		// Hex colors that cannot be shortened are left alone.
+		'a { border: 1px solid #123456; }',
+	],
+	invalid: [
+		'a { color: #FFFFFF; }',
+		'a { color: #aabbcc; }',
+		'a { color: #ffffff00; }',
+		'a { color: #AABBCCDD; }',
+		'a { border-color: #ffffff #aabbcc; }',
+		'a { color: #ffffff !important; }',
+		'a { color: #ffffff /* keep */; }',
+		'a { --theme: #ffffff; }',
+		String.raw`a { color: #\66 fffff; }`,
+		'a { background: linear-gradient(#ffffff, #aabbccdd); }',
+		'@media (width > 0px) { a { color: #ffffff; } }',
+		'@layer theme { a { color: #aabbcc; } }',
+		'@container (width > 0px) { a { color: #ffffff; } }',
+		'@scope (.card) { a { color: #ffffff; } }',
+	],
+});

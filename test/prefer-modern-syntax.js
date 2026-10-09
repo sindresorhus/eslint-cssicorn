@@ -37,6 +37,32 @@ ruleTest({
 		// CSS Modules interop blocks are read by JavaScript as exact strings.
 		':export { shadow: rgba(0, 0, 0, 0.5); --brand: rgba(0, 0, 0, 0.5); }',
 		':import("./theme.css") { shadow: rgb(0 0 0 / .5); }',
+		// Modern color syntax with no legacy form.
+		'a { color: rgb(0 0 0); }',
+		'a { color: rgb(var(--r) var(--g) var(--b) / 50%); }',
+		'a { color: hsl(var(--h) var(--s) var(--l) / 25%); }',
+		'a { color: lab(50% 0 0 / calc(var(--a) * 1)); }',
+		'a { color: oklch(50% 0 0 / none); }',
+		'a { color: rgb(none none none / 50%); }',
+		'a { color: color(srgb 1 0 0 / none); }',
+		// Color-producing functions that are not in the checked set.
+		'a { background: color-mix(in oklch, red 40%, blue); }',
+		'a { color: light-dark(rgb(0 0 0 / 50%), rgb(255 255 255 / 50%)); }',
+		// Substitutions in legacy arguments are always skipped.
+		'a { color: rgba(inherit(--channels), .5); }',
+		// `var()` fallbacks are only parsed inside custom properties.
+		'a { color: var(--brand, oklch(50% 0 0 / .5)); }',
+		'a { --brand: var(--fallback, rgb(0 0 0 / 50%)); }',
+		// CSS Modules interop blocks are ignored.
+		':export { color: rgb(0 0 0 / .5); --brand: hsla(30, 40%, 50%, .5); }',
+		':import("./x.css") { --brand: oklch(50% 0 0 / .5); }',
+		// Modern colors inside grouping rules.
+		'@media (min-width: 100px) { a { color: rgb(0 0 0 / 50%); } }',
+		'@supports (color: rgb(0 0 0 / 50%)) { a { color: red; } }',
+		// Color-like text inside a URL is ignored.
+		'a { background: url("data:image/svg+xml,rgba(0,0,0,.5)"); }',
+		// Modern pseudo-elements.
+		'a::after, b::first-line { color: red; }',
 	],
 	invalid: [
 		{code: 'a { color: rgba(0, 0, 0, .5); }', output: 'a { color: rgb(0 0 0 / 50%); }', errors: 1},
@@ -122,6 +148,58 @@ ruleTest({
 		{code: 'a { --brand: rgba(0, /* keep */ 0, 0, .5); }', errors: 1},
 		{code: 'a { color: rgb(0,\n 0,\n 0); }', output: 'a { color: rgb(0\n 0\n 0); }', errors: 1},
 		{code: 'a { color: rgb(0\n, 0, 0); }', errors: 1},
+		// `rgba()`/`hsla()` name with boundary alpha values.
+		{code: 'a { color: rgba(0, 0, 0, 1); }', output: 'a { color: rgb(0 0 0 / 100%); }', errors: 1},
+		{code: 'a { color: rgba(255, 255, 255, 0); }', output: 'a { color: rgb(255 255 255 / 0%); }', errors: 1},
+		{code: 'a { color: rgba(0,0,0,.5); }', output: 'a { color: rgb(0 0 0 / 50%); }', errors: 1},
+		// Modern comma-free alpha on `hsl()`.
+		{code: 'a { color: hsl(30 40% 50% / .5); }', output: 'a { color: hsl(30 40% 50% / 50%); }', errors: [{messageId: 'prefer-modern-syntax/alpha'}]},
+		{code: 'a { color: hsl(30 40% 50% / 1e-2); }', errors: 1},
+		// Alpha in other color spaces and color spaces beyond srgb.
+		{code: 'a { color: color(display-p3 1 0 0 / .5); }', output: 'a { color: color(display-p3 1 0 0 / 50%); }', errors: 1},
+		{code: 'a { color: color(srgb 1 0 0 / 1); }', output: 'a { color: color(srgb 1 0 0 / 100%); }', errors: 1},
+		{code: 'a { color: lab(calc(50%) 0 0 / .5); }', output: 'a { color: lab(calc(50%) 0 0 / 50%); }', errors: 1},
+		// Function names keep their original case when the name does not change.
+		{code: 'a { color: RGB(0 0 0 / .5); }', output: 'a { color: RGB(0 0 0 / 50%); }', errors: 1},
+		{code: 'a { color: HSL(30 40% 50% / .5); }', output: 'a { color: HSL(30 40% 50% / 50%); }', errors: 1},
+		// `rgba()`/`hsla()` are reported even when the rest is already modern.
+		{code: 'a { color: rgba(1 2 3 / 100%); }', output: 'a { color: rgb(1 2 3 / 100%); }', errors: [{messageId: 'prefer-modern-syntax/color'}]},
+		{code: 'a { color: hsla(30 40% 50% / 100%); }', output: 'a { color: hsl(30 40% 50% / 100%); }', errors: 1},
+		{code: 'a { color: hsla(var(--h) var(--s) var(--l) / .25); }', output: 'a { color: hsl(var(--h) var(--s) var(--l) / 25%); }', errors: 1},
+		// Escaped alias name.
+		{code: String.raw`a { color: h\73 la(30, 40%, 50%, .25); }`, output: 'a { color: hsl(30 40% 50% / 25%); }', errors: 1},
+		// Percentage alpha in legacy comma arguments keeps the seam without touching the alpha.
+		{code: 'a { color: hsl(30, 40%, 50%, 100%); }', output: 'a { color: hsl(30 40% 50% / 100%); }', errors: 1},
+		{code: 'a { color: rgba(0, 0, 0, 50%); }', output: 'a { color: rgb(0 0 0 / 50%); }', errors: 1},
+		{code: 'a { border-color: rgb(0,0,0,0.5); }', output: 'a { border-color: rgb(0 0 0 / 50%); }', errors: 1},
+		// Multiple colors in one declaration.
+		{
+			code: 'a { box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .1), 0 1px 2px rgba(0, 0, 0, .2); }',
+			output: 'a { box-shadow: inset 0 0 0 1px rgb(0 0 0 / 10%), 0 1px 2px rgb(0 0 0 / 20%); }',
+			errors: 2,
+		},
+		{code: 'a { --brand: rgb(0 0 0 / .5) rgb(1 1 1 / .25); }', output: 'a { --brand: rgb(0 0 0 / 50%) rgb(1 1 1 / 25%); }', errors: 2},
+		{code: 'a { background: linear-gradient(rgba(0, 0, 0, .5) 0%, transparent 100%); }', output: 'a { background: linear-gradient(rgb(0 0 0 / 50%) 0%, transparent 100%); }', errors: 1},
+		// Relative colors with a legacy origin.
+		{code: 'a { color: hsl(from rgb(1, 2, 3) h s l / .25); }', output: 'a { color: hsl(from rgb(1 2 3) h s l / 25%); }', errors: 2},
+		// `!important` on a legacy color.
+		{code: 'a { opacity: .5; color: rgba(0, 0, 0, .5) !important; }', output: 'a { opacity: .5; color: rgb(0 0 0 / 50%) !important; }', errors: 1},
+		// Custom property and `@supports` modern alpha.
+		{code: 'a { --brand: hsl(30 40% 50% / .5); }', output: 'a { --brand: hsl(30 40% 50% / 50%); }', errors: 1},
+		{code: '@supports (color: hsl(30, 40%, 50%)) { a { color: red; } }', output: '@supports (color: hsl(30 40% 50%)) { a { color: red; } }', errors: 1},
+		// Comments inside the function block the autofix.
+		{code: 'a { color: rgb(/* c */ 0 0 0 / .5); }', errors: 1},
+		{code: 'a { color: rgba(0, 0, 0, /* alpha */ .5); }', errors: 1},
+		// A function in a legacy component blocks the autofix.
+		{code: 'a { color: rgb(0, 0, max(1px, 2px)); }', errors: 1},
+		// Not a CSS Modules interop block because of the class prefix.
+		{code: '.a:import("./x.css") { color: rgba(0, 0, 0, .5); }', output: '.a:import("./x.css") { color: rgb(0 0 0 / 50%); }', errors: 1},
+		// Modern pseudo-element with a legacy color.
+		{code: 'a[data-x]::after { color: rgba(0, 0, 0, .5); }', output: 'a[data-x]::after { color: rgb(0 0 0 / 50%); }', errors: 1},
+		// Case-insensitive legacy pseudo-element.
+		{code: 'a:FIRST-LETTER { color: red; }', output: 'a::FIRST-LETTER { color: red; }', errors: 1},
+		// Legacy color inside a grouping rule.
+		{code: '@media (min-width: 100px) { a { color: rgba(0, 0, 0, .5); } }', output: '@media (min-width: 100px) { a { color: rgb(0 0 0 / 50%); } }', errors: 1},
 	],
 });
 

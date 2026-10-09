@@ -65,6 +65,28 @@ test.snapshot({
 				},
 			},
 		},
+		// Exempt keywords mixed with known property names.
+		'a { transition-property: all, none, opacity, transform; }',
+		// Only identifiers are checked; times, keywords, and functions are ignored.
+		'a { transition: 1s linear, 2s opacity; }',
+		'a { transition: opacity; }',
+		'a { transition: opacity 1s ease-in-out, transform 1s ease-out; }',
+		'a { transition: opacity 1s allow-discrete, transform 1s; }',
+		'a { transition: opacity 1s, transform 1s, color 1s; }',
+		'a { will-change: transform, opacity, filter; }',
+		// Other vendor-prefixed declarations are recognized.
+		'a { -o-transition: opacity 1s; -ms-transition-property: transform; }',
+		// Known property names are allowed even when the reference is unusual.
+		'a { transition: will-change 1s, content-visibility 1s; }',
+		'a { transition-property: will-change; }',
+		// Custom property references are ignored anywhere in the value.
+		'a { transition: --foo, opacity 1s; }',
+		'a { will-change: opacity, var(--extra); }',
+		// Function arguments are not resolved.
+		'a { will-change: foo(transfrom); }',
+		'@media (min-width: 1px) { a { transition: opacity 1s; } }',
+		'@layer base { a { will-change: transform; } }',
+		'@scope (.card) { a { transition: opacity 1s; } }',
 	],
 	invalid: [
 		'a { transition: opactiy 200ms; }',
@@ -131,6 +153,30 @@ test.snapshot({
 		'a { @media print { transition: opactiy 1s; } }',
 		'a { @supports (will-change: transfrom) { will-change: transfrom; } }',
 		'a { @container style(transition-property: colr) { transition-property: colr; } }',
+		'a { transition: opactiy 200ms ease; }',
+		'a { transition-property: opacity, transfrom; }',
+		'a { transition: 1s opactiy; }',
+		'a { transition: ease, opactiy 1s; }',
+		'a { will-change: opacity, transfrom, color; }',
+		'a { will-change: auto, transfrom; }',
+		'a { will-change: contents, opactiy; }',
+		'a { transition-property: opacity, none, transfrom; }',
+		// Vendor-prefixed declarations are still checked.
+		'a { -webkit-transition: opactiy 1s; }',
+		// Multiple declarations each report on their own line.
+		'a { transition: opactiy 1s; will-change: transfrom; }',
+		// CSS-wide keywords are only allowed as the whole value.
+		'a { transition-property: inherit, opacity; }',
+		'a { transition-property: initial, opacity, unset; }',
+		'a { will-change: inherit, initial; }',
+		// `default` is reserved even without a companion identifier.
+		'a { transition: default; }',
+		'a { Transition: Opactiy 1s; }',
+		String.raw`a { will-change: transf\72 om; }`,
+		'a { will-change: opactiy, opactiy; }',
+		// An ICSS `:import()` selector combined with a real selector is still checked.
+		':import("a.css") .card { transition: opactiy 1s; }',
+		'@layer components { @media (width > 1px) { a { transition: opactiy 1s; } } }',
 	],
 });
 

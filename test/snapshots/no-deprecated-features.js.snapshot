@@ -789,6 +789,23 @@ Output:
 
 `;
 
+exports[`invalid(39): a { word-wrap: break-word !important; } 1`] = `
+
+  1 | a { word-wrap: break-word !important; }
+
+`;
+
+exports[`invalid(39): a { word-wrap: break-word !important; } 2`] = `
+
+Message:
+> 1 | a { word-wrap: break-word !important; }
+    |     ^^^^^^^^^ Do not use deprecated CSS property \`word-wrap\`.
+
+Output:
+  1 | a { overflow-wrap: break-word !important; }
+
+`;
+
 exports[`invalid(4): @media only PROJECTION { a { color: red; } } 1`] = `
 
   1 | @media only PROJECTION { a { color: red; } }
@@ -800,6 +817,174 @@ exports[`invalid(4): @media only PROJECTION { a { color: red; } } 2`] = `
 Message:
 > 1 | @media only PROJECTION { a { color: red; } }
     |             ^^^^^^^^^^ Do not use deprecated CSS media type \`@media projection\`.
+
+`;
+
+exports[`invalid(40): a { grid-gap: 1rem !important; } 1`] = `
+
+  1 | a { grid-gap: 1rem !important; }
+
+`;
+
+exports[`invalid(40): a { grid-gap: 1rem !important; } 2`] = `
+
+Message:
+> 1 | a { grid-gap: 1rem !important; }
+    |     ^^^^^^^^ Do not use deprecated CSS property \`grid-gap\`.
+
+Output:
+  1 | a { gap: 1rem !important; }
+
+`;
+
+exports[`invalid(41): a { page-break-before: right; } 1`] = `
+
+  1 | a { page-break-before: right; }
+
+`;
+
+exports[`invalid(41): a { page-break-before: right; } 2`] = `
+
+Message:
+> 1 | a { page-break-before: right; }
+    |     ^^^^^^^^^^^^^^^^^ Do not use deprecated CSS property \`page-break-before\`.
+
+Output:
+  1 | a { break-before: right; }
+
+`;
+
+exports[`invalid(42): a { outline-color: activecaption; } 1`] = `
+
+  1 | a { outline-color: activecaption; }
+
+`;
+
+exports[`invalid(42): a { outline-color: activecaption; } 2`] = `
+
+Message:
+> 1 | a { outline-color: activecaption; }
+    |                    ^^^^^^^^^^^^^ Do not use deprecated CSS property value \`outline-color: activecaption\`.
+
+Suggestion 1/1: Replace \`outline-color: activecaption\` with \`canvas\`.:
+  1 | a { outline-color: canvas; }
+
+`;
+
+exports[`invalid(43): a { color: color-mix(in srgb, activecaption, red); } 1`] = `
+
+  1 | a { color: color-mix(in srgb, activecaption, red); }
+
+`;
+
+exports[`invalid(43): a { color: color-mix(in srgb, activecaption, red); } 2`] = `
+
+Message:
+> 1 | a { color: color-mix(in srgb, activecaption, red); }
+    |                               ^^^^^^^^^^^^^ Do not use deprecated CSS property value \`color: activecaption\`.
+
+Suggestion 1/1: Replace \`color: activecaption\` with \`canvas\`.:
+  1 | a { color: color-mix(in srgb, canvas, red); }
+
+`;
+
+exports[`invalid(44): a { ime-mode: disabled; } 1`] = `
+
+  1 | a { ime-mode: disabled; }
+
+`;
+
+exports[`invalid(44): a { ime-mode: disabled; } 2`] = `
+
+Message:
+> 1 | a { ime-mode: disabled; }
+    |     ^^^^^^^^ Do not use deprecated CSS property \`ime-mode\`.
+
+`;
+
+exports[`invalid(45): a { scroll-snap-type-x: mandatory; } 1`] = `
+
+  1 | a { scroll-snap-type-x: mandatory; }
+
+`;
+
+exports[`invalid(45): a { scroll-snap-type-x: mandatory; } 2`] = `
+
+Message:
+> 1 | a { scroll-snap-type-x: mandatory; }
+    |     ^^^^^^^^^^^^^^^^^^ Do not use deprecated CSS property \`scroll-snap-type-x\`.
+
+`;
+
+exports[`invalid(46): a { -webkit-box-pack: center; -webkit-box-lines: multiple; } 1`] = `
+
+  1 | a { -webkit-box-pack: center; -webkit-box-lines: multiple; }
+
+`;
+
+exports[`invalid(46): a { -webkit-box-pack: center; -webkit-box-lines: multiple; } 2`] = `
+
+Message:
+> 1 | a { -webkit-box-pack: center; -webkit-box-lines: multiple; }
+    |     ^^^^^^^^^^^^^^^^ Do not use deprecated CSS property \`-webkit-box-pack\`.
+
+`;
+
+exports[`invalid(46): a { -webkit-box-pack: center; -webkit-box-lines: multiple; } 3`] = `
+
+Message:
+> 1 | a { -webkit-box-pack: center; -webkit-box-lines: multiple; }
+    |                               ^^^^^^^^^^^^^^^^^ Do not use deprecated CSS property \`-webkit-box-lines\`.
+
+`;
+
+exports[`invalid(47): a { -webkit-box-orient: horizontal; } 1`] = `
+
+  1 | a { -webkit-box-orient: horizontal; }
+
+`;
+
+exports[`invalid(47): a { -webkit-box-orient: horizontal; } 2`] = `
+
+Message:
+> 1 | a { -webkit-box-orient: horizontal; }
+    |     ^^^^^^^^^^^^^^^^^^ Do not use deprecated CSS property \`-webkit-box-orient\`.
+
+`;
+
+exports[`invalid(48): a { -webkit-box-orient: HORIZONTAL; } 1`] = `
+
+  1 | a { -webkit-box-orient: HORIZONTAL; }
+
+`;
+
+exports[`invalid(48): a { -webkit-box-orient: HORIZONTAL; } 2`] = `
+
+Message:
+> 1 | a { -webkit-box-orient: HORIZONTAL; }
+    |     ^^^^^^^^^^^^^^^^^^ Do not use deprecated CSS property \`-webkit-box-orient\`.
+
+`;
+
+exports[`invalid(49): a { min-width: intrinsic; max-width: min-intrinsic; } 1`] = `
+
+  1 | a { min-width: intrinsic; max-width: min-intrinsic; }
+
+`;
+
+exports[`invalid(49): a { min-width: intrinsic; max-width: min-intrinsic; } 2`] = `
+
+Message:
+> 1 | a { min-width: intrinsic; max-width: min-intrinsic; }
+    |                ^^^^^^^^^ Do not use deprecated CSS property value \`min-width: intrinsic\`.
+
+`;
+
+exports[`invalid(49): a { min-width: intrinsic; max-width: min-intrinsic; } 3`] = `
+
+Message:
+> 1 | a { min-width: intrinsic; max-width: min-intrinsic; }
+    |                                      ^^^^^^^^^^^^^ Do not use deprecated CSS property value \`max-width: min-intrinsic\`.
 
 `;
 
@@ -822,6 +1007,51 @@ exports[`invalid(5): @media aural, projection { a { color: red; } } 3`] = `
 Message:
 > 1 | @media aural, projection { a { color: red; } }
     |               ^^^^^^^^^^ Do not use deprecated CSS media type \`@media projection\`.
+
+`;
+
+exports[`invalid(50): @media tv and (color) { a { color: red; } } 1`] = `
+
+  1 | @media tv and (color) { a { color: red; } }
+
+`;
+
+exports[`invalid(50): @media tv and (color) { a { color: red; } } 2`] = `
+
+Message:
+> 1 | @media tv and (color) { a { color: red; } }
+    |        ^^ Do not use deprecated CSS media type \`@media tv\`.
+
+`;
+
+exports[`invalid(51): @media only tv { a { color: red; } } 1`] = `
+
+  1 | @media only tv { a { color: red; } }
+
+`;
+
+exports[`invalid(51): @media only tv { a { color: red; } } 2`] = `
+
+Message:
+> 1 | @media only tv { a { color: red; } }
+    |             ^^ Do not use deprecated CSS media type \`@media tv\`.
+
+`;
+
+exports[`invalid(52): @supports (position-try-options: --x) { a { color: red; } } 1`] = `
+
+  1 | @supports (position-try-options: --x) { a { color: red; } }
+
+`;
+
+exports[`invalid(52): @supports (position-try-options: --x) { a { color: red; } } 2`] = `
+
+Message:
+> 1 | @supports (position-try-options: --x) { a { color: red; } }
+    |            ^^^^^^^^^^^^^^^^^^^^ Do not use deprecated CSS property \`position-try-options\`.
+
+Suggestion 1/1: Replace \`position-try-options\` with \`position-try-fallbacks\`.:
+  1 | @supports (position-try-fallbacks: --x) { a { color: red; } }
 
 `;
 

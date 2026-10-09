@@ -4,7 +4,7 @@ import assert from 'node:assert/strict';
 import getDocumentationUrl from '../../rules/utils/get-documentation-url.js';
 import packageJson from '../../package.json' with {type: 'json'};
 
-const filename = url.fileURLToPath(import.meta.url).replace(/\.js$/, '.js');
+const filename = url.fileURLToPath(import.meta.url).replace(/\.js$/v, '.js');
 
 test('returns the URL of the a named rule\'s documentation', () => {
 	const url = `https://github.com/sindresorhus/eslint-cssicorn/blob/v${packageJson.version}/docs/rules/foo.md`;

@@ -30,6 +30,19 @@ test.snapshot({
 		// CSS Modules interop blocks are read by JavaScript as exact strings.
 		':export { gap: 0px; margin: 0px 1px; }',
 		':import("./theme.css") { gap: 0px; }',
+		// Non-zero lengths and non-length units are left alone.
+		'a { width: 0.1px; margin: 0%; transform: rotate(0deg); }',
+		// Vendor-prefixed properties and functions are ignored.
+		'a { -webkit-margin-before: 0px; -moz-border-start-width: 0px; }',
+		'a { width: -moz-calc(0px + 1px); }',
+		// Math functions may require units.
+		'a { width: sign(0px); height: mod(0px, 1px); }',
+		// Strings and URLs are not lengths.
+		'a { content: "0px"; background: url("0px.png"); }',
+		// Unitless zero and non-length media and container features.
+		'@media (width: 0) {} @container (width: 0) {}',
+		'@media (aspect-ratio: 0/1) {} @media (resolution: 0dpi) {}',
+		'a { margin: calc(0px + 1px) 0; }',
 	],
 	invalid: [
 		'a { margin: 0px; }',
@@ -49,5 +62,32 @@ test.snapshot({
 		'a { width: 0.0px; }',
 		'a { width: 0e999px; }',
 		'.a:export { gap: 0px; } :export, .a { gap: 0px; }',
+		// Multiple zero lengths in one declaration.
+		'a { margin: 0px 0rem 0em 0q; }',
+		'a { padding: 0px 0; }',
+		// Different zero spellings.
+		'a { width: 00px; }',
+		'a { width: +0px; }',
+		'a { width: -0px; }',
+		'a { width: .0px; }',
+		'a { width: 0E3px; }',
+		// Comments must be preserved by the fix.
+		'a { margin: /* keep */ 0px; }',
+		'a { margin: 0px !important; }',
+		// Multiple zero lengths across declarations.
+		'a { top: 0px; left: 0px; border-width: 0px; }',
+		'a { margin: 0px; padding: 0px; }',
+		// Media and container feature ranges.
+		'@media (width: 0px) {}',
+		'@media (width >= 0px) {}',
+		'@media (device-width: 0px) {}',
+		'@media (0px < width < 100px) {}',
+		'@container (min-width: 0px) {}',
+		'@container (0px < width <= 100px) {}',
+		// Nested contexts.
+		'a { &:hover { margin: 0px; } }',
+		'@layer theme { a { margin: 0px; } }',
+		'@scope (.card) { a { margin: 0px; } }',
+		'@supports (padding: 0px) { a { margin: 0; } }',
 	],
 });

@@ -75,6 +75,7 @@ test.snapshot({
 		'@supports (width: max(10px, min(5vw, 100px))) { a { width: 1px; } }',
 		'@supports (--size: max(10px, min(5vw, 100px))) { a { width: 1px; } }',
 		'@media (width: max(10px, min(5vw, 100px))) { a { width: 1px; } }',
+		'a { width: min(100px, max(calc(10px + 1px), 5vw)); }',
 	],
 	invalid: [
 		'a { width: max(min(5vw, 100px), 10px); }',
@@ -113,6 +114,9 @@ test.snapshot({
 		'@layer components { a { width: max(10px, min(5vw, 100px)); } }',
 		'@scope (.card) { a { width: max(10px, min(5vw, 100px)); } }',
 		'a { & .child { width: max(10px, min(5vw, 100px)); } }',
+		'a { width: min(100px, max(calc(10px), 5vw)); }',
+		'@keyframes slide { to { width: max(10px, min(5vw, 100px)); } }',
+		'a { @starting-style { width: max(10px, min(5vw, 100px)); } }',
 	],
 });
 

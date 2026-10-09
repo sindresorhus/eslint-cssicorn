@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import normalizeCssIdentifier, {decodeCssIdentifier, toAsciiLowerCase} from '../../rules/utils/normalize-css-identifier.js';
+import normalizeCssIdentifier, {decodeCssIdentifier, normalizePropertyName, toAsciiLowerCase} from '../../rules/utils/normalize-css-identifier.js';
 
 test('decodes escapes and lowercases ASCII letters', () => {
 	assert.equal(normalizeCssIdentifier('COLOR'), 'color');
@@ -21,4 +21,11 @@ test('decodes escapes without changing case', () => {
 	assert.equal(decodeCssIdentifier('Color'), 'Color');
 	assert.equal(decodeCssIdentifier(String.raw`\63 OLOR`), 'cOLOR');
 	assert.equal(decodeCssIdentifier(String.raw`\-\-Brand`), '--Brand');
+});
+
+test('normalizes property names, keeping custom property names case-sensitive', () => {
+	assert.equal(normalizePropertyName('-WEBKIT-Box'), '-webkit-box');
+	assert.equal(normalizePropertyName(String.raw`\63 OLOR`), 'color');
+	assert.equal(normalizePropertyName('--FOO'), '--FOO');
+	assert.equal(normalizePropertyName(String.raw`\-\-Brand`), '--Brand');
 });

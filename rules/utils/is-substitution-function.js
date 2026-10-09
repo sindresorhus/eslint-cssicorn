@@ -17,3 +17,5 @@ export default function isSubstitutionFunction(node) {
 	const name = normalizeCssIdentifier(node.name);
 	return name.startsWith('--') || substitutionFunctions.has(name);
 }
+
+export {substitutionFunctions};

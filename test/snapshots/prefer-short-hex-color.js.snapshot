@@ -1,0 +1,259 @@
+exports[`invalid(1): a { color: #FFFFFF; } 1`] = `
+
+  1 | a { color: #FFFFFF; }
+
+`;
+
+exports[`invalid(1): a { color: #FFFFFF; } 2`] = `
+
+Message:
+> 1 | a { color: #FFFFFF; }
+    |            ^^^^^^^ Prefer \`#FFF\` over \`#FFFFFF\`.
+
+Output:
+  1 | a { color: #FFF; }
+
+`;
+
+exports[`invalid(10): a { background: linear-gradient(#ffffff, #aabbccdd); } 1`] = `
+
+  1 | a { background: linear-gradient(#ffffff, #aabbccdd); }
+
+`;
+
+exports[`invalid(10): a { background: linear-gradient(#ffffff, #aabbccdd); } 2`] = `
+
+Message:
+> 1 | a { background: linear-gradient(#ffffff, #aabbccdd); }
+    |                                 ^^^^^^^ Prefer \`#fff\` over \`#ffffff\`.
+
+Output:
+  1 | a { background: linear-gradient(#fff, #aabbccdd); }
+
+`;
+
+exports[`invalid(10): a { background: linear-gradient(#ffffff, #aabbccdd); } 3`] = `
+
+Message:
+> 1 | a { background: linear-gradient(#ffffff, #aabbccdd); }
+    |                                          ^^^^^^^^^ Prefer \`#abcd\` over \`#aabbccdd\`.
+
+Output:
+  1 | a { background: linear-gradient(#ffffff, #abcd); }
+
+`;
+
+exports[`invalid(11): @media (width > 0px) { a { color: #ffffff; } } 1`] = `
+
+  1 | @media (width > 0px) { a { color: #ffffff; } }
+
+`;
+
+exports[`invalid(11): @media (width > 0px) { a { color: #ffffff; } } 2`] = `
+
+Message:
+> 1 | @media (width > 0px) { a { color: #ffffff; } }
+    |                                   ^^^^^^^ Prefer \`#fff\` over \`#ffffff\`.
+
+Output:
+  1 | @media (width > 0px) { a { color: #fff; } }
+
+`;
+
+exports[`invalid(12): @layer theme { a { color: #aabbcc; } } 1`] = `
+
+  1 | @layer theme { a { color: #aabbcc; } }
+
+`;
+
+exports[`invalid(12): @layer theme { a { color: #aabbcc; } } 2`] = `
+
+Message:
+> 1 | @layer theme { a { color: #aabbcc; } }
+    |                           ^^^^^^^ Prefer \`#abc\` over \`#aabbcc\`.
+
+Output:
+  1 | @layer theme { a { color: #abc; } }
+
+`;
+
+exports[`invalid(13): @container (width > 0px) { a { color: #ffffff; } } 1`] = `
+
+  1 | @container (width > 0px) { a { color: #ffffff; } }
+
+`;
+
+exports[`invalid(13): @container (width > 0px) { a { color: #ffffff; } } 2`] = `
+
+Message:
+> 1 | @container (width > 0px) { a { color: #ffffff; } }
+    |                                       ^^^^^^^ Prefer \`#fff\` over \`#ffffff\`.
+
+Output:
+  1 | @container (width > 0px) { a { color: #fff; } }
+
+`;
+
+exports[`invalid(14): @scope (.card) { a { color: #ffffff; } } 1`] = `
+
+  1 | @scope (.card) { a { color: #ffffff; } }
+
+`;
+
+exports[`invalid(14): @scope (.card) { a { color: #ffffff; } } 2`] = `
+
+Message:
+> 1 | @scope (.card) { a { color: #ffffff; } }
+    |                             ^^^^^^^ Prefer \`#fff\` over \`#ffffff\`.
+
+Output:
+  1 | @scope (.card) { a { color: #fff; } }
+
+`;
+
+exports[`invalid(2): a { color: #aabbcc; } 1`] = `
+
+  1 | a { color: #aabbcc; }
+
+`;
+
+exports[`invalid(2): a { color: #aabbcc; } 2`] = `
+
+Message:
+> 1 | a { color: #aabbcc; }
+    |            ^^^^^^^ Prefer \`#abc\` over \`#aabbcc\`.
+
+Output:
+  1 | a { color: #abc; }
+
+`;
+
+exports[`invalid(3): a { color: #ffffff00; } 1`] = `
+
+  1 | a { color: #ffffff00; }
+
+`;
+
+exports[`invalid(3): a { color: #ffffff00; } 2`] = `
+
+Message:
+> 1 | a { color: #ffffff00; }
+    |            ^^^^^^^^^ Prefer \`#fff0\` over \`#ffffff00\`.
+
+Output:
+  1 | a { color: #fff0; }
+
+`;
+
+exports[`invalid(4): a { color: #AABBCCDD; } 1`] = `
+
+  1 | a { color: #AABBCCDD; }
+
+`;
+
+exports[`invalid(4): a { color: #AABBCCDD; } 2`] = `
+
+Message:
+> 1 | a { color: #AABBCCDD; }
+    |            ^^^^^^^^^ Prefer \`#ABCD\` over \`#AABBCCDD\`.
+
+Output:
+  1 | a { color: #ABCD; }
+
+`;
+
+exports[`invalid(5): a { border-color: #ffffff #aabbcc; } 1`] = `
+
+  1 | a { border-color: #ffffff #aabbcc; }
+
+`;
+
+exports[`invalid(5): a { border-color: #ffffff #aabbcc; } 2`] = `
+
+Message:
+> 1 | a { border-color: #ffffff #aabbcc; }
+    |                   ^^^^^^^ Prefer \`#fff\` over \`#ffffff\`.
+
+Output:
+  1 | a { border-color: #fff #aabbcc; }
+
+`;
+
+exports[`invalid(5): a { border-color: #ffffff #aabbcc; } 3`] = `
+
+Message:
+> 1 | a { border-color: #ffffff #aabbcc; }
+    |                           ^^^^^^^ Prefer \`#abc\` over \`#aabbcc\`.
+
+Output:
+  1 | a { border-color: #ffffff #abc; }
+
+`;
+
+exports[`invalid(6): a { color: #ffffff !important; } 1`] = `
+
+  1 | a { color: #ffffff !important; }
+
+`;
+
+exports[`invalid(6): a { color: #ffffff !important; } 2`] = `
+
+Message:
+> 1 | a { color: #ffffff !important; }
+    |            ^^^^^^^ Prefer \`#fff\` over \`#ffffff\`.
+
+Output:
+  1 | a { color: #fff !important; }
+
+`;
+
+exports[`invalid(7): a { color: #ffffff /* keep */; } 1`] = `
+
+  1 | a { color: #ffffff /* keep */; }
+
+`;
+
+exports[`invalid(7): a { color: #ffffff /* keep */; } 2`] = `
+
+Message:
+> 1 | a { color: #ffffff /* keep */; }
+    |            ^^^^^^^ Prefer \`#fff\` over \`#ffffff\`.
+
+Output:
+  1 | a { color: #fff /* keep */; }
+
+`;
+
+exports[`invalid(8): a { --theme: #ffffff; } 1`] = `
+
+  1 | a { --theme: #ffffff; }
+
+`;
+
+exports[`invalid(8): a { --theme: #ffffff; } 2`] = `
+
+Message:
+> 1 | a { --theme: #ffffff; }
+    |              ^^^^^^^ Prefer \`#fff\` over \`#ffffff\`.
+
+Output:
+  1 | a { --theme: #fff; }
+
+`;
+
+exports[`invalid(9): a { color: #\\66 fffff; } 1`] = `
+
+  1 | a { color: #\\66 fffff; }
+
+`;
+
+exports[`invalid(9): a { color: #\\66 fffff; } 2`] = `
+
+Message:
+> 1 | a { color: #\\66 fffff; }
+    |            ^^^^^^^^^^ Prefer \`#fff\` over \`#\\66 fffff\`.
+
+Output:
+  1 | a { color: #fff; }
+
+`;

@@ -1,5 +1,5 @@
 import {rangeMediaFeatureNames} from './shared/media-features.js';
-import {hasCommentInRange, normalizeCssIdentifier} from './utils/index.js';
+import {getContainingAtRule, hasCommentInRange, normalizeCssIdentifier} from './utils/index.js';
 
 /**
 @import * as ESLint from 'eslint';
@@ -30,17 +30,8 @@ const getBound = node => {
 };
 
 const isInMediaRule = (node, sourceCode) => {
-	let currentNode = node;
-
-	while (currentNode) {
-		if (currentNode.type === 'Atrule') {
-			return normalizeCssIdentifier(currentNode.name) === 'media';
-		}
-
-		currentNode = sourceCode.getParent(currentNode);
-	}
-
-	return false;
+	const atRule = getContainingAtRule(node, {sourceCode});
+	return atRule !== undefined && normalizeCssIdentifier(atRule.name) === 'media';
 };
 
 const getValueText = (node, sourceCode) => sourceCode.getText(node.value);
@@ -76,8 +67,7 @@ const getPairReplacement = (firstNode, secondNode, sourceCode) => {
 		return;
 	}
 
-	const minimumNode = firstBound.prefix === 'min' ? firstNode : secondNode;
-	const maximumNode = firstBound.prefix === 'max' ? firstNode : secondNode;
+	const [minimumNode, maximumNode] = firstBound.prefix === 'min' ? [firstNode, secondNode] : [secondNode, firstNode];
 	const exclusiveMaximum = getExclusivePixelMaximum(maximumNode);
 	const maximum = exclusiveMaximum ?? getValueText(maximumNode, sourceCode);
 

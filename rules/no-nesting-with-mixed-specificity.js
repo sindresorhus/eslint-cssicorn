@@ -4,6 +4,7 @@ import {
 	canBeRepresentedByNestingSelector,
 	compareSpecificity,
 	getMaximumSpecificity,
+	getOwningStyleRule,
 	getParentStyleRule,
 	getRuleSpecificities,
 	getSelectorArgument,
@@ -11,7 +12,6 @@ import {
 	hasAncestorStyleRule,
 	hasLeadingCombinator,
 	hasScopeAncestor,
-	isStyleRule,
 } from './shared/css-selector-specificity.js';
 import {normalizeCssIdentifier} from './utils/index.js';
 
@@ -78,8 +78,8 @@ const create = context => {
 		}
 
 		const ancestors = sourceCode.getAncestors(node);
-		const owner = ancestors.findLast(ancestor => ancestor.type === 'Rule' || ancestor.type === 'Atrule');
-		if (!owner?.prelude || !isStyleRule(owner, context) || !ancestors.includes(owner.prelude)) {
+		const owner = getOwningStyleRule(node, context);
+		if (!owner) {
 			return;
 		}
 

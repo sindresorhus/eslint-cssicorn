@@ -337,6 +337,11 @@ testRule({
 			errors: 1,
 		},
 		{
+			code: 'a { margin-top: 1px; margin-right: 1px; margin-bottom: 1px; margin-left: 1px; }',
+			output: 'a { margin: 1px; }',
+			errors: 1,
+		},
+		{
 			code: 'a { margin-top: 1px; margin-right: 2px; margin-bottom: 3px; margin-left: 2px; }',
 			output: 'a { margin: 1px 2px 3px; }',
 			errors: 1,
@@ -454,6 +459,11 @@ testRule({
 		{
 			code: 'a { border-top-left-radius: 50% 10%; border-top-right-radius: 50% 10%; border-bottom-right-radius: 50% 10%; border-bottom-left-radius: 50% 10%; }',
 			output: 'a { border-radius: 50% / 10%; }',
+			errors: 1,
+		},
+		{
+			code: 'a { border-top-left-radius: 1px 4px; border-top-right-radius: 2px 4px; border-bottom-right-radius: 3px 4px; border-bottom-left-radius: 2px 4px; }',
+			output: 'a { border-radius: 1px 2px 3px / 4px; }',
 			errors: 1,
 		},
 		{
@@ -1117,5 +1127,5 @@ test('rejects unknown ignored shorthands', () => {
 			},
 		},
 		{filename: 'test.css'},
-	), {message: /Value "unknown" should be equal to one of the allowed values\./u});
+	), {message: /Value "unknown" should be equal to one of the allowed values\./v});
 });

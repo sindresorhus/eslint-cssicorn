@@ -1,18 +1,11 @@
-import {generate, ident} from '@eslint/css-tree';
-import {hasCommentInRange, toAsciiLowerCase} from './utils/index.js';
+import {generate} from '@eslint/css-tree';
+import {hasCommentInRange, normalizePropertyName} from './utils/index.js';
 
 const MESSAGE_ID_ERROR = 'no-duplicate-properties/error';
 const MESSAGE_ID_SUGGESTION = 'no-duplicate-properties/suggestion';
 const messages = {
 	[MESSAGE_ID_ERROR]: 'Duplicate property `{{property}}`. The first declaration is on line {{line}}.',
 	[MESSAGE_ID_SUGGESTION]: 'Remove the duplicate declaration.',
-};
-
-const getPropertyKey = property => {
-	const decodedProperty = ident.decode(property);
-	return decodedProperty.startsWith('--')
-		? decodedProperty
-		: toAsciiLowerCase(decodedProperty);
 };
 
 const getValueKey = declaration => generate(declaration.value).trim();
@@ -24,7 +17,7 @@ const isFallback = (previousNode, declaration, propertyKey) =>
 	!propertyKey.startsWith('--')
 	&& previousNode?.type === 'Declaration'
 	&& previousNode.important === declaration.important
-	&& getPropertyKey(previousNode.property) === propertyKey
+	&& normalizePropertyName(previousNode.property) === propertyKey
 	&& getValueKey(previousNode) !== getValueKey(declaration);
 
 const isLinebreakCharacter = character => '\n\f\r'.includes(character);
@@ -91,7 +84,7 @@ const wouldRetargetDisableNextLine = (location, removalRange, text, disableNextL
 	&& location.start.line !== location.end.line
 	&& removalRange[1] < getLineEnd(text, removalRange[1]);
 
-const getDeclarationRemovalRange = (declaration, sourceCode, lineBounds, disableNextLineTargetLines) => {
+const getDuplicateRemovalRange = (declaration, sourceCode, lineBounds, disableNextLineTargetLines) => {
 	const {text} = sourceCode;
 	const location = sourceCode.getLoc(declaration);
 	let [start, end] = sourceCode.getRange(declaration);
@@ -163,7 +156,7 @@ const create = context => {
 				continue;
 			}
 
-			const propertyKey = getPropertyKey(declaration.property);
+			const propertyKey = normalizePropertyName(declaration.property);
 			const firstDeclaration = firstDeclarations.get(propertyKey);
 			if (!firstDeclaration) {
 				firstDeclarations.set(propertyKey, declaration);
@@ -175,7 +168,7 @@ const create = context => {
 			}
 
 			const declarationLocation = sourceCode.getLoc(declaration);
-			const removalRange = getDeclarationRemovalRange(declaration, sourceCode, lineBounds, disableNextLineTargetLines);
+			const removalRange = getDuplicateRemovalRange(declaration, sourceCode, lineBounds, disableNextLineTargetLines);
 			const omitSuggestion = hasCommentInRange(context, removalRange)
 				|| wouldRetargetDisableNextLine(declarationLocation, removalRange, sourceCode.text, disableNextLineTargetLines);
 			yield {

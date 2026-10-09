@@ -1,16 +1,18 @@
 // @ts-check
 
-import {generate, parse, walk} from '@eslint/css-tree';
+import {generate, walk} from '@eslint/css-tree';
 import {areEquivalentColors, isLiteralColor} from './shared/css-colors.js';
 import {getVendorPrefix, shorthandToAffectedProperties} from './shared/css-shorthand-properties.js';
 import {areEqualValues} from './shared/css-shorthand-values.js';
 import {
 	decodeCssIdentifier,
+	groupingAtRules,
 	hasCommentInRange,
 	isBareRootRule,
 	isCssModulesInteropDeclaration,
 	normalizeCssIdentifier,
-	toAsciiLowerCase,
+	normalizePropertyName,
+	parseValue,
 } from './utils/index.js';
 
 /**
@@ -31,7 +33,6 @@ import {
 
 const MESSAGE_ID = 'prefer-light-dark';
 const MESSAGE_ID_SUGGESTION = 'prefer-light-dark/suggestion';
-const groupingAtRules = new Set(['media', 'supports', 'container', 'layer', 'scope', 'starting-style']);
 const messages = {
 	[MESSAGE_ID]: 'Prefer `light-dark()` for the paired colors in `{{property}}`.',
 	[MESSAGE_ID_SUGGESTION]: 'Combine the colors with `light-dark()` and remove the override declaration.',
@@ -40,10 +41,7 @@ const messages = {
 /**
 @param {DeclarationPlain} declaration
 */
-const getProperty = declaration => {
-	const property = decodeCssIdentifier(declaration.property);
-	return property.startsWith('--') ? property : toAsciiLowerCase(property);
-};
+const getProperty = declaration => normalizePropertyName(declaration.property);
 
 /**
 @param {BlockPlain | null} block
@@ -193,18 +191,6 @@ function getDeclarationMap(declarations) {
 }
 
 /**
-@param {string} text
-@param {number} [offset]
-*/
-function getParsedValue(text, offset = 0) {
-	try {
-		return /** @type {Value} */ (parse(text, {context: 'value', positions: true, offset}));
-	} catch {
-		// Invalid values and tolerant parser nodes are outside this rule's scope.
-	}
-}
-
-/**
 Get the range of a private value node parsed with positions enabled.
 @param {CssNode} node
 @param {CssicornContext} context
@@ -225,8 +211,8 @@ function getColorReplacements({base, override, property, mode}, context) {
 		return;
 	}
 
-	const baseValue = getParsedValue(sourceCode.getText(base.value), sourceCode.getRange(base.value)[0]);
-	const overrideValue = getParsedValue(sourceCode.getText(override.value), sourceCode.getRange(override.value)[0]);
+	const baseValue = parseValue(sourceCode.getText(base.value), sourceCode.getRange(base.value)[0]);
+	const overrideValue = parseValue(sourceCode.getText(override.value), sourceCode.getRange(override.value)[0]);
 	if (!baseValue || !overrideValue) {
 		return;
 	}
@@ -275,7 +261,7 @@ function getColorReplacements({base, override, property, mode}, context) {
 			text = text.slice(0, replacement.sourceRange[0] - start) + replacement.text + text.slice(replacement.sourceRange[1] - start);
 		}
 
-		const transformed = getParsedValue(text);
+		const transformed = parseValue(text);
 		if (!transformed) {
 			return;
 		}

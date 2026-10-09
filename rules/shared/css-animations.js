@@ -24,6 +24,8 @@ const animationShorthandComponents = [
 	{property: 'animation-timeline', type: 'single-animation-timeline'},
 ];
 
+const easingFunctions = new Set(['linear', 'steps', 'cubic-bezier']);
+
 /**
 Get the decoded, case-sensitive name of an animation identifier or string.
 
@@ -148,7 +150,5 @@ const getKeyframesName = (atRule, lexer) => {
 };
 
 export {
-	getAnimationName, getAnimationNameNodes, getGroupAnimationNameNodes, getKeyframesName,
+	easingFunctions, getAnimationName, getAnimationNameNodes, getGroupAnimationNameNodes, getKeyframesName,
 };
-
-export {getCanonicalLexerNode} from '../utils/index.js';

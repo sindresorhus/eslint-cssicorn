@@ -1,3 +1,4 @@
+import sizeProperties from './shared/css-size-properties.js';
 import {isCssModulesInteropDeclaration, normalizeCssIdentifier} from './utils/index.js';
 
 const MESSAGE_ID_ERROR = 'prefer-explicit-viewport-units/error';
@@ -6,21 +7,6 @@ const messages = {
 	[MESSAGE_ID_ERROR]: 'Prefer `{{replacement}}` over `{{value}}`.',
 	[MESSAGE_ID_SUGGESTION]: 'Replace `{{value}}` with `{{replacement}}`.',
 };
-
-const sizeProperties = new Set([
-	'height',
-	'min-height',
-	'max-height',
-	'width',
-	'min-width',
-	'max-width',
-	'block-size',
-	'min-block-size',
-	'max-block-size',
-	'inline-size',
-	'min-inline-size',
-	'max-inline-size',
-]);
 
 const schema = [
 	{
@@ -70,18 +56,18 @@ const create = context => {
 			return;
 		}
 
-		const replacement = getReplacement(unit, preferredUnit);
 		const value = `${node.value}${node.unit}`;
+		const replacement = `${node.value}${getReplacement(unit, preferredUnit)}`;
 
 		return {
 			node,
 			messageId: MESSAGE_ID_ERROR,
-			data: {value, replacement: `${node.value}${replacement}`},
+			data: {value, replacement},
 			suggest: [
 				{
 					messageId: MESSAGE_ID_SUGGESTION,
-					data: {value, replacement: `${node.value}${replacement}`},
-					fix: fixer => fixer.replaceText(node, `${node.value}${replacement}`),
+					data: {value, replacement},
+					fix: fixer => fixer.replaceText(node, replacement),
 				},
 			],
 		};

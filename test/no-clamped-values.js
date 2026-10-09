@@ -64,6 +64,8 @@ test.snapshot({
 		'@property --amount { syntax: "<number>"; inherits: false; initial-value: calc(1200); }',
 		'@unknown { opacity: 50; width: calc(-1px); }',
 		'@supports (opacity: 50) { a { opacity: .5; } }',
+		'a { color: rgb(0 0 0 / none); }',
+		'a { filter: drop-shadow(0 0 blur(calc(-1px))); }',
 		{code: 'a { opacity: ; color: rgb(; filter: grayscale(; }', languageOptions: {tolerant: true}},
 	],
 	invalid: [
@@ -132,6 +134,9 @@ test.snapshot({
 		'@media (width > 1px) { @supports (display: grid) { a { opacity: 50; } } }',
 		'@container (width > 1px) { @layer theme { @scope (.a) { .b { opacity: 50; } } } }',
 		'a { & .b { opacity: 50; } } @keyframes fade { to { filter: grayscale(50); } }',
+		'a { color: rgba(0, 0, 0, 150%); }',
+		'a { text-decoration-thickness: 0%; }',
+		'a { -webkit-filter: grayscale(50); }',
 	],
 });
 
@@ -259,6 +264,7 @@ test.snapshot({
 		'a { FILTER: BLUR(CALC(-1PX)) !important; }',
 		'a { filter: blur(calc(/* radius */ -1px)); }',
 		'a { filter: blur(calc(-1px)) grayscale(50); }',
+		String.raw`a { filter: bl\75 r(calc(-1px)); }`,
 		'@media (width > 1px) { a { &:hover { filter: blur(calc(-1px)); } } }',
 	],
 });

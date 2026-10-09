@@ -64,6 +64,134 @@ Message:
 
 `;
 
+exports[`invalid(12): a { b {} color: red; background: blue; } 1`] = `
+
+  1 | a { b {} color: red; background: blue; }
+
+`;
+
+exports[`invalid(12): a { b {} color: red; background: blue; } 2`] = `
+
+Message:
+> 1 | a { b {} color: red; background: blue; }
+    |          ^^^^^^^^^^ Do not place declarations after nested rules.
+
+`;
+
+exports[`invalid(12): a { b {} color: red; background: blue; } 3`] = `
+
+Message:
+> 1 | a { b {} color: red; background: blue; }
+    |                      ^^^^^^^^^^^^^^^^ Do not place declarations after nested rules.
+
+`;
+
+exports[`invalid(13): a { b {} c {} color: red; display: block; } 1`] = `
+
+  1 | a { b {} c {} color: red; display: block; }
+
+`;
+
+exports[`invalid(13): a { b {} c {} color: red; display: block; } 2`] = `
+
+Message:
+> 1 | a { b {} c {} color: red; display: block; }
+    |               ^^^^^^^^^^ Do not place declarations after nested rules.
+
+`;
+
+exports[`invalid(13): a { b {} c {} color: red; display: block; } 3`] = `
+
+Message:
+> 1 | a { b {} c {} color: red; display: block; }
+    |                           ^^^^^^^^^^^^^^ Do not place declarations after nested rules.
+
+`;
+
+exports[`invalid(14): a { b {} COLOR: RED; } 1`] = `
+
+  1 | a { b {} COLOR: RED; }
+
+`;
+
+exports[`invalid(14): a { b {} COLOR: RED; } 2`] = `
+
+Message:
+> 1 | a { b {} COLOR: RED; }
+    |          ^^^^^^^^^^ Do not place declarations after nested rules.
+
+`;
+
+exports[`invalid(15): a { b {} color: red !important; } 1`] = `
+
+  1 | a { b {} color: red !important; }
+
+`;
+
+exports[`invalid(15): a { b {} color: red !important; } 2`] = `
+
+Message:
+> 1 | a { b {} color: red !important; }
+    |          ^^^^^^^^^^^^^^^^^^^^^ Do not place declarations after nested rules.
+
+`;
+
+exports[`invalid(16): a { b {} /* comment */ color: red; } 1`] = `
+
+  1 | a { b {} /* comment */ color: red; }
+
+`;
+
+exports[`invalid(16): a { b {} /* comment */ color: red; } 2`] = `
+
+Message:
+> 1 | a { b {} /* comment */ color: red; }
+    |                        ^^^^^^^^^^ Do not place declarations after nested rules.
+
+`;
+
+exports[`invalid(17): a { b {} color: /* keep */ red; } 1`] = `
+
+  1 | a { b {} color: /* keep */ red; }
+
+`;
+
+exports[`invalid(17): a { b {} color: /* keep */ red; } 2`] = `
+
+Message:
+> 1 | a { b {} color: /* keep */ red; }
+    |          ^^^^^^^^^^^^^^^^^^^^^ Do not place declarations after nested rules.
+
+`;
+
+exports[`invalid(18): a { b {} @media (width > 0px) {} color: red; } 1`] = `
+
+  1 | a { b {} @media (width > 0px) {} color: red; }
+
+`;
+
+exports[`invalid(18): a { b {} @media (width > 0px) {} color: red; } 2`] = `
+
+Message:
+> 1 | a { b {} @media (width > 0px) {} color: red; }
+    |                                  ^^^^^^^^^^ Do not place declarations after nested rules.
+
+`;
+
+exports[`invalid(19): a { &:hover {} color: red; } 1`] = `
+
+  1 | a { &:hover {} color: red; }
+
+`;
+
+exports[`invalid(19): a { &:hover {} color: red; } 2`] = `
+
+Message:
+> 1 | a { &:hover {} color: red; }
+    |                ^^^^^^^^^^ Do not place declarations after nested rules.
+
+`;
+
 exports[`invalid(2): a { & {} color: red; } 1`] = `
 
   1 | a { & {} color: red; }
@@ -75,6 +203,90 @@ exports[`invalid(2): a { & {} color: red; } 2`] = `
 Message:
 > 1 | a { & {} color: red; }
     |          ^^^^^^^^^^ Do not place declarations after nested rules.
+
+`;
+
+exports[`invalid(20): a { color: red; b {} background: blue; } 1`] = `
+
+  1 | a { color: red; b {} background: blue; }
+
+`;
+
+exports[`invalid(20): a { color: red; b {} background: blue; } 2`] = `
+
+Message:
+> 1 | a { color: red; b {} background: blue; }
+    |                      ^^^^^^^^^^^^^^^^ Do not place declarations after nested rules.
+
+`;
+
+exports[`invalid(21): @media (width > 0px) { a { b {} color: red; } } 1`] = `
+
+  1 | @media (width > 0px) { a { b {} color: red; } }
+
+`;
+
+exports[`invalid(21): @media (width > 0px) { a { b {} color: red; } } 2`] = `
+
+Message:
+> 1 | @media (width > 0px) { a { b {} color: red; } }
+    |                                 ^^^^^^^^^^ Do not place declarations after nested rules.
+
+`;
+
+exports[`invalid(22): @supports (display: grid) { a { b {} color: red; } } 1`] = `
+
+  1 | @supports (display: grid) { a { b {} color: red; } }
+
+`;
+
+exports[`invalid(22): @supports (display: grid) { a { b {} color: red; } } 2`] = `
+
+Message:
+> 1 | @supports (display: grid) { a { b {} color: red; } }
+    |                                      ^^^^^^^^^^ Do not place declarations after nested rules.
+
+`;
+
+exports[`invalid(23): @container (width > 0px) { a { b {} color: red; } } 1`] = `
+
+  1 | @container (width > 0px) { a { b {} color: red; } }
+
+`;
+
+exports[`invalid(23): @container (width > 0px) { a { b {} color: red; } } 2`] = `
+
+Message:
+> 1 | @container (width > 0px) { a { b {} color: red; } }
+    |                                     ^^^^^^^^^^ Do not place declarations after nested rules.
+
+`;
+
+exports[`invalid(24): @layer theme { a { b {} color: red; } } 1`] = `
+
+  1 | @layer theme { a { b {} color: red; } }
+
+`;
+
+exports[`invalid(24): @layer theme { a { b {} color: red; } } 2`] = `
+
+Message:
+> 1 | @layer theme { a { b {} color: red; } }
+    |                         ^^^^^^^^^^ Do not place declarations after nested rules.
+
+`;
+
+exports[`invalid(25): @scope (.card) { a { b {} color: red; } } 1`] = `
+
+  1 | @scope (.card) { a { b {} color: red; } }
+
+`;
+
+exports[`invalid(25): @scope (.card) { a { b {} color: red; } } 2`] = `
+
+Message:
+> 1 | @scope (.card) { a { b {} color: red; } }
+    |                           ^^^^^^^^^^ Do not place declarations after nested rules.
 
 `;
 

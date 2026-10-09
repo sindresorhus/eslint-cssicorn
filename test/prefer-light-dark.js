@@ -92,6 +92,33 @@ test.snapshot({
 		':root, .theme { color-scheme: light dark; } a { color: white; @media (prefers-color-scheme: dark) { color: black; } }',
 		root + ':root,html { color-scheme: light; } a { color: white; @media (prefers-color-scheme: dark) { color: black; } }',
 		root + ':root,html { all: initial; } a { color: white; @media (prefers-color-scheme: dark) { color: black; } }',
+		// `!important` must match on both declarations.
+		pair('color: white !important;', 'color: black;'),
+		// A custom property value must be a single literal color.
+		pair('--x: white red;', '--x: black red;'),
+		pair('--x: white;', '--x: black blue;'),
+		// The override value must be a literal color.
+		pair('--x: white;', '--x: var(--y);'),
+		// Identical values are not a pair to combine.
+		pair('color: white;', 'color: white;'),
+		// Adjacent selectors must serialize identically.
+		root + 'a > b { color: white; } @media (prefers-color-scheme: dark) { a b { color: black; } }',
+		// An empty base rule has no declaration to pair.
+		root + 'a {} @media (prefers-color-scheme: dark) { a { color: black; } }',
+		// Participating blocks cannot contain other nested rules.
+		root + 'a { color: white; b { color: red; } } @media (prefers-color-scheme: dark) { a { color: black; } }',
+		root + 'a { color: white; @media (prefers-color-scheme: dark) { b { color: black; } } }',
+		// The media block must contain exactly one rule.
+		root + 'a { color: white; } @media (prefers-color-scheme: dark) { a { color: black; } b { color: white; } }',
+		// The media override must be last, with only declarations before it.
+		root + 'a { color: white; @media (width > 1px) { color: red; } @media (prefers-color-scheme: dark) { color: black; } }',
+		root + 'a { @media (prefers-color-scheme: dark) { color: black; } color: white; }',
+		// A nested at-rule inside the base block is not a declaration block.
+		root + 'a { color: white; @supports (x: y) {} } @media (prefers-color-scheme: dark) { a { color: black; } }',
+		// Only top-level literal colors may differ.
+		pair('box-shadow: 0 0 0 3px red;', 'box-shadow: 0 0 0 6px blue;'),
+		// A `color-scheme` in the base rule must be the dual declaration.
+		root + 'a { color-scheme: initial; color: white; } @media (prefers-color-scheme: dark) { a { color: black; } }',
 	],
 	invalid: [
 		pair('color: white;', 'color: black;'),
@@ -133,6 +160,46 @@ test.snapshot({
 		pair('--color: rgb(none 0 0);', '--color: rgb(0 0 0);'),
 		pair('fill: url(#paint) white;', 'fill: url(#paint) black;'),
 		':root,html { color-scheme: light dark; } a { color: white; @media (prefers-color-scheme: dark) { color: black; } }',
+		// Adjacent class selector.
+		root + '.card { color: white; } @media (prefers-color-scheme: dark) { .card { color: black; } }',
+		// Final nested form with a color component in a shorthand.
+		root + '.card { color-scheme: light dark; border: 1px solid white; @media (prefers-color-scheme: dark) { border: 1px solid black; } }',
+		// Color-valued custom property in the final nested form.
+		root + '.card { color-scheme: light dark; --surface: white; @media (prefers-color-scheme: dark) { --surface: black; } }',
+		// Color-valued custom property in the adjacent form.
+		pair('--surface: white;', '--surface: black;'),
+		// Setup from an unconditional bare `html` rule, including `only`.
+		'html { color-scheme: light dark; } a { color: white; } @media (prefers-color-scheme: dark) { a { color: black; } }',
+		'html { color-scheme: only light dark; } a { color: white; @media (prefers-color-scheme: dark) { color: black; } }',
+		// Setup inside `@layer`, base rule outside it.
+		'@layer base { :root { color-scheme: light dark; } } a { color: white; } @media (prefers-color-scheme: dark) { a { color: black; } }',
+		// Setup in the base rule in reversed order.
+		'a { color-scheme: dark light; color: white; @media (prefers-color-scheme: dark) { color: black; } }',
+		// Both light and dark media queries.
+		root + 'a { color: red; } @media (prefers-color-scheme: dark) { a { color: black; } } b { color: white; } @media (prefers-color-scheme: light) { b { color: blue; } }',
+		// Uppercase and shorthand hex color keywords.
+		pair('color: #FFF;', 'color: #000;'),
+		pair('color: WHITE;', 'color: black;'),
+		pair('color: Red;', 'color: #00f;'),
+		// Escaped class selector in both selector lists.
+		root + String.raw`.c\61 rd { color: white; } @media (prefers-color-scheme: dark) { .c\61 rd { color: black; } }`,
+		// A comment in a paired declaration prevents the suggestion.
+		pair('color: white /* light */;', 'color: black;'),
+		// Matching `!important` on both declarations.
+		pair('color: white !important;', 'color: black !important;'),
+		// Multiple paired declarations in one rule.
+		root + 'a { color: white; border-color: red; @media (prefers-color-scheme: dark) { color: black; border-color: blue; } }',
+		// Nested inside `@supports`, `@container`, and `@media`.
+		'@supports (color: red) { a { color-scheme: light dark; color: white; @media (prefers-color-scheme: dark) { color: black; } } }',
+		'@container (width > 1px) { a { color-scheme: light dark; color: white; @media (prefers-color-scheme: dark) { color: black; } } }',
+		'@media (width > 1px) { a { color-scheme: light dark; color: white; @media (prefers-color-scheme: dark) { color: black; } } }',
+		// Shorthand property with a color component in the adjacent form.
+		pair('border: 1px solid white;', 'border: 1px solid black;'),
+		pair('text-shadow: 0 1px white;', 'text-shadow: 0 1px black;'),
+		// Both blocks declare the dual color-scheme.
+		'a { color-scheme: light dark; color: white; } @media (prefers-color-scheme: dark) { a { color-scheme: light dark; color: black; } }',
+		// Setup and base rule inside the same `@layer`.
+		'@layer theme { :root { color-scheme: light dark; } a { color: white; } @media (prefers-color-scheme: dark) { a { color: black; } } }',
 	],
 });
 

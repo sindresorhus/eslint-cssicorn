@@ -1,15 +1,18 @@
-import {keyword, parse, walk} from '@eslint/css-tree';
+import {walk} from '@eslint/css-tree';
+import {easingFunctions} from './shared/css-animations.js';
 import colorFunctionsWithAlpha from './shared/css-color-functions.js';
 import {isLiteralColor, areEqualLiteralColors} from './shared/css-colors.js';
 import {getNumericLiteralKey, isSafeIntegerSpelling} from './shared/css-numeric-literals.js';
 import mathFunctions from './shared/css-math-functions.js';
 import {areEqualValues, getCondensedValueCount} from './shared/css-shorthand-values.js';
 import {
+	getBasePropertyName,
 	getCommaSeparatedGroups,
 	hasCommentInRange,
 	isCssModulesInteropDeclaration,
 	isSubstitutionFunction,
 	normalizeCssIdentifier,
+	parseCustomPropertyDeclaration,
 	toLocation,
 } from './utils/index.js';
 
@@ -24,7 +27,6 @@ const messages = {
 };
 
 const simplifiableFunctions = new Set(['calc', 'min', 'max', 'clamp', 'abs', 'sign', 'hypot', 'round', 'pow', 'random']);
-const easingFunctions = new Set(['steps', 'cubic-bezier', 'linear']);
 const easingProperties = new Set(['animation', 'transition', 'animation-timing-function', 'transition-timing-function']);
 const defaultFunctions = new Set(['blur', 'brightness', 'contrast', 'drop-shadow', 'grayscale', 'hue-rotate', 'invert', 'opacity', 'saturate', 'sepia', 'translate', 'skew', 'scale']);
 const contentFunctionDefaults = new Map([
@@ -302,6 +304,14 @@ function getWrapperProblem(node, parentFunction, siblings, context) {
 	});
 }
 
+/**
+Check whether a percentage is a valid mix weight, like `50%` in `color-mix(in oklab, red 50%, blue)`.
+
+@param {Percentage} percentage
+@returns {boolean}
+*/
+const isPercentageWeight = percentage => !percentage.value.startsWith('-') && isSafeIntegerSpelling(percentage.value) && Number(percentage.value) <= 100;
+
 const isIdentifierArgument = (argument, name) => argument.nodes.length === 1
 	&& argument.nodes[0].type === 'Identifier'
 	&& normalizeCssIdentifier(argument.nodes[0].name) === name;
@@ -475,7 +485,7 @@ function getDynamicRangeLimitProblem(node, context) {
 		const value = nodes.find(child => child.type === 'Identifier');
 		const percentage = nodes.find(child => child.type === 'Percentage');
 		if (nodes.length !== 2 || !value || !percentage || !['standard', 'constrained', 'no-limit'].includes(normalizeCssIdentifier(value.name))
-			|| percentage.value.startsWith('-') || !isSafeIntegerSpelling(percentage.value) || Number(percentage.value) > 100
+			|| !isPercentageWeight(percentage)
 		) {
 			return;
 		}
@@ -744,7 +754,7 @@ function getShapeProblem(node, declaration, context) {
 		return;
 	}
 
-	const property = keyword(normalizeCssIdentifier(declaration.property)).basename;
+	const property = getBasePropertyName(declaration.property);
 	if (['shape', 'path'].includes(name)) {
 		const tokens = getDefaultFillRuleTokens(node, property);
 		if (name === 'shape') {
@@ -916,7 +926,7 @@ function getMixPercentages(arguments_, name, context) {
 	const valueType = name === 'color-mix' ? 'color' : (name === 'calc-mix' ? 'calc-sum' : 'image');
 	for (const {nodes} of arguments_) {
 		const percentage = getMixPercentage(nodes, name);
-		if (nodes.length !== (percentage ? 2 : 1) || (percentage && (percentage.value.startsWith('-') || !isSafeIntegerSpelling(percentage.value) || Number(percentage.value) > 100))) {
+		if (nodes.length !== (percentage ? 2 : 1) || (percentage && !isPercentageWeight(percentage))) {
 			return;
 		}
 
@@ -1126,14 +1136,18 @@ function getSignProblem(node, parentFunction, siblings, context) {
 	});
 }
 
+const roundStrategies = ['nearest', 'up', 'down', 'to-zero', 'line-width'];
+
+const getRoundStrategy = arguments_ => roundStrategies.find(name => isIdentifierArgument(arguments_[0], name));
+
 function getRedundantRoundArguments(arguments_) {
-	const strategy = ['nearest', 'up', 'down', 'to-zero', 'line-width'].find(name => isIdentifierArgument(arguments_[0], name));
+	const strategy = getRoundStrategy(arguments_);
 	const removedArguments = [];
 	if (strategy === 'nearest' && (arguments_.length === 2 || arguments_.length === 3)) {
 		removedArguments.push(arguments_[0]);
 	}
 
-	const step = getRoundStepArgument(arguments_);
+	const step = getRoundStepArgument(arguments_, strategy);
 	if (step && (isNumberArgument(step, 1) || (step.nodes.length === 1 && step.nodes[0].type === 'Number' && /^-0*1(?:\.0+)?(?:e[+\-]?0+)?$/iv.test(step.nodes[0].value)))) {
 		removedArguments.push(step);
 	}
@@ -1141,8 +1155,7 @@ function getRedundantRoundArguments(arguments_) {
 	return removedArguments;
 }
 
-function getRoundStepArgument(arguments_) {
-	const strategy = ['nearest', 'up', 'down', 'to-zero', 'line-width'].find(name => isIdentifierArgument(arguments_[0], name));
+function getRoundStepArgument(arguments_, strategy = getRoundStrategy(arguments_)) {
 	const stepIndex = strategy ? 2 : 1;
 	if (strategy !== 'line-width' && arguments_.length === stepIndex + 1) {
 		return arguments_[stepIndex];
@@ -1353,7 +1366,7 @@ function getHypotZeroProblem(node, arguments_, context) {
 		return;
 	}
 
-	const zeros = values.map(value => positiveZeroPattern.test(value.value.replace(/^-/, '')));
+	const zeros = values.map(value => positiveZeroPattern.test(value.value.replace(/^-/v, '')));
 	// Keep at least two nonzero components: browsers can use a different precision algorithm for a single-argument hypot().
 	if (zeros.filter(isZero => !isZero).length < 2) {
 		return;
@@ -1497,7 +1510,7 @@ function getEasingKeyword(name, arguments_) {
 }
 
 function getEasingProblem(node, declaration, context) {
-	const property = keyword(normalizeCssIdentifier(declaration.property)).basename;
+	const property = getBasePropertyName(declaration.property);
 	if (!easingProperties.has(property) || [...declaration.value.children].some(child => isSubstitutionFunction(child))) {
 		return;
 	}
@@ -1609,16 +1622,12 @@ const create = context => {
 				return;
 			}
 
-			try {
-				({value} = parse(sourceCode.getText(declaration), {
-					context: 'declaration',
-					parseCustomProperty: true,
-					positions: true,
-					offset: sourceCode.getRange(declaration)[0],
-				}));
-			} catch {
+			const parsed = parseCustomPropertyDeclaration(declaration, context);
+			if (!parsed) {
 				return;
 			}
+
+			({value} = parsed);
 		}
 
 		const problems = [];

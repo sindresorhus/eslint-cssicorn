@@ -973,6 +973,159 @@ Output:
 
 `;
 
+exports[`invalid(61): a { inset: 0 0 0 0; } 1`] = `
+
+  1 | a { inset: 0 0 0 0; }
+
+`;
+
+exports[`invalid(61): a { inset: 0 0 0 0; } 2`] = `
+
+Message:
+> 1 | a { inset: 0 0 0 0; }
+    |            ^^^^^^^ Simplify this shorthand value to \`0\`.
+
+Output:
+  1 | a { inset: 0; }
+
+`;
+
+exports[`invalid(62): a { inset: auto auto; } 1`] = `
+
+  1 | a { inset: auto auto; }
+
+`;
+
+exports[`invalid(62): a { inset: auto auto; } 2`] = `
+
+Message:
+> 1 | a { inset: auto auto; }
+    |            ^^^^^^^^^ Simplify this shorthand value to \`auto\`.
+
+Output:
+  1 | a { inset: auto; }
+
+`;
+
+exports[`invalid(63): a { border-color: #ABCDEF #abcdef; } 1`] = `
+
+  1 | a { border-color: #ABCDEF #abcdef; }
+
+`;
+
+exports[`invalid(63): a { border-color: #ABCDEF #abcdef; } 2`] = `
+
+Message:
+> 1 | a { border-color: #ABCDEF #abcdef; }
+    |                   ^^^^^^^^^^^^^^^ Simplify this shorthand value to \`#ABCDEF\`.
+
+Output:
+  1 | a { border-color: #ABCDEF; }
+
+`;
+
+exports[`invalid(64): a { border-style: SOLID solid; } 1`] = `
+
+  1 | a { border-style: SOLID solid; }
+
+`;
+
+exports[`invalid(64): a { border-style: SOLID solid; } 2`] = `
+
+Message:
+> 1 | a { border-style: SOLID solid; }
+    |                   ^^^^^^^^^^^ Simplify this shorthand value to \`SOLID\`.
+
+Output:
+  1 | a { border-style: SOLID; }
+
+`;
+
+exports[`invalid(65): a { gap: normal normal; } 1`] = `
+
+  1 | a { gap: normal normal; }
+
+`;
+
+exports[`invalid(65): a { gap: normal normal; } 2`] = `
+
+Message:
+> 1 | a { gap: normal normal; }
+    |          ^^^^^^^^^^^^^ Simplify this shorthand value to \`normal\`.
+
+Output:
+  1 | a { gap: normal; }
+
+`;
+
+exports[`invalid(66): a { place-self: start start; } 1`] = `
+
+  1 | a { place-self: start start; }
+
+`;
+
+exports[`invalid(66): a { place-self: start start; } 2`] = `
+
+Message:
+> 1 | a { place-self: start start; }
+    |                 ^^^^^^^^^^^ Simplify this shorthand value to \`start\`.
+
+Output:
+  1 | a { place-self: start; }
+
+`;
+
+exports[`invalid(67): a { place-items: safe center safe center; } 1`] = `
+
+  1 | a { place-items: safe center safe center; }
+
+`;
+
+exports[`invalid(67): a { place-items: safe center safe center; } 2`] = `
+
+Message:
+> 1 | a { place-items: safe center safe center; }
+    |                  ^^^^^^^^^^^^^^^^^^^^^^^ Simplify this shorthand value to \`safe center\`.
+
+Output:
+  1 | a { place-items: safe center; }
+
+`;
+
+exports[`invalid(68): a { -moz-border-radius: 1px 1px; } 1`] = `
+
+  1 | a { -moz-border-radius: 1px 1px; }
+
+`;
+
+exports[`invalid(68): a { -moz-border-radius: 1px 1px; } 2`] = `
+
+Message:
+> 1 | a { -moz-border-radius: 1px 1px; }
+    |                         ^^^^^^^ Simplify this shorthand value to \`1px\`.
+
+Output:
+  1 | a { -moz-border-radius: 1px; }
+
+`;
+
+exports[`invalid(69): a { padding: 1px 1px 1px; } 1`] = `
+
+  1 | a { padding: 1px 1px 1px; }
+
+`;
+
+exports[`invalid(69): a { padding: 1px 1px 1px; } 2`] = `
+
+Message:
+> 1 | a { padding: 1px 1px 1px; }
+    |              ^^^^^^^^^^^ Simplify this shorthand value to \`1px\`.
+
+Output:
+  1 | a { padding: 1px; }
+
+`;
+
 exports[`invalid(7): a { padding: 1px 1px; } 1`] = `
 
   1 | a { padding: 1px 1px; }
@@ -987,6 +1140,105 @@ Message:
 
 Output:
   1 | a { padding: 1px; }
+
+`;
+
+exports[`invalid(70): a { scroll-padding: 1px 1px 1px; } 1`] = `
+
+  1 | a { scroll-padding: 1px 1px 1px; }
+
+`;
+
+exports[`invalid(70): a { scroll-padding: 1px 1px 1px; } 2`] = `
+
+Message:
+> 1 | a { scroll-padding: 1px 1px 1px; }
+    |                     ^^^^^^^^^^^ Simplify this shorthand value to \`1px\`.
+
+Output:
+  1 | a { scroll-padding: 1px; }
+
+`;
+
+exports[`invalid(71): a { inset: 1px 1px !important; } 1`] = `
+
+  1 | a { inset: 1px 1px !important; }
+
+`;
+
+exports[`invalid(71): a { inset: 1px 1px !important; } 2`] = `
+
+Message:
+> 1 | a { inset: 1px 1px !important; }
+    |            ^^^^^^^^ Simplify this shorthand value to \`1px\`.
+
+Output:
+  1 | a { inset: 1px !important; }
+
+`;
+
+exports[`invalid(72): a { inset: 0PX 0px; } 1`] = `
+
+  1 | a { inset: 0PX 0px; }
+
+`;
+
+exports[`invalid(72): a { inset: 0PX 0px; } 2`] = `
+
+Message:
+> 1 | a { inset: 0PX 0px; }
+    |            ^^^^^^^ Simplify this shorthand value to \`0PX\`.
+
+Output:
+  1 | a { inset: 0PX; }
+
+`;
+
+exports[`invalid(73): a { border-radius: 1px 2px 1px 2px / 3px 4px 3px 4px; } 1`] = `
+
+  1 | a { border-radius: 1px 2px 1px 2px / 3px 4px 3px 4px; }
+
+`;
+
+exports[`invalid(73): a { border-radius: 1px 2px 1px 2px / 3px 4px 3px 4px; } 2`] = `
+
+Message:
+> 1 | a { border-radius: 1px 2px 1px 2px / 3px 4px 3px 4px; }
+    |                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this shorthand value to \`1px 2px / 3px 4px\`.
+
+Output:
+  1 | a { border-radius: 1px 2px / 3px 4px; }
+
+`;
+
+exports[`invalid(74): a { border-radius: 1px 1px / 2px 3px 3px; } 1`] = `
+
+  1 | a { border-radius: 1px 1px / 2px 3px 3px; }
+
+`;
+
+exports[`invalid(74): a { border-radius: 1px 1px / 2px 3px 3px; } 2`] = `
+
+Message:
+> 1 | a { border-radius: 1px 1px / 2px 3px 3px; }
+    |                    ^^^^^^^^^^^^^^^^^^^^^ Simplify this shorthand value to \`1px / 2px 3px 3px\`.
+
+Output:
+  1 | a { border-radius: 1px / 2px 3px 3px; }
+
+`;
+
+exports[`invalid(75): a { inset: 1px 2px /* c */ 1px 2px; } 1`] = `
+
+  1 | a { inset: 1px 2px /* c */ 1px 2px; }
+
+`;
+
+exports[`invalid(75): a { inset: 1px 2px /* c */ 1px 2px; } 2`] = `
+
+Message:
+> 1 | a { inset: 1px 2px /* c */ 1px 2px; }
+    |            ^^^^^^^^^^^^^^^^^^^^^^^ Simplify this shorthand value to \`1px 2px\`.
 
 `;
 

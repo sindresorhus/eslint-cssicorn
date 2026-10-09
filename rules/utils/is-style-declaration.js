@@ -7,7 +7,13 @@ import normalizeCssIdentifier from './normalize-css-identifier.js';
 @import {CssicornContext} from '../rule/cssicorn-context.js';
 */
 
-const groupingAtRules = new Set(['media', 'supports', 'container', 'layer', 'scope', 'starting-style']);
+/**
+Grouping at-rules that pass style context through to nested style rules. `@scope` is a grouping at-rule, but not transparent to them, so it is added separately below.
+*/
+const transparentGroupingAtRules = new Set(['media', 'supports', 'container', 'layer', 'starting-style']);
+
+// Grouping at-rules can contain style declarations.
+const groupingAtRules = new Set([...transparentGroupingAtRules, 'scope']);
 
 /**
 Check for a style declaration, including declarations directly inside nested grouping rules.
@@ -34,3 +40,5 @@ export default function isStyleDeclaration(declaration, {sourceCode}) {
 
 	return false;
 }
+
+export {groupingAtRules, transparentGroupingAtRules};

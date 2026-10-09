@@ -672,6 +672,20 @@ Message:
 
 `;
 
+exports[`invalid(49): @keyframes example { to { flex: 1; } } 1`] = `
+
+  1 | @keyframes example { to { flex: 1; } }
+
+`;
+
+exports[`invalid(49): @keyframes example { to { flex: 1; } } 2`] = `
+
+Message:
+> 1 | @keyframes example { to { flex: 1; } }
+    |                           ^^^^^^^ Avoid animating 'flex', which can affect layout.
+
+`;
+
 exports[`invalid(5): a { transition: opacity 1s, height 200ms, margin-inline 1s; } 1`] = `
 
   1 | a { transition: opacity 1s, height 200ms, margin-inline 1s; }
@@ -691,6 +705,20 @@ exports[`invalid(5): a { transition: opacity 1s, height 200ms, margin-inline 1s;
 Message:
 > 1 | a { transition: opacity 1s, height 200ms, margin-inline 1s; }
     |                                           ^^^^^^^^^^^^^ Avoid animating 'margin-inline', which can affect layout.
+
+`;
+
+exports[`invalid(50): @keyframes example { to { width: 1px !important; width: 1px; } } 1`] = `
+
+  1 | @keyframes example { to { width: 1px !important; width: 1px; } }
+
+`;
+
+exports[`invalid(50): @keyframes example { to { width: 1px !important; width: 1px; } } 2`] = `
+
+Message:
+> 1 | @keyframes example { to { width: 1px !important; width: 1px; } }
+    |                                                  ^^^^^^^^^^ Avoid animating 'width', which can affect layout.
 
 `;
 

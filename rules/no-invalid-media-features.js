@@ -69,7 +69,7 @@ for (const [name, syntax] of rangeMediaFeatureSyntaxes) {
 @param {string} name
 */
 function isIgnoredFeatureName(name) {
-	const {custom, vendor} = keyword(normalizeCssIdentifier(name).replace(/^(?:min|max)-(?=-)/, ''));
+	const {custom, vendor} = keyword(normalizeCssIdentifier(name).replace(/^(?:min|max)-(?=-)/v, ''));
 	return custom || vendor !== '';
 }
 
@@ -202,10 +202,10 @@ function getInvalidValueProblem(sourceCode, valueNode, name, syntax) {
 @returns {Identifier | undefined}
 */
 function getRangeFeatureNameNode(node) {
-	const identifierNodes = [node.left, node.middle, node.right].filter(node => node?.type === 'Identifier');
+	const identifierNodes = [node.left, node.middle, node.right].filter(part => part?.type === 'Identifier');
 
-	return identifierNodes.find(node => mediaFeatureSyntaxes.has(normalizeCssIdentifier(node.name)))
-		?? identifierNodes.find(node => isIgnoredFeatureName(node.name))
+	return identifierNodes.find(part => mediaFeatureSyntaxes.has(normalizeCssIdentifier(part.name)))
+		?? identifierNodes.find(part => isIgnoredFeatureName(part.name))
 		?? identifierNodes[0];
 }
 

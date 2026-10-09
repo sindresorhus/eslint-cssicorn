@@ -1,7 +1,9 @@
-import {parse, walk, keyword} from '@eslint/css-tree';
+import {parse, walk} from '@eslint/css-tree';
 import colorFunctionsWithAlpha from './shared/css-color-functions.js';
 import {
 	evaluateCssMath,
+	getBasePropertyName,
+	getBlockOwner,
 	getCommaSeparatedGroups,
 	isCssMathFunction,
 	isCssModulesInteropDeclaration,
@@ -314,8 +316,8 @@ function getCalculationProblem(node, trace, declarationProperty, sourceCode) {
 /**
 Choose the property's or known descriptor's grammar without assuming an unknown at-rule's declaration semantics.
 */
-function getDeclarationContext(parent, sourceCode) {
-	const owner = sourceCode.getParent(parent);
+function getDeclarationContext(declaration, sourceCode) {
+	const owner = getBlockOwner(declaration, {sourceCode});
 	const atRule = owner?.type === 'Atrule' ? normalizeCssIdentifier(owner.name) : undefined;
 	const atRuleDefinition = atRule && sourceCode.lexer.getAtrule(atRule);
 	if (atRule && !atRuleDefinition) {
@@ -343,12 +345,12 @@ const create = context => {
 			return;
 		}
 
-		const property = keyword(normalizeCssIdentifier(declaration.property)).basename;
+		const property = getBasePropertyName(declaration.property);
 		if (!hasClampingCandidate(property, declaration.value) || isCssModulesInteropDeclaration(declaration, context)) {
 			return;
 		}
 
-		const declarationContext = getDeclarationContext(parent, sourceCode);
+		const declarationContext = getDeclarationContext(declaration, sourceCode);
 		if (!declarationContext) {
 			return;
 		}
@@ -369,6 +371,8 @@ const create = context => {
 			}
 		};
 
+		// These properties accept a single component only.
+		const needsSingleComponent = opacityProperties.has(property) || property === 'perspective';
 		if (!isDescriptor) {
 			for (const node of declaration.value.children) {
 				if (!isComponent(node)) {
@@ -380,7 +384,7 @@ const create = context => {
 					continue;
 				}
 
-				if ((opacityProperties.has(property) || property === 'perspective') && declaration.value.children.length !== 1) {
+				if (needsSingleComponent && declaration.value.children.length !== 1) {
 					continue;
 				}
 

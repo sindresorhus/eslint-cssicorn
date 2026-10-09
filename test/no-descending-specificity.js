@@ -186,6 +186,10 @@ test.snapshot({
 				}
 			}
 		`,
+		'b a#x { color: red; } a#X { color: blue; }',
+		'b a { color: red; } c a { color: blue; }',
+		'b a { color: red; } @layer base { a { color: blue; } }',
+		'@media (width > 40rem) { b a { color: red; } } @media (min-width: 40rem) { a { color: blue; } }',
 	],
 	invalid: [
 		'b a { color: red; } a { color: blue; }',
@@ -327,6 +331,9 @@ test.snapshot({
 				.card { color: blue; }
 			}
 		`,
+		':is(b, c) a { color: red; } a { color: blue; }',
+		'b > a { color: red; } a { color: blue; }',
+		'b a { color: red; } a { color: blue; } a { color: green; }',
 	],
 });
 

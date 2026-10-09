@@ -1,11 +1,13 @@
-import {parse, walk} from '@eslint/css-tree';
+import {walk} from '@eslint/css-tree';
 import {
 	getCommaSeparatedGroups,
+	getContainingDeclaration,
 	hasCommentInRange,
 	hasSubstitutionOrRandomFunction,
 	isCssModulesInteropDeclaration,
 	isSubstitutionFunction,
 	normalizeCssIdentifier,
+	parseCustomPropertyDeclaration,
 	toLocation,
 } from './utils/index.js';
 
@@ -189,7 +191,7 @@ const create = context => {
 			return;
 		}
 
-		const declaration = sourceCode.getAncestors(node).findLast(ancestor => ancestor.type === 'Declaration');
+		const declaration = getContainingDeclaration(node, context);
 		if (
 			!declaration
 			|| sourceCode.getParent(declaration).type !== 'Block'
@@ -212,19 +214,8 @@ const create = context => {
 			return;
 		}
 
-		let parsed;
-		try {
-			parsed = parse(sourceCode.getText(declaration), {
-				context: 'declaration',
-				parseCustomProperty: true,
-				positions: true,
-				offset: sourceCode.getRange(declaration)[0],
-			});
-		} catch {
-			return;
-		}
-
-		if (parsed.value.type !== 'Value') {
+		const parsed = parseCustomPropertyDeclaration(declaration, context);
+		if (parsed?.value.type !== 'Value') {
 			return;
 		}
 

@@ -1,15 +1,17 @@
-import {
-	find,
-	ident,
-} from '@eslint/css-tree';
+import {find} from '@eslint/css-tree';
 import {
 	canBeRepresentedByNestingSelector,
 	canMatchSelector,
+	getOwningStyleRule,
 	hasAncestorStyleRule,
 	hasScopeAncestor,
-	isStyleRule,
 } from './shared/css-selector-specificity.js';
-import {getPseudoSelectorArgument, hasCommentInRange, normalizeCssIdentifier} from './utils/index.js';
+import {
+	decodeCssIdentifier,
+	getPseudoSelectorArgument,
+	hasCommentInRange,
+	normalizeCssIdentifier,
+} from './utils/index.js';
 
 /**
 @import {CssicornContext} from './rule/cssicorn-context.js';
@@ -97,9 +99,8 @@ const create = context => {
 			return;
 		}
 
-		const ancestors = sourceCode.getAncestors(node);
-		const owner = ancestors.findLast(ancestor => ancestor.type === 'Rule' || ancestor.type === 'Atrule');
-		if (!owner?.prelude || !isStyleRule(owner, context) || !ancestors.includes(owner.prelude)) {
+		const owner = getOwningStyleRule(node, context);
+		if (!owner) {
 			return;
 		}
 
@@ -147,7 +148,7 @@ const create = context => {
 				const range = sourceCode.getRange(selector);
 				let selectorText = sourceCode.text.slice(...range);
 				// Terminate a trailing hex escape so it cannot consume surrounding selector whitespace.
-				if (selectorText.includes('\\') && ident.decode(selectorText + ' ') === ident.decode(selectorText)) {
+				if (selectorText.includes('\\') && decodeCssIdentifier(selectorText + ' ') === decodeCssIdentifier(selectorText)) {
 					selectorText += ' ';
 				}
 
