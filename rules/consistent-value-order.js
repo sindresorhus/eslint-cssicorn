@@ -1,4 +1,5 @@
-import {ident} from '@eslint/css-tree';
+import {ident, tokenize, tokenTypes} from '@eslint/css-tree';
+import {colorFunctions} from './shared/css-color-functions.js';
 import {getVendorPrefix} from './shared/css-shorthand-properties.js';
 import {
 	getCanonicalLexerNode,
@@ -11,6 +12,7 @@ import {
 } from './utils/index.js';
 
 /**
+@import {CssNodePlain} from '@eslint/css-tree';
 @import {CssicornContext} from './rule/cssicorn-context.js';
 @import {CssicornRule} from './rule/to-eslint-rule.js';
 @import {CssicornRuleFixer} from './rule/to-eslint-rule-fixer.js';
@@ -59,6 +61,33 @@ const isColumnComponent = node => {
 	}
 
 	return ['Identifier', 'Dimension', 'Function'].includes(node.type);
+};
+
+/**
+Use a color placeholder for matching when substitutions are confined to a known color function. The original component is retained for fixes.
+
+@param {CssNodePlain} node
+@param {CssicornContext} context
+@returns {CssNodePlain}
+*/
+const getMatchingComponent = (node, context) => {
+	if (
+		node.type !== 'Function'
+		|| !colorFunctions.has(normalizeCssIdentifier(node.name))
+		|| !hasSubstitutionOrRandomFunction(node)
+	) {
+		return node;
+	}
+
+	// Variable fallbacks are Raw nodes, so inspect tokens to retain the random-function safeguard.
+	const text = context.sourceCode.getText(node);
+	let hasRandomFunction = false;
+	tokenize(text, (type, start, end) => {
+		if (type === tokenTypes.Function && ['random', 'random-item'].includes(normalizeCssIdentifier(text.slice(start, end - 1)))) {
+			hasRandomFunction = true;
+		}
+	});
+	return hasRandomFunction ? node : {type: 'Identifier', name: 'transparent'};
 };
 
 const getGroupProblem = (nodes, canonicalNodes, {order, matchResult, property, context}) => {
@@ -152,7 +181,7 @@ const create = context => {
 				continue;
 			}
 
-			const groupValue = {...value, children: componentNodes};
+			const groupValue = {...value, children: componentNodes.map(node => getMatchingComponent(node, context))};
 			if (hasSubstitutionOrRandomFunction(groupValue)) {
 				continue;
 			}

@@ -7,7 +7,7 @@ import {
 	tokenTypes,
 	toPlainObject,
 } from '@eslint/css-tree';
-import colorFunctionsWithAlpha from './shared/css-color-functions.js';
+import {colorFunctions} from './shared/css-color-functions.js';
 import {
 	decodeCssIdentifier,
 	hasCommentInRange,
@@ -38,7 +38,7 @@ const messages = {
 	[MESSAGE_ID_SUGGESTION]: 'Replace with `{{replacement}}`.',
 };
 
-const colorFunctions = new Set([...colorFunctionsWithAlpha, 'color-mix', 'light-dark', 'device-cmyk', 'contrast-color', 'palette-mix']);
+const colorAndPaletteFunctions = new Set([...colorFunctions, 'palette-mix']);
 const preservedFunctions = new Set(['random', 'element', '-moz-element', 'url']);
 const componentTypes = new Set(['Hash', 'Dimension', 'Percentage', 'Function']);
 const openingTokens = new Map([
@@ -364,7 +364,7 @@ const create = context => {
 				}
 			}
 
-			if (node.type === 'Function' && colorFunctions.has(normalizeCssIdentifier(node.name))) {
+			if (node.type === 'Function' && colorAndPaletteFunctions.has(normalizeCssIdentifier(node.name))) {
 				return;
 			}
 

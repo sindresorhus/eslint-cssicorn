@@ -44,7 +44,19 @@ test.snapshot({
 		'a { border: 1px /* keep */ solid red; }',
 		{code: 'a { border: red solid (; box-shadow: red 0 0 (; }', languageOptions: {tolerant: true}},
 		'a { box-shadow: 1px 2px red, blue 3px; text-shadow: 1px 2px red, blue 3px; }',
-		'a { box-shadow: 1px 2px red, var(--other-shadow); text-shadow: 1px 2px red, rgb(1 2 var(--blue)) 3px 4px; }',
+		'a { box-shadow: 1px 2px red, var(--other-shadow); text-shadow: 1px 2px red, 3px 4px rgb(1 2 var(--blue)); }',
+		'a { border: 1px solid rgb(var(--channels)); outline: rgb(var(--channels)) solid var(--width); }',
+		'a { border: rgb(var(--channels)) solid calc(var(--width)); border: unknown(var(--channels)) solid 1px; }',
+		'a { border: rgb(var(--channels)) solid 1px unknown; border: rgb(var(--channels)) solid 1px red; }',
+		'a { border: rgb(var(--channels)) hsl(var(--hue) 50% 50%) solid 1px; border: rgb(red) solid 1px; }',
+		'a { border: palette-mix(in lab, var(--palette)) solid 1px; }',
+		'a { border: rgb(var(--channels, random(0, 255))) solid 1px; }',
+		'a { border: rgb(env(channels, RANDOM-ITEM(auto, 1, 2))) solid 1px; }',
+		String.raw`a { border: rgb(var(--channels, r\61 ndom(0, 255))) solid 1px; }`,
+		'a { border: rgb(random(0, 255) var(--green) 0) solid 1px; }',
+		'a { border: color-mix(in srgb, random-item(auto, red, blue), var(--color)) solid 1px; }',
+		'a { --border: rgb(var(--channels)) solid 1px; color: rgb(var(--channels)); }',
+		':export { border: rgb(var(--channels)) solid 1px; }',
 		'a { box-shadow: 0 0 red, blue calc(random(1px, 2px)) 0; }',
 		'a { text-shadow: blue RANDOM-ITEM(auto, 1px, 2px) 0 0, 1px 2px red; }',
 		'a { box-shadow: red random(1px, 2px) 0, blue 0 random(3px, 4px); }',
@@ -210,8 +222,8 @@ test({
 		},
 		{
 			code: 'a { box-shadow: color-mix(in srgb, red, blue) min(1px, 2px) 0 inset, rgb(1 2 var(--blue)) 3px 4px; }',
-			output: 'a { box-shadow: inset min(1px, 2px) 0 color-mix(in srgb, red, blue), rgb(1 2 var(--blue)) 3px 4px; }',
-			errors: 1,
+			output: 'a { box-shadow: inset min(1px, 2px) 0 color-mix(in srgb, red, blue), 3px 4px rgb(1 2 var(--blue)); }',
+			errors: 2,
 		},
 		{
 			code: 'a { box-shadow: red /* keep */ 0 0, var(--other), blue 1px 2px; }',
@@ -322,6 +334,93 @@ test({
 			errors: 1,
 		},
 	],
+});
+
+test({
+	valid: [],
+	invalid: [
+		...[
+			'rgb(var(--channels))',
+			'rgba(1, 2, 3, var(--alpha))',
+			'hsl(var(--hue) 50% 50%)',
+			'hsla(0, 50%, 50%, var(--alpha))',
+			'hwb(var(--hue) 0% 0%)',
+			'lab(var(--lightness) 0 0)',
+			'lch(50% var(--chroma) 0)',
+			'oklab(var(--lightness) 0 0)',
+			'oklch(50% var(--chroma) 0)',
+			'color(display-p3 var(--channels))',
+			'color-mix(in srgb, var(--color), blue)',
+			'light-dark(var(--light), var(--dark))',
+			'device-cmyk(var(--channels))',
+			'contrast-color(var(--color))',
+		].map(color => ({
+			code: `a { border: ${color} solid 1px; }`,
+			output: `a { border: 1px solid ${color}; }`,
+			errors: 1,
+		})),
+		{
+			code: 'a { border: rgb(from var(--color, red) r g calc(b + var(--blue))) solid 1px; }',
+			output: 'a { border: 1px solid rgb(from var(--color, red) r g calc(b + var(--blue))); }',
+			errors: 1,
+		},
+		{
+			code: 'a { box-shadow: rgb(var(--channels, 1, 2, 3)) 0 0 inset, var(--shadow), color-mix(in srgb, var(--color, red), blue) 1px 2px; }',
+			output: 'a { box-shadow: inset 0 0 rgb(var(--channels, 1, 2, 3)), var(--shadow), 1px 2px color-mix(in srgb, var(--color, red), blue); }',
+			errors: 2,
+		},
+		{
+			code: 'a { text-shadow: rgb(env(color-channels)) 0 0; column-rule: hsl(attr(data-hue deg) 50% 50%) dashed 1px; }',
+			output: 'a { text-shadow: 0 0 rgb(env(color-channels)); column-rule: 1px dashed hsl(attr(data-hue deg) 50% 50%); }',
+			errors: 2,
+		},
+		{
+			code: 'a { text-emphasis: color-mix(in srgb, --theme-color(), blue) "•"; }',
+			output: 'a { text-emphasis: "•" color-mix(in srgb, --theme-color(), blue); }',
+			errors: 1,
+		},
+		{
+			code: 'a { border: rgb(var(--channels, "random(0, 255)")) solid 1px; }',
+			output: 'a { border: 1px solid rgb(var(--channels, "random(0, 255)")); }',
+			errors: 1,
+		},
+		{
+			code: 'a {\r\n  outline: RGB(VAR(--channels))solid\r\n    1px !important;\r\n}',
+			output: 'a {\r\n  outline: 1px solid\r\n    RGB(VAR(--channels)) !important;\r\n}',
+			errors: 1,
+		},
+		{
+			code: String.raw`a { border: r\67 b(var(--channels)) solid 1px; }`,
+			output: String.raw`a { border: 1px solid r\67 b(var(--channels)); }`,
+			errors: 1,
+		},
+		{
+			code: 'a { border: rgb(var(--channels) /* keep */) solid 1px; }',
+			errors: 1,
+		},
+		{
+			code: 'a { text-decoration: wavy underline rgb(var(--channels) /* keep */); }',
+			output: 'a { text-decoration: underline wavy rgb(var(--channels) /* keep */); }',
+			errors: 1,
+		},
+	],
+});
+
+nodeTest('color substitution fixes preserve validity after channel expansion', () => {
+	const linter = new Linter();
+	const config = {...plugin.configs.all, rules: {'cssicorn/consistent-value-order': 'error'}};
+	const value = 'rgb(var(--channels)) solid 1px';
+	const output = '1px solid rgb(var(--channels))';
+	const result = linter.verifyAndFix(`a { border: ${value}; }`, config, {filename: 'test.css'});
+	assert.equal(result.output, `a { border: ${output}; }`);
+	assert.deepEqual(result.messages, []);
+	assert.deepEqual(linter.verifyAndFix(result.output, config, {filename: 'test.css'}), {...result, fixed: false});
+	for (const [replacement, expectedValidity] of [['1 2 3', true], ['1, 2, 3', true], ['1 2 3 / 50%', true], ['', false], ['red', false], ['1 2 3, blue', false]]) {
+		for (const borderValue of [value, output]) {
+			const expandedValue = borderValue.replace('var(--channels)', () => replacement);
+			assert.equal(Boolean(lexer.matchProperty('border', expandedValue).matched), expectedValidity, expandedValue);
+		}
+	}
 });
 
 nodeTest('fixes preserve component boundaries after hexadecimal escapes', () => {
