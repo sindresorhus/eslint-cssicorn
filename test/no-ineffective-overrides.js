@@ -362,3 +362,26 @@ test.snapshot({
 		String.raw`.\62 utton { COLOR: red !important; } @SCOPE (.panel) { .button:HOVER { color: blue; } }`,
 	],
 });
+
+test.snapshot({
+	valid: [
+		'.button { opacity: 1; @starting-style { opacity: 0; } }',
+		'.button { opacity: 1 !important; @starting-style { opacity: 0 !important; } }',
+		'.button { @starting-style { opacity: 0 !important; } } .button:hover { opacity: 1; }',
+		'@media print { .button { opacity: 1 !important; } } @starting-style { .button { opacity: 0; } }',
+		'.button { opacity: 1 !important; } @starting-style { .button:hover, .link:hover { opacity: 0; } }',
+		'@starting-style { .button { opacity: 0 !important; } } @layer states { .button:hover { opacity: 1; } }',
+	],
+	invalid: [
+		'.button { opacity: 1 !important; @starting-style { opacity: 0; } }',
+		'.button { opacity: 1 !important; } @starting-style { .button { opacity: 0; } }',
+		'@starting-style { .button { opacity: 0; } } .button { opacity: 1 !important; }',
+		'@starting-style { .button { opacity: 0 !important; } } @starting-style { .button:hover { opacity: 1; } }',
+		'.button { opacity: 1; } @layer states { @starting-style { .button { opacity: 0; } } }',
+		'@layer components { .button { opacity: 1 !important; } } @starting-style { .button { opacity: 0 !important; } }',
+		'@media print { .button { opacity: 1 !important; } } @media print { @starting-style { .button { opacity: 0; } } }',
+		'.button { opacity: 1 !important; } @scope (.panel) { @starting-style { .button { opacity: 0; } } }',
+		'.button { opacity: 1 !important; @starting-style { @media print { opacity: 0; } } }',
+		String.raw`.\62 utton { OPACITY: 1 !important; @STARTING-STYLE { opacity: 0; } }`,
+	],
+});

@@ -33,7 +33,7 @@ const MESSAGE_ID = 'no-ineffective-overrides';
 const messages = {
 	[MESSAGE_ID]: '`{{property}}` cannot override the declaration on line {{line}} because {{reason}}.',
 };
-const CONDITIONAL_RULES = new Set(['media', 'supports', 'container']);
+const CONDITIONAL_RULES = new Set(['media', 'supports', 'container', 'starting-style']);
 const UNSUPPORTED_PSEUDO_CLASSES = new Set(['host', 'host-context', 'scope']);
 const ROLLBACK_KEYWORDS = new Set(['revert', 'revert-layer']);
 const ALL_EXCLUDED_PROPERTIES = new Set(['direction', 'unicode-bidi']);
