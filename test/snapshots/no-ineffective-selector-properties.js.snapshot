@@ -1,0 +1,3494 @@
+exports[`invalid(1): ::selection { margin: 1rem; } 1`] = `
+
+  1 | ::selection { margin: 1rem; }
+
+`;
+
+exports[`invalid(1): ::selection { margin: 1rem; } 2`] = `
+
+Message:
+> 1 | ::selection { margin: 1rem; }
+    |               ^^^^^^^^^^^^ \`margin\` has no effect on the targets selected by ::selection.
+
+Output:
+  1 | ::selection {  }
+
+`;
+
+exports[`invalid(10): ::selection { height: 10px; } 1`] = `
+
+  1 | ::selection { height: 10px; }
+
+`;
+
+exports[`invalid(10): ::selection { height: 10px; } 2`] = `
+
+Message:
+> 1 | ::selection { height: 10px; }
+    |               ^^^^^^^^^^^^ \`height\` has no effect on the targets selected by ::selection.
+
+Output:
+  1 | ::selection {  }
+
+`;
+
+exports[`invalid(100): a:visited { height: 10px; } 1`] = `
+
+  1 | a:visited { height: 10px; }
+
+`;
+
+exports[`invalid(100): a:visited { height: 10px; } 2`] = `
+
+Message:
+> 1 | a:visited { height: 10px; }
+    |             ^^^^^^^^^^^^ \`height\` has no effect on the targets selected by :visited.
+
+Output:
+  1 | a:visited {  }
+
+`;
+
+exports[`invalid(101): a:visited { min-width: 10px; } 1`] = `
+
+  1 | a:visited { min-width: 10px; }
+
+`;
+
+exports[`invalid(101): a:visited { min-width: 10px; } 2`] = `
+
+Message:
+> 1 | a:visited { min-width: 10px; }
+    |             ^^^^^^^^^^^^^^^ \`min-width\` has no effect on the targets selected by :visited.
+
+Output:
+  1 | a:visited {  }
+
+`;
+
+exports[`invalid(102): a:visited { max-height: 10px; } 1`] = `
+
+  1 | a:visited { max-height: 10px; }
+
+`;
+
+exports[`invalid(102): a:visited { max-height: 10px; } 2`] = `
+
+Message:
+> 1 | a:visited { max-height: 10px; }
+    |             ^^^^^^^^^^^^^^^^ \`max-height\` has no effect on the targets selected by :visited.
+
+Output:
+  1 | a:visited {  }
+
+`;
+
+exports[`invalid(103): a:visited { inline-size: 10px; } 1`] = `
+
+  1 | a:visited { inline-size: 10px; }
+
+`;
+
+exports[`invalid(103): a:visited { inline-size: 10px; } 2`] = `
+
+Message:
+> 1 | a:visited { inline-size: 10px; }
+    |             ^^^^^^^^^^^^^^^^^ \`inline-size\` has no effect on the targets selected by :visited.
+
+Output:
+  1 | a:visited {  }
+
+`;
+
+exports[`invalid(104): a:visited { block-size: 10px; } 1`] = `
+
+  1 | a:visited { block-size: 10px; }
+
+`;
+
+exports[`invalid(104): a:visited { block-size: 10px; } 2`] = `
+
+Message:
+> 1 | a:visited { block-size: 10px; }
+    |             ^^^^^^^^^^^^^^^^ \`block-size\` has no effect on the targets selected by :visited.
+
+Output:
+  1 | a:visited {  }
+
+`;
+
+exports[`invalid(105): a:visited { min-block-size: 10px; } 1`] = `
+
+  1 | a:visited { min-block-size: 10px; }
+
+`;
+
+exports[`invalid(105): a:visited { min-block-size: 10px; } 2`] = `
+
+Message:
+> 1 | a:visited { min-block-size: 10px; }
+    |             ^^^^^^^^^^^^^^^^^^^^ \`min-block-size\` has no effect on the targets selected by :visited.
+
+Output:
+  1 | a:visited {  }
+
+`;
+
+exports[`invalid(106): a:visited { max-inline-size: 10px; } 1`] = `
+
+  1 | a:visited { max-inline-size: 10px; }
+
+`;
+
+exports[`invalid(106): a:visited { max-inline-size: 10px; } 2`] = `
+
+Message:
+> 1 | a:visited { max-inline-size: 10px; }
+    |             ^^^^^^^^^^^^^^^^^^^^^ \`max-inline-size\` has no effect on the targets selected by :visited.
+
+Output:
+  1 | a:visited {  }
+
+`;
+
+exports[`invalid(107): a:visited { display: block; } 1`] = `
+
+  1 | a:visited { display: block; }
+
+`;
+
+exports[`invalid(107): a:visited { display: block; } 2`] = `
+
+Message:
+> 1 | a:visited { display: block; }
+    |             ^^^^^^^^^^^^^^ \`display\` has no effect on the targets selected by :visited.
+
+Output:
+  1 | a:visited {  }
+
+`;
+
+exports[`invalid(108): a:visited { position: relative; } 1`] = `
+
+  1 | a:visited { position: relative; }
+
+`;
+
+exports[`invalid(108): a:visited { position: relative; } 2`] = `
+
+Message:
+> 1 | a:visited { position: relative; }
+    |             ^^^^^^^^^^^^^^^^^^ \`position\` has no effect on the targets selected by :visited.
+
+Output:
+  1 | a:visited {  }
+
+`;
+
+exports[`invalid(109): a:visited { top: 1px; } 1`] = `
+
+  1 | a:visited { top: 1px; }
+
+`;
+
+exports[`invalid(109): a:visited { top: 1px; } 2`] = `
+
+Message:
+> 1 | a:visited { top: 1px; }
+    |             ^^^^^^^^ \`top\` has no effect on the targets selected by :visited.
+
+Output:
+  1 | a:visited {  }
+
+`;
+
+exports[`invalid(11): ::selection { min-width: 10px; } 1`] = `
+
+  1 | ::selection { min-width: 10px; }
+
+`;
+
+exports[`invalid(11): ::selection { min-width: 10px; } 2`] = `
+
+Message:
+> 1 | ::selection { min-width: 10px; }
+    |               ^^^^^^^^^^^^^^^ \`min-width\` has no effect on the targets selected by ::selection.
+
+Output:
+  1 | ::selection {  }
+
+`;
+
+exports[`invalid(110): a:visited { inset: 1px; } 1`] = `
+
+  1 | a:visited { inset: 1px; }
+
+`;
+
+exports[`invalid(110): a:visited { inset: 1px; } 2`] = `
+
+Message:
+> 1 | a:visited { inset: 1px; }
+    |             ^^^^^^^^^^ \`inset\` has no effect on the targets selected by :visited.
+
+Output:
+  1 | a:visited {  }
+
+`;
+
+exports[`invalid(111): a:visited { inset-block: 1px; } 1`] = `
+
+  1 | a:visited { inset-block: 1px; }
+
+`;
+
+exports[`invalid(111): a:visited { inset-block: 1px; } 2`] = `
+
+Message:
+> 1 | a:visited { inset-block: 1px; }
+    |             ^^^^^^^^^^^^^^^^ \`inset-block\` has no effect on the targets selected by :visited.
+
+Output:
+  1 | a:visited {  }
+
+`;
+
+exports[`invalid(112): a:visited { inset-inline-start: 1px; } 1`] = `
+
+  1 | a:visited { inset-inline-start: 1px; }
+
+`;
+
+exports[`invalid(112): a:visited { inset-inline-start: 1px; } 2`] = `
+
+Message:
+> 1 | a:visited { inset-inline-start: 1px; }
+    |             ^^^^^^^^^^^^^^^^^^^^^^^ \`inset-inline-start\` has no effect on the targets selected by :visited.
+
+Output:
+  1 | a:visited {  }
+
+`;
+
+exports[`invalid(113): a:visited { opacity: 0.5; } 1`] = `
+
+  1 | a:visited { opacity: 0.5; }
+
+`;
+
+exports[`invalid(113): a:visited { opacity: 0.5; } 2`] = `
+
+Message:
+> 1 | a:visited { opacity: 0.5; }
+    |             ^^^^^^^^^^^^ \`opacity\` has no effect on the targets selected by :visited.
+
+Output:
+  1 | a:visited {  }
+
+`;
+
+exports[`invalid(114): a:visited { transform: translateX(1px); } 1`] = `
+
+  1 | a:visited { transform: translateX(1px); }
+
+`;
+
+exports[`invalid(114): a:visited { transform: translateX(1px); } 2`] = `
+
+Message:
+> 1 | a:visited { transform: translateX(1px); }
+    |             ^^^^^^^^^^^^^^^^^^^^^^^^^^ \`transform\` has no effect on the targets selected by :visited.
+
+Output:
+  1 | a:visited {  }
+
+`;
+
+exports[`invalid(115): a:visited { transform-origin: top left; } 1`] = `
+
+  1 | a:visited { transform-origin: top left; }
+
+`;
+
+exports[`invalid(115): a:visited { transform-origin: top left; } 2`] = `
+
+Message:
+> 1 | a:visited { transform-origin: top left; }
+    |             ^^^^^^^^^^^^^^^^^^^^^^^^^^ \`transform-origin\` has no effect on the targets selected by :visited.
+
+Output:
+  1 | a:visited {  }
+
+`;
+
+exports[`invalid(116): a:visited { translate: 1px; } 1`] = `
+
+  1 | a:visited { translate: 1px; }
+
+`;
+
+exports[`invalid(116): a:visited { translate: 1px; } 2`] = `
+
+Message:
+> 1 | a:visited { translate: 1px; }
+    |             ^^^^^^^^^^^^^^ \`translate\` has no effect on the targets selected by :visited.
+
+Output:
+  1 | a:visited {  }
+
+`;
+
+exports[`invalid(117): a:visited { rotate: 90deg; } 1`] = `
+
+  1 | a:visited { rotate: 90deg; }
+
+`;
+
+exports[`invalid(117): a:visited { rotate: 90deg; } 2`] = `
+
+Message:
+> 1 | a:visited { rotate: 90deg; }
+    |             ^^^^^^^^^^^^^ \`rotate\` has no effect on the targets selected by :visited.
+
+Output:
+  1 | a:visited {  }
+
+`;
+
+exports[`invalid(118): a:visited { scale: 2; } 1`] = `
+
+  1 | a:visited { scale: 2; }
+
+`;
+
+exports[`invalid(118): a:visited { scale: 2; } 2`] = `
+
+Message:
+> 1 | a:visited { scale: 2; }
+    |             ^^^^^^^^ \`scale\` has no effect on the targets selected by :visited.
+
+Output:
+  1 | a:visited {  }
+
+`;
+
+exports[`invalid(119): a:visited { box-shadow: 1px 1px red; } 1`] = `
+
+  1 | a:visited { box-shadow: 1px 1px red; }
+
+`;
+
+exports[`invalid(119): a:visited { box-shadow: 1px 1px red; } 2`] = `
+
+Message:
+> 1 | a:visited { box-shadow: 1px 1px red; }
+    |             ^^^^^^^^^^^^^^^^^^^^^^^ \`box-shadow\` has no effect on the targets selected by :visited.
+
+Output:
+  1 | a:visited {  }
+
+`;
+
+exports[`invalid(12): ::selection { max-height: 10px; } 1`] = `
+
+  1 | ::selection { max-height: 10px; }
+
+`;
+
+exports[`invalid(12): ::selection { max-height: 10px; } 2`] = `
+
+Message:
+> 1 | ::selection { max-height: 10px; }
+    |               ^^^^^^^^^^^^^^^^ \`max-height\` has no effect on the targets selected by ::selection.
+
+Output:
+  1 | ::selection {  }
+
+`;
+
+exports[`invalid(120): a:visited { background-image: url(image.png); } 1`] = `
+
+  1 | a:visited { background-image: url(image.png); }
+
+`;
+
+exports[`invalid(120): a:visited { background-image: url(image.png); } 2`] = `
+
+Message:
+> 1 | a:visited { background-image: url(image.png); }
+    |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`background-image\` has no effect on the targets selected by :visited.
+
+Output:
+  1 | a:visited {  }
+
+`;
+
+exports[`invalid(121): a:visited { background-position: center; } 1`] = `
+
+  1 | a:visited { background-position: center; }
+
+`;
+
+exports[`invalid(121): a:visited { background-position: center; } 2`] = `
+
+Message:
+> 1 | a:visited { background-position: center; }
+    |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`background-position\` has no effect on the targets selected by :visited.
+
+Output:
+  1 | a:visited {  }
+
+`;
+
+exports[`invalid(122): a:visited { background-position-x: 1px; } 1`] = `
+
+  1 | a:visited { background-position-x: 1px; }
+
+`;
+
+exports[`invalid(122): a:visited { background-position-x: 1px; } 2`] = `
+
+Message:
+> 1 | a:visited { background-position-x: 1px; }
+    |             ^^^^^^^^^^^^^^^^^^^^^^^^^^ \`background-position-x\` has no effect on the targets selected by :visited.
+
+Output:
+  1 | a:visited {  }
+
+`;
+
+exports[`invalid(123): a:visited { background-position-y: 1px; } 1`] = `
+
+  1 | a:visited { background-position-y: 1px; }
+
+`;
+
+exports[`invalid(123): a:visited { background-position-y: 1px; } 2`] = `
+
+Message:
+> 1 | a:visited { background-position-y: 1px; }
+    |             ^^^^^^^^^^^^^^^^^^^^^^^^^^ \`background-position-y\` has no effect on the targets selected by :visited.
+
+Output:
+  1 | a:visited {  }
+
+`;
+
+exports[`invalid(124): a:visited { background-size: cover; } 1`] = `
+
+  1 | a:visited { background-size: cover; }
+
+`;
+
+exports[`invalid(124): a:visited { background-size: cover; } 2`] = `
+
+Message:
+> 1 | a:visited { background-size: cover; }
+    |             ^^^^^^^^^^^^^^^^^^^^^^ \`background-size\` has no effect on the targets selected by :visited.
+
+Output:
+  1 | a:visited {  }
+
+`;
+
+exports[`invalid(125): a:visited { background-repeat: no-repeat; } 1`] = `
+
+  1 | a:visited { background-repeat: no-repeat; }
+
+`;
+
+exports[`invalid(125): a:visited { background-repeat: no-repeat; } 2`] = `
+
+Message:
+> 1 | a:visited { background-repeat: no-repeat; }
+    |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`background-repeat\` has no effect on the targets selected by :visited.
+
+Output:
+  1 | a:visited {  }
+
+`;
+
+exports[`invalid(126): a:visited { background-origin: content-box; } 1`] = `
+
+  1 | a:visited { background-origin: content-box; }
+
+`;
+
+exports[`invalid(126): a:visited { background-origin: content-box; } 2`] = `
+
+Message:
+> 1 | a:visited { background-origin: content-box; }
+    |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`background-origin\` has no effect on the targets selected by :visited.
+
+Output:
+  1 | a:visited {  }
+
+`;
+
+exports[`invalid(127): a:visited { background-clip: padding-box; } 1`] = `
+
+  1 | a:visited { background-clip: padding-box; }
+
+`;
+
+exports[`invalid(127): a:visited { background-clip: padding-box; } 2`] = `
+
+Message:
+> 1 | a:visited { background-clip: padding-box; }
+    |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`background-clip\` has no effect on the targets selected by :visited.
+
+Output:
+  1 | a:visited {  }
+
+`;
+
+exports[`invalid(128): a:visited { background-attachment: fixed; } 1`] = `
+
+  1 | a:visited { background-attachment: fixed; }
+
+`;
+
+exports[`invalid(128): a:visited { background-attachment: fixed; } 2`] = `
+
+Message:
+> 1 | a:visited { background-attachment: fixed; }
+    |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`background-attachment\` has no effect on the targets selected by :visited.
+
+Output:
+  1 | a:visited {  }
+
+`;
+
+exports[`invalid(129): a:visited { border-width: 1px; } 1`] = `
+
+  1 | a:visited { border-width: 1px; }
+
+`;
+
+exports[`invalid(129): a:visited { border-width: 1px; } 2`] = `
+
+Message:
+> 1 | a:visited { border-width: 1px; }
+    |             ^^^^^^^^^^^^^^^^^ \`border-width\` has no effect on the targets selected by :visited.
+
+Output:
+  1 | a:visited {  }
+
+`;
+
+exports[`invalid(13): ::selection { inline-size: 10px; } 1`] = `
+
+  1 | ::selection { inline-size: 10px; }
+
+`;
+
+exports[`invalid(13): ::selection { inline-size: 10px; } 2`] = `
+
+Message:
+> 1 | ::selection { inline-size: 10px; }
+    |               ^^^^^^^^^^^^^^^^^ \`inline-size\` has no effect on the targets selected by ::selection.
+
+Output:
+  1 | ::selection {  }
+
+`;
+
+exports[`invalid(130): a:visited { border-top-style: solid; } 1`] = `
+
+  1 | a:visited { border-top-style: solid; }
+
+`;
+
+exports[`invalid(130): a:visited { border-top-style: solid; } 2`] = `
+
+Message:
+> 1 | a:visited { border-top-style: solid; }
+    |             ^^^^^^^^^^^^^^^^^^^^^^^ \`border-top-style\` has no effect on the targets selected by :visited.
+
+Output:
+  1 | a:visited {  }
+
+`;
+
+exports[`invalid(131): a:visited { border-block-width: 1px; } 1`] = `
+
+  1 | a:visited { border-block-width: 1px; }
+
+`;
+
+exports[`invalid(131): a:visited { border-block-width: 1px; } 2`] = `
+
+Message:
+> 1 | a:visited { border-block-width: 1px; }
+    |             ^^^^^^^^^^^^^^^^^^^^^^^ \`border-block-width\` has no effect on the targets selected by :visited.
+
+Output:
+  1 | a:visited {  }
+
+`;
+
+exports[`invalid(132): a:visited { border-inline-end-style: solid; } 1`] = `
+
+  1 | a:visited { border-inline-end-style: solid; }
+
+`;
+
+exports[`invalid(132): a:visited { border-inline-end-style: solid; } 2`] = `
+
+Message:
+> 1 | a:visited { border-inline-end-style: solid; }
+    |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`border-inline-end-style\` has no effect on the targets selected by :visited.
+
+Output:
+  1 | a:visited {  }
+
+`;
+
+exports[`invalid(133): a:visited { border-radius: 1px; } 1`] = `
+
+  1 | a:visited { border-radius: 1px; }
+
+`;
+
+exports[`invalid(133): a:visited { border-radius: 1px; } 2`] = `
+
+Message:
+> 1 | a:visited { border-radius: 1px; }
+    |             ^^^^^^^^^^^^^^^^^^ \`border-radius\` has no effect on the targets selected by :visited.
+
+Output:
+  1 | a:visited {  }
+
+`;
+
+exports[`invalid(134): a:visited { border-bottom-left-radius: 1px; } 1`] = `
+
+  1 | a:visited { border-bottom-left-radius: 1px; }
+
+`;
+
+exports[`invalid(134): a:visited { border-bottom-left-radius: 1px; } 2`] = `
+
+Message:
+> 1 | a:visited { border-bottom-left-radius: 1px; }
+    |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`border-bottom-left-radius\` has no effect on the targets selected by :visited.
+
+Output:
+  1 | a:visited {  }
+
+`;
+
+exports[`invalid(135): a:visited { border-start-end-radius: 1px; } 1`] = `
+
+  1 | a:visited { border-start-end-radius: 1px; }
+
+`;
+
+exports[`invalid(135): a:visited { border-start-end-radius: 1px; } 2`] = `
+
+Message:
+> 1 | a:visited { border-start-end-radius: 1px; }
+    |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`border-start-end-radius\` has no effect on the targets selected by :visited.
+
+Output:
+  1 | a:visited {  }
+
+`;
+
+exports[`invalid(136): ::target-text { padding: 1rem; } 1`] = `
+
+  1 | ::target-text { padding: 1rem; }
+
+`;
+
+exports[`invalid(136): ::target-text { padding: 1rem; } 2`] = `
+
+Message:
+> 1 | ::target-text { padding: 1rem; }
+    |                 ^^^^^^^^^^^^^ \`padding\` has no effect on the targets selected by ::target-text.
+
+Output:
+  1 | ::target-text {  }
+
+`;
+
+exports[`invalid(137): ::spelling-error { padding: 1rem; } 1`] = `
+
+  1 | ::spelling-error { padding: 1rem; }
+
+`;
+
+exports[`invalid(137): ::spelling-error { padding: 1rem; } 2`] = `
+
+Message:
+> 1 | ::spelling-error { padding: 1rem; }
+    |                    ^^^^^^^^^^^^^ \`padding\` has no effect on the targets selected by ::spelling-error.
+
+Output:
+  1 | ::spelling-error {  }
+
+`;
+
+exports[`invalid(138): ::grammar-error { padding: 1rem; } 1`] = `
+
+  1 | ::grammar-error { padding: 1rem; }
+
+`;
+
+exports[`invalid(138): ::grammar-error { padding: 1rem; } 2`] = `
+
+Message:
+> 1 | ::grammar-error { padding: 1rem; }
+    |                   ^^^^^^^^^^^^^ \`padding\` has no effect on the targets selected by ::grammar-error.
+
+Output:
+  1 | ::grammar-error {  }
+
+`;
+
+exports[`invalid(139): ::search-text { padding: 1rem; } 1`] = `
+
+  1 | ::search-text { padding: 1rem; }
+
+`;
+
+exports[`invalid(139): ::search-text { padding: 1rem; } 2`] = `
+
+Message:
+> 1 | ::search-text { padding: 1rem; }
+    |                 ^^^^^^^^^^^^^ \`padding\` has no effect on the targets selected by ::search-text.
+
+Output:
+  1 | ::search-text {  }
+
+`;
+
+exports[`invalid(14): ::selection { block-size: 10px; } 1`] = `
+
+  1 | ::selection { block-size: 10px; }
+
+`;
+
+exports[`invalid(14): ::selection { block-size: 10px; } 2`] = `
+
+Message:
+> 1 | ::selection { block-size: 10px; }
+    |               ^^^^^^^^^^^^^^^^ \`block-size\` has no effect on the targets selected by ::selection.
+
+Output:
+  1 | ::selection {  }
+
+`;
+
+exports[`invalid(140): ::highlight(example) { padding: 1rem; } 1`] = `
+
+  1 | ::highlight(example) { padding: 1rem; }
+
+`;
+
+exports[`invalid(140): ::highlight(example) { padding: 1rem; } 2`] = `
+
+Message:
+> 1 | ::highlight(example) { padding: 1rem; }
+    |                        ^^^^^^^^^^^^^ \`padding\` has no effect on the targets selected by ::highlight.
+
+Output:
+  1 | ::highlight(example) {  }
+
+`;
+
+exports[`invalid(141): ::selection { font: bold 1rem serif; } 1`] = `
+
+  1 | ::selection { font: bold 1rem serif; }
+
+`;
+
+exports[`invalid(141): ::selection { font: bold 1rem serif; } 2`] = `
+
+Message:
+> 1 | ::selection { font: bold 1rem serif; }
+    |               ^^^^^^^^^^^^^^^^^^^^^ \`font\` has no effect on the targets selected by ::selection.
+
+Output:
+  1 | ::selection {  }
+
+`;
+
+exports[`invalid(142): ::selection { font-family: serif; } 1`] = `
+
+  1 | ::selection { font-family: serif; }
+
+`;
+
+exports[`invalid(142): ::selection { font-family: serif; } 2`] = `
+
+Message:
+> 1 | ::selection { font-family: serif; }
+    |               ^^^^^^^^^^^^^^^^^^ \`font-family\` has no effect on the targets selected by ::selection.
+
+Output:
+  1 | ::selection {  }
+
+`;
+
+exports[`invalid(143): ::selection { font-size: 1rem; } 1`] = `
+
+  1 | ::selection { font-size: 1rem; }
+
+`;
+
+exports[`invalid(143): ::selection { font-size: 1rem; } 2`] = `
+
+Message:
+> 1 | ::selection { font-size: 1rem; }
+    |               ^^^^^^^^^^^^^^^ \`font-size\` has no effect on the targets selected by ::selection.
+
+Output:
+  1 | ::selection {  }
+
+`;
+
+exports[`invalid(144): ::selection { font-weight: bold; } 1`] = `
+
+  1 | ::selection { font-weight: bold; }
+
+`;
+
+exports[`invalid(144): ::selection { font-weight: bold; } 2`] = `
+
+Message:
+> 1 | ::selection { font-weight: bold; }
+    |               ^^^^^^^^^^^^^^^^^ \`font-weight\` has no effect on the targets selected by ::selection.
+
+Output:
+  1 | ::selection {  }
+
+`;
+
+exports[`invalid(145): ::selection { font-variant: small-caps; } 1`] = `
+
+  1 | ::selection { font-variant: small-caps; }
+
+`;
+
+exports[`invalid(145): ::selection { font-variant: small-caps; } 2`] = `
+
+Message:
+> 1 | ::selection { font-variant: small-caps; }
+    |               ^^^^^^^^^^^^^^^^^^^^^^^^ \`font-variant\` has no effect on the targets selected by ::selection.
+
+Output:
+  1 | ::selection {  }
+
+`;
+
+exports[`invalid(146): ::selection { font-variant-numeric: tabular-nums; } 1`] = `
+
+  1 | ::selection { font-variant-numeric: tabular-nums; }
+
+`;
+
+exports[`invalid(146): ::selection { font-variant-numeric: tabular-nums; } 2`] = `
+
+Message:
+> 1 | ::selection { font-variant-numeric: tabular-nums; }
+    |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`font-variant-numeric\` has no effect on the targets selected by ::selection.
+
+Output:
+  1 | ::selection {  }
+
+`;
+
+exports[`invalid(147): ::selection { font-variation-settings: \"wght\" 700; } 1`] = `
+
+  1 | ::selection { font-variation-settings: "wght" 700; }
+
+`;
+
+exports[`invalid(147): ::selection { font-variation-settings: \"wght\" 700; } 2`] = `
+
+Message:
+> 1 | ::selection { font-variation-settings: "wght" 700; }
+    |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`font-variation-settings\` has no effect on the targets selected by ::selection.
+
+Output:
+  1 | ::selection {  }
+
+`;
+
+exports[`invalid(148): ::selection { font-kerning: none; } 1`] = `
+
+  1 | ::selection { font-kerning: none; }
+
+`;
+
+exports[`invalid(148): ::selection { font-kerning: none; } 2`] = `
+
+Message:
+> 1 | ::selection { font-kerning: none; }
+    |               ^^^^^^^^^^^^^^^^^^ \`font-kerning\` has no effect on the targets selected by ::selection.
+
+Output:
+  1 | ::selection {  }
+
+`;
+
+exports[`invalid(149): ::selection { font-synthesis: none; } 1`] = `
+
+  1 | ::selection { font-synthesis: none; }
+
+`;
+
+exports[`invalid(149): ::selection { font-synthesis: none; } 2`] = `
+
+Message:
+> 1 | ::selection { font-synthesis: none; }
+    |               ^^^^^^^^^^^^^^^^^^^^ \`font-synthesis\` has no effect on the targets selected by ::selection.
+
+Output:
+  1 | ::selection {  }
+
+`;
+
+exports[`invalid(15): ::selection { min-block-size: 10px; } 1`] = `
+
+  1 | ::selection { min-block-size: 10px; }
+
+`;
+
+exports[`invalid(15): ::selection { min-block-size: 10px; } 2`] = `
+
+Message:
+> 1 | ::selection { min-block-size: 10px; }
+    |               ^^^^^^^^^^^^^^^^^^^^ \`min-block-size\` has no effect on the targets selected by ::selection.
+
+Output:
+  1 | ::selection {  }
+
+`;
+
+exports[`invalid(150): ::selection { font-synthesis-weight: none; } 1`] = `
+
+  1 | ::selection { font-synthesis-weight: none; }
+
+`;
+
+exports[`invalid(150): ::selection { font-synthesis-weight: none; } 2`] = `
+
+Message:
+> 1 | ::selection { font-synthesis-weight: none; }
+    |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`font-synthesis-weight\` has no effect on the targets selected by ::selection.
+
+Output:
+  1 | ::selection {  }
+
+`;
+
+exports[`invalid(151): ::selection { line-height: 2; } 1`] = `
+
+  1 | ::selection { line-height: 2; }
+
+`;
+
+exports[`invalid(151): ::selection { line-height: 2; } 2`] = `
+
+Message:
+> 1 | ::selection { line-height: 2; }
+    |               ^^^^^^^^^^^^^^ \`line-height\` has no effect on the targets selected by ::selection.
+
+Output:
+  1 | ::selection {  }
+
+`;
+
+exports[`invalid(152): a:visited { font: bold 1rem serif; } 1`] = `
+
+  1 | a:visited { font: bold 1rem serif; }
+
+`;
+
+exports[`invalid(152): a:visited { font: bold 1rem serif; } 2`] = `
+
+Message:
+> 1 | a:visited { font: bold 1rem serif; }
+    |             ^^^^^^^^^^^^^^^^^^^^^ \`font\` has no effect on the targets selected by :visited.
+
+Output:
+  1 | a:visited {  }
+
+`;
+
+exports[`invalid(153): a:visited { font-family: serif; } 1`] = `
+
+  1 | a:visited { font-family: serif; }
+
+`;
+
+exports[`invalid(153): a:visited { font-family: serif; } 2`] = `
+
+Message:
+> 1 | a:visited { font-family: serif; }
+    |             ^^^^^^^^^^^^^^^^^^ \`font-family\` has no effect on the targets selected by :visited.
+
+Output:
+  1 | a:visited {  }
+
+`;
+
+exports[`invalid(154): a:visited { font-size: 1rem; } 1`] = `
+
+  1 | a:visited { font-size: 1rem; }
+
+`;
+
+exports[`invalid(154): a:visited { font-size: 1rem; } 2`] = `
+
+Message:
+> 1 | a:visited { font-size: 1rem; }
+    |             ^^^^^^^^^^^^^^^ \`font-size\` has no effect on the targets selected by :visited.
+
+Output:
+  1 | a:visited {  }
+
+`;
+
+exports[`invalid(155): a:visited { font-weight: bold; } 1`] = `
+
+  1 | a:visited { font-weight: bold; }
+
+`;
+
+exports[`invalid(155): a:visited { font-weight: bold; } 2`] = `
+
+Message:
+> 1 | a:visited { font-weight: bold; }
+    |             ^^^^^^^^^^^^^^^^^ \`font-weight\` has no effect on the targets selected by :visited.
+
+Output:
+  1 | a:visited {  }
+
+`;
+
+exports[`invalid(156): a:visited { font-variant: small-caps; } 1`] = `
+
+  1 | a:visited { font-variant: small-caps; }
+
+`;
+
+exports[`invalid(156): a:visited { font-variant: small-caps; } 2`] = `
+
+Message:
+> 1 | a:visited { font-variant: small-caps; }
+    |             ^^^^^^^^^^^^^^^^^^^^^^^^ \`font-variant\` has no effect on the targets selected by :visited.
+
+Output:
+  1 | a:visited {  }
+
+`;
+
+exports[`invalid(157): a:visited { font-variant-numeric: tabular-nums; } 1`] = `
+
+  1 | a:visited { font-variant-numeric: tabular-nums; }
+
+`;
+
+exports[`invalid(157): a:visited { font-variant-numeric: tabular-nums; } 2`] = `
+
+Message:
+> 1 | a:visited { font-variant-numeric: tabular-nums; }
+    |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`font-variant-numeric\` has no effect on the targets selected by :visited.
+
+Output:
+  1 | a:visited {  }
+
+`;
+
+exports[`invalid(158): a:visited { font-variation-settings: \"wght\" 700; } 1`] = `
+
+  1 | a:visited { font-variation-settings: "wght" 700; }
+
+`;
+
+exports[`invalid(158): a:visited { font-variation-settings: \"wght\" 700; } 2`] = `
+
+Message:
+> 1 | a:visited { font-variation-settings: "wght" 700; }
+    |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`font-variation-settings\` has no effect on the targets selected by :visited.
+
+Output:
+  1 | a:visited {  }
+
+`;
+
+exports[`invalid(159): a:visited { font-kerning: none; } 1`] = `
+
+  1 | a:visited { font-kerning: none; }
+
+`;
+
+exports[`invalid(159): a:visited { font-kerning: none; } 2`] = `
+
+Message:
+> 1 | a:visited { font-kerning: none; }
+    |             ^^^^^^^^^^^^^^^^^^ \`font-kerning\` has no effect on the targets selected by :visited.
+
+Output:
+  1 | a:visited {  }
+
+`;
+
+exports[`invalid(16): ::selection { max-inline-size: 10px; } 1`] = `
+
+  1 | ::selection { max-inline-size: 10px; }
+
+`;
+
+exports[`invalid(16): ::selection { max-inline-size: 10px; } 2`] = `
+
+Message:
+> 1 | ::selection { max-inline-size: 10px; }
+    |               ^^^^^^^^^^^^^^^^^^^^^ \`max-inline-size\` has no effect on the targets selected by ::selection.
+
+Output:
+  1 | ::selection {  }
+
+`;
+
+exports[`invalid(160): a:visited { font-synthesis: none; } 1`] = `
+
+  1 | a:visited { font-synthesis: none; }
+
+`;
+
+exports[`invalid(160): a:visited { font-synthesis: none; } 2`] = `
+
+Message:
+> 1 | a:visited { font-synthesis: none; }
+    |             ^^^^^^^^^^^^^^^^^^^^ \`font-synthesis\` has no effect on the targets selected by :visited.
+
+Output:
+  1 | a:visited {  }
+
+`;
+
+exports[`invalid(161): a:visited { font-synthesis-weight: none; } 1`] = `
+
+  1 | a:visited { font-synthesis-weight: none; }
+
+`;
+
+exports[`invalid(161): a:visited { font-synthesis-weight: none; } 2`] = `
+
+Message:
+> 1 | a:visited { font-synthesis-weight: none; }
+    |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`font-synthesis-weight\` has no effect on the targets selected by :visited.
+
+Output:
+  1 | a:visited {  }
+
+`;
+
+exports[`invalid(162): a:visited { line-height: 2; } 1`] = `
+
+  1 | a:visited { line-height: 2; }
+
+`;
+
+exports[`invalid(162): a:visited { line-height: 2; } 2`] = `
+
+Message:
+> 1 | a:visited { line-height: 2; }
+    |             ^^^^^^^^^^^^^^ \`line-height\` has no effect on the targets selected by :visited.
+
+Output:
+  1 | a:visited {  }
+
+`;
+
+exports[`invalid(163): ::selection { border: 1px solid red; } 1`] = `
+
+  1 | ::selection { border: 1px solid red; }
+
+`;
+
+exports[`invalid(163): ::selection { border: 1px solid red; } 2`] = `
+
+Message:
+> 1 | ::selection { border: 1px solid red; }
+    |               ^^^^^^^^^^^^^^^^^^^^^ \`border\` has no effect on the targets selected by ::selection.
+
+Output:
+  1 | ::selection {  }
+
+`;
+
+exports[`invalid(164): ::selection { border-color: red; } 1`] = `
+
+  1 | ::selection { border-color: red; }
+
+`;
+
+exports[`invalid(164): ::selection { border-color: red; } 2`] = `
+
+Message:
+> 1 | ::selection { border-color: red; }
+    |               ^^^^^^^^^^^^^^^^^ \`border-color\` has no effect on the targets selected by ::selection.
+
+Output:
+  1 | ::selection {  }
+
+`;
+
+exports[`invalid(165): ::selection { border-left: 1px solid red; } 1`] = `
+
+  1 | ::selection { border-left: 1px solid red; }
+
+`;
+
+exports[`invalid(165): ::selection { border-left: 1px solid red; } 2`] = `
+
+Message:
+> 1 | ::selection { border-left: 1px solid red; }
+    |               ^^^^^^^^^^^^^^^^^^^^^^^^^^ \`border-left\` has no effect on the targets selected by ::selection.
+
+Output:
+  1 | ::selection {  }
+
+`;
+
+exports[`invalid(166): ::selection { border-block: 1px solid red; } 1`] = `
+
+  1 | ::selection { border-block: 1px solid red; }
+
+`;
+
+exports[`invalid(166): ::selection { border-block: 1px solid red; } 2`] = `
+
+Message:
+> 1 | ::selection { border-block: 1px solid red; }
+    |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`border-block\` has no effect on the targets selected by ::selection.
+
+Output:
+  1 | ::selection {  }
+
+`;
+
+exports[`invalid(167): ::selection { border-inline-end-color: red; } 1`] = `
+
+  1 | ::selection { border-inline-end-color: red; }
+
+`;
+
+exports[`invalid(167): ::selection { border-inline-end-color: red; } 2`] = `
+
+Message:
+> 1 | ::selection { border-inline-end-color: red; }
+    |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`border-inline-end-color\` has no effect on the targets selected by ::selection.
+
+Output:
+  1 | ::selection {  }
+
+`;
+
+exports[`invalid(168): li::marker { border: 1px solid red; } 1`] = `
+
+  1 | li::marker { border: 1px solid red; }
+
+`;
+
+exports[`invalid(168): li::marker { border: 1px solid red; } 2`] = `
+
+Message:
+> 1 | li::marker { border: 1px solid red; }
+    |              ^^^^^^^^^^^^^^^^^^^^^ \`border\` has no effect on the targets selected by ::marker.
+
+Output:
+  1 | li::marker {  }
+
+`;
+
+exports[`invalid(169): li::marker { border-color: red; } 1`] = `
+
+  1 | li::marker { border-color: red; }
+
+`;
+
+exports[`invalid(169): li::marker { border-color: red; } 2`] = `
+
+Message:
+> 1 | li::marker { border-color: red; }
+    |              ^^^^^^^^^^^^^^^^^ \`border-color\` has no effect on the targets selected by ::marker.
+
+Output:
+  1 | li::marker {  }
+
+`;
+
+exports[`invalid(17): ::selection { display: block; } 1`] = `
+
+  1 | ::selection { display: block; }
+
+`;
+
+exports[`invalid(17): ::selection { display: block; } 2`] = `
+
+Message:
+> 1 | ::selection { display: block; }
+    |               ^^^^^^^^^^^^^^ \`display\` has no effect on the targets selected by ::selection.
+
+Output:
+  1 | ::selection {  }
+
+`;
+
+exports[`invalid(170): li::marker { border-left: 1px solid red; } 1`] = `
+
+  1 | li::marker { border-left: 1px solid red; }
+
+`;
+
+exports[`invalid(170): li::marker { border-left: 1px solid red; } 2`] = `
+
+Message:
+> 1 | li::marker { border-left: 1px solid red; }
+    |              ^^^^^^^^^^^^^^^^^^^^^^^^^^ \`border-left\` has no effect on the targets selected by ::marker.
+
+Output:
+  1 | li::marker {  }
+
+`;
+
+exports[`invalid(171): li::marker { border-block: 1px solid red; } 1`] = `
+
+  1 | li::marker { border-block: 1px solid red; }
+
+`;
+
+exports[`invalid(171): li::marker { border-block: 1px solid red; } 2`] = `
+
+Message:
+> 1 | li::marker { border-block: 1px solid red; }
+    |              ^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`border-block\` has no effect on the targets selected by ::marker.
+
+Output:
+  1 | li::marker {  }
+
+`;
+
+exports[`invalid(172): li::marker { border-inline-end-color: red; } 1`] = `
+
+  1 | li::marker { border-inline-end-color: red; }
+
+`;
+
+exports[`invalid(172): li::marker { border-inline-end-color: red; } 2`] = `
+
+Message:
+> 1 | li::marker { border-inline-end-color: red; }
+    |              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`border-inline-end-color\` has no effect on the targets selected by ::marker.
+
+Output:
+  1 | li::marker {  }
+
+`;
+
+exports[`invalid(173): li::marker { background: red; background-color: yellow; } 1`] = `
+
+  1 | li::marker { background: red; background-color: yellow; }
+
+`;
+
+exports[`invalid(173): li::marker { background: red; background-color: yellow; } 2`] = `
+
+Message:
+> 1 | li::marker { background: red; background-color: yellow; }
+    |              ^^^^^^^^^^^^^^^ \`background\` has no effect on the targets selected by ::marker.
+
+Output:
+  1 | li::marker {  background-color: yellow; }
+
+`;
+
+exports[`invalid(173): li::marker { background: red; background-color: yellow; } 3`] = `
+
+Message:
+> 1 | li::marker { background: red; background-color: yellow; }
+    |                               ^^^^^^^^^^^^^^^^^^^^^^^^ \`background-color\` has no effect on the targets selected by ::marker.
+
+Output:
+  1 | li::marker { background: red;  }
+
+`;
+
+exports[`invalid(174): a:visited { text-shadow: 1px 1px red; } 1`] = `
+
+  1 | a:visited { text-shadow: 1px 1px red; }
+
+`;
+
+exports[`invalid(174): a:visited { text-shadow: 1px 1px red; } 2`] = `
+
+Message:
+> 1 | a:visited { text-shadow: 1px 1px red; }
+    |             ^^^^^^^^^^^^^^^^^^^^^^^^ \`text-shadow\` has no effect on the targets selected by :visited.
+
+Output:
+  1 | a:visited {  }
+
+`;
+
+exports[`invalid(175): ::selection, li::marker, a:visited { padding: var(--padding); } 1`] = `
+
+  1 | ::selection, li::marker, a:visited { padding: var(--padding); }
+
+`;
+
+exports[`invalid(175): ::selection, li::marker, a:visited { padding: var(--padding); } 2`] = `
+
+Message:
+> 1 | ::selection, li::marker, a:visited { padding: var(--padding); }
+    |                                      ^^^^^^^^^^^^^^^^^^^^^^^ \`padding\` has no effect on the targets selected by ::selection, ::marker, :visited.
+
+Output:
+  1 | ::selection, li::marker, a:visited {  }
+
+`;
+
+exports[`invalid(176): ::selection, ::highlight(example) { font-size: 1rem; } 1`] = `
+
+  1 | ::selection, ::highlight(example) { font-size: 1rem; }
+
+`;
+
+exports[`invalid(176): ::selection, ::highlight(example) { font-size: 1rem; } 2`] = `
+
+Message:
+> 1 | ::selection, ::highlight(example) { font-size: 1rem; }
+    |                                     ^^^^^^^^^^^^^^^ \`font-size\` has no effect on the targets selected by ::selection, ::highlight.
+
+Output:
+  1 | ::selection, ::highlight(example) {  }
+
+`;
+
+exports[`invalid(177): ::selection, a:visited { font-weight: bold; } 1`] = `
+
+  1 | ::selection, a:visited { font-weight: bold; }
+
+`;
+
+exports[`invalid(177): ::selection, a:visited { font-weight: bold; } 2`] = `
+
+Message:
+> 1 | ::selection, a:visited { font-weight: bold; }
+    |                          ^^^^^^^^^^^^^^^^^ \`font-weight\` has no effect on the targets selected by ::selection, :visited.
+
+Output:
+  1 | ::selection, a:visited {  }
+
+`;
+
+exports[`invalid(178): li::before::marker { padding: 1rem; } 1`] = `
+
+  1 | li::before::marker { padding: 1rem; }
+
+`;
+
+exports[`invalid(178): li::before::marker { padding: 1rem; } 2`] = `
+
+Message:
+> 1 | li::before::marker { padding: 1rem; }
+    |                      ^^^^^^^^^^^^^ \`padding\` has no effect on the targets selected by ::marker.
+
+Output:
+  1 | li::before::marker {  }
+
+`;
+
+exports[`invalid(179): :is(.first, .second)::marker { padding: 1rem; } 1`] = `
+
+  1 | :is(.first, .second)::marker { padding: 1rem; }
+
+`;
+
+exports[`invalid(179): :is(.first, .second)::marker { padding: 1rem; } 2`] = `
+
+Message:
+> 1 | :is(.first, .second)::marker { padding: 1rem; }
+    |                                ^^^^^^^^^^^^^ \`padding\` has no effect on the targets selected by ::marker.
+
+Output:
+  1 | :is(.first, .second)::marker {  }
+
+`;
+
+exports[`invalid(18): ::selection { position: relative; } 1`] = `
+
+  1 | ::selection { position: relative; }
+
+`;
+
+exports[`invalid(18): ::selection { position: relative; } 2`] = `
+
+Message:
+> 1 | ::selection { position: relative; }
+    |               ^^^^^^^^^^^^^^^^^^ \`position\` has no effect on the targets selected by ::selection.
+
+Output:
+  1 | ::selection {  }
+
+`;
+
+exports[`invalid(180): a:visited:not(.ordinary) { font-weight: bold; } 1`] = `
+
+  1 | a:visited:not(.ordinary) { font-weight: bold; }
+
+`;
+
+exports[`invalid(180): a:visited:not(.ordinary) { font-weight: bold; } 2`] = `
+
+Message:
+> 1 | a:visited:not(.ordinary) { font-weight: bold; }
+    |                            ^^^^^^^^^^^^^^^^^ \`font-weight\` has no effect on the targets selected by :visited.
+
+Output:
+  1 | a:visited:not(.ordinary) {  }
+
+`;
+
+exports[`invalid(181): LI::MARKER { MARGIN-RIGHT: 1rem !IMPORTANT; } 1`] = `
+
+  1 | LI::MARKER { MARGIN-RIGHT: 1rem !IMPORTANT; }
+
+`;
+
+exports[`invalid(181): LI::MARKER { MARGIN-RIGHT: 1rem !IMPORTANT; } 2`] = `
+
+Message:
+> 1 | LI::MARKER { MARGIN-RIGHT: 1rem !IMPORTANT; }
+    |              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`margin-right\` has no effect on the targets selected by ::marker.
+
+Output:
+  1 | LI::MARKER {  }
+
+`;
+
+exports[`invalid(182): ::SELECTION { FONT-WEIGHT: bold; } 1`] = `
+
+  1 | ::SELECTION { FONT-WEIGHT: bold; }
+
+`;
+
+exports[`invalid(182): ::SELECTION { FONT-WEIGHT: bold; } 2`] = `
+
+Message:
+> 1 | ::SELECTION { FONT-WEIGHT: bold; }
+    |               ^^^^^^^^^^^^^^^^^ \`font-weight\` has no effect on the targets selected by ::selection.
+
+Output:
+  1 | ::SELECTION {  }
+
+`;
+
+exports[`invalid(183): li::m\\61 rker { p\\61 dding: 1rem; } 1`] = `
+
+  1 | li::m\\61 rker { p\\61 dding: 1rem; }
+
+`;
+
+exports[`invalid(183): li::m\\61 rker { p\\61 dding: 1rem; } 2`] = `
+
+Message:
+> 1 | li::m\\61 rker { p\\61 dding: 1rem; }
+    |                 ^^^^^^^^^^^^^^^^ \`padding\` has no effect on the targets selected by ::marker.
+
+Output:
+  1 | li::m\\61 rker {  }
+
+`;
+
+exports[`invalid(184): a:vi\\73 ited { font-\\77 eight: bold; } 1`] = `
+
+  1 | a:vi\\73 ited { font-\\77 eight: bold; }
+
+`;
+
+exports[`invalid(184): a:vi\\73 ited { font-\\77 eight: bold; } 2`] = `
+
+Message:
+> 1 | a:vi\\73 ited { font-\\77 eight: bold; }
+    |                ^^^^^^^^^^^^^^^^^^^^ \`font-weight\` has no effect on the targets selected by :visited.
+
+Output:
+  1 | a:vi\\73 ited {  }
+
+`;
+
+exports[`invalid(185): ::\\73 election { margin: 1rem; } 1`] = `
+
+  1 | ::\\73 election { margin: 1rem; }
+
+`;
+
+exports[`invalid(185): ::\\73 election { margin: 1rem; } 2`] = `
+
+Message:
+> 1 | ::\\73 election { margin: 1rem; }
+    |                  ^^^^^^^^^^^^ \`margin\` has no effect on the targets selected by ::selection.
+
+Output:
+  1 | ::\\73 election {  }
+
+`;
+
+exports[`invalid(186): ::selection { padding: inherit; margin: initial; width: unset; height: revert; } 1`] = `
+
+  1 | ::selection { padding: inherit; margin: initial; width: unset; height: revert; }
+
+`;
+
+exports[`invalid(186): ::selection { padding: inherit; margin: initial; width: unset; height: revert; } 2`] = `
+
+Message:
+> 1 | ::selection { padding: inherit; margin: initial; width: unset; height: revert; }
+    |               ^^^^^^^^^^^^^^^^ \`padding\` has no effect on the targets selected by ::selection.
+
+Output:
+  1 | ::selection {  margin: initial; width: unset; height: revert; }
+
+`;
+
+exports[`invalid(186): ::selection { padding: inherit; margin: initial; width: unset; height: revert; } 3`] = `
+
+Message:
+> 1 | ::selection { padding: inherit; margin: initial; width: unset; height: revert; }
+    |                                 ^^^^^^^^^^^^^^^ \`margin\` has no effect on the targets selected by ::selection.
+
+Output:
+  1 | ::selection { padding: inherit;  width: unset; height: revert; }
+
+`;
+
+exports[`invalid(186): ::selection { padding: inherit; margin: initial; width: unset; height: revert; } 4`] = `
+
+Message:
+> 1 | ::selection { padding: inherit; margin: initial; width: unset; height: revert; }
+    |                                                  ^^^^^^^^^^^^ \`width\` has no effect on the targets selected by ::selection.
+
+Output:
+  1 | ::selection { padding: inherit; margin: initial;  height: revert; }
+
+`;
+
+exports[`invalid(186): ::selection { padding: inherit; margin: initial; width: unset; height: revert; } 5`] = `
+
+Message:
+> 1 | ::selection { padding: inherit; margin: initial; width: unset; height: revert; }
+    |                                                                ^^^^^^^^^^^^^^ \`height\` has no effect on the targets selected by ::selection.
+
+Output:
+  1 | ::selection { padding: inherit; margin: initial; width: unset;  }
+
+`;
+
+exports[`invalid(187): ::selection { all: initial; padding: 1rem; } 1`] = `
+
+  1 | ::selection { all: initial; padding: 1rem; }
+
+`;
+
+exports[`invalid(187): ::selection { all: initial; padding: 1rem; } 2`] = `
+
+Message:
+> 1 | ::selection { all: initial; padding: 1rem; }
+    |                             ^^^^^^^^^^^^^ \`padding\` has no effect on the targets selected by ::selection.
+
+Output:
+  1 | ::selection { all: initial;  }
+
+`;
+
+exports[`invalid(188): .list { &::marker { margin: 1rem; } } 1`] = `
+
+  1 | .list { &::marker { margin: 1rem; } }
+
+`;
+
+exports[`invalid(188): .list { &::marker { margin: 1rem; } } 2`] = `
+
+Message:
+> 1 | .list { &::marker { margin: 1rem; } }
+    |                     ^^^^^^^^^^^^ \`margin\` has no effect on the targets selected by ::marker.
+
+Output:
+  1 | .list { &::marker {  } }
+
+`;
+
+exports[`invalid(189): .links { &:visited { font-weight: bold; } } 1`] = `
+
+  1 | .links { &:visited { font-weight: bold; } }
+
+`;
+
+exports[`invalid(189): .links { &:visited { font-weight: bold; } } 2`] = `
+
+Message:
+> 1 | .links { &:visited { font-weight: bold; } }
+    |                      ^^^^^^^^^^^^^^^^^ \`font-weight\` has no effect on the targets selected by :visited.
+
+Output:
+  1 | .links { &:visited {  } }
+
+`;
+
+exports[`invalid(19): ::selection { top: 1px; } 1`] = `
+
+  1 | ::selection { top: 1px; }
+
+`;
+
+exports[`invalid(19): ::selection { top: 1px; } 2`] = `
+
+Message:
+> 1 | ::selection { top: 1px; }
+    |               ^^^^^^^^ \`top\` has no effect on the targets selected by ::selection.
+
+Output:
+  1 | ::selection {  }
+
+`;
+
+exports[`invalid(190): .parent { ::selection { padding: 1rem; } } 1`] = `
+
+  1 | .parent { ::selection { padding: 1rem; } }
+
+`;
+
+exports[`invalid(190): .parent { ::selection { padding: 1rem; } } 2`] = `
+
+Message:
+> 1 | .parent { ::selection { padding: 1rem; } }
+    |                         ^^^^^^^^^^^^^ \`padding\` has no effect on the targets selected by ::selection.
+
+Output:
+  1 | .parent { ::selection {  } }
+
+`;
+
+exports[`invalid(191): @media (width > 1px) { @supports (display: grid) { ::selection { padding: 1rem; } } } 1`] = `
+
+  1 | @media (width > 1px) { @supports (display: grid) { ::selection { padding: 1rem; } } }
+
+`;
+
+exports[`invalid(191): @media (width > 1px) { @supports (display: grid) { ::selection { padding: 1rem; } } } 2`] = `
+
+Message:
+> 1 | @media (width > 1px) { @supports (display: grid) { ::selection { padding: 1rem; } } }
+    |                                                                  ^^^^^^^^^^^^^ \`padding\` has no effect on the targets selected by ::selection.
+
+Output:
+  1 | @media (width > 1px) { @supports (display: grid) { ::selection {  } } }
+
+`;
+
+exports[`invalid(192): ::selection { @media (width > 1px) { padding: 1rem; } } 1`] = `
+
+  1 | ::selection { @media (width > 1px) { padding: 1rem; } }
+
+`;
+
+exports[`invalid(192): ::selection { @media (width > 1px) { padding: 1rem; } } 2`] = `
+
+Message:
+> 1 | ::selection { @media (width > 1px) { padding: 1rem; } }
+    |                                      ^^^^^^^^^^^^^ \`padding\` has no effect on the targets selected by ::selection.
+
+Output:
+  1 | ::selection { @media (width > 1px) {  } }
+
+`;
+
+exports[`invalid(193): ::selection { @supports (display: grid) { padding: 1rem; } } 1`] = `
+
+  1 | ::selection { @supports (display: grid) { padding: 1rem; } }
+
+`;
+
+exports[`invalid(193): ::selection { @supports (display: grid) { padding: 1rem; } } 2`] = `
+
+Message:
+> 1 | ::selection { @supports (display: grid) { padding: 1rem; } }
+    |                                           ^^^^^^^^^^^^^ \`padding\` has no effect on the targets selected by ::selection.
+
+Output:
+  1 | ::selection { @supports (display: grid) {  } }
+
+`;
+
+exports[`invalid(194): ::selection { @container (width > 1px) { padding: 1rem; } } 1`] = `
+
+  1 | ::selection { @container (width > 1px) { padding: 1rem; } }
+
+`;
+
+exports[`invalid(194): ::selection { @container (width > 1px) { padding: 1rem; } } 2`] = `
+
+Message:
+> 1 | ::selection { @container (width > 1px) { padding: 1rem; } }
+    |                                          ^^^^^^^^^^^^^ \`padding\` has no effect on the targets selected by ::selection.
+
+Output:
+  1 | ::selection { @container (width > 1px) {  } }
+
+`;
+
+exports[`invalid(195): ::selection { @layer example { padding: 1rem; } } 1`] = `
+
+  1 | ::selection { @layer example { padding: 1rem; } }
+
+`;
+
+exports[`invalid(195): ::selection { @layer example { padding: 1rem; } } 2`] = `
+
+Message:
+> 1 | ::selection { @layer example { padding: 1rem; } }
+    |                                ^^^^^^^^^^^^^ \`padding\` has no effect on the targets selected by ::selection.
+
+Output:
+  1 | ::selection { @layer example {  } }
+
+`;
+
+exports[`invalid(196): ::selection { @starting-style { padding: 1rem; } } 1`] = `
+
+  1 | ::selection { @starting-style { padding: 1rem; } }
+
+`;
+
+exports[`invalid(196): ::selection { @starting-style { padding: 1rem; } } 2`] = `
+
+Message:
+> 1 | ::selection { @starting-style { padding: 1rem; } }
+    |                                 ^^^^^^^^^^^^^ \`padding\` has no effect on the targets selected by ::selection.
+
+Output:
+  1 | ::selection { @starting-style {  } }
+
+`;
+
+exports[`invalid(197): ::selection { @MEDIA (width > 1px) { @supports (display: grid) { padding: 1rem; } } } 1`] = `
+
+  1 | ::selection { @MEDIA (width > 1px) { @supports (display: grid) { padding: 1rem; } } }
+
+`;
+
+exports[`invalid(197): ::selection { @MEDIA (width > 1px) { @supports (display: grid) { padding: 1rem; } } } 2`] = `
+
+Message:
+> 1 | ::selection { @MEDIA (width > 1px) { @supports (display: grid) { padding: 1rem; } } }
+    |                                                                  ^^^^^^^^^^^^^ \`padding\` has no effect on the targets selected by ::selection.
+
+Output:
+  1 | ::selection { @MEDIA (width > 1px) { @supports (display: grid) {  } } }
+
+`;
+
+exports[`invalid(198): @scope (.root) { ::selection { padding: 1rem; } } 1`] = `
+
+  1 | @scope (.root) { ::selection { padding: 1rem; } }
+
+`;
+
+exports[`invalid(198): @scope (.root) { ::selection { padding: 1rem; } } 2`] = `
+
+Message:
+> 1 | @scope (.root) { ::selection { padding: 1rem; } }
+    |                                ^^^^^^^^^^^^^ \`padding\` has no effect on the targets selected by ::selection.
+
+Output:
+  1 | @scope (.root) { ::selection {  } }
+
+`;
+
+exports[`invalid(199): ::selection { @media (width > 1px) { .ordinary { padding: 1rem; } } padding: 1rem; } 1`] = `
+
+  1 | ::selection { @media (width > 1px) { .ordinary { padding: 1rem; } } padding: 1rem; }
+
+`;
+
+exports[`invalid(199): ::selection { @media (width > 1px) { .ordinary { padding: 1rem; } } padding: 1rem; } 2`] = `
+
+Message:
+> 1 | ::selection { @media (width > 1px) { .ordinary { padding: 1rem; } } padding: 1rem; }
+    |                                                                     ^^^^^^^^^^^^^ \`padding\` has no effect on the targets selected by ::selection.
+
+Output:
+  1 | ::selection { @media (width > 1px) { .ordinary { padding: 1rem; } }  }
+
+`;
+
+exports[`invalid(2): ::selection { margin-right: 0.5rem; } 1`] = `
+
+  1 | ::selection { margin-right: 0.5rem; }
+
+`;
+
+exports[`invalid(2): ::selection { margin-right: 0.5rem; } 2`] = `
+
+Message:
+> 1 | ::selection { margin-right: 0.5rem; }
+    |               ^^^^^^^^^^^^^^^^^^^^ \`margin-right\` has no effect on the targets selected by ::selection.
+
+Output:
+  1 | ::selection {  }
+
+`;
+
+exports[`invalid(20): ::selection { inset: 1px; } 1`] = `
+
+  1 | ::selection { inset: 1px; }
+
+`;
+
+exports[`invalid(20): ::selection { inset: 1px; } 2`] = `
+
+Message:
+> 1 | ::selection { inset: 1px; }
+    |               ^^^^^^^^^^ \`inset\` has no effect on the targets selected by ::selection.
+
+Output:
+  1 | ::selection {  }
+
+`;
+
+exports[`invalid(200): ::selection { font-optical-sizing: none; } 1`] = `
+
+  1 | ::selection { font-optical-sizing: none; }
+
+`;
+
+exports[`invalid(200): ::selection { font-optical-sizing: none; } 2`] = `
+
+Message:
+> 1 | ::selection { font-optical-sizing: none; }
+    |               ^^^^^^^^^^^^^^^^^^^^^^^^^ \`font-optical-sizing\` has no effect on the targets selected by ::selection.
+
+Output:
+  1 | ::selection {  }
+
+`;
+
+exports[`invalid(201): ::selection { @media (width > 1px) { font-feature-settings: \"kern\"; } } 1`] = `
+
+  1 | ::selection { @media (width > 1px) { font-feature-settings: "kern"; } }
+
+`;
+
+exports[`invalid(201): ::selection { @media (width > 1px) { font-feature-settings: \"kern\"; } } 2`] = `
+
+Message:
+> 1 | ::selection { @media (width > 1px) { font-feature-settings: "kern"; } }
+    |                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`font-feature-settings\` has no effect on the targets selected by ::selection.
+
+Output:
+  1 | ::selection { @media (width > 1px) {  } }
+
+`;
+
+exports[`invalid(202): ::search-text:current { padding: 1rem; } 1`] = `
+
+  1 | ::search-text:current { padding: 1rem; }
+
+`;
+
+exports[`invalid(202): ::search-text:current { padding: 1rem; } 2`] = `
+
+Message:
+> 1 | ::search-text:current { padding: 1rem; }
+    |                         ^^^^^^^^^^^^^ \`padding\` has no effect on the targets selected by ::search-text.
+
+Output:
+  1 | ::search-text:current {  }
+
+`;
+
+exports[`invalid(203): a:visited:lang(en) { font-weight: bold; } 1`] = `
+
+  1 | a:visited:lang(en) { font-weight: bold; }
+
+`;
+
+exports[`invalid(203): a:visited:lang(en) { font-weight: bold; } 2`] = `
+
+Message:
+> 1 | a:visited:lang(en) { font-weight: bold; }
+    |                      ^^^^^^^^^^^^^^^^^ \`font-weight\` has no effect on the targets selected by :visited.
+
+Output:
+  1 | a:visited:lang(en) {  }
+
+`;
+
+exports[`invalid(21): ::selection { inset-block: 1px; } 1`] = `
+
+  1 | ::selection { inset-block: 1px; }
+
+`;
+
+exports[`invalid(21): ::selection { inset-block: 1px; } 2`] = `
+
+Message:
+> 1 | ::selection { inset-block: 1px; }
+    |               ^^^^^^^^^^^^^^^^ \`inset-block\` has no effect on the targets selected by ::selection.
+
+Output:
+  1 | ::selection {  }
+
+`;
+
+exports[`invalid(22): ::selection { inset-inline-start: 1px; } 1`] = `
+
+  1 | ::selection { inset-inline-start: 1px; }
+
+`;
+
+exports[`invalid(22): ::selection { inset-inline-start: 1px; } 2`] = `
+
+Message:
+> 1 | ::selection { inset-inline-start: 1px; }
+    |               ^^^^^^^^^^^^^^^^^^^^^^^ \`inset-inline-start\` has no effect on the targets selected by ::selection.
+
+Output:
+  1 | ::selection {  }
+
+`;
+
+exports[`invalid(23): ::selection { opacity: 0.5; } 1`] = `
+
+  1 | ::selection { opacity: 0.5; }
+
+`;
+
+exports[`invalid(23): ::selection { opacity: 0.5; } 2`] = `
+
+Message:
+> 1 | ::selection { opacity: 0.5; }
+    |               ^^^^^^^^^^^^ \`opacity\` has no effect on the targets selected by ::selection.
+
+Output:
+  1 | ::selection {  }
+
+`;
+
+exports[`invalid(24): ::selection { transform: translateX(1px); } 1`] = `
+
+  1 | ::selection { transform: translateX(1px); }
+
+`;
+
+exports[`invalid(24): ::selection { transform: translateX(1px); } 2`] = `
+
+Message:
+> 1 | ::selection { transform: translateX(1px); }
+    |               ^^^^^^^^^^^^^^^^^^^^^^^^^^ \`transform\` has no effect on the targets selected by ::selection.
+
+Output:
+  1 | ::selection {  }
+
+`;
+
+exports[`invalid(25): ::selection { transform-origin: top left; } 1`] = `
+
+  1 | ::selection { transform-origin: top left; }
+
+`;
+
+exports[`invalid(25): ::selection { transform-origin: top left; } 2`] = `
+
+Message:
+> 1 | ::selection { transform-origin: top left; }
+    |               ^^^^^^^^^^^^^^^^^^^^^^^^^^ \`transform-origin\` has no effect on the targets selected by ::selection.
+
+Output:
+  1 | ::selection {  }
+
+`;
+
+exports[`invalid(26): ::selection { translate: 1px; } 1`] = `
+
+  1 | ::selection { translate: 1px; }
+
+`;
+
+exports[`invalid(26): ::selection { translate: 1px; } 2`] = `
+
+Message:
+> 1 | ::selection { translate: 1px; }
+    |               ^^^^^^^^^^^^^^ \`translate\` has no effect on the targets selected by ::selection.
+
+Output:
+  1 | ::selection {  }
+
+`;
+
+exports[`invalid(27): ::selection { rotate: 90deg; } 1`] = `
+
+  1 | ::selection { rotate: 90deg; }
+
+`;
+
+exports[`invalid(27): ::selection { rotate: 90deg; } 2`] = `
+
+Message:
+> 1 | ::selection { rotate: 90deg; }
+    |               ^^^^^^^^^^^^^ \`rotate\` has no effect on the targets selected by ::selection.
+
+Output:
+  1 | ::selection {  }
+
+`;
+
+exports[`invalid(28): ::selection { scale: 2; } 1`] = `
+
+  1 | ::selection { scale: 2; }
+
+`;
+
+exports[`invalid(28): ::selection { scale: 2; } 2`] = `
+
+Message:
+> 1 | ::selection { scale: 2; }
+    |               ^^^^^^^^ \`scale\` has no effect on the targets selected by ::selection.
+
+Output:
+  1 | ::selection {  }
+
+`;
+
+exports[`invalid(29): ::selection { box-shadow: 1px 1px red; } 1`] = `
+
+  1 | ::selection { box-shadow: 1px 1px red; }
+
+`;
+
+exports[`invalid(29): ::selection { box-shadow: 1px 1px red; } 2`] = `
+
+Message:
+> 1 | ::selection { box-shadow: 1px 1px red; }
+    |               ^^^^^^^^^^^^^^^^^^^^^^^ \`box-shadow\` has no effect on the targets selected by ::selection.
+
+Output:
+  1 | ::selection {  }
+
+`;
+
+exports[`invalid(3): ::selection { margin-inline: 1rem; } 1`] = `
+
+  1 | ::selection { margin-inline: 1rem; }
+
+`;
+
+exports[`invalid(3): ::selection { margin-inline: 1rem; } 2`] = `
+
+Message:
+> 1 | ::selection { margin-inline: 1rem; }
+    |               ^^^^^^^^^^^^^^^^^^^ \`margin-inline\` has no effect on the targets selected by ::selection.
+
+Output:
+  1 | ::selection {  }
+
+`;
+
+exports[`invalid(30): ::selection { background-image: url(image.png); } 1`] = `
+
+  1 | ::selection { background-image: url(image.png); }
+
+`;
+
+exports[`invalid(30): ::selection { background-image: url(image.png); } 2`] = `
+
+Message:
+> 1 | ::selection { background-image: url(image.png); }
+    |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`background-image\` has no effect on the targets selected by ::selection.
+
+Output:
+  1 | ::selection {  }
+
+`;
+
+exports[`invalid(31): ::selection { background-position: center; } 1`] = `
+
+  1 | ::selection { background-position: center; }
+
+`;
+
+exports[`invalid(31): ::selection { background-position: center; } 2`] = `
+
+Message:
+> 1 | ::selection { background-position: center; }
+    |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`background-position\` has no effect on the targets selected by ::selection.
+
+Output:
+  1 | ::selection {  }
+
+`;
+
+exports[`invalid(32): ::selection { background-position-x: 1px; } 1`] = `
+
+  1 | ::selection { background-position-x: 1px; }
+
+`;
+
+exports[`invalid(32): ::selection { background-position-x: 1px; } 2`] = `
+
+Message:
+> 1 | ::selection { background-position-x: 1px; }
+    |               ^^^^^^^^^^^^^^^^^^^^^^^^^^ \`background-position-x\` has no effect on the targets selected by ::selection.
+
+Output:
+  1 | ::selection {  }
+
+`;
+
+exports[`invalid(33): ::selection { background-position-y: 1px; } 1`] = `
+
+  1 | ::selection { background-position-y: 1px; }
+
+`;
+
+exports[`invalid(33): ::selection { background-position-y: 1px; } 2`] = `
+
+Message:
+> 1 | ::selection { background-position-y: 1px; }
+    |               ^^^^^^^^^^^^^^^^^^^^^^^^^^ \`background-position-y\` has no effect on the targets selected by ::selection.
+
+Output:
+  1 | ::selection {  }
+
+`;
+
+exports[`invalid(34): ::selection { background-size: cover; } 1`] = `
+
+  1 | ::selection { background-size: cover; }
+
+`;
+
+exports[`invalid(34): ::selection { background-size: cover; } 2`] = `
+
+Message:
+> 1 | ::selection { background-size: cover; }
+    |               ^^^^^^^^^^^^^^^^^^^^^^ \`background-size\` has no effect on the targets selected by ::selection.
+
+Output:
+  1 | ::selection {  }
+
+`;
+
+exports[`invalid(35): ::selection { background-repeat: no-repeat; } 1`] = `
+
+  1 | ::selection { background-repeat: no-repeat; }
+
+`;
+
+exports[`invalid(35): ::selection { background-repeat: no-repeat; } 2`] = `
+
+Message:
+> 1 | ::selection { background-repeat: no-repeat; }
+    |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`background-repeat\` has no effect on the targets selected by ::selection.
+
+Output:
+  1 | ::selection {  }
+
+`;
+
+exports[`invalid(36): ::selection { background-origin: content-box; } 1`] = `
+
+  1 | ::selection { background-origin: content-box; }
+
+`;
+
+exports[`invalid(36): ::selection { background-origin: content-box; } 2`] = `
+
+Message:
+> 1 | ::selection { background-origin: content-box; }
+    |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`background-origin\` has no effect on the targets selected by ::selection.
+
+Output:
+  1 | ::selection {  }
+
+`;
+
+exports[`invalid(37): ::selection { background-clip: padding-box; } 1`] = `
+
+  1 | ::selection { background-clip: padding-box; }
+
+`;
+
+exports[`invalid(37): ::selection { background-clip: padding-box; } 2`] = `
+
+Message:
+> 1 | ::selection { background-clip: padding-box; }
+    |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`background-clip\` has no effect on the targets selected by ::selection.
+
+Output:
+  1 | ::selection {  }
+
+`;
+
+exports[`invalid(38): ::selection { background-attachment: fixed; } 1`] = `
+
+  1 | ::selection { background-attachment: fixed; }
+
+`;
+
+exports[`invalid(38): ::selection { background-attachment: fixed; } 2`] = `
+
+Message:
+> 1 | ::selection { background-attachment: fixed; }
+    |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`background-attachment\` has no effect on the targets selected by ::selection.
+
+Output:
+  1 | ::selection {  }
+
+`;
+
+exports[`invalid(39): ::selection { border-width: 1px; } 1`] = `
+
+  1 | ::selection { border-width: 1px; }
+
+`;
+
+exports[`invalid(39): ::selection { border-width: 1px; } 2`] = `
+
+Message:
+> 1 | ::selection { border-width: 1px; }
+    |               ^^^^^^^^^^^^^^^^^ \`border-width\` has no effect on the targets selected by ::selection.
+
+Output:
+  1 | ::selection {  }
+
+`;
+
+exports[`invalid(4): ::selection { margin-block-start: 1rem; } 1`] = `
+
+  1 | ::selection { margin-block-start: 1rem; }
+
+`;
+
+exports[`invalid(4): ::selection { margin-block-start: 1rem; } 2`] = `
+
+Message:
+> 1 | ::selection { margin-block-start: 1rem; }
+    |               ^^^^^^^^^^^^^^^^^^^^^^^^ \`margin-block-start\` has no effect on the targets selected by ::selection.
+
+Output:
+  1 | ::selection {  }
+
+`;
+
+exports[`invalid(40): ::selection { border-top-style: solid; } 1`] = `
+
+  1 | ::selection { border-top-style: solid; }
+
+`;
+
+exports[`invalid(40): ::selection { border-top-style: solid; } 2`] = `
+
+Message:
+> 1 | ::selection { border-top-style: solid; }
+    |               ^^^^^^^^^^^^^^^^^^^^^^^ \`border-top-style\` has no effect on the targets selected by ::selection.
+
+Output:
+  1 | ::selection {  }
+
+`;
+
+exports[`invalid(41): ::selection { border-block-width: 1px; } 1`] = `
+
+  1 | ::selection { border-block-width: 1px; }
+
+`;
+
+exports[`invalid(41): ::selection { border-block-width: 1px; } 2`] = `
+
+Message:
+> 1 | ::selection { border-block-width: 1px; }
+    |               ^^^^^^^^^^^^^^^^^^^^^^^ \`border-block-width\` has no effect on the targets selected by ::selection.
+
+Output:
+  1 | ::selection {  }
+
+`;
+
+exports[`invalid(42): ::selection { border-inline-end-style: solid; } 1`] = `
+
+  1 | ::selection { border-inline-end-style: solid; }
+
+`;
+
+exports[`invalid(42): ::selection { border-inline-end-style: solid; } 2`] = `
+
+Message:
+> 1 | ::selection { border-inline-end-style: solid; }
+    |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`border-inline-end-style\` has no effect on the targets selected by ::selection.
+
+Output:
+  1 | ::selection {  }
+
+`;
+
+exports[`invalid(43): ::selection { border-radius: 1px; } 1`] = `
+
+  1 | ::selection { border-radius: 1px; }
+
+`;
+
+exports[`invalid(43): ::selection { border-radius: 1px; } 2`] = `
+
+Message:
+> 1 | ::selection { border-radius: 1px; }
+    |               ^^^^^^^^^^^^^^^^^^ \`border-radius\` has no effect on the targets selected by ::selection.
+
+Output:
+  1 | ::selection {  }
+
+`;
+
+exports[`invalid(44): ::selection { border-bottom-left-radius: 1px; } 1`] = `
+
+  1 | ::selection { border-bottom-left-radius: 1px; }
+
+`;
+
+exports[`invalid(44): ::selection { border-bottom-left-radius: 1px; } 2`] = `
+
+Message:
+> 1 | ::selection { border-bottom-left-radius: 1px; }
+    |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`border-bottom-left-radius\` has no effect on the targets selected by ::selection.
+
+Output:
+  1 | ::selection {  }
+
+`;
+
+exports[`invalid(45): ::selection { border-start-end-radius: 1px; } 1`] = `
+
+  1 | ::selection { border-start-end-radius: 1px; }
+
+`;
+
+exports[`invalid(45): ::selection { border-start-end-radius: 1px; } 2`] = `
+
+Message:
+> 1 | ::selection { border-start-end-radius: 1px; }
+    |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`border-start-end-radius\` has no effect on the targets selected by ::selection.
+
+Output:
+  1 | ::selection {  }
+
+`;
+
+exports[`invalid(46): li::marker { margin: 1rem; } 1`] = `
+
+  1 | li::marker { margin: 1rem; }
+
+`;
+
+exports[`invalid(46): li::marker { margin: 1rem; } 2`] = `
+
+Message:
+> 1 | li::marker { margin: 1rem; }
+    |              ^^^^^^^^^^^^ \`margin\` has no effect on the targets selected by ::marker.
+
+Output:
+  1 | li::marker {  }
+
+`;
+
+exports[`invalid(47): li::marker { margin-right: 0.5rem; } 1`] = `
+
+  1 | li::marker { margin-right: 0.5rem; }
+
+`;
+
+exports[`invalid(47): li::marker { margin-right: 0.5rem; } 2`] = `
+
+Message:
+> 1 | li::marker { margin-right: 0.5rem; }
+    |              ^^^^^^^^^^^^^^^^^^^^ \`margin-right\` has no effect on the targets selected by ::marker.
+
+Output:
+  1 | li::marker {  }
+
+`;
+
+exports[`invalid(48): li::marker { margin-inline: 1rem; } 1`] = `
+
+  1 | li::marker { margin-inline: 1rem; }
+
+`;
+
+exports[`invalid(48): li::marker { margin-inline: 1rem; } 2`] = `
+
+Message:
+> 1 | li::marker { margin-inline: 1rem; }
+    |              ^^^^^^^^^^^^^^^^^^^ \`margin-inline\` has no effect on the targets selected by ::marker.
+
+Output:
+  1 | li::marker {  }
+
+`;
+
+exports[`invalid(49): li::marker { margin-block-start: 1rem; } 1`] = `
+
+  1 | li::marker { margin-block-start: 1rem; }
+
+`;
+
+exports[`invalid(49): li::marker { margin-block-start: 1rem; } 2`] = `
+
+Message:
+> 1 | li::marker { margin-block-start: 1rem; }
+    |              ^^^^^^^^^^^^^^^^^^^^^^^^ \`margin-block-start\` has no effect on the targets selected by ::marker.
+
+Output:
+  1 | li::marker {  }
+
+`;
+
+exports[`invalid(5): ::selection { padding: 1rem; } 1`] = `
+
+  1 | ::selection { padding: 1rem; }
+
+`;
+
+exports[`invalid(5): ::selection { padding: 1rem; } 2`] = `
+
+Message:
+> 1 | ::selection { padding: 1rem; }
+    |               ^^^^^^^^^^^^^ \`padding\` has no effect on the targets selected by ::selection.
+
+Output:
+  1 | ::selection {  }
+
+`;
+
+exports[`invalid(50): li::marker { padding: 1rem; } 1`] = `
+
+  1 | li::marker { padding: 1rem; }
+
+`;
+
+exports[`invalid(50): li::marker { padding: 1rem; } 2`] = `
+
+Message:
+> 1 | li::marker { padding: 1rem; }
+    |              ^^^^^^^^^^^^^ \`padding\` has no effect on the targets selected by ::marker.
+
+Output:
+  1 | li::marker {  }
+
+`;
+
+exports[`invalid(51): li::marker { padding-bottom: 1rem; } 1`] = `
+
+  1 | li::marker { padding-bottom: 1rem; }
+
+`;
+
+exports[`invalid(51): li::marker { padding-bottom: 1rem; } 2`] = `
+
+Message:
+> 1 | li::marker { padding-bottom: 1rem; }
+    |              ^^^^^^^^^^^^^^^^^^^^ \`padding-bottom\` has no effect on the targets selected by ::marker.
+
+Output:
+  1 | li::marker {  }
+
+`;
+
+exports[`invalid(52): li::marker { padding-block: 1rem; } 1`] = `
+
+  1 | li::marker { padding-block: 1rem; }
+
+`;
+
+exports[`invalid(52): li::marker { padding-block: 1rem; } 2`] = `
+
+Message:
+> 1 | li::marker { padding-block: 1rem; }
+    |              ^^^^^^^^^^^^^^^^^^^ \`padding-block\` has no effect on the targets selected by ::marker.
+
+Output:
+  1 | li::marker {  }
+
+`;
+
+exports[`invalid(53): li::marker { padding-inline-end: 1rem; } 1`] = `
+
+  1 | li::marker { padding-inline-end: 1rem; }
+
+`;
+
+exports[`invalid(53): li::marker { padding-inline-end: 1rem; } 2`] = `
+
+Message:
+> 1 | li::marker { padding-inline-end: 1rem; }
+    |              ^^^^^^^^^^^^^^^^^^^^^^^^ \`padding-inline-end\` has no effect on the targets selected by ::marker.
+
+Output:
+  1 | li::marker {  }
+
+`;
+
+exports[`invalid(54): li::marker { width: 10px; } 1`] = `
+
+  1 | li::marker { width: 10px; }
+
+`;
+
+exports[`invalid(54): li::marker { width: 10px; } 2`] = `
+
+Message:
+> 1 | li::marker { width: 10px; }
+    |              ^^^^^^^^^^^ \`width\` has no effect on the targets selected by ::marker.
+
+Output:
+  1 | li::marker {  }
+
+`;
+
+exports[`invalid(55): li::marker { height: 10px; } 1`] = `
+
+  1 | li::marker { height: 10px; }
+
+`;
+
+exports[`invalid(55): li::marker { height: 10px; } 2`] = `
+
+Message:
+> 1 | li::marker { height: 10px; }
+    |              ^^^^^^^^^^^^ \`height\` has no effect on the targets selected by ::marker.
+
+Output:
+  1 | li::marker {  }
+
+`;
+
+exports[`invalid(56): li::marker { min-width: 10px; } 1`] = `
+
+  1 | li::marker { min-width: 10px; }
+
+`;
+
+exports[`invalid(56): li::marker { min-width: 10px; } 2`] = `
+
+Message:
+> 1 | li::marker { min-width: 10px; }
+    |              ^^^^^^^^^^^^^^^ \`min-width\` has no effect on the targets selected by ::marker.
+
+Output:
+  1 | li::marker {  }
+
+`;
+
+exports[`invalid(57): li::marker { max-height: 10px; } 1`] = `
+
+  1 | li::marker { max-height: 10px; }
+
+`;
+
+exports[`invalid(57): li::marker { max-height: 10px; } 2`] = `
+
+Message:
+> 1 | li::marker { max-height: 10px; }
+    |              ^^^^^^^^^^^^^^^^ \`max-height\` has no effect on the targets selected by ::marker.
+
+Output:
+  1 | li::marker {  }
+
+`;
+
+exports[`invalid(58): li::marker { inline-size: 10px; } 1`] = `
+
+  1 | li::marker { inline-size: 10px; }
+
+`;
+
+exports[`invalid(58): li::marker { inline-size: 10px; } 2`] = `
+
+Message:
+> 1 | li::marker { inline-size: 10px; }
+    |              ^^^^^^^^^^^^^^^^^ \`inline-size\` has no effect on the targets selected by ::marker.
+
+Output:
+  1 | li::marker {  }
+
+`;
+
+exports[`invalid(59): li::marker { block-size: 10px; } 1`] = `
+
+  1 | li::marker { block-size: 10px; }
+
+`;
+
+exports[`invalid(59): li::marker { block-size: 10px; } 2`] = `
+
+Message:
+> 1 | li::marker { block-size: 10px; }
+    |              ^^^^^^^^^^^^^^^^ \`block-size\` has no effect on the targets selected by ::marker.
+
+Output:
+  1 | li::marker {  }
+
+`;
+
+exports[`invalid(6): ::selection { padding-bottom: 1rem; } 1`] = `
+
+  1 | ::selection { padding-bottom: 1rem; }
+
+`;
+
+exports[`invalid(6): ::selection { padding-bottom: 1rem; } 2`] = `
+
+Message:
+> 1 | ::selection { padding-bottom: 1rem; }
+    |               ^^^^^^^^^^^^^^^^^^^^ \`padding-bottom\` has no effect on the targets selected by ::selection.
+
+Output:
+  1 | ::selection {  }
+
+`;
+
+exports[`invalid(60): li::marker { min-block-size: 10px; } 1`] = `
+
+  1 | li::marker { min-block-size: 10px; }
+
+`;
+
+exports[`invalid(60): li::marker { min-block-size: 10px; } 2`] = `
+
+Message:
+> 1 | li::marker { min-block-size: 10px; }
+    |              ^^^^^^^^^^^^^^^^^^^^ \`min-block-size\` has no effect on the targets selected by ::marker.
+
+Output:
+  1 | li::marker {  }
+
+`;
+
+exports[`invalid(61): li::marker { max-inline-size: 10px; } 1`] = `
+
+  1 | li::marker { max-inline-size: 10px; }
+
+`;
+
+exports[`invalid(61): li::marker { max-inline-size: 10px; } 2`] = `
+
+Message:
+> 1 | li::marker { max-inline-size: 10px; }
+    |              ^^^^^^^^^^^^^^^^^^^^^ \`max-inline-size\` has no effect on the targets selected by ::marker.
+
+Output:
+  1 | li::marker {  }
+
+`;
+
+exports[`invalid(62): li::marker { display: block; } 1`] = `
+
+  1 | li::marker { display: block; }
+
+`;
+
+exports[`invalid(62): li::marker { display: block; } 2`] = `
+
+Message:
+> 1 | li::marker { display: block; }
+    |              ^^^^^^^^^^^^^^ \`display\` has no effect on the targets selected by ::marker.
+
+Output:
+  1 | li::marker {  }
+
+`;
+
+exports[`invalid(63): li::marker { position: relative; } 1`] = `
+
+  1 | li::marker { position: relative; }
+
+`;
+
+exports[`invalid(63): li::marker { position: relative; } 2`] = `
+
+Message:
+> 1 | li::marker { position: relative; }
+    |              ^^^^^^^^^^^^^^^^^^ \`position\` has no effect on the targets selected by ::marker.
+
+Output:
+  1 | li::marker {  }
+
+`;
+
+exports[`invalid(64): li::marker { top: 1px; } 1`] = `
+
+  1 | li::marker { top: 1px; }
+
+`;
+
+exports[`invalid(64): li::marker { top: 1px; } 2`] = `
+
+Message:
+> 1 | li::marker { top: 1px; }
+    |              ^^^^^^^^ \`top\` has no effect on the targets selected by ::marker.
+
+Output:
+  1 | li::marker {  }
+
+`;
+
+exports[`invalid(65): li::marker { inset: 1px; } 1`] = `
+
+  1 | li::marker { inset: 1px; }
+
+`;
+
+exports[`invalid(65): li::marker { inset: 1px; } 2`] = `
+
+Message:
+> 1 | li::marker { inset: 1px; }
+    |              ^^^^^^^^^^ \`inset\` has no effect on the targets selected by ::marker.
+
+Output:
+  1 | li::marker {  }
+
+`;
+
+exports[`invalid(66): li::marker { inset-block: 1px; } 1`] = `
+
+  1 | li::marker { inset-block: 1px; }
+
+`;
+
+exports[`invalid(66): li::marker { inset-block: 1px; } 2`] = `
+
+Message:
+> 1 | li::marker { inset-block: 1px; }
+    |              ^^^^^^^^^^^^^^^^ \`inset-block\` has no effect on the targets selected by ::marker.
+
+Output:
+  1 | li::marker {  }
+
+`;
+
+exports[`invalid(67): li::marker { inset-inline-start: 1px; } 1`] = `
+
+  1 | li::marker { inset-inline-start: 1px; }
+
+`;
+
+exports[`invalid(67): li::marker { inset-inline-start: 1px; } 2`] = `
+
+Message:
+> 1 | li::marker { inset-inline-start: 1px; }
+    |              ^^^^^^^^^^^^^^^^^^^^^^^ \`inset-inline-start\` has no effect on the targets selected by ::marker.
+
+Output:
+  1 | li::marker {  }
+
+`;
+
+exports[`invalid(68): li::marker { opacity: 0.5; } 1`] = `
+
+  1 | li::marker { opacity: 0.5; }
+
+`;
+
+exports[`invalid(68): li::marker { opacity: 0.5; } 2`] = `
+
+Message:
+> 1 | li::marker { opacity: 0.5; }
+    |              ^^^^^^^^^^^^ \`opacity\` has no effect on the targets selected by ::marker.
+
+Output:
+  1 | li::marker {  }
+
+`;
+
+exports[`invalid(69): li::marker { transform: translateX(1px); } 1`] = `
+
+  1 | li::marker { transform: translateX(1px); }
+
+`;
+
+exports[`invalid(69): li::marker { transform: translateX(1px); } 2`] = `
+
+Message:
+> 1 | li::marker { transform: translateX(1px); }
+    |              ^^^^^^^^^^^^^^^^^^^^^^^^^^ \`transform\` has no effect on the targets selected by ::marker.
+
+Output:
+  1 | li::marker {  }
+
+`;
+
+exports[`invalid(7): ::selection { padding-block: 1rem; } 1`] = `
+
+  1 | ::selection { padding-block: 1rem; }
+
+`;
+
+exports[`invalid(7): ::selection { padding-block: 1rem; } 2`] = `
+
+Message:
+> 1 | ::selection { padding-block: 1rem; }
+    |               ^^^^^^^^^^^^^^^^^^^ \`padding-block\` has no effect on the targets selected by ::selection.
+
+Output:
+  1 | ::selection {  }
+
+`;
+
+exports[`invalid(70): li::marker { transform-origin: top left; } 1`] = `
+
+  1 | li::marker { transform-origin: top left; }
+
+`;
+
+exports[`invalid(70): li::marker { transform-origin: top left; } 2`] = `
+
+Message:
+> 1 | li::marker { transform-origin: top left; }
+    |              ^^^^^^^^^^^^^^^^^^^^^^^^^^ \`transform-origin\` has no effect on the targets selected by ::marker.
+
+Output:
+  1 | li::marker {  }
+
+`;
+
+exports[`invalid(71): li::marker { translate: 1px; } 1`] = `
+
+  1 | li::marker { translate: 1px; }
+
+`;
+
+exports[`invalid(71): li::marker { translate: 1px; } 2`] = `
+
+Message:
+> 1 | li::marker { translate: 1px; }
+    |              ^^^^^^^^^^^^^^ \`translate\` has no effect on the targets selected by ::marker.
+
+Output:
+  1 | li::marker {  }
+
+`;
+
+exports[`invalid(72): li::marker { rotate: 90deg; } 1`] = `
+
+  1 | li::marker { rotate: 90deg; }
+
+`;
+
+exports[`invalid(72): li::marker { rotate: 90deg; } 2`] = `
+
+Message:
+> 1 | li::marker { rotate: 90deg; }
+    |              ^^^^^^^^^^^^^ \`rotate\` has no effect on the targets selected by ::marker.
+
+Output:
+  1 | li::marker {  }
+
+`;
+
+exports[`invalid(73): li::marker { scale: 2; } 1`] = `
+
+  1 | li::marker { scale: 2; }
+
+`;
+
+exports[`invalid(73): li::marker { scale: 2; } 2`] = `
+
+Message:
+> 1 | li::marker { scale: 2; }
+    |              ^^^^^^^^ \`scale\` has no effect on the targets selected by ::marker.
+
+Output:
+  1 | li::marker {  }
+
+`;
+
+exports[`invalid(74): li::marker { box-shadow: 1px 1px red; } 1`] = `
+
+  1 | li::marker { box-shadow: 1px 1px red; }
+
+`;
+
+exports[`invalid(74): li::marker { box-shadow: 1px 1px red; } 2`] = `
+
+Message:
+> 1 | li::marker { box-shadow: 1px 1px red; }
+    |              ^^^^^^^^^^^^^^^^^^^^^^^ \`box-shadow\` has no effect on the targets selected by ::marker.
+
+Output:
+  1 | li::marker {  }
+
+`;
+
+exports[`invalid(75): li::marker { background-image: url(image.png); } 1`] = `
+
+  1 | li::marker { background-image: url(image.png); }
+
+`;
+
+exports[`invalid(75): li::marker { background-image: url(image.png); } 2`] = `
+
+Message:
+> 1 | li::marker { background-image: url(image.png); }
+    |              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`background-image\` has no effect on the targets selected by ::marker.
+
+Output:
+  1 | li::marker {  }
+
+`;
+
+exports[`invalid(76): li::marker { background-position: center; } 1`] = `
+
+  1 | li::marker { background-position: center; }
+
+`;
+
+exports[`invalid(76): li::marker { background-position: center; } 2`] = `
+
+Message:
+> 1 | li::marker { background-position: center; }
+    |              ^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`background-position\` has no effect on the targets selected by ::marker.
+
+Output:
+  1 | li::marker {  }
+
+`;
+
+exports[`invalid(77): li::marker { background-position-x: 1px; } 1`] = `
+
+  1 | li::marker { background-position-x: 1px; }
+
+`;
+
+exports[`invalid(77): li::marker { background-position-x: 1px; } 2`] = `
+
+Message:
+> 1 | li::marker { background-position-x: 1px; }
+    |              ^^^^^^^^^^^^^^^^^^^^^^^^^^ \`background-position-x\` has no effect on the targets selected by ::marker.
+
+Output:
+  1 | li::marker {  }
+
+`;
+
+exports[`invalid(78): li::marker { background-position-y: 1px; } 1`] = `
+
+  1 | li::marker { background-position-y: 1px; }
+
+`;
+
+exports[`invalid(78): li::marker { background-position-y: 1px; } 2`] = `
+
+Message:
+> 1 | li::marker { background-position-y: 1px; }
+    |              ^^^^^^^^^^^^^^^^^^^^^^^^^^ \`background-position-y\` has no effect on the targets selected by ::marker.
+
+Output:
+  1 | li::marker {  }
+
+`;
+
+exports[`invalid(79): li::marker { background-size: cover; } 1`] = `
+
+  1 | li::marker { background-size: cover; }
+
+`;
+
+exports[`invalid(79): li::marker { background-size: cover; } 2`] = `
+
+Message:
+> 1 | li::marker { background-size: cover; }
+    |              ^^^^^^^^^^^^^^^^^^^^^^ \`background-size\` has no effect on the targets selected by ::marker.
+
+Output:
+  1 | li::marker {  }
+
+`;
+
+exports[`invalid(8): ::selection { padding-inline-end: 1rem; } 1`] = `
+
+  1 | ::selection { padding-inline-end: 1rem; }
+
+`;
+
+exports[`invalid(8): ::selection { padding-inline-end: 1rem; } 2`] = `
+
+Message:
+> 1 | ::selection { padding-inline-end: 1rem; }
+    |               ^^^^^^^^^^^^^^^^^^^^^^^^ \`padding-inline-end\` has no effect on the targets selected by ::selection.
+
+Output:
+  1 | ::selection {  }
+
+`;
+
+exports[`invalid(80): li::marker { background-repeat: no-repeat; } 1`] = `
+
+  1 | li::marker { background-repeat: no-repeat; }
+
+`;
+
+exports[`invalid(80): li::marker { background-repeat: no-repeat; } 2`] = `
+
+Message:
+> 1 | li::marker { background-repeat: no-repeat; }
+    |              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`background-repeat\` has no effect on the targets selected by ::marker.
+
+Output:
+  1 | li::marker {  }
+
+`;
+
+exports[`invalid(81): li::marker { background-origin: content-box; } 1`] = `
+
+  1 | li::marker { background-origin: content-box; }
+
+`;
+
+exports[`invalid(81): li::marker { background-origin: content-box; } 2`] = `
+
+Message:
+> 1 | li::marker { background-origin: content-box; }
+    |              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`background-origin\` has no effect on the targets selected by ::marker.
+
+Output:
+  1 | li::marker {  }
+
+`;
+
+exports[`invalid(82): li::marker { background-clip: padding-box; } 1`] = `
+
+  1 | li::marker { background-clip: padding-box; }
+
+`;
+
+exports[`invalid(82): li::marker { background-clip: padding-box; } 2`] = `
+
+Message:
+> 1 | li::marker { background-clip: padding-box; }
+    |              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`background-clip\` has no effect on the targets selected by ::marker.
+
+Output:
+  1 | li::marker {  }
+
+`;
+
+exports[`invalid(83): li::marker { background-attachment: fixed; } 1`] = `
+
+  1 | li::marker { background-attachment: fixed; }
+
+`;
+
+exports[`invalid(83): li::marker { background-attachment: fixed; } 2`] = `
+
+Message:
+> 1 | li::marker { background-attachment: fixed; }
+    |              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`background-attachment\` has no effect on the targets selected by ::marker.
+
+Output:
+  1 | li::marker {  }
+
+`;
+
+exports[`invalid(84): li::marker { border-width: 1px; } 1`] = `
+
+  1 | li::marker { border-width: 1px; }
+
+`;
+
+exports[`invalid(84): li::marker { border-width: 1px; } 2`] = `
+
+Message:
+> 1 | li::marker { border-width: 1px; }
+    |              ^^^^^^^^^^^^^^^^^ \`border-width\` has no effect on the targets selected by ::marker.
+
+Output:
+  1 | li::marker {  }
+
+`;
+
+exports[`invalid(85): li::marker { border-top-style: solid; } 1`] = `
+
+  1 | li::marker { border-top-style: solid; }
+
+`;
+
+exports[`invalid(85): li::marker { border-top-style: solid; } 2`] = `
+
+Message:
+> 1 | li::marker { border-top-style: solid; }
+    |              ^^^^^^^^^^^^^^^^^^^^^^^ \`border-top-style\` has no effect on the targets selected by ::marker.
+
+Output:
+  1 | li::marker {  }
+
+`;
+
+exports[`invalid(86): li::marker { border-block-width: 1px; } 1`] = `
+
+  1 | li::marker { border-block-width: 1px; }
+
+`;
+
+exports[`invalid(86): li::marker { border-block-width: 1px; } 2`] = `
+
+Message:
+> 1 | li::marker { border-block-width: 1px; }
+    |              ^^^^^^^^^^^^^^^^^^^^^^^ \`border-block-width\` has no effect on the targets selected by ::marker.
+
+Output:
+  1 | li::marker {  }
+
+`;
+
+exports[`invalid(87): li::marker { border-inline-end-style: solid; } 1`] = `
+
+  1 | li::marker { border-inline-end-style: solid; }
+
+`;
+
+exports[`invalid(87): li::marker { border-inline-end-style: solid; } 2`] = `
+
+Message:
+> 1 | li::marker { border-inline-end-style: solid; }
+    |              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`border-inline-end-style\` has no effect on the targets selected by ::marker.
+
+Output:
+  1 | li::marker {  }
+
+`;
+
+exports[`invalid(88): li::marker { border-radius: 1px; } 1`] = `
+
+  1 | li::marker { border-radius: 1px; }
+
+`;
+
+exports[`invalid(88): li::marker { border-radius: 1px; } 2`] = `
+
+Message:
+> 1 | li::marker { border-radius: 1px; }
+    |              ^^^^^^^^^^^^^^^^^^ \`border-radius\` has no effect on the targets selected by ::marker.
+
+Output:
+  1 | li::marker {  }
+
+`;
+
+exports[`invalid(89): li::marker { border-bottom-left-radius: 1px; } 1`] = `
+
+  1 | li::marker { border-bottom-left-radius: 1px; }
+
+`;
+
+exports[`invalid(89): li::marker { border-bottom-left-radius: 1px; } 2`] = `
+
+Message:
+> 1 | li::marker { border-bottom-left-radius: 1px; }
+    |              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`border-bottom-left-radius\` has no effect on the targets selected by ::marker.
+
+Output:
+  1 | li::marker {  }
+
+`;
+
+exports[`invalid(9): ::selection { width: 10px; } 1`] = `
+
+  1 | ::selection { width: 10px; }
+
+`;
+
+exports[`invalid(9): ::selection { width: 10px; } 2`] = `
+
+Message:
+> 1 | ::selection { width: 10px; }
+    |               ^^^^^^^^^^^ \`width\` has no effect on the targets selected by ::selection.
+
+Output:
+  1 | ::selection {  }
+
+`;
+
+exports[`invalid(90): li::marker { border-start-end-radius: 1px; } 1`] = `
+
+  1 | li::marker { border-start-end-radius: 1px; }
+
+`;
+
+exports[`invalid(90): li::marker { border-start-end-radius: 1px; } 2`] = `
+
+Message:
+> 1 | li::marker { border-start-end-radius: 1px; }
+    |              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`border-start-end-radius\` has no effect on the targets selected by ::marker.
+
+Output:
+  1 | li::marker {  }
+
+`;
+
+exports[`invalid(91): a:visited { margin: 1rem; } 1`] = `
+
+  1 | a:visited { margin: 1rem; }
+
+`;
+
+exports[`invalid(91): a:visited { margin: 1rem; } 2`] = `
+
+Message:
+> 1 | a:visited { margin: 1rem; }
+    |             ^^^^^^^^^^^^ \`margin\` has no effect on the targets selected by :visited.
+
+Output:
+  1 | a:visited {  }
+
+`;
+
+exports[`invalid(92): a:visited { margin-right: 0.5rem; } 1`] = `
+
+  1 | a:visited { margin-right: 0.5rem; }
+
+`;
+
+exports[`invalid(92): a:visited { margin-right: 0.5rem; } 2`] = `
+
+Message:
+> 1 | a:visited { margin-right: 0.5rem; }
+    |             ^^^^^^^^^^^^^^^^^^^^ \`margin-right\` has no effect on the targets selected by :visited.
+
+Output:
+  1 | a:visited {  }
+
+`;
+
+exports[`invalid(93): a:visited { margin-inline: 1rem; } 1`] = `
+
+  1 | a:visited { margin-inline: 1rem; }
+
+`;
+
+exports[`invalid(93): a:visited { margin-inline: 1rem; } 2`] = `
+
+Message:
+> 1 | a:visited { margin-inline: 1rem; }
+    |             ^^^^^^^^^^^^^^^^^^^ \`margin-inline\` has no effect on the targets selected by :visited.
+
+Output:
+  1 | a:visited {  }
+
+`;
+
+exports[`invalid(94): a:visited { margin-block-start: 1rem; } 1`] = `
+
+  1 | a:visited { margin-block-start: 1rem; }
+
+`;
+
+exports[`invalid(94): a:visited { margin-block-start: 1rem; } 2`] = `
+
+Message:
+> 1 | a:visited { margin-block-start: 1rem; }
+    |             ^^^^^^^^^^^^^^^^^^^^^^^^ \`margin-block-start\` has no effect on the targets selected by :visited.
+
+Output:
+  1 | a:visited {  }
+
+`;
+
+exports[`invalid(95): a:visited { padding: 1rem; } 1`] = `
+
+  1 | a:visited { padding: 1rem; }
+
+`;
+
+exports[`invalid(95): a:visited { padding: 1rem; } 2`] = `
+
+Message:
+> 1 | a:visited { padding: 1rem; }
+    |             ^^^^^^^^^^^^^ \`padding\` has no effect on the targets selected by :visited.
+
+Output:
+  1 | a:visited {  }
+
+`;
+
+exports[`invalid(96): a:visited { padding-bottom: 1rem; } 1`] = `
+
+  1 | a:visited { padding-bottom: 1rem; }
+
+`;
+
+exports[`invalid(96): a:visited { padding-bottom: 1rem; } 2`] = `
+
+Message:
+> 1 | a:visited { padding-bottom: 1rem; }
+    |             ^^^^^^^^^^^^^^^^^^^^ \`padding-bottom\` has no effect on the targets selected by :visited.
+
+Output:
+  1 | a:visited {  }
+
+`;
+
+exports[`invalid(97): a:visited { padding-block: 1rem; } 1`] = `
+
+  1 | a:visited { padding-block: 1rem; }
+
+`;
+
+exports[`invalid(97): a:visited { padding-block: 1rem; } 2`] = `
+
+Message:
+> 1 | a:visited { padding-block: 1rem; }
+    |             ^^^^^^^^^^^^^^^^^^^ \`padding-block\` has no effect on the targets selected by :visited.
+
+Output:
+  1 | a:visited {  }
+
+`;
+
+exports[`invalid(98): a:visited { padding-inline-end: 1rem; } 1`] = `
+
+  1 | a:visited { padding-inline-end: 1rem; }
+
+`;
+
+exports[`invalid(98): a:visited { padding-inline-end: 1rem; } 2`] = `
+
+Message:
+> 1 | a:visited { padding-inline-end: 1rem; }
+    |             ^^^^^^^^^^^^^^^^^^^^^^^^ \`padding-inline-end\` has no effect on the targets selected by :visited.
+
+Output:
+  1 | a:visited {  }
+
+`;
+
+exports[`invalid(99): a:visited { width: 10px; } 1`] = `
+
+  1 | a:visited { width: 10px; }
+
+`;
+
+exports[`invalid(99): a:visited { width: 10px; } 2`] = `
+
+Message:
+> 1 | a:visited { width: 10px; }
+    |             ^^^^^^^^^^^ \`width\` has no effect on the targets selected by :visited.
+
+Output:
+  1 | a:visited {  }
+
+`;
