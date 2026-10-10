@@ -1,5 +1,12 @@
 const splitProperties = properties => properties.split(' ');
 
+// Reset-only properties missing from the shorthand definitions below.
+const additionalResetProperties = new Map([
+	['animation', ['animation-composition', 'animation-trigger']],
+	['background', ['background-blend-mode']],
+	['columns', ['column-wrap']],
+]);
+
 const shorthandEntries = [
 	[
 		'animation',
@@ -165,6 +172,7 @@ const pairShorthands = new Set([
 const fourSideShorthands = new Set(['border-color', 'border-style', 'border-width', 'inset', 'margin', 'padding', 'scroll-margin', 'scroll-padding']);
 
 export {
+	additionalResetProperties,
 	fourSideShorthands,
 	getVendorPrefix,
 	pairShorthands,

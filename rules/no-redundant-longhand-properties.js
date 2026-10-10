@@ -1,4 +1,5 @@
 import {
+	additionalResetProperties,
 	fourSideShorthands,
 	getVendorPrefix,
 	pairShorthands,
@@ -31,11 +32,6 @@ const shorthandsByFirstComponent = Map.groupBy(
 	shorthandProperties.entries().map(([shorthand, definition], catalogIndex) => ({shorthand, definition, catalogIndex})),
 	({definition}) => definition.components[0],
 );
-const additionalResetProperties = new Map([
-	['animation', ['animation-composition', 'animation-trigger']],
-	['background', ['background-blend-mode']],
-	['columns', ['column-wrap']],
-]);
 const additionalAffectedProperties = new Map([
 	['background-position', ['background-position-x', 'background-position-y']],
 	['column-gap', ['grid-column-gap']],
