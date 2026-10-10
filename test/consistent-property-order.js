@@ -569,7 +569,32 @@ nodeTest('shorthands with incomplete interaction metadata remain boundaries', ()
 	}
 });
 
-nodeTest('ordering works with duplicate and shorthand rules without circular fixes', () => {
+nodeTest('ordering converges with shorthand fixes and duplicate suggestions', () => {
+	const linter = new Linter();
+	const config = getConfig();
+	config.rules['cssicorn/no-duplicate-properties'] = 'error';
+	config.rules['cssicorn/no-redundant-longhand-properties'] = 'error';
+	const code = 'a { color: red; color: red; margin-top: 1px; margin-right: 1px; margin-bottom: 1px; margin-left: 1px; display: flex; }';
+	const messages = linter.verify(code, config);
+	for (const rule of ['consistent-property-order', 'no-duplicate-properties', 'no-redundant-longhand-properties']) {
+		assert.equal(messages.some(message => message.ruleId === 'cssicorn/' + rule), true, rule);
+	}
+
+	const result = linter.verifyAndFix(code, config);
+	assert.equal(result.output, 'a { display: flex; margin: 1px; color: red; color: red; }');
+	assert.equal(result.fixed, true);
+	assert.equal(result.messages.length, 1);
+	assert.equal(result.messages[0].ruleId, 'cssicorn/no-duplicate-properties');
+	assert.equal(result.messages[0].suggestions.length, 1);
+	assert.equal(linter.verifyAndFix(result.output, config).fixed, false);
+
+	const [{fix: {range, text}}] = result.messages[0].suggestions;
+	const output = result.output.slice(0, range[0]) + text + result.output.slice(range[1]);
+	assert.equal(output, 'a { display: flex; margin: 1px; color: red; }');
+	assert.deepEqual(linter.verify(output, config), []);
+});
+
+nodeTest('ordering preserves fallbacks when duplicate and shorthand rules are enabled', () => {
 	const linter = new Linter();
 	const config = getConfig();
 	config.rules['cssicorn/no-duplicate-properties'] = 'error';

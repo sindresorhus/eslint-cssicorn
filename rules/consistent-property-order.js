@@ -7,7 +7,6 @@ import {
 	groupingAtRules,
 	hasCommentInRange,
 	isCssModulesInteropDeclaration,
-	isStyleDeclaration,
 	normalizeCssIdentifier,
 } from './utils/index.js';
 
@@ -59,11 +58,11 @@ Recognize style properties in ordinary rules, Tailwind utilities and variants, a
 @param {CssicornContext} context
 */
 const isPropertyOrderingContext = (declaration, context) => {
-	if (isStyleDeclaration(declaration, context)) {
+	let owner = getBlockOwner(declaration, context);
+	if (owner?.type === 'Rule') {
 		return true;
 	}
 
-	let owner = getBlockOwner(declaration, context);
 	if (owner?.type !== 'Atrule') {
 		return false;
 	}
