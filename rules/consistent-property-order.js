@@ -4,6 +4,7 @@ import concentricPropertyOrder from './shared/concentric-property-order.js';
 import propertyInteractions from './shared/css-property-interactions.js';
 import {
 	getBlockOwner,
+	groupingAtRules,
 	hasCommentInRange,
 	isCssModulesInteropDeclaration,
 	isStyleDeclaration,
@@ -52,7 +53,7 @@ const pageMarginAtRules = new Set([
 ]);
 
 /**
-Recognize style properties in ordinary rules and specific page and positioning contexts.
+Recognize style properties in ordinary rules, Tailwind utilities and variants, and specific page and positioning contexts.
 
 @param {DeclarationPlain} declaration
 @param {CssicornContext} context
@@ -62,7 +63,7 @@ const isPropertyOrderingContext = (declaration, context) => {
 		return true;
 	}
 
-	const owner = getBlockOwner(declaration, context);
+	let owner = getBlockOwner(declaration, context);
 	if (owner?.type !== 'Atrule') {
 		return false;
 	}
@@ -72,12 +73,25 @@ const isPropertyOrderingContext = (declaration, context) => {
 		return true;
 	}
 
-	if (!pageMarginAtRules.has(name)) {
-		return false;
+	if (pageMarginAtRules.has(name)) {
+		const page = getBlockOwner(owner, context);
+		return page?.type === 'Atrule' && normalizeCssIdentifier(page.name) === 'page';
 	}
 
-	const page = getBlockOwner(owner, context);
-	return page?.type === 'Atrule' && normalizeCssIdentifier(page.name) === 'page';
+	while (owner?.type === 'Atrule') {
+		const ancestorName = normalizeCssIdentifier(owner.name);
+		if (ancestorName === 'utility') {
+			return true;
+		}
+
+		if (ancestorName !== 'variant' && !groupingAtRules.has(ancestorName)) {
+			return false;
+		}
+
+		owner = getBlockOwner(owner, context);
+	}
+
+	return owner?.type === 'Rule';
 };
 
 /**

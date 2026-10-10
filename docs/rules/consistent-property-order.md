@@ -110,8 +110,29 @@ Comments, blank lines, nested rules, and nested at-rules separate declaration gr
 
 Custom properties, unknown properties, legacy `page-break-*` and `glyph-orientation-vertical` properties, and properties missing from the selected order also separate groups. The `rule-inset-cap`, `rule-inset-junction`, and `rule-visibility-items` shorthands are also excluded because their interaction metadata is incomplete.
 
-The standardized `-webkit-text-fill-color`, `-webkit-text-stroke`, `-webkit-text-stroke-width`, and `-webkit-text-stroke-color` properties are supported. Other vendor-prefixed properties separate groups.
+The standardized `-webkit-text-fill-color`, `-webkit-text-stroke`, `-webkit-text-stroke-width`, and `-webkit-text-stroke-color` properties are supported. `-webkit-line-clamp` is also supported in alphabetical and custom orders; it is absent from the default preset. Other vendor-prefixed properties separate groups.
 
 Style declarations inside keyframes and nested grouping at-rules are supported, as are declarations in `@position-try`, `@page`, and page-margin boxes directly inside `@page`. Unsupported page descriptors, such as `page-orientation`, remain in place and separate groups. Other descriptor blocks, such as `@font-face` and `@property`, and CSS Modules interop blocks are excluded.
 
 Blocks spanning a line targeted by `eslint-disable-line` or `eslint-disable-next-line` are skipped so sorting cannot change the directive's target.
+
+## Tailwind CSS
+
+The rule supports declarations in `@utility` definitions and nested `@variant` applications, including nested grouping at-rules. Repeated functional utility declarations retain their fallback order. `@apply` and custom properties, including compiler markers such as `--tw-sort`, remain fixed boundaries.
+
+Configure the [Tailwind parser extension](https://github.com/eslint/css#configuring-tailwind-syntax) to parse mixed declaration and nested-rule blocks:
+
+```js
+import cssicorn from 'eslint-cssicorn';
+import {tailwind4} from 'tailwind-csstree';
+
+export default [
+	cssicorn.configs.recommended,
+	{
+		files: ['**/*.css'],
+		languageOptions: {customSyntax: tailwind4},
+	},
+];
+```
+
+`@theme`, `@plugin`, `@custom-variant`, and unknown at-rules are not treated as declaration contexts. A `@variant` must be inside a style rule or utility definition.

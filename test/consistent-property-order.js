@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import nodeTest from 'node:test';
 import css from '@eslint/css';
 import {Linter} from 'eslint';
+import {tailwind4} from 'tailwind-csstree';
 import plugin from '../index.js';
 import {getTester} from './utils/test.js';
 
@@ -136,6 +137,128 @@ const getConfig = (options = {}) => ({
 	plugins: {css, cssicorn: plugin},
 	linterOptions: {reportUnusedDisableDirectives: 'off'},
 	rules: {'cssicorn/consistent-property-order': ['error', options]},
+});
+
+const getTailwindConfig = (options = {}) => ({
+	...getConfig(options),
+	languageOptions: {customSyntax: tailwind4},
+});
+
+nodeTest('sorts Tailwind utility runs around nested selectors', () => {
+	const linter = new Linter();
+	const config = getTailwindConfig();
+	const code = '@utility card { color: red; display: flex; &:hover { color: blue; display: block; } color: green; display: grid; }';
+	assert.equal(linter.verify(code, config).length, 3);
+	const result = linter.verifyAndFix(code, config);
+	assert.equal(result.output, '@utility card { display: flex; color: red; &:hover { display: block; color: blue; } display: grid; color: green; }');
+	assert.equal(result.fixed, true);
+	assert.deepEqual(result.messages, []);
+	assert.equal(linter.verifyAndFix(result.output, config).fixed, false);
+});
+
+nodeTest('functional utility fallbacks retain their order', () => {
+	const linter = new Linter();
+	const config = getTailwindConfig({order: ['display', 'tab-size', 'color']});
+	const result = linter.verifyAndFix('@utility tab-* { tab-size: --value(integer); tab-size: --value([integer]); color: red; display: flex; }', config);
+	assert.equal(result.output, '@utility tab-* { display: flex; tab-size: --value(integer); tab-size: --value([integer]); color: red; }');
+	assert.equal(result.fixed, true);
+	assert.deepEqual(result.messages, []);
+});
+
+nodeTest('sorts nested Tailwind variants and grouping blocks', () => {
+	const linter = new Linter();
+	for (const [code, output] of [
+		['a { @variant hover { color: red; display: flex; } }', 'a { @variant hover { display: flex; color: red; } }'],
+		['@utility card { @variant hover { @variant focus { color: red; display: flex; } } }', '@utility card { @variant hover { @variant focus { display: flex; color: red; } } }'],
+		['a { @media screen { @variant hover { color: red; display: flex; } } }', 'a { @media screen { @variant hover { display: flex; color: red; } } }'],
+	]) {
+		const result = linter.verifyAndFix(code, getTailwindConfig());
+		assert.equal(result.output, output);
+		assert.equal(result.fixed, true);
+		assert.deepEqual(result.messages, []);
+	}
+
+	for (const grouping of ['media screen', 'supports (display: flex)', 'container (width > 1px)', 'layer theme', 'scope (.card)', 'starting-style']) {
+		const result = linter.verifyAndFix('@utility card { @' + grouping + ' { @variant hover { color: red; display: flex; } } }', getTailwindConfig());
+		assert.equal(result.output, '@utility card { @' + grouping + ' { @variant hover { display: flex; color: red; } } }');
+		assert.equal(result.fixed, true);
+		assert.deepEqual(result.messages, []);
+	}
+});
+
+nodeTest('Tailwind apply directives and compiler markers stay between declaration runs', () => {
+	const linter = new Linter();
+	for (const boundary of ['@apply block;', '--tw-sort: custom;']) {
+		const code = '@utility card { color: red; display: flex; ' + boundary + ' color: blue; display: grid; }';
+		const config = getTailwindConfig();
+		assert.equal(linter.verify(code, config).length, 2);
+		const result = linter.verifyAndFix(code, config);
+		assert.equal(result.output, '@utility card { display: flex; color: red; ' + boundary + ' display: grid; color: blue; }');
+		assert.equal(result.fixed, true);
+		assert.deepEqual(result.messages, []);
+	}
+});
+
+nodeTest('Tailwind context support keeps templates, comments, and suppression boundaries', () => {
+	const linter = new Linter();
+	for (const code of [
+		'@variant hover { color: red; display: flex; }',
+		'@theme { color: red; display: flex; }',
+		'@custom-variant card { @variant hover { color: red; display: flex; @slot; } }',
+		'@plugin "example" { color: red; display: flex; }',
+		'@utility card { @unknown { color: red; display: flex; } }',
+		'@utility card { color: red; /* keep */ display: flex; }',
+		'a { @variant hover {\n/* eslint-disable-next-line cssicorn/lowercase */\ncolor: red;\ndisplay: flex;\n} }',
+	]) {
+		const result = linter.verifyAndFix(code, getTailwindConfig());
+		assert.equal(result.output, code);
+		assert.equal(result.fixed, false);
+		assert.deepEqual(result.messages, []);
+	}
+});
+
+nodeTest('Tailwind shorthand reversals remain suggestions', () => {
+	const linter = new Linter();
+	const config = getTailwindConfig();
+	const code = '@utility card { @variant hover { margin-left: 2px; margin: 1px; } }';
+	const result = linter.verifyAndFix(code, config);
+	assert.equal(result.output, code);
+	assert.equal(result.fixed, false);
+	assert.equal(result.messages.length, 1);
+	const [{fix: {range, text}}] = result.messages[0].suggestions;
+	const output = code.slice(0, range[0]) + text + code.slice(range[1]);
+	assert.equal(output, '@utility card { @variant hover { margin: 1px; margin-left: 2px; } }');
+	assert.deepEqual(linter.verify(output, config), []);
+});
+
+nodeTest('prefixed line clamp supports alphabetical and custom orders while preserving fallbacks', () => {
+	const linter = new Linter();
+	const code = 'a { color: red; -webkit-line-clamp: 2; -webkit-line-clamp: var(--lines); display: -webkit-box; }';
+	for (const order of ['alphabetical', ['-webkit-line-clamp', 'color', 'display']]) {
+		const result = linter.verifyAndFix(code, getConfig({order}));
+		assert.equal(result.output, 'a { -webkit-line-clamp: 2; -webkit-line-clamp: var(--lines); color: red; display: -webkit-box; }');
+		assert.equal(result.fixed, true);
+		assert.deepEqual(result.messages, []);
+	}
+
+	assert.deepEqual(linter.verify(code, getConfig()), []);
+	assert.equal(linter.verifyAndFix(code, getConfig()).output, code);
+});
+
+nodeTest('prefixed line clamp conflicts with its components, unprefixed shorthand, and all', () => {
+	const linter = new Linter();
+	for (const property of ['max-lines', 'block-ellipsis', 'continue', 'line-clamp', 'all']) {
+		const config = getConfig({order: [property, '-webkit-line-clamp']});
+		const code = 'a { -WEBKIT-LINE-CLAMP: var(--lines) !important; ' + property + ': initial; }';
+		const result = linter.verifyAndFix(code, config);
+		assert.equal(result.output, code);
+		assert.equal(result.fixed, false);
+		assert.equal(result.messages.length, 1);
+		const [{fix: {range, text}}] = result.messages[0].suggestions;
+		const output = code.slice(0, range[0]) + text + code.slice(range[1]);
+		assert.equal(output, 'a { ' + property + ': initial; -WEBKIT-LINE-CLAMP: var(--lines) !important; }');
+		assert.deepEqual(linter.verify(output, config), []);
+	}
 });
 
 nodeTest('default ordering gives font-width the font-stretch rank and preserves alias fallbacks', () => {

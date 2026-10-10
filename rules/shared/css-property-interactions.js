@@ -5,6 +5,7 @@
 @type {Map<string, Set<string>>}
 */
 const propertyInteractions = new Map([
+	['-webkit-line-clamp', new Set(['property:-webkit-line-clamp', 'property:block-ellipsis', 'property:continue', 'property:max-lines'])],
 	['-webkit-text-fill-color', new Set(['property:-webkit-text-fill-color'])],
 	['-webkit-text-stroke', new Set(['property:-webkit-text-stroke', 'property:-webkit-text-stroke-color', 'property:-webkit-text-stroke-width'])],
 	['-webkit-text-stroke-color', new Set(['property:-webkit-text-stroke-color'])],

@@ -37,11 +37,14 @@ test('independent properties have independent footprints', () => {
 	}
 });
 
-test('standardized prefixed text properties retain their distinct cascade footprints', () => {
+test('supported prefixed properties remain limited to standardized text and clamp properties', () => {
 	assert.deepEqual(
 		interactions.keys().filter(property => property.startsWith('-')).toArray(),
-		['-webkit-text-fill-color', '-webkit-text-stroke', '-webkit-text-stroke-color', '-webkit-text-stroke-width'],
+		['-webkit-line-clamp', '-webkit-text-fill-color', '-webkit-text-stroke', '-webkit-text-stroke-color', '-webkit-text-stroke-width'],
 	);
+});
+
+test('standardized prefixed text properties retain their distinct cascade footprints', () => {
 	assert.deepEqual(interactions.get('-webkit-text-stroke'), new Set([
 		'property:-webkit-text-stroke',
 		'property:-webkit-text-stroke-color',
@@ -60,11 +63,26 @@ test('standardized prefixed text properties retain their distinct cascade footpr
 	assert.equal(interactions.get('-webkit-text-stroke').isDisjointFrom(interactions.get('-webkit-text-fill-color')), true);
 });
 
+test('prefixed line clamp covers the standard shorthand and its components', () => {
+	const footprint = interactions.get('-webkit-line-clamp');
+	assert.deepEqual(footprint, new Set([
+		'property:-webkit-line-clamp',
+		'property:block-ellipsis',
+		'property:continue',
+		'property:max-lines',
+	]));
+	for (const property of ['line-clamp', 'max-lines', 'block-ellipsis', 'continue']) {
+		assert.equal(footprint.isDisjointFrom(interactions.get(property)), false, property);
+	}
+
+	assert.equal(footprint.isDisjointFrom(interactions.get('color')), true);
+});
+
 test('unsupported names cannot be enabled by a custom ordering list', () => {
 	for (const property of [
 		'--color',
 		'-webkit-appearance',
-		'-webkit-line-clamp',
+		'-webkit-box-orient',
 		'-moz-text-stroke',
 		'page-break-before',
 		'page-break-after',
