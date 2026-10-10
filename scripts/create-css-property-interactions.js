@@ -6,8 +6,17 @@ import {propertyNameAliases} from '../rules/shared/css-property-name-aliases.js'
 const targetUrl = new URL('../rules/shared/css-property-interactions.js', import.meta.url);
 const {properties} = await webref.listAll();
 const definitions = new Map(properties.map(property => [property.name, property]));
-// These legacy shorthands have special value mappings that Webref does not describe.
-const unsupportedProperties = new Set(['page-break-before', 'page-break-after', 'page-break-inside', 'glyph-orientation-vertical']);
+// These properties have special value mappings or incomplete shorthand metadata in Webref.
+const unsupportedProperties = new Set([
+	'page-break-before',
+	'page-break-after',
+	'page-break-inside',
+	'glyph-orientation-vertical',
+	// The shorthands set both axes, but Webref only lists their column components: https://drafts.csswg.org/css-gaps-1/
+	'rule-inset-cap',
+	'rule-inset-junction',
+	'rule-visibility-items',
+]);
 
 const compareNames = (first, second) => {
 	if (first === second) {

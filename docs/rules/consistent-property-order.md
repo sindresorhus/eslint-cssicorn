@@ -106,6 +106,6 @@ The safety check is conservative. Properties in the same logical-property group,
 
 Comments, blank lines, nested rules, and nested at-rules separate declaration groups. Declarations containing comments remain in place. The rule preserves semicolons, indentation, and line endings, including when the final declaration has no semicolon.
 
-Custom properties, unknown properties, vendor-prefixed properties, legacy `page-break-*` and `glyph-orientation-vertical` properties, and properties missing from the selected order also separate groups. Descriptor blocks, such as `@font-face` and `@property`, and CSS Modules interop blocks are excluded. Style declarations inside keyframes and nested grouping at-rules are supported.
+Custom properties, unknown properties, vendor-prefixed properties, legacy `page-break-*` and `glyph-orientation-vertical` properties, and properties missing from the selected order also separate groups. The `rule-inset-cap`, `rule-inset-junction`, and `rule-visibility-items` shorthands are also excluded because their interaction metadata is incomplete. Descriptor blocks, such as `@font-face` and `@property`, and CSS Modules interop blocks are excluded. Style declarations inside keyframes and nested grouping at-rules are supported.
 
 Blocks spanning a line targeted by `eslint-disable-line` or `eslint-disable-next-line` are skipped so sorting cannot change the directive's target.

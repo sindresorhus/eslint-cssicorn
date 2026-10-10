@@ -38,7 +38,18 @@ test('independent properties have independent footprints', () => {
 });
 
 test('unsupported names cannot be enabled by a custom ordering list', () => {
-	for (const property of ['--color', '-webkit-appearance', 'page-break-before', 'page-break-after', 'page-break-inside', 'glyph-orientation-vertical', '__proto__']) {
+	for (const property of [
+		'--color',
+		'-webkit-appearance',
+		'page-break-before',
+		'page-break-after',
+		'page-break-inside',
+		'glyph-orientation-vertical',
+		'rule-inset-cap',
+		'rule-inset-junction',
+		'rule-visibility-items',
+		'__proto__',
+	]) {
 		assert.equal(interactions.has(property), false);
 	}
 });

@@ -24,6 +24,7 @@ test.snapshot({
 		'a { color: red; &:hover {} display: flex; }',
 		'a { color: red; @media screen {} display: flex; }',
 		'@font-face { font-family: example; src: url(example.woff2); }',
+		{code: '@font-face { font-weight: 700; font-family: example; }', options: alphabetical},
 		'@property --example { initial-value: red; inherits: false; syntax: "<color>"; }',
 		':export { color: red; display: flex; }',
 		':import("example.css") { color: red; display: flex; }',
@@ -195,6 +196,22 @@ nodeTest('long whitespace inside a declaration is preserved', () => {
 	assert.deepEqual(result.messages, []);
 });
 
+nodeTest('sorts declarations inside nested starting styles', () => {
+	const linter = new Linter();
+	const result = linter.verifyAndFix('a { @starting-style { color: red; display: flex; } }', getConfig());
+	assert.equal(result.output, 'a { @starting-style { display: flex; color: red; } }');
+	assert.equal(result.fixed, true);
+	assert.deepEqual(result.messages, []);
+});
+
+nodeTest('preserves CRLF inside moved multiline values', () => {
+	const linter = new Linter();
+	const result = linter.verifyAndFix('a {\r\n  background: linear-gradient(\r\n    red,\r\n    blue\r\n  );\r\n  display: flex;\r\n}', getConfig());
+	assert.equal(result.output, 'a {\r\n  display: flex;\r\n  background: linear-gradient(\r\n    red,\r\n    blue\r\n  );\r\n}');
+	assert.equal(result.fixed, true);
+	assert.deepEqual(result.messages, []);
+});
+
 nodeTest('line directives do not change their target', () => {
 	const linter = new Linter();
 	for (const code of [
@@ -228,6 +245,27 @@ nodeTest('custom orders cannot enable unsupported properties', () => {
 		const config = getConfig({order: ['display', property, 'color']});
 		assert.deepEqual(linter.verify(code, config), []);
 		assert.equal(linter.verifyAndFix(code, config).output, code);
+	}
+});
+
+nodeTest('shorthands with incomplete interaction metadata remain boundaries', () => {
+	const linter = new Linter();
+	for (const [property, rowValue, shorthandValue] of [
+		['rule-inset-cap', '1px', '2px'],
+		['rule-inset-junction', '1px', '2px'],
+		['rule-visibility-items', 'around', 'between'],
+	]) {
+		const rowProperty = 'row-' + property;
+		for (const [code, options] of [
+			['a { ' + rowProperty + ': ' + rowValue + '; ' + property + ': ' + shorthandValue + '; }', {order: [property, rowProperty]}],
+			['a { ' + property + ': ' + shorthandValue + '; ' + rowProperty + ': ' + rowValue + '; }', {order: 'alphabetical'}],
+			['a { color: red; ' + property + ': ' + shorthandValue + '; display: flex; }', {order: ['display', property, 'color']}],
+		]) {
+			const result = linter.verifyAndFix(code, getConfig(options));
+			assert.equal(result.output, code);
+			assert.equal(result.fixed, false);
+			assert.deepEqual(result.messages, []);
+		}
 	}
 });
 
