@@ -36,7 +36,7 @@ Default: `'concentric-css'`
 
 #### `'concentric-css'`
 
-Use the Concentric CSS property order, as shown above.
+Use the Concentric CSS property order, as shown above. The preset uses a [fixed property list](https://github.com/Siilwyn/css-declaration-sorter/blob/v7.4.0/src/orders/concentric-css.mjs). Properties absent from that list, such as `interpolate-size`, remain in place and separate declaration groups. Alphabetical and custom ordering can include them when their interaction metadata is supported.
 
 #### `'alphabetical'`
 
@@ -100,7 +100,7 @@ a {
 }
 ```
 
-The safety check is conservative. Properties in the same logical-property group, such as `width` and `height`, can receive suggestions even when their physical declarations are independent. Property interactions come from `@webref/css` and the plugin's shared shorthand and alias data. Property references in the value grammar are also treated as interactions, so shared syntax can produce additional suggestions.
+The safety check is conservative. Properties in the same logical-property group, such as `width` and `height`, can receive suggestions even when their physical declarations are independent.
 
 ## Declaration groups
 

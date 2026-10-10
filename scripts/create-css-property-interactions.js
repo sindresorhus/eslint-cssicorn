@@ -74,12 +74,15 @@ const content = [
 	'// Generated file, DO NOT edit',
 	'/* eslint-disable @stylistic/max-len -- Keep generated property footprints on one line. */',
 	'',
+	'/**',
+	'@type {Map<string, Set<string>>}',
+	'*/',
 	'const propertyInteractions = new Map([',
 	...properties.map(({name}) => name).filter(name => !name.startsWith('-') && !unsupportedProperties.has(name)).toSorted(compareNames).map(property => {
 		const interactions = getPropertyInteractions(property).map(interaction => `'${interaction}'`).join(', ');
-		return `\t['${property}', [${interactions}]],`;
+		return `\t['${property}', new Set([${interactions}])],`;
 	}),
-	'].map(([property, interactions]) => [property, new Set(interactions)]));',
+	']);',
 	'',
 	'export default propertyInteractions;',
 	'',

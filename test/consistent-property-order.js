@@ -138,6 +138,34 @@ const getConfig = (options = {}) => ({
 	rules: {'cssicorn/consistent-property-order': ['error', options]},
 });
 
+nodeTest('supported properties missing from the default catalog remain boundaries', () => {
+	const linter = new Linter();
+	const code = 'a { color: red; interpolate-size: allow-keywords; display: flex; }';
+	const result = linter.verifyAndFix(code, getConfig());
+	assert.equal(result.output, code);
+	assert.equal(result.fixed, false);
+	assert.deepEqual(result.messages, []);
+
+	const alphabeticalResult = linter.verifyAndFix(code, getConfig({order: 'alphabetical'}));
+	assert.equal(alphabeticalResult.output, 'a { color: red; display: flex; interpolate-size: allow-keywords; }');
+	assert.equal(alphabeticalResult.fixed, true);
+	assert.deepEqual(alphabeticalResult.messages, []);
+});
+
+nodeTest('sorts independent declaration runs before, inside, and after a nested rule', () => {
+	const linter = new Linter();
+	const config = getConfig();
+	const code = 'a { color: red; display: flex; &:hover { color: blue; display: block; } color: green; display: grid; }';
+	const messages = linter.verify(code, config);
+	assert.equal(messages.length, 3);
+
+	const result = linter.verifyAndFix(code, config);
+	assert.equal(result.output, 'a { display: flex; color: red; &:hover { display: block; color: blue; } display: grid; color: green; }');
+	assert.equal(result.fixed, true);
+	assert.deepEqual(result.messages, []);
+	assert.equal(linter.verifyAndFix(result.output, config).fixed, false);
+});
+
 nodeTest('autofixes preserve fallbacks and are idempotent', () => {
 	const linter = new Linter();
 	const config = getConfig();
