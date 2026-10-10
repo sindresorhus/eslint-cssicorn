@@ -512,6 +512,21 @@ nodeTest('preserves CRLF inside moved multiline values', () => {
 	assert.deepEqual(result.messages, []);
 });
 
+nodeTest('suggestions preserve CRLF, multiline values, and an omitted final semicolon', () => {
+	const linter = new Linter();
+	const config = getConfig();
+	const code = 'a {\r\n  margin-left: 2px;\r\n  margin: var(\r\n    --space,\r\n    1px\r\n  )\r\n}';
+	const result = linter.verifyAndFix(code, config);
+	assert.equal(result.output, code);
+	assert.equal(result.fixed, false);
+	assert.equal(result.messages.length, 1);
+	assert.equal(result.messages[0].suggestions.length, 1);
+	const [{fix: {range, text}}] = result.messages[0].suggestions;
+	const output = code.slice(0, range[0]) + text + code.slice(range[1]);
+	assert.equal(output, 'a {\r\n  margin: var(\r\n    --space,\r\n    1px\r\n  );\r\n  margin-left: 2px\r\n}');
+	assert.deepEqual(linter.verify(output, config), []);
+});
+
 nodeTest('line directives do not change their target', () => {
 	const linter = new Linter();
 	for (const code of [
