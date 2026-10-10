@@ -5,6 +5,10 @@
 @type {Map<string, Set<string>>}
 */
 const propertyInteractions = new Map([
+	['-webkit-text-fill-color', new Set(['property:-webkit-text-fill-color'])],
+	['-webkit-text-stroke', new Set(['property:-webkit-text-stroke', 'property:-webkit-text-stroke-color', 'property:-webkit-text-stroke-width'])],
+	['-webkit-text-stroke-color', new Set(['property:-webkit-text-stroke-color'])],
+	['-webkit-text-stroke-width', new Set(['property:-webkit-text-stroke-width'])],
 	['accent-color', new Set(['property:accent-color'])],
 	['align-content', new Set(['property:align-content'])],
 	['align-items', new Set(['property:align-items'])],

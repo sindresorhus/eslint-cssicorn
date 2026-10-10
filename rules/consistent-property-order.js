@@ -3,6 +3,7 @@
 import concentricPropertyOrder from './shared/concentric-property-order.js';
 import propertyInteractions from './shared/css-property-interactions.js';
 import {
+	getBlockOwner,
 	hasCommentInRange,
 	isCssModulesInteropDeclaration,
 	isStyleDeclaration,
@@ -26,7 +27,58 @@ const messages = {
 	[MESSAGE_ID]: 'Expected property `{{expected}}` before `{{actual}}`.',
 	[MESSAGE_ID_SUGGESTION]: 'Reorder properties. This may change the cascade.',
 };
-const concentricRanks = new Map(concentricPropertyOrder.map((property, index) => [property, index]));
+const concentricRanks = new Map([
+	...concentricPropertyOrder.map((property, index) => /** @type {[string, number]} */ ([property, index])),
+	// The two names identify the same property, so keep their fallback order.
+	['font-width', concentricPropertyOrder.indexOf('font-stretch')],
+]);
+const pageMarginAtRules = new Set([
+	'top-left-corner',
+	'top-left',
+	'top-center',
+	'top-right',
+	'top-right-corner',
+	'bottom-left-corner',
+	'bottom-left',
+	'bottom-center',
+	'bottom-right',
+	'bottom-right-corner',
+	'left-top',
+	'left-middle',
+	'left-bottom',
+	'right-top',
+	'right-middle',
+	'right-bottom',
+]);
+
+/**
+Recognize style properties in ordinary rules and specific page and positioning contexts.
+
+@param {DeclarationPlain} declaration
+@param {CssicornContext} context
+*/
+const isPropertyOrderingContext = (declaration, context) => {
+	if (isStyleDeclaration(declaration, context)) {
+		return true;
+	}
+
+	const owner = getBlockOwner(declaration, context);
+	if (owner?.type !== 'Atrule') {
+		return false;
+	}
+
+	const name = normalizeCssIdentifier(owner.name);
+	if (name === 'page' || name === 'position-try') {
+		return true;
+	}
+
+	if (!pageMarginAtRules.has(name)) {
+		return false;
+	}
+
+	const page = getBlockOwner(owner, context);
+	return page?.type === 'Atrule' && normalizeCssIdentifier(page.name) === 'page';
+};
 
 /**
 Check only pairs whose relative order changes, preserving fallback and override semantics.
@@ -128,7 +180,7 @@ const create = context => {
 		const firstDeclaration = block.children.find(child => child.type === 'Declaration');
 		if (
 			!firstDeclaration
-			|| !isStyleDeclaration(firstDeclaration, context)
+			|| !isPropertyOrderingContext(firstDeclaration, context)
 			|| isCssModulesInteropDeclaration(firstDeclaration, context)
 		) {
 			return;

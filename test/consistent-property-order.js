@@ -138,6 +138,155 @@ const getConfig = (options = {}) => ({
 	rules: {'cssicorn/consistent-property-order': ['error', options]},
 });
 
+nodeTest('default ordering gives font-width the font-stretch rank and preserves alias fallbacks', () => {
+	const linter = new Linter();
+	const config = getConfig();
+	const code = 'a { FONT-WIDTH: condensed; font-stretch: expanded; font-width: 75%; color: red; display: flex; }';
+	const result = linter.verifyAndFix(code, config);
+	assert.equal(result.output, 'a { display: flex; color: red; FONT-WIDTH: condensed; font-stretch: expanded; font-width: 75%; }');
+	assert.equal(result.fixed, true);
+	assert.deepEqual(result.messages, []);
+	assert.equal(linter.verifyAndFix(result.output, config).fixed, false);
+});
+
+nodeTest('alphabetical and custom ordering retain explicit font alias ranks', () => {
+	const linter = new Linter();
+	const code = 'a { font-width: condensed; font-stretch: expanded; }';
+	for (const options of [{order: 'alphabetical'}, {order: ['font-stretch', 'font-width']}]) {
+		const result = linter.verifyAndFix(code, getConfig(options));
+		assert.equal(result.output, code);
+		assert.equal(result.fixed, false);
+		assert.equal(result.messages.length, 1);
+		const [{fix: {range, text}}] = result.messages[0].suggestions;
+		assert.equal(code.slice(0, range[0]) + text + code.slice(range[1]), 'a { font-stretch: expanded; font-width: condensed; }');
+	}
+});
+
+nodeTest('standardized prefixed text properties participate in default ordering', () => {
+	const linter = new Linter();
+	for (const property of ['-webkit-text-fill-color', '-webkit-text-stroke', '-webkit-text-stroke-width', '-WEBKIT-TEXT-STROKE-COLOR']) {
+		const result = linter.verifyAndFix('a { color: red; ' + property + ': initial; display: flex; }', getConfig());
+		assert.equal(result.output, 'a { display: flex; ' + property + ': initial; color: red; }');
+		assert.equal(result.fixed, true);
+		assert.deepEqual(result.messages, []);
+	}
+
+	const result = linter.verifyAndFix('a { color: red; -webkit-text-stroke: 1px black; -webkit-text-stroke: 2px blue; display: flex; }', getConfig());
+	assert.equal(result.output, 'a { display: flex; -webkit-text-stroke: 1px black; -webkit-text-stroke: 2px blue; color: red; }');
+	assert.deepEqual(result.messages, []);
+});
+
+nodeTest('newly supported properties retain cascade-conflict suggestions', () => {
+	const linter = new Linter();
+	for (const [code, output] of [
+		['a { font-width: condensed; font: 16px serif; }', 'a { font: 16px serif; font-width: condensed; }'],
+		['a { -webkit-text-stroke-width: 2px; -webkit-text-stroke: var(--stroke); }', 'a { -webkit-text-stroke: var(--stroke); -webkit-text-stroke-width: 2px; }'],
+		['a { -webkit-text-stroke-color: red; -webkit-text-stroke: 1px blue; }', 'a { -webkit-text-stroke: 1px blue; -webkit-text-stroke-color: red; }'],
+		['a { -webkit-text-fill-color: red; all: initial; }', 'a { all: initial; -webkit-text-fill-color: red; }'],
+		['@position-try --fallback { margin-left: 2px; margin: 1px; }', '@position-try --fallback { margin: 1px; margin-left: 2px; }'],
+		['@position-try --fallback { margin-inline-start: 2px; margin-left: 1px; }', '@position-try --fallback { margin-left: 1px; margin-inline-start: 2px; }'],
+		['@page { margin-left: 2cm; margin: 1cm; }', '@page { margin: 1cm; margin-left: 2cm; }'],
+	]) {
+		const result = linter.verifyAndFix(code, getConfig());
+		assert.equal(result.output, code);
+		assert.equal(result.fixed, false);
+		assert.equal(result.messages.length, 1);
+		assert.equal(result.messages[0].suggestions.length, 1);
+		const [{fix: {range, text}}] = result.messages[0].suggestions;
+		const suggestedOutput = code.slice(0, range[0]) + text + code.slice(range[1]);
+		assert.equal(suggestedOutput, output);
+		assert.deepEqual(linter.verify(suggestedOutput, getConfig()), []);
+	}
+});
+
+nodeTest('position-try fixes preserve casing, CRLF, and an omitted final semicolon', () => {
+	const linter = new Linter();
+	const result = linter.verifyAndFix('@POSITION-TRY --fallback {\r\n  margin: 1px;\r\n  top: 2px\r\n}', getConfig());
+	assert.equal(result.output, '@POSITION-TRY --fallback {\r\n  top: 2px;\r\n  margin: 1px\r\n}');
+	assert.equal(result.fixed, true);
+	assert.deepEqual(result.messages, []);
+});
+
+nodeTest('sorts page runs before, inside, and after a margin box', () => {
+	const linter = new Linter();
+	const code = '@page { padding: 1cm; margin: 2cm; @top-left { color: red; content: "Header"; } color: blue; background: white; }';
+	const config = getConfig();
+	assert.equal(linter.verify(code, config).length, 3);
+	const result = linter.verifyAndFix(code, config);
+	assert.equal(result.output, '@page { margin: 2cm; padding: 1cm; @top-left { content: "Header"; color: red; } background: white; color: blue; }');
+	assert.equal(result.fixed, true);
+	assert.deepEqual(result.messages, []);
+	assert.equal(linter.verifyAndFix(result.output, config).fixed, false);
+});
+
+nodeTest('all sixteen page margin boxes support ordinary property ordering', () => {
+	const linter = new Linter();
+	for (const name of [
+		'top-left-corner',
+		'top-left',
+		'top-center',
+		'top-right',
+		'top-right-corner',
+		'bottom-left-corner',
+		'bottom-left',
+		'bottom-center',
+		'bottom-right',
+		'bottom-right-corner',
+		'left-top',
+		'left-middle',
+		'left-bottom',
+		'right-top',
+		'right-middle',
+		'right-bottom',
+	]) {
+		const result = linter.verifyAndFix('@PAGE { @' + name.toUpperCase() + ' { color: red; content: "Header"; } }', getConfig());
+		assert.equal(result.output, '@PAGE { @' + name.toUpperCase() + ' { content: "Header"; color: red; } }');
+		assert.equal(result.fixed, true);
+		assert.deepEqual(result.messages, []);
+	}
+});
+
+nodeTest('new declaration contexts keep comments, directives, and unsupported descriptors fixed', () => {
+	const linter = new Linter();
+	for (const code of [
+		'@position-try --fallback { margin: 1px; /* keep */ top: 2px; }',
+		'@page { @top-left { color: red; /* keep */ content: "Header"; } }',
+		'@position-try --fallback {\nmargin: 1px; /* eslint-disable-line cssicorn/lowercase */\ntop: 2px;\n}',
+		'@page { @top-left {\n/* eslint-disable-next-line cssicorn/lowercase */\nCOLOR: RED;\ncontent: "Header";\n} }',
+	]) {
+		const result = linter.verifyAndFix(code, getConfig());
+		assert.equal(result.output, code);
+		assert.equal(result.fixed, false);
+		assert.deepEqual(result.messages, []);
+	}
+});
+
+nodeTest('unsupported page descriptors remain boundaries in every ordering mode', () => {
+	const linter = new Linter();
+	const code = '@page { color: red; page-orientation: upright; background: white; }';
+	for (const order of ['concentric-css', 'alphabetical', ['background', 'page-orientation', 'color']]) {
+		const result = linter.verifyAndFix(code, getConfig({order}));
+		assert.equal(result.output, code);
+		assert.equal(result.fixed, false);
+		assert.deepEqual(result.messages, []);
+	}
+});
+
+nodeTest('page-margin and position-try context admission stays narrow', () => {
+	const linter = new Linter();
+	for (const code of [
+		'@top-left { content: "Header"; color: red; }',
+		'@page { @media print { @top-left { content: "Header"; color: red; } } }',
+		'@position-try --fallback { @unknown { top: 2px; margin: 1px; } }',
+		'@font-face { font-weight: 700; font-family: example; }',
+	]) {
+		const result = linter.verifyAndFix(code, getConfig({order: 'alphabetical'}));
+		assert.equal(result.output, code);
+		assert.equal(result.fixed, false);
+		assert.deepEqual(result.messages, []);
+	}
+});
+
 nodeTest('supported properties missing from the default catalog remain boundaries', () => {
 	const linter = new Linter();
 	const code = 'a { color: red; interpolate-size: allow-keywords; display: flex; }';

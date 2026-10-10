@@ -36,7 +36,9 @@ Default: `'concentric-css'`
 
 #### `'concentric-css'`
 
-Use the Concentric CSS property order, as shown above. The preset uses a [fixed property list](https://github.com/Siilwyn/css-declaration-sorter/blob/v7.4.0/src/orders/concentric-css.mjs). Properties absent from that list, such as `interpolate-size`, remain in place and separate declaration groups. Alphabetical and custom ordering can include them when their interaction metadata is supported.
+Use the Concentric CSS property order, as shown above. The preset uses a [fixed property list](https://github.com/Siilwyn/css-declaration-sorter/blob/v7.4.0/src/orders/concentric-css.mjs).
+
+The modern `font-width` property shares the position of its legacy alias, `font-stretch`. Their relative order is preserved in this mode. Other properties absent from the list, such as `interpolate-size`, remain in place and separate declaration groups. Alphabetical and custom ordering can include them when their interaction metadata is supported.
 
 #### `'alphabetical'`
 
@@ -106,6 +108,10 @@ The safety check is conservative. Properties in the same logical-property group,
 
 Comments, blank lines, nested rules, and nested at-rules separate declaration groups. Declarations containing comments remain in place. The rule preserves semicolons, indentation, and line endings, including when the final declaration has no semicolon.
 
-Custom properties, unknown properties, vendor-prefixed properties, legacy `page-break-*` and `glyph-orientation-vertical` properties, and properties missing from the selected order also separate groups. The `rule-inset-cap`, `rule-inset-junction`, and `rule-visibility-items` shorthands are also excluded because their interaction metadata is incomplete. Descriptor blocks, such as `@font-face` and `@property`, and CSS Modules interop blocks are excluded. Style declarations inside keyframes and nested grouping at-rules are supported.
+Custom properties, unknown properties, legacy `page-break-*` and `glyph-orientation-vertical` properties, and properties missing from the selected order also separate groups. The `rule-inset-cap`, `rule-inset-junction`, and `rule-visibility-items` shorthands are also excluded because their interaction metadata is incomplete.
+
+The standardized `-webkit-text-fill-color`, `-webkit-text-stroke`, `-webkit-text-stroke-width`, and `-webkit-text-stroke-color` properties are supported. Other vendor-prefixed properties separate groups.
+
+Style declarations inside keyframes and nested grouping at-rules are supported, as are declarations in `@position-try`, `@page`, and page-margin boxes directly inside `@page`. Unsupported page descriptors, such as `page-orientation`, remain in place and separate groups. Other descriptor blocks, such as `@font-face` and `@property`, and CSS Modules interop blocks are excluded.
 
 Blocks spanning a line targeted by `eslint-disable-line` or `eslint-disable-next-line` are skipped so sorting cannot change the directive's target.

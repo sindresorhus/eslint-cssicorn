@@ -37,10 +37,35 @@ test('independent properties have independent footprints', () => {
 	}
 });
 
+test('standardized prefixed text properties retain their distinct cascade footprints', () => {
+	assert.deepEqual(
+		interactions.keys().filter(property => property.startsWith('-')).toArray(),
+		['-webkit-text-fill-color', '-webkit-text-stroke', '-webkit-text-stroke-color', '-webkit-text-stroke-width'],
+	);
+	assert.deepEqual(interactions.get('-webkit-text-stroke'), new Set([
+		'property:-webkit-text-stroke',
+		'property:-webkit-text-stroke-color',
+		'property:-webkit-text-stroke-width',
+	]));
+
+	for (const property of ['-webkit-text-fill-color', '-webkit-text-stroke-color', '-webkit-text-stroke-width']) {
+		assert.deepEqual(interactions.get(property), new Set([`property:${property}`]));
+		assert.equal(interactions.get(property).isDisjointFrom(interactions.get('color')), true);
+	}
+
+	for (const property of ['-webkit-text-stroke-color', '-webkit-text-stroke-width']) {
+		assert.equal(interactions.get('-webkit-text-stroke').isDisjointFrom(interactions.get(property)), false);
+	}
+
+	assert.equal(interactions.get('-webkit-text-stroke').isDisjointFrom(interactions.get('-webkit-text-fill-color')), true);
+});
+
 test('unsupported names cannot be enabled by a custom ordering list', () => {
 	for (const property of [
 		'--color',
 		'-webkit-appearance',
+		'-webkit-line-clamp',
+		'-moz-text-stroke',
 		'page-break-before',
 		'page-break-after',
 		'page-break-inside',
