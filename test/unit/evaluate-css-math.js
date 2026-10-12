@@ -437,6 +437,22 @@ test('rejects nonfinite and unresolved percentage bases', () => {
 	}
 });
 
+test('resolves percentages without floating-point noise', () => {
+	for (const [css, basis, expected] of [
+		['calc(110%)', quantity(100), quantity(110)],
+		['calc(-19.98%)', quantity(255), quantity(-50.949)],
+		['calc(0.1%)', quantity(3), quantity(0.003)],
+		['calc(33.3%)', quantity(0.3), quantity(0.0999)],
+		['calc(7%)', quantity(100), quantity(7)],
+		['calc(57%)', quantity(100), quantity(57)],
+		['calc(120%)', quantity(255), quantity(306)],
+		['calc(-7%)', quantity(100), quantity(-7)],
+		['calc(110%)', quantity(100, 'px'), quantity(110, 'px')],
+	]) {
+		assert.deepEqual(evaluateCssMath(parseValue(css), {percentageBasis: basis}), expected);
+	}
+});
+
 test('canonicalizes absolute percentage bases', () => {
 	assert.deepEqual(evaluateCssMath(parseValue('min(25%, 50%)'), {percentageBasis: quantity(1, 'in')}), quantity(24, 'px'));
 });

@@ -146,13 +146,63 @@ Message:
 
 `;
 
-exports[`invalid(103): a { color: lch(-1% 0 0); } 1`] = `
+exports[`invalid(103): a { color: lab(calc(110%) 0 0); } 1`] = `
+
+  1 | a { color: lab(calc(110%) 0 0); }
+
+`;
+
+exports[`invalid(103): a { color: lab(calc(110%) 0 0); } 2`] = `
+
+Message:
+> 1 | a { color: lab(calc(110%) 0 0); }
+    |                ^^^^^^^^^^ 'lab() lightness' evaluates to 110, which the browser clamps to 100.
+
+`;
+
+exports[`invalid(104): a { color: rgb(calc(107%) calc(-7%) 0); } 1`] = `
+
+  1 | a { color: rgb(calc(107%) calc(-7%) 0); }
+
+`;
+
+exports[`invalid(104): a { color: rgb(calc(107%) calc(-7%) 0); } 2`] = `
+
+Message:
+> 1 | a { color: rgb(calc(107%) calc(-7%) 0); }
+    |                ^^^^^^^^^^ 'rgb() red' evaluates to 272.85, which the browser clamps to 255.
+
+`;
+
+exports[`invalid(104): a { color: rgb(calc(107%) calc(-7%) 0); } 3`] = `
+
+Message:
+> 1 | a { color: rgb(calc(107%) calc(-7%) 0); }
+    |                           ^^^^^^^^^ 'rgb() green' evaluates to -17.85, which the browser clamps to 0.
+
+`;
+
+exports[`invalid(105): a { color: rgb(calc(-19.98%) 0 0); } 1`] = `
+
+  1 | a { color: rgb(calc(-19.98%) 0 0); }
+
+`;
+
+exports[`invalid(105): a { color: rgb(calc(-19.98%) 0 0); } 2`] = `
+
+Message:
+> 1 | a { color: rgb(calc(-19.98%) 0 0); }
+    |                ^^^^^^^^^^^^^ 'rgb() red' evaluates to -50.949, which the browser clamps to 0.
+
+`;
+
+exports[`invalid(106): a { color: lch(-1% 0 0); } 1`] = `
 
   1 | a { color: lch(-1% 0 0); }
 
 `;
 
-exports[`invalid(103): a { color: lch(-1% 0 0); } 2`] = `
+exports[`invalid(106): a { color: lch(-1% 0 0); } 2`] = `
 
 Message:
 > 1 | a { color: lch(-1% 0 0); }
@@ -160,13 +210,13 @@ Message:
 
 `;
 
-exports[`invalid(104): a { color: lch(50 -1 0); } 1`] = `
+exports[`invalid(107): a { color: lch(50 -1 0); } 1`] = `
 
   1 | a { color: lch(50 -1 0); }
 
 `;
 
-exports[`invalid(104): a { color: lch(50 -1 0); } 2`] = `
+exports[`invalid(107): a { color: lch(50 -1 0); } 2`] = `
 
 Message:
 > 1 | a { color: lch(50 -1 0); }
@@ -174,13 +224,13 @@ Message:
 
 `;
 
-exports[`invalid(105): a { color: oklab(2 0 0); } 1`] = `
+exports[`invalid(108): a { color: oklab(2 0 0); } 1`] = `
 
   1 | a { color: oklab(2 0 0); }
 
 `;
 
-exports[`invalid(105): a { color: oklab(2 0 0); } 2`] = `
+exports[`invalid(108): a { color: oklab(2 0 0); } 2`] = `
 
 Message:
 > 1 | a { color: oklab(2 0 0); }
@@ -188,75 +238,17 @@ Message:
 
 `;
 
-exports[`invalid(106): a { color: oklch(101% 0 0); } 1`] = `
+exports[`invalid(109): a { color: oklch(101% 0 0); } 1`] = `
 
   1 | a { color: oklch(101% 0 0); }
 
 `;
 
-exports[`invalid(106): a { color: oklch(101% 0 0); } 2`] = `
+exports[`invalid(109): a { color: oklch(101% 0 0); } 2`] = `
 
 Message:
 > 1 | a { color: oklch(101% 0 0); }
     |                  ^^^^ 'oklch() lightness' evaluates to 101%, which the browser clamps to 100%.
-
-`;
-
-exports[`invalid(107): a { color: oklch(.5 -1 0); } 1`] = `
-
-  1 | a { color: oklch(.5 -1 0); }
-
-`;
-
-exports[`invalid(107): a { color: oklch(.5 -1 0); } 2`] = `
-
-Message:
-> 1 | a { color: oklch(.5 -1 0); }
-    |                     ^^ 'oklch() chroma' evaluates to -1, which the browser clamps to 0.
-
-`;
-
-exports[`invalid(108): a { color: device-cmyk(2 0 0 0 / 50); } 1`] = `
-
-  1 | a { color: device-cmyk(2 0 0 0 / 50); }
-
-`;
-
-exports[`invalid(108): a { color: device-cmyk(2 0 0 0 / 50); } 2`] = `
-
-Message:
-> 1 | a { color: device-cmyk(2 0 0 0 / 50); }
-    |                        ^ 'device-cmyk() channel 1' evaluates to 2, which the browser clamps to 1.
-
-`;
-
-exports[`invalid(108): a { color: device-cmyk(2 0 0 0 / 50); } 3`] = `
-
-Message:
-> 1 | a { color: device-cmyk(2 0 0 0 / 50); }
-    |                                  ^^ 'device-cmyk() alpha' evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
-
-`;
-
-exports[`invalid(109): a { color: color(--profile 2 0 0 / 50); } 1`] = `
-
-  1 | a { color: color(--profile 2 0 0 / 50); }
-
-`;
-
-exports[`invalid(109): a { color: color(--profile 2 0 0 / 50); } 2`] = `
-
-Message:
-> 1 | a { color: color(--profile 2 0 0 / 50); }
-    |                            ^ 'color() channel 1' evaluates to 2, which the browser clamps to 1.
-
-`;
-
-exports[`invalid(109): a { color: color(--profile 2 0 0 / 50); } 3`] = `
-
-Message:
-> 1 | a { color: color(--profile 2 0 0 / 50); }
-    |                                    ^^ 'color() alpha' evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
 
 `;
 
@@ -302,13 +294,71 @@ Message:
 
 `;
 
-exports[`invalid(110): a { color: color(display-p3 2 -1 3 / 50); } 1`] = `
+exports[`invalid(110): a { color: oklch(.5 -1 0); } 1`] = `
+
+  1 | a { color: oklch(.5 -1 0); }
+
+`;
+
+exports[`invalid(110): a { color: oklch(.5 -1 0); } 2`] = `
+
+Message:
+> 1 | a { color: oklch(.5 -1 0); }
+    |                     ^^ 'oklch() chroma' evaluates to -1, which the browser clamps to 0.
+
+`;
+
+exports[`invalid(111): a { color: device-cmyk(2 0 0 0 / 50); } 1`] = `
+
+  1 | a { color: device-cmyk(2 0 0 0 / 50); }
+
+`;
+
+exports[`invalid(111): a { color: device-cmyk(2 0 0 0 / 50); } 2`] = `
+
+Message:
+> 1 | a { color: device-cmyk(2 0 0 0 / 50); }
+    |                        ^ 'device-cmyk() channel 1' evaluates to 2, which the browser clamps to 1.
+
+`;
+
+exports[`invalid(111): a { color: device-cmyk(2 0 0 0 / 50); } 3`] = `
+
+Message:
+> 1 | a { color: device-cmyk(2 0 0 0 / 50); }
+    |                                  ^^ 'device-cmyk() alpha' evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
+
+`;
+
+exports[`invalid(112): a { color: color(--profile 2 0 0 / 50); } 1`] = `
+
+  1 | a { color: color(--profile 2 0 0 / 50); }
+
+`;
+
+exports[`invalid(112): a { color: color(--profile 2 0 0 / 50); } 2`] = `
+
+Message:
+> 1 | a { color: color(--profile 2 0 0 / 50); }
+    |                            ^ 'color() channel 1' evaluates to 2, which the browser clamps to 1.
+
+`;
+
+exports[`invalid(112): a { color: color(--profile 2 0 0 / 50); } 3`] = `
+
+Message:
+> 1 | a { color: color(--profile 2 0 0 / 50); }
+    |                                    ^^ 'color() alpha' evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
+
+`;
+
+exports[`invalid(113): a { color: color(display-p3 2 -1 3 / 50); } 1`] = `
 
   1 | a { color: color(display-p3 2 -1 3 / 50); }
 
 `;
 
-exports[`invalid(110): a { color: color(display-p3 2 -1 3 / 50); } 2`] = `
+exports[`invalid(113): a { color: color(display-p3 2 -1 3 / 50); } 2`] = `
 
 Message:
 > 1 | a { color: color(display-p3 2 -1 3 / 50); }
@@ -316,13 +366,13 @@ Message:
 
 `;
 
-exports[`invalid(111): a { background: linear-gradient(rgb(300 0 0), light-dark(red, rgb(0 0 0 / 50))); } 1`] = `
+exports[`invalid(114): a { background: linear-gradient(rgb(300 0 0), light-dark(red, rgb(0 0 0 / 50))); } 1`] = `
 
   1 | a { background: linear-gradient(rgb(300 0 0), light-dark(red, rgb(0 0 0 / 50))); }
 
 `;
 
-exports[`invalid(111): a { background: linear-gradient(rgb(300 0 0), light-dark(red, rgb(0 0 0 / 50))); } 2`] = `
+exports[`invalid(114): a { background: linear-gradient(rgb(300 0 0), light-dark(red, rgb(0 0 0 / 50))); } 2`] = `
 
 Message:
 > 1 | a { background: linear-gradient(rgb(300 0 0), light-dark(red, rgb(0 0 0 / 50))); }
@@ -330,7 +380,7 @@ Message:
 
 `;
 
-exports[`invalid(111): a { background: linear-gradient(rgb(300 0 0), light-dark(red, rgb(0 0 0 / 50))); } 3`] = `
+exports[`invalid(114): a { background: linear-gradient(rgb(300 0 0), light-dark(red, rgb(0 0 0 / 50))); } 3`] = `
 
 Message:
 > 1 | a { background: linear-gradient(rgb(300 0 0), light-dark(red, rgb(0 0 0 / 50))); }
@@ -338,13 +388,13 @@ Message:
 
 `;
 
-exports[`invalid(112): a { color: color-mix(in srgb, rgb(300 0 0), blue); } 1`] = `
+exports[`invalid(115): a { color: color-mix(in srgb, rgb(300 0 0), blue); } 1`] = `
 
   1 | a { color: color-mix(in srgb, rgb(300 0 0), blue); }
 
 `;
 
-exports[`invalid(112): a { color: color-mix(in srgb, rgb(300 0 0), blue); } 2`] = `
+exports[`invalid(115): a { color: color-mix(in srgb, rgb(300 0 0), blue); } 2`] = `
 
 Message:
 > 1 | a { color: color-mix(in srgb, rgb(300 0 0), blue); }
@@ -352,13 +402,13 @@ Message:
 
 `;
 
-exports[`invalid(113): a { color: rgb(calc(200 + 200) 0 0 / calc(25 + 25)); } 1`] = `
+exports[`invalid(116): a { color: rgb(calc(200 + 200) 0 0 / calc(25 + 25)); } 1`] = `
 
   1 | a { color: rgb(calc(200 + 200) 0 0 / calc(25 + 25)); }
 
 `;
 
-exports[`invalid(113): a { color: rgb(calc(200 + 200) 0 0 / calc(25 + 25)); } 2`] = `
+exports[`invalid(116): a { color: rgb(calc(200 + 200) 0 0 / calc(25 + 25)); } 2`] = `
 
 Message:
 > 1 | a { color: rgb(calc(200 + 200) 0 0 / calc(25 + 25)); }
@@ -366,7 +416,7 @@ Message:
 
 `;
 
-exports[`invalid(113): a { color: rgb(calc(200 + 200) 0 0 / calc(25 + 25)); } 3`] = `
+exports[`invalid(116): a { color: rgb(calc(200 + 200) 0 0 / calc(25 + 25)); } 3`] = `
 
 Message:
 > 1 | a { color: rgb(calc(200 + 200) 0 0 / calc(25 + 25)); }
@@ -374,13 +424,13 @@ Message:
 
 `;
 
-exports[`invalid(114): a { color: rgb(calc(10% / 20%) 0 0 / calc(30% / 10%)); } 1`] = `
+exports[`invalid(117): a { color: rgb(calc(10% / 20%) 0 0 / calc(30% / 10%)); } 1`] = `
 
   1 | a { color: rgb(calc(10% / 20%) 0 0 / calc(30% / 10%)); }
 
 `;
 
-exports[`invalid(114): a { color: rgb(calc(10% / 20%) 0 0 / calc(30% / 10%)); } 2`] = `
+exports[`invalid(117): a { color: rgb(calc(10% / 20%) 0 0 / calc(30% / 10%)); } 2`] = `
 
 Message:
 > 1 | a { color: rgb(calc(10% / 20%) 0 0 / calc(30% / 10%)); }
@@ -388,13 +438,13 @@ Message:
 
 `;
 
-exports[`invalid(115): a { perspective: .5px; } 1`] = `
+exports[`invalid(118): a { perspective: .5px; } 1`] = `
 
   1 | a { perspective: .5px; }
 
 `;
 
-exports[`invalid(115): a { perspective: .5px; } 2`] = `
+exports[`invalid(118): a { perspective: .5px; } 2`] = `
 
 Message:
 > 1 | a { perspective: .5px; }
@@ -402,75 +452,17 @@ Message:
 
 `;
 
-exports[`invalid(116): a { perspective: 0; } 1`] = `
+exports[`invalid(119): a { perspective: 0; } 1`] = `
 
   1 | a { perspective: 0; }
 
 `;
 
-exports[`invalid(116): a { perspective: 0; } 2`] = `
+exports[`invalid(119): a { perspective: 0; } 2`] = `
 
 Message:
 > 1 | a { perspective: 0; }
     |                  ^ 'perspective' evaluates to 0px, which the browser clamps to 1px.
-
-`;
-
-exports[`invalid(117): a { perspective: 0em; } 1`] = `
-
-  1 | a { perspective: 0em; }
-
-`;
-
-exports[`invalid(117): a { perspective: 0em; } 2`] = `
-
-Message:
-> 1 | a { perspective: 0em; }
-    |                  ^^^ 'perspective' evaluates to 0px, which the browser clamps to 1px.
-
-`;
-
-exports[`invalid(118): a { perspective: calc(0px); transform: perspective(calc(0px)); text-decoration-thickness: calc(0px); } 1`] = `
-
-  1 | a { perspective: calc(0px); transform: perspective(calc(0px)); text-decoration-thickness: calc(0px); }
-
-`;
-
-exports[`invalid(118): a { perspective: calc(0px); transform: perspective(calc(0px)); text-decoration-thickness: calc(0px); } 2`] = `
-
-Message:
-> 1 | a { perspective: calc(0px); transform: perspective(calc(0px)); text-decoration-thickness: calc(0px); }
-    |                  ^^^^^^^^^ 'perspective' evaluates to 0px, which the browser clamps to 1px.
-
-`;
-
-exports[`invalid(118): a { perspective: calc(0px); transform: perspective(calc(0px)); text-decoration-thickness: calc(0px); } 3`] = `
-
-Message:
-> 1 | a { perspective: calc(0px); transform: perspective(calc(0px)); text-decoration-thickness: calc(0px); }
-    |                                                    ^^^^^^^^^ 'perspective()' evaluates to 0px, which the browser clamps to 1px.
-
-`;
-
-exports[`invalid(118): a { perspective: calc(0px); transform: perspective(calc(0px)); text-decoration-thickness: calc(0px); } 4`] = `
-
-Message:
-> 1 | a { perspective: calc(0px); transform: perspective(calc(0px)); text-decoration-thickness: calc(0px); }
-    |                                                                                           ^^^^^^^^^ 'text-decoration-thickness' evaluates to 0px, which the browser floors to one device pixel.
-
-`;
-
-exports[`invalid(119): a { transform: perspective(.005in); } 1`] = `
-
-  1 | a { transform: perspective(.005in); }
-
-`;
-
-exports[`invalid(119): a { transform: perspective(.005in); } 2`] = `
-
-Message:
-> 1 | a { transform: perspective(.005in); }
-    |                            ^^^^^^ 'perspective()' evaluates to 0.48px, which the browser clamps to 1px.
 
 `;
 
@@ -502,13 +494,71 @@ Message:
 
 `;
 
-exports[`invalid(120): a { perspective: calc(-1px); } 1`] = `
+exports[`invalid(120): a { perspective: 0em; } 1`] = `
+
+  1 | a { perspective: 0em; }
+
+`;
+
+exports[`invalid(120): a { perspective: 0em; } 2`] = `
+
+Message:
+> 1 | a { perspective: 0em; }
+    |                  ^^^ 'perspective' evaluates to 0px, which the browser clamps to 1px.
+
+`;
+
+exports[`invalid(121): a { perspective: calc(0px); transform: perspective(calc(0px)); text-decoration-thickness: calc(0px); } 1`] = `
+
+  1 | a { perspective: calc(0px); transform: perspective(calc(0px)); text-decoration-thickness: calc(0px); }
+
+`;
+
+exports[`invalid(121): a { perspective: calc(0px); transform: perspective(calc(0px)); text-decoration-thickness: calc(0px); } 2`] = `
+
+Message:
+> 1 | a { perspective: calc(0px); transform: perspective(calc(0px)); text-decoration-thickness: calc(0px); }
+    |                  ^^^^^^^^^ 'perspective' evaluates to 0px, which the browser clamps to 1px.
+
+`;
+
+exports[`invalid(121): a { perspective: calc(0px); transform: perspective(calc(0px)); text-decoration-thickness: calc(0px); } 3`] = `
+
+Message:
+> 1 | a { perspective: calc(0px); transform: perspective(calc(0px)); text-decoration-thickness: calc(0px); }
+    |                                                    ^^^^^^^^^ 'perspective()' evaluates to 0px, which the browser clamps to 1px.
+
+`;
+
+exports[`invalid(121): a { perspective: calc(0px); transform: perspective(calc(0px)); text-decoration-thickness: calc(0px); } 4`] = `
+
+Message:
+> 1 | a { perspective: calc(0px); transform: perspective(calc(0px)); text-decoration-thickness: calc(0px); }
+    |                                                                                           ^^^^^^^^^ 'text-decoration-thickness' evaluates to 0px, which the browser floors to one device pixel.
+
+`;
+
+exports[`invalid(122): a { transform: perspective(.005in); } 1`] = `
+
+  1 | a { transform: perspective(.005in); }
+
+`;
+
+exports[`invalid(122): a { transform: perspective(.005in); } 2`] = `
+
+Message:
+> 1 | a { transform: perspective(.005in); }
+    |                            ^^^^^^ 'perspective()' evaluates to 0.48px, which the browser clamps to 1px.
+
+`;
+
+exports[`invalid(123): a { perspective: calc(-1px); } 1`] = `
 
   1 | a { perspective: calc(-1px); }
 
 `;
 
-exports[`invalid(120): a { perspective: calc(-1px); } 2`] = `
+exports[`invalid(123): a { perspective: calc(-1px); } 2`] = `
 
 Message:
 > 1 | a { perspective: calc(-1px); }
@@ -516,13 +566,13 @@ Message:
 
 `;
 
-exports[`invalid(121): a { transform: perspective(calc(.25px + .25px)); } 1`] = `
+exports[`invalid(124): a { transform: perspective(calc(.25px + .25px)); } 1`] = `
 
   1 | a { transform: perspective(calc(.25px + .25px)); }
 
 `;
 
-exports[`invalid(121): a { transform: perspective(calc(.25px + .25px)); } 2`] = `
+exports[`invalid(124): a { transform: perspective(calc(.25px + .25px)); } 2`] = `
 
 Message:
 > 1 | a { transform: perspective(calc(.25px + .25px)); }
@@ -530,13 +580,13 @@ Message:
 
 `;
 
-exports[`invalid(122): a { border-image-slice: 110%; } 1`] = `
+exports[`invalid(125): a { border-image-slice: 110%; } 1`] = `
 
   1 | a { border-image-slice: 110%; }
 
 `;
 
-exports[`invalid(122): a { border-image-slice: 110%; } 2`] = `
+exports[`invalid(125): a { border-image-slice: 110%; } 2`] = `
 
 Message:
 > 1 | a { border-image-slice: 110%; }
@@ -544,13 +594,13 @@ Message:
 
 `;
 
-exports[`invalid(123): a { mask-border-slice: 110%; } 1`] = `
+exports[`invalid(126): a { mask-border-slice: 110%; } 1`] = `
 
   1 | a { mask-border-slice: 110%; }
 
 `;
 
-exports[`invalid(123): a { mask-border-slice: 110%; } 2`] = `
+exports[`invalid(126): a { mask-border-slice: 110%; } 2`] = `
 
 Message:
 > 1 | a { mask-border-slice: 110%; }
@@ -558,13 +608,13 @@ Message:
 
 `;
 
-exports[`invalid(124): a { border-image: url(a) 110% / 200%; } 1`] = `
+exports[`invalid(127): a { border-image: url(a) 110% / 200%; } 1`] = `
 
   1 | a { border-image: url(a) 110% / 200%; }
 
 `;
 
-exports[`invalid(124): a { border-image: url(a) 110% / 200%; } 2`] = `
+exports[`invalid(127): a { border-image: url(a) 110% / 200%; } 2`] = `
 
 Message:
 > 1 | a { border-image: url(a) 110% / 200%; }
@@ -572,13 +622,13 @@ Message:
 
 `;
 
-exports[`invalid(125): a { mask-border: url(a) 110% / 200%; } 1`] = `
+exports[`invalid(128): a { mask-border: url(a) 110% / 200%; } 1`] = `
 
   1 | a { mask-border: url(a) 110% / 200%; }
 
 `;
 
-exports[`invalid(125): a { mask-border: url(a) 110% / 200%; } 2`] = `
+exports[`invalid(128): a { mask-border: url(a) 110% / 200%; } 2`] = `
 
 Message:
 > 1 | a { mask-border: url(a) 110% / 200%; }
@@ -586,83 +636,17 @@ Message:
 
 `;
 
-exports[`invalid(126): a { border-image-slice: calc(50% + 60%); } 1`] = `
+exports[`invalid(129): a { border-image-slice: calc(50% + 60%); } 1`] = `
 
   1 | a { border-image-slice: calc(50% + 60%); }
 
 `;
 
-exports[`invalid(126): a { border-image-slice: calc(50% + 60%); } 2`] = `
+exports[`invalid(129): a { border-image-slice: calc(50% + 60%); } 2`] = `
 
 Message:
 > 1 | a { border-image-slice: calc(50% + 60%); }
     |                         ^^^^^^^^^^^^^^^ 'border-image-slice' evaluates to 110%, which the browser clamps to 100%.
-
-`;
-
-exports[`invalid(127): a { border-image-slice: calc(-1); mask-border-slice: calc(-1); } 1`] = `
-
-  1 | a { border-image-slice: calc(-1); mask-border-slice: calc(-1); }
-
-`;
-
-exports[`invalid(127): a { border-image-slice: calc(-1); mask-border-slice: calc(-1); } 2`] = `
-
-Message:
-> 1 | a { border-image-slice: calc(-1); mask-border-slice: calc(-1); }
-    |                         ^^^^^^^^ 'border-image-slice' evaluates to -1, which the browser clamps to 0.
-
-`;
-
-exports[`invalid(127): a { border-image-slice: calc(-1); mask-border-slice: calc(-1); } 3`] = `
-
-Message:
-> 1 | a { border-image-slice: calc(-1); mask-border-slice: calc(-1); }
-    |                                                      ^^^^^^^^ 'mask-border-slice' evaluates to -1, which the browser clamps to 0.
-
-`;
-
-exports[`invalid(128): a { border-image: url(a) calc(-1) / 1; mask-border: url(a) calc(-1) / 1; } 1`] = `
-
-  1 | a { border-image: url(a) calc(-1) / 1; mask-border: url(a) calc(-1) / 1; }
-
-`;
-
-exports[`invalid(128): a { border-image: url(a) calc(-1) / 1; mask-border: url(a) calc(-1) / 1; } 2`] = `
-
-Message:
-> 1 | a { border-image: url(a) calc(-1) / 1; mask-border: url(a) calc(-1) / 1; }
-    |                          ^^^^^^^^ 'border-image-slice' evaluates to -1, which the browser clamps to 0.
-
-`;
-
-exports[`invalid(128): a { border-image: url(a) calc(-1) / 1; mask-border: url(a) calc(-1) / 1; } 3`] = `
-
-Message:
-> 1 | a { border-image: url(a) calc(-1) / 1; mask-border: url(a) calc(-1) / 1; }
-    |                                                            ^^^^^^^^ 'mask-border-slice' evaluates to -1, which the browser clamps to 0.
-
-`;
-
-exports[`invalid(129): a { perspective: calc(-1em); transform: perspective(calc(-1em)); } 1`] = `
-
-  1 | a { perspective: calc(-1em); transform: perspective(calc(-1em)); }
-
-`;
-
-exports[`invalid(129): a { perspective: calc(-1em); transform: perspective(calc(-1em)); } 2`] = `
-
-Message:
-> 1 | a { perspective: calc(-1em); transform: perspective(calc(-1em)); }
-    |                  ^^^^^^^^^^ 'perspective' evaluates to -1em, which the browser clamps to 0em.
-
-`;
-
-exports[`invalid(129): a { perspective: calc(-1em); transform: perspective(calc(-1em)); } 3`] = `
-
-Message:
-> 1 | a { perspective: calc(-1em); transform: perspective(calc(-1em)); }
-    |                                                     ^^^^^^^^^^ 'perspective()' evaluates to -1em, which the browser clamps to 0em.
 
 `;
 
@@ -694,13 +678,79 @@ Message:
 
 `;
 
-exports[`invalid(130): a { text-decoration-thickness: 0; } 1`] = `
+exports[`invalid(130): a { border-image-slice: calc(-1); mask-border-slice: calc(-1); } 1`] = `
+
+  1 | a { border-image-slice: calc(-1); mask-border-slice: calc(-1); }
+
+`;
+
+exports[`invalid(130): a { border-image-slice: calc(-1); mask-border-slice: calc(-1); } 2`] = `
+
+Message:
+> 1 | a { border-image-slice: calc(-1); mask-border-slice: calc(-1); }
+    |                         ^^^^^^^^ 'border-image-slice' evaluates to -1, which the browser clamps to 0.
+
+`;
+
+exports[`invalid(130): a { border-image-slice: calc(-1); mask-border-slice: calc(-1); } 3`] = `
+
+Message:
+> 1 | a { border-image-slice: calc(-1); mask-border-slice: calc(-1); }
+    |                                                      ^^^^^^^^ 'mask-border-slice' evaluates to -1, which the browser clamps to 0.
+
+`;
+
+exports[`invalid(131): a { border-image: url(a) calc(-1) / 1; mask-border: url(a) calc(-1) / 1; } 1`] = `
+
+  1 | a { border-image: url(a) calc(-1) / 1; mask-border: url(a) calc(-1) / 1; }
+
+`;
+
+exports[`invalid(131): a { border-image: url(a) calc(-1) / 1; mask-border: url(a) calc(-1) / 1; } 2`] = `
+
+Message:
+> 1 | a { border-image: url(a) calc(-1) / 1; mask-border: url(a) calc(-1) / 1; }
+    |                          ^^^^^^^^ 'border-image-slice' evaluates to -1, which the browser clamps to 0.
+
+`;
+
+exports[`invalid(131): a { border-image: url(a) calc(-1) / 1; mask-border: url(a) calc(-1) / 1; } 3`] = `
+
+Message:
+> 1 | a { border-image: url(a) calc(-1) / 1; mask-border: url(a) calc(-1) / 1; }
+    |                                                            ^^^^^^^^ 'mask-border-slice' evaluates to -1, which the browser clamps to 0.
+
+`;
+
+exports[`invalid(132): a { perspective: calc(-1em); transform: perspective(calc(-1em)); } 1`] = `
+
+  1 | a { perspective: calc(-1em); transform: perspective(calc(-1em)); }
+
+`;
+
+exports[`invalid(132): a { perspective: calc(-1em); transform: perspective(calc(-1em)); } 2`] = `
+
+Message:
+> 1 | a { perspective: calc(-1em); transform: perspective(calc(-1em)); }
+    |                  ^^^^^^^^^^ 'perspective' evaluates to -1em, which the browser clamps to 0em.
+
+`;
+
+exports[`invalid(132): a { perspective: calc(-1em); transform: perspective(calc(-1em)); } 3`] = `
+
+Message:
+> 1 | a { perspective: calc(-1em); transform: perspective(calc(-1em)); }
+    |                                                     ^^^^^^^^^^ 'perspective()' evaluates to -1em, which the browser clamps to 0em.
+
+`;
+
+exports[`invalid(133): a { text-decoration-thickness: 0; } 1`] = `
 
   1 | a { text-decoration-thickness: 0; }
 
 `;
 
-exports[`invalid(130): a { text-decoration-thickness: 0; } 2`] = `
+exports[`invalid(133): a { text-decoration-thickness: 0; } 2`] = `
 
 Message:
 > 1 | a { text-decoration-thickness: 0; }
@@ -708,13 +758,13 @@ Message:
 
 `;
 
-exports[`invalid(131): a { text-decoration-thickness: -1px; } 1`] = `
+exports[`invalid(134): a { text-decoration-thickness: -1px; } 1`] = `
 
   1 | a { text-decoration-thickness: -1px; }
 
 `;
 
-exports[`invalid(131): a { text-decoration-thickness: -1px; } 2`] = `
+exports[`invalid(134): a { text-decoration-thickness: -1px; } 2`] = `
 
 Message:
 > 1 | a { text-decoration-thickness: -1px; }
@@ -722,13 +772,13 @@ Message:
 
 `;
 
-exports[`invalid(132): a { text-decoration: underline -1%; } 1`] = `
+exports[`invalid(135): a { text-decoration: underline -1%; } 1`] = `
 
   1 | a { text-decoration: underline -1%; }
 
 `;
 
-exports[`invalid(132): a { text-decoration: underline -1%; } 2`] = `
+exports[`invalid(135): a { text-decoration: underline -1%; } 2`] = `
 
 Message:
 > 1 | a { text-decoration: underline -1%; }
@@ -736,13 +786,13 @@ Message:
 
 `;
 
-exports[`invalid(133): a { text-decoration-thickness: calc(1px - 2px); } 1`] = `
+exports[`invalid(136): a { text-decoration-thickness: calc(1px - 2px); } 1`] = `
 
   1 | a { text-decoration-thickness: calc(1px - 2px); }
 
 `;
 
-exports[`invalid(133): a { text-decoration-thickness: calc(1px - 2px); } 2`] = `
+exports[`invalid(136): a { text-decoration-thickness: calc(1px - 2px); } 2`] = `
 
 Message:
 > 1 | a { text-decoration-thickness: calc(1px - 2px); }
@@ -750,13 +800,13 @@ Message:
 
 `;
 
-exports[`invalid(134): a { width: calc(-1px); } 1`] = `
+exports[`invalid(137): a { width: calc(-1px); } 1`] = `
 
   1 | a { width: calc(-1px); }
 
 `;
 
-exports[`invalid(134): a { width: calc(-1px); } 2`] = `
+exports[`invalid(137): a { width: calc(-1px); } 2`] = `
 
 Message:
 > 1 | a { width: calc(-1px); }
@@ -764,13 +814,13 @@ Message:
 
 `;
 
-exports[`invalid(135): a { width: calc(calc(-1px * 1px) / 1px); } 1`] = `
+exports[`invalid(138): a { width: calc(calc(-1px * 1px) / 1px); } 1`] = `
 
   1 | a { width: calc(calc(-1px * 1px) / 1px); }
 
 `;
 
-exports[`invalid(135): a { width: calc(calc(-1px * 1px) / 1px); } 2`] = `
+exports[`invalid(138): a { width: calc(calc(-1px * 1px) / 1px); } 2`] = `
 
 Message:
 > 1 | a { width: calc(calc(-1px * 1px) / 1px); }
@@ -778,13 +828,13 @@ Message:
 
 `;
 
-exports[`invalid(136): a { width: calc(-.00000001px); opacity: calc(-.00000001); } 1`] = `
+exports[`invalid(139): a { width: calc(-.00000001px); opacity: calc(-.00000001); } 1`] = `
 
   1 | a { width: calc(-.00000001px); opacity: calc(-.00000001); }
 
 `;
 
-exports[`invalid(136): a { width: calc(-.00000001px); opacity: calc(-.00000001); } 2`] = `
+exports[`invalid(139): a { width: calc(-.00000001px); opacity: calc(-.00000001); } 2`] = `
 
 Message:
 > 1 | a { width: calc(-.00000001px); opacity: calc(-.00000001); }
@@ -792,61 +842,11 @@ Message:
 
 `;
 
-exports[`invalid(136): a { width: calc(-.00000001px); opacity: calc(-.00000001); } 3`] = `
+exports[`invalid(139): a { width: calc(-.00000001px); opacity: calc(-.00000001); } 3`] = `
 
 Message:
 > 1 | a { width: calc(-.00000001px); opacity: calc(-.00000001); }
     |                                         ^^^^^^^^^^^^^^^^ 'opacity' evaluates to -1e-8, which the browser clamps to 0.
-
-`;
-
-exports[`invalid(137): a { opacity: calc(sin(1e-15deg) / 1e-18); } 1`] = `
-
-  1 | a { opacity: calc(sin(1e-15deg) / 1e-18); }
-
-`;
-
-exports[`invalid(137): a { opacity: calc(sin(1e-15deg) / 1e-18); } 2`] = `
-
-Message:
-> 1 | a { opacity: calc(sin(1e-15deg) / 1e-18); }
-    |              ^^^^^^^^^^^^^^^^^^^^^^^^^^^ 'opacity' evaluates to 17.453292519943293, which the browser clamps to 1. Did you mean a percentage?
-
-`;
-
-exports[`invalid(138): a { opacity: -.000000000001; color: rgb(0 0 0 / 1.000000000001); } 1`] = `
-
-  1 | a { opacity: -.000000000001; color: rgb(0 0 0 / 1.000000000001); }
-
-`;
-
-exports[`invalid(138): a { opacity: -.000000000001; color: rgb(0 0 0 / 1.000000000001); } 2`] = `
-
-Message:
-> 1 | a { opacity: -.000000000001; color: rgb(0 0 0 / 1.000000000001); }
-    |              ^^^^^^^^^^^^^^ 'opacity' evaluates to -1e-12, which the browser clamps to 0.
-
-`;
-
-exports[`invalid(138): a { opacity: -.000000000001; color: rgb(0 0 0 / 1.000000000001); } 3`] = `
-
-Message:
-> 1 | a { opacity: -.000000000001; color: rgb(0 0 0 / 1.000000000001); }
-    |                                                 ^^^^^^^^^^^^^^ 'rgb() alpha' evaluates to 1.000000000001, which the browser clamps to 1. Did you mean a percentage?
-
-`;
-
-exports[`invalid(139): a { width: calc(-10%); } 1`] = `
-
-  1 | a { width: calc(-10%); }
-
-`;
-
-exports[`invalid(139): a { width: calc(-10%); } 2`] = `
-
-Message:
-> 1 | a { width: calc(-10%); }
-    |            ^^^^^^^^^^ 'width' evaluates to -10%, which the browser clamps to 0%.
 
 `;
 
@@ -864,13 +864,63 @@ Message:
 
 `;
 
-exports[`invalid(140): a { padding: calc(1px - 2px); } 1`] = `
+exports[`invalid(140): a { opacity: calc(sin(1e-15deg) / 1e-18); } 1`] = `
+
+  1 | a { opacity: calc(sin(1e-15deg) / 1e-18); }
+
+`;
+
+exports[`invalid(140): a { opacity: calc(sin(1e-15deg) / 1e-18); } 2`] = `
+
+Message:
+> 1 | a { opacity: calc(sin(1e-15deg) / 1e-18); }
+    |              ^^^^^^^^^^^^^^^^^^^^^^^^^^^ 'opacity' evaluates to 17.453292519943293, which the browser clamps to 1. Did you mean a percentage?
+
+`;
+
+exports[`invalid(141): a { opacity: -.000000000001; color: rgb(0 0 0 / 1.000000000001); } 1`] = `
+
+  1 | a { opacity: -.000000000001; color: rgb(0 0 0 / 1.000000000001); }
+
+`;
+
+exports[`invalid(141): a { opacity: -.000000000001; color: rgb(0 0 0 / 1.000000000001); } 2`] = `
+
+Message:
+> 1 | a { opacity: -.000000000001; color: rgb(0 0 0 / 1.000000000001); }
+    |              ^^^^^^^^^^^^^^ 'opacity' evaluates to -1e-12, which the browser clamps to 0.
+
+`;
+
+exports[`invalid(141): a { opacity: -.000000000001; color: rgb(0 0 0 / 1.000000000001); } 3`] = `
+
+Message:
+> 1 | a { opacity: -.000000000001; color: rgb(0 0 0 / 1.000000000001); }
+    |                                                 ^^^^^^^^^^^^^^ 'rgb() alpha' evaluates to 1.000000000001, which the browser clamps to 1. Did you mean a percentage?
+
+`;
+
+exports[`invalid(142): a { width: calc(-10%); } 1`] = `
+
+  1 | a { width: calc(-10%); }
+
+`;
+
+exports[`invalid(142): a { width: calc(-10%); } 2`] = `
+
+Message:
+> 1 | a { width: calc(-10%); }
+    |            ^^^^^^^^^^ 'width' evaluates to -10%, which the browser clamps to 0%.
+
+`;
+
+exports[`invalid(143): a { padding: calc(1px - 2px); } 1`] = `
 
   1 | a { padding: calc(1px - 2px); }
 
 `;
 
-exports[`invalid(140): a { padding: calc(1px - 2px); } 2`] = `
+exports[`invalid(143): a { padding: calc(1px - 2px); } 2`] = `
 
 Message:
 > 1 | a { padding: calc(1px - 2px); }
@@ -878,13 +928,13 @@ Message:
 
 `;
 
-exports[`invalid(141): a { padding: 1px calc(-1px); } 1`] = `
+exports[`invalid(144): a { padding: 1px calc(-1px); } 1`] = `
 
   1 | a { padding: 1px calc(-1px); }
 
 `;
 
-exports[`invalid(141): a { padding: 1px calc(-1px); } 2`] = `
+exports[`invalid(144): a { padding: 1px calc(-1px); } 2`] = `
 
 Message:
 > 1 | a { padding: 1px calc(-1px); }
@@ -892,13 +942,13 @@ Message:
 
 `;
 
-exports[`invalid(142): a { block-size: calc(-1px); max-inline-size: calc(-1px); padding-inline-start: calc(-1px); } 1`] = `
+exports[`invalid(145): a { block-size: calc(-1px); max-inline-size: calc(-1px); padding-inline-start: calc(-1px); } 1`] = `
 
   1 | a { block-size: calc(-1px); max-inline-size: calc(-1px); padding-inline-start: calc(-1px); }
 
 `;
 
-exports[`invalid(142): a { block-size: calc(-1px); max-inline-size: calc(-1px); padding-inline-start: calc(-1px); } 2`] = `
+exports[`invalid(145): a { block-size: calc(-1px); max-inline-size: calc(-1px); padding-inline-start: calc(-1px); } 2`] = `
 
 Message:
 > 1 | a { block-size: calc(-1px); max-inline-size: calc(-1px); padding-inline-start: calc(-1px); }
@@ -906,7 +956,7 @@ Message:
 
 `;
 
-exports[`invalid(142): a { block-size: calc(-1px); max-inline-size: calc(-1px); padding-inline-start: calc(-1px); } 3`] = `
+exports[`invalid(145): a { block-size: calc(-1px); max-inline-size: calc(-1px); padding-inline-start: calc(-1px); } 3`] = `
 
 Message:
 > 1 | a { block-size: calc(-1px); max-inline-size: calc(-1px); padding-inline-start: calc(-1px); }
@@ -914,7 +964,7 @@ Message:
 
 `;
 
-exports[`invalid(142): a { block-size: calc(-1px); max-inline-size: calc(-1px); padding-inline-start: calc(-1px); } 4`] = `
+exports[`invalid(145): a { block-size: calc(-1px); max-inline-size: calc(-1px); padding-inline-start: calc(-1px); } 4`] = `
 
 Message:
 > 1 | a { block-size: calc(-1px); max-inline-size: calc(-1px); padding-inline-start: calc(-1px); }
@@ -922,13 +972,13 @@ Message:
 
 `;
 
-exports[`invalid(143): a { PADDING-BLOCK: CALC(-1PX) !important; } 1`] = `
+exports[`invalid(146): a { PADDING-BLOCK: CALC(-1PX) !important; } 1`] = `
 
   1 | a { PADDING-BLOCK: CALC(-1PX) !important; }
 
 `;
 
-exports[`invalid(143): a { PADDING-BLOCK: CALC(-1PX) !important; } 2`] = `
+exports[`invalid(146): a { PADDING-BLOCK: CALC(-1PX) !important; } 2`] = `
 
 Message:
 > 1 | a { PADDING-BLOCK: CALC(-1PX) !important; }
@@ -936,13 +986,13 @@ Message:
 
 `;
 
-exports[`invalid(144): a { font: calc(-1px)/1 serif; animation: fade calc(-1s); columns: calc(0) 10px; } 1`] = `
+exports[`invalid(147): a { font: calc(-1px)/1 serif; animation: fade calc(-1s); columns: calc(0) 10px; } 1`] = `
 
   1 | a { font: calc(-1px)/1 serif; animation: fade calc(-1s); columns: calc(0) 10px; }
 
 `;
 
-exports[`invalid(144): a { font: calc(-1px)/1 serif; animation: fade calc(-1s); columns: calc(0) 10px; } 2`] = `
+exports[`invalid(147): a { font: calc(-1px)/1 serif; animation: fade calc(-1s); columns: calc(0) 10px; } 2`] = `
 
 Message:
 > 1 | a { font: calc(-1px)/1 serif; animation: fade calc(-1s); columns: calc(0) 10px; }
@@ -950,7 +1000,7 @@ Message:
 
 `;
 
-exports[`invalid(144): a { font: calc(-1px)/1 serif; animation: fade calc(-1s); columns: calc(0) 10px; } 3`] = `
+exports[`invalid(147): a { font: calc(-1px)/1 serif; animation: fade calc(-1s); columns: calc(0) 10px; } 3`] = `
 
 Message:
 > 1 | a { font: calc(-1px)/1 serif; animation: fade calc(-1s); columns: calc(0) 10px; }
@@ -958,7 +1008,7 @@ Message:
 
 `;
 
-exports[`invalid(144): a { font: calc(-1px)/1 serif; animation: fade calc(-1s); columns: calc(0) 10px; } 4`] = `
+exports[`invalid(147): a { font: calc(-1px)/1 serif; animation: fade calc(-1s); columns: calc(0) 10px; } 4`] = `
 
 Message:
 > 1 | a { font: calc(-1px)/1 serif; animation: fade calc(-1s); columns: calc(0) 10px; }
@@ -966,13 +1016,13 @@ Message:
 
 `;
 
-exports[`invalid(145): a { columns: calc(-1px); column-rule: none; } b { columns: 1px / calc(-1px); } c { flex: 1 1 calc(-1px); } 1`] = `
+exports[`invalid(148): a { columns: calc(-1px); column-rule: none; } b { columns: 1px / calc(-1px); } c { flex: 1 1 calc(-1px); } 1`] = `
 
   1 | a { columns: calc(-1px); column-rule: none; } b { columns: 1px / calc(-1px); } c { flex: 1 1 calc(-1px); }
 
 `;
 
-exports[`invalid(145): a { columns: calc(-1px); column-rule: none; } b { columns: 1px / calc(-1px); } c { flex: 1 1 calc(-1px); } 2`] = `
+exports[`invalid(148): a { columns: calc(-1px); column-rule: none; } b { columns: 1px / calc(-1px); } c { flex: 1 1 calc(-1px); } 2`] = `
 
 Message:
 > 1 | a { columns: calc(-1px); column-rule: none; } b { columns: 1px / calc(-1px); } c { flex: 1 1 calc(-1px); }
@@ -980,7 +1030,7 @@ Message:
 
 `;
 
-exports[`invalid(145): a { columns: calc(-1px); column-rule: none; } b { columns: 1px / calc(-1px); } c { flex: 1 1 calc(-1px); } 3`] = `
+exports[`invalid(148): a { columns: calc(-1px); column-rule: none; } b { columns: 1px / calc(-1px); } c { flex: 1 1 calc(-1px); } 3`] = `
 
 Message:
 > 1 | a { columns: calc(-1px); column-rule: none; } b { columns: 1px / calc(-1px); } c { flex: 1 1 calc(-1px); }
@@ -988,7 +1038,7 @@ Message:
 
 `;
 
-exports[`invalid(145): a { columns: calc(-1px); column-rule: none; } b { columns: 1px / calc(-1px); } c { flex: 1 1 calc(-1px); } 4`] = `
+exports[`invalid(148): a { columns: calc(-1px); column-rule: none; } b { columns: 1px / calc(-1px); } c { flex: 1 1 calc(-1px); } 4`] = `
 
 Message:
 > 1 | a { columns: calc(-1px); column-rule: none; } b { columns: 1px / calc(-1px); } c { flex: 1 1 calc(-1px); }
@@ -996,75 +1046,17 @@ Message:
 
 `;
 
-exports[`invalid(146): a { border-image: url(a) 50% / calc(-1px); } 1`] = `
+exports[`invalid(149): a { border-image: url(a) 50% / calc(-1px); } 1`] = `
 
   1 | a { border-image: url(a) 50% / calc(-1px); }
 
 `;
 
-exports[`invalid(146): a { border-image: url(a) 50% / calc(-1px); } 2`] = `
+exports[`invalid(149): a { border-image: url(a) 50% / calc(-1px); } 2`] = `
 
 Message:
 > 1 | a { border-image: url(a) 50% / calc(-1px); }
     |                                ^^^^^^^^^^ 'border-image-width' evaluates to -1px, which the browser clamps to 0px.
-
-`;
-
-exports[`invalid(147): a { font-weight: calc(1200); } 1`] = `
-
-  1 | a { font-weight: calc(1200); }
-
-`;
-
-exports[`invalid(147): a { font-weight: calc(1200); } 2`] = `
-
-Message:
-> 1 | a { font-weight: calc(1200); }
-    |                  ^^^^^^^^^^ 'font-weight' evaluates to 1200, which the browser clamps to 1000.
-
-`;
-
-exports[`invalid(148): a { animation-duration: calc(-1s); } 1`] = `
-
-  1 | a { animation-duration: calc(-1s); }
-
-`;
-
-exports[`invalid(148): a { animation-duration: calc(-1s); } 2`] = `
-
-Message:
-> 1 | a { animation-duration: calc(-1s); }
-    |                         ^^^^^^^^^ 'animation-duration' evaluates to -1s, which the browser clamps to 0s.
-
-`;
-
-exports[`invalid(149): a { column-count: calc(.4); orphans: calc(.4); widows: calc(.4); } 1`] = `
-
-  1 | a { column-count: calc(.4); orphans: calc(.4); widows: calc(.4); }
-
-`;
-
-exports[`invalid(149): a { column-count: calc(.4); orphans: calc(.4); widows: calc(.4); } 2`] = `
-
-Message:
-> 1 | a { column-count: calc(.4); orphans: calc(.4); widows: calc(.4); }
-    |                   ^^^^^^^^ 'column-count' evaluates to 0, which the browser clamps to 1.
-
-`;
-
-exports[`invalid(149): a { column-count: calc(.4); orphans: calc(.4); widows: calc(.4); } 3`] = `
-
-Message:
-> 1 | a { column-count: calc(.4); orphans: calc(.4); widows: calc(.4); }
-    |                                      ^^^^^^^^ 'orphans' evaluates to 0, which the browser clamps to 1.
-
-`;
-
-exports[`invalid(149): a { column-count: calc(.4); orphans: calc(.4); widows: calc(.4); } 4`] = `
-
-Message:
-> 1 | a { column-count: calc(.4); orphans: calc(.4); widows: calc(.4); }
-    |                                                        ^^^^^^^^ 'widows' evaluates to 0, which the browser clamps to 1.
 
 `;
 
@@ -1082,13 +1074,71 @@ Message:
 
 `;
 
-exports[`invalid(150): @font-face { font-family: test; src: url(a); font-weight: calc(1200); } 1`] = `
+exports[`invalid(150): a { font-weight: calc(1200); } 1`] = `
+
+  1 | a { font-weight: calc(1200); }
+
+`;
+
+exports[`invalid(150): a { font-weight: calc(1200); } 2`] = `
+
+Message:
+> 1 | a { font-weight: calc(1200); }
+    |                  ^^^^^^^^^^ 'font-weight' evaluates to 1200, which the browser clamps to 1000.
+
+`;
+
+exports[`invalid(151): a { animation-duration: calc(-1s); } 1`] = `
+
+  1 | a { animation-duration: calc(-1s); }
+
+`;
+
+exports[`invalid(151): a { animation-duration: calc(-1s); } 2`] = `
+
+Message:
+> 1 | a { animation-duration: calc(-1s); }
+    |                         ^^^^^^^^^ 'animation-duration' evaluates to -1s, which the browser clamps to 0s.
+
+`;
+
+exports[`invalid(152): a { column-count: calc(.4); orphans: calc(.4); widows: calc(.4); } 1`] = `
+
+  1 | a { column-count: calc(.4); orphans: calc(.4); widows: calc(.4); }
+
+`;
+
+exports[`invalid(152): a { column-count: calc(.4); orphans: calc(.4); widows: calc(.4); } 2`] = `
+
+Message:
+> 1 | a { column-count: calc(.4); orphans: calc(.4); widows: calc(.4); }
+    |                   ^^^^^^^^ 'column-count' evaluates to 0, which the browser clamps to 1.
+
+`;
+
+exports[`invalid(152): a { column-count: calc(.4); orphans: calc(.4); widows: calc(.4); } 3`] = `
+
+Message:
+> 1 | a { column-count: calc(.4); orphans: calc(.4); widows: calc(.4); }
+    |                                      ^^^^^^^^ 'orphans' evaluates to 0, which the browser clamps to 1.
+
+`;
+
+exports[`invalid(152): a { column-count: calc(.4); orphans: calc(.4); widows: calc(.4); } 4`] = `
+
+Message:
+> 1 | a { column-count: calc(.4); orphans: calc(.4); widows: calc(.4); }
+    |                                                        ^^^^^^^^ 'widows' evaluates to 0, which the browser clamps to 1.
+
+`;
+
+exports[`invalid(153): @font-face { font-family: test; src: url(a); font-weight: calc(1200); } 1`] = `
 
   1 | @font-face { font-family: test; src: url(a); font-weight: calc(1200); }
 
 `;
 
-exports[`invalid(150): @font-face { font-family: test; src: url(a); font-weight: calc(1200); } 2`] = `
+exports[`invalid(153): @font-face { font-family: test; src: url(a); font-weight: calc(1200); } 2`] = `
 
 Message:
 > 1 | @font-face { font-family: test; src: url(a); font-weight: calc(1200); }
@@ -1096,13 +1146,13 @@ Message:
 
 `;
 
-exports[`invalid(151): @position-try --test { width: calc(-1px); } 1`] = `
+exports[`invalid(154): @position-try --test { width: calc(-1px); } 1`] = `
 
   1 | @position-try --test { width: calc(-1px); }
 
 `;
 
-exports[`invalid(151): @position-try --test { width: calc(-1px); } 2`] = `
+exports[`invalid(154): @position-try --test { width: calc(-1px); } 2`] = `
 
 Message:
 > 1 | @position-try --test { width: calc(-1px); }
@@ -1110,13 +1160,13 @@ Message:
 
 `;
 
-exports[`invalid(152): a { OPACITY: 50 !important; color: RGB(0 0 0 / 50); filter: GRAYSCALE(50); } 1`] = `
+exports[`invalid(155): a { OPACITY: 50 !important; color: RGB(0 0 0 / 50); filter: GRAYSCALE(50); } 1`] = `
 
   1 | a { OPACITY: 50 !important; color: RGB(0 0 0 / 50); filter: GRAYSCALE(50); }
 
 `;
 
-exports[`invalid(152): a { OPACITY: 50 !important; color: RGB(0 0 0 / 50); filter: GRAYSCALE(50); } 2`] = `
+exports[`invalid(155): a { OPACITY: 50 !important; color: RGB(0 0 0 / 50); filter: GRAYSCALE(50); } 2`] = `
 
 Message:
 > 1 | a { OPACITY: 50 !important; color: RGB(0 0 0 / 50); filter: GRAYSCALE(50); }
@@ -1124,7 +1174,7 @@ Message:
 
 `;
 
-exports[`invalid(152): a { OPACITY: 50 !important; color: RGB(0 0 0 / 50); filter: GRAYSCALE(50); } 3`] = `
+exports[`invalid(155): a { OPACITY: 50 !important; color: RGB(0 0 0 / 50); filter: GRAYSCALE(50); } 3`] = `
 
 Message:
 > 1 | a { OPACITY: 50 !important; color: RGB(0 0 0 / 50); filter: GRAYSCALE(50); }
@@ -1132,7 +1182,7 @@ Message:
 
 `;
 
-exports[`invalid(152): a { OPACITY: 50 !important; color: RGB(0 0 0 / 50); filter: GRAYSCALE(50); } 4`] = `
+exports[`invalid(155): a { OPACITY: 50 !important; color: RGB(0 0 0 / 50); filter: GRAYSCALE(50); } 4`] = `
 
 Message:
 > 1 | a { OPACITY: 50 !important; color: RGB(0 0 0 / 50); filter: GRAYSCALE(50); }
@@ -1140,13 +1190,13 @@ Message:
 
 `;
 
-exports[`invalid(153): a { WIDTH: CALC(-1px); opacity: MAX(2, 1); } 1`] = `
+exports[`invalid(156): a { WIDTH: CALC(-1px); opacity: MAX(2, 1); } 1`] = `
 
   1 | a { WIDTH: CALC(-1px); opacity: MAX(2, 1); }
 
 `;
 
-exports[`invalid(153): a { WIDTH: CALC(-1px); opacity: MAX(2, 1); } 2`] = `
+exports[`invalid(156): a { WIDTH: CALC(-1px); opacity: MAX(2, 1); } 2`] = `
 
 Message:
 > 1 | a { WIDTH: CALC(-1px); opacity: MAX(2, 1); }
@@ -1154,7 +1204,7 @@ Message:
 
 `;
 
-exports[`invalid(153): a { WIDTH: CALC(-1px); opacity: MAX(2, 1); } 3`] = `
+exports[`invalid(156): a { WIDTH: CALC(-1px); opacity: MAX(2, 1); } 3`] = `
 
 Message:
 > 1 | a { WIDTH: CALC(-1px); opacity: MAX(2, 1); }
@@ -1162,13 +1212,13 @@ Message:
 
 `;
 
-exports[`invalid(154): a { filter: \\67 rayscale(50); color: r\\67 b(0 0 0 / 50); } 1`] = `
+exports[`invalid(157): a { filter: \\67 rayscale(50); color: r\\67 b(0 0 0 / 50); } 1`] = `
 
   1 | a { filter: \\67 rayscale(50); color: r\\67 b(0 0 0 / 50); }
 
 `;
 
-exports[`invalid(154): a { filter: \\67 rayscale(50); color: r\\67 b(0 0 0 / 50); } 2`] = `
+exports[`invalid(157): a { filter: \\67 rayscale(50); color: r\\67 b(0 0 0 / 50); } 2`] = `
 
 Message:
 > 1 | a { filter: \\67 rayscale(50); color: r\\67 b(0 0 0 / 50); }
@@ -1176,7 +1226,7 @@ Message:
 
 `;
 
-exports[`invalid(154): a { filter: \\67 rayscale(50); color: r\\67 b(0 0 0 / 50); } 3`] = `
+exports[`invalid(157): a { filter: \\67 rayscale(50); color: r\\67 b(0 0 0 / 50); } 3`] = `
 
 Message:
 > 1 | a { filter: \\67 rayscale(50); color: r\\67 b(0 0 0 / 50); }
@@ -1184,13 +1234,13 @@ Message:
 
 `;
 
-exports[`invalid(155): a { opacity: /* keep */ 50; color: rgb(0 0 0 / /* keep */ 50); } 1`] = `
+exports[`invalid(158): a { opacity: /* keep */ 50; color: rgb(0 0 0 / /* keep */ 50); } 1`] = `
 
   1 | a { opacity: /* keep */ 50; color: rgb(0 0 0 / /* keep */ 50); }
 
 `;
 
-exports[`invalid(155): a { opacity: /* keep */ 50; color: rgb(0 0 0 / /* keep */ 50); } 2`] = `
+exports[`invalid(158): a { opacity: /* keep */ 50; color: rgb(0 0 0 / /* keep */ 50); } 2`] = `
 
 Message:
 > 1 | a { opacity: /* keep */ 50; color: rgb(0 0 0 / /* keep */ 50); }
@@ -1198,7 +1248,7 @@ Message:
 
 `;
 
-exports[`invalid(155): a { opacity: /* keep */ 50; color: rgb(0 0 0 / /* keep */ 50); } 3`] = `
+exports[`invalid(158): a { opacity: /* keep */ 50; color: rgb(0 0 0 / /* keep */ 50); } 3`] = `
 
 Message:
 > 1 | a { opacity: /* keep */ 50; color: rgb(0 0 0 / /* keep */ 50); }
@@ -1206,67 +1256,17 @@ Message:
 
 `;
 
-exports[`invalid(156): @media (width > 1px) { @supports (display: grid) { a { opacity: 50; } } } 1`] = `
+exports[`invalid(159): @media (width > 1px) { @supports (display: grid) { a { opacity: 50; } } } 1`] = `
 
   1 | @media (width > 1px) { @supports (display: grid) { a { opacity: 50; } } }
 
 `;
 
-exports[`invalid(156): @media (width > 1px) { @supports (display: grid) { a { opacity: 50; } } } 2`] = `
+exports[`invalid(159): @media (width > 1px) { @supports (display: grid) { a { opacity: 50; } } } 2`] = `
 
 Message:
 > 1 | @media (width > 1px) { @supports (display: grid) { a { opacity: 50; } } }
     |                                                                 ^^ 'opacity' evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
-
-`;
-
-exports[`invalid(157): @container (width > 1px) { @layer theme { @scope (.a) { .b { opacity: 50; } } } } 1`] = `
-
-  1 | @container (width > 1px) { @layer theme { @scope (.a) { .b { opacity: 50; } } } }
-
-`;
-
-exports[`invalid(157): @container (width > 1px) { @layer theme { @scope (.a) { .b { opacity: 50; } } } } 2`] = `
-
-Message:
-> 1 | @container (width > 1px) { @layer theme { @scope (.a) { .b { opacity: 50; } } } }
-    |                                                                       ^^ 'opacity' evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
-
-`;
-
-exports[`invalid(158): a { & .b { opacity: 50; } } @keyframes fade { to { filter: grayscale(50); } } 1`] = `
-
-  1 | a { & .b { opacity: 50; } } @keyframes fade { to { filter: grayscale(50); } }
-
-`;
-
-exports[`invalid(158): a { & .b { opacity: 50; } } @keyframes fade { to { filter: grayscale(50); } } 2`] = `
-
-Message:
-> 1 | a { & .b { opacity: 50; } } @keyframes fade { to { filter: grayscale(50); } }
-    |                     ^^ 'opacity' evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
-
-`;
-
-exports[`invalid(158): a { & .b { opacity: 50; } } @keyframes fade { to { filter: grayscale(50); } } 3`] = `
-
-Message:
-> 1 | a { & .b { opacity: 50; } } @keyframes fade { to { filter: grayscale(50); } }
-    |                                                                      ^^ 'grayscale() amount' evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
-
-`;
-
-exports[`invalid(159): a { color: rgba(0, 0, 0, 150%); } 1`] = `
-
-  1 | a { color: rgba(0, 0, 0, 150%); }
-
-`;
-
-exports[`invalid(159): a { color: rgba(0, 0, 0, 150%); } 2`] = `
-
-Message:
-> 1 | a { color: rgba(0, 0, 0, 150%); }
-    |                          ^^^^ 'rgba() alpha' evaluates to 150%, which the browser clamps to 100%.
 
 `;
 
@@ -1284,13 +1284,63 @@ Message:
 
 `;
 
-exports[`invalid(160): a { text-decoration-thickness: 0%; } 1`] = `
+exports[`invalid(160): @container (width > 1px) { @layer theme { @scope (.a) { .b { opacity: 50; } } } } 1`] = `
+
+  1 | @container (width > 1px) { @layer theme { @scope (.a) { .b { opacity: 50; } } } }
+
+`;
+
+exports[`invalid(160): @container (width > 1px) { @layer theme { @scope (.a) { .b { opacity: 50; } } } } 2`] = `
+
+Message:
+> 1 | @container (width > 1px) { @layer theme { @scope (.a) { .b { opacity: 50; } } } }
+    |                                                                       ^^ 'opacity' evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
+
+`;
+
+exports[`invalid(161): a { & .b { opacity: 50; } } @keyframes fade { to { filter: grayscale(50); } } 1`] = `
+
+  1 | a { & .b { opacity: 50; } } @keyframes fade { to { filter: grayscale(50); } }
+
+`;
+
+exports[`invalid(161): a { & .b { opacity: 50; } } @keyframes fade { to { filter: grayscale(50); } } 2`] = `
+
+Message:
+> 1 | a { & .b { opacity: 50; } } @keyframes fade { to { filter: grayscale(50); } }
+    |                     ^^ 'opacity' evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
+
+`;
+
+exports[`invalid(161): a { & .b { opacity: 50; } } @keyframes fade { to { filter: grayscale(50); } } 3`] = `
+
+Message:
+> 1 | a { & .b { opacity: 50; } } @keyframes fade { to { filter: grayscale(50); } }
+    |                                                                      ^^ 'grayscale() amount' evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
+
+`;
+
+exports[`invalid(162): a { color: rgba(0, 0, 0, 150%); } 1`] = `
+
+  1 | a { color: rgba(0, 0, 0, 150%); }
+
+`;
+
+exports[`invalid(162): a { color: rgba(0, 0, 0, 150%); } 2`] = `
+
+Message:
+> 1 | a { color: rgba(0, 0, 0, 150%); }
+    |                          ^^^^ 'rgba() alpha' evaluates to 150%, which the browser clamps to 100%.
+
+`;
+
+exports[`invalid(163): a { text-decoration-thickness: 0%; } 1`] = `
 
   1 | a { text-decoration-thickness: 0%; }
 
 `;
 
-exports[`invalid(160): a { text-decoration-thickness: 0%; } 2`] = `
+exports[`invalid(163): a { text-decoration-thickness: 0%; } 2`] = `
 
 Message:
 > 1 | a { text-decoration-thickness: 0%; }
@@ -1298,13 +1348,13 @@ Message:
 
 `;
 
-exports[`invalid(161): a { -webkit-filter: grayscale(50); } 1`] = `
+exports[`invalid(164): a { -webkit-filter: grayscale(50); } 1`] = `
 
   1 | a { -webkit-filter: grayscale(50); }
 
 `;
 
-exports[`invalid(161): a { -webkit-filter: grayscale(50); } 2`] = `
+exports[`invalid(164): a { -webkit-filter: grayscale(50); } 2`] = `
 
 Message:
 > 1 | a { -webkit-filter: grayscale(50); }
