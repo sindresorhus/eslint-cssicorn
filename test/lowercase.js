@@ -174,6 +174,12 @@ test.snapshot({
 test({
 	valid: [],
 	invalid: [
+		// Browser hack prefixes are not part of the property name.
+		...['*', '_', '$', '+', '&', '/', '//'].map(hack => ({
+			code: `a { ${hack}ZOOM: 1; }`,
+			output: `a { ${hack}zoom: 1; }`,
+			errors: 1,
+		})),
 		{
 			code: '@media (\u00A0WIDTH: 1PX) {}',
 			output: '@media (\u00A0width: 1px) {}',

@@ -346,7 +346,9 @@ const create = context => {
 	// Check for a problem before checking the context, because that is much cheaper.
 	context.on('Declaration', node => {
 		const [start] = sourceCode.getRange(node);
-		const problem = getIdentifierProblem(node, [start, start + node.property.length], 'property', context);
+		// Keep browser hack prefixes like `*zoom` and `//zoom`, which are not part of the identifier.
+		const hackLength = /^(?:[$&*+]|\/\/?)/v.exec(node.property)?.[0].length ?? 0;
+		const problem = getIdentifierProblem(node, [start + hackLength, start + node.property.length], 'property', context);
 		if (
 			!problem
 			|| isInPreservedContext(node, context)
