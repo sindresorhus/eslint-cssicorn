@@ -216,9 +216,18 @@ function normalizeMatchNode(node) {
 	}
 }
 
+// A value is matched once, not once for every identifier in it, as matching a long value, like a font family list, is slow.
+const valueMatches = new WeakMap();
+
 function getValueMatch(matchValue, candidate, target, sourceCode) {
+	if (valueMatches.has(candidate)) {
+		return {match: valueMatches.get(candidate), target};
+	}
+
 	if (!sourceCode.getText(candidate).includes('\\')) {
-		return {match: matchValue(candidate), target};
+		const match = matchValue(candidate);
+		valueMatches.set(candidate, match);
+		return {match, target};
 	}
 
 	const normalizedCandidate = clone(candidate);

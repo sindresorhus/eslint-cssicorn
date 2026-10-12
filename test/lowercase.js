@@ -168,6 +168,10 @@ test.snapshot({
 		// Units outside and inside `inherit()` and `first-valid()` are still checked, but the value identifiers are not.
 		'a { animation: inherit(--Easing) Ease 1S; transition: first-valid(1S) EASE; }',
 		'a { color: RGB(1 2 3); background: HSL(0DEG 0% 0%); }',
+		// A value is matched once for all its identifiers.
+		'a { font-family: Arial, Helvetica, SANS-SERIF, Roboto, Segoe UI, SERIF; }',
+		String.raw`a { font-family: Arial, \53 ANS-SERIF, Roboto, SERIF; }`,
+		'a { transition: OPACITY 1S EASE-IN, Transform 2S LINEAR; }',
 	],
 });
 
