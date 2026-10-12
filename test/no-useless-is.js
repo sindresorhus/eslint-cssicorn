@@ -178,6 +178,27 @@ ruleTest({
 			output: String.raw`.foo\61 :hover {}`,
 			errors: [{messageId: 'no-useless-is'}],
 		},
+		// `@eslint/css` can parse a nested rule that starts like `a::before` or `a ::before` as a declaration.
+		...[
+			'.wrap { :is(a)::before { color: red; } }',
+			'.wrap { :is(A)::BEFORE { color: red; } }',
+			'.wrap { :is(a) ::before { color: red; } }',
+			'.wrap { :is(a)\n::before { color: red; } }',
+			'.wrap { :is(input):not([type=checkbox], [type=radio], [type=range]) { color: red; } }',
+			'.wrap { @media (width > 1px) { :is(a)::before { color: red; } } }',
+		].map(code => ({code, errors: [{messageId: 'no-useless-is'}]})),
+		...[
+			['.wrap { :is(a):hover { color: red; } }', '.wrap { a:hover { color: red; } }'],
+			['.wrap { :is(a:hover) { color: red; } }', '.wrap { a:hover { color: red; } }'],
+			['.wrap { :is(a) .b::before { color: red; } }', '.wrap { a .b::before { color: red; } }'],
+			['.wrap { .x, :is(a)::before { color: red; } }', '.wrap { .x, a::before { color: red; } }'],
+			['.wrap { :is(a).x::before { color: red; } }', '.wrap { a.x::before { color: red; } }'],
+			['.wrap { :is(*)::before { color: red; } }', '.wrap { *::before { color: red; } }'],
+			['.wrap { .x :is(a)::before { color: red; } }', '.wrap { .x a::before { color: red; } }'],
+			['.wrap { :is(.x)::before { color: red; } }', '.wrap { .x::before { color: red; } }'],
+			[':is(a)::before { color: red; }', 'a::before { color: red; }'],
+			['@media (width > 1px) { :is(a)::before { color: red; } }', '@media (width > 1px) { a::before { color: red; } }'],
+		].map(([code, output]) => ({code, output, errors: [{messageId: 'no-useless-is'}]})),
 		{
 			code: '/* 🌈 */\r\n@media (width > 1px) {\r\n  .card:\\69 s(\r\n    .active\r\n  ) { color: red; }\r\n}',
 			output: '/* 🌈 */\r\n@media (width > 1px) {\r\n  .card.active { color: red; }\r\n}',

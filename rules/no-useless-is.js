@@ -10,6 +10,7 @@ import {
 	decodeCssIdentifier,
 	getPseudoSelectorArgument,
 	hasCommentInRange,
+	isParsedAsNestedRule,
 	normalizeCssIdentifier,
 } from './utils/index.js';
 
@@ -150,6 +151,15 @@ const create = context => {
 				// Terminate a trailing hex escape so it cannot consume surrounding selector whitespace.
 				if (selectorText.includes('\\') && decodeCssIdentifier(selectorText + ' ') === decodeCssIdentifier(selectorText)) {
 					selectorText += ' ';
+				}
+
+				// `@eslint/css` can parse a nested rule that starts like `a::before` or `a ::before` as a declaration, and the fixed file must still parse.
+				if (hasAncestorStyleRule(owner, context)) {
+					const [nodeStart, nodeEnd] = sourceCode.getRange(node);
+					const fixedPreludeText = sourceCode.text.slice(sourceCode.getRange(owner.prelude)[0], nodeStart) + selectorText + sourceCode.text.slice(nodeEnd, sourceCode.getRange(owner.block)[0]);
+					if (!isParsedAsNestedRule(`${fixedPreludeText}{}`)) {
+						return abort();
+					}
 				}
 
 				yield fixer.replaceText(node, selectorText);
