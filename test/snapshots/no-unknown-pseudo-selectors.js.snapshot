@@ -287,6 +287,52 @@ Message:
 
 `;
 
+exports[`invalid(26): :horizontal {} a:start {} ::before:vertical {} ::-webkit-scrollbar :horizontal {} :decrement::-webkit-scrollbar-button {} 1`] = `
+
+  1 | :horizontal {} a:start {} ::before:vertical {} ::-webkit-scrollbar :horizontal {} :decrement::-webkit-scrollbar-button {}
+
+`;
+
+exports[`invalid(26): :horizontal {} a:start {} ::before:vertical {} ::-webkit-scrollbar :horizontal {} :decrement::-webkit-scrollbar-button {} 2`] = `
+
+Message:
+> 1 | :horizontal {} a:start {} ::before:vertical {} ::-webkit-scrollbar :horizontal {} :decrement::-webkit-scrollbar-button {}
+    | ^^^^^^^^^^^ Unknown pseudo-selector ':horizontal'.
+
+`;
+
+exports[`invalid(26): :horizontal {} a:start {} ::before:vertical {} ::-webkit-scrollbar :horizontal {} :decrement::-webkit-scrollbar-button {} 3`] = `
+
+Message:
+> 1 | :horizontal {} a:start {} ::before:vertical {} ::-webkit-scrollbar :horizontal {} :decrement::-webkit-scrollbar-button {}
+    |                 ^^^^^^ Unknown pseudo-selector ':start'.
+
+`;
+
+exports[`invalid(26): :horizontal {} a:start {} ::before:vertical {} ::-webkit-scrollbar :horizontal {} :decrement::-webkit-scrollbar-button {} 4`] = `
+
+Message:
+> 1 | :horizontal {} a:start {} ::before:vertical {} ::-webkit-scrollbar :horizontal {} :decrement::-webkit-scrollbar-button {}
+    |                                   ^^^^^^^^^ Unknown pseudo-selector ':vertical'.
+
+`;
+
+exports[`invalid(26): :horizontal {} a:start {} ::before:vertical {} ::-webkit-scrollbar :horizontal {} :decrement::-webkit-scrollbar-button {} 5`] = `
+
+Message:
+> 1 | :horizontal {} a:start {} ::before:vertical {} ::-webkit-scrollbar :horizontal {} :decrement::-webkit-scrollbar-button {}
+    |                                                                    ^^^^^^^^^^^ Unknown pseudo-selector ':horizontal'.
+
+`;
+
+exports[`invalid(26): :horizontal {} a:start {} ::before:vertical {} ::-webkit-scrollbar :horizontal {} :decrement::-webkit-scrollbar-button {} 6`] = `
+
+Message:
+> 1 | :horizontal {} a:start {} ::before:vertical {} ::-webkit-scrollbar :horizontal {} :decrement::-webkit-scrollbar-button {}
+    |                                                                                   ^^^^^^^^^^ Unknown pseudo-selector ':decrement'.
+
+`;
+
 exports[`invalid(3): :is(.foo:foucs, :not(.bar:hovr)) {} 1`] = `
 
   1 | :is(.foo:foucs, :not(.bar:hovr)) {}

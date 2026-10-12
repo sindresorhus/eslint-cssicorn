@@ -59,6 +59,10 @@ test.snapshot({
 			code: ':foo(.bar) {}',
 			options: [{allow: [':foo']}],
 		},
+		// WebKit scrollbar pseudo-classes are not prefixed, but only apply to the prefixed scrollbar pseudo-elements.
+		'::-webkit-scrollbar-thumb:horizontal {} ::-webkit-scrollbar-button:vertical:start:decrement {} ::-webkit-scrollbar-track-piece:end:increment {}',
+		'::-webkit-scrollbar-button:double-button:single-button:no-button {} ::-webkit-scrollbar-corner:window-inactive {} ::-webkit-scrollbar:corner-present {}',
+		'.a::-webkit-scrollbar-thumb:hover:horizontal {} ::-WEBKIT-SCROLLBAR-BUTTON:VERTICAL {} .a { &::-webkit-scrollbar-thumb:horizontal {} }',
 	],
 	invalid: [
 		':foucs {}',
@@ -90,5 +94,7 @@ test.snapshot({
 		'@media (width > 0px) { :foucs {} }',
 		'@layer theme { :hovr {} }',
 		'@scope (.card) { :foucs {} }',
+		// The WebKit scrollbar pseudo-classes are only allowed after a prefixed pseudo-element in the same compound.
+		':horizontal {} a:start {} ::before:vertical {} ::-webkit-scrollbar :horizontal {} :decrement::-webkit-scrollbar-button {}',
 	],
 });

@@ -39,14 +39,48 @@ const frameworkPseudoSelectors = [
 
 const knownPseudoSelectorKeys = new Set([...standardPseudoSelectors, ...frameworkPseudoSelectors].map(pseudoSelector => getPseudoSelectorKey(pseudoSelector)));
 
+// WebKit styles scrollbars with unprefixed pseudo-classes on its prefixed pseudo-elements, like `::-webkit-scrollbar-thumb:horizontal`.
+const webkitScrollbarPseudoClasses = new Set([
+	'corner-present',
+	'decrement',
+	'double-button',
+	'end',
+	'horizontal',
+	'increment',
+	'no-button',
+	'single-button',
+	'start',
+	'vertical',
+	'window-inactive',
+]);
+
 const getPseudoSelector = node => `${node.type === 'PseudoElementSelector' ? '::' : ':'}${node.name}`;
 const isCustomSelector = node => node.type === 'PseudoClassSelector' && isDashedIdentifier(node.name);
 const isVendorPrefixed = node => getVendorPrefix(decodeCssIdentifier(node.name)) !== '';
 
-const getProblem = (node, allowedPseudoSelectorKeys) => {
+const isWebkitScrollbarPseudoClass = (node, sourceCode) => {
+	if (
+		node.type !== 'PseudoClassSelector'
+		|| !webkitScrollbarPseudoClasses.has(normalizeCssIdentifier(node.name))
+	) {
+		return false;
+	}
+
+	const siblings = sourceCode.getParent(node)?.children ?? [];
+	for (let index = siblings.indexOf(node) - 1; index >= 0 && siblings[index].type !== 'Combinator'; index--) {
+		if (siblings[index].type === 'PseudoElementSelector' && isVendorPrefixed(siblings[index])) {
+			return true;
+		}
+	}
+
+	return false;
+};
+
+const getProblem = (node, allowedPseudoSelectorKeys, sourceCode) => {
 	if (
 		isCustomSelector(node)
 		|| isVendorPrefixed(node)
+		|| isWebkitScrollbarPseudoClass(node, sourceCode)
 	) {
 		return;
 	}
@@ -75,8 +109,9 @@ const create = context => {
 	const [{allow}] = context.options;
 	const allowedPseudoSelectorKeys = new Set(allow.map(pseudoSelector => getPseudoSelectorKey(pseudoSelector)));
 
-	context.on('PseudoClassSelector', node => getProblem(node, allowedPseudoSelectorKeys));
-	context.on('PseudoElementSelector', node => getProblem(node, allowedPseudoSelectorKeys));
+	const {sourceCode} = context;
+	context.on('PseudoClassSelector', node => getProblem(node, allowedPseudoSelectorKeys, sourceCode));
+	context.on('PseudoElementSelector', node => getProblem(node, allowedPseudoSelectorKeys, sourceCode));
 };
 
 /**

@@ -31,6 +31,13 @@ Vendor-prefixed pseudo-selectors, such as `::-webkit-scrollbar` and `:-moz-focus
 :-moz-focusring {}
 ```
 
+The unprefixed WebKit scrollbar pseudo-classes, like `:horizontal` and `:decrement`, are allowed after a vendor-prefixed pseudo-element in the same compound selector.
+
+```css
+/* ✅ */
+::-webkit-scrollbar-button:vertical:decrement {}
+```
+
 The rule does not validate context or arguments. Nested pseudo-selectors are checked only when `@eslint/css` parses the arguments as selectors.
 
 ## Options
