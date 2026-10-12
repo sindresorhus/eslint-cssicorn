@@ -2161,13 +2161,41 @@ Output:
 
 `;
 
-exports[`invalid(54): a { color: RGB(1 2 3); background: HSL(0DEG 0% 0%); } 1`] = `
+exports[`invalid(54): a { animation: inherit(--Easing) Ease 1S; transition: first-valid(1S) EASE; } 1`] = `
+
+  1 | a { animation: inherit(--Easing) Ease 1S; transition: first-valid(1S) EASE; }
+
+`;
+
+exports[`invalid(54): a { animation: inherit(--Easing) Ease 1S; transition: first-valid(1S) EASE; } 2`] = `
+
+Message:
+> 1 | a { animation: inherit(--Easing) Ease 1S; transition: first-valid(1S) EASE; }
+    |                                        ^ Use lowercase for CSS unit \`S\`.
+
+Output:
+  1 | a { animation: inherit(--Easing) Ease 1s; transition: first-valid(1S) EASE; }
+
+`;
+
+exports[`invalid(54): a { animation: inherit(--Easing) Ease 1S; transition: first-valid(1S) EASE; } 3`] = `
+
+Message:
+> 1 | a { animation: inherit(--Easing) Ease 1S; transition: first-valid(1S) EASE; }
+    |                                                                    ^ Use lowercase for CSS unit \`S\`.
+
+Output:
+  1 | a { animation: inherit(--Easing) Ease 1S; transition: first-valid(1s) EASE; }
+
+`;
+
+exports[`invalid(55): a { color: RGB(1 2 3); background: HSL(0DEG 0% 0%); } 1`] = `
 
   1 | a { color: RGB(1 2 3); background: HSL(0DEG 0% 0%); }
 
 `;
 
-exports[`invalid(54): a { color: RGB(1 2 3); background: HSL(0DEG 0% 0%); } 2`] = `
+exports[`invalid(55): a { color: RGB(1 2 3); background: HSL(0DEG 0% 0%); } 2`] = `
 
 Message:
 > 1 | a { color: RGB(1 2 3); background: HSL(0DEG 0% 0%); }
@@ -2178,7 +2206,7 @@ Output:
 
 `;
 
-exports[`invalid(54): a { color: RGB(1 2 3); background: HSL(0DEG 0% 0%); } 3`] = `
+exports[`invalid(55): a { color: RGB(1 2 3); background: HSL(0DEG 0% 0%); } 3`] = `
 
 Message:
 > 1 | a { color: RGB(1 2 3); background: HSL(0DEG 0% 0%); }
@@ -2189,7 +2217,7 @@ Output:
 
 `;
 
-exports[`invalid(54): a { color: RGB(1 2 3); background: HSL(0DEG 0% 0%); } 4`] = `
+exports[`invalid(55): a { color: RGB(1 2 3); background: HSL(0DEG 0% 0%); } 4`] = `
 
 Message:
 > 1 | a { color: RGB(1 2 3); background: HSL(0DEG 0% 0%); }

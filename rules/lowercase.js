@@ -14,6 +14,7 @@ import {
 	isCssModulesInteropDeclaration,
 	isDashedIdentifier,
 	normalizeCssIdentifier,
+	substitutionFunctions,
 	toAsciiLowerCase,
 	toLocation,
 } from './utils/index.js';
@@ -47,7 +48,6 @@ const preservedFunctionPayloadNames = new Set([
 	'paint',
 	'url',
 ]);
-const substitutingFunctionNames = new Set(['attr', 'env', 'var']);
 // Function names that the CSS Transforms specifications write in camelCase.
 const camelCaseFunctionNames = new Map([
 	'rotateX',
@@ -239,7 +239,7 @@ function getValueMatch(matchValue, candidate, target, sourceCode) {
 	return {match: matchValue(normalizedCandidate), target: normalizedTarget};
 }
 
-const isSubstitutingFunction = name => name.startsWith('--') || substitutingFunctionNames.has(name);
+const isSubstitutingFunction = name => name.startsWith('--') || substitutionFunctions.has(name);
 
 function hasFunction(node, predicate) {
 	let found = false;

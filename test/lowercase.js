@@ -82,6 +82,8 @@ test.snapshot({
 		'a { border-color: var(--Color) RED; }',
 		'a { color: var(--Color, RED); }',
 		'a { transition: var(--Duration) EASE-IN; }',
+		// `inherit()` and `first-valid()` are substitutions too, so `Ease` can be the animation name.
+		'a { animation: inherit(--easing) Ease 1s; animation: first-valid(ease-in) Ease 1s; }',
 		// `@property` initial values are user data, so they are not changed.
 		'@property --Theme { syntax: "*"; inherits: false; initial-value: FOO(1PX) #ABC; }',
 		// Keyframe selectors are not value keywords, so their casing is kept.
@@ -163,6 +165,8 @@ test.snapshot({
 		'@counter-style Thumbs { SYSTEM: CYCLIC; }',
 		'a { background: IMAGE-SET(URL(a.png) 1X); }',
 		'a { transition: ALL 1S EASE-IN-OUT; }',
+		// Units outside and inside `inherit()` and `first-valid()` are still checked, but the value identifiers are not.
+		'a { animation: inherit(--Easing) Ease 1S; transition: first-valid(1S) EASE; }',
 		'a { color: RGB(1 2 3); background: HSL(0DEG 0% 0%); }',
 	],
 });
