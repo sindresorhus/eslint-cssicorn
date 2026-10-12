@@ -466,6 +466,19 @@ test.snapshot({
 		':is(.foo .bar, .baz) a {}',
 		':is(.foo > .bar, .baz).active {}',
 		':is(.foo .bar, .baz) > a {}',
+		// A nested selector that starts with a type selector gets an explicit `&`, so the parser does not read it as a declaration
+		'div :is(span, button) { color: red; }',
+		'.x :is(span:is(.a, .b), button.c) { color: red; }',
+		'.x :IS(SPAN:not(.a, .b), .c) { color: red; }',
+		'.parent { :is(span:not(.a, .b), button.c) .child { color: red; } }',
+		'.parent { :is(span, .b) > .child { color: red; } }',
+		'.parent { :is(span&, button&) .child { color: red; } }',
+		'.parent { &:is(span, button) .child { color: red; } }',
+		'.parent { > :is(span, button) .child { color: red; } }',
+		'@media (width > 0px) { .parent { :is(span, .b) .child { color: red; } } }',
+		':is(span:is(.a, .b), button.c) .child { color: red; }',
+		'div :is(span, button) {\n  color: red;\n}',
+		'.parent {\r\n\t:is(span, button) .child {\r\n\t\tcolor: red;\r\n\t}\r\n}',
 	],
 });
 

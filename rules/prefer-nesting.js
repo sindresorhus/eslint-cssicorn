@@ -214,7 +214,7 @@ const getLeadingGroupCandidate = (children, rule, context) => {
 	let parentText;
 	if (canUnwrap) {
 		// The inner selector inherits the list's maximum specificity, just like :is().
-		parentText = getNodesText(argumentsList.children, sourceCode);
+		parentText = hasAncestor ? getNestedSelectorListText(argumentsList.children, sourceCode) : getNodesText(argumentsList.children, sourceCode);
 		if (leadingNode) {
 			parentText = argumentsList.children.map(argument => {
 				const nodes = argument.children;
@@ -264,23 +264,41 @@ const getCandidate = (selector, rule, context) => {
 	}
 
 	const isDescendant = isDescendantCombinator(children[groupIndex - 1]);
-	let innerNodes = children.slice(isDescendant || !hasCombinator ? groupIndex : parentEnd);
+	const innerNodes = children.slice(isDescendant || !hasCombinator ? groupIndex : parentEnd);
+	let inner = (hasCombinator ? '' : '&') + getNodesText(innerNodes, sourceCode);
 	if (groupIndex === children.length - 1 && isDescendant && normalizeCssIdentifier(group.name) === 'is') {
 		// Unlike :is(), a nested selector list gives each branch its own specificity.
 		const argumentsList = getSelectorList(group);
 		const specificities = argumentsList.children.map(argument => getRuleSelectorSpecificity(argument, [0, 0, 0]));
 		const hasEqualSpecificity = specificities.every(specificity => compareSpecificity(specificity, specificities[0]) === 0);
-		innerNodes = hasEqualSpecificity && canUnwrapSelectorList(argumentsList) ? argumentsList.children : [group];
+		if (hasEqualSpecificity && canUnwrapSelectorList(argumentsList)) {
+			inner = getNestedSelectorListText(argumentsList.children, sourceCode);
+		}
 	}
 
 	return {
 		node: group,
 		outerNodes: children.slice(0, parentEnd),
-		inner: (hasCombinator ? '' : '&') + getNodesText(innerNodes, sourceCode),
+		inner,
 	};
 };
 
 const getNodesText = (nodes, sourceCode) => sourceCode.text.slice(...getNodesRange(nodes, {sourceCode}));
+
+// Explicit nesting avoids interpreting a leading type selector as a declaration, as in `span:is(.a, .b), .c`.
+const getNestedSelectorListText = (selectors, sourceCode) => {
+	let text = '';
+	let previousEnd;
+	for (const selector of selectors) {
+		const [start, end] = getNodesRange(selector.children, {sourceCode});
+		const [firstNode] = selector.children;
+		const prefix = firstNode.type === 'TypeSelector' && firstNode.name !== '*' && !hasNestingSelector(selector) ? '& ' : '';
+		text += (previousEnd === undefined ? '' : sourceCode.text.slice(previousEnd, start)) + prefix + sourceCode.text.slice(start, end);
+		previousEnd = end;
+	}
+
+	return text;
+};
 
 const getIndentation = (rule, sourceCode) => {
 	const [ruleStart] = sourceCode.getRange(rule);

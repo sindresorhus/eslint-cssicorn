@@ -725,6 +725,74 @@ Output:
 
 `;
 
+exports[`invalid(46): div :is(span, button) { color: red; } 1`] = `
+
+  1 | div :is(span, button) { color: red; }
+
+`;
+
+exports[`invalid(46): div :is(span, button) { color: red; } 2`] = `
+
+Message:
+> 1 | div :is(span, button) { color: red; }
+    |     ^^^^^^^^^^^^^^^^^ Prefer CSS nesting over \`:is()\`.
+
+Output:
+  1 | div { & span, & button { color: red; } }
+
+`;
+
+exports[`invalid(47): .x :is(span:is(.a, .b), button.c) { color: red; } 1`] = `
+
+  1 | .x :is(span:is(.a, .b), button.c) { color: red; }
+
+`;
+
+exports[`invalid(47): .x :is(span:is(.a, .b), button.c) { color: red; } 2`] = `
+
+Message:
+> 1 | .x :is(span:is(.a, .b), button.c) { color: red; }
+    |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Prefer CSS nesting over \`:is()\`.
+
+Output:
+  1 | .x { & span:is(.a, .b), & button.c { color: red; } }
+
+`;
+
+exports[`invalid(48): .x :IS(SPAN:not(.a, .b), .c) { color: red; } 1`] = `
+
+  1 | .x :IS(SPAN:not(.a, .b), .c) { color: red; }
+
+`;
+
+exports[`invalid(48): .x :IS(SPAN:not(.a, .b), .c) { color: red; } 2`] = `
+
+Message:
+> 1 | .x :IS(SPAN:not(.a, .b), .c) { color: red; }
+    |    ^^^^^^^^^^^^^^^^^^^^^^^^^ Prefer CSS nesting over \`:is()\`.
+
+Output:
+  1 | .x { :IS(SPAN:not(.a, .b), .c) { color: red; } }
+
+`;
+
+exports[`invalid(49): .parent { :is(span:not(.a, .b), button.c) .child { color: red; } } 1`] = `
+
+  1 | .parent { :is(span:not(.a, .b), button.c) .child { color: red; } }
+
+`;
+
+exports[`invalid(49): .parent { :is(span:not(.a, .b), button.c) .child { color: red; } } 2`] = `
+
+Message:
+> 1 | .parent { :is(span:not(.a, .b), button.c) .child { color: red; } }
+    |           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Prefer CSS nesting over \`:is()\`.
+
+Output:
+  1 | .parent { & span:not(.a, .b), & button.c { .child { color: red; } } }
+
+`;
+
 exports[`invalid(5): :is(.foo, #bar) a {} 1`] = `
 
   1 | :is(.foo, #bar) a {}
@@ -739,6 +807,164 @@ Message:
 
 Output:
   1 | .foo, #bar { & a {} }
+
+`;
+
+exports[`invalid(50): .parent { :is(span, .b) > .child { color: red; } } 1`] = `
+
+  1 | .parent { :is(span, .b) > .child { color: red; } }
+
+`;
+
+exports[`invalid(50): .parent { :is(span, .b) > .child { color: red; } } 2`] = `
+
+Message:
+> 1 | .parent { :is(span, .b) > .child { color: red; } }
+    |           ^^^^^^^^^^^^^ Prefer CSS nesting over \`:is()\`.
+
+Output:
+  1 | .parent { & span, .b { > .child { color: red; } } }
+
+`;
+
+exports[`invalid(51): .parent { :is(span&, button&) .child { color: red; } } 1`] = `
+
+  1 | .parent { :is(span&, button&) .child { color: red; } }
+
+`;
+
+exports[`invalid(51): .parent { :is(span&, button&) .child { color: red; } } 2`] = `
+
+Message:
+> 1 | .parent { :is(span&, button&) .child { color: red; } }
+    |           ^^^^^^^^^^^^^^^^^^^ Prefer CSS nesting over \`:is()\`.
+
+Output:
+  1 | .parent { span&, button& { .child { color: red; } } }
+
+`;
+
+exports[`invalid(52): .parent { &:is(span, button) .child { color: red; } } 1`] = `
+
+  1 | .parent { &:is(span, button) .child { color: red; } }
+
+`;
+
+exports[`invalid(52): .parent { &:is(span, button) .child { color: red; } } 2`] = `
+
+Message:
+> 1 | .parent { &:is(span, button) .child { color: red; } }
+    |            ^^^^^^^^^^^^^^^^^ Prefer CSS nesting over \`:is()\`.
+
+Output:
+  1 | .parent { span&, button& { & .child { color: red; } } }
+
+`;
+
+exports[`invalid(53): .parent { > :is(span, button) .child { color: red; } } 1`] = `
+
+  1 | .parent { > :is(span, button) .child { color: red; } }
+
+`;
+
+exports[`invalid(53): .parent { > :is(span, button) .child { color: red; } } 2`] = `
+
+Message:
+> 1 | .parent { > :is(span, button) .child { color: red; } }
+    |             ^^^^^^^^^^^^^^^^^ Prefer CSS nesting over \`:is()\`.
+
+Output:
+  1 | .parent { > span, > button { & .child { color: red; } } }
+
+`;
+
+exports[`invalid(54): @media (width > 0px) { .parent { :is(span, .b) .child { color: red; } } } 1`] = `
+
+  1 | @media (width > 0px) { .parent { :is(span, .b) .child { color: red; } } }
+
+`;
+
+exports[`invalid(54): @media (width > 0px) { .parent { :is(span, .b) .child { color: red; } } } 2`] = `
+
+Message:
+> 1 | @media (width > 0px) { .parent { :is(span, .b) .child { color: red; } } }
+    |                                  ^^^^^^^^^^^^^ Prefer CSS nesting over \`:is()\`.
+
+Output:
+  1 | @media (width > 0px) { .parent { & span, .b { .child { color: red; } } } }
+
+`;
+
+exports[`invalid(55): :is(span:is(.a, .b), button.c) .child { color: red; } 1`] = `
+
+  1 | :is(span:is(.a, .b), button.c) .child { color: red; }
+
+`;
+
+exports[`invalid(55): :is(span:is(.a, .b), button.c) .child { color: red; } 2`] = `
+
+Message:
+> 1 | :is(span:is(.a, .b), button.c) .child { color: red; }
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Prefer CSS nesting over \`:is()\`.
+
+Output:
+  1 | span:is(.a, .b), button.c { .child { color: red; } }
+
+`;
+
+exports[`invalid(56): div :is(span, button) {\n  color: red;\n} 1`] = `
+
+  1 | div :is(span, button) {
+  2 |   color: red;
+  3 | }
+
+`;
+
+exports[`invalid(56): div :is(span, button) {\n  color: red;\n} 2`] = `
+
+Message:
+> 1 | div :is(span, button) {
+    |     ^^^^^^^^^^^^^^^^^ Prefer CSS nesting over \`:is()\`.
+  2 |   color: red;
+  3 | }
+
+Output:
+  1 | div {
+  2 |   & span, & button {
+  3 |     color: red;
+  4 |   }
+  5 | }
+
+`;
+
+exports[`invalid(57): .parent {\r\n\t:is(span, button) .child {\r\n\t\tcolor: red;\r\n\t}\r\n} 1`] = `
+
+  1 | .parent {
+  2 | 	:is(span, button) .child {
+  3 | 		color: red;
+  4 | 	}
+  5 | }
+
+`;
+
+exports[`invalid(57): .parent {\r\n\t:is(span, button) .child {\r\n\t\tcolor: red;\r\n\t}\r\n} 2`] = `
+
+Message:
+  1 | .parent {
+> 2 | 	:is(span, button) .child {
+    | 	^^^^^^^^^^^^^^^^^ Prefer CSS nesting over \`:is()\`.
+  3 | 		color: red;
+  4 | 	}
+  5 | }
+
+Output:
+  1 | .parent {
+  2 | 	& span, & button {
+  3 | 		.child {
+  4 | 			color: red;
+  5 | 		}
+  6 | 	}
+  7 | }
 
 `;
 
