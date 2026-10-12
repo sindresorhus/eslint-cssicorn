@@ -101,8 +101,9 @@ function getEnvironmentPlaceholder(syntax) {
 			return '0';
 		}
 
+		// A single number is a valid ratio and can also be one side of a ratio, like `16 / env(…)`.
 		case '<ratio>': {
-			return '1 / 1';
+			return '1';
 		}
 
 		case '<resolution> | infinite': {

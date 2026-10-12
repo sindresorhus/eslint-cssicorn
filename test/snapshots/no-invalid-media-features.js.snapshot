@@ -110,13 +110,27 @@ Message:
 
 `;
 
-exports[`invalid(17): @media (resolution: 10px) {} 1`] = `
+exports[`invalid(17): @media (aspect-ratio: -16 / env(viewport-ratio)) {} 1`] = `
+
+  1 | @media (aspect-ratio: -16 / env(viewport-ratio)) {}
+
+`;
+
+exports[`invalid(17): @media (aspect-ratio: -16 / env(viewport-ratio)) {} 2`] = `
+
+Message:
+> 1 | @media (aspect-ratio: -16 / env(viewport-ratio)) {}
+    |                       ^^^^^^^^^^^^^^^^^^^^^^^^^ Invalid value \`-16 / env(viewport-ratio)\` for media feature \`aspect-ratio\`. Expected <ratio>.
+
+`;
+
+exports[`invalid(18): @media (resolution: 10px) {} 1`] = `
 
   1 | @media (resolution: 10px) {}
 
 `;
 
-exports[`invalid(17): @media (resolution: 10px) {} 2`] = `
+exports[`invalid(18): @media (resolution: 10px) {} 2`] = `
 
 Message:
 > 1 | @media (resolution: 10px) {}
@@ -124,31 +138,17 @@ Message:
 
 `;
 
-exports[`invalid(18): @media (grid: 2) {} 1`] = `
+exports[`invalid(19): @media (grid: 2) {} 1`] = `
 
   1 | @media (grid: 2) {}
 
 `;
 
-exports[`invalid(18): @media (grid: 2) {} 2`] = `
+exports[`invalid(19): @media (grid: 2) {} 2`] = `
 
 Message:
 > 1 | @media (grid: 2) {}
     |               ^ Invalid value \`2\` for media feature \`grid\`. Expected <integer [0,1]>.
-
-`;
-
-exports[`invalid(19): @media (orientation: square) {} 1`] = `
-
-  1 | @media (orientation: square) {}
-
-`;
-
-exports[`invalid(19): @media (orientation: square) {} 2`] = `
-
-Message:
-> 1 | @media (orientation: square) {}
-    |                      ^^^^^^ Invalid value \`square\` for media feature \`orientation\`. Expected portrait | landscape.
 
 `;
 
@@ -166,13 +166,27 @@ Message:
 
 `;
 
-exports[`invalid(20): @media (display-mode: windowed) {} 1`] = `
+exports[`invalid(20): @media (orientation: square) {} 1`] = `
+
+  1 | @media (orientation: square) {}
+
+`;
+
+exports[`invalid(20): @media (orientation: square) {} 2`] = `
+
+Message:
+> 1 | @media (orientation: square) {}
+    |                      ^^^^^^ Invalid value \`square\` for media feature \`orientation\`. Expected portrait | landscape.
+
+`;
+
+exports[`invalid(21): @media (display-mode: windowed) {} 1`] = `
 
   1 | @media (display-mode: windowed) {}
 
 `;
 
-exports[`invalid(20): @media (display-mode: windowed) {} 2`] = `
+exports[`invalid(21): @media (display-mode: windowed) {} 2`] = `
 
 Message:
 > 1 | @media (display-mode: windowed) {}
@@ -180,13 +194,13 @@ Message:
 
 `;
 
-exports[`invalid(21): @media (device-posture: flat) {} 1`] = `
+exports[`invalid(22): @media (device-posture: flat) {} 1`] = `
 
   1 | @media (device-posture: flat) {}
 
 `;
 
-exports[`invalid(21): @media (device-posture: flat) {} 2`] = `
+exports[`invalid(22): @media (device-posture: flat) {} 2`] = `
 
 Message:
 > 1 | @media (device-posture: flat) {}
@@ -194,13 +208,13 @@ Message:
 
 `;
 
-exports[`invalid(22): @media (shape: square) {} 1`] = `
+exports[`invalid(23): @media (shape: square) {} 1`] = `
 
   1 | @media (shape: square) {}
 
 `;
 
-exports[`invalid(22): @media (shape: square) {} 2`] = `
+exports[`invalid(23): @media (shape: square) {} 2`] = `
 
 Message:
 > 1 | @media (shape: square) {}
@@ -208,13 +222,13 @@ Message:
 
 `;
 
-exports[`invalid(23): @media (red < width < blue) {} 1`] = `
+exports[`invalid(24): @media (red < width < blue) {} 1`] = `
 
   1 | @media (red < width < blue) {}
 
 `;
 
-exports[`invalid(23): @media (red < width < blue) {} 2`] = `
+exports[`invalid(24): @media (red < width < blue) {} 2`] = `
 
 Message:
 > 1 | @media (red < width < blue) {}
@@ -222,7 +236,7 @@ Message:
 
 `;
 
-exports[`invalid(23): @media (red < width < blue) {} 3`] = `
+exports[`invalid(24): @media (red < width < blue) {} 3`] = `
 
 Message:
 > 1 | @media (red < width < blue) {}
@@ -230,13 +244,13 @@ Message:
 
 `;
 
-exports[`invalid(24): @media (　　unknown-feature) {} 1`] = `
+exports[`invalid(25): @media (　　unknown-feature) {} 1`] = `
 
   1 | @media (　　unknown-feature) {}
 
 `;
 
-exports[`invalid(24): @media (　　unknown-feature) {} 2`] = `
+exports[`invalid(25): @media (　　unknown-feature) {} 2`] = `
 
 Message:
 > 1 | @media (　　unknown-feature) {}
@@ -244,13 +258,13 @@ Message:
 
 `;
 
-exports[`invalid(25): @media (min-width) {} 1`] = `
+exports[`invalid(26): @media (min-width) {} 1`] = `
 
   1 | @media (min-width) {}
 
 `;
 
-exports[`invalid(25): @media (min-width) {} 2`] = `
+exports[`invalid(26): @media (min-width) {} 2`] = `
 
 Message:
 > 1 | @media (min-width) {}
@@ -258,13 +272,13 @@ Message:
 
 `;
 
-exports[`invalid(26): @media (max-height) {} 1`] = `
+exports[`invalid(27): @media (max-height) {} 1`] = `
 
   1 | @media (max-height) {}
 
 `;
 
-exports[`invalid(26): @media (max-height) {} 2`] = `
+exports[`invalid(27): @media (max-height) {} 2`] = `
 
 Message:
 > 1 | @media (max-height) {}
@@ -272,13 +286,13 @@ Message:
 
 `;
 
-exports[`invalid(27): @media (MIN-WIDTH) {} 1`] = `
+exports[`invalid(28): @media (MIN-WIDTH) {} 1`] = `
 
   1 | @media (MIN-WIDTH) {}
 
 `;
 
-exports[`invalid(27): @media (MIN-WIDTH) {} 2`] = `
+exports[`invalid(28): @media (MIN-WIDTH) {} 2`] = `
 
 Message:
 > 1 | @media (MIN-WIDTH) {}
@@ -286,31 +300,17 @@ Message:
 
 `;
 
-exports[`invalid(28): @media (m\\61 x-width) {} 1`] = `
+exports[`invalid(29): @media (m\\61 x-width) {} 1`] = `
 
   1 | @media (m\\61 x-width) {}
 
 `;
 
-exports[`invalid(28): @media (m\\61 x-width) {} 2`] = `
+exports[`invalid(29): @media (m\\61 x-width) {} 2`] = `
 
 Message:
 > 1 | @media (m\\61 x-width) {}
     |         ^^^^^^^^^^^^ Media feature \`m\\61 x-width\` requires a value in plain notation.
-
-`;
-
-exports[`invalid(29): @media (/* before */ min-width /* name */) {} 1`] = `
-
-  1 | @media (/* before */ min-width /* name */) {}
-
-`;
-
-exports[`invalid(29): @media (/* before */ min-width /* name */) {} 2`] = `
-
-Message:
-> 1 | @media (/* before */ min-width /* name */) {}
-    |                      ^^^^^^^^^ Media feature \`min-width\` requires a value in plain notation.
 
 `;
 
@@ -328,13 +328,27 @@ Message:
 
 `;
 
-exports[`invalid(30): @media (orientation > portrait) {} 1`] = `
+exports[`invalid(30): @media (/* before */ min-width /* name */) {} 1`] = `
+
+  1 | @media (/* before */ min-width /* name */) {}
+
+`;
+
+exports[`invalid(30): @media (/* before */ min-width /* name */) {} 2`] = `
+
+Message:
+> 1 | @media (/* before */ min-width /* name */) {}
+    |                      ^^^^^^^^^ Media feature \`min-width\` requires a value in plain notation.
+
+`;
+
+exports[`invalid(31): @media (orientation > portrait) {} 1`] = `
 
   1 | @media (orientation > portrait) {}
 
 `;
 
-exports[`invalid(30): @media (orientation > portrait) {} 2`] = `
+exports[`invalid(31): @media (orientation > portrait) {} 2`] = `
 
 Message:
 > 1 | @media (orientation > portrait) {}
@@ -342,13 +356,13 @@ Message:
 
 `;
 
-exports[`invalid(31): @media (portrait < orientation) {} 1`] = `
+exports[`invalid(32): @media (portrait < orientation) {} 1`] = `
 
   1 | @media (portrait < orientation) {}
 
 `;
 
-exports[`invalid(31): @media (portrait < orientation) {} 2`] = `
+exports[`invalid(32): @media (portrait < orientation) {} 2`] = `
 
 Message:
 > 1 | @media (portrait < orientation) {}
@@ -356,13 +370,13 @@ Message:
 
 `;
 
-exports[`invalid(32): @media (grid >= 0) {} 1`] = `
+exports[`invalid(33): @media (grid >= 0) {} 1`] = `
 
   1 | @media (grid >= 0) {}
 
 `;
 
-exports[`invalid(32): @media (grid >= 0) {} 2`] = `
+exports[`invalid(33): @media (grid >= 0) {} 2`] = `
 
 Message:
 > 1 | @media (grid >= 0) {}
@@ -370,13 +384,13 @@ Message:
 
 `;
 
-exports[`invalid(33): @media (ORIENTATION > portrait) {} 1`] = `
+exports[`invalid(34): @media (ORIENTATION > portrait) {} 1`] = `
 
   1 | @media (ORIENTATION > portrait) {}
 
 `;
 
-exports[`invalid(33): @media (ORIENTATION > portrait) {} 2`] = `
+exports[`invalid(34): @media (ORIENTATION > portrait) {} 2`] = `
 
 Message:
 > 1 | @media (ORIENTATION > portrait) {}
@@ -384,13 +398,13 @@ Message:
 
 `;
 
-exports[`invalid(34): @media (o\\72 ientation > portrait) {} 1`] = `
+exports[`invalid(35): @media (o\\72 ientation > portrait) {} 1`] = `
 
   1 | @media (o\\72 ientation > portrait) {}
 
 `;
 
-exports[`invalid(34): @media (o\\72 ientation > portrait) {} 2`] = `
+exports[`invalid(35): @media (o\\72 ientation > portrait) {} 2`] = `
 
 Message:
 > 1 | @media (o\\72 ientation > portrait) {}
@@ -398,13 +412,13 @@ Message:
 
 `;
 
-exports[`invalid(35): @media (orientation > square) {} 1`] = `
+exports[`invalid(36): @media (orientation > square) {} 1`] = `
 
   1 | @media (orientation > square) {}
 
 `;
 
-exports[`invalid(35): @media (orientation > square) {} 2`] = `
+exports[`invalid(36): @media (orientation > square) {} 2`] = `
 
 Message:
 > 1 | @media (orientation > square) {}
@@ -412,13 +426,13 @@ Message:
 
 `;
 
-exports[`invalid(36): @media (orientation > theme(--orientation)) {} 1`] = `
+exports[`invalid(37): @media (orientation > theme(--orientation)) {} 1`] = `
 
   1 | @media (orientation > theme(--orientation)) {}
 
 `;
 
-exports[`invalid(36): @media (orientation > theme(--orientation)) {} 2`] = `
+exports[`invalid(37): @media (orientation > theme(--orientation)) {} 2`] = `
 
 Message:
 > 1 | @media (orientation > theme(--orientation)) {}
@@ -426,13 +440,13 @@ Message:
 
 `;
 
-exports[`invalid(37): @media (min-width > 10px) {} 1`] = `
+exports[`invalid(38): @media (min-width > 10px) {} 1`] = `
 
   1 | @media (min-width > 10px) {}
 
 `;
 
-exports[`invalid(37): @media (min-width > 10px) {} 2`] = `
+exports[`invalid(38): @media (min-width > 10px) {} 2`] = `
 
 Message:
 > 1 | @media (min-width > 10px) {}
@@ -440,31 +454,17 @@ Message:
 
 `;
 
-exports[`invalid(38): @media (10px < max-width) {} 1`] = `
+exports[`invalid(39): @media (10px < max-width) {} 1`] = `
 
   1 | @media (10px < max-width) {}
 
 `;
 
-exports[`invalid(38): @media (10px < max-width) {} 2`] = `
+exports[`invalid(39): @media (10px < max-width) {} 2`] = `
 
 Message:
 > 1 | @media (10px < max-width) {}
     |                ^^^^^^^^^ Media feature \`max-width\` does not support range notation.
-
-`;
-
-exports[`invalid(39): @media (MAX-WIDTH > 10px) {} 1`] = `
-
-  1 | @media (MAX-WIDTH > 10px) {}
-
-`;
-
-exports[`invalid(39): @media (MAX-WIDTH > 10px) {} 2`] = `
-
-Message:
-> 1 | @media (MAX-WIDTH > 10px) {}
-    |         ^^^^^^^^^ Media feature \`MAX-WIDTH\` does not support range notation.
 
 `;
 
@@ -482,13 +482,27 @@ Message:
 
 `;
 
-exports[`invalid(40): @media (m\\69 n-width > 10px) {} 1`] = `
+exports[`invalid(40): @media (MAX-WIDTH > 10px) {} 1`] = `
+
+  1 | @media (MAX-WIDTH > 10px) {}
+
+`;
+
+exports[`invalid(40): @media (MAX-WIDTH > 10px) {} 2`] = `
+
+Message:
+> 1 | @media (MAX-WIDTH > 10px) {}
+    |         ^^^^^^^^^ Media feature \`MAX-WIDTH\` does not support range notation.
+
+`;
+
+exports[`invalid(41): @media (m\\69 n-width > 10px) {} 1`] = `
 
   1 | @media (m\\69 n-width > 10px) {}
 
 `;
 
-exports[`invalid(40): @media (m\\69 n-width > 10px) {} 2`] = `
+exports[`invalid(41): @media (m\\69 n-width > 10px) {} 2`] = `
 
 Message:
 > 1 | @media (m\\69 n-width > 10px) {}
@@ -496,13 +510,13 @@ Message:
 
 `;
 
-exports[`invalid(41): @media (min-width > red) {} 1`] = `
+exports[`invalid(42): @media (min-width > red) {} 1`] = `
 
   1 | @media (min-width > red) {}
 
 `;
 
-exports[`invalid(41): @media (min-width > red) {} 2`] = `
+exports[`invalid(42): @media (min-width > red) {} 2`] = `
 
 Message:
 > 1 | @media (min-width > red) {}
@@ -510,13 +524,13 @@ Message:
 
 `;
 
-exports[`invalid(42): @media (10px < min-width < 20px) {} 1`] = `
+exports[`invalid(43): @media (10px < min-width < 20px) {} 1`] = `
 
   1 | @media (10px < min-width < 20px) {}
 
 `;
 
-exports[`invalid(42): @media (10px < min-width < 20px) {} 2`] = `
+exports[`invalid(43): @media (10px < min-width < 20px) {} 2`] = `
 
 Message:
 > 1 | @media (10px < min-width < 20px) {}
@@ -524,13 +538,13 @@ Message:
 
 `;
 
-exports[`invalid(43): @media (10px < width > 20px) {} 1`] = `
+exports[`invalid(44): @media (10px < width > 20px) {} 1`] = `
 
   1 | @media (10px < width > 20px) {}
 
 `;
 
-exports[`invalid(43): @media (10px < width > 20px) {} 2`] = `
+exports[`invalid(44): @media (10px < width > 20px) {} 2`] = `
 
 Message:
 > 1 | @media (10px < width > 20px) {}
@@ -538,13 +552,13 @@ Message:
 
 `;
 
-exports[`invalid(44): @media (20px >= width <= 10px) {} 1`] = `
+exports[`invalid(45): @media (20px >= width <= 10px) {} 1`] = `
 
   1 | @media (20px >= width <= 10px) {}
 
 `;
 
-exports[`invalid(44): @media (20px >= width <= 10px) {} 2`] = `
+exports[`invalid(45): @media (20px >= width <= 10px) {} 2`] = `
 
 Message:
 > 1 | @media (20px >= width <= 10px) {}
@@ -552,13 +566,13 @@ Message:
 
 `;
 
-exports[`invalid(45): @media (width < 10px < 20px) {} 1`] = `
+exports[`invalid(46): @media (width < 10px < 20px) {} 1`] = `
 
   1 | @media (width < 10px < 20px) {}
 
 `;
 
-exports[`invalid(45): @media (width < 10px < 20px) {} 2`] = `
+exports[`invalid(46): @media (width < 10px < 20px) {} 2`] = `
 
 Message:
 > 1 | @media (width < 10px < 20px) {}
@@ -566,13 +580,13 @@ Message:
 
 `;
 
-exports[`invalid(46): @media (10px < 20px < width) {} 1`] = `
+exports[`invalid(47): @media (10px < 20px < width) {} 1`] = `
 
   1 | @media (10px < 20px < width) {}
 
 `;
 
-exports[`invalid(46): @media (10px < 20px < width) {} 2`] = `
+exports[`invalid(47): @media (10px < 20px < width) {} 2`] = `
 
 Message:
 > 1 | @media (10px < 20px < width) {}
@@ -580,13 +594,13 @@ Message:
 
 `;
 
-exports[`invalid(47): @media (/* before */ 10px /* left */ < width /* middle */ > 20px) {} 1`] = `
+exports[`invalid(48): @media (/* before */ 10px /* left */ < width /* middle */ > 20px) {} 1`] = `
 
   1 | @media (/* before */ 10px /* left */ < width /* middle */ > 20px) {}
 
 `;
 
-exports[`invalid(47): @media (/* before */ 10px /* left */ < width /* middle */ > 20px) {} 2`] = `
+exports[`invalid(48): @media (/* before */ 10px /* left */ < width /* middle */ > 20px) {} 2`] = `
 
 Message:
 > 1 | @media (/* before */ 10px /* left */ < width /* middle */ > 20px) {}
@@ -594,31 +608,17 @@ Message:
 
 `;
 
-exports[`invalid(48): @media (theme(--minimum) < width > theme(--maximum)) {} 1`] = `
+exports[`invalid(49): @media (theme(--minimum) < width > theme(--maximum)) {} 1`] = `
 
   1 | @media (theme(--minimum) < width > theme(--maximum)) {}
 
 `;
 
-exports[`invalid(48): @media (theme(--minimum) < width > theme(--maximum)) {} 2`] = `
+exports[`invalid(49): @media (theme(--minimum) < width > theme(--maximum)) {} 2`] = `
 
 Message:
 > 1 | @media (theme(--minimum) < width > theme(--maximum)) {}
     |        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Chained media feature comparisons must place the feature between two values and use the same comparison direction.
-
-`;
-
-exports[`invalid(49): @media (min-grid: 1) {} 1`] = `
-
-  1 | @media (min-grid: 1) {}
-
-`;
-
-exports[`invalid(49): @media (min-grid: 1) {} 2`] = `
-
-Message:
-> 1 | @media (min-grid: 1) {}
-    |         ^^^^^^^^ Unknown media feature \`min-grid\`.
 
 `;
 
@@ -636,13 +636,27 @@ Message:
 
 `;
 
-exports[`invalid(50): @supports (display: grid) { .element { @media (max-width) { color: red; } } } 1`] = `
+exports[`invalid(50): @media (min-grid: 1) {} 1`] = `
+
+  1 | @media (min-grid: 1) {}
+
+`;
+
+exports[`invalid(50): @media (min-grid: 1) {} 2`] = `
+
+Message:
+> 1 | @media (min-grid: 1) {}
+    |         ^^^^^^^^ Unknown media feature \`min-grid\`.
+
+`;
+
+exports[`invalid(51): @supports (display: grid) { .element { @media (max-width) { color: red; } } } 1`] = `
 
   1 | @supports (display: grid) { .element { @media (max-width) { color: red; } } }
 
 `;
 
-exports[`invalid(50): @supports (display: grid) { .element { @media (max-width) { color: red; } } } 2`] = `
+exports[`invalid(51): @supports (display: grid) { .element { @media (max-width) { color: red; } } } 2`] = `
 
 Message:
 > 1 | @supports (display: grid) { .element { @media (max-width) { color: red; } } }
@@ -650,13 +664,13 @@ Message:
 
 `;
 
-exports[`invalid(51): @import \"theme.css\" (orientation > portrait); 1`] = `
+exports[`invalid(52): @import \"theme.css\" (orientation > portrait); 1`] = `
 
   1 | @import "theme.css" (orientation > portrait);
 
 `;
 
-exports[`invalid(51): @import \"theme.css\" (orientation > portrait); 2`] = `
+exports[`invalid(52): @import \"theme.css\" (orientation > portrait); 2`] = `
 
 Message:
 > 1 | @import "theme.css" (orientation > portrait);
@@ -664,13 +678,13 @@ Message:
 
 `;
 
-exports[`invalid(52): @media (10px < 20px < unknown-feature) {} 1`] = `
+exports[`invalid(53): @media (10px < 20px < unknown-feature) {} 1`] = `
 
   1 | @media (10px < 20px < unknown-feature) {}
 
 `;
 
-exports[`invalid(52): @media (10px < 20px < unknown-feature) {} 2`] = `
+exports[`invalid(53): @media (10px < 20px < unknown-feature) {} 2`] = `
 
 Message:
 > 1 | @media (10px < 20px < unknown-feature) {}
@@ -678,13 +692,13 @@ Message:
 
 `;
 
-exports[`invalid(53): @media (10px < 20px < orientation) {} 1`] = `
+exports[`invalid(54): @media (10px < 20px < orientation) {} 1`] = `
 
   1 | @media (10px < 20px < orientation) {}
 
 `;
 
-exports[`invalid(53): @media (10px < 20px < orientation) {} 2`] = `
+exports[`invalid(54): @media (10px < 20px < orientation) {} 2`] = `
 
 Message:
 > 1 | @media (10px < 20px < orientation) {}
@@ -692,13 +706,13 @@ Message:
 
 `;
 
-exports[`invalid(54): @media (10px < 20px < m\\61 x-width) {} 1`] = `
+exports[`invalid(55): @media (10px < 20px < m\\61 x-width) {} 1`] = `
 
   1 | @media (10px < 20px < m\\61 x-width) {}
 
 `;
 
-exports[`invalid(54): @media (10px < 20px < m\\61 x-width) {} 2`] = `
+exports[`invalid(55): @media (10px < 20px < m\\61 x-width) {} 2`] = `
 
 Message:
 > 1 | @media (10px < 20px < m\\61 x-width) {}
@@ -706,13 +720,13 @@ Message:
 
 `;
 
-exports[`invalid(55): @media (width: 1\\31 px) {} 1`] = `
+exports[`invalid(56): @media (width: 1\\31 px) {} 1`] = `
 
   1 | @media (width: 1\\31 px) {}
 
 `;
 
-exports[`invalid(55): @media (width: 1\\31 px) {} 2`] = `
+exports[`invalid(56): @media (width: 1\\31 px) {} 2`] = `
 
 Message:
 > 1 | @media (width: 1\\31 px) {}
@@ -720,13 +734,13 @@ Message:
 
 `;
 
-exports[`invalid(56): @media (width: 1\\65 2px) {} 1`] = `
+exports[`invalid(57): @media (width: 1\\65 2px) {} 1`] = `
 
   1 | @media (width: 1\\65 2px) {}
 
 `;
 
-exports[`invalid(56): @media (width: 1\\65 2px) {} 2`] = `
+exports[`invalid(57): @media (width: 1\\65 2px) {} 2`] = `
 
 Message:
 > 1 | @media (width: 1\\65 2px) {}
@@ -734,13 +748,13 @@ Message:
 
 `;
 
-exports[`invalid(57): @media (grid: -1) {} 1`] = `
+exports[`invalid(58): @media (grid: -1) {} 1`] = `
 
   1 | @media (grid: -1) {}
 
 `;
 
-exports[`invalid(57): @media (grid: -1) {} 2`] = `
+exports[`invalid(58): @media (grid: -1) {} 2`] = `
 
 Message:
 > 1 | @media (grid: -1) {}
@@ -748,31 +762,17 @@ Message:
 
 `;
 
-exports[`invalid(58): @media (grid: 1.0) {} 1`] = `
+exports[`invalid(59): @media (grid: 1.0) {} 1`] = `
 
   1 | @media (grid: 1.0) {}
 
 `;
 
-exports[`invalid(58): @media (grid: 1.0) {} 2`] = `
+exports[`invalid(59): @media (grid: 1.0) {} 2`] = `
 
 Message:
 > 1 | @media (grid: 1.0) {}
     |               ^^^ Invalid value \`1.0\` for media feature \`grid\`. Expected <integer [0,1]>.
-
-`;
-
-exports[`invalid(59): @media (theme(--minimum) < width < red) {} 1`] = `
-
-  1 | @media (theme(--minimum) < width < red) {}
-
-`;
-
-exports[`invalid(59): @media (theme(--minimum) < width < red) {} 2`] = `
-
-Message:
-> 1 | @media (theme(--minimum) < width < red) {}
-    |                                    ^^^ Invalid value \`red\` for media feature \`width\`. Expected <length>.
 
 `;
 
@@ -790,13 +790,27 @@ Message:
 
 `;
 
-exports[`invalid(60): @media (widht: 10px) {} 1`] = `
+exports[`invalid(60): @media (theme(--minimum) < width < red) {} 1`] = `
+
+  1 | @media (theme(--minimum) < width < red) {}
+
+`;
+
+exports[`invalid(60): @media (theme(--minimum) < width < red) {} 2`] = `
+
+Message:
+> 1 | @media (theme(--minimum) < width < red) {}
+    |                                    ^^^ Invalid value \`red\` for media feature \`width\`. Expected <length>.
+
+`;
+
+exports[`invalid(61): @media (widht: 10px) {} 1`] = `
 
   1 | @media (widht: 10px) {}
 
 `;
 
-exports[`invalid(60): @media (widht: 10px) {} 2`] = `
+exports[`invalid(61): @media (widht: 10px) {} 2`] = `
 
 Message:
 > 1 | @media (widht: 10px) {}
@@ -804,13 +818,13 @@ Message:
 
 `;
 
-exports[`invalid(61): @media (heigth) {} 1`] = `
+exports[`invalid(62): @media (heigth) {} 1`] = `
 
   1 | @media (heigth) {}
 
 `;
 
-exports[`invalid(61): @media (heigth) {} 2`] = `
+exports[`invalid(62): @media (heigth) {} 2`] = `
 
 Message:
 > 1 | @media (heigth) {}
@@ -818,13 +832,13 @@ Message:
 
 `;
 
-exports[`invalid(62): @media not all and (unknown-feature: 1px) {} 1`] = `
+exports[`invalid(63): @media not all and (unknown-feature: 1px) {} 1`] = `
 
   1 | @media not all and (unknown-feature: 1px) {}
 
 `;
 
-exports[`invalid(62): @media not all and (unknown-feature: 1px) {} 2`] = `
+exports[`invalid(63): @media not all and (unknown-feature: 1px) {} 2`] = `
 
 Message:
 > 1 | @media not all and (unknown-feature: 1px) {}
@@ -832,13 +846,13 @@ Message:
 
 `;
 
-exports[`invalid(63): @media (width: 10px) and (unknown-feature: 2px) {} 1`] = `
+exports[`invalid(64): @media (width: 10px) and (unknown-feature: 2px) {} 1`] = `
 
   1 | @media (width: 10px) and (unknown-feature: 2px) {}
 
 `;
 
-exports[`invalid(63): @media (width: 10px) and (unknown-feature: 2px) {} 2`] = `
+exports[`invalid(64): @media (width: 10px) and (unknown-feature: 2px) {} 2`] = `
 
 Message:
 > 1 | @media (width: 10px) and (unknown-feature: 2px) {}
@@ -846,13 +860,13 @@ Message:
 
 `;
 
-exports[`invalid(64): @media (color-index: 1.5) {} 1`] = `
+exports[`invalid(65): @media (color-index: 1.5) {} 1`] = `
 
   1 | @media (color-index: 1.5) {}
 
 `;
 
-exports[`invalid(64): @media (color-index: 1.5) {} 2`] = `
+exports[`invalid(65): @media (color-index: 1.5) {} 2`] = `
 
 Message:
 > 1 | @media (color-index: 1.5) {}
@@ -860,13 +874,13 @@ Message:
 
 `;
 
-exports[`invalid(65): @media (color: rgb(0, 0, 0)) {} 1`] = `
+exports[`invalid(66): @media (color: rgb(0, 0, 0)) {} 1`] = `
 
   1 | @media (color: rgb(0, 0, 0)) {}
 
 `;
 
-exports[`invalid(65): @media (color: rgb(0, 0, 0)) {} 2`] = `
+exports[`invalid(66): @media (color: rgb(0, 0, 0)) {} 2`] = `
 
 Message:
 > 1 | @media (color: rgb(0, 0, 0)) {}
@@ -874,13 +888,13 @@ Message:
 
 `;
 
-exports[`invalid(66): @media (scan: interlaced) {} 1`] = `
+exports[`invalid(67): @media (scan: interlaced) {} 1`] = `
 
   1 | @media (scan: interlaced) {}
 
 `;
 
-exports[`invalid(66): @media (scan: interlaced) {} 2`] = `
+exports[`invalid(67): @media (scan: interlaced) {} 2`] = `
 
 Message:
 > 1 | @media (scan: interlaced) {}
@@ -888,13 +902,13 @@ Message:
 
 `;
 
-exports[`invalid(67): @media (update: quick) {} 1`] = `
+exports[`invalid(68): @media (update: quick) {} 1`] = `
 
   1 | @media (update: quick) {}
 
 `;
 
-exports[`invalid(67): @media (update: quick) {} 2`] = `
+exports[`invalid(68): @media (update: quick) {} 2`] = `
 
 Message:
 > 1 | @media (update: quick) {}
@@ -902,31 +916,17 @@ Message:
 
 `;
 
-exports[`invalid(68): @media (overflow-block: auto) {} 1`] = `
+exports[`invalid(69): @media (overflow-block: auto) {} 1`] = `
 
   1 | @media (overflow-block: auto) {}
 
 `;
 
-exports[`invalid(68): @media (overflow-block: auto) {} 2`] = `
+exports[`invalid(69): @media (overflow-block: auto) {} 2`] = `
 
 Message:
 > 1 | @media (overflow-block: auto) {}
     |                         ^^^^ Invalid value \`auto\` for media feature \`overflow-block\`. Expected none | scroll | paged.
-
-`;
-
-exports[`invalid(69): @media (pointer: touch) {} 1`] = `
-
-  1 | @media (pointer: touch) {}
-
-`;
-
-exports[`invalid(69): @media (pointer: touch) {} 2`] = `
-
-Message:
-> 1 | @media (pointer: touch) {}
-    |                  ^^^^^ Invalid value \`touch\` for media feature \`pointer\`. Expected none | coarse | fine.
 
 `;
 
@@ -944,13 +944,27 @@ Message:
 
 `;
 
-exports[`invalid(70): @media (hover: yes) {} 1`] = `
+exports[`invalid(70): @media (pointer: touch) {} 1`] = `
+
+  1 | @media (pointer: touch) {}
+
+`;
+
+exports[`invalid(70): @media (pointer: touch) {} 2`] = `
+
+Message:
+> 1 | @media (pointer: touch) {}
+    |                  ^^^^^ Invalid value \`touch\` for media feature \`pointer\`. Expected none | coarse | fine.
+
+`;
+
+exports[`invalid(71): @media (hover: yes) {} 1`] = `
 
   1 | @media (hover: yes) {}
 
 `;
 
-exports[`invalid(70): @media (hover: yes) {} 2`] = `
+exports[`invalid(71): @media (hover: yes) {} 2`] = `
 
 Message:
 > 1 | @media (hover: yes) {}
@@ -958,13 +972,13 @@ Message:
 
 `;
 
-exports[`invalid(71): @media (prefers-color-scheme: dark-mode) {} 1`] = `
+exports[`invalid(72): @media (prefers-color-scheme: dark-mode) {} 1`] = `
 
   1 | @media (prefers-color-scheme: dark-mode) {}
 
 `;
 
-exports[`invalid(71): @media (prefers-color-scheme: dark-mode) {} 2`] = `
+exports[`invalid(72): @media (prefers-color-scheme: dark-mode) {} 2`] = `
 
 Message:
 > 1 | @media (prefers-color-scheme: dark-mode) {}
@@ -972,13 +986,13 @@ Message:
 
 `;
 
-exports[`invalid(72): @media (prefers-reduced-motion: 0) {} 1`] = `
+exports[`invalid(73): @media (prefers-reduced-motion: 0) {} 1`] = `
 
   1 | @media (prefers-reduced-motion: 0) {}
 
 `;
 
-exports[`invalid(72): @media (prefers-reduced-motion: 0) {} 2`] = `
+exports[`invalid(73): @media (prefers-reduced-motion: 0) {} 2`] = `
 
 Message:
 > 1 | @media (prefers-reduced-motion: 0) {}
@@ -986,13 +1000,13 @@ Message:
 
 `;
 
-exports[`invalid(73): @media (scripting: yes) {} 1`] = `
+exports[`invalid(74): @media (scripting: yes) {} 1`] = `
 
   1 | @media (scripting: yes) {}
 
 `;
 
-exports[`invalid(73): @media (scripting: yes) {} 2`] = `
+exports[`invalid(74): @media (scripting: yes) {} 2`] = `
 
 Message:
 > 1 | @media (scripting: yes) {}
@@ -1000,13 +1014,13 @@ Message:
 
 `;
 
-exports[`invalid(74): @media (color-gamut: rgb) {} 1`] = `
+exports[`invalid(75): @media (color-gamut: rgb) {} 1`] = `
 
   1 | @media (color-gamut: rgb) {}
 
 `;
 
-exports[`invalid(74): @media (color-gamut: rgb) {} 2`] = `
+exports[`invalid(75): @media (color-gamut: rgb) {} 2`] = `
 
 Message:
 > 1 | @media (color-gamut: rgb) {}
@@ -1014,13 +1028,13 @@ Message:
 
 `;
 
-exports[`invalid(75): @media (nav-controls: forward) {} 1`] = `
+exports[`invalid(76): @media (nav-controls: forward) {} 1`] = `
 
   1 | @media (nav-controls: forward) {}
 
 `;
 
-exports[`invalid(75): @media (nav-controls: forward) {} 2`] = `
+exports[`invalid(76): @media (nav-controls: forward) {} 2`] = `
 
 Message:
 > 1 | @media (nav-controls: forward) {}
@@ -1028,13 +1042,13 @@ Message:
 
 `;
 
-exports[`invalid(76): @media (display-state: open) {} 1`] = `
+exports[`invalid(77): @media (display-state: open) {} 1`] = `
 
   1 | @media (display-state: open) {}
 
 `;
 
-exports[`invalid(76): @media (display-state: open) {} 2`] = `
+exports[`invalid(77): @media (display-state: open) {} 2`] = `
 
 Message:
 > 1 | @media (display-state: open) {}
@@ -1042,13 +1056,13 @@ Message:
 
 `;
 
-exports[`invalid(77): @media (horizontal-viewport-segments: 0.5) {} 1`] = `
+exports[`invalid(78): @media (horizontal-viewport-segments: 0.5) {} 1`] = `
 
   1 | @media (horizontal-viewport-segments: 0.5) {}
 
 `;
 
-exports[`invalid(77): @media (horizontal-viewport-segments: 0.5) {} 2`] = `
+exports[`invalid(78): @media (horizontal-viewport-segments: 0.5) {} 2`] = `
 
 Message:
 > 1 | @media (horizontal-viewport-segments: 0.5) {}
@@ -1056,31 +1070,17 @@ Message:
 
 `;
 
-exports[`invalid(78): @media (color-gamut > srgb) {} 1`] = `
+exports[`invalid(79): @media (color-gamut > srgb) {} 1`] = `
 
   1 | @media (color-gamut > srgb) {}
 
 `;
 
-exports[`invalid(78): @media (color-gamut > srgb) {} 2`] = `
+exports[`invalid(79): @media (color-gamut > srgb) {} 2`] = `
 
 Message:
 > 1 | @media (color-gamut > srgb) {}
     |         ^^^^^^^^^^^ Media feature \`color-gamut\` does not support range notation.
-
-`;
-
-exports[`invalid(79): @media (scan > progressive) {} 1`] = `
-
-  1 | @media (scan > progressive) {}
-
-`;
-
-exports[`invalid(79): @media (scan > progressive) {} 2`] = `
-
-Message:
-> 1 | @media (scan > progressive) {}
-    |         ^^^^ Media feature \`scan\` does not support range notation.
 
 `;
 
@@ -1098,13 +1098,27 @@ Message:
 
 `;
 
-exports[`invalid(80): @media (update >= slow) {} 1`] = `
+exports[`invalid(80): @media (scan > progressive) {} 1`] = `
+
+  1 | @media (scan > progressive) {}
+
+`;
+
+exports[`invalid(80): @media (scan > progressive) {} 2`] = `
+
+Message:
+> 1 | @media (scan > progressive) {}
+    |         ^^^^ Media feature \`scan\` does not support range notation.
+
+`;
+
+exports[`invalid(81): @media (update >= slow) {} 1`] = `
 
   1 | @media (update >= slow) {}
 
 `;
 
-exports[`invalid(80): @media (update >= slow) {} 2`] = `
+exports[`invalid(81): @media (update >= slow) {} 2`] = `
 
 Message:
 > 1 | @media (update >= slow) {}
@@ -1112,13 +1126,13 @@ Message:
 
 `;
 
-exports[`invalid(81): @media (pointer <= fine) {} 1`] = `
+exports[`invalid(82): @media (pointer <= fine) {} 1`] = `
 
   1 | @media (pointer <= fine) {}
 
 `;
 
-exports[`invalid(81): @media (pointer <= fine) {} 2`] = `
+exports[`invalid(82): @media (pointer <= fine) {} 2`] = `
 
 Message:
 > 1 | @media (pointer <= fine) {}
@@ -1126,13 +1140,13 @@ Message:
 
 `;
 
-exports[`invalid(82): @media (max-height <= 20px) {} 1`] = `
+exports[`invalid(83): @media (max-height <= 20px) {} 1`] = `
 
   1 | @media (max-height <= 20px) {}
 
 `;
 
-exports[`invalid(82): @media (max-height <= 20px) {} 2`] = `
+exports[`invalid(83): @media (max-height <= 20px) {} 2`] = `
 
 Message:
 > 1 | @media (max-height <= 20px) {}
@@ -1140,13 +1154,13 @@ Message:
 
 `;
 
-exports[`invalid(83): @media (10px < min-device-width) {} 1`] = `
+exports[`invalid(84): @media (10px < min-device-width) {} 1`] = `
 
   1 | @media (10px < min-device-width) {}
 
 `;
 
-exports[`invalid(83): @media (10px < min-device-width) {} 2`] = `
+exports[`invalid(84): @media (10px < min-device-width) {} 2`] = `
 
 Message:
 > 1 | @media (10px < min-device-width) {}
@@ -1154,13 +1168,13 @@ Message:
 
 `;
 
-exports[`invalid(84): @media (min-resolution) {} 1`] = `
+exports[`invalid(85): @media (min-resolution) {} 1`] = `
 
   1 | @media (min-resolution) {}
 
 `;
 
-exports[`invalid(84): @media (min-resolution) {} 2`] = `
+exports[`invalid(85): @media (min-resolution) {} 2`] = `
 
 Message:
 > 1 | @media (min-resolution) {}
@@ -1168,13 +1182,13 @@ Message:
 
 `;
 
-exports[`invalid(85): @media (10px <= width > 20px) {} 1`] = `
+exports[`invalid(86): @media (10px <= width > 20px) {} 1`] = `
 
   1 | @media (10px <= width > 20px) {}
 
 `;
 
-exports[`invalid(85): @media (10px <= width > 20px) {} 2`] = `
+exports[`invalid(86): @media (10px <= width > 20px) {} 2`] = `
 
 Message:
 > 1 | @media (10px <= width > 20px) {}
@@ -1182,13 +1196,13 @@ Message:
 
 `;
 
-exports[`invalid(86): @media (10px > width < 20px) {} 1`] = `
+exports[`invalid(87): @media (10px > width < 20px) {} 1`] = `
 
   1 | @media (10px > width < 20px) {}
 
 `;
 
-exports[`invalid(86): @media (10px > width < 20px) {} 2`] = `
+exports[`invalid(87): @media (10px > width < 20px) {} 2`] = `
 
 Message:
 > 1 | @media (10px > width < 20px) {}
@@ -1196,13 +1210,13 @@ Message:
 
 `;
 
-exports[`invalid(87): @media (20px > width > red) {} 1`] = `
+exports[`invalid(88): @media (20px > width > red) {} 1`] = `
 
   1 | @media (20px > width > red) {}
 
 `;
 
-exports[`invalid(87): @media (20px > width > red) {} 2`] = `
+exports[`invalid(88): @media (20px > width > red) {} 2`] = `
 
 Message:
 > 1 | @media (20px > width > red) {}
@@ -1210,31 +1224,17 @@ Message:
 
 `;
 
-exports[`invalid(88): @media (10px < width < 20px) and (20px < height > 10px) {} 1`] = `
+exports[`invalid(89): @media (10px < width < 20px) and (20px < height > 10px) {} 1`] = `
 
   1 | @media (10px < width < 20px) and (20px < height > 10px) {}
 
 `;
 
-exports[`invalid(88): @media (10px < width < 20px) and (20px < height > 10px) {} 2`] = `
+exports[`invalid(89): @media (10px < width < 20px) and (20px < height > 10px) {} 2`] = `
 
 Message:
 > 1 | @media (10px < width < 20px) and (20px < height > 10px) {}
     |                                  ^^^^^^^^^^^^^^^^^^^^^^ Chained media feature comparisons must place the feature between two values and use the same comparison direction.
-
-`;
-
-exports[`invalid(89): @media screen { .element { @media (min-width) { color: red; } } } 1`] = `
-
-  1 | @media screen { .element { @media (min-width) { color: red; } } }
-
-`;
-
-exports[`invalid(89): @media screen { .element { @media (min-width) { color: red; } } } 2`] = `
-
-Message:
-> 1 | @media screen { .element { @media (min-width) { color: red; } } }
-    |                                    ^^^^^^^^^ Media feature \`min-width\` requires a value in plain notation.
 
 `;
 
@@ -1252,13 +1252,27 @@ Message:
 
 `;
 
-exports[`invalid(90): @import \"theme.css\" (width: red); 1`] = `
+exports[`invalid(90): @media screen { .element { @media (min-width) { color: red; } } } 1`] = `
+
+  1 | @media screen { .element { @media (min-width) { color: red; } } }
+
+`;
+
+exports[`invalid(90): @media screen { .element { @media (min-width) { color: red; } } } 2`] = `
+
+Message:
+> 1 | @media screen { .element { @media (min-width) { color: red; } } }
+    |                                    ^^^^^^^^^ Media feature \`min-width\` requires a value in plain notation.
+
+`;
+
+exports[`invalid(91): @import \"theme.css\" (width: red); 1`] = `
 
   1 | @import "theme.css" (width: red);
 
 `;
 
-exports[`invalid(90): @import \"theme.css\" (width: red); 2`] = `
+exports[`invalid(91): @import \"theme.css\" (width: red); 2`] = `
 
 Message:
 > 1 | @import "theme.css" (width: red);
