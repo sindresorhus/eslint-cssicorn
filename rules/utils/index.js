@@ -37,3 +37,4 @@ export {parse} from './parse.js';
 export {default as parseCustomPropertyDeclaration} from './parse-custom-property-declaration.js';
 export {default as parseValue} from './parse-value.js';
 export {default as toLocation} from './to-location.js';
+export {default as trimCssWhitespace} from './trim-css-whitespace.js';

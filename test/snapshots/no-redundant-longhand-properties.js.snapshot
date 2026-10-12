@@ -112,3 +112,20 @@ Output:
   9 | }
 
 `;
+
+exports[`invalid(6): a { margin-top: 1px; margin-right: 2px; margin-bottom: 3px; margin-left: calc(1px    +    4px)   } 1`] = `
+
+  1 | a { margin-top: 1px; margin-right: 2px; margin-bottom: 3px; margin-left: calc(1px    +    4px)   }
+
+`;
+
+exports[`invalid(6): a { margin-top: 1px; margin-right: 2px; margin-bottom: 3px; margin-left: calc(1px    +    4px)   } 2`] = `
+
+Message:
+> 1 | a { margin-top: 1px; margin-right: 2px; margin-bottom: 3px; margin-left: calc(1px    +    4px)   }
+    |                                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Use the \`margin\` shorthand instead of its longhand properties.
+
+Output:
+  1 | a { margin: 1px 2px 3px calc(1px    +    4px)   }
+
+`;

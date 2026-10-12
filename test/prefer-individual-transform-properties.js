@@ -192,6 +192,7 @@ ruleTest.snapshot({
 		'@scope (.buttons) { a { transform: scale(2); } }',
 		'a { @media (width > 10px) { transform: scale(2); } }',
 		'a { translate: 1px; transform: scale(2); } b { transform: scale(3); }',
+		'a { transform: translate(1px)    scale(2)   }',
 	],
 });
 

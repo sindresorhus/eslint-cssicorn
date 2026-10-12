@@ -296,6 +296,7 @@ testRule.snapshot({
 				margin-left: 4px;
 			}
 		`,
+		'a { margin-top: 1px; margin-right: 2px; margin-bottom: 3px; margin-left: calc(1px    +    4px)   }',
 	],
 });
 

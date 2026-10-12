@@ -1,4 +1,5 @@
 import {getParentStyleRule, isPseudoElementNode} from './shared/css-selector-specificity.js';
+import {trimCssWhitespace} from './utils/index.js';
 
 /**
 @import * as ESLint from 'eslint';
@@ -8,8 +9,6 @@ const MESSAGE_ID = 'no-redundant-nested-style-rules';
 const messages = {
 	[MESSAGE_ID]: 'Remove the redundant nested `&` style rule.',
 };
-
-const trimCssWhitespace = string => string.replaceAll(/^[\t\n\f\r ]+|[\t\n\f\r ]+$/gv, '');
 
 const getSingleSelector = rule => rule.prelude.type === 'SelectorList' && rule.prelude.children.length === 1
 	? rule.prelude.children.at(0)
@@ -113,9 +112,13 @@ const isFixUnsafe = (node, sourceCode, multilineUnsafeRanges) => {
 };
 
 const getDeclarationSeparatorIndex = content => {
-	const trailingWhitespace = content.match(/[\t\n\f\r ]*$/v)[0];
-	let separatorIndex = content.length - trailingWhitespace.length;
-	if (trailingWhitespace === '') {
+	// A backward scan, because a `$`-anchored regex is quadratic for a long run of inner whitespace.
+	let separatorIndex = content.length;
+	while (separatorIndex > 0 && '\t\n\f\r '.includes(content[separatorIndex - 1])) {
+		separatorIndex--;
+	}
+
+	if (separatorIndex === content.length) {
 		return separatorIndex;
 	}
 

@@ -19,6 +19,7 @@ import {
 	normalizeCssIdentifier,
 	normalizePropertyName,
 	parse,
+	trimCssWhitespace,
 } from './utils/index.js';
 
 /**
@@ -189,8 +190,6 @@ const hasRandomFunction = value => {
 	});
 	return hasRandom;
 };
-
-const trimCssWhitespace = string => string.replaceAll(/^[\t\n\f\r ]+|[\t\n\f\r ]+$/gv, '');
 
 const hasMalformedContent = rule => Boolean(find(rule.block, node => (
 	node.type === 'Block' && node.children.some(child => child.type === 'Raw')
