@@ -115,8 +115,8 @@ const shorthandToAffectedProperties = new Map(shorthandProperties.keys().map(sho
 
 // Include affected properties even when combining their longhands is not supported by the shorthand serializers.
 const additionalAffectedPropertyEntries = [
-	// https://drafts.csswg.org/css-animations-2/#animation
-	['animation', 'animation-composition animation-trigger'],
+	// `animation` does not reset `animation-composition`: https://drafts.csswg.org/css-animations-2/#animation
+	['animation', 'animation-trigger'],
 	// Missing shorthand metadata: https://drafts.csswg.org/css-backgrounds-4/#propdef-background-repeat
 	['background', 'background-repeat-x background-repeat-y'],
 	['background-repeat', 'background-repeat-x background-repeat-y'],
@@ -124,8 +124,7 @@ const additionalAffectedPropertyEntries = [
 	['caret', 'caret-color caret-animation caret-shape'],
 	// https://drafts.csswg.org/css-anchor-position-1/#propdef-position-try
 	['position-try', 'position-try-order position-try-fallbacks'],
-	// https://drafts.csswg.org/css-text-4/#propdef-text-align
-	['text-align', 'text-align-all text-align-last'],
+	// Omit the unimplemented `text-align` shorthand: https://drafts.csswg.org/css-text-4/#propdef-text-align
 	// Missing from Webref shorthand metadata: https://drafts.csswg.org/css-inline-3/#propdef-text-box
 	['text-box', 'text-box-trim text-box-edge'],
 	// https://drafts.csswg.org/css-text-decor-4/#propdef-text-decoration-skip

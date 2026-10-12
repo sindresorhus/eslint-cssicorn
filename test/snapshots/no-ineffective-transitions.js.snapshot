@@ -162,37 +162,37 @@ Suggestion 1/1: Allow discrete transitions for all targets using this behavior e
 
 `;
 
-exports[`invalid(18): a { transition: display 1s !important; transition-behavior: allow-discrete; } 1`] = `
+exports[`invalid(18): a { transition: text-align 1s; } 1`] = `
 
-  1 | a { transition: display 1s !important; transition-behavior: allow-discrete; }
+  1 | a { transition: text-align 1s; }
 
 `;
 
-exports[`invalid(18): a { transition: display 1s !important; transition-behavior: allow-discrete; } 2`] = `
+exports[`invalid(18): a { transition: text-align 1s; } 2`] = `
 
 Message:
-> 1 | a { transition: display 1s !important; transition-behavior: allow-discrete; }
-    |                 ^^^^^^^ Transitioning \`display\` requires \`allow-discrete\` behavior.
+> 1 | a { transition: text-align 1s; }
+    |                 ^^^^^^^^^^ Transitioning \`text-align\` requires \`allow-discrete\` behavior.
 
 Suggestion 1/1: Allow discrete transitions for all targets using this behavior entry.:
-  1 | a { transition: allow-discrete display 1s !important; transition-behavior: allow-discrete; }
+  1 | a { transition: allow-discrete text-align 1s; }
 
 `;
 
-exports[`invalid(19): a { transition-behavior: normal !important; transition: display 1s allow-discrete; } 1`] = `
+exports[`invalid(19): a { transition: text-align-last 1s normal, text-align 1s allow-discrete; } 1`] = `
 
-  1 | a { transition-behavior: normal !important; transition: display 1s allow-discrete; }
+  1 | a { transition: text-align-last 1s normal, text-align 1s allow-discrete; }
 
 `;
 
-exports[`invalid(19): a { transition-behavior: normal !important; transition: display 1s allow-discrete; } 2`] = `
+exports[`invalid(19): a { transition: text-align-last 1s normal, text-align 1s allow-discrete; } 2`] = `
 
 Message:
-> 1 | a { transition-behavior: normal !important; transition: display 1s allow-discrete; }
-    |                                                         ^^^^^^^ Transitioning \`display\` requires \`allow-discrete\` behavior.
+> 1 | a { transition: text-align-last 1s normal, text-align 1s allow-discrete; }
+    |                 ^^^^^^^^^^^^^^^ Transitioning \`text-align-last\` requires \`allow-discrete\` behavior.
 
 Suggestion 1/1: Allow discrete transitions for all targets using this behavior entry.:
-  1 | a { transition-behavior: allow-discrete !important; transition: display 1s allow-discrete; }
+  1 | a { transition: text-align-last 1s allow-discrete, text-align 1s allow-discrete; }
 
 `;
 
@@ -213,13 +213,61 @@ Suggestion 1/1: Allow discrete transitions for all targets using this behavior e
 
 `;
 
-exports[`invalid(20): a { transition: display 1s !important; all: initial; } 1`] = `
+exports[`invalid(20): a { transition: animation-composition 1s, animation 1s; } 1`] = `
+
+  1 | a { transition: animation-composition 1s, animation 1s; }
+
+`;
+
+exports[`invalid(20): a { transition: animation-composition 1s, animation 1s; } 2`] = `
+
+Message:
+> 1 | a { transition: animation-composition 1s, animation 1s; }
+    |                 ^^^^^^^^^^^^^^^^^^^^^ Property \`animation-composition\` cannot be transitioned.
+
+`;
+
+exports[`invalid(21): a { transition: display 1s !important; transition-behavior: allow-discrete; } 1`] = `
+
+  1 | a { transition: display 1s !important; transition-behavior: allow-discrete; }
+
+`;
+
+exports[`invalid(21): a { transition: display 1s !important; transition-behavior: allow-discrete; } 2`] = `
+
+Message:
+> 1 | a { transition: display 1s !important; transition-behavior: allow-discrete; }
+    |                 ^^^^^^^ Transitioning \`display\` requires \`allow-discrete\` behavior.
+
+Suggestion 1/1: Allow discrete transitions for all targets using this behavior entry.:
+  1 | a { transition: allow-discrete display 1s !important; transition-behavior: allow-discrete; }
+
+`;
+
+exports[`invalid(22): a { transition-behavior: normal !important; transition: display 1s allow-discrete; } 1`] = `
+
+  1 | a { transition-behavior: normal !important; transition: display 1s allow-discrete; }
+
+`;
+
+exports[`invalid(22): a { transition-behavior: normal !important; transition: display 1s allow-discrete; } 2`] = `
+
+Message:
+> 1 | a { transition-behavior: normal !important; transition: display 1s allow-discrete; }
+    |                                                         ^^^^^^^ Transitioning \`display\` requires \`allow-discrete\` behavior.
+
+Suggestion 1/1: Allow discrete transitions for all targets using this behavior entry.:
+  1 | a { transition-behavior: allow-discrete !important; transition: display 1s allow-discrete; }
+
+`;
+
+exports[`invalid(23): a { transition: display 1s !important; all: initial; } 1`] = `
 
   1 | a { transition: display 1s !important; all: initial; }
 
 `;
 
-exports[`invalid(20): a { transition: display 1s !important; all: initial; } 2`] = `
+exports[`invalid(23): a { transition: display 1s !important; all: initial; } 2`] = `
 
 Message:
 > 1 | a { transition: display 1s !important; all: initial; }
@@ -230,13 +278,13 @@ Suggestion 1/1: Allow discrete transitions for all targets using this behavior e
 
 `;
 
-exports[`invalid(21): a { transition: display 1s !\\69mportant; transition-behavior: allow-discrete; } 1`] = `
+exports[`invalid(24): a { transition: display 1s !\\69mportant; transition-behavior: allow-discrete; } 1`] = `
 
   1 | a { transition: display 1s !\\69mportant; transition-behavior: allow-discrete; }
 
 `;
 
-exports[`invalid(21): a { transition: display 1s !\\69mportant; transition-behavior: allow-discrete; } 2`] = `
+exports[`invalid(24): a { transition: display 1s !\\69mportant; transition-behavior: allow-discrete; } 2`] = `
 
 Message:
 > 1 | a { transition: display 1s !\\69mportant; transition-behavior: allow-discrete; }
@@ -247,13 +295,13 @@ Suggestion 1/1: Allow discrete transitions for all targets using this behavior e
 
 `;
 
-exports[`invalid(22): a { transition-property: display !important; transition-behavior: normal !important; all: var(--reset); } 1`] = `
+exports[`invalid(25): a { transition-property: display !important; transition-behavior: normal !important; all: var(--reset); } 1`] = `
 
   1 | a { transition-property: display !important; transition-behavior: normal !important; all: var(--reset); }
 
 `;
 
-exports[`invalid(22): a { transition-property: display !important; transition-behavior: normal !important; all: var(--reset); } 2`] = `
+exports[`invalid(25): a { transition-property: display !important; transition-behavior: normal !important; all: var(--reset); } 2`] = `
 
 Message:
 > 1 | a { transition-property: display !important; transition-behavior: normal !important; all: var(--reset); }
@@ -264,13 +312,13 @@ Suggestion 1/1: Allow discrete transitions for all targets using this behavior e
 
 `;
 
-exports[`invalid(23): a { transition: opacity 1s; transition-property: display !important; transition: transform 1s allow-discrete; transition-behavior: normal; } 1`] = `
+exports[`invalid(26): a { transition: opacity 1s; transition-property: display !important; transition: transform 1s allow-discrete; transition-behavior: normal; } 1`] = `
 
   1 | a { transition: opacity 1s; transition-property: display !important; transition: transform 1s allow-discrete; transition-behavior: normal; }
 
 `;
 
-exports[`invalid(23): a { transition: opacity 1s; transition-property: display !important; transition: transform 1s allow-discrete; transition-behavior: normal; } 2`] = `
+exports[`invalid(26): a { transition: opacity 1s; transition-property: display !important; transition: transform 1s allow-discrete; transition-behavior: normal; } 2`] = `
 
 Message:
 > 1 | a { transition: opacity 1s; transition-property: display !important; transition: transform 1s allow-discrete; transition-behavior: normal; }
@@ -281,13 +329,13 @@ Suggestion 1/1: Allow discrete transitions for all targets using this behavior e
 
 `;
 
-exports[`invalid(24): a { all: initial; transition: display 1s; } 1`] = `
+exports[`invalid(27): a { all: initial; transition: display 1s; } 1`] = `
 
   1 | a { all: initial; transition: display 1s; }
 
 `;
 
-exports[`invalid(24): a { all: initial; transition: display 1s; } 2`] = `
+exports[`invalid(27): a { all: initial; transition: display 1s; } 2`] = `
 
 Message:
 > 1 | a { all: initial; transition: display 1s; }
@@ -298,13 +346,13 @@ Suggestion 1/1: Allow discrete transitions for all targets using this behavior e
 
 `;
 
-exports[`invalid(25): a { transition: display 1s !important; transition: var(--transition); } 1`] = `
+exports[`invalid(28): a { transition: display 1s !important; transition: var(--transition); } 1`] = `
 
   1 | a { transition: display 1s !important; transition: var(--transition); }
 
 `;
 
-exports[`invalid(25): a { transition: display 1s !important; transition: var(--transition); } 2`] = `
+exports[`invalid(28): a { transition: display 1s !important; transition: var(--transition); } 2`] = `
 
 Message:
 > 1 | a { transition: display 1s !important; transition: var(--transition); }
@@ -315,13 +363,13 @@ Suggestion 1/1: Allow discrete transitions for all targets using this behavior e
 
 `;
 
-exports[`invalid(26): a { transition: var(--transition); transition: display 1s; } 1`] = `
+exports[`invalid(29): a { transition: var(--transition); transition: display 1s; } 1`] = `
 
   1 | a { transition: var(--transition); transition: display 1s; }
 
 `;
 
-exports[`invalid(26): a { transition: var(--transition); transition: display 1s; } 2`] = `
+exports[`invalid(29): a { transition: var(--transition); transition: display 1s; } 2`] = `
 
 Message:
 > 1 | a { transition: var(--transition); transition: display 1s; }
@@ -329,51 +377,6 @@ Message:
 
 Suggestion 1/1: Allow discrete transitions for all targets using this behavior entry.:
   1 | a { transition: var(--transition); transition: allow-discrete display 1s; }
-
-`;
-
-exports[`invalid(27): a { transition: display 1s; transition-behavior: var(--behavior); transition-behavior: normal; } 1`] = `
-
-  1 | a { transition: display 1s; transition-behavior: var(--behavior); transition-behavior: normal; }
-
-`;
-
-exports[`invalid(27): a { transition: display 1s; transition-behavior: var(--behavior); transition-behavior: normal; } 2`] = `
-
-Message:
-> 1 | a { transition: display 1s; transition-behavior: var(--behavior); transition-behavior: normal; }
-    |                 ^^^^^^^ Transitioning \`display\` requires \`allow-discrete\` behavior.
-
-Suggestion 1/1: Allow discrete transitions for all targets using this behavior entry.:
-  1 | a { transition: display 1s; transition-behavior: var(--behavior); transition-behavior: allow-discrete; }
-
-`;
-
-exports[`invalid(28): a { transition: contain 1s; } 1`] = `
-
-  1 | a { transition: contain 1s; }
-
-`;
-
-exports[`invalid(28): a { transition: contain 1s; } 2`] = `
-
-Message:
-> 1 | a { transition: contain 1s; }
-    |                 ^^^^^^^ Property \`contain\` cannot be transitioned.
-
-`;
-
-exports[`invalid(29): a { transition: contain 1s allow-discrete; } 1`] = `
-
-  1 | a { transition: contain 1s allow-discrete; }
-
-`;
-
-exports[`invalid(29): a { transition: contain 1s allow-discrete; } 2`] = `
-
-Message:
-> 1 | a { transition: contain 1s allow-discrete; }
-    |                 ^^^^^^^ Property \`contain\` cannot be transitioned.
 
 `;
 
@@ -394,13 +397,58 @@ Suggestion 1/1: Allow discrete transitions for all targets using this behavior e
 
 `;
 
-exports[`invalid(30): a { transition-property: contain; } 1`] = `
+exports[`invalid(30): a { transition: display 1s; transition-behavior: var(--behavior); transition-behavior: normal; } 1`] = `
+
+  1 | a { transition: display 1s; transition-behavior: var(--behavior); transition-behavior: normal; }
+
+`;
+
+exports[`invalid(30): a { transition: display 1s; transition-behavior: var(--behavior); transition-behavior: normal; } 2`] = `
+
+Message:
+> 1 | a { transition: display 1s; transition-behavior: var(--behavior); transition-behavior: normal; }
+    |                 ^^^^^^^ Transitioning \`display\` requires \`allow-discrete\` behavior.
+
+Suggestion 1/1: Allow discrete transitions for all targets using this behavior entry.:
+  1 | a { transition: display 1s; transition-behavior: var(--behavior); transition-behavior: allow-discrete; }
+
+`;
+
+exports[`invalid(31): a { transition: contain 1s; } 1`] = `
+
+  1 | a { transition: contain 1s; }
+
+`;
+
+exports[`invalid(31): a { transition: contain 1s; } 2`] = `
+
+Message:
+> 1 | a { transition: contain 1s; }
+    |                 ^^^^^^^ Property \`contain\` cannot be transitioned.
+
+`;
+
+exports[`invalid(32): a { transition: contain 1s allow-discrete; } 1`] = `
+
+  1 | a { transition: contain 1s allow-discrete; }
+
+`;
+
+exports[`invalid(32): a { transition: contain 1s allow-discrete; } 2`] = `
+
+Message:
+> 1 | a { transition: contain 1s allow-discrete; }
+    |                 ^^^^^^^ Property \`contain\` cannot be transitioned.
+
+`;
+
+exports[`invalid(33): a { transition-property: contain; } 1`] = `
 
   1 | a { transition-property: contain; }
 
 `;
 
-exports[`invalid(30): a { transition-property: contain; } 2`] = `
+exports[`invalid(33): a { transition-property: contain; } 2`] = `
 
 Message:
 > 1 | a { transition-property: contain; }
@@ -408,13 +456,13 @@ Message:
 
 `;
 
-exports[`invalid(31): a { transition: will-change 1s; } 1`] = `
+exports[`invalid(34): a { transition: will-change 1s; } 1`] = `
 
   1 | a { transition: will-change 1s; }
 
 `;
 
-exports[`invalid(31): a { transition: will-change 1s; } 2`] = `
+exports[`invalid(34): a { transition: will-change 1s; } 2`] = `
 
 Message:
 > 1 | a { transition: will-change 1s; }
@@ -422,13 +470,13 @@ Message:
 
 `;
 
-exports[`invalid(32): a { transition: will-change 1s allow-discrete; } 1`] = `
+exports[`invalid(35): a { transition: will-change 1s allow-discrete; } 1`] = `
 
   1 | a { transition: will-change 1s allow-discrete; }
 
 `;
 
-exports[`invalid(32): a { transition: will-change 1s allow-discrete; } 2`] = `
+exports[`invalid(35): a { transition: will-change 1s allow-discrete; } 2`] = `
 
 Message:
 > 1 | a { transition: will-change 1s allow-discrete; }
@@ -436,13 +484,13 @@ Message:
 
 `;
 
-exports[`invalid(33): a { transition-property: will-change; } 1`] = `
+exports[`invalid(36): a { transition-property: will-change; } 1`] = `
 
   1 | a { transition-property: will-change; }
 
 `;
 
-exports[`invalid(33): a { transition-property: will-change; } 2`] = `
+exports[`invalid(36): a { transition-property: will-change; } 2`] = `
 
 Message:
 > 1 | a { transition-property: will-change; }
@@ -450,13 +498,13 @@ Message:
 
 `;
 
-exports[`invalid(34): a { transition: transition-duration 1s; } 1`] = `
+exports[`invalid(37): a { transition: transition-duration 1s; } 1`] = `
 
   1 | a { transition: transition-duration 1s; }
 
 `;
 
-exports[`invalid(34): a { transition: transition-duration 1s; } 2`] = `
+exports[`invalid(37): a { transition: transition-duration 1s; } 2`] = `
 
 Message:
 > 1 | a { transition: transition-duration 1s; }
@@ -464,13 +512,13 @@ Message:
 
 `;
 
-exports[`invalid(35): a { transition: transition-duration 1s allow-discrete; } 1`] = `
+exports[`invalid(38): a { transition: transition-duration 1s allow-discrete; } 1`] = `
 
   1 | a { transition: transition-duration 1s allow-discrete; }
 
 `;
 
-exports[`invalid(35): a { transition: transition-duration 1s allow-discrete; } 2`] = `
+exports[`invalid(38): a { transition: transition-duration 1s allow-discrete; } 2`] = `
 
 Message:
 > 1 | a { transition: transition-duration 1s allow-discrete; }
@@ -478,59 +526,17 @@ Message:
 
 `;
 
-exports[`invalid(36): a { transition-property: transition-duration; } 1`] = `
+exports[`invalid(39): a { transition-property: transition-duration; } 1`] = `
 
   1 | a { transition-property: transition-duration; }
 
 `;
 
-exports[`invalid(36): a { transition-property: transition-duration; } 2`] = `
+exports[`invalid(39): a { transition-property: transition-duration; } 2`] = `
 
 Message:
 > 1 | a { transition-property: transition-duration; }
     |                          ^^^^^^^^^^^^^^^^^^^ Property \`transition-duration\` cannot be transitioned.
-
-`;
-
-exports[`invalid(37): a { transition: animation-name 1s; } 1`] = `
-
-  1 | a { transition: animation-name 1s; }
-
-`;
-
-exports[`invalid(37): a { transition: animation-name 1s; } 2`] = `
-
-Message:
-> 1 | a { transition: animation-name 1s; }
-    |                 ^^^^^^^^^^^^^^ Property \`animation-name\` cannot be transitioned.
-
-`;
-
-exports[`invalid(38): a { transition: animation-name 1s allow-discrete; } 1`] = `
-
-  1 | a { transition: animation-name 1s allow-discrete; }
-
-`;
-
-exports[`invalid(38): a { transition: animation-name 1s allow-discrete; } 2`] = `
-
-Message:
-> 1 | a { transition: animation-name 1s allow-discrete; }
-    |                 ^^^^^^^^^^^^^^ Property \`animation-name\` cannot be transitioned.
-
-`;
-
-exports[`invalid(39): a { transition-property: animation-name; } 1`] = `
-
-  1 | a { transition-property: animation-name; }
-
-`;
-
-exports[`invalid(39): a { transition-property: animation-name; } 2`] = `
-
-Message:
-> 1 | a { transition-property: animation-name; }
-    |                          ^^^^^^^^^^^^^^ Property \`animation-name\` cannot be transitioned.
 
 `;
 
@@ -551,13 +557,55 @@ Suggestion 1/1: Allow discrete transitions for all targets using this behavior e
 
 `;
 
-exports[`invalid(40): a { transition: scroll-behavior 1s; } 1`] = `
+exports[`invalid(40): a { transition: animation-name 1s; } 1`] = `
+
+  1 | a { transition: animation-name 1s; }
+
+`;
+
+exports[`invalid(40): a { transition: animation-name 1s; } 2`] = `
+
+Message:
+> 1 | a { transition: animation-name 1s; }
+    |                 ^^^^^^^^^^^^^^ Property \`animation-name\` cannot be transitioned.
+
+`;
+
+exports[`invalid(41): a { transition: animation-name 1s allow-discrete; } 1`] = `
+
+  1 | a { transition: animation-name 1s allow-discrete; }
+
+`;
+
+exports[`invalid(41): a { transition: animation-name 1s allow-discrete; } 2`] = `
+
+Message:
+> 1 | a { transition: animation-name 1s allow-discrete; }
+    |                 ^^^^^^^^^^^^^^ Property \`animation-name\` cannot be transitioned.
+
+`;
+
+exports[`invalid(42): a { transition-property: animation-name; } 1`] = `
+
+  1 | a { transition-property: animation-name; }
+
+`;
+
+exports[`invalid(42): a { transition-property: animation-name; } 2`] = `
+
+Message:
+> 1 | a { transition-property: animation-name; }
+    |                          ^^^^^^^^^^^^^^ Property \`animation-name\` cannot be transitioned.
+
+`;
+
+exports[`invalid(43): a { transition: scroll-behavior 1s; } 1`] = `
 
   1 | a { transition: scroll-behavior 1s; }
 
 `;
 
-exports[`invalid(40): a { transition: scroll-behavior 1s; } 2`] = `
+exports[`invalid(43): a { transition: scroll-behavior 1s; } 2`] = `
 
 Message:
 > 1 | a { transition: scroll-behavior 1s; }
@@ -565,13 +613,13 @@ Message:
 
 `;
 
-exports[`invalid(41): a { transition: scroll-behavior 1s allow-discrete; } 1`] = `
+exports[`invalid(44): a { transition: scroll-behavior 1s allow-discrete; } 1`] = `
 
   1 | a { transition: scroll-behavior 1s allow-discrete; }
 
 `;
 
-exports[`invalid(41): a { transition: scroll-behavior 1s allow-discrete; } 2`] = `
+exports[`invalid(44): a { transition: scroll-behavior 1s allow-discrete; } 2`] = `
 
 Message:
 > 1 | a { transition: scroll-behavior 1s allow-discrete; }
@@ -579,13 +627,13 @@ Message:
 
 `;
 
-exports[`invalid(42): a { transition-property: scroll-behavior; } 1`] = `
+exports[`invalid(45): a { transition-property: scroll-behavior; } 1`] = `
 
   1 | a { transition-property: scroll-behavior; }
 
 `;
 
-exports[`invalid(42): a { transition-property: scroll-behavior; } 2`] = `
+exports[`invalid(45): a { transition-property: scroll-behavior; } 2`] = `
 
 Message:
 > 1 | a { transition-property: scroll-behavior; }
@@ -593,13 +641,13 @@ Message:
 
 `;
 
-exports[`invalid(43): a { transition: touch-action 1s; } 1`] = `
+exports[`invalid(46): a { transition: touch-action 1s; } 1`] = `
 
   1 | a { transition: touch-action 1s; }
 
 `;
 
-exports[`invalid(43): a { transition: touch-action 1s; } 2`] = `
+exports[`invalid(46): a { transition: touch-action 1s; } 2`] = `
 
 Message:
 > 1 | a { transition: touch-action 1s; }
@@ -607,13 +655,13 @@ Message:
 
 `;
 
-exports[`invalid(44): a { transition: touch-action 1s allow-discrete; } 1`] = `
+exports[`invalid(47): a { transition: touch-action 1s allow-discrete; } 1`] = `
 
   1 | a { transition: touch-action 1s allow-discrete; }
 
 `;
 
-exports[`invalid(44): a { transition: touch-action 1s allow-discrete; } 2`] = `
+exports[`invalid(47): a { transition: touch-action 1s allow-discrete; } 2`] = `
 
 Message:
 > 1 | a { transition: touch-action 1s allow-discrete; }
@@ -621,13 +669,13 @@ Message:
 
 `;
 
-exports[`invalid(45): a { transition-property: touch-action; } 1`] = `
+exports[`invalid(48): a { transition-property: touch-action; } 1`] = `
 
   1 | a { transition-property: touch-action; }
 
 `;
 
-exports[`invalid(45): a { transition-property: touch-action; } 2`] = `
+exports[`invalid(48): a { transition-property: touch-action; } 2`] = `
 
 Message:
 > 1 | a { transition-property: touch-action; }
@@ -635,13 +683,13 @@ Message:
 
 `;
 
-exports[`invalid(46): a { transition: position 1s; } 1`] = `
+exports[`invalid(49): a { transition: position 1s; } 1`] = `
 
   1 | a { transition: position 1s; }
 
 `;
 
-exports[`invalid(46): a { transition: position 1s; } 2`] = `
+exports[`invalid(49): a { transition: position 1s; } 2`] = `
 
 Message:
 > 1 | a { transition: position 1s; }
@@ -649,57 +697,6 @@ Message:
 
 Suggestion 1/1: Allow discrete transitions for all targets using this behavior entry.:
   1 | a { transition: allow-discrete position 1s; }
-
-`;
-
-exports[`invalid(47): a { transition: cursor 1s; } 1`] = `
-
-  1 | a { transition: cursor 1s; }
-
-`;
-
-exports[`invalid(47): a { transition: cursor 1s; } 2`] = `
-
-Message:
-> 1 | a { transition: cursor 1s; }
-    |                 ^^^^^^ Transitioning \`cursor\` requires \`allow-discrete\` behavior.
-
-Suggestion 1/1: Allow discrete transitions for all targets using this behavior entry.:
-  1 | a { transition: allow-discrete cursor 1s; }
-
-`;
-
-exports[`invalid(48): a { transition: pointer-events 1s; } 1`] = `
-
-  1 | a { transition: pointer-events 1s; }
-
-`;
-
-exports[`invalid(48): a { transition: pointer-events 1s; } 2`] = `
-
-Message:
-> 1 | a { transition: pointer-events 1s; }
-    |                 ^^^^^^^^^^^^^^ Transitioning \`pointer-events\` requires \`allow-discrete\` behavior.
-
-Suggestion 1/1: Allow discrete transitions for all targets using this behavior entry.:
-  1 | a { transition: allow-discrete pointer-events 1s; }
-
-`;
-
-exports[`invalid(49): a { transition: font-family 1s; } 1`] = `
-
-  1 | a { transition: font-family 1s; }
-
-`;
-
-exports[`invalid(49): a { transition: font-family 1s; } 2`] = `
-
-Message:
-> 1 | a { transition: font-family 1s; }
-    |                 ^^^^^^^^^^^ Transitioning \`font-family\` requires \`allow-discrete\` behavior.
-
-Suggestion 1/1: Allow discrete transitions for all targets using this behavior entry.:
-  1 | a { transition: allow-discrete font-family 1s; }
 
 `;
 
@@ -720,13 +717,64 @@ Suggestion 1/1: Allow discrete transitions for all targets using this behavior e
 
 `;
 
-exports[`invalid(50): a { transition: flex-direction 1s; } 1`] = `
+exports[`invalid(50): a { transition: cursor 1s; } 1`] = `
+
+  1 | a { transition: cursor 1s; }
+
+`;
+
+exports[`invalid(50): a { transition: cursor 1s; } 2`] = `
+
+Message:
+> 1 | a { transition: cursor 1s; }
+    |                 ^^^^^^ Transitioning \`cursor\` requires \`allow-discrete\` behavior.
+
+Suggestion 1/1: Allow discrete transitions for all targets using this behavior entry.:
+  1 | a { transition: allow-discrete cursor 1s; }
+
+`;
+
+exports[`invalid(51): a { transition: pointer-events 1s; } 1`] = `
+
+  1 | a { transition: pointer-events 1s; }
+
+`;
+
+exports[`invalid(51): a { transition: pointer-events 1s; } 2`] = `
+
+Message:
+> 1 | a { transition: pointer-events 1s; }
+    |                 ^^^^^^^^^^^^^^ Transitioning \`pointer-events\` requires \`allow-discrete\` behavior.
+
+Suggestion 1/1: Allow discrete transitions for all targets using this behavior entry.:
+  1 | a { transition: allow-discrete pointer-events 1s; }
+
+`;
+
+exports[`invalid(52): a { transition: font-family 1s; } 1`] = `
+
+  1 | a { transition: font-family 1s; }
+
+`;
+
+exports[`invalid(52): a { transition: font-family 1s; } 2`] = `
+
+Message:
+> 1 | a { transition: font-family 1s; }
+    |                 ^^^^^^^^^^^ Transitioning \`font-family\` requires \`allow-discrete\` behavior.
+
+Suggestion 1/1: Allow discrete transitions for all targets using this behavior entry.:
+  1 | a { transition: allow-discrete font-family 1s; }
+
+`;
+
+exports[`invalid(53): a { transition: flex-direction 1s; } 1`] = `
 
   1 | a { transition: flex-direction 1s; }
 
 `;
 
-exports[`invalid(50): a { transition: flex-direction 1s; } 2`] = `
+exports[`invalid(53): a { transition: flex-direction 1s; } 2`] = `
 
 Message:
 > 1 | a { transition: flex-direction 1s; }
@@ -737,13 +785,13 @@ Suggestion 1/1: Allow discrete transitions for all targets using this behavior e
 
 `;
 
-exports[`invalid(51): a { transition: overflow-x 1s; } 1`] = `
+exports[`invalid(54): a { transition: overflow-x 1s; } 1`] = `
 
   1 | a { transition: overflow-x 1s; }
 
 `;
 
-exports[`invalid(51): a { transition: overflow-x 1s; } 2`] = `
+exports[`invalid(54): a { transition: overflow-x 1s; } 2`] = `
 
 Message:
 > 1 | a { transition: overflow-x 1s; }
@@ -754,13 +802,13 @@ Suggestion 1/1: Allow discrete transitions for all targets using this behavior e
 
 `;
 
-exports[`invalid(52): a { TRANSITION: DISPLAY 200MS EASE NORMAL; } 1`] = `
+exports[`invalid(55): a { TRANSITION: DISPLAY 200MS EASE NORMAL; } 1`] = `
 
   1 | a { TRANSITION: DISPLAY 200MS EASE NORMAL; }
 
 `;
 
-exports[`invalid(52): a { TRANSITION: DISPLAY 200MS EASE NORMAL; } 2`] = `
+exports[`invalid(55): a { TRANSITION: DISPLAY 200MS EASE NORMAL; } 2`] = `
 
 Message:
 > 1 | a { TRANSITION: DISPLAY 200MS EASE NORMAL; }
@@ -771,13 +819,13 @@ Suggestion 1/1: Allow discrete transitions for all targets using this behavior e
 
 `;
 
-exports[`invalid(53): a { tr\\61 nsition: d\\69 splay 200m\\73  \\65 ase n\\6f rmal; } 1`] = `
+exports[`invalid(56): a { tr\\61 nsition: d\\69 splay 200m\\73  \\65 ase n\\6f rmal; } 1`] = `
 
   1 | a { tr\\61 nsition: d\\69 splay 200m\\73  \\65 ase n\\6f rmal; }
 
 `;
 
-exports[`invalid(53): a { tr\\61 nsition: d\\69 splay 200m\\73  \\65 ase n\\6f rmal; } 2`] = `
+exports[`invalid(56): a { tr\\61 nsition: d\\69 splay 200m\\73  \\65 ase n\\6f rmal; } 2`] = `
 
 Message:
 > 1 | a { tr\\61 nsition: d\\69 splay 200m\\73  \\65 ase n\\6f rmal; }
@@ -788,13 +836,13 @@ Suggestion 1/1: Allow discrete transitions for all targets using this behavior e
 
 `;
 
-exports[`invalid(54): a { transition\\2d property: d\\69 splay; transition-behavior: n\\6f rmal; } 1`] = `
+exports[`invalid(57): a { transition\\2d property: d\\69 splay; transition-behavior: n\\6f rmal; } 1`] = `
 
   1 | a { transition\\2d property: d\\69 splay; transition-behavior: n\\6f rmal; }
 
 `;
 
-exports[`invalid(54): a { transition\\2d property: d\\69 splay; transition-behavior: n\\6f rmal; } 2`] = `
+exports[`invalid(57): a { transition\\2d property: d\\69 splay; transition-behavior: n\\6f rmal; } 2`] = `
 
 Message:
 > 1 | a { transition\\2d property: d\\69 splay; transition-behavior: n\\6f rmal; }
@@ -805,13 +853,13 @@ Suggestion 1/1: Allow discrete transitions for all targets using this behavior e
 
 `;
 
-exports[`invalid(55): a { transition: /* before */ display /* target */ 1s /* end */ !important; } 1`] = `
+exports[`invalid(58): a { transition: /* before */ display /* target */ 1s /* end */ !important; } 1`] = `
 
   1 | a { transition: /* before */ display /* target */ 1s /* end */ !important; }
 
 `;
 
-exports[`invalid(55): a { transition: /* before */ display /* target */ 1s /* end */ !important; } 2`] = `
+exports[`invalid(58): a { transition: /* before */ display /* target */ 1s /* end */ !important; } 2`] = `
 
 Message:
 > 1 | a { transition: /* before */ display /* target */ 1s /* end */ !important; }
@@ -822,7 +870,7 @@ Suggestion 1/1: Allow discrete transitions for all targets using this behavior e
 
 `;
 
-exports[`invalid(56): a {\r\n  transition-property: display;\r\n  transition-behavior: /* before */ normal /* after */;\r\n} 1`] = `
+exports[`invalid(59): a {\r\n  transition-property: display;\r\n  transition-behavior: /* before */ normal /* after */;\r\n} 1`] = `
 
   1 | a {
   2 |   transition-property: display;
@@ -831,7 +879,7 @@ exports[`invalid(56): a {\r\n  transition-property: display;\r\n  transition-beh
 
 `;
 
-exports[`invalid(56): a {\r\n  transition-property: display;\r\n  transition-behavior: /* before */ normal /* after */;\r\n} 2`] = `
+exports[`invalid(59): a {\r\n  transition-property: display;\r\n  transition-behavior: /* before */ normal /* after */;\r\n} 2`] = `
 
 Message:
   1 | a {
@@ -845,57 +893,6 @@ Suggestion 1/1: Allow discrete transitions for all targets using this behavior e
   2 |   transition-property: display;
   3 |   transition-behavior: /* before */ allow-discrete /* after */;
   4 | }
-
-`;
-
-exports[`invalid(57): a { transition: display 0s 1s; } 1`] = `
-
-  1 | a { transition: display 0s 1s; }
-
-`;
-
-exports[`invalid(57): a { transition: display 0s 1s; } 2`] = `
-
-Message:
-> 1 | a { transition: display 0s 1s; }
-    |                 ^^^^^^^ Transitioning \`display\` requires \`allow-discrete\` behavior.
-
-Suggestion 1/1: Allow discrete transitions for all targets using this behavior entry.:
-  1 | a { transition: allow-discrete display 0s 1s; }
-
-`;
-
-exports[`invalid(58): a { & b { transition: display 1s; } } 1`] = `
-
-  1 | a { & b { transition: display 1s; } }
-
-`;
-
-exports[`invalid(58): a { & b { transition: display 1s; } } 2`] = `
-
-Message:
-> 1 | a { & b { transition: display 1s; } }
-    |                       ^^^^^^^ Transitioning \`display\` requires \`allow-discrete\` behavior.
-
-Suggestion 1/1: Allow discrete transitions for all targets using this behavior entry.:
-  1 | a { & b { transition: allow-discrete display 1s; } }
-
-`;
-
-exports[`invalid(59): @media (width > 1px) { a { transition: display 1s; } } 1`] = `
-
-  1 | @media (width > 1px) { a { transition: display 1s; } }
-
-`;
-
-exports[`invalid(59): @media (width > 1px) { a { transition: display 1s; } } 2`] = `
-
-Message:
-> 1 | @media (width > 1px) { a { transition: display 1s; } }
-    |                                        ^^^^^^^ Transitioning \`display\` requires \`allow-discrete\` behavior.
-
-Suggestion 1/1: Allow discrete transitions for all targets using this behavior entry.:
-  1 | @media (width > 1px) { a { transition: allow-discrete display 1s; } }
 
 `;
 
@@ -916,13 +913,64 @@ Suggestion 1/1: Allow discrete transitions for all targets using this behavior e
 
 `;
 
-exports[`invalid(60): @supports (display: grid) { a { transition: display 1s; } } 1`] = `
+exports[`invalid(60): a { transition: display 0s 1s; } 1`] = `
+
+  1 | a { transition: display 0s 1s; }
+
+`;
+
+exports[`invalid(60): a { transition: display 0s 1s; } 2`] = `
+
+Message:
+> 1 | a { transition: display 0s 1s; }
+    |                 ^^^^^^^ Transitioning \`display\` requires \`allow-discrete\` behavior.
+
+Suggestion 1/1: Allow discrete transitions for all targets using this behavior entry.:
+  1 | a { transition: allow-discrete display 0s 1s; }
+
+`;
+
+exports[`invalid(61): a { & b { transition: display 1s; } } 1`] = `
+
+  1 | a { & b { transition: display 1s; } }
+
+`;
+
+exports[`invalid(61): a { & b { transition: display 1s; } } 2`] = `
+
+Message:
+> 1 | a { & b { transition: display 1s; } }
+    |                       ^^^^^^^ Transitioning \`display\` requires \`allow-discrete\` behavior.
+
+Suggestion 1/1: Allow discrete transitions for all targets using this behavior entry.:
+  1 | a { & b { transition: allow-discrete display 1s; } }
+
+`;
+
+exports[`invalid(62): @media (width > 1px) { a { transition: display 1s; } } 1`] = `
+
+  1 | @media (width > 1px) { a { transition: display 1s; } }
+
+`;
+
+exports[`invalid(62): @media (width > 1px) { a { transition: display 1s; } } 2`] = `
+
+Message:
+> 1 | @media (width > 1px) { a { transition: display 1s; } }
+    |                                        ^^^^^^^ Transitioning \`display\` requires \`allow-discrete\` behavior.
+
+Suggestion 1/1: Allow discrete transitions for all targets using this behavior entry.:
+  1 | @media (width > 1px) { a { transition: allow-discrete display 1s; } }
+
+`;
+
+exports[`invalid(63): @supports (display: grid) { a { transition: display 1s; } } 1`] = `
 
   1 | @supports (display: grid) { a { transition: display 1s; } }
 
 `;
 
-exports[`invalid(60): @supports (display: grid) { a { transition: display 1s; } } 2`] = `
+exports[`invalid(63): @supports (display: grid) { a { transition: display 1s; } } 2`] = `
 
 Message:
 > 1 | @supports (display: grid) { a { transition: display 1s; } }
@@ -933,13 +981,13 @@ Suggestion 1/1: Allow discrete transitions for all targets using this behavior e
 
 `;
 
-exports[`invalid(61): @container (width > 1px) { a { transition: display 1s; } } 1`] = `
+exports[`invalid(64): @container (width > 1px) { a { transition: display 1s; } } 1`] = `
 
   1 | @container (width > 1px) { a { transition: display 1s; } }
 
 `;
 
-exports[`invalid(61): @container (width > 1px) { a { transition: display 1s; } } 2`] = `
+exports[`invalid(64): @container (width > 1px) { a { transition: display 1s; } } 2`] = `
 
 Message:
 > 1 | @container (width > 1px) { a { transition: display 1s; } }
@@ -950,13 +998,13 @@ Suggestion 1/1: Allow discrete transitions for all targets using this behavior e
 
 `;
 
-exports[`invalid(62): @layer components { a { transition: display 1s; } } 1`] = `
+exports[`invalid(65): @layer components { a { transition: display 1s; } } 1`] = `
 
   1 | @layer components { a { transition: display 1s; } }
 
 `;
 
-exports[`invalid(62): @layer components { a { transition: display 1s; } } 2`] = `
+exports[`invalid(65): @layer components { a { transition: display 1s; } } 2`] = `
 
 Message:
 > 1 | @layer components { a { transition: display 1s; } }
@@ -967,13 +1015,13 @@ Suggestion 1/1: Allow discrete transitions for all targets using this behavior e
 
 `;
 
-exports[`invalid(63): @scope (.card) { a { transition: display 1s; } } 1`] = `
+exports[`invalid(66): @scope (.card) { a { transition: display 1s; } } 1`] = `
 
   1 | @scope (.card) { a { transition: display 1s; } }
 
 `;
 
-exports[`invalid(63): @scope (.card) { a { transition: display 1s; } } 2`] = `
+exports[`invalid(66): @scope (.card) { a { transition: display 1s; } } 2`] = `
 
 Message:
 > 1 | @scope (.card) { a { transition: display 1s; } }
@@ -984,13 +1032,13 @@ Suggestion 1/1: Allow discrete transitions for all targets using this behavior e
 
 `;
 
-exports[`invalid(64): a { @media print { transition: display 1s; } } 1`] = `
+exports[`invalid(67): a { @media print { transition: display 1s; } } 1`] = `
 
   1 | a { @media print { transition: display 1s; } }
 
 `;
 
-exports[`invalid(64): a { @media print { transition: display 1s; } } 2`] = `
+exports[`invalid(67): a { @media print { transition: display 1s; } } 2`] = `
 
 Message:
 > 1 | a { @media print { transition: display 1s; } }
@@ -1001,13 +1049,13 @@ Suggestion 1/1: Allow discrete transitions for all targets using this behavior e
 
 `;
 
-exports[`invalid(65): a { @starting-style { transition: display 1s; } } 1`] = `
+exports[`invalid(68): a { @starting-style { transition: display 1s; } } 1`] = `
 
   1 | a { @starting-style { transition: display 1s; } }
 
 `;
 
-exports[`invalid(65): a { @starting-style { transition: display 1s; } } 2`] = `
+exports[`invalid(68): a { @starting-style { transition: display 1s; } } 2`] = `
 
 Message:
 > 1 | a { @starting-style { transition: display 1s; } }
@@ -1018,13 +1066,13 @@ Suggestion 1/1: Allow discrete transitions for all targets using this behavior e
 
 `;
 
-exports[`invalid(66): a { transition: display 1s, display 2s; } 1`] = `
+exports[`invalid(69): a { transition: display 1s, display 2s; } 1`] = `
 
   1 | a { transition: display 1s, display 2s; }
 
 `;
 
-exports[`invalid(66): a { transition: display 1s, display 2s; } 2`] = `
+exports[`invalid(69): a { transition: display 1s, display 2s; } 2`] = `
 
 Message:
 > 1 | a { transition: display 1s, display 2s; }
@@ -1032,57 +1080,6 @@ Message:
 
 Suggestion 1/1: Allow discrete transitions for all targets using this behavior entry.:
   1 | a { transition: display 1s, allow-discrete display 2s; }
-
-`;
-
-exports[`invalid(67): a { transition-property: display, display; transition-behavior: normal; } 1`] = `
-
-  1 | a { transition-property: display, display; transition-behavior: normal; }
-
-`;
-
-exports[`invalid(67): a { transition-property: display, display; transition-behavior: normal; } 2`] = `
-
-Message:
-> 1 | a { transition-property: display, display; transition-behavior: normal; }
-    |                                   ^^^^^^^ Transitioning \`display\` requires \`allow-discrete\` behavior.
-
-Suggestion 1/1: Allow discrete transitions for all targets using this behavior entry.:
-  1 | a { transition-property: display, display; transition-behavior: allow-discrete; }
-
-`;
-
-exports[`invalid(68): a { transition-property: none; transition-property: display; transition-behavior: normal; } 1`] = `
-
-  1 | a { transition-property: none; transition-property: display; transition-behavior: normal; }
-
-`;
-
-exports[`invalid(68): a { transition-property: none; transition-property: display; transition-behavior: normal; } 2`] = `
-
-Message:
-> 1 | a { transition-property: none; transition-property: display; transition-behavior: normal; }
-    |                                                     ^^^^^^^ Transitioning \`display\` requires \`allow-discrete\` behavior.
-
-Suggestion 1/1: Allow discrete transitions for all targets using this behavior entry.:
-  1 | a { transition-property: none; transition-property: display; transition-behavior: allow-discrete; }
-
-`;
-
-exports[`invalid(69): a { transition: all 1s; transition-property: display; transition-behavior: normal; } 1`] = `
-
-  1 | a { transition: all 1s; transition-property: display; transition-behavior: normal; }
-
-`;
-
-exports[`invalid(69): a { transition: all 1s; transition-property: display; transition-behavior: normal; } 2`] = `
-
-Message:
-> 1 | a { transition: all 1s; transition-property: display; transition-behavior: normal; }
-    |                                              ^^^^^^^ Transitioning \`display\` requires \`allow-discrete\` behavior.
-
-Suggestion 1/1: Allow discrete transitions for all targets using this behavior entry.:
-  1 | a { transition: all 1s; transition-property: display; transition-behavior: allow-discrete; }
 
 `;
 
@@ -1103,13 +1100,64 @@ Suggestion 1/1: Allow discrete transitions for all targets using this behavior e
 
 `;
 
-exports[`invalid(70): a { transition-property: display, will-change; transition-behavior: normal, normal; } 1`] = `
+exports[`invalid(70): a { transition-property: display, display; transition-behavior: normal; } 1`] = `
+
+  1 | a { transition-property: display, display; transition-behavior: normal; }
+
+`;
+
+exports[`invalid(70): a { transition-property: display, display; transition-behavior: normal; } 2`] = `
+
+Message:
+> 1 | a { transition-property: display, display; transition-behavior: normal; }
+    |                                   ^^^^^^^ Transitioning \`display\` requires \`allow-discrete\` behavior.
+
+Suggestion 1/1: Allow discrete transitions for all targets using this behavior entry.:
+  1 | a { transition-property: display, display; transition-behavior: allow-discrete; }
+
+`;
+
+exports[`invalid(71): a { transition-property: none; transition-property: display; transition-behavior: normal; } 1`] = `
+
+  1 | a { transition-property: none; transition-property: display; transition-behavior: normal; }
+
+`;
+
+exports[`invalid(71): a { transition-property: none; transition-property: display; transition-behavior: normal; } 2`] = `
+
+Message:
+> 1 | a { transition-property: none; transition-property: display; transition-behavior: normal; }
+    |                                                     ^^^^^^^ Transitioning \`display\` requires \`allow-discrete\` behavior.
+
+Suggestion 1/1: Allow discrete transitions for all targets using this behavior entry.:
+  1 | a { transition-property: none; transition-property: display; transition-behavior: allow-discrete; }
+
+`;
+
+exports[`invalid(72): a { transition: all 1s; transition-property: display; transition-behavior: normal; } 1`] = `
+
+  1 | a { transition: all 1s; transition-property: display; transition-behavior: normal; }
+
+`;
+
+exports[`invalid(72): a { transition: all 1s; transition-property: display; transition-behavior: normal; } 2`] = `
+
+Message:
+> 1 | a { transition: all 1s; transition-property: display; transition-behavior: normal; }
+    |                                              ^^^^^^^ Transitioning \`display\` requires \`allow-discrete\` behavior.
+
+Suggestion 1/1: Allow discrete transitions for all targets using this behavior entry.:
+  1 | a { transition: all 1s; transition-property: display; transition-behavior: allow-discrete; }
+
+`;
+
+exports[`invalid(73): a { transition-property: display, will-change; transition-behavior: normal, normal; } 1`] = `
 
   1 | a { transition-property: display, will-change; transition-behavior: normal, normal; }
 
 `;
 
-exports[`invalid(70): a { transition-property: display, will-change; transition-behavior: normal, normal; } 2`] = `
+exports[`invalid(73): a { transition-property: display, will-change; transition-behavior: normal, normal; } 2`] = `
 
 Message:
 > 1 | a { transition-property: display, will-change; transition-behavior: normal, normal; }
@@ -1120,7 +1168,7 @@ Suggestion 1/1: Allow discrete transitions for all targets using this behavior e
 
 `;
 
-exports[`invalid(70): a { transition-property: display, will-change; transition-behavior: normal, normal; } 3`] = `
+exports[`invalid(73): a { transition-property: display, will-change; transition-behavior: normal, normal; } 3`] = `
 
 Message:
 > 1 | a { transition-property: display, will-change; transition-behavior: normal, normal; }
@@ -1128,13 +1176,13 @@ Message:
 
 `;
 
-exports[`invalid(71): a { transition: display 1s normal, content-visibility 1s normal; } 1`] = `
+exports[`invalid(74): a { transition: display 1s normal, content-visibility 1s normal; } 1`] = `
 
   1 | a { transition: display 1s normal, content-visibility 1s normal; }
 
 `;
 
-exports[`invalid(71): a { transition: display 1s normal, content-visibility 1s normal; } 2`] = `
+exports[`invalid(74): a { transition: display 1s normal, content-visibility 1s normal; } 2`] = `
 
 Message:
 > 1 | a { transition: display 1s normal, content-visibility 1s normal; }
@@ -1145,7 +1193,7 @@ Suggestion 1/1: Allow discrete transitions for all targets using this behavior e
 
 `;
 
-exports[`invalid(71): a { transition: display 1s normal, content-visibility 1s normal; } 3`] = `
+exports[`invalid(74): a { transition: display 1s normal, content-visibility 1s normal; } 3`] = `
 
 Message:
 > 1 | a { transition: display 1s normal, content-visibility 1s normal; }
@@ -1156,13 +1204,13 @@ Suggestion 1/1: Allow discrete transitions for all targets using this behavior e
 
 `;
 
-exports[`invalid(72): a { transition: display 1s normal, opacity 2s allow-discrete, content-visibility 1s; } 1`] = `
+exports[`invalid(75): a { transition: display 1s normal, opacity 2s allow-discrete, content-visibility 1s; } 1`] = `
 
   1 | a { transition: display 1s normal, opacity 2s allow-discrete, content-visibility 1s; }
 
 `;
 
-exports[`invalid(72): a { transition: display 1s normal, opacity 2s allow-discrete, content-visibility 1s; } 2`] = `
+exports[`invalid(75): a { transition: display 1s normal, opacity 2s allow-discrete, content-visibility 1s; } 2`] = `
 
 Message:
 > 1 | a { transition: display 1s normal, opacity 2s allow-discrete, content-visibility 1s; }
@@ -1173,7 +1221,7 @@ Suggestion 1/1: Allow discrete transitions for all targets using this behavior e
 
 `;
 
-exports[`invalid(72): a { transition: display 1s normal, opacity 2s allow-discrete, content-visibility 1s; } 3`] = `
+exports[`invalid(75): a { transition: display 1s normal, opacity 2s allow-discrete, content-visibility 1s; } 3`] = `
 
 Message:
 > 1 | a { transition: display 1s normal, opacity 2s allow-discrete, content-visibility 1s; }
@@ -1184,13 +1232,13 @@ Suggestion 1/1: Allow discrete transitions for all targets using this behavior e
 
 `;
 
-exports[`invalid(73): a { transition-behavior: allow-discrete, normal; transition-property: display, position; } 1`] = `
+exports[`invalid(76): a { transition-behavior: allow-discrete, normal; transition-property: display, position; } 1`] = `
 
   1 | a { transition-behavior: allow-discrete, normal; transition-property: display, position; }
 
 `;
 
-exports[`invalid(73): a { transition-behavior: allow-discrete, normal; transition-property: display, position; } 2`] = `
+exports[`invalid(76): a { transition-behavior: allow-discrete, normal; transition-property: display, position; } 2`] = `
 
 Message:
 > 1 | a { transition-behavior: allow-discrete, normal; transition-property: display, position; }

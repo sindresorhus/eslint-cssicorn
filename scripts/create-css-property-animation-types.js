@@ -31,6 +31,8 @@ const discreteProperties = new Set([
 	'content-visibility',
 	// https://drafts.csswg.org/css-position-4/#overlay
 	'overlay',
+	// Browsers implement it as a longhand, not the shorthand from https://drafts.csswg.org/css-text-4/#propdef-text-align
+	'text-align',
 ]);
 
 for (const {name, animationType, longhands} of properties) {

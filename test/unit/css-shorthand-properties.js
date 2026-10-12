@@ -11,7 +11,7 @@ test('additional affected properties do not enable unsupported shorthand seriali
 
 test('additional animation resets preserve existing components and nested resets', () => {
 	const properties = shorthandToAffectedProperties.get('animation');
-	for (const property of ['animation-name', 'animation-timeline', 'animation-range-start', 'animation-range-end', 'animation-composition', 'animation-trigger']) {
+	for (const property of ['animation-name', 'animation-timeline', 'animation-range-start', 'animation-range-end', 'animation-trigger']) {
 		assert.ok(properties.has(property), property);
 	}
 
@@ -25,4 +25,9 @@ test('background repeat expands both axes without enabling shorthand serializati
 	for (const property of ['background-repeat', 'background-repeat-x', 'background-repeat-y', 'background-color']) {
 		assert.ok(properties.has(property), property);
 	}
+});
+
+test('independent properties are not treated as shorthand resets', () => {
+	assert.equal(shorthandToAffectedProperties.get('animation').has('animation-composition'), false);
+	assert.equal(shorthandToAffectedProperties.has('text-align'), false);
 });
