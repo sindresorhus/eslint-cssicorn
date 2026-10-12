@@ -63,6 +63,9 @@ test.snapshot({
 		'::-webkit-scrollbar-thumb:horizontal {} ::-webkit-scrollbar-button:vertical:start:decrement {} ::-webkit-scrollbar-track-piece:end:increment {}',
 		'::-webkit-scrollbar-button:double-button:single-button:no-button {} ::-webkit-scrollbar-corner:window-inactive {} ::-webkit-scrollbar:corner-present {}',
 		'.a::-webkit-scrollbar-thumb:hover:horizontal {} ::-WEBKIT-SCROLLBAR-BUTTON:VERTICAL {} .a { &::-webkit-scrollbar-thumb:horizontal {} }',
+		// Logical pseudo-classes keep the arguments in the same compound selector.
+		'::-webkit-scrollbar:not(:horizontal) {} ::-webkit-scrollbar-thumb:not(:window-inactive) {} ::-webkit-scrollbar-button:is(:horizontal, :vertical):where(:decrement) {}',
+		'::-webkit-scrollbar-button:single-button:not(:is(:horizontal)) {}',
 	],
 	invalid: [
 		':foucs {}',
@@ -96,5 +99,6 @@ test.snapshot({
 		'@scope (.card) { :foucs {} }',
 		// The WebKit scrollbar pseudo-classes are only allowed after a prefixed pseudo-element in the same compound.
 		':horizontal {} a:start {} ::before:vertical {} ::-webkit-scrollbar :horizontal {} :decrement::-webkit-scrollbar-button {}',
+		':not(:horizontal) {} a:is(:decrement) {} ::before:not(:vertical) {} ::-webkit-scrollbar :not(:horizontal) {} ::-webkit-scrollbar:not(a :horizontal) {}',
 	],
 });

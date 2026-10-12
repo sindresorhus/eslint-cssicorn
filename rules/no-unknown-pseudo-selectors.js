@@ -58,23 +58,28 @@ const getPseudoSelector = node => `${node.type === 'PseudoElementSelector' ? '::
 const isCustomSelector = node => node.type === 'PseudoClassSelector' && isDashedIdentifier(node.name);
 const isVendorPrefixed = node => getVendorPrefix(decodeCssIdentifier(node.name)) !== '';
 
-const isWebkitScrollbarPseudoClass = (node, sourceCode) => {
-	if (
-		node.type !== 'PseudoClassSelector'
-		|| !webkitScrollbarPseudoClasses.has(normalizeCssIdentifier(node.name))
-	) {
-		return false;
-	}
+const isAfterVendorPrefixedPseudoElement = (node, sourceCode) => {
+	const selector = sourceCode.getParent(node);
+	const siblings = selector?.children ?? [];
+	for (let index = siblings.indexOf(node) - 1; index >= 0; index--) {
+		const sibling = siblings[index];
+		if (sibling.type === 'Combinator') {
+			return false;
+		}
 
-	const siblings = sourceCode.getParent(node)?.children ?? [];
-	for (let index = siblings.indexOf(node) - 1; index >= 0 && siblings[index].type !== 'Combinator'; index--) {
-		if (siblings[index].type === 'PseudoElementSelector' && isVendorPrefixed(siblings[index])) {
+		if (sibling.type === 'PseudoElementSelector' && isVendorPrefixed(sibling)) {
 			return true;
 		}
 	}
 
-	return false;
+	// An argument of a pseudo-class, like `:horizontal` in `::-webkit-scrollbar:not(:horizontal)`, belongs to the outer compound selector.
+	const pseudoClass = selector && sourceCode.getParent(sourceCode.getParent(selector));
+	return pseudoClass?.type === 'PseudoClassSelector' && isAfterVendorPrefixedPseudoElement(pseudoClass, sourceCode);
 };
+
+const isWebkitScrollbarPseudoClass = (node, sourceCode) => node.type === 'PseudoClassSelector'
+	&& webkitScrollbarPseudoClasses.has(normalizeCssIdentifier(node.name))
+	&& isAfterVendorPrefixedPseudoElement(node, sourceCode);
 
 const getProblem = (node, allowedPseudoSelectorKeys, sourceCode) => {
 	if (

@@ -333,6 +333,52 @@ Message:
 
 `;
 
+exports[`invalid(27): :not(:horizontal) {} a:is(:decrement) {} ::before:not(:vertical) {} ::-webkit-scrollbar :not(:horizontal) {} ::-webkit-scrollbar:not(a :horizontal) {} 1`] = `
+
+  1 | :not(:horizontal) {} a:is(:decrement) {} ::before:not(:vertical) {} ::-webkit-scrollbar :not(:horizontal) {} ::-webkit-scrollbar:not(a :horizontal) {}
+
+`;
+
+exports[`invalid(27): :not(:horizontal) {} a:is(:decrement) {} ::before:not(:vertical) {} ::-webkit-scrollbar :not(:horizontal) {} ::-webkit-scrollbar:not(a :horizontal) {} 2`] = `
+
+Message:
+> 1 | :not(:horizontal) {} a:is(:decrement) {} ::before:not(:vertical) {} ::-webkit-scrollbar :not(:horizontal) {} ::-webkit-scrollbar:not(a :horizontal) {}
+    |      ^^^^^^^^^^^ Unknown pseudo-selector ':horizontal'.
+
+`;
+
+exports[`invalid(27): :not(:horizontal) {} a:is(:decrement) {} ::before:not(:vertical) {} ::-webkit-scrollbar :not(:horizontal) {} ::-webkit-scrollbar:not(a :horizontal) {} 3`] = `
+
+Message:
+> 1 | :not(:horizontal) {} a:is(:decrement) {} ::before:not(:vertical) {} ::-webkit-scrollbar :not(:horizontal) {} ::-webkit-scrollbar:not(a :horizontal) {}
+    |                           ^^^^^^^^^^ Unknown pseudo-selector ':decrement'.
+
+`;
+
+exports[`invalid(27): :not(:horizontal) {} a:is(:decrement) {} ::before:not(:vertical) {} ::-webkit-scrollbar :not(:horizontal) {} ::-webkit-scrollbar:not(a :horizontal) {} 4`] = `
+
+Message:
+> 1 | :not(:horizontal) {} a:is(:decrement) {} ::before:not(:vertical) {} ::-webkit-scrollbar :not(:horizontal) {} ::-webkit-scrollbar:not(a :horizontal) {}
+    |                                                       ^^^^^^^^^ Unknown pseudo-selector ':vertical'.
+
+`;
+
+exports[`invalid(27): :not(:horizontal) {} a:is(:decrement) {} ::before:not(:vertical) {} ::-webkit-scrollbar :not(:horizontal) {} ::-webkit-scrollbar:not(a :horizontal) {} 5`] = `
+
+Message:
+> 1 | :not(:horizontal) {} a:is(:decrement) {} ::before:not(:vertical) {} ::-webkit-scrollbar :not(:horizontal) {} ::-webkit-scrollbar:not(a :horizontal) {}
+    |                                                                                              ^^^^^^^^^^^ Unknown pseudo-selector ':horizontal'.
+
+`;
+
+exports[`invalid(27): :not(:horizontal) {} a:is(:decrement) {} ::before:not(:vertical) {} ::-webkit-scrollbar :not(:horizontal) {} ::-webkit-scrollbar:not(a :horizontal) {} 6`] = `
+
+Message:
+> 1 | :not(:horizontal) {} a:is(:decrement) {} ::before:not(:vertical) {} ::-webkit-scrollbar :not(:horizontal) {} ::-webkit-scrollbar:not(a :horizontal) {}
+    |                                                                                                                                        ^^^^^^^^^^^ Unknown pseudo-selector ':horizontal'.
+
+`;
+
 exports[`invalid(3): :is(.foo:foucs, :not(.bar:hovr)) {} 1`] = `
 
   1 | :is(.foo:foucs, :not(.bar:hovr)) {}

@@ -31,12 +31,15 @@ Vendor-prefixed pseudo-selectors, such as `::-webkit-scrollbar` and `:-moz-focus
 :-moz-focusring {}
 ```
 
-The unprefixed WebKit scrollbar pseudo-classes, like `:horizontal` and `:decrement`, are allowed after a vendor-prefixed pseudo-element in the same compound selector.
+The unprefixed WebKit scrollbar pseudo-classes, like `:horizontal` and `:decrement`, are allowed after a vendor-prefixed pseudo-element in the same compound selector, also inside pseudo-class arguments like `:not()`.
 
 ```css
 /* ✅ */
 ::-webkit-scrollbar-button:vertical:decrement {}
+::-webkit-scrollbar-thumb:not(:window-inactive) {}
 ```
+
+This is a simplification. Browsers only accept these pseudo-classes after `::-webkit-scrollbar*` and `::-webkit-resizer`, and only inside `:is()`, `:where()`, and `:not()`, so selectors that browsers drop, like `::-webkit-slider-thumb:horizontal`, are not reported. `::selection:window-inactive` is reported, although Chrome and Safari support it. Add `':window-inactive'` to `allow` if you use it.
 
 The rule does not validate context or arguments. Nested pseudo-selectors are checked only when `@eslint/css` parses the arguments as selectors.
 
