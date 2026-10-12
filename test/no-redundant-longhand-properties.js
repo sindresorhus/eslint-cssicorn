@@ -301,6 +301,9 @@ testRule.snapshot({
 
 testRule({
 	valid: [
+		// Browsers without `transition-behavior` support drop a `transition` that contains a behavior keyword.
+		'a { transition-property: opacity; transition-duration: 1s; transition-timing-function: ease; transition-delay: 0s; transition-behavior: allow-discrete; }',
+		'a { transition-behavior: normal, allow-discrete; transition-property: ease-in, color; transition-duration: 1s; transition-timing-function: linear, ease; transition-delay: 0s; }',
 		{
 			code: 'a { padding-top: 1px; padding-right: 2px; padding-bottom: 3px; padding-left: 4px; }',
 			options: [{ignoreShorthands: ['padding']}],
@@ -601,9 +604,25 @@ testRule({
 			output: 'a { grid-template: "header" 1fr "main" 2fr / 1fr; }',
 			errors: 1,
 		},
+		// The initial `transition-behavior` is omitted, because browsers without `transition-behavior` support drop a `transition` that contains it.
 		{
-			code: 'a { transition-behavior: normal, allow-discrete; transition-property: ease-in, color; transition-duration: 1s; transition-timing-function: linear, ease; transition-delay: 0s; }',
-			output: 'a { transition: 1s linear 0s normal ease-in, 1s ease 0s allow-discrete color; }',
+			code: 'a { transition-property: opacity; transition-duration: 1s; transition-timing-function: ease; transition-delay: 0s; transition-behavior: normal; }',
+			output: 'a { transition: 1s ease 0s opacity; }',
+			errors: 1,
+		},
+		{
+			code: 'a { transition-property: opacity; transition-duration: 1s; transition-timing-function: ease; transition-delay: 0s; transition-behavior: NORMAL; }',
+			output: 'a { transition: 1s ease 0s opacity; }',
+			errors: 1,
+		},
+		{
+			code: 'a { transition-behavior: normal, normal; transition-property: opacity, color; transition-duration: 1s, 2s; transition-timing-function: ease; transition-delay: 0s; }',
+			output: 'a { transition: 1s ease 0s opacity, 2s ease 0s color; }',
+			errors: 1,
+		},
+		{
+			code: 'a { transition-property: opacity !important; transition-duration: 1s !important; transition-timing-function: ease !important; transition-delay: 0s !important; transition-behavior: normal !important; }',
+			output: 'a { transition: 1s ease 0s opacity !important; }',
 			errors: 1,
 		},
 		{

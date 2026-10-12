@@ -187,7 +187,14 @@ const serializeCyclicLists = (declarations, sourceCode, order, primaryIndex) => 
 	return layers.join(', ');
 };
 
-const serializeTransition = (declarations, sourceCode) => serializeCyclicLists(declarations, sourceCode, [1, 2, 3, 4, 0], 0);
+const serializeTransition = (declarations, sourceCode) => {
+	// Browsers without `transition-behavior` support drop a `transition` that contains a behavior keyword, so the longhands are only combined when the behavior is initial, and it is omitted.
+	if (splitCommaList(declarations[4].value, sourceCode).some(value => toAsciiLowerCase(value) !== 'normal')) {
+		return;
+	}
+
+	return serializeCyclicLists(declarations, sourceCode, [1, 2, 3, 0], 0);
+};
 
 const serializeAnimation = (declarations, sourceCode) => {
 	const animationNameDeclaration = declarations[7];
