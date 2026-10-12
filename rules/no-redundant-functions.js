@@ -95,6 +95,7 @@ const superellipseKeywords = new Map([
 	['infinity', 'square'],
 	['-infinity', 'notch'],
 ]);
+const hasSubstitutionChild = node => [...node.children].some(child => isSubstitutionFunction(child));
 const isMathFunction = node => node?.type === 'Function' && mathFunctions.has(normalizeCssIdentifier(node.name));
 const isTreeCountingFunction = node => node?.type === 'Function' && treeCountingFunctions.has(normalizeCssIdentifier(node.name)) && [...node.children].length === 0;
 
@@ -105,7 +106,7 @@ function isCalculationArgument(node, parentFunction) {
 
 	const name = parentFunction && normalizeCssIdentifier(parentFunction.name);
 	const argumentCount = name === 'calc-size' ? 2 : (['media-progress', 'container-progress'].includes(name) ? 3 : 0);
-	if (!argumentCount || [...parentFunction.children].some(child => isSubstitutionFunction(child))) {
+	if (!argumentCount || hasSubstitutionChild(parentFunction)) {
 		return false;
 	}
 
@@ -332,7 +333,7 @@ function getComparisonProblem(node, parentFunction, siblings, context) {
 
 	if (
 		children.some(child => child.type === 'Operator' && child.value === ',')
-		|| (name !== 'calc' && children.some(child => isSubstitutionFunction(child)))
+		|| (name !== 'calc' && hasSubstitutionChild(node))
 	) {
 		return;
 	}
@@ -365,7 +366,7 @@ function getDropShadowProblem(node, children, context) {
 function getDefaultFunctionProblem(node, context) {
 	const name = normalizeCssIdentifier(node.name);
 	const children = [...node.children];
-	if (children.some(child => isSubstitutionFunction(child))) {
+	if (hasSubstitutionChild(node)) {
 		return;
 	}
 
@@ -510,7 +511,7 @@ function getDynamicRangeLimitProblem(node, context) {
 function getContentProblem(node, context) {
 	const name = normalizeCssIdentifier(node.name);
 	const children = [...node.children];
-	if (children.some(child => isSubstitutionFunction(child))) {
+	if (hasSubstitutionChild(node)) {
 		return;
 	}
 
@@ -539,7 +540,7 @@ function getContentProblem(node, context) {
 
 function getAnchorSizeProblem(node, declaration, context) {
 	const axis = anchorSizeAxes.get(normalizeCssIdentifier(declaration.property));
-	if (!axis || [...node.children].some(child => isSubstitutionFunction(child))) {
+	if (!axis || hasSubstitutionChild(node)) {
 		return;
 	}
 
@@ -583,7 +584,7 @@ function getCalcSizeProblem(node, context) {
 }
 
 function getStripesProblem(node, context) {
-	if ([...node.children].some(child => isSubstitutionFunction(child))) {
+	if (hasSubstitutionChild(node)) {
 		return;
 	}
 
@@ -603,7 +604,7 @@ function getStripesProblem(node, context) {
 }
 
 function getImageSetProblem(node, context) {
-	if ([...node.children].some(child => isSubstitutionFunction(child))) {
+	if (hasSubstitutionChild(node)) {
 		return;
 	}
 
@@ -751,7 +752,7 @@ function getDefaultFillRuleTokens(node, property) {
 function getShapeProblem(node, declaration, context) {
 	const name = normalizeCssIdentifier(node.name);
 	const children = [...node.children];
-	if (children.some(child => isSubstitutionFunction(child))) {
+	if (hasSubstitutionChild(node)) {
 		return;
 	}
 
@@ -807,7 +808,7 @@ function getShapeProblem(node, declaration, context) {
 function getTimelineProblem(node, context) {
 	const name = normalizeCssIdentifier(node.name);
 	const children = [...node.children];
-	if (children.some(child => isSubstitutionFunction(child))) {
+	if (hasSubstitutionChild(node)) {
 		return;
 	}
 
@@ -905,7 +906,7 @@ function getMixProblem(node, context) {
 	const [prelude] = arguments_;
 	const hasPrelude = ['color-mix', 'palette-mix'].includes(name) && isKeyword(prelude.nodes[0], 'in');
 	const inputs = arguments_.slice(hasPrelude ? 1 : 0);
-	if (inputs.length === 0 || inputs.some(argument => argument.nodes.length === 0) || [...node.children].some(child => isSubstitutionFunction(child))) {
+	if (inputs.length === 0 || inputs.some(argument => argument.nodes.length === 0) || hasSubstitutionChild(node)) {
 		return;
 	}
 
@@ -970,7 +971,7 @@ function getMixWeightTokens(arguments_, name, context) {
 }
 
 function getGradientProblem(node, context) {
-	if ([...node.children].some(child => isSubstitutionFunction(child))) {
+	if (hasSubstitutionChild(node)) {
 		return;
 	}
 
@@ -1076,7 +1077,7 @@ function isNonnegativeMathFunction(node, context) {
 
 	if (name === 'random') {
 		// Random raises its maximum to its minimum. Retain an unkeyed, unstepped call; substitutions can introduce a step.
-		return arguments_.length === 2 && [...node.children].every(child => !isSubstitutionFunction(child)) && isNonnegativeArgument(arguments_[0], context);
+		return arguments_.length === 2 && !hasSubstitutionChild(node) && isNonnegativeArgument(arguments_[0], context);
 	}
 
 	if (name === 'round') {
@@ -1186,7 +1187,7 @@ function isIntegerMathInput(node) {
 	const name = normalizeCssIdentifier(node.name);
 	const arguments_ = getCommaSeparatedGroups(node);
 	return (name === 'sign' && arguments_.length === 1 && arguments_[0].nodes.length > 0)
-		|| (name === 'round' && [...node.children].every(child => !isSubstitutionFunction(child)) && Boolean(getUnsteppedRoundValue(arguments_)?.nodes.length));
+		|| (name === 'round' && !hasSubstitutionChild(node) && Boolean(getUnsteppedRoundValue(arguments_)?.nodes.length));
 }
 
 function isIntegerMathValue(node) {
@@ -1513,7 +1514,7 @@ function getEasingKeyword(name, arguments_) {
 
 function getEasingProblem(node, declaration, context) {
 	const property = getBasePropertyName(declaration.property);
-	if (!easingProperties.has(property) || [...declaration.value.children].some(child => isSubstitutionFunction(child))) {
+	if (!easingProperties.has(property) || hasSubstitutionChild(declaration.value)) {
 		return;
 	}
 
@@ -1546,7 +1547,7 @@ function isRedundantAbsoluteValueArgument(node, parentFunction) {
 		return hasEvenPowerExponent(arguments_) && arguments_[0].nodes.length === 1 && arguments_[0].nodes[0] === node;
 	}
 
-	if ([...parentFunction.children].some(child => isSubstitutionFunction(child))) {
+	if (hasSubstitutionChild(parentFunction)) {
 		return false;
 	}
 
@@ -1584,7 +1585,7 @@ function getRedundantFunctionProblem(node, parentFunction, siblings, context) {
 	}
 
 	// Direct substitutions can introduce extra arguments or turn a calculation into a strategy keyword. Retained parentheses and functions keep those boundaries intact.
-	if ([...node.children].some(child => isSubstitutionFunction(child))) {
+	if (hasSubstitutionChild(node)) {
 		return;
 	}
 
