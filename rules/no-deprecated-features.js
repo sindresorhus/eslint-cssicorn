@@ -492,9 +492,22 @@ const getProblem = ({node, location, feature, name, fix, suggest}, allow) => {
 	};
 };
 
+// Built once per block, as a block can have many deprecated declarations.
+const blockProperties = new WeakMap();
+
 const isPropertyDeclaredInSameBlock = (declaration, property, context) => {
 	const block = context.sourceCode.getParent(declaration);
-	return block?.type === 'Block' && block.children.some(child => child.type === 'Declaration' && normalizeCssIdentifier(child.property) === property);
+	if (block?.type !== 'Block') {
+		return false;
+	}
+
+	let properties = blockProperties.get(block);
+	if (!properties) {
+		properties = new Set(block.children.filter(child => child.type === 'Declaration').map(child => normalizeCssIdentifier(child.property)));
+		blockProperties.set(block, properties);
+	}
+
+	return properties.has(property);
 };
 
 const getDeprecatedPropertyProblem = ({declaration, property, singleValueIdentifier, singleValue, context, allow}) => {

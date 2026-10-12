@@ -72,6 +72,7 @@ test.snapshot({
 		'p { word-wrap: break-word; OVERFLOW-WRAP: break-word; }',
 		String.raw`p { word-wrap: break-word; overfl\6f w-wrap: break-word; }`,
 		'p { -webkit-box-flex: 1; flex-grow: 1; }',
+		'p { word-wrap: break-word; grid-gap: 1rem; gap: 1rem; page-break-inside: avoid; }',
 		// The replacement property is only in another block
 		'p { word-wrap: break-word; & span { overflow-wrap: break-word; } }',
 		'p { grid-gap: 1rem; @media (width > 1px) { gap: 2rem; } }',
