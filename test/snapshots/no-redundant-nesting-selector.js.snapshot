@@ -1578,13 +1578,41 @@ Output:
 
 `;
 
-exports[`invalid(76): a { & span:before {} & SPAN:AFTER {} & span:first-line {} & span:first-letter {} } 1`] = `
+exports[`invalid(76): a{color:red;&>span{}--x:1;& .b{}} 1`] = `
+
+  1 | a{color:red;&>span{}--x:1;& .b{}}
+
+`;
+
+exports[`invalid(76): a{color:red;&>span{}--x:1;& .b{}} 2`] = `
+
+Message:
+> 1 | a{color:red;&>span{}--x:1;& .b{}}
+    |             ^ Remove the redundant nesting selector \`&\`.
+
+Output:
+  1 | a{color:red;>span{}--x:1;& .b{}}
+
+`;
+
+exports[`invalid(76): a{color:red;&>span{}--x:1;& .b{}} 3`] = `
+
+Message:
+> 1 | a{color:red;&>span{}--x:1;& .b{}}
+    |                           ^ Remove the redundant nesting selector \`&\`.
+
+Output:
+  1 | a{color:red;&>span{}--x:1;.b{}}
+
+`;
+
+exports[`invalid(77): a { & span:before {} & SPAN:AFTER {} & span:first-line {} & span:first-letter {} } 1`] = `
 
   1 | a { & span:before {} & SPAN:AFTER {} & span:first-line {} & span:first-letter {} }
 
 `;
 
-exports[`invalid(76): a { & span:before {} & SPAN:AFTER {} & span:first-line {} & span:first-letter {} } 2`] = `
+exports[`invalid(77): a { & span:before {} & SPAN:AFTER {} & span:first-line {} & span:first-letter {} } 2`] = `
 
 Message:
 > 1 | a { & span:before {} & SPAN:AFTER {} & span:first-line {} & span:first-letter {} }
@@ -1595,7 +1623,7 @@ Output:
 
 `;
 
-exports[`invalid(76): a { & span:before {} & SPAN:AFTER {} & span:first-line {} & span:first-letter {} } 3`] = `
+exports[`invalid(77): a { & span:before {} & SPAN:AFTER {} & span:first-line {} & span:first-letter {} } 3`] = `
 
 Message:
 > 1 | a { & span:before {} & SPAN:AFTER {} & span:first-line {} & span:first-letter {} }
@@ -1606,7 +1634,7 @@ Output:
 
 `;
 
-exports[`invalid(76): a { & span:before {} & SPAN:AFTER {} & span:first-line {} & span:first-letter {} } 4`] = `
+exports[`invalid(77): a { & span:before {} & SPAN:AFTER {} & span:first-line {} & span:first-letter {} } 4`] = `
 
 Message:
 > 1 | a { & span:before {} & SPAN:AFTER {} & span:first-line {} & span:first-letter {} }
@@ -1617,7 +1645,7 @@ Output:
 
 `;
 
-exports[`invalid(76): a { & span:before {} & SPAN:AFTER {} & span:first-line {} & span:first-letter {} } 5`] = `
+exports[`invalid(77): a { & span:before {} & SPAN:AFTER {} & span:first-line {} & span:first-letter {} } 5`] = `
 
 Message:
 > 1 | a { & span:before {} & SPAN:AFTER {} & span:first-line {} & span:first-letter {} }
@@ -1628,13 +1656,13 @@ Output:
 
 `;
 
-exports[`invalid(77): a { & span:before, .child {} } 1`] = `
+exports[`invalid(78): a { & span:before, .child {} } 1`] = `
 
   1 | a { & span:before, .child {} }
 
 `;
 
-exports[`invalid(77): a { & span:before, .child {} } 2`] = `
+exports[`invalid(78): a { & span:before, .child {} } 2`] = `
 
 Message:
 > 1 | a { & span:before, .child {} }
@@ -1645,13 +1673,13 @@ Output:
 
 `;
 
-exports[`invalid(78): a { & span:b\\65 fore {} } 1`] = `
+exports[`invalid(79): a { & span:b\\65 fore {} } 1`] = `
 
   1 | a { & span:b\\65 fore {} }
 
 `;
 
-exports[`invalid(78): a { & span:b\\65 fore {} } 2`] = `
+exports[`invalid(79): a { & span:b\\65 fore {} } 2`] = `
 
 Message:
 > 1 | a { & span:b\\65 fore {} }

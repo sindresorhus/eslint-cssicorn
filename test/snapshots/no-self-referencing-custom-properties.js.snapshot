@@ -1,3 +1,17 @@
+exports[`invalid(1): a { --a: var( --a ); } 1`] = `
+
+  1 | a { --a: var( --a ); }
+
+`;
+
+exports[`invalid(1): a { --a: var( --a ); } 2`] = `
+
+Message:
+> 1 | a { --a: var( --a ); }
+    |               ^^^ Custom property \`--a\` must not reference itself.
+
+`;
+
 exports[`invalid(1): a { --one: var(--two); --two: var(--one); } 1`] = `
 
   1 | a { --one: var(--two); --two: var(--one); }
@@ -240,6 +254,28 @@ Message:
 
 `;
 
+exports[`invalid(2): a { --a: var(--b) ! important; --a: 1px; --b: var(--a); } 1`] = `
+
+  1 | a { --a: var(--b) ! important; --a: 1px; --b: var(--a); }
+
+`;
+
+exports[`invalid(2): a { --a: var(--b) ! important; --a: 1px; --b: var(--a); } 2`] = `
+
+Message:
+> 1 | a { --a: var(--b) ! important; --a: 1px; --b: var(--a); }
+    |              ^^^ Custom property \`--a\` is part of a dependency cycle.
+
+`;
+
+exports[`invalid(2): a { --a: var(--b) ! important; --a: 1px; --b: var(--a); } 3`] = `
+
+Message:
+> 1 | a { --a: var(--b) ! important; --a: 1px; --b: var(--a); }
+    |                                                   ^^^ Custom property \`--b\` is part of a dependency cycle.
+
+`;
+
 exports[`invalid(2): a { --b: var(--a); --a: var(--b); } 1`] = `
 
   1 | a { --b: var(--a); --a: var(--b); }
@@ -423,6 +459,28 @@ exports[`invalid(29): a { --spacing: var(/* before */ --spacing /* after */, 1px
 Message:
 > 1 | a { --spacing: var(/* before */ --spacing /* after */, 1px); }
     |                                 ^^^^^^^^^ Custom property \`--spacing\` must not reference itself.
+
+`;
+
+exports[`invalid(3): a { --a: var(--b) !/**/important; --a: 1px; --b: var(--a); } 1`] = `
+
+  1 | a { --a: var(--b) !/**/important; --a: 1px; --b: var(--a); }
+
+`;
+
+exports[`invalid(3): a { --a: var(--b) !/**/important; --a: 1px; --b: var(--a); } 2`] = `
+
+Message:
+> 1 | a { --a: var(--b) !/**/important; --a: 1px; --b: var(--a); }
+    |              ^^^ Custom property \`--a\` is part of a dependency cycle.
+
+`;
+
+exports[`invalid(3): a { --a: var(--b) !/**/important; --a: 1px; --b: var(--a); } 3`] = `
+
+Message:
+> 1 | a { --a: var(--b) !/**/important; --a: 1px; --b: var(--a); }
+    |                                                      ^^^ Custom property \`--b\` is part of a dependency cycle.
 
 `;
 
@@ -618,6 +676,20 @@ Message:
 
 `;
 
+exports[`invalid(4): a { --b: initial !important; --b: 1px; --c: var(--b, var(--c)); } 1`] = `
+
+  1 | a { --b: initial !important; --b: 1px; --c: var(--b, var(--c)); }
+
+`;
+
+exports[`invalid(4): a { --b: initial !important; --b: 1px; --c: var(--b, var(--c)); } 2`] = `
+
+Message:
+> 1 | a { --b: initial !important; --b: 1px; --c: var(--b, var(--c)); }
+    |                                                          ^^^ Custom property \`--c\` must not reference itself.
+
+`;
+
 exports[`invalid(40): a { \\2d\\2d spacing: var(--spacing); } 1`] = `
 
   1 | a { \\2d\\2d spacing: var(--spacing); }
@@ -761,6 +833,58 @@ exports[`invalid(5): a { --a: var(--b); --b: var(--a); --c: var(--d); --d: var(-
 Message:
 > 1 | a { --a: var(--b); --b: var(--a); --c: var(--d); --d: var(--c); }
     |                                                           ^^^ Custom property \`--d\` is part of a dependency cycle.
+
+`;
+
+exports[`invalid(5): a { --a: var(--b, var(--a)); --b: var(--c); --c: var(--b); } 1`] = `
+
+  1 | a { --a: var(--b, var(--a)); --b: var(--c); --c: var(--b); }
+
+`;
+
+exports[`invalid(5): a { --a: var(--b, var(--a)); --b: var(--c); --c: var(--b); } 2`] = `
+
+Message:
+> 1 | a { --a: var(--b, var(--a)); --b: var(--c); --c: var(--b); }
+    |                       ^^^ Custom property \`--a\` must not reference itself.
+
+`;
+
+exports[`invalid(5): a { --a: var(--b, var(--a)); --b: var(--c); --c: var(--b); } 3`] = `
+
+Message:
+> 1 | a { --a: var(--b, var(--a)); --b: var(--c); --c: var(--b); }
+    |                                       ^^^ Custom property \`--b\` is part of a dependency cycle.
+
+`;
+
+exports[`invalid(5): a { --a: var(--b, var(--a)); --b: var(--c); --c: var(--b); } 4`] = `
+
+Message:
+> 1 | a { --a: var(--b, var(--a)); --b: var(--c); --c: var(--b); }
+    |                                                      ^^^ Custom property \`--c\` is part of a dependency cycle.
+
+`;
+
+exports[`invalid(6): a { --a: calc(var(--b) * 2); --b: min(var(--a), 1px); } 1`] = `
+
+  1 | a { --a: calc(var(--b) * 2); --b: min(var(--a), 1px); }
+
+`;
+
+exports[`invalid(6): a { --a: calc(var(--b) * 2); --b: min(var(--a), 1px); } 2`] = `
+
+Message:
+> 1 | a { --a: calc(var(--b) * 2); --b: min(var(--a), 1px); }
+    |                   ^^^ Custom property \`--a\` is part of a dependency cycle.
+
+`;
+
+exports[`invalid(6): a { --a: calc(var(--b) * 2); --b: min(var(--a), 1px); } 3`] = `
+
+Message:
+> 1 | a { --a: calc(var(--b) * 2); --b: min(var(--a), 1px); }
+    |                                           ^^^ Custom property \`--b\` is part of a dependency cycle.
 
 `;
 

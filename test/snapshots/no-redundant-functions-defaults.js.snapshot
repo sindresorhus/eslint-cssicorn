@@ -3894,6 +3894,34 @@ Output:
 
 `;
 
+exports[`invalid(19): a { grid-row: calc(+1); counter-increment: item calc(2); } 1`] = `
+
+  1 | a { grid-row: calc(+1); counter-increment: item calc(2); }
+
+`;
+
+exports[`invalid(19): a { grid-row: calc(+1); counter-increment: item calc(2); } 2`] = `
+
+Message:
+> 1 | a { grid-row: calc(+1); counter-increment: item calc(2); }
+    |               ^^^^^^^^ Simplify this redundant use of \`calc()\`.
+
+Output:
+  1 | a { grid-row: +1; counter-increment: item calc(2); }
+
+`;
+
+exports[`invalid(19): a { grid-row: calc(+1); counter-increment: item calc(2); } 3`] = `
+
+Message:
+> 1 | a { grid-row: calc(+1); counter-increment: item calc(2); }
+    |                                                 ^^^^^^^ Simplify this redundant use of \`calc()\`.
+
+Output:
+  1 | a { grid-row: calc(+1); counter-increment: item 2; }
+
+`;
+
 exports[`invalid(19): a { grid-template-columns: repeat(auto-fit, calc(20%)); } 1`] = `
 
   1 | a { grid-template-columns: repeat(auto-fit, calc(20%)); }

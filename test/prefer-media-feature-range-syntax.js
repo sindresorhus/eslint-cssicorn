@@ -8,6 +8,12 @@ const MESSAGE_ID_ERROR = 'prefer-media-feature-range-syntax/error';
 test({
 	valid: [],
 	invalid: [
+		// Prefixed features have no range syntax, so only the standard query is changed.
+		{
+			code: '@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {}',
+			output: '@media (-webkit-min-device-pixel-ratio: 2), (resolution >= 192dpi) {}',
+			errors: [{messageId: MESSAGE_ID_ERROR}],
+		},
 		{
 			code: '@media (min-width /* inside */: 500px) and /* between */ (max-width: 999px) {}',
 			output: '@media (min-width /* inside */: 500px) and /* between */ (width <= 999px) {}',
@@ -64,6 +70,16 @@ test.snapshot({
 		'@media not all and (max-width: 999px) {}',
 		'@media screen and (max-width: 999px) {}',
 		'@supports (display: grid) { @media (min-width: 500px) {} }',
+		'@MEDIA (min-width: 500px) {}',
+		'@media(min-width:500px){}',
+		'@scope (.card) { @media (min-width: 500px) {} }',
+		'.card { @media (max-width: 999px) {} }',
+		'@media (min-width: 500px) { @container (min-width: 500px) {} }',
+		'@media (min-resolution: 192dpi) {}',
+		'@media (max-resolution: infinite) {}',
+		'@media (min-width: env(safe-area-inset-left)) {}',
+		'@media (min-aspect-ratio: 16 / 9) {}',
+		'@media (min-width: 500px) and (max-width: 999px) and (max-width: 800px) {}',
 	],
 });
 
@@ -92,6 +108,12 @@ test.snapshot({
 		'@media (min-width: 500px) and (max-width: 999.0px) {}',
 		'@media (min-width: 500px) and (max-width: 0px) {}',
 		'@media (min-width: 500px) and (max-width: 000999px) {}',
+		'@media (min-width:500px)and (max-width:999px) {}',
+		'@media only screen and (min-width: 500px) and (max-width: 999px) {}',
+		'@media not screen and (min-width: 500px) and (max-width: 999px) {}',
+		'@media (min-width: 0) and (max-width: 999px) {}',
+		'@media (min-width: 500px) and (max-width: 1e3px) {}',
+		'@media (min-color: 1) and (max-color: 7) {}',
 	],
 });
 

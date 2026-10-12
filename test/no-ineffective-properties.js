@@ -1137,3 +1137,18 @@ test({
 		},
 	],
 });
+
+test({
+	valid: [
+		// `animation-composition` is not part of the `animation` shorthand, so `add` is the name.
+		'a { animation: 1s ease reverse forwards add; }',
+		// The direction is already set, so `normal` is the name.
+		'a { animation: 1s alternate normal; }',
+	],
+	invalid: [
+		{
+			code: 'a { animation: 1s linear normal; }',
+			errors: [{messageId: omittedComponentMessageId, data: {property: 'animation', component: 'an animation name'}}],
+		},
+	],
+});

@@ -193,6 +193,10 @@ test.snapshot({
 		'b a { color: red; } c a { color: blue; }',
 		'b a { color: red; } @layer base { a { color: blue; } }',
 		'@media (width > 40rem) { b a { color: red; } } @media (min-width: 40rem) { a { color: blue; } }',
+		'.x .a { color: red; } @layer x { .a { color: blue; } }',
+		'.x .a::after { color: red; } .a::before { color: blue; }',
+		'.x .a { --Foo: 1; } .a { --foo: 2; }',
+		'.x a[href] { color: red; } a { color: blue; }',
 	],
 	invalid: [
 		'b a { color: red; } a { color: blue; }',
@@ -337,6 +341,11 @@ test.snapshot({
 		':is(b, c) a { color: red; } a { color: blue; }',
 		'b > a { color: red; } a { color: blue; }',
 		'b a { color: red; } a { color: blue; } a { color: green; }',
+		// Declarations after a nested rule come after it in the cascade.
+		'.p { .x & { color: blue; } color: red; }',
+		'.x .a { color: red; } .b, .a { color: blue; }',
+		'@media print { .x .a { color: red; } } .a { @media print { color: blue; } }',
+		'.x > * { color: red; } * { color: blue; }',
 	],
 });
 

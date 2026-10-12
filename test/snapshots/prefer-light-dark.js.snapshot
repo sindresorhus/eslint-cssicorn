@@ -15,6 +15,23 @@ Suggestion 1/1: Combine the colors with \`light-dark()\` and remove the override
 
 `;
 
+exports[`invalid(1): :root { color-scheme: light dark; } a { color: white; } @media (prefers-color-scheme:dark) { a { color: black; } } 1`] = `
+
+  1 | :root { color-scheme: light dark; } a { color: white; } @media (prefers-color-scheme:dark) { a { color: black; } }
+
+`;
+
+exports[`invalid(1): :root { color-scheme: light dark; } a { color: white; } @media (prefers-color-scheme:dark) { a { color: black; } } 2`] = `
+
+Message:
+> 1 | :root { color-scheme: light dark; } a { color: white; } @media (prefers-color-scheme:dark) { a { color: black; } }
+    |                                                                                                  ^^^^^^^^^^^^ Prefer \`light-dark()\` for the paired colors in \`color\`.
+
+Suggestion 1/1: Combine the colors with \`light-dark()\` and remove the override declaration.:
+  1 | :root { color-scheme: light dark; } a { color: light-dark(white, black); } 
+
+`;
+
 exports[`invalid(10): :root { color-scheme: light dark; } a { color: r\\67 b(255 0 0); } @media (prefers-color-scheme: dark) { a { color: blue; } } 1`] = `
 
   1 | :root { color-scheme: light dark; } a { color: r\\67 b(255 0 0); } @media (prefers-color-scheme: dark) { a { color: blue; } }
@@ -215,6 +232,23 @@ Suggestion 1/1: Combine the colors with \`light-dark()\` and remove the override
 
 `;
 
+exports[`invalid(2): :root { color-scheme: light dark; } a { color: white; @media (prefers-color-scheme: dark) { color: black ; margin: 0; } } 1`] = `
+
+  1 | :root { color-scheme: light dark; } a { color: white; @media (prefers-color-scheme: dark) { color: black ; margin: 0; } }
+
+`;
+
+exports[`invalid(2): :root { color-scheme: light dark; } a { color: white; @media (prefers-color-scheme: dark) { color: black ; margin: 0; } } 2`] = `
+
+Message:
+> 1 | :root { color-scheme: light dark; } a { color: white; @media (prefers-color-scheme: dark) { color: black ; margin: 0; } }
+    |                                                                                             ^^^^^^^^^^^^^ Prefer \`light-dark()\` for the paired colors in \`color\`.
+
+Suggestion 1/1: Combine the colors with \`light-dark()\` and remove the override declaration.:
+  1 | :root { color-scheme: light dark; } a { color: light-dark(white, black); @media (prefers-color-scheme: dark) {  margin: 0; } }
+
+`;
+
 exports[`invalid(20): :root { color-scheme: light dark; } a { color: RGB(255 0 0 / .5); } @media (prefers-color-scheme: dark) { a { color: rgb(0 0 0 / 50%); } } 1`] = `
 
   1 | :root { color-scheme: light dark; } a { color: RGB(255 0 0 / .5); } @media (prefers-color-scheme: dark) { a { color: rgb(0 0 0 / 50%); } }
@@ -382,6 +416,23 @@ Message:
 
 Suggestion 1/1: Combine the colors with \`light-dark()\` and remove the override declaration.:
   1 | :root { color-scheme: light dark; } @media (width > 1px) { a { color: light-dark(white, black); }  }
+
+`;
+
+exports[`invalid(3): :root { color-scheme: light dark; } a { color: white !important; @media (prefers-color-scheme: dark) { color: black!important; margin: 0; } } 1`] = `
+
+  1 | :root { color-scheme: light dark; } a { color: white !important; @media (prefers-color-scheme: dark) { color: black!important; margin: 0; } }
+
+`;
+
+exports[`invalid(3): :root { color-scheme: light dark; } a { color: white !important; @media (prefers-color-scheme: dark) { color: black!important; margin: 0; } } 2`] = `
+
+Message:
+> 1 | :root { color-scheme: light dark; } a { color: white !important; @media (prefers-color-scheme: dark) { color: black!important; margin: 0; } }
+    |                                                                                                        ^^^^^^^^^^^^^^^^^^^^^^ Prefer \`light-dark()\` for the paired colors in \`color\`.
+
+Suggestion 1/1: Combine the colors with \`light-dark()\` and remove the override declaration.:
+  1 | :root { color-scheme: light dark; } a { color: light-dark(white, black) !important; @media (prefers-color-scheme: dark) {  margin: 0; } }
 
 `;
 
@@ -563,6 +614,23 @@ Message:
 
 Suggestion 1/1: Combine the colors with \`light-dark()\` and remove the override declaration.:
   1 | :root { color-scheme: light dark; } a { color: light-dark(white, black); } @media (prefers-color-scheme: dark) { /* keep */  }
+
+`;
+
+exports[`invalid(4): :root { color-scheme: light dark; } a { outline: white solid 1px; } @media (prefers-color-scheme: dark) { a { outline: black solid 1px; } } 1`] = `
+
+  1 | :root { color-scheme: light dark; } a { outline: white solid 1px; } @media (prefers-color-scheme: dark) { a { outline: black solid 1px; } }
+
+`;
+
+exports[`invalid(4): :root { color-scheme: light dark; } a { outline: white solid 1px; } @media (prefers-color-scheme: dark) { a { outline: black solid 1px; } } 2`] = `
+
+Message:
+> 1 | :root { color-scheme: light dark; } a { outline: white solid 1px; } @media (prefers-color-scheme: dark) { a { outline: black solid 1px; } }
+    |                                                                                                               ^^^^^^^^^^^^^^^^^^^^^^^^ Prefer \`light-dark()\` for the paired colors in \`outline\`.
+
+Suggestion 1/1: Combine the colors with \`light-dark()\` and remove the override declaration.:
+  1 | :root { color-scheme: light dark; } a { outline: light-dark(white, black) solid 1px; } 
 
 `;
 
@@ -774,6 +842,23 @@ Suggestion 1/1: Combine the colors with \`light-dark()\` and remove the override
 
 `;
 
+exports[`invalid(5): :root { color-scheme: light dark; } a { background: url(\"white\") white; } @media (prefers-color-scheme: dark) { a { background: url(\"white\") black; } } 1`] = `
+
+  1 | :root { color-scheme: light dark; } a { background: url("white") white; } @media (prefers-color-scheme: dark) { a { background: url("white") black; } }
+
+`;
+
+exports[`invalid(5): :root { color-scheme: light dark; } a { background: url(\"white\") white; } @media (prefers-color-scheme: dark) { a { background: url(\"white\") black; } } 2`] = `
+
+Message:
+> 1 | :root { color-scheme: light dark; } a { background: url("white") white; } @media (prefers-color-scheme: dark) { a { background: url("white") black; } }
+    |                                                                                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Prefer \`light-dark()\` for the paired colors in \`background\`.
+
+Suggestion 1/1: Combine the colors with \`light-dark()\` and remove the override declaration.:
+  1 | :root { color-scheme: light dark; } a { background: url("white") light-dark(white, black); } 
+
+`;
+
 exports[`invalid(5): :root { color-scheme: light dark; } a { color: white; background-color: red; } @media (prefers-color-scheme: dark) { a { color: black; padding: 0; } } 1`] = `
 
   1 | :root { color-scheme: light dark; } a { color: white; background-color: red; } @media (prefers-color-scheme: dark) { a { color: black; padding: 0; } }
@@ -969,6 +1054,23 @@ Message:
 
 Suggestion 1/1: Combine the colors with \`light-dark()\` and remove the override declaration.:
   1 | :root { color-scheme: light dark; } a { color: light-dark(#FFF, #000); } 
+
+`;
+
+exports[`invalid(6): :root { color-scheme: light dark; } @media print { a { color: white; } @media (prefers-color-scheme: dark) { a { color: black; } } } 1`] = `
+
+  1 | :root { color-scheme: light dark; } @media print { a { color: white; } @media (prefers-color-scheme: dark) { a { color: black; } } }
+
+`;
+
+exports[`invalid(6): :root { color-scheme: light dark; } @media print { a { color: white; } @media (prefers-color-scheme: dark) { a { color: black; } } } 2`] = `
+
+Message:
+> 1 | :root { color-scheme: light dark; } @media print { a { color: white; } @media (prefers-color-scheme: dark) { a { color: black; } } }
+    |                                                                                                                  ^^^^^^^^^^^^ Prefer \`light-dark()\` for the paired colors in \`color\`.
+
+Suggestion 1/1: Combine the colors with \`light-dark()\` and remove the override declaration.:
+  1 | :root { color-scheme: light dark; } @media print { a { color: light-dark(white, black); }  }
 
 `;
 

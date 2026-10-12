@@ -11,6 +11,8 @@ test.snapshot({
 		'a { transform: translate(0px, var(--space)); }',
 		'a { width: unknown(0px); }',
 		'a { flex: 0px; flex: 1 1 0px; flex: 0%; }',
+		// `flex: 1 0` would set `flex-shrink: 0` instead of `flex-basis: 0px`.
+		'a { flex: 1 0px; flex: 2 0px !important; }',
 		'a { columns: 0px; }',
 		'a { -webkit-flex: 0px; -webkit-columns: 0px; }',
 		'a { line-height: 0px; tab-size: 0px; border-image-width: 0px; border-image-outset: 0px; }',
@@ -94,5 +96,7 @@ test.snapshot({
 		'@layer theme { a { margin: 0px; } }',
 		'@scope (.card) { a { margin: 0px; } }',
 		'@supports (padding: 0px) { a { margin: 0; } }',
+		'@container card (0px < width) {}',
+		'@media screen and (max-width: 0em), screen and (min-width: 40em) {}',
 	],
 });

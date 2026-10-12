@@ -110,3 +110,22 @@ test('only accepts an `of` selector list in `:nth-child()` and `:nth-last-child(
 	assert.equal(canMatchSelector(parseSelector(':is(:nth-of-type(2n of .item), .item)')), true);
 	assert.equal(canMatchSelector(parseSelector(':not(:nth-of-type(2n of .item))')), false);
 });
+
+test('calculates specificity of scoping, part, legacy, and namespaced selectors', () => {
+	assert.deepEqual(getSelectorSpecificities(':host'), [[0, 1, 0]]);
+	assert.deepEqual(getSelectorSpecificities(':host-context(.theme)'), [[0, 2, 0]]);
+	assert.deepEqual(getSelectorSpecificities('::part(label)'), [[0, 0, 1]]);
+	assert.deepEqual(getSelectorSpecificities('a:before'), [[0, 0, 2]]);
+	assert.deepEqual(getSelectorSpecificities('A:FIRST-LINE'), [[0, 0, 2]]);
+	assert.deepEqual(getSelectorSpecificities('svg|circle'), [[0, 0, 1]]);
+	assert.deepEqual(getSelectorSpecificities('|a'), [[0, 0, 1]]);
+	assert.deepEqual(getSelectorSpecificities('*|*'), [[0, 0, 0]]);
+	assert.deepEqual(getSelectorSpecificities('svg|*'), [[0, 0, 0]]);
+	assert.deepEqual(getSelectorSpecificities(':nth-of-type(2n)'), [[0, 1, 0]]);
+});
+
+// Pseudo-classes after a pseudo-element, like `::part(label):hover`, are valid, but skipped as not representable.
+test('treats pseudo-classes after a pseudo-element as not representable', () => {
+	assert.equal(canMatchSelector(parseSelector('::part(label):hover')), false);
+	assert.equal(canMatchSelector(parseSelector('input::file-selector-button:hover')), false);
+});

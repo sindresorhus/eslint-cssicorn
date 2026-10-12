@@ -151,6 +151,12 @@ test('type errors remain invalid after algebraic cancellation', () => {
 	}
 });
 
+test('converts one inch in every absolute length unit to exactly 96px', () => {
+	for (const expression of ['calc(1in)', 'calc(2.54cm)', 'calc(25.4mm)', 'calc(101.6Q)', 'calc(72pt)', 'calc(6pc)', 'calc(96PX)']) {
+		assert.deepEqual(evaluate(expression), {value: 96, unit: 'px'}, expression);
+	}
+});
+
 test('compatible compound terms can add before their dimensions cancel', () => {
 	for (const [expression, expected] of [
 		['calc((1px * 1s + 1s * 1px) / 2s)', {value: 1, unit: 'px'}],

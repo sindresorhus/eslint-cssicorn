@@ -114,6 +114,9 @@ test.snapshot({
 		'[data-x].bar::cue(.foo#id) {}',
 		':is(a > .foo#id, b) {}',
 		'[foo|bar].baz#id {}',
+		':root.dark#app {}',
+		'.a#b:hover::before:focus#c {}',
+		'.a { .b & .c#d {} }',
 	],
 });
 

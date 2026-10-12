@@ -120,6 +120,10 @@ test.snapshot({
 		'.root { &::after { .a, #b { .c {} } } }',
 		// Non-standard pseudo-class is not representable, so it is ignored
 		':-webkit-autofill, #dialog { & .close {} }',
+		// `&` inherits the parent specificity through relative and nested parents
+		'.a { > .b { :is(&, .c.d) {} } }',
+		':is(.a, .b) { :is(&, .c) {} }',
+		'.a { & > :is(&, .b) {} }',
 	],
 	invalid: [
 		'#dialog, .dialog { & .close {} }',
@@ -232,6 +236,9 @@ test.snapshot({
 				& .close {}
 			}
 		`,
+		// In `@scope`, `&` is `:where(:scope)` with zero specificity
+		'@scope (.root) { :is(&, .item) {} }',
+		'.a { .c, #d { :is(.x, &) {} } }',
 	],
 });
 

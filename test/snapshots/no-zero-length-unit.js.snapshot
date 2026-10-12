@@ -769,6 +769,40 @@ Output:
 
 `;
 
+exports[`invalid(41): @container card (0px < width) {} 1`] = `
+
+  1 | @container card (0px < width) {}
+
+`;
+
+exports[`invalid(41): @container card (0px < width) {} 2`] = `
+
+Message:
+> 1 | @container card (0px < width) {}
+    |                   ^^ Remove the unit from this zero length.
+
+Output:
+  1 | @container card (0 < width) {}
+
+`;
+
+exports[`invalid(42): @media screen and (max-width: 0em), screen and (min-width: 40em) {} 1`] = `
+
+  1 | @media screen and (max-width: 0em), screen and (min-width: 40em) {}
+
+`;
+
+exports[`invalid(42): @media screen and (max-width: 0em), screen and (min-width: 40em) {} 2`] = `
+
+Message:
+> 1 | @media screen and (max-width: 0em), screen and (min-width: 40em) {}
+    |                                ^^ Remove the unit from this zero length.
+
+Output:
+  1 | @media screen and (max-width: 0), screen and (min-width: 40em) {}
+
+`;
+
 exports[`invalid(5): a { box-shadow: 0px 0px 0px 1px red, inset 0PX 1px 0px 0px blue; } 1`] = `
 
   1 | a { box-shadow: 0px 0px 0px 1px red, inset 0PX 1px 0px 0px blue; }

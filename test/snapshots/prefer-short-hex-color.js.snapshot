@@ -111,6 +111,57 @@ Output:
 
 `;
 
+exports[`invalid(15): a { COLOR: #AABBCC; } 1`] = `
+
+  1 | a { COLOR: #AABBCC; }
+
+`;
+
+exports[`invalid(15): a { COLOR: #AABBCC; } 2`] = `
+
+Message:
+> 1 | a { COLOR: #AABBCC; }
+    |            ^^^^^^^ Prefer \`#ABC\` over \`#AABBCC\`.
+
+Output:
+  1 | a { COLOR: #ABC; }
+
+`;
+
+exports[`invalid(16): a { color: rgb(from #aabbcc r g b); } 1`] = `
+
+  1 | a { color: rgb(from #aabbcc r g b); }
+
+`;
+
+exports[`invalid(16): a { color: rgb(from #aabbcc r g b); } 2`] = `
+
+Message:
+> 1 | a { color: rgb(from #aabbcc r g b); }
+    |                     ^^^^^^^ Prefer \`#abc\` over \`#aabbcc\`.
+
+Output:
+  1 | a { color: rgb(from #abc r g b); }
+
+`;
+
+exports[`invalid(17): @font-palette-values --palette { override-colors: 0 #ffffff; } 1`] = `
+
+  1 | @font-palette-values --palette { override-colors: 0 #ffffff; }
+
+`;
+
+exports[`invalid(17): @font-palette-values --palette { override-colors: 0 #ffffff; } 2`] = `
+
+Message:
+> 1 | @font-palette-values --palette { override-colors: 0 #ffffff; }
+    |                                                     ^^^^^^^ Prefer \`#fff\` over \`#ffffff\`.
+
+Output:
+  1 | @font-palette-values --palette { override-colors: 0 #fff; }
+
+`;
+
 exports[`invalid(2): a { color: #aabbcc; } 1`] = `
 
   1 | a { color: #aabbcc; }

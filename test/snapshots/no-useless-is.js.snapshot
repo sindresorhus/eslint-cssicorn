@@ -890,6 +890,34 @@ Output:
 
 `;
 
+exports[`invalid(54): .foo { :is(.bar) & {} > :is(.baz) {} } 1`] = `
+
+  1 | .foo { :is(.bar) & {} > :is(.baz) {} }
+
+`;
+
+exports[`invalid(54): .foo { :is(.bar) & {} > :is(.baz) {} } 2`] = `
+
+Message:
+> 1 | .foo { :is(.bar) & {} > :is(.baz) {} }
+    |        ^^^^^^^^^ Remove the unnecessary \`:is()\` wrapper.
+
+Output:
+  1 | .foo { .bar & {} > :is(.baz) {} }
+
+`;
+
+exports[`invalid(54): .foo { :is(.bar) & {} > :is(.baz) {} } 3`] = `
+
+Message:
+> 1 | .foo { :is(.bar) & {} > :is(.baz) {} }
+    |                         ^^^^^^^^^ Remove the unnecessary \`:is()\` wrapper.
+
+Output:
+  1 | .foo { :is(.bar) & {} > .baz {} }
+
+`;
+
 exports[`invalid(6): .rgh-tic:is(:nth-of-type(5n+1)):has(~ .rgh-tic:hover:nth-of-type(5n+1))::before {} 1`] = `
 
   1 | .rgh-tic:is(:nth-of-type(5n+1)):has(~ .rgh-tic:hover:nth-of-type(5n+1))::before {}

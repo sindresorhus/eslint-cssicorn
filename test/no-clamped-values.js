@@ -326,3 +326,26 @@ test.snapshot({
 		'a { opacity: min(infinity, 2); }',
 	],
 });
+
+test.snapshot({
+	valid: [
+		'a { font-style: oblique calc(100grad); }',
+		'a { color: lab(50 calc(200) calc(-200)); background: hwb(0 calc(200%) calc(-1%)); }',
+		'a { color: lch(50 50 calc(400)); }',
+		'a { transform: scale(calc(-1)) rotate(calc(-1deg)) translate(calc(-1px)); }',
+		'a { margin: calc(-1px); letter-spacing: calc(-1px); z-index: calc(-1.5); }',
+		'a { opacity: 1E0; color: rgb(255 255 255 / 1e0); }',
+		'@page { opacity: 50; }',
+	],
+	invalid: [
+		'a { animation-duration: calc(-1MS); }',
+		'a { perspective: 1Q; }',
+		'a { opacity: 5e1; color: rgb(1e3 0 0); }',
+		'@position-try --test { min-width: calc(-1px); }',
+		'a { animation-timing-function: cubic-bezier(calc(2), 0, 1, 1); }',
+		'a { grid-template-columns: repeat(calc(0), 1fr); }',
+		'a { filter: url(#a) grayscale(50); }',
+		'a { color: color-mix(in srgb, rgb(0 0 0 / 50) calc(150%), blue); }',
+		'a { color: hsl(0 -1 50); }',
+	],
+});

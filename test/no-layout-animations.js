@@ -208,6 +208,10 @@ test.snapshot({
 		'@keyframes example { to { transition: width 1s; transition-property: height; } }',
 		'@keyframes example {}',
 		'@keyframes example;',
+		'a { transition: grid-gap 1s, grid-row-gap 1s, border-color 1s, outline 1s, place-items 1s, columns 1s; }',
+		'@page { transition: width 1s; }',
+		'@keyframes resize { 50% { width: 1px !important; } to { height: 1px ! IMPORTANT; } }',
+		'@keyframes resize { to { --width: 1px; } }',
 		'a { transition: min(width, height) 1s; }',
 		'a { transition-duration: width; }',
 		{
@@ -217,6 +221,10 @@ test.snapshot({
 	],
 	invalid: [
 		'a { transition: width 200ms ease; }',
+		'a { transition: margin 1s steps(2, start); }',
+		'a { transition: 1s width; transition-property: --width, width; }',
+		'@-webkit-keyframes resize { to { WIDTH: 1px; } }',
+		'@keyframes resize { to { border: 1px solid; } }',
 		'a { transition: 200ms width ease; }',
 		'a { transition: ease 200ms width; }',
 		'a { transition: 200ms cubic-bezier(0, 0, 1, 1) width -100ms; }',

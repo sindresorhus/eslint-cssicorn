@@ -155,6 +155,13 @@ rial", sans-serif; }`,
 		'a { font-family: Arial, Arial !important; }',
 		'a { font-family: Arial, Arial; font-family: Helvetica, Helvetica; }',
 		'@keyframes x { from { font-family: Inter, Inter; } }',
+		'a { font-family: Arial,\n\tHelvetica,\n\tArial; }',
+		'a { font-family:\n\tArial,\n\tArial\n\t; }',
+		'a { font: italic small-caps bold condensed 16px/2 Arial, Arial; }',
+		'a { font-family: Arial, generic(kai), GENERIC(KAI); }',
+		// An escaped space is part of the name, and joining identifiers adds another.
+		String.raw`a { font-family: A\  b, "A  b"; }`,
+		String.raw`a { font-family: "A\72 ial", Arial; }`,
 	],
 });
 

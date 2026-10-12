@@ -916,6 +916,57 @@ Output:
 
 `;
 
+exports[`invalid(55): :root.dark#app {} 1`] = `
+
+  1 | :root.dark#app {}
+
+`;
+
+exports[`invalid(55): :root.dark#app {} 2`] = `
+
+Message:
+> 1 | :root.dark#app {}
+    | ^^^^^^^^^^^^^^ Use consistent ordering for compound selector components.
+
+Output:
+  1 | #app.dark:root {}
+
+`;
+
+exports[`invalid(56): .a#b:hover::before:focus#c {} 1`] = `
+
+  1 | .a#b:hover::before:focus#c {}
+
+`;
+
+exports[`invalid(56): .a#b:hover::before:focus#c {} 2`] = `
+
+Message:
+> 1 | .a#b:hover::before:focus#c {}
+    | ^^^^^^^^^^ Use consistent ordering for compound selector components.
+
+Output:
+  1 | #b.a:hover::before:focus#c {}
+
+`;
+
+exports[`invalid(57): .a { .b & .c#d {} } 1`] = `
+
+  1 | .a { .b & .c#d {} }
+
+`;
+
+exports[`invalid(57): .a { .b & .c#d {} } 2`] = `
+
+Message:
+> 1 | .a { .b & .c#d {} }
+    |           ^^^^ Use consistent ordering for compound selector components.
+
+Output:
+  1 | .a { .b & #d.c {} }
+
+`;
+
 exports[`invalid(6): #id& {} 1`] = `
 
   1 | #id& {}

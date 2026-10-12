@@ -87,6 +87,8 @@ test.snapshot({
 		'a { @layer components { @media all { & {} } } }',
 		'@utility x { @media all { & {} } }',
 		'a { &:hover { & {} } }',
+		'@scope (.a) { @scope (&) to (& .b) {} }',
+		'@utility x { @scope (&) {} }',
 	],
 	invalid: [
 		// A top-level `@variant` compiles to a media query, so `&` stays unscoped.

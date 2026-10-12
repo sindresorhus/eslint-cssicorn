@@ -8,6 +8,8 @@ test.snapshot({
 		'a { color: red; margin: 1px; background: url("#ABC") no-repeat; }',
 		String.raw`a { \63 olor: \72 gb(0 0 0); }`,
 		'linearGradient, svg|foreignObject, .Class#ID { color: red; }',
+		// SVG attribute names are case-sensitive
+		'svg[viewBox], [preserveAspectRatio="none"] { color: red; }',
 		'[DATA-Foo="Value" I], :lang(en-US), :nth-child(2n of .Item) { color: red; }',
 		':--Heading { color: red; }',
 		':--Heading(:HOVER) { color: red; }',
@@ -95,6 +97,15 @@ test.snapshot({
 		// Unknown function names and their arguments can be case-sensitive.
 		'a { background-image: linearGradient(0deg, RED, BLUE); }',
 		'linearGradient.Theme#Main[data-mode="DARK"] { color: red; }',
+		// Custom identifiers in counter styles, pages, view transitions, and containers keep their casing.
+		'@counter-style Foo { system: extends MyStyle; symbols: A B C; additive-symbols: 1000 M, 900 CM; prefix: A; suffix: B; pad: 3 Z; negative: N; fallback: Thumbs; speak-as: Thumbs; }',
+		'a { list-style: Thumbs inside; list-style-type: Thumbs; content: counter(Foo, Thumbs) counters(Foo, ".", Thumbs); }',
+		'a { page: Wide; view-transition-name: Hero; view-transition-class: Card Big; container: Sidebar / inline-size; counter-reset: Normal List-Item 1; }',
+		'@view-transition { navigation: auto; types: Slide Fade; } .a { composes: Foo Bar from "./x.css"; }',
+		// Property names in `transition` and `will-change`, and the second easing keyword in `animation`, which is the animation name.
+		'a { transition: Opacity 1s, Width 2s; will-change: Opacity, MyProp; animation: 2s ease Ease; }',
+		// A system font keyword after a size is a font family name.
+		'a { font: 12px/1.5 Menu; font-family: Menu, Caption; }',
 	],
 	invalid: [
 		outdent`
@@ -172,6 +183,9 @@ test.snapshot({
 		'a { font-family: Arial, Helvetica, SANS-SERIF, Roboto, Segoe UI, SERIF; }',
 		String.raw`a { font-family: Arial, \53 ANS-SERIF, Roboto, SERIF; }`,
 		'a { transition: OPACITY 1S EASE-IN, Transform 2S LINEAR; }',
+		// The second `Linear` is the animation name.
+		'a { animation: 1S Linear Linear; }',
+		'@media (HOVER) and (1PX <= WIDTH) and (MIN-ASPECT-RATIO: 16/9) {}',
 	],
 });
 

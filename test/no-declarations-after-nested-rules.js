@@ -70,5 +70,8 @@ test.snapshot({
 		'@container (width > 0px) { a { b {} color: red; } }',
 		'@layer theme { a { b {} color: red; } }',
 		'@scope (.card) { a { b {} color: red; } }',
+		'a { @layer theme {} color: red; }',
+		'a { @container (width > 0px) {} color: red; }',
+		'a {\r\n\tb {}\r\n\tcolor: red;\r\n}',
 	],
 });

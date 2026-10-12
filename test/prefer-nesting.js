@@ -506,6 +506,16 @@ test.snapshot({
 		'.x :is(.a, .b)+div { color: red; }',
 		'.parent { &:is(.a, .b)+div { color: red; } }',
 		'.parent { :is(&.a, &.b)+div { color: red; } }',
+		'.a { color: red; } @MEDIA (y) { .a .b { color: green; } }',
+		'.a { color: red; } @media (y) { .a { color: blue; } } .a .b { color: green; }',
+		'@media (x) { .a { color: red; } } .a .b { color: blue; }',
+		'.a { color: red; } @layer x { .a .b { color: blue; } }',
+		'.a {\r\n  color: red;\r\n}\r\n@media (x) {\r\n  .a .b {\r\n    color: blue;\r\n  }\r\n}',
+		'.x .item, .y .item { color: red; }',
+		'.card { > .a .item, > .b .item { color: red; } }',
+		':is(.a,.b)+a{color:red}',
+		':is(.a, .b)+-x-a { color: red; }',
+		':is(.a, .b)+*|a { color: red; }',
 		'.card { color: red; } body :hover .card { color: blue; }',
 		'.card { color: red; } BODY :HOVER .card { color: blue; }',
 		'.card { color: red; } a:not(.x) .a .card { color: blue; }',
@@ -817,6 +827,15 @@ nodeTest('related rule fixes settle with selector groups and long adjacent runs'
 			code: '.card .title, .card .body {} @layer theme { .card .footer, .card .aside {} .card.active {} }',
 			output: '.card { & .title, & .body {} @layer theme { & .footer, & .aside {} &.active {} } }',
 		},
+		// Moving `@layer b` before `@layer a { .other }` would change the layer order
+		{
+			code: '.card { background: white; } @layer a { .other { color: green; } } @layer b { .card { color: blue; } } @layer a { .card { color: red; } }',
+			output: '.card { background: white; } @layer a { .other { color: green; } } .card { @layer b { color: blue; } @layer a { color: red; } }',
+		},
+		{
+			code: '.card { background: white; } @layer { .card { color: blue; } } @layer { .card { color: red; } }',
+			output: '.card { background: white; @layer { color: blue; } @layer { color: red; } }',
+		},
 	];
 	for (const {code, output} of cases) {
 		const result = linter.verifyAndFix(code, config, {filename: 'test.css'});
@@ -962,6 +981,12 @@ test({
 		{
 			code: '.card {} @layer theme { .card {} }',
 			output: '.card { @layer theme {} }',
+			errors: 1,
+		},
+		// The first layer stays first, so the layer order does not change.
+		{
+			code: '@layer x { .card .title { color: green; } } @layer y { .card { color: red; } }',
+			output: '.card { @layer x { & .title { color: green; } } @layer y { color: red; } }',
 			errors: 1,
 		},
 		{
@@ -1146,6 +1171,8 @@ test({
 		'@namespace url("http://www.w3.org/1999/xhtml"); .card .title {} .card .body {}',
 		'.card {} @media (color) { .card .title {} .other {} }',
 		'.card {} @layer theme { .card .title {} .other .body {} }',
+		// Moving the later layer block before the other one would change the layer order.
+		'.card { color: red; } @layer y { .other { color: blue; } } @layer x { .card .title { color: green; } }',
 		'.card {} @supports (display: grid) { .card .title {} }',
 		'.card {} @container (width > 0px) { .card .title {} }',
 		'.card {} @starting-style { .other {} }',

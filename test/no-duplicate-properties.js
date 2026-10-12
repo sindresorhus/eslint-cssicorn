@@ -39,6 +39,7 @@ test.snapshot({
 		'a { color: red; color: blue; }',
 		'a { Color: red; cOlOr: blue; }',
 		'a { color: red !important; color: blue !important; }',
+		'a { color: red !important; color: blue !IMPORTANT; }',
 		'a { color: red; color: RED; }',
 		'a { color: red; /* fallback */ color: blue; }',
 		'@keyframes pulse { from { opacity: 0; opacity: 1; } }',

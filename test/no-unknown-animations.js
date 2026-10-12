@@ -83,6 +83,16 @@ test.snapshot({
 		'@keyframes fade {} a { animation-name: fade !important; }',
 		'@media screen { @keyframes fade {} a { animation-name: fade; } }',
 		'@keyframes fade {} @keyframes slide {} a { animation: fade 1s, slide 2s; }',
+		// Keywords go to other longhands first, so a repeated keyword is the name.
+		'@keyframes paused {} a { animation: 1s running paused; }',
+		'@keyframes infinite {} a { animation: 1s infinite infinite; }',
+		'@keyframes normal {} a { animation: 1s normal normal; }',
+		'@keyframes fade {} a { animation: 1s linear(0, 0.5 50%, 1) fade; }',
+		'@keyframes fade {} a { animation: fade 1s steps(4, jump-end) infinite; }',
+		'@keyframes fade {} a { animation: fade 1s view(block); }',
+		'@keyframes fade {} a { animation: fade 1s scroll(root); }',
+		'@keyframes fade {} a { animation: auto fade; }',
+		'@keyframes /* comment */ fade /* comment */ {} a { animation-name: fade; }',
 	],
 	invalid: [
 		'a { animation-name: missing; }',
@@ -137,6 +147,10 @@ test.snapshot({
 		'a { animation: missing, slide; } @keyframes slide {}',
 		'a { animation: 1s missing, fade 2s; } @keyframes fade {}',
 		'a { animation-name: missing !important; }',
+		'@keyframes paused {} a { animation: 1s paused running; }',
+		'a { animation: 1s running paused; }',
+		'@keyframes fade {} a { ANIMATION: FADE 1S; }',
+		'@keyframes fade {} a { animation: fade 1s ease-in-out forwards, missing 2s; }',
 	],
 });
 

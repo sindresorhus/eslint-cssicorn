@@ -584,6 +584,62 @@ Message:
 
 `;
 
+exports[`invalid(43): @keyframes paused {} a { animation: 1s paused running; } 1`] = `
+
+  1 | @keyframes paused {} a { animation: 1s paused running; }
+
+`;
+
+exports[`invalid(43): @keyframes paused {} a { animation: 1s paused running; } 2`] = `
+
+Message:
+> 1 | @keyframes paused {} a { animation: 1s paused running; }
+    |                                               ^^^^^^^ Unknown animation \`running\`.
+
+`;
+
+exports[`invalid(44): a { animation: 1s running paused; } 1`] = `
+
+  1 | a { animation: 1s running paused; }
+
+`;
+
+exports[`invalid(44): a { animation: 1s running paused; } 2`] = `
+
+Message:
+> 1 | a { animation: 1s running paused; }
+    |                           ^^^^^^ Unknown animation \`paused\`.
+
+`;
+
+exports[`invalid(45): @keyframes fade {} a { ANIMATION: FADE 1S; } 1`] = `
+
+  1 | @keyframes fade {} a { ANIMATION: FADE 1S; }
+
+`;
+
+exports[`invalid(45): @keyframes fade {} a { ANIMATION: FADE 1S; } 2`] = `
+
+Message:
+> 1 | @keyframes fade {} a { ANIMATION: FADE 1S; }
+    |                                   ^^^^ Unknown animation \`FADE\`.
+
+`;
+
+exports[`invalid(46): @keyframes fade {} a { animation: fade 1s ease-in-out forwards, missing 2s; } 1`] = `
+
+  1 | @keyframes fade {} a { animation: fade 1s ease-in-out forwards, missing 2s; }
+
+`;
+
+exports[`invalid(46): @keyframes fade {} a { animation: fade 1s ease-in-out forwards, missing 2s; } 2`] = `
+
+Message:
+> 1 | @keyframes fade {} a { animation: fade 1s ease-in-out forwards, missing 2s; }
+    |                                                                 ^^^^^^^ Unknown animation \`missing\`.
+
+`;
+
 exports[`invalid(5): a { animation-name: fade, missing; }\n@keyframes fade {} 1`] = `
 
   1 | a { animation-name: fade, missing; }

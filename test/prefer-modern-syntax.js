@@ -120,6 +120,8 @@ ruleTest({
 		{code: 'a { background: linear-gradient(rgba(0, 0, 0, .5), hsl(30, 40%, 50%)); }', output: 'a { background: linear-gradient(rgb(0 0 0 / 50%), hsl(30 40% 50%)); }', errors: 2},
 		{code: 'a { color: rgba(var(--channels) / .5); }', output: 'a { color: rgb(var(--channels) / 50%); }', errors: 1},
 		{code: 'a { color: hsla(var(--h) var(--s) var(--l)); }', output: 'a { color: hsl(var(--h) var(--s) var(--l)); }', errors: 1},
+		// `rgb()` accepts the same arguments as `rgba()`, so a lone substitution can be renamed
+		{code: 'a { border: 1px solid RGBA(var(--color)); }', output: 'a { border: 1px solid rgb(var(--color)); }', errors: 1},
 		{code: 'a { color: rgb(calc(var(--red)), 0, 0); }', errors: 1},
 		{code: 'a { color: rgb(0 0 0 / .5); }', output: 'a { color: rgb(0 0 0 / 50%); }', errors: [{messageId: 'prefer-modern-syntax/alpha'}]},
 		{code: 'a { color: rgb(0, 0, 0); }', output: 'a { color: rgb(0 0 0); }', errors: [{messageId: 'prefer-modern-syntax/color'}]},

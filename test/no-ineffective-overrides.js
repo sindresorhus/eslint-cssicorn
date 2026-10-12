@@ -582,3 +582,15 @@ test.snapshot({
 		'.button { color: red; } .button { color: red; } .button:hover { color: blue; } .button { color: red !important; }',
 	],
 });
+
+test({
+	valid: [],
+	invalid: [
+		// A normal rollback keyword cannot beat an important blocker.
+		'.button { color: red !important; } .button:hover { color: revert; }',
+		// Nested layers are still layered.
+		'.button { color: red; } @layer components { @layer states { .button:hover { color: blue; } } }',
+		// Starting styles are ordinary normal declarations in the cascade.
+		'.button { opacity: 1 !important; } @starting-style { .button { opacity: 0; } }',
+	].map(code => ({code, errors: [{messageId: 'no-ineffective-overrides'}]})),
+});

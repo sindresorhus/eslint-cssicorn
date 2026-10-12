@@ -1254,6 +1254,42 @@ Message:
 
 `;
 
+exports[`invalid(86): @scope (.root) { :is(&, .item) {} } 1`] = `
+
+  1 | @scope (.root) { :is(&, .item) {} }
+
+`;
+
+exports[`invalid(86): @scope (.root) { :is(&, .item) {} } 2`] = `
+
+Message:
+> 1 | @scope (.root) { :is(&, .item) {} }
+    |                  ^^^^^^^^^^^^^ The selectors in \`:is()\` have mixed specificity (0-0-0, 0-1-0). The most specific selector determines the specificity of the list.
+
+`;
+
+exports[`invalid(87): .a { .c, #d { :is(.x, &) {} } } 1`] = `
+
+  1 | .a { .c, #d { :is(.x, &) {} } }
+
+`;
+
+exports[`invalid(87): .a { .c, #d { :is(.x, &) {} } } 2`] = `
+
+Message:
+> 1 | .a { .c, #d { :is(.x, &) {} } }
+    |               ^^^^^^^^^^ Do not nest rules under selector lists with mixed specificity.
+
+`;
+
+exports[`invalid(87): .a { .c, #d { :is(.x, &) {} } } 3`] = `
+
+Message:
+> 1 | .a { .c, #d { :is(.x, &) {} } }
+    |               ^^^^^^^^^^ The selectors in \`:is()\` have mixed specificity (0-1-0, 1-1-0). The most specific selector determines the specificity of the list.
+
+`;
+
 exports[`invalid(9): :is(::before, *), div { & .close {} } 1`] = `
 
   1 | :is(::before, *), div { & .close {} }

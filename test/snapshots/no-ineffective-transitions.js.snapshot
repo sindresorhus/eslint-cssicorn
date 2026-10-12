@@ -1249,6 +1249,31 @@ Suggestion 1/1: Allow discrete transitions for all targets using this behavior e
 
 `;
 
+exports[`invalid(77): a { transition: anchor-name 1s, interpolate-size 1s; } 1`] = `
+
+  1 | a { transition: anchor-name 1s, interpolate-size 1s; }
+
+`;
+
+exports[`invalid(77): a { transition: anchor-name 1s, interpolate-size 1s; } 2`] = `
+
+Message:
+> 1 | a { transition: anchor-name 1s, interpolate-size 1s; }
+    |                 ^^^^^^^^^^^ Transitioning \`anchor-name\` requires \`allow-discrete\` behavior.
+
+Suggestion 1/1: Allow discrete transitions for all targets using this behavior entry.:
+  1 | a { transition: allow-discrete anchor-name 1s, interpolate-size 1s; }
+
+`;
+
+exports[`invalid(77): a { transition: anchor-name 1s, interpolate-size 1s; } 3`] = `
+
+Message:
+> 1 | a { transition: anchor-name 1s, interpolate-size 1s; }
+    |                                 ^^^^^^^^^^^^^^^^ Property \`interpolate-size\` cannot be transitioned.
+
+`;
+
 exports[`invalid(8): a { transition: opacity 1s; transition-property: display; } 1`] = `
 
   1 | a { transition: opacity 1s; transition-property: display; }

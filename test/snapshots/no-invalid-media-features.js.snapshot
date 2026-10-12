@@ -26,6 +26,20 @@ Message:
 
 `;
 
+exports[`invalid(100): @import url(\"theme.css\") supports(display: grid) (orientation: sideways); 1`] = `
+
+  1 | @import url("theme.css") supports(display: grid) (orientation: sideways);
+
+`;
+
+exports[`invalid(100): @import url(\"theme.css\") supports(display: grid) (orientation: sideways); 2`] = `
+
+Message:
+> 1 | @import url("theme.css") supports(display: grid) (orientation: sideways);
+    |                                                                ^^^^^^^^ Invalid value \`sideways\` for media feature \`orientation\`. Expected portrait | landscape.
+
+`;
+
 exports[`invalid(11): @media (width: calc(var(--breakpoint) + env(safe-area-inset-left))) {} 1`] = `
 
   1 | @media (width: calc(var(--breakpoint) + env(safe-area-inset-left))) {}
@@ -1070,17 +1084,17 @@ Message:
 
 `;
 
-exports[`invalid(79): @media (color-gamut > srgb) {} 1`] = `
+exports[`invalid(79): @media (prefers-color-scheme: no-preference) {} 1`] = `
 
-  1 | @media (color-gamut > srgb) {}
+  1 | @media (prefers-color-scheme: no-preference) {}
 
 `;
 
-exports[`invalid(79): @media (color-gamut > srgb) {} 2`] = `
+exports[`invalid(79): @media (prefers-color-scheme: no-preference) {} 2`] = `
 
 Message:
-> 1 | @media (color-gamut > srgb) {}
-    |         ^^^^^^^^^^^ Media feature \`color-gamut\` does not support range notation.
+> 1 | @media (prefers-color-scheme: no-preference) {}
+    |                               ^^^^^^^^^^^^^ Invalid value \`no-preference\` for media feature \`prefers-color-scheme\`. Expected light | dark.
 
 `;
 
@@ -1098,13 +1112,69 @@ Message:
 
 `;
 
-exports[`invalid(80): @media (scan > progressive) {} 1`] = `
+exports[`invalid(80): @media (prefers-contrast: forced) {} 1`] = `
+
+  1 | @media (prefers-contrast: forced) {}
+
+`;
+
+exports[`invalid(80): @media (prefers-contrast: forced) {} 2`] = `
+
+Message:
+> 1 | @media (prefers-contrast: forced) {}
+    |                           ^^^^^^ Invalid value \`forced\` for media feature \`prefers-contrast\`. Expected no-preference | less | more | custom.
+
+`;
+
+exports[`invalid(81): @media (device-pixel-ratio: 2) {} 1`] = `
+
+  1 | @media (device-pixel-ratio: 2) {}
+
+`;
+
+exports[`invalid(81): @media (device-pixel-ratio: 2) {} 2`] = `
+
+Message:
+> 1 | @media (device-pixel-ratio: 2) {}
+    |         ^^^^^^^^^^^^^^^^^^ Unknown media feature \`device-pixel-ratio\`.
+
+`;
+
+exports[`invalid(82): @media screen and (min-width: 0\\0) {} 1`] = `
+
+  1 | @media screen and (min-width: 0\\0) {}
+
+`;
+
+exports[`invalid(82): @media screen and (min-width: 0\\0) {} 2`] = `
+
+Message:
+> 1 | @media screen and (min-width: 0\\0) {}
+    |                               ^^^ Invalid value \`0\\0\` for media feature \`min-width\`. Expected <length>.
+
+`;
+
+exports[`invalid(83): @media (color-gamut > srgb) {} 1`] = `
+
+  1 | @media (color-gamut > srgb) {}
+
+`;
+
+exports[`invalid(83): @media (color-gamut > srgb) {} 2`] = `
+
+Message:
+> 1 | @media (color-gamut > srgb) {}
+    |         ^^^^^^^^^^^ Media feature \`color-gamut\` does not support range notation.
+
+`;
+
+exports[`invalid(84): @media (scan > progressive) {} 1`] = `
 
   1 | @media (scan > progressive) {}
 
 `;
 
-exports[`invalid(80): @media (scan > progressive) {} 2`] = `
+exports[`invalid(84): @media (scan > progressive) {} 2`] = `
 
 Message:
 > 1 | @media (scan > progressive) {}
@@ -1112,13 +1182,13 @@ Message:
 
 `;
 
-exports[`invalid(81): @media (update >= slow) {} 1`] = `
+exports[`invalid(85): @media (update >= slow) {} 1`] = `
 
   1 | @media (update >= slow) {}
 
 `;
 
-exports[`invalid(81): @media (update >= slow) {} 2`] = `
+exports[`invalid(85): @media (update >= slow) {} 2`] = `
 
 Message:
 > 1 | @media (update >= slow) {}
@@ -1126,13 +1196,13 @@ Message:
 
 `;
 
-exports[`invalid(82): @media (pointer <= fine) {} 1`] = `
+exports[`invalid(86): @media (pointer <= fine) {} 1`] = `
 
   1 | @media (pointer <= fine) {}
 
 `;
 
-exports[`invalid(82): @media (pointer <= fine) {} 2`] = `
+exports[`invalid(86): @media (pointer <= fine) {} 2`] = `
 
 Message:
 > 1 | @media (pointer <= fine) {}
@@ -1140,13 +1210,13 @@ Message:
 
 `;
 
-exports[`invalid(83): @media (max-height <= 20px) {} 1`] = `
+exports[`invalid(87): @media (max-height <= 20px) {} 1`] = `
 
   1 | @media (max-height <= 20px) {}
 
 `;
 
-exports[`invalid(83): @media (max-height <= 20px) {} 2`] = `
+exports[`invalid(87): @media (max-height <= 20px) {} 2`] = `
 
 Message:
 > 1 | @media (max-height <= 20px) {}
@@ -1154,13 +1224,13 @@ Message:
 
 `;
 
-exports[`invalid(84): @media (10px < min-device-width) {} 1`] = `
+exports[`invalid(88): @media (10px < min-device-width) {} 1`] = `
 
   1 | @media (10px < min-device-width) {}
 
 `;
 
-exports[`invalid(84): @media (10px < min-device-width) {} 2`] = `
+exports[`invalid(88): @media (10px < min-device-width) {} 2`] = `
 
 Message:
 > 1 | @media (10px < min-device-width) {}
@@ -1168,73 +1238,17 @@ Message:
 
 `;
 
-exports[`invalid(85): @media (min-resolution) {} 1`] = `
+exports[`invalid(89): @media (min-resolution) {} 1`] = `
 
   1 | @media (min-resolution) {}
 
 `;
 
-exports[`invalid(85): @media (min-resolution) {} 2`] = `
+exports[`invalid(89): @media (min-resolution) {} 2`] = `
 
 Message:
 > 1 | @media (min-resolution) {}
     |         ^^^^^^^^^^^^^^ Media feature \`min-resolution\` requires a value in plain notation.
-
-`;
-
-exports[`invalid(86): @media (10px <= width > 20px) {} 1`] = `
-
-  1 | @media (10px <= width > 20px) {}
-
-`;
-
-exports[`invalid(86): @media (10px <= width > 20px) {} 2`] = `
-
-Message:
-> 1 | @media (10px <= width > 20px) {}
-    |        ^^^^^^^^^^^^^^^^^^^^^^ Chained media feature comparisons must place the feature between two values and use the same comparison direction.
-
-`;
-
-exports[`invalid(87): @media (10px > width < 20px) {} 1`] = `
-
-  1 | @media (10px > width < 20px) {}
-
-`;
-
-exports[`invalid(87): @media (10px > width < 20px) {} 2`] = `
-
-Message:
-> 1 | @media (10px > width < 20px) {}
-    |        ^^^^^^^^^^^^^^^^^^^^^ Chained media feature comparisons must place the feature between two values and use the same comparison direction.
-
-`;
-
-exports[`invalid(88): @media (20px > width > red) {} 1`] = `
-
-  1 | @media (20px > width > red) {}
-
-`;
-
-exports[`invalid(88): @media (20px > width > red) {} 2`] = `
-
-Message:
-> 1 | @media (20px > width > red) {}
-    |                        ^^^ Invalid value \`red\` for media feature \`width\`. Expected <length>.
-
-`;
-
-exports[`invalid(89): @media (10px < width < 20px) and (20px < height > 10px) {} 1`] = `
-
-  1 | @media (10px < width < 20px) and (20px < height > 10px) {}
-
-`;
-
-exports[`invalid(89): @media (10px < width < 20px) and (20px < height > 10px) {} 2`] = `
-
-Message:
-> 1 | @media (10px < width < 20px) and (20px < height > 10px) {}
-    |                                  ^^^^^^^^^^^^^^^^^^^^^^ Chained media feature comparisons must place the feature between two values and use the same comparison direction.
 
 `;
 
@@ -1252,13 +1266,69 @@ Message:
 
 `;
 
-exports[`invalid(90): @media screen { .element { @media (min-width) { color: red; } } } 1`] = `
+exports[`invalid(90): @media (10px <= width > 20px) {} 1`] = `
+
+  1 | @media (10px <= width > 20px) {}
+
+`;
+
+exports[`invalid(90): @media (10px <= width > 20px) {} 2`] = `
+
+Message:
+> 1 | @media (10px <= width > 20px) {}
+    |        ^^^^^^^^^^^^^^^^^^^^^^ Chained media feature comparisons must place the feature between two values and use the same comparison direction.
+
+`;
+
+exports[`invalid(91): @media (10px > width < 20px) {} 1`] = `
+
+  1 | @media (10px > width < 20px) {}
+
+`;
+
+exports[`invalid(91): @media (10px > width < 20px) {} 2`] = `
+
+Message:
+> 1 | @media (10px > width < 20px) {}
+    |        ^^^^^^^^^^^^^^^^^^^^^ Chained media feature comparisons must place the feature between two values and use the same comparison direction.
+
+`;
+
+exports[`invalid(92): @media (20px > width > red) {} 1`] = `
+
+  1 | @media (20px > width > red) {}
+
+`;
+
+exports[`invalid(92): @media (20px > width > red) {} 2`] = `
+
+Message:
+> 1 | @media (20px > width > red) {}
+    |                        ^^^ Invalid value \`red\` for media feature \`width\`. Expected <length>.
+
+`;
+
+exports[`invalid(93): @media (10px < width < 20px) and (20px < height > 10px) {} 1`] = `
+
+  1 | @media (10px < width < 20px) and (20px < height > 10px) {}
+
+`;
+
+exports[`invalid(93): @media (10px < width < 20px) and (20px < height > 10px) {} 2`] = `
+
+Message:
+> 1 | @media (10px < width < 20px) and (20px < height > 10px) {}
+    |                                  ^^^^^^^^^^^^^^^^^^^^^^ Chained media feature comparisons must place the feature between two values and use the same comparison direction.
+
+`;
+
+exports[`invalid(94): @media screen { .element { @media (min-width) { color: red; } } } 1`] = `
 
   1 | @media screen { .element { @media (min-width) { color: red; } } }
 
 `;
 
-exports[`invalid(90): @media screen { .element { @media (min-width) { color: red; } } } 2`] = `
+exports[`invalid(94): @media screen { .element { @media (min-width) { color: red; } } } 2`] = `
 
 Message:
 > 1 | @media screen { .element { @media (min-width) { color: red; } } }
@@ -1266,16 +1336,72 @@ Message:
 
 `;
 
-exports[`invalid(91): @import \"theme.css\" (width: red); 1`] = `
+exports[`invalid(95): @import \"theme.css\" (width: red); 1`] = `
 
   1 | @import "theme.css" (width: red);
 
 `;
 
-exports[`invalid(91): @import \"theme.css\" (width: red); 2`] = `
+exports[`invalid(95): @import \"theme.css\" (width: red); 2`] = `
 
 Message:
 > 1 | @import "theme.css" (width: red);
     |                             ^^^ Invalid value \`red\` for media feature \`width\`. Expected <length>.
+
+`;
+
+exports[`invalid(96): @media (aspect-ratio: -1 / 2) {} 1`] = `
+
+  1 | @media (aspect-ratio: -1 / 2) {}
+
+`;
+
+exports[`invalid(96): @media (aspect-ratio: -1 / 2) {} 2`] = `
+
+Message:
+> 1 | @media (aspect-ratio: -1 / 2) {}
+    |                       ^^^^^^ Invalid value \`-1 / 2\` for media feature \`aspect-ratio\`. Expected <ratio>.
+
+`;
+
+exports[`invalid(97): @media (resolution: 1in) {} 1`] = `
+
+  1 | @media (resolution: 1in) {}
+
+`;
+
+exports[`invalid(97): @media (resolution: 1in) {} 2`] = `
+
+Message:
+> 1 | @media (resolution: 1in) {}
+    |                     ^^^ Invalid value \`1in\` for media feature \`resolution\`. Expected <resolution> | infinite.
+
+`;
+
+exports[`invalid(98): @media (min-width: 2dppx) {} 1`] = `
+
+  1 | @media (min-width: 2dppx) {}
+
+`;
+
+exports[`invalid(98): @media (min-width: 2dppx) {} 2`] = `
+
+Message:
+> 1 | @media (min-width: 2dppx) {}
+    |                    ^^^^^ Invalid value \`2dppx\` for media feature \`min-width\`. Expected <length>.
+
+`;
+
+exports[`invalid(99): @media (width: attr(data-width px)) {} 1`] = `
+
+  1 | @media (width: attr(data-width px)) {}
+
+`;
+
+exports[`invalid(99): @media (width: attr(data-width px)) {} 2`] = `
+
+Message:
+> 1 | @media (width: attr(data-width px)) {}
+    |                ^^^^^^^^^^^^^^^^^^^ Invalid value \`attr(data-width px)\` for media feature \`width\`. Expected <length>.
 
 `;

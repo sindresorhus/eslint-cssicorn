@@ -89,6 +89,9 @@ ruleTest.snapshot({
 		':is(.a, .b) .c {}',
 		// A wrapper inside a `::part()` argument is not a style-rule selector
 		'::part(:is(x)) {}',
+		// Unwrapping would put a type selector after `&` or another simple selector
+		'.foo { &:is(div) {} }',
+		'.foo:is(*) {}',
 	],
 	invalid: [
 		':is(.foo) {}',
@@ -148,6 +151,7 @@ ruleTest.snapshot({
 		':is([href]) {}',
 		':is(#id) {}',
 		'.foo:is(.bar) .baz {}',
+		'.foo { :is(.bar) & {} > :is(.baz) {} }',
 	],
 });
 

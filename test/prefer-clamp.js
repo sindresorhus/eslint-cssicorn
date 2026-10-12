@@ -117,6 +117,12 @@ test.snapshot({
 		'a { width: min(100px, max(calc(10px), 5vw)); }',
 		'@keyframes slide { to { width: max(10px, min(5vw, 100px)); } }',
 		'a { @starting-style { width: max(10px, min(5vw, 100px)); } }',
+		String.raw`a { width: max(1px, m\69n(2px, 3px)); }`,
+		String.raw`a { width: m\61x(1px, min(2px, 3px)); }`,
+		'a { width: calc(max(10px, min(5vw, 100px)) * 2); }',
+		'a { --size: calc(1px + max(min(5vw, 100px), 10px)); }',
+		'a {\n\twidth: max(min(\n\t\t5vw,\n\t\t100px\n\t), 10px);\n}',
+		'a {\r\n  width: max(10px, min(5vw, 100px)) !important;\r\n}',
 	],
 });
 

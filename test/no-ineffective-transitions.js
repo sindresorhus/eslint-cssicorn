@@ -307,6 +307,8 @@ test.snapshot({
 		'a { transition-behavior: allow-discrete !IMPORTANT; transition: display 1s; }',
 		'a { transition: display 1s, opacity 1s allow-discrete, overlay 2s; transition-behavior: allow-discrete; }',
 		'a { transition-property: display, display; transition-behavior: allow-discrete; }',
+		'a { transition: anchor-name 1s allow-discrete, position-try-fallbacks 1s allow-discrete, view-transition-name 1s allow-discrete; }',
+		'a { transition: corner-shape 1s, scrollbar-color 1s, aspect-ratio 1s; }',
 	],
 	invalid: [
 		'a { transition: display 200ms; transition-behavior: normal; }',
@@ -363,6 +365,7 @@ test.snapshot({
 		'a { transition: display 1s normal, content-visibility 1s normal; }',
 		'a { transition: display 1s normal, opacity 2s allow-discrete, content-visibility 1s; }',
 		'a { transition-behavior: allow-discrete, normal; transition-property: display, position; }',
+		'a { transition: anchor-name 1s, interpolate-size 1s; }',
 	],
 });
 

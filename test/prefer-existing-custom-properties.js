@@ -207,6 +207,20 @@ test({
 	}],
 });
 
+test.snapshot({
+	valid: [
+		withTokens('a { color: rgba(255, 255, 255, .5); }', {'--white': '#ffffff80'}),
+	],
+	invalid: [
+		withTokens('a { transition: all 2e2ms; }', {'--fast': '200ms'}),
+		withTokens('a { aspect-ratio: 16/9; }', {'--ratio': '16 / 9'}),
+		withTokens('a { color: rgba(103,80,164,1); border-color: rgb(103 80 164 / 100%); outline-color: #6750a4ff; }', {'--brand': '#6750a4'}),
+		withTokens('a { font: 8px/1.5 serif; margin: calc(-1 * 8px); }', {'--space': '8px'}),
+		withTokens('a { margin: 8px!important; padding:8px; }', {'--space': '8px'}),
+		withTokens('a { width: max(8px, 50%); }', {'--space': '8px'}),
+	],
+});
+
 const lint = customProperties => new Linter().verify('a { color: red; }', {
 	files: ['**'],
 	language: 'css/css',

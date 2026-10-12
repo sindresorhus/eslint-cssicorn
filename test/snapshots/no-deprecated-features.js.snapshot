@@ -1228,13 +1228,30 @@ Output:
 
 `;
 
-exports[`invalid(54): a { page-break-before: right; } 1`] = `
+exports[`invalid(54): a { page-break-after: ALWAYS !important; } 1`] = `
+
+  1 | a { page-break-after: ALWAYS !important; }
+
+`;
+
+exports[`invalid(54): a { page-break-after: ALWAYS !important; } 2`] = `
+
+Message:
+> 1 | a { page-break-after: ALWAYS !important; }
+    |     ^^^^^^^^^^^^^^^^ Do not use deprecated CSS property \`page-break-after\`.
+
+Output:
+  1 | a { break-after: page !important; }
+
+`;
+
+exports[`invalid(55): a { page-break-before: right; } 1`] = `
 
   1 | a { page-break-before: right; }
 
 `;
 
-exports[`invalid(54): a { page-break-before: right; } 2`] = `
+exports[`invalid(55): a { page-break-before: right; } 2`] = `
 
 Message:
 > 1 | a { page-break-before: right; }
@@ -1245,13 +1262,13 @@ Output:
 
 `;
 
-exports[`invalid(55): a { outline-color: activecaption; } 1`] = `
+exports[`invalid(56): a { outline-color: activecaption; } 1`] = `
 
   1 | a { outline-color: activecaption; }
 
 `;
 
-exports[`invalid(55): a { outline-color: activecaption; } 2`] = `
+exports[`invalid(56): a { outline-color: activecaption; } 2`] = `
 
 Message:
 > 1 | a { outline-color: activecaption; }
@@ -1262,13 +1279,13 @@ Suggestion 1/1: Replace \`outline-color: activecaption\` with \`canvas\`.:
 
 `;
 
-exports[`invalid(56): a { color: color-mix(in srgb, activecaption, red); } 1`] = `
+exports[`invalid(57): a { color: color-mix(in srgb, activecaption, red); } 1`] = `
 
   1 | a { color: color-mix(in srgb, activecaption, red); }
 
 `;
 
-exports[`invalid(56): a { color: color-mix(in srgb, activecaption, red); } 2`] = `
+exports[`invalid(57): a { color: color-mix(in srgb, activecaption, red); } 2`] = `
 
 Message:
 > 1 | a { color: color-mix(in srgb, activecaption, red); }
@@ -1279,13 +1296,13 @@ Suggestion 1/1: Replace \`color: activecaption\` with \`canvas\`.:
 
 `;
 
-exports[`invalid(57): a { ime-mode: disabled; } 1`] = `
+exports[`invalid(58): a { ime-mode: disabled; } 1`] = `
 
   1 | a { ime-mode: disabled; }
 
 `;
 
-exports[`invalid(57): a { ime-mode: disabled; } 2`] = `
+exports[`invalid(58): a { ime-mode: disabled; } 2`] = `
 
 Message:
 > 1 | a { ime-mode: disabled; }
@@ -1293,39 +1310,17 @@ Message:
 
 `;
 
-exports[`invalid(58): a { scroll-snap-type-x: mandatory; } 1`] = `
+exports[`invalid(59): a { scroll-snap-type-x: mandatory; } 1`] = `
 
   1 | a { scroll-snap-type-x: mandatory; }
 
 `;
 
-exports[`invalid(58): a { scroll-snap-type-x: mandatory; } 2`] = `
+exports[`invalid(59): a { scroll-snap-type-x: mandatory; } 2`] = `
 
 Message:
 > 1 | a { scroll-snap-type-x: mandatory; }
     |     ^^^^^^^^^^^^^^^^^^ Do not use deprecated CSS property \`scroll-snap-type-x\`.
-
-`;
-
-exports[`invalid(59): a { -webkit-box-pack: center; -webkit-box-lines: multiple; } 1`] = `
-
-  1 | a { -webkit-box-pack: center; -webkit-box-lines: multiple; }
-
-`;
-
-exports[`invalid(59): a { -webkit-box-pack: center; -webkit-box-lines: multiple; } 2`] = `
-
-Message:
-> 1 | a { -webkit-box-pack: center; -webkit-box-lines: multiple; }
-    |     ^^^^^^^^^^^^^^^^ Do not use deprecated CSS property \`-webkit-box-pack\`.
-
-`;
-
-exports[`invalid(59): a { -webkit-box-pack: center; -webkit-box-lines: multiple; } 3`] = `
-
-Message:
-> 1 | a { -webkit-box-pack: center; -webkit-box-lines: multiple; }
-    |                               ^^^^^^^^^^^^^^^^^ Do not use deprecated CSS property \`-webkit-box-lines\`.
 
 `;
 
@@ -1367,13 +1362,35 @@ Message:
 
 `;
 
-exports[`invalid(60): a { -webkit-box-orient: horizontal; } 1`] = `
+exports[`invalid(60): a { -webkit-box-pack: center; -webkit-box-lines: multiple; } 1`] = `
+
+  1 | a { -webkit-box-pack: center; -webkit-box-lines: multiple; }
+
+`;
+
+exports[`invalid(60): a { -webkit-box-pack: center; -webkit-box-lines: multiple; } 2`] = `
+
+Message:
+> 1 | a { -webkit-box-pack: center; -webkit-box-lines: multiple; }
+    |     ^^^^^^^^^^^^^^^^ Do not use deprecated CSS property \`-webkit-box-pack\`.
+
+`;
+
+exports[`invalid(60): a { -webkit-box-pack: center; -webkit-box-lines: multiple; } 3`] = `
+
+Message:
+> 1 | a { -webkit-box-pack: center; -webkit-box-lines: multiple; }
+    |                               ^^^^^^^^^^^^^^^^^ Do not use deprecated CSS property \`-webkit-box-lines\`.
+
+`;
+
+exports[`invalid(61): a { -webkit-box-orient: horizontal; } 1`] = `
 
   1 | a { -webkit-box-orient: horizontal; }
 
 `;
 
-exports[`invalid(60): a { -webkit-box-orient: horizontal; } 2`] = `
+exports[`invalid(61): a { -webkit-box-orient: horizontal; } 2`] = `
 
 Message:
 > 1 | a { -webkit-box-orient: horizontal; }
@@ -1381,13 +1398,13 @@ Message:
 
 `;
 
-exports[`invalid(61): a { -webkit-box-orient: HORIZONTAL; } 1`] = `
+exports[`invalid(62): a { -webkit-box-orient: HORIZONTAL; } 1`] = `
 
   1 | a { -webkit-box-orient: HORIZONTAL; }
 
 `;
 
-exports[`invalid(61): a { -webkit-box-orient: HORIZONTAL; } 2`] = `
+exports[`invalid(62): a { -webkit-box-orient: HORIZONTAL; } 2`] = `
 
 Message:
 > 1 | a { -webkit-box-orient: HORIZONTAL; }
@@ -1395,13 +1412,13 @@ Message:
 
 `;
 
-exports[`invalid(62): a { min-width: intrinsic; max-width: min-intrinsic; } 1`] = `
+exports[`invalid(63): a { min-width: intrinsic; max-width: min-intrinsic; } 1`] = `
 
   1 | a { min-width: intrinsic; max-width: min-intrinsic; }
 
 `;
 
-exports[`invalid(62): a { min-width: intrinsic; max-width: min-intrinsic; } 2`] = `
+exports[`invalid(63): a { min-width: intrinsic; max-width: min-intrinsic; } 2`] = `
 
 Message:
 > 1 | a { min-width: intrinsic; max-width: min-intrinsic; }
@@ -1409,7 +1426,7 @@ Message:
 
 `;
 
-exports[`invalid(62): a { min-width: intrinsic; max-width: min-intrinsic; } 3`] = `
+exports[`invalid(63): a { min-width: intrinsic; max-width: min-intrinsic; } 3`] = `
 
 Message:
 > 1 | a { min-width: intrinsic; max-width: min-intrinsic; }
@@ -1417,13 +1434,13 @@ Message:
 
 `;
 
-exports[`invalid(63): @media tv and (color) { a { color: red; } } 1`] = `
+exports[`invalid(64): @media tv and (color) { a { color: red; } } 1`] = `
 
   1 | @media tv and (color) { a { color: red; } }
 
 `;
 
-exports[`invalid(63): @media tv and (color) { a { color: red; } } 2`] = `
+exports[`invalid(64): @media tv and (color) { a { color: red; } } 2`] = `
 
 Message:
 > 1 | @media tv and (color) { a { color: red; } }
@@ -1431,13 +1448,13 @@ Message:
 
 `;
 
-exports[`invalid(64): @media only tv { a { color: red; } } 1`] = `
+exports[`invalid(65): @media only tv { a { color: red; } } 1`] = `
 
   1 | @media only tv { a { color: red; } }
 
 `;
 
-exports[`invalid(64): @media only tv { a { color: red; } } 2`] = `
+exports[`invalid(65): @media only tv { a { color: red; } } 2`] = `
 
 Message:
 > 1 | @media only tv { a { color: red; } }
@@ -1445,13 +1462,13 @@ Message:
 
 `;
 
-exports[`invalid(65): @supports (position-try-options: --x) { a { color: red; } } 1`] = `
+exports[`invalid(66): @supports (position-try-options: --x) { a { color: red; } } 1`] = `
 
   1 | @supports (position-try-options: --x) { a { color: red; } }
 
 `;
 
-exports[`invalid(65): @supports (position-try-options: --x) { a { color: red; } } 2`] = `
+exports[`invalid(66): @supports (position-try-options: --x) { a { color: red; } } 2`] = `
 
 Message:
 > 1 | @supports (position-try-options: --x) { a { color: red; } }

@@ -171,6 +171,9 @@ test.snapshot({
 		// A no-break space is not CSS whitespace, so it is part of the custom property value
 		'.a { --x: red\u00A0; } .b { --x: red; }',
 		'.a { --x: \u00A0red; } .b { --x: red; }',
+		'@scope (.parent) { > .a { color: red; } > .b { color: red; } }',
+		'.a { color: red; } .b:is(.c, :-webkit-autofill) { color: red; }',
+		'.a { color: red; } .b::before:hover { color: red; }',
 	],
 	invalid: [
 		'.a{color:red}.b{color:red}.c{color:red}',
@@ -239,6 +242,11 @@ test.snapshot({
 		'.nav { .a:hover { color: red; } .b:focus { color: red; } .c:hover { color: red; } .d:hover { color: red; } }',
 		'a:hover { color: red; } button:focus { color: red; } span:hover { color: red; } div:hover { color: red; }',
 		'@media (width > 1px) { a:hover { color: red; } button:focus { color: red; } span:hover { color: red; } div:hover { color: red; } }',
+		'@scope (.parent) { :scope { color: red; } .a { color: red; } }',
+		'@starting-style { .a { opacity: 0; } .b { opacity: 0; } }',
+		'@container (width > 1px) { .a { color: red; } .b { color: red; } }',
+		'.a { color: red !IMPORTANT; } .b { color: red !important; }',
+		'.parent { @media (width > 1px) { & .a { color: red; } } @media (width > 1px) { color: blue; } }',
 	],
 });
 

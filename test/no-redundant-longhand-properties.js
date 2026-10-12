@@ -331,6 +331,30 @@ testRule({
 			output: 'a { padding: 1px 2px 3px 4px; }',
 			errors: 1,
 		},
+		// `ignoreShorthands` ignores only the listed shorthands, not related ones.
+		{
+			code: 'a { margin-block-start: 1px; margin-block-end: 2px; }',
+			output: 'a { margin-block: 1px 2px; }',
+			options: [{ignoreShorthands: ['margin']}],
+			errors: 1,
+		},
+		{
+			code: 'a { padding-top: 1px; padding-right: 2px; padding-bottom: 3px; padding-left: 4px; }',
+			output: 'a { padding: 1px 2px 3px 4px; }',
+			options: [{ignoreShorthands: ['padding-block', 'padding-inline']}],
+			errors: 1,
+		},
+		// Anchor functions are valid in the `inset` shorthand
+		{
+			code: 'a { top: anchor(bottom); right: 0; bottom: 0; left: 0; }',
+			output: 'a { inset: anchor(bottom) 0 0; }',
+			errors: 1,
+		},
+		{
+			code: 'a { top: calc(anchor(--a top) + 1px); right: 5px; bottom: 5px; left: anchor-size(width, 0px); }',
+			output: 'a { inset: calc(anchor(--a top) + 1px) 5px 5px anchor-size(width, 0px); }',
+			errors: 1,
+		},
 		{
 			code: 'a { --gap: 1px; margin-top: 1px; margin-right: 2px; margin-bottom: 3px; margin-left: 4px; }',
 			output: 'a { --gap: 1px; margin: 1px 2px 3px 4px; }',
@@ -1025,6 +1049,11 @@ testRule({
 		{
 			code: 'a {\r\n\tmargin-top: 1px;\r\n\tmargin-right: 2px;\r\n\tmargin-bottom: 3px;\r\n\tmargin-left: 4px;\r\n}',
 			output: 'a {\r\n\tmargin: 1px 2px 3px 4px;\r\n}',
+			errors: 1,
+		},
+		{
+			code: 'a {\r\n  margin-top: 1px;\r\n  margin-right: 2px;\r\n  margin-bottom: 3px;\r\n  margin-left: 4px;\r\n}',
+			output: 'a {\r\n  margin: 1px 2px 3px 4px;\r\n}',
 			errors: 1,
 		},
 		{

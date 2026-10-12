@@ -71,6 +71,7 @@ test.snapshot({
 	],
 	invalid: [
 		'@keyframes fade { from { opacity: 0; } } @keyframes fade { to { opacity: 1; } }',
+		'@keyframes /* comment */ fade {} @keyframes fade /* comment */ {}',
 		'@property --color { syntax: "<color>"; inherits: false; initial-value: red; } @property --color { syntax: "<color>"; inherits: false; initial-value: blue; }',
 		'@counter-style dots { system: cyclic; symbols: "•"; } @counter-style dots { system: cyclic; symbols: "*"; }',
 		'@position-try --above { top: 0; } @position-try --above { bottom: 0; }',

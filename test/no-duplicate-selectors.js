@@ -83,6 +83,12 @@ test.snapshot({
 		'a[href="x"] { color: red; } a[href="X"] { color: blue; }',
 		// Partially overlapping lists are not duplicates
 		'.a, .b { color: red; } .a { color: blue; } .b { color: green; }',
+		'[a="x" i] {} [a="x"] {}',
+		'a b {} a > b {}',
+		'a:nth-child(2n+1) {} a:nth-child(2n-1) {}',
+		// Arguments of `::highlight()` and `:state()` are case-sensitive
+		'::highlight(Foo) {} ::highlight(foo) {} a:state(Foo) {} a:state(foo) {}',
+		'.a { @media print { .b {} } } .c { @media print { .b {} } }',
 	],
 	invalid: [
 		'.card { color: red; } .other { color: green; } .card { color: blue; }',
@@ -94,6 +100,7 @@ test.snapshot({
 		'a, /* keep */ a { color: red; }',
 		'a, a /* keep */, b { color: red; }',
 		'a, a /* keep */ { color: red; }',
+		'[a="b"i], [ a = "b" i ], :is(a,b), :is( a , b ) { color: red; }',
 		outdent`
 			a,
 			b,
@@ -196,6 +203,9 @@ test.snapshot({
 		'.a { color: red; } .a { color: blue; } .a { color: green; }',
 		// Separators may span lines
 		'a\n,a { color: red; }',
+		// Insignificant An+B whitespace and signs are normalized
+		'a:nth-child( 2n + 1 ) {} a:nth-child(+n+3) {} a:nth-child(2n+1) {} a:nth-child(n+3) {}',
+		'.a,\r\n  .a,\r\n  .b {}',
 	],
 });
 

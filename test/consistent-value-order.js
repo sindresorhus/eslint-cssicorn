@@ -155,6 +155,12 @@ test.snapshot({
 				},
 			},
 		},
+		'a { columns: 2 auto / 10px; }',
+		'a { box-shadow: 1px 1px inset; }',
+		'a { box-shadow: red 1px 1px,blue 2px 2px inset; }',
+		'a { outline: red auto; }',
+		'a { border: red/**/solid 1px; }',
+		'a { border: 1px red solid; border: solid red 1px; }',
 	],
 });
 

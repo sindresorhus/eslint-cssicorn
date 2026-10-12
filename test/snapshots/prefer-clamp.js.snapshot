@@ -600,6 +600,132 @@ Output:
 
 `;
 
+exports[`invalid(40): a { width: max(1px, m\\69n(2px, 3px)); } 1`] = `
+
+  1 | a { width: max(1px, m\\69n(2px, 3px)); }
+
+`;
+
+exports[`invalid(40): a { width: max(1px, m\\69n(2px, 3px)); } 2`] = `
+
+Message:
+> 1 | a { width: max(1px, m\\69n(2px, 3px)); }
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^ Prefer \`clamp()\` over nested \`min()\` and \`max()\`.
+
+Output:
+  1 | a { width: clamp(1px, 2px, 3px); }
+
+`;
+
+exports[`invalid(41): a { width: m\\61x(1px, min(2px, 3px)); } 1`] = `
+
+  1 | a { width: m\\61x(1px, min(2px, 3px)); }
+
+`;
+
+exports[`invalid(41): a { width: m\\61x(1px, min(2px, 3px)); } 2`] = `
+
+Message:
+> 1 | a { width: m\\61x(1px, min(2px, 3px)); }
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^ Prefer \`clamp()\` over nested \`min()\` and \`max()\`.
+
+Output:
+  1 | a { width: clamp(1px, 2px, 3px); }
+
+`;
+
+exports[`invalid(42): a { width: calc(max(10px, min(5vw, 100px)) * 2); } 1`] = `
+
+  1 | a { width: calc(max(10px, min(5vw, 100px)) * 2); }
+
+`;
+
+exports[`invalid(42): a { width: calc(max(10px, min(5vw, 100px)) * 2); } 2`] = `
+
+Message:
+> 1 | a { width: calc(max(10px, min(5vw, 100px)) * 2); }
+    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^ Prefer \`clamp()\` over nested \`min()\` and \`max()\`.
+
+Output:
+  1 | a { width: calc(clamp(10px, 5vw, 100px) * 2); }
+
+`;
+
+exports[`invalid(43): a { --size: calc(1px + max(min(5vw, 100px), 10px)); } 1`] = `
+
+  1 | a { --size: calc(1px + max(min(5vw, 100px), 10px)); }
+
+`;
+
+exports[`invalid(43): a { --size: calc(1px + max(min(5vw, 100px), 10px)); } 2`] = `
+
+Message:
+> 1 | a { --size: calc(1px + max(min(5vw, 100px), 10px)); }
+    |                        ^^^^^^^^^^^^^^^^^^^^^^^^^^ Prefer \`clamp()\` over nested \`min()\` and \`max()\`.
+
+Output:
+  1 | a { --size: calc(1px + clamp(10px, 5vw, 100px)); }
+
+`;
+
+exports[`invalid(44): a {\n\twidth: max(min(\n\t\t5vw,\n\t\t100px\n\t), 10px);\n} 1`] = `
+
+  1 | a {
+  2 | 	width: max(min(
+  3 | 		5vw,
+  4 | 		100px
+  5 | 	), 10px);
+  6 | }
+
+`;
+
+exports[`invalid(44): a {\n\twidth: max(min(\n\t\t5vw,\n\t\t100px\n\t), 10px);\n} 2`] = `
+
+Message:
+  1 | a {
+> 2 | 	width: max(min(
+    | 	       ^^^^^^^^
+> 3 | 		5vw,
+    | ^^^^^^
+> 4 | 		100px
+    | ^^^^^^^
+> 5 | 	), 10px);
+    | ^^^^^^^^^ Prefer \`clamp()\` over nested \`min()\` and \`max()\`.
+  6 | }
+
+Output:
+  1 | a {
+  2 | 	width: clamp(10px,
+  3 | 		5vw,
+  4 | 		100px
+  5 | 	);
+  6 | }
+
+`;
+
+exports[`invalid(45): a {\r\n  width: max(10px, min(5vw, 100px)) !important;\r\n} 1`] = `
+
+  1 | a {
+  2 |   width: max(10px, min(5vw, 100px)) !important;
+  3 | }
+
+`;
+
+exports[`invalid(45): a {\r\n  width: max(10px, min(5vw, 100px)) !important;\r\n} 2`] = `
+
+Message:
+  1 | a {
+> 2 |   width: max(10px, min(5vw, 100px)) !important;
+    |          ^^^^^^^^^^^^^^^^^^^^^^^^^^ Prefer \`clamp()\` over nested \`min()\` and \`max()\`.
+  3 | }
+
+Output:
+  1 | a {
+  2 |   width: clamp(10px, 5vw, 100px) !important;
+  3 | }
+
+`;
+
 exports[`invalid(5): a { width: calc(1px + max(10px, min(5vw, 100px))); } 1`] = `
 
   1 | a { width: calc(1px + max(10px, min(5vw, 100px))); }

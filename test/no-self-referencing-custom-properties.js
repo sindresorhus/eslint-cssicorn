@@ -413,3 +413,19 @@ test({
 		},
 	],
 });
+
+test.snapshot({
+	valid: [
+		'a { --a: 1px ! important; --a: var(--b); --b: var(--a); }',
+		'a { --b: 1px !important; --b: initial; --c: var(--b, var(--c)); }',
+		'a { --b: INHERIT; --c: var(--b, var(--c)); }',
+	],
+	invalid: [
+		'a { --a: var( --a ); }',
+		'a { --a: var(--b) ! important; --a: 1px; --b: var(--a); }',
+		'a { --a: var(--b) !/**/important; --a: 1px; --b: var(--a); }',
+		'a { --b: initial !important; --b: 1px; --c: var(--b, var(--c)); }',
+		'a { --a: var(--b, var(--a)); --b: var(--c); --c: var(--b); }',
+		'a { --a: calc(var(--b) * 2); --b: min(var(--a), 1px); }',
+	],
+});

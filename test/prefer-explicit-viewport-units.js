@@ -60,6 +60,9 @@ test.snapshot({
 		'@media (width > 0px) { .element { height: 100vh; } }',
 		'@layer theme { .element { height: 100vh; width: 100vw; } }',
 		'.element { &:hover { height: 100vh; } }',
+		'@keyframes grow { to { height: 100vh; } }',
+		'@position-try --fallback { max-height: 100vh; }',
+		'.element { max-height: calc(100vh - var(--spacing) * 2); }',
 	],
 });
 

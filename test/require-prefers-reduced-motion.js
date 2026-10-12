@@ -77,6 +77,12 @@ test.snapshot({
 		'a { -webkit-transition: color 1s; transition-duration: var(--duration); }',
 		String.raw`a { -WEBKIT-TRANSITION-PROP\65 RTY: opacity; -webkit-transition-duration: 1s; }`,
 		'a { -future-transition-property: color; transition-property: opacity; transition-duration: 1s; }',
+		'a { transition: OPACITY 1S EASE-IN-OUT, color 1s STEP-END; }',
+		'a { transition: visibility 0s 1s, opacity 1s; }',
+		'a { transition: transform 0S, width 0.0ms; }',
+		'a { transition-property: color; -webkit-transition-duration: 1s; }',
+		'@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } } a { animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }',
+		'@media all and (prefers-reduced-motion: no-preference) { a { transition: transform 1s; } }',
 	],
 	invalid: [
 		'a { animation: slide 1s; }',
@@ -159,6 +165,9 @@ test.snapshot({
 		'a { -future-transition: color 1s; transition-duration: 1s; }',
 		String.raw`a { -FUTURE-TRANSITION-PROP\65 RTY: opacity; transition-duration: 1s; }`,
 		'a { -moz-transition-property: opacity; transition-duration: 1s; }',
+		'a { transition: opacity 1s, visibility 1s; }',
+		'a { transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out; }',
+		'a { transition: transform 1s; }\n@media (prefers-reduced-motion: reduce) { a { transition: none; } }',
 		'a { transition-property: opacity; -webkit-transition-property: color; transition-duration: 1s; }',
 	],
 });

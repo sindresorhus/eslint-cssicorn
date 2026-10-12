@@ -305,6 +305,143 @@ Output:
 
 `;
 
+exports[`invalid(21): a {\r\n    & {\r\n        color: red;\r\n        b {\r\n            c: d;\r\n        }\r\n    }\r\n} 1`] = `
+
+  1 | a {
+  2 |     & {
+  3 |         color: red;
+  4 |         b {
+  5 |             c: d;
+  6 |         }
+  7 |     }
+  8 | }
+
+`;
+
+exports[`invalid(21): a {\r\n    & {\r\n        color: red;\r\n        b {\r\n            c: d;\r\n        }\r\n    }\r\n} 2`] = `
+
+Message:
+  1 | a {
+> 2 |     & {
+    |     ^ Remove the redundant nested \`&\` style rule.
+  3 |         color: red;
+  4 |         b {
+  5 |             c: d;
+  6 |         }
+  7 |     }
+  8 | }
+
+Output:
+  1 | a {
+  2 |     color: red;
+  3 |     b {
+  4 |         c: d;
+  5 |     }
+  6 | }
+
+`;
+
+exports[`invalid(22): a { & { color: red /* keep */; } b {} } 1`] = `
+
+  1 | a { & { color: red /* keep */; } b {} }
+
+`;
+
+exports[`invalid(22): a { & { color: red /* keep */; } b {} } 2`] = `
+
+Message:
+> 1 | a { & { color: red /* keep */; } b {} }
+    |     ^ Remove the redundant nested \`&\` style rule.
+
+Output:
+  1 | a { color: red /* keep */; b {} }
+
+`;
+
+exports[`invalid(23): a { & { content: \"a;\" } b {} } 1`] = `
+
+  1 | a { & { content: "a;" } b {} }
+
+`;
+
+exports[`invalid(23): a { & { content: \"a;\" } b {} } 2`] = `
+
+Message:
+> 1 | a { & { content: "a;" } b {} }
+    |     ^ Remove the redundant nested \`&\` style rule.
+
+Output:
+  1 | a { content: "a;"; b {} }
+
+`;
+
+exports[`invalid(24): a { color: blue; & {\n\tcolor: red;\n} } 1`] = `
+
+  1 | a { color: blue; & {
+  2 | 	color: red;
+  3 | } }
+
+`;
+
+exports[`invalid(24): a { color: blue; & {\n\tcolor: red;\n} } 2`] = `
+
+Message:
+> 1 | a { color: blue; & {
+    |                  ^ Remove the redundant nested \`&\` style rule.
+  2 | 	color: red;
+  3 | } }
+
+Output:
+  1 | a { color: blue; color: red; }
+
+`;
+
+exports[`invalid(25): a {\n\t&\n\t{\n\t\tcolor: red;\n\t}\n} 1`] = `
+
+  1 | a {
+  2 | 	&
+  3 | 	{
+  4 | 		color: red;
+  5 | 	}
+  6 | }
+
+`;
+
+exports[`invalid(25): a {\n\t&\n\t{\n\t\tcolor: red;\n\t}\n} 2`] = `
+
+Message:
+  1 | a {
+> 2 | 	&
+    | 	^ Remove the redundant nested \`&\` style rule.
+  3 | 	{
+  4 | 		color: red;
+  5 | 	}
+  6 | }
+
+Output:
+  1 | a {
+  2 | 	color: red;
+  3 | }
+
+`;
+
+exports[`invalid(26): .x { a { & { color: red; } } } 1`] = `
+
+  1 | .x { a { & { color: red; } } }
+
+`;
+
+exports[`invalid(26): .x { a { & { color: red; } } } 2`] = `
+
+Message:
+> 1 | .x { a { & { color: red; } } }
+    |          ^ Remove the redundant nested \`&\` style rule.
+
+Output:
+  1 | .x { a { color: red; } }
+
+`;
+
 exports[`invalid(3): a { & {} } 1`] = `
 
   1 | a { & {} }

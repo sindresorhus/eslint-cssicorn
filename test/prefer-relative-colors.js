@@ -227,3 +227,18 @@ test({
 		}],
 	}],
 });
+
+test.snapshot({
+	valid: [
+		withRoot('@page { color: rgb(var(--channels) / .5); }'),
+		withRoot('@font-face { font-family: test; color: rgb(var(--channels) / .5); }'),
+		withRoot('a { color: rgb(var(--channels) / .5 / .5); }'),
+		withRoot('a { --brand: rgb(var(--channels) / .5); }'),
+	],
+	invalid: [
+		':root { --brand: rgb(var(  --channels  )); } a { color: rgb(var(--channels) / .5); }',
+		withRoot('a { --x: "rgb(" rgb(var(--channels) / .5); }'),
+		withRoot(String.raw`a { --x: url(rgb\() rgb(var(--channels) / .5); }`),
+		withRoot('a { color: rgb(var(--channels) / 50%) }'),
+	],
+});

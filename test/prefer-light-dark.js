@@ -223,6 +223,24 @@ test.snapshot({
 	],
 });
 
+test.snapshot({
+	valid: [
+		pair('color: rgb(255 0 0 / 50%);', 'color: rgb(255 0 0 / 5e-1);'),
+		pair('color: rgb(255 0 0);', 'color: rgb(2.55e2 0 0);'),
+		pair('color: #808080;', 'color: rgb(128, 128, 128);'),
+		pair('caret-color: white;', 'caret-color: auto;'),
+		root + 'a { color: white; } @media all and (prefers-color-scheme: dark) { a { color: black; } }',
+	],
+	invalid: [
+		root + 'a { color: white; } @media (prefers-color-scheme:dark) { a { color: black; } }',
+		root + 'a { color: white; @media (prefers-color-scheme: dark) { color: black ; margin: 0; } }',
+		root + 'a { color: white !important; @media (prefers-color-scheme: dark) { color: black!important; margin: 0; } }',
+		pair('outline: white solid 1px;', 'outline: black solid 1px;'),
+		pair('background: url("white") white;', 'background: url("white") black;'),
+		root + '@media print { a { color: white; } @media (prefers-color-scheme: dark) { a { color: black; } } }',
+	],
+});
+
 const configuration = rules => ({
 	files: ['**'], language: 'css/css', plugins: {css, cssicorn: plugin}, rules,
 });

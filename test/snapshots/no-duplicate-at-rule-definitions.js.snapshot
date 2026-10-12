@@ -12,13 +12,27 @@ Message:
 
 `;
 
-exports[`invalid(10): @POSITION-TRY --above {} @position-try --above {} 1`] = `
+exports[`invalid(10): @COUNTER-STYLE dots {} @counter-style dots {} 1`] = `
+
+  1 | @COUNTER-STYLE dots {} @counter-style dots {}
+
+`;
+
+exports[`invalid(10): @COUNTER-STYLE dots {} @counter-style dots {} 2`] = `
+
+Message:
+> 1 | @COUNTER-STYLE dots {} @counter-style dots {}
+    |                                       ^^^^ Duplicate \`@counter-style\` definition \`dots\`. The first definition is on line 1.
+
+`;
+
+exports[`invalid(11): @POSITION-TRY --above {} @position-try --above {} 1`] = `
 
   1 | @POSITION-TRY --above {} @position-try --above {}
 
 `;
 
-exports[`invalid(10): @POSITION-TRY --above {} @position-try --above {} 2`] = `
+exports[`invalid(11): @POSITION-TRY --above {} @position-try --above {} 2`] = `
 
 Message:
 > 1 | @POSITION-TRY --above {} @position-try --above {}
@@ -26,13 +40,13 @@ Message:
 
 `;
 
-exports[`invalid(11): @\\6b eyframes fade {} @keyframes fade {} 1`] = `
+exports[`invalid(12): @\\6b eyframes fade {} @keyframes fade {} 1`] = `
 
   1 | @\\6b eyframes fade {} @keyframes fade {}
 
 `;
 
-exports[`invalid(11): @\\6b eyframes fade {} @keyframes fade {} 2`] = `
+exports[`invalid(12): @\\6b eyframes fade {} @keyframes fade {} 2`] = `
 
 Message:
 > 1 | @\\6b eyframes fade {} @keyframes fade {}
@@ -40,13 +54,13 @@ Message:
 
 `;
 
-exports[`invalid(12): @\\70 roperty --color {} @property --color {} 1`] = `
+exports[`invalid(13): @\\70 roperty --color {} @property --color {} 1`] = `
 
   1 | @\\70 roperty --color {} @property --color {}
 
 `;
 
-exports[`invalid(12): @\\70 roperty --color {} @property --color {} 2`] = `
+exports[`invalid(13): @\\70 roperty --color {} @property --color {} 2`] = `
 
 Message:
 > 1 | @\\70 roperty --color {} @property --color {}
@@ -54,13 +68,13 @@ Message:
 
 `;
 
-exports[`invalid(13): @counter-style do\\74 s {} @counter-style dots {} 1`] = `
+exports[`invalid(14): @counter-style do\\74 s {} @counter-style dots {} 1`] = `
 
   1 | @counter-style do\\74 s {} @counter-style dots {}
 
 `;
 
-exports[`invalid(13): @counter-style do\\74 s {} @counter-style dots {} 2`] = `
+exports[`invalid(14): @counter-style do\\74 s {} @counter-style dots {} 2`] = `
 
 Message:
 > 1 | @counter-style do\\74 s {} @counter-style dots {}
@@ -68,13 +82,13 @@ Message:
 
 `;
 
-exports[`invalid(14): @property --c\\6f lor {} @property --color {} 1`] = `
+exports[`invalid(15): @property --c\\6f lor {} @property --color {} 1`] = `
 
   1 | @property --c\\6f lor {} @property --color {}
 
 `;
 
-exports[`invalid(14): @property --c\\6f lor {} @property --color {} 2`] = `
+exports[`invalid(15): @property --c\\6f lor {} @property --color {} 2`] = `
 
 Message:
 > 1 | @property --c\\6f lor {} @property --color {}
@@ -82,13 +96,13 @@ Message:
 
 `;
 
-exports[`invalid(15): @position-try --a\\62 ove {} @position-try --above {} 1`] = `
+exports[`invalid(16): @position-try --a\\62 ove {} @position-try --above {} 1`] = `
 
   1 | @position-try --a\\62 ove {} @position-try --above {}
 
 `;
 
-exports[`invalid(15): @position-try --a\\62 ove {} @position-try --above {} 2`] = `
+exports[`invalid(16): @position-try --a\\62 ove {} @position-try --above {} 2`] = `
 
 Message:
 > 1 | @position-try --a\\62 ove {} @position-try --above {}
@@ -96,13 +110,13 @@ Message:
 
 `;
 
-exports[`invalid(16): @keyframes f\\61 de {} @keyframes fade {} 1`] = `
+exports[`invalid(17): @keyframes f\\61 de {} @keyframes fade {} 1`] = `
 
   1 | @keyframes f\\61 de {} @keyframes fade {}
 
 `;
 
-exports[`invalid(16): @keyframes f\\61 de {} @keyframes fade {} 2`] = `
+exports[`invalid(17): @keyframes f\\61 de {} @keyframes fade {} 2`] = `
 
 Message:
 > 1 | @keyframes f\\61 de {} @keyframes fade {}
@@ -110,13 +124,13 @@ Message:
 
 `;
 
-exports[`invalid(17): @keyframes \"fade\" {} @keyframes fade {} 1`] = `
+exports[`invalid(18): @keyframes \"fade\" {} @keyframes fade {} 1`] = `
 
   1 | @keyframes "fade" {} @keyframes fade {}
 
 `;
 
-exports[`invalid(17): @keyframes \"fade\" {} @keyframes fade {} 2`] = `
+exports[`invalid(18): @keyframes \"fade\" {} @keyframes fade {} 2`] = `
 
 Message:
 > 1 | @keyframes "fade" {} @keyframes fade {}
@@ -124,13 +138,13 @@ Message:
 
 `;
 
-exports[`invalid(18): @keyframes fade {} @keyframes \"f\\61 de\" {} 1`] = `
+exports[`invalid(19): @keyframes fade {} @keyframes \"f\\61 de\" {} 1`] = `
 
   1 | @keyframes fade {} @keyframes "f\\61 de" {}
 
 `;
 
-exports[`invalid(18): @keyframes fade {} @keyframes \"f\\61 de\" {} 2`] = `
+exports[`invalid(19): @keyframes fade {} @keyframes \"f\\61 de\" {} 2`] = `
 
 Message:
 > 1 | @keyframes fade {} @keyframes "f\\61 de" {}
@@ -138,13 +152,27 @@ Message:
 
 `;
 
-exports[`invalid(19): @keyframes 'fade' {} @keyframes \"fade\" {} 1`] = `
+exports[`invalid(2): @keyframes /* comment */ fade {} @keyframes fade /* comment */ {} 1`] = `
+
+  1 | @keyframes /* comment */ fade {} @keyframes fade /* comment */ {}
+
+`;
+
+exports[`invalid(2): @keyframes /* comment */ fade {} @keyframes fade /* comment */ {} 2`] = `
+
+Message:
+> 1 | @keyframes /* comment */ fade {} @keyframes fade /* comment */ {}
+    |                                             ^^^^ Duplicate \`@keyframes\` definition \`fade\`. The first definition is on line 1.
+
+`;
+
+exports[`invalid(20): @keyframes 'fade' {} @keyframes \"fade\" {} 1`] = `
 
   1 | @keyframes 'fade' {} @keyframes "fade" {}
 
 `;
 
-exports[`invalid(19): @keyframes 'fade' {} @keyframes \"fade\" {} 2`] = `
+exports[`invalid(20): @keyframes 'fade' {} @keyframes \"fade\" {} 2`] = `
 
 Message:
 > 1 | @keyframes 'fade' {} @keyframes "fade" {}
@@ -152,27 +180,13 @@ Message:
 
 `;
 
-exports[`invalid(2): @property --color { syntax: \"<color>\"; inherits: false; initial-value: red; } @property --color { syntax: \"<color>\"; inherits: false; initial-value: blue; } 1`] = `
-
-  1 | @property --color { syntax: "<color>"; inherits: false; initial-value: red; } @property --color { syntax: "<color>"; inherits: false; initial-value: blue; }
-
-`;
-
-exports[`invalid(2): @property --color { syntax: \"<color>\"; inherits: false; initial-value: red; } @property --color { syntax: \"<color>\"; inherits: false; initial-value: blue; } 2`] = `
-
-Message:
-> 1 | @property --color { syntax: "<color>"; inherits: false; initial-value: red; } @property --color { syntax: "<color>"; inherits: false; initial-value: blue; }
-    |                                                                                         ^^^^^^^ Duplicate \`@property\` definition \`--color\`. The first definition is on line 1.
-
-`;
-
-exports[`invalid(20): @keyframes \"\" {} @keyframes \"\" {} 1`] = `
+exports[`invalid(21): @keyframes \"\" {} @keyframes \"\" {} 1`] = `
 
   1 | @keyframes "" {} @keyframes "" {}
 
 `;
 
-exports[`invalid(20): @keyframes \"\" {} @keyframes \"\" {} 2`] = `
+exports[`invalid(21): @keyframes \"\" {} @keyframes \"\" {} 2`] = `
 
 Message:
 > 1 | @keyframes "" {} @keyframes "" {}
@@ -180,13 +194,13 @@ Message:
 
 `;
 
-exports[`invalid(21): @keyframes \"none\" {} @keyframes \"none\" {} 1`] = `
+exports[`invalid(22): @keyframes \"none\" {} @keyframes \"none\" {} 1`] = `
 
   1 | @keyframes "none" {} @keyframes "none" {}
 
 `;
 
-exports[`invalid(21): @keyframes \"none\" {} @keyframes \"none\" {} 2`] = `
+exports[`invalid(22): @keyframes \"none\" {} @keyframes \"none\" {} 2`] = `
 
 Message:
 > 1 | @keyframes "none" {} @keyframes "none" {}
@@ -194,13 +208,13 @@ Message:
 
 `;
 
-exports[`invalid(22): @-webkit-keyframes fade {} @-WEBKIT-KEYFRAMES fade {} 1`] = `
+exports[`invalid(23): @-webkit-keyframes fade {} @-WEBKIT-KEYFRAMES fade {} 1`] = `
 
   1 | @-webkit-keyframes fade {} @-WEBKIT-KEYFRAMES fade {}
 
 `;
 
-exports[`invalid(22): @-webkit-keyframes fade {} @-WEBKIT-KEYFRAMES fade {} 2`] = `
+exports[`invalid(23): @-webkit-keyframes fade {} @-WEBKIT-KEYFRAMES fade {} 2`] = `
 
 Message:
 > 1 | @-webkit-keyframes fade {} @-WEBKIT-KEYFRAMES fade {}
@@ -208,13 +222,13 @@ Message:
 
 `;
 
-exports[`invalid(23): @-moz-keyframes fade {} @-moz-keyframes fade {} 1`] = `
+exports[`invalid(24): @-moz-keyframes fade {} @-moz-keyframes fade {} 1`] = `
 
   1 | @-moz-keyframes fade {} @-moz-keyframes fade {}
 
 `;
 
-exports[`invalid(23): @-moz-keyframes fade {} @-moz-keyframes fade {} 2`] = `
+exports[`invalid(24): @-moz-keyframes fade {} @-moz-keyframes fade {} 2`] = `
 
 Message:
 > 1 | @-moz-keyframes fade {} @-moz-keyframes fade {}
@@ -222,13 +236,13 @@ Message:
 
 `;
 
-exports[`invalid(24): @-o-keyframes fade {} @-o-keyframes fade {} 1`] = `
+exports[`invalid(25): @-o-keyframes fade {} @-o-keyframes fade {} 1`] = `
 
   1 | @-o-keyframes fade {} @-o-keyframes fade {}
 
 `;
 
-exports[`invalid(24): @-o-keyframes fade {} @-o-keyframes fade {} 2`] = `
+exports[`invalid(25): @-o-keyframes fade {} @-o-keyframes fade {} 2`] = `
 
 Message:
 > 1 | @-o-keyframes fade {} @-o-keyframes fade {}
@@ -236,13 +250,13 @@ Message:
 
 `;
 
-exports[`invalid(25): @-webkit-keyframes fade {} @keyframes fade {} @keyframes fade {} 1`] = `
+exports[`invalid(26): @-webkit-keyframes fade {} @keyframes fade {} @keyframes fade {} 1`] = `
 
   1 | @-webkit-keyframes fade {} @keyframes fade {} @keyframes fade {}
 
 `;
 
-exports[`invalid(25): @-webkit-keyframes fade {} @keyframes fade {} @keyframes fade {} 2`] = `
+exports[`invalid(26): @-webkit-keyframes fade {} @keyframes fade {} @keyframes fade {} 2`] = `
 
 Message:
 > 1 | @-webkit-keyframes fade {} @keyframes fade {} @keyframes fade {}
@@ -250,13 +264,13 @@ Message:
 
 `;
 
-exports[`invalid(26): @media (width > 40rem) { @keyframes fade {} @keyframes fade {} } 1`] = `
+exports[`invalid(27): @media (width > 40rem) { @keyframes fade {} @keyframes fade {} } 1`] = `
 
   1 | @media (width > 40rem) { @keyframes fade {} @keyframes fade {} }
 
 `;
 
-exports[`invalid(26): @media (width > 40rem) { @keyframes fade {} @keyframes fade {} } 2`] = `
+exports[`invalid(27): @media (width > 40rem) { @keyframes fade {} @keyframes fade {} } 2`] = `
 
 Message:
 > 1 | @media (width > 40rem) { @keyframes fade {} @keyframes fade {} }
@@ -264,13 +278,13 @@ Message:
 
 `;
 
-exports[`invalid(27): @supports (display: grid) { @property --color {} @property --color {} } 1`] = `
+exports[`invalid(28): @supports (display: grid) { @property --color {} @property --color {} } 1`] = `
 
   1 | @supports (display: grid) { @property --color {} @property --color {} }
 
 `;
 
-exports[`invalid(27): @supports (display: grid) { @property --color {} @property --color {} } 2`] = `
+exports[`invalid(28): @supports (display: grid) { @property --color {} @property --color {} } 2`] = `
 
 Message:
 > 1 | @supports (display: grid) { @property --color {} @property --color {} }
@@ -278,13 +292,13 @@ Message:
 
 `;
 
-exports[`invalid(28): @container card (width > 20rem) { @position-try --above {} @position-try --above {} } 1`] = `
+exports[`invalid(29): @container card (width > 20rem) { @position-try --above {} @position-try --above {} } 1`] = `
 
   1 | @container card (width > 20rem) { @position-try --above {} @position-try --above {} }
 
 `;
 
-exports[`invalid(28): @container card (width > 20rem) { @position-try --above {} @position-try --above {} } 2`] = `
+exports[`invalid(29): @container card (width > 20rem) { @position-try --above {} @position-try --above {} } 2`] = `
 
 Message:
 > 1 | @container card (width > 20rem) { @position-try --above {} @position-try --above {} }
@@ -292,13 +306,27 @@ Message:
 
 `;
 
-exports[`invalid(29): @layer theme { @counter-style dots {} @counter-style dots {} } 1`] = `
+exports[`invalid(3): @property --color { syntax: \"<color>\"; inherits: false; initial-value: red; } @property --color { syntax: \"<color>\"; inherits: false; initial-value: blue; } 1`] = `
+
+  1 | @property --color { syntax: "<color>"; inherits: false; initial-value: red; } @property --color { syntax: "<color>"; inherits: false; initial-value: blue; }
+
+`;
+
+exports[`invalid(3): @property --color { syntax: \"<color>\"; inherits: false; initial-value: red; } @property --color { syntax: \"<color>\"; inherits: false; initial-value: blue; } 2`] = `
+
+Message:
+> 1 | @property --color { syntax: "<color>"; inherits: false; initial-value: red; } @property --color { syntax: "<color>"; inherits: false; initial-value: blue; }
+    |                                                                                         ^^^^^^^ Duplicate \`@property\` definition \`--color\`. The first definition is on line 1.
+
+`;
+
+exports[`invalid(30): @layer theme { @counter-style dots {} @counter-style dots {} } 1`] = `
 
   1 | @layer theme { @counter-style dots {} @counter-style dots {} }
 
 `;
 
-exports[`invalid(29): @layer theme { @counter-style dots {} @counter-style dots {} } 2`] = `
+exports[`invalid(30): @layer theme { @counter-style dots {} @counter-style dots {} } 2`] = `
 
 Message:
 > 1 | @layer theme { @counter-style dots {} @counter-style dots {} }
@@ -306,27 +334,13 @@ Message:
 
 `;
 
-exports[`invalid(3): @counter-style dots { system: cyclic; symbols: \"•\"; } @counter-style dots { system: cyclic; symbols: \"*\"; } 1`] = `
-
-  1 | @counter-style dots { system: cyclic; symbols: "•"; } @counter-style dots { system: cyclic; symbols: "*"; }
-
-`;
-
-exports[`invalid(3): @counter-style dots { system: cyclic; symbols: \"•\"; } @counter-style dots { system: cyclic; symbols: \"*\"; } 2`] = `
-
-Message:
-> 1 | @counter-style dots { system: cyclic; symbols: "•"; } @counter-style dots { system: cyclic; symbols: "*"; }
-    |                                                                      ^^^^ Duplicate \`@counter-style\` definition \`dots\`. The first definition is on line 1.
-
-`;
-
-exports[`invalid(30): @scope (.card) { @keyframes fade {} @keyframes fade {} } 1`] = `
+exports[`invalid(31): @scope (.card) { @keyframes fade {} @keyframes fade {} } 1`] = `
 
   1 | @scope (.card) { @keyframes fade {} @keyframes fade {} }
 
 `;
 
-exports[`invalid(30): @scope (.card) { @keyframes fade {} @keyframes fade {} } 2`] = `
+exports[`invalid(31): @scope (.card) { @keyframes fade {} @keyframes fade {} } 2`] = `
 
 Message:
 > 1 | @scope (.card) { @keyframes fade {} @keyframes fade {} }
@@ -334,13 +348,13 @@ Message:
 
 `;
 
-exports[`invalid(31): .card { @media (width > 40rem) { @keyframes fade {} @keyframes fade {} } } 1`] = `
+exports[`invalid(32): .card { @media (width > 40rem) { @keyframes fade {} @keyframes fade {} } } 1`] = `
 
   1 | .card { @media (width > 40rem) { @keyframes fade {} @keyframes fade {} } }
 
 `;
 
-exports[`invalid(31): .card { @media (width > 40rem) { @keyframes fade {} @keyframes fade {} } } 2`] = `
+exports[`invalid(32): .card { @media (width > 40rem) { @keyframes fade {} @keyframes fade {} } } 2`] = `
 
 Message:
 > 1 | .card { @media (width > 40rem) { @keyframes fade {} @keyframes fade {} } }
@@ -348,13 +362,13 @@ Message:
 
 `;
 
-exports[`invalid(32): @keyframes fade /* first */ {} /* keep */ @keyframes /* second */ fade {} 1`] = `
+exports[`invalid(33): @keyframes fade /* first */ {} /* keep */ @keyframes /* second */ fade {} 1`] = `
 
   1 | @keyframes fade /* first */ {} /* keep */ @keyframes /* second */ fade {}
 
 `;
 
-exports[`invalid(32): @keyframes fade /* first */ {} /* keep */ @keyframes /* second */ fade {} 2`] = `
+exports[`invalid(33): @keyframes fade /* first */ {} /* keep */ @keyframes /* second */ fade {} 2`] = `
 
 Message:
 > 1 | @keyframes fade /* first */ {} /* keep */ @keyframes /* second */ fade {}
@@ -362,7 +376,7 @@ Message:
 
 `;
 
-exports[`invalid(33): @media (width > 40rem) {\r\n  @keyframes fade {}\r\n  /* keep */ @keyframes \"fade\" {}\r\n} 1`] = `
+exports[`invalid(34): @media (width > 40rem) {\r\n  @keyframes fade {}\r\n  /* keep */ @keyframes \"fade\" {}\r\n} 1`] = `
 
   1 | @media (width > 40rem) {
   2 |   @keyframes fade {}
@@ -371,7 +385,7 @@ exports[`invalid(33): @media (width > 40rem) {\r\n  @keyframes fade {}\r\n  /* k
 
 `;
 
-exports[`invalid(33): @media (width > 40rem) {\r\n  @keyframes fade {}\r\n  /* keep */ @keyframes \"fade\" {}\r\n} 2`] = `
+exports[`invalid(34): @media (width > 40rem) {\r\n  @keyframes fade {}\r\n  /* keep */ @keyframes \"fade\" {}\r\n} 2`] = `
 
 Message:
   1 | @media (width > 40rem) {
@@ -382,13 +396,13 @@ Message:
 
 `;
 
-exports[`invalid(34): @property --color {} @property --color { syntax: \"<color>\"; inherits: false; initial-value: red; } 1`] = `
+exports[`invalid(35): @property --color {} @property --color { syntax: \"<color>\"; inherits: false; initial-value: red; } 1`] = `
 
   1 | @property --color {} @property --color { syntax: "<color>"; inherits: false; initial-value: red; }
 
 `;
 
-exports[`invalid(34): @property --color {} @property --color { syntax: \"<color>\"; inherits: false; initial-value: red; } 2`] = `
+exports[`invalid(35): @property --color {} @property --color { syntax: \"<color>\"; inherits: false; initial-value: red; } 2`] = `
 
 Message:
 > 1 | @property --color {} @property --color { syntax: "<color>"; inherits: false; initial-value: red; }
@@ -396,13 +410,13 @@ Message:
 
 `;
 
-exports[`invalid(35): @property --color { syntax: \"<color>\"; inherits: false; initial-value: red; } @property --color { syntax: \"<color>\"; inherits: false; initial-value: future-color(red); } 1`] = `
+exports[`invalid(36): @property --color { syntax: \"<color>\"; inherits: false; initial-value: red; } @property --color { syntax: \"<color>\"; inherits: false; initial-value: future-color(red); } 1`] = `
 
   1 | @property --color { syntax: "<color>"; inherits: false; initial-value: red; } @property --color { syntax: "<color>"; inherits: false; initial-value: future-color(red); }
 
 `;
 
-exports[`invalid(35): @property --color { syntax: \"<color>\"; inherits: false; initial-value: red; } @property --color { syntax: \"<color>\"; inherits: false; initial-value: future-color(red); } 2`] = `
+exports[`invalid(36): @property --color { syntax: \"<color>\"; inherits: false; initial-value: red; } @property --color { syntax: \"<color>\"; inherits: false; initial-value: future-color(red); } 2`] = `
 
 Message:
 > 1 | @property --color { syntax: "<color>"; inherits: false; initial-value: red; } @property --color { syntax: "<color>"; inherits: false; initial-value: future-color(red); }
@@ -410,13 +424,13 @@ Message:
 
 `;
 
-exports[`invalid(36): @-w\\65 bkit-keyframes fade {} @-webkit-keyframes fade {} 1`] = `
+exports[`invalid(37): @-w\\65 bkit-keyframes fade {} @-webkit-keyframes fade {} 1`] = `
 
   1 | @-w\\65 bkit-keyframes fade {} @-webkit-keyframes fade {}
 
 `;
 
-exports[`invalid(36): @-w\\65 bkit-keyframes fade {} @-webkit-keyframes fade {} 2`] = `
+exports[`invalid(37): @-w\\65 bkit-keyframes fade {} @-webkit-keyframes fade {} 2`] = `
 
 Message:
 > 1 | @-w\\65 bkit-keyframes fade {} @-webkit-keyframes fade {}
@@ -424,13 +438,13 @@ Message:
 
 `;
 
-exports[`invalid(37): @property --color, --size {} @property --color {} 1`] = `
+exports[`invalid(38): @property --color, --size {} @property --color {} 1`] = `
 
   1 | @property --color, --size {} @property --color {}
 
 `;
 
-exports[`invalid(37): @property --color, --size {} @property --color {} 2`] = `
+exports[`invalid(38): @property --color, --size {} @property --color {} 2`] = `
 
 Message:
 > 1 | @property --color, --size {} @property --color {}
@@ -438,13 +452,13 @@ Message:
 
 `;
 
-exports[`invalid(38): @property --color {} @property --size, --color {} 1`] = `
+exports[`invalid(39): @property --color {} @property --size, --color {} 1`] = `
 
   1 | @property --color {} @property --size, --color {}
 
 `;
 
-exports[`invalid(38): @property --color {} @property --size, --color {} 2`] = `
+exports[`invalid(39): @property --color {} @property --size, --color {} 2`] = `
 
 Message:
 > 1 | @property --color {} @property --size, --color {}
@@ -452,13 +466,27 @@ Message:
 
 `;
 
-exports[`invalid(39): @property --color, --size {} @property --size, --color {} 1`] = `
+exports[`invalid(4): @counter-style dots { system: cyclic; symbols: \"•\"; } @counter-style dots { system: cyclic; symbols: \"*\"; } 1`] = `
+
+  1 | @counter-style dots { system: cyclic; symbols: "•"; } @counter-style dots { system: cyclic; symbols: "*"; }
+
+`;
+
+exports[`invalid(4): @counter-style dots { system: cyclic; symbols: \"•\"; } @counter-style dots { system: cyclic; symbols: \"*\"; } 2`] = `
+
+Message:
+> 1 | @counter-style dots { system: cyclic; symbols: "•"; } @counter-style dots { system: cyclic; symbols: "*"; }
+    |                                                                      ^^^^ Duplicate \`@counter-style\` definition \`dots\`. The first definition is on line 1.
+
+`;
+
+exports[`invalid(40): @property --color, --size {} @property --size, --color {} 1`] = `
 
   1 | @property --color, --size {} @property --size, --color {}
 
 `;
 
-exports[`invalid(39): @property --color, --size {} @property --size, --color {} 2`] = `
+exports[`invalid(40): @property --color, --size {} @property --size, --color {} 2`] = `
 
 Message:
 > 1 | @property --color, --size {} @property --size, --color {}
@@ -466,7 +494,7 @@ Message:
 
 `;
 
-exports[`invalid(39): @property --color, --size {} @property --size, --color {} 3`] = `
+exports[`invalid(40): @property --color, --size {} @property --size, --color {} 3`] = `
 
 Message:
 > 1 | @property --color, --size {} @property --size, --color {}
@@ -474,27 +502,13 @@ Message:
 
 `;
 
-exports[`invalid(4): @position-try --above { top: 0; } @position-try --above { bottom: 0; } 1`] = `
-
-  1 | @position-try --above { top: 0; } @position-try --above { bottom: 0; }
-
-`;
-
-exports[`invalid(4): @position-try --above { top: 0; } @position-try --above { bottom: 0; } 2`] = `
-
-Message:
-> 1 | @position-try --above { top: 0; } @position-try --above { bottom: 0; }
-    |                                                 ^^^^^^^ Duplicate \`@position-try\` definition \`--above\`. The first definition is on line 1.
-
-`;
-
-exports[`invalid(40): @property --color, --color {} 1`] = `
+exports[`invalid(41): @property --color, --color {} 1`] = `
 
   1 | @property --color, --color {}
 
 `;
 
-exports[`invalid(40): @property --color, --color {} 2`] = `
+exports[`invalid(41): @property --color, --color {} 2`] = `
 
 Message:
 > 1 | @property --color, --color {}
@@ -502,13 +516,13 @@ Message:
 
 `;
 
-exports[`invalid(41): @property --color, --color, --color {} 1`] = `
+exports[`invalid(42): @property --color, --color, --color {} 1`] = `
 
   1 | @property --color, --color, --color {}
 
 `;
 
-exports[`invalid(41): @property --color, --color, --color {} 2`] = `
+exports[`invalid(42): @property --color, --color, --color {} 2`] = `
 
 Message:
 > 1 | @property --color, --color, --color {}
@@ -516,7 +530,7 @@ Message:
 
 `;
 
-exports[`invalid(41): @property --color, --color, --color {} 3`] = `
+exports[`invalid(42): @property --color, --color, --color {} 3`] = `
 
 Message:
 > 1 | @property --color, --color, --color {}
@@ -524,13 +538,13 @@ Message:
 
 `;
 
-exports[`invalid(42): @property --color, --size {} @property --color, --size {} @property --color {} 1`] = `
+exports[`invalid(43): @property --color, --size {} @property --color, --size {} @property --color {} 1`] = `
 
   1 | @property --color, --size {} @property --color, --size {} @property --color {}
 
 `;
 
-exports[`invalid(42): @property --color, --size {} @property --color, --size {} @property --color {} 2`] = `
+exports[`invalid(43): @property --color, --size {} @property --color, --size {} @property --color {} 2`] = `
 
 Message:
 > 1 | @property --color, --size {} @property --color, --size {} @property --color {}
@@ -538,7 +552,7 @@ Message:
 
 `;
 
-exports[`invalid(42): @property --color, --size {} @property --color, --size {} @property --color {} 3`] = `
+exports[`invalid(43): @property --color, --size {} @property --color, --size {} @property --color {} 3`] = `
 
 Message:
 > 1 | @property --color, --size {} @property --color, --size {} @property --color {}
@@ -546,7 +560,7 @@ Message:
 
 `;
 
-exports[`invalid(42): @property --color, --size {} @property --color, --size {} @property --color {} 4`] = `
+exports[`invalid(43): @property --color, --size {} @property --color, --size {} @property --color {} 4`] = `
 
 Message:
 > 1 | @property --color, --size {} @property --color, --size {} @property --color {}
@@ -554,13 +568,13 @@ Message:
 
 `;
 
-exports[`invalid(43): @\\70 roperty --c\\6f lor, --size {} @PROPERTY --color {} 1`] = `
+exports[`invalid(44): @\\70 roperty --c\\6f lor, --size {} @PROPERTY --color {} 1`] = `
 
   1 | @\\70 roperty --c\\6f lor, --size {} @PROPERTY --color {}
 
 `;
 
-exports[`invalid(43): @\\70 roperty --c\\6f lor, --size {} @PROPERTY --color {} 2`] = `
+exports[`invalid(44): @\\70 roperty --c\\6f lor, --size {} @PROPERTY --color {} 2`] = `
 
 Message:
 > 1 | @\\70 roperty --c\\6f lor, --size {} @PROPERTY --color {}
@@ -568,13 +582,13 @@ Message:
 
 `;
 
-exports[`invalid(44): @media (width > 40rem) { @property --color, --size {} @property --size {} } 1`] = `
+exports[`invalid(45): @media (width > 40rem) { @property --color, --size {} @property --size {} } 1`] = `
 
   1 | @media (width > 40rem) { @property --color, --size {} @property --size {} }
 
 `;
 
-exports[`invalid(44): @media (width > 40rem) { @property --color, --size {} @property --size {} } 2`] = `
+exports[`invalid(45): @media (width > 40rem) { @property --color, --size {} @property --size {} } 2`] = `
 
 Message:
 > 1 | @media (width > 40rem) { @property --color, --size {} @property --size {} }
@@ -582,13 +596,13 @@ Message:
 
 `;
 
-exports[`invalid(45): @counter-style upper-roman {} @counter-style UPPER-ROMAN {} 1`] = `
+exports[`invalid(46): @counter-style upper-roman {} @counter-style UPPER-ROMAN {} 1`] = `
 
   1 | @counter-style upper-roman {} @counter-style UPPER-ROMAN {}
 
 `;
 
-exports[`invalid(45): @counter-style upper-roman {} @counter-style UPPER-ROMAN {} 2`] = `
+exports[`invalid(46): @counter-style upper-roman {} @counter-style UPPER-ROMAN {} 2`] = `
 
 Message:
 > 1 | @counter-style upper-roman {} @counter-style UPPER-ROMAN {}
@@ -596,13 +610,13 @@ Message:
 
 `;
 
-exports[`invalid(46): @counter-style LOWER-LATIN {} @counter-style lower-latin {} 1`] = `
+exports[`invalid(47): @counter-style LOWER-LATIN {} @counter-style lower-latin {} 1`] = `
 
   1 | @counter-style LOWER-LATIN {} @counter-style lower-latin {}
 
 `;
 
-exports[`invalid(46): @counter-style LOWER-LATIN {} @counter-style lower-latin {} 2`] = `
+exports[`invalid(47): @counter-style LOWER-LATIN {} @counter-style lower-latin {} 2`] = `
 
 Message:
 > 1 | @counter-style LOWER-LATIN {} @counter-style lower-latin {}
@@ -610,13 +624,13 @@ Message:
 
 `;
 
-exports[`invalid(47): @counter-style cjk-earthly-branch {} @counter-style CJK-EARTHLY-BRANCH {} 1`] = `
+exports[`invalid(48): @counter-style cjk-earthly-branch {} @counter-style CJK-EARTHLY-BRANCH {} 1`] = `
 
   1 | @counter-style cjk-earthly-branch {} @counter-style CJK-EARTHLY-BRANCH {}
 
 `;
 
-exports[`invalid(47): @counter-style cjk-earthly-branch {} @counter-style CJK-EARTHLY-BRANCH {} 2`] = `
+exports[`invalid(48): @counter-style cjk-earthly-branch {} @counter-style CJK-EARTHLY-BRANCH {} 2`] = `
 
 Message:
 > 1 | @counter-style cjk-earthly-branch {} @counter-style CJK-EARTHLY-BRANCH {}
@@ -624,13 +638,13 @@ Message:
 
 `;
 
-exports[`invalid(48): @COUNTER-STYLE JAPANESE-FORMAL {} @counter-style japanese-formal {} 1`] = `
+exports[`invalid(49): @COUNTER-STYLE JAPANESE-FORMAL {} @counter-style japanese-formal {} 1`] = `
 
   1 | @COUNTER-STYLE JAPANESE-FORMAL {} @counter-style japanese-formal {}
 
 `;
 
-exports[`invalid(48): @COUNTER-STYLE JAPANESE-FORMAL {} @counter-style japanese-formal {} 2`] = `
+exports[`invalid(49): @COUNTER-STYLE JAPANESE-FORMAL {} @counter-style japanese-formal {} 2`] = `
 
 Message:
 > 1 | @COUNTER-STYLE JAPANESE-FORMAL {} @counter-style japanese-formal {}
@@ -638,13 +652,27 @@ Message:
 
 `;
 
-exports[`invalid(49): @counter-style ETHIOPIC-NUMERIC {} @counter-style ethiopic-numeric {} 1`] = `
+exports[`invalid(5): @position-try --above { top: 0; } @position-try --above { bottom: 0; } 1`] = `
+
+  1 | @position-try --above { top: 0; } @position-try --above { bottom: 0; }
+
+`;
+
+exports[`invalid(5): @position-try --above { top: 0; } @position-try --above { bottom: 0; } 2`] = `
+
+Message:
+> 1 | @position-try --above { top: 0; } @position-try --above { bottom: 0; }
+    |                                                 ^^^^^^^ Duplicate \`@position-try\` definition \`--above\`. The first definition is on line 1.
+
+`;
+
+exports[`invalid(50): @counter-style ETHIOPIC-NUMERIC {} @counter-style ethiopic-numeric {} 1`] = `
 
   1 | @counter-style ETHIOPIC-NUMERIC {} @counter-style ethiopic-numeric {}
 
 `;
 
-exports[`invalid(49): @counter-style ETHIOPIC-NUMERIC {} @counter-style ethiopic-numeric {} 2`] = `
+exports[`invalid(50): @counter-style ETHIOPIC-NUMERIC {} @counter-style ethiopic-numeric {} 2`] = `
 
 Message:
 > 1 | @counter-style ETHIOPIC-NUMERIC {} @counter-style ethiopic-numeric {}
@@ -652,27 +680,13 @@ Message:
 
 `;
 
-exports[`invalid(5): @keyframes fade {} a { color: red; } @keyframes slide {} @keyframes fade {} 1`] = `
-
-  1 | @keyframes fade {} a { color: red; } @keyframes slide {} @keyframes fade {}
-
-`;
-
-exports[`invalid(5): @keyframes fade {} a { color: red; } @keyframes slide {} @keyframes fade {} 2`] = `
-
-Message:
-> 1 | @keyframes fade {} a { color: red; } @keyframes slide {} @keyframes fade {}
-    |                                                                     ^^^^ Duplicate \`@keyframes\` definition \`fade\`. The first definition is on line 1.
-
-`;
-
-exports[`invalid(50): @counter-style cjk-ideographic {} @counter-style CJK-IDEOGRAPHIC {} 1`] = `
+exports[`invalid(51): @counter-style cjk-ideographic {} @counter-style CJK-IDEOGRAPHIC {} 1`] = `
 
   1 | @counter-style cjk-ideographic {} @counter-style CJK-IDEOGRAPHIC {}
 
 `;
 
-exports[`invalid(50): @counter-style cjk-ideographic {} @counter-style CJK-IDEOGRAPHIC {} 2`] = `
+exports[`invalid(51): @counter-style cjk-ideographic {} @counter-style CJK-IDEOGRAPHIC {} 2`] = `
 
 Message:
 > 1 | @counter-style cjk-ideographic {} @counter-style CJK-IDEOGRAPHIC {}
@@ -680,13 +694,13 @@ Message:
 
 `;
 
-exports[`invalid(51): @counter-style decimal {} @counter-style DECIMAL {} 1`] = `
+exports[`invalid(52): @counter-style decimal {} @counter-style DECIMAL {} 1`] = `
 
   1 | @counter-style decimal {} @counter-style DECIMAL {}
 
 `;
 
-exports[`invalid(51): @counter-style decimal {} @counter-style DECIMAL {} 2`] = `
+exports[`invalid(52): @counter-style decimal {} @counter-style DECIMAL {} 2`] = `
 
 Message:
 > 1 | @counter-style decimal {} @counter-style DECIMAL {}
@@ -694,13 +708,13 @@ Message:
 
 `;
 
-exports[`invalid(52): @counter-style \\75 pper-roman {} @counter-style UPPER-ROMAN {} 1`] = `
+exports[`invalid(53): @counter-style \\75 pper-roman {} @counter-style UPPER-ROMAN {} 1`] = `
 
   1 | @counter-style \\75 pper-roman {} @counter-style UPPER-ROMAN {}
 
 `;
 
-exports[`invalid(52): @counter-style \\75 pper-roman {} @counter-style UPPER-ROMAN {} 2`] = `
+exports[`invalid(53): @counter-style \\75 pper-roman {} @counter-style UPPER-ROMAN {} 2`] = `
 
 Message:
 > 1 | @counter-style \\75 pper-roman {} @counter-style UPPER-ROMAN {}
@@ -708,13 +722,13 @@ Message:
 
 `;
 
-exports[`invalid(53): @media (width > 40rem) { @counter-style upper-roman {} @counter-style UPPER-ROMAN {} } 1`] = `
+exports[`invalid(54): @media (width > 40rem) { @counter-style upper-roman {} @counter-style UPPER-ROMAN {} } 1`] = `
 
   1 | @media (width > 40rem) { @counter-style upper-roman {} @counter-style UPPER-ROMAN {} }
 
 `;
 
-exports[`invalid(53): @media (width > 40rem) { @counter-style upper-roman {} @counter-style UPPER-ROMAN {} } 2`] = `
+exports[`invalid(54): @media (width > 40rem) { @counter-style upper-roman {} @counter-style UPPER-ROMAN {} } 2`] = `
 
 Message:
 > 1 | @media (width > 40rem) { @counter-style upper-roman {} @counter-style UPPER-ROMAN {} }
@@ -722,13 +736,13 @@ Message:
 
 `;
 
-exports[`invalid(54): a { @keyframes fade {} @keyframes fade {} } 1`] = `
+exports[`invalid(55): a { @keyframes fade {} @keyframes fade {} } 1`] = `
 
   1 | a { @keyframes fade {} @keyframes fade {} }
 
 `;
 
-exports[`invalid(54): a { @keyframes fade {} @keyframes fade {} } 2`] = `
+exports[`invalid(55): a { @keyframes fade {} @keyframes fade {} } 2`] = `
 
 Message:
 > 1 | a { @keyframes fade {} @keyframes fade {} }
@@ -736,13 +750,13 @@ Message:
 
 `;
 
-exports[`invalid(55): @keyframes fade {} @keyframes fade-out {} @keyframes fade {} 1`] = `
+exports[`invalid(56): @keyframes fade {} @keyframes fade-out {} @keyframes fade {} 1`] = `
 
   1 | @keyframes fade {} @keyframes fade-out {} @keyframes fade {}
 
 `;
 
-exports[`invalid(55): @keyframes fade {} @keyframes fade-out {} @keyframes fade {} 2`] = `
+exports[`invalid(56): @keyframes fade {} @keyframes fade-out {} @keyframes fade {} 2`] = `
 
 Message:
 > 1 | @keyframes fade {} @keyframes fade-out {} @keyframes fade {}
@@ -750,13 +764,13 @@ Message:
 
 `;
 
-exports[`invalid(56): @keyframes none {} @keyframes \"none\" {} 1`] = `
+exports[`invalid(57): @keyframes none {} @keyframes \"none\" {} 1`] = `
 
   1 | @keyframes none {} @keyframes "none" {}
 
 `;
 
-exports[`invalid(56): @keyframes none {} @keyframes \"none\" {} 2`] = `
+exports[`invalid(57): @keyframes none {} @keyframes \"none\" {} 2`] = `
 
 Message:
 > 1 | @keyframes none {} @keyframes "none" {}
@@ -764,13 +778,13 @@ Message:
 
 `;
 
-exports[`invalid(57): @property --color, /* keep */ --size {} @property --size {} 1`] = `
+exports[`invalid(58): @property --color, /* keep */ --size {} @property --size {} 1`] = `
 
   1 | @property --color, /* keep */ --size {} @property --size {}
 
 `;
 
-exports[`invalid(57): @property --color, /* keep */ --size {} @property --size {} 2`] = `
+exports[`invalid(58): @property --color, /* keep */ --size {} @property --size {} 2`] = `
 
 Message:
 > 1 | @property --color, /* keep */ --size {} @property --size {}
@@ -778,7 +792,21 @@ Message:
 
 `;
 
-exports[`invalid(6): @keyframes fade {}\n@keyframes fade {}\n@keyframes fade {} 1`] = `
+exports[`invalid(6): @keyframes fade {} a { color: red; } @keyframes slide {} @keyframes fade {} 1`] = `
+
+  1 | @keyframes fade {} a { color: red; } @keyframes slide {} @keyframes fade {}
+
+`;
+
+exports[`invalid(6): @keyframes fade {} a { color: red; } @keyframes slide {} @keyframes fade {} 2`] = `
+
+Message:
+> 1 | @keyframes fade {} a { color: red; } @keyframes slide {} @keyframes fade {}
+    |                                                                     ^^^^ Duplicate \`@keyframes\` definition \`fade\`. The first definition is on line 1.
+
+`;
+
+exports[`invalid(7): @keyframes fade {}\n@keyframes fade {}\n@keyframes fade {} 1`] = `
 
   1 | @keyframes fade {}
   2 | @keyframes fade {}
@@ -786,7 +814,7 @@ exports[`invalid(6): @keyframes fade {}\n@keyframes fade {}\n@keyframes fade {} 
 
 `;
 
-exports[`invalid(6): @keyframes fade {}\n@keyframes fade {}\n@keyframes fade {} 2`] = `
+exports[`invalid(7): @keyframes fade {}\n@keyframes fade {}\n@keyframes fade {} 2`] = `
 
 Message:
   1 | @keyframes fade {}
@@ -796,7 +824,7 @@ Message:
 
 `;
 
-exports[`invalid(6): @keyframes fade {}\n@keyframes fade {}\n@keyframes fade {} 3`] = `
+exports[`invalid(7): @keyframes fade {}\n@keyframes fade {}\n@keyframes fade {} 3`] = `
 
 Message:
   1 | @keyframes fade {}
@@ -806,13 +834,13 @@ Message:
 
 `;
 
-exports[`invalid(7): @KEYFRAMES fade {} @keyframes fade {} 1`] = `
+exports[`invalid(8): @KEYFRAMES fade {} @keyframes fade {} 1`] = `
 
   1 | @KEYFRAMES fade {} @keyframes fade {}
 
 `;
 
-exports[`invalid(7): @KEYFRAMES fade {} @keyframes fade {} 2`] = `
+exports[`invalid(8): @KEYFRAMES fade {} @keyframes fade {} 2`] = `
 
 Message:
 > 1 | @KEYFRAMES fade {} @keyframes fade {}
@@ -820,30 +848,16 @@ Message:
 
 `;
 
-exports[`invalid(8): @PROPERTY --color {} @property --color {} 1`] = `
+exports[`invalid(9): @PROPERTY --color {} @property --color {} 1`] = `
 
   1 | @PROPERTY --color {} @property --color {}
 
 `;
 
-exports[`invalid(8): @PROPERTY --color {} @property --color {} 2`] = `
+exports[`invalid(9): @PROPERTY --color {} @property --color {} 2`] = `
 
 Message:
 > 1 | @PROPERTY --color {} @property --color {}
     |                                ^^^^^^^ Duplicate \`@property\` definition \`--color\`. The first definition is on line 1.
-
-`;
-
-exports[`invalid(9): @COUNTER-STYLE dots {} @counter-style dots {} 1`] = `
-
-  1 | @COUNTER-STYLE dots {} @counter-style dots {}
-
-`;
-
-exports[`invalid(9): @COUNTER-STYLE dots {} @counter-style dots {} 2`] = `
-
-Message:
-> 1 | @COUNTER-STYLE dots {} @counter-style dots {}
-    |                                       ^^^^ Duplicate \`@counter-style\` definition \`dots\`. The first definition is on line 1.
 
 `;

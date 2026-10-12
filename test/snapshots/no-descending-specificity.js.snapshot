@@ -1000,6 +1000,62 @@ Message:
 
 `;
 
+exports[`invalid(66): .p { .x & { color: blue; } color: red; } 1`] = `
+
+  1 | .p { .x & { color: blue; } color: red; }
+
+`;
+
+exports[`invalid(66): .p { .x & { color: blue; } color: red; } 2`] = `
+
+Message:
+> 1 | .p { .x & { color: blue; } color: red; }
+    | ^^ Expected selector \`.p\` to come before \`.x .p\` on line 1 because both set \`color\`.
+
+`;
+
+exports[`invalid(67): .x .a { color: red; } .b, .a { color: blue; } 1`] = `
+
+  1 | .x .a { color: red; } .b, .a { color: blue; }
+
+`;
+
+exports[`invalid(67): .x .a { color: red; } .b, .a { color: blue; } 2`] = `
+
+Message:
+> 1 | .x .a { color: red; } .b, .a { color: blue; }
+    |                           ^^ Expected selector \`.a\` to come before \`.x .a\` on line 1 because both set \`color\`.
+
+`;
+
+exports[`invalid(68): @media print { .x .a { color: red; } } .a { @media print { color: blue; } } 1`] = `
+
+  1 | @media print { .x .a { color: red; } } .a { @media print { color: blue; } }
+
+`;
+
+exports[`invalid(68): @media print { .x .a { color: red; } } .a { @media print { color: blue; } } 2`] = `
+
+Message:
+> 1 | @media print { .x .a { color: red; } } .a { @media print { color: blue; } }
+    |                                        ^^ Expected selector \`.a\` to come before \`.x .a\` on line 1 because both set \`color\`.
+
+`;
+
+exports[`invalid(69): .x > * { color: red; } * { color: blue; } 1`] = `
+
+  1 | .x > * { color: red; } * { color: blue; }
+
+`;
+
+exports[`invalid(69): .x > * { color: red; } * { color: blue; } 2`] = `
+
+Message:
+> 1 | .x > * { color: red; } * { color: blue; }
+    |                        ^ Expected selector \`*\` to come before \`.x>*\` on line 1 because both set \`color\`.
+
+`;
+
 exports[`invalid(7): b a { color: red !important; } a { color: blue; color: green !important; } 1`] = `
 
   1 | b a { color: red !important; } a { color: blue; color: green !important; }

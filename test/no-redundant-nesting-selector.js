@@ -145,6 +145,8 @@ test.snapshot({
 		'a { & > span:before {} & .child:after {} & span:hover {} }',
 		'a { .child, & span:before {} }',
 		'a { & .child, & span:before {} }',
+		// Minified nested rules after a declaration.
+		'a{color:red;&>span{}--x:1;& .b{}}',
 		// The parser reads these legacy pseudo-elements without `&` as rules.
 		'a { & span:before {} & SPAN:AFTER {} & span:first-line {} & span:first-letter {} }',
 		'a { & span:before, .child {} }',

@@ -1205,6 +1205,9 @@ test.snapshot({
 		'a { font-style: oblique calc(101grad); font-style: oblique calc(1.6rad); font-style: oblique calc(.3turn); }',
 		'a { font: oblique calc(120deg) 16px serif; }',
 		'@font-face { font-style: oblique calc(120deg); }',
+		// Decimal and exponent spellings are numbers, not integers.
+		'a { z-index: calc(1.0); order: calc(2.0); column-count: calc(1e1); }',
+		'a { grid-template-columns: repeat(calc(2.0), 1fr); animation-timing-function: steps(calc(2.0)); }',
 		'a { width: calc(0); opacity: calc(0); rotate: calc(-0deg); }',
 		'a { --length: calc(20px); --percentage: calc(20%); --number: calc(2); }',
 		'a { unknown-property: calc(20px); width: calc(20unknown); }',
@@ -1236,6 +1239,7 @@ test.snapshot({
 		'a { font-style: oblique calc(90deg); font-style: oblique calc(100grad); font: oblique calc(45deg) 16px serif; }',
 		'a { font-style: oblique max(120deg); }',
 		'a { rotate: calc(120deg); }',
+		'a { grid-row: calc(+1); counter-increment: item calc(2); }',
 	],
 });
 

@@ -379,6 +379,20 @@ Message:
 
 `;
 
+exports[`invalid(28): ::selection:window-inactive {} 1`] = `
+
+  1 | ::selection:window-inactive {}
+
+`;
+
+exports[`invalid(28): ::selection:window-inactive {} 2`] = `
+
+Message:
+> 1 | ::selection:window-inactive {}
+    |            ^^^^^^^^^^^^^^^^ Unknown pseudo-selector ':window-inactive'.
+
+`;
+
 exports[`invalid(3): :is(.foo:foucs, :not(.bar:hovr)) {} 1`] = `
 
   1 | :is(.foo:foucs, :not(.bar:hovr)) {}

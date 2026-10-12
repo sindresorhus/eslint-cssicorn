@@ -125,6 +125,10 @@ test.snapshot({
 		'a { height: 0; padding: 0 0 0 50%; }',
 		// An enclosing `@supports` testing `aspect-ratio` skips nested container queries too
 		'@supports (aspect-ratio: 1) { @container style(aspect-ratio: 1) { a { height: 0; padding-top: 50%; } } }',
+		// Calculations that are not positive percentages
+		'a { height: 0; padding-bottom: calc(10% - 5% * 4); }',
+		'a { height: 0; padding-bottom: calc(50% * 50%); }',
+		'a { height: 0; padding-bottom: calc(1 - 1 + 50%); }',
 	],
 	invalid: [
 		'a { height: 0; padding-bottom: 56.25%; }',
@@ -214,6 +218,9 @@ test.snapshot({
 		'a { height: 0; padding-top: 0%; padding-bottom: 50%; }',
 		// An unrelated declaration does not affect detection
 		'a { height: 0; padding-top: 50%; margin: 0; }',
+		'a { height: 0; padding-bottom: calc(100% / 2 / 2); }',
+		'a { height: 0; padding-bottom: calc(10% + -5%); }',
+		'a { height: 0; padding-bottom: calc(-1 * -50%); }',
 	],
 });
 

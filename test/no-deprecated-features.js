@@ -7,6 +7,7 @@ test.snapshot({
 		'a { overflow-wrap: break-word; gap: 1rem; break-before: page; overflow: auto; text-orientation: sideways; }',
 		'@media screen and (color) { :is(article, section)::before { color: CanvasText; } }',
 		'-webkit-box { -webkit-box-orient: vertical; }',
+		'a { -webkit-box-orient: VERTICAL !important; }',
 		'a { --word-wrap: overlay; custom-property: overlay; color: custom(activecaption); }',
 		'a { appearance: custom(button); color: rgb(0 0 0); width: 1intrinsic; }',
 		'a { color: rgb(from custom(activecaption) r g b); }',
@@ -96,6 +97,7 @@ test.snapshot({
 		// Fixes preserve `!important`
 		'a { word-wrap: break-word !important; }',
 		'a { grid-gap: 1rem !important; }',
+		'a { page-break-after: ALWAYS !important; }',
 		// `page-break-before` only maps the `always` value, so other values keep the property replacement
 		'a { page-break-before: right; }',
 		// Deprecated system color in a listed color property

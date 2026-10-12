@@ -108,6 +108,12 @@ test.snapshot({
 		'@scope (.component) { a { & { color: red; } } }',
 		'a { & { margin: 1px    2px   } }',
 		'a { & { margin: 1px    2px } }',
+		'a {\r\n    & {\r\n        color: red;\r\n        b {\r\n            c: d;\r\n        }\r\n    }\r\n}',
+		'a { & { color: red /* keep */; } b {} }',
+		'a { & { content: "a;" } b {} }',
+		'a { color: blue; & {\n\tcolor: red;\n} }',
+		'a {\n\t&\n\t{\n\t\tcolor: red;\n\t}\n}',
+		'.x { a { & { color: red; } } }',
 	],
 });
 

@@ -1537,6 +1537,40 @@ Output:
 
 `;
 
+exports[`invalid(78): a { columns: 2 auto / 10px; } 1`] = `
+
+  1 | a { columns: 2 auto / 10px; }
+
+`;
+
+exports[`invalid(78): a { columns: 2 auto / 10px; } 2`] = `
+
+Message:
+> 1 | a { columns: 2 auto / 10px; }
+    |              ^^^^^^ Use consistent ordering for \`columns\` value components.
+
+Output:
+  1 | a { columns: auto 2 / 10px; }
+
+`;
+
+exports[`invalid(79): a { box-shadow: 1px 1px inset; } 1`] = `
+
+  1 | a { box-shadow: 1px 1px inset; }
+
+`;
+
+exports[`invalid(79): a { box-shadow: 1px 1px inset; } 2`] = `
+
+Message:
+> 1 | a { box-shadow: 1px 1px inset; }
+    |                 ^^^^^^^^^^^^^ Use consistent ordering for \`box-shadow\` value components.
+
+Output:
+  1 | a { box-shadow: inset 1px 1px; }
+
+`;
+
 exports[`invalid(8): a { border-block-start: red solid 1px; } 1`] = `
 
   1 | a { border-block-start: red solid 1px; }
@@ -1551,6 +1585,96 @@ Message:
 
 Output:
   1 | a { border-block-start: 1px solid red; }
+
+`;
+
+exports[`invalid(80): a { box-shadow: red 1px 1px,blue 2px 2px inset; } 1`] = `
+
+  1 | a { box-shadow: red 1px 1px,blue 2px 2px inset; }
+
+`;
+
+exports[`invalid(80): a { box-shadow: red 1px 1px,blue 2px 2px inset; } 2`] = `
+
+Message:
+> 1 | a { box-shadow: red 1px 1px,blue 2px 2px inset; }
+    |                 ^^^^^^^^^^^ Use consistent ordering for \`box-shadow\` value components.
+
+Output:
+  1 | a { box-shadow: 1px 1px red,blue 2px 2px inset; }
+
+`;
+
+exports[`invalid(80): a { box-shadow: red 1px 1px,blue 2px 2px inset; } 3`] = `
+
+Message:
+> 1 | a { box-shadow: red 1px 1px,blue 2px 2px inset; }
+    |                             ^^^^^^^^^^^^^^^^^^ Use consistent ordering for \`box-shadow\` value components.
+
+Output:
+  1 | a { box-shadow: red 1px 1px,inset 2px 2px blue; }
+
+`;
+
+exports[`invalid(81): a { outline: red auto; } 1`] = `
+
+  1 | a { outline: red auto; }
+
+`;
+
+exports[`invalid(81): a { outline: red auto; } 2`] = `
+
+Message:
+> 1 | a { outline: red auto; }
+    |              ^^^^^^^^ Use consistent ordering for \`outline\` value components.
+
+Output:
+  1 | a { outline: auto red; }
+
+`;
+
+exports[`invalid(82): a { border: red/**/solid 1px; } 1`] = `
+
+  1 | a { border: red/**/solid 1px; }
+
+`;
+
+exports[`invalid(82): a { border: red/**/solid 1px; } 2`] = `
+
+Message:
+> 1 | a { border: red/**/solid 1px; }
+    |             ^^^^^^^^^^^^^^^^ Use consistent ordering for \`border\` value components.
+
+Output:
+  1 | a { border: 1px/**/solid red; }
+
+`;
+
+exports[`invalid(83): a { border: 1px red solid; border: solid red 1px; } 1`] = `
+
+  1 | a { border: 1px red solid; border: solid red 1px; }
+
+`;
+
+exports[`invalid(83): a { border: 1px red solid; border: solid red 1px; } 2`] = `
+
+Message:
+> 1 | a { border: 1px red solid; border: solid red 1px; }
+    |             ^^^^^^^^^^^^^ Use consistent ordering for \`border\` value components.
+
+Output:
+  1 | a { border: 1px solid red; border: solid red 1px; }
+
+`;
+
+exports[`invalid(83): a { border: 1px red solid; border: solid red 1px; } 3`] = `
+
+Message:
+> 1 | a { border: 1px red solid; border: solid red 1px; }
+    |                                    ^^^^^^^^^^^^^ Use consistent ordering for \`border\` value components.
+
+Output:
+  1 | a { border: 1px red solid; border: 1px solid red; }
 
 `;
 

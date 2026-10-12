@@ -121,6 +121,12 @@ test.snapshot({
 		'@media (min-device-aspect-ratio: 1 / 1) {}',
 		'@media (min-device-width: 10px) {}',
 		'@media (shape: rect) {}',
+		'@media (resolution: 2X) and (min-resolution: 300DPI) {}',
+		String.raw`@media (width: 10\50 X) {}`,
+		'@media (width >= 1e3px) and (0 < width) {}',
+		'@media (width: calc(env(safe-area-inset-left) * 2)) {}',
+		'@media (aspect-ratio > 1 / 0) {}',
+		'@media (aspect-ratio: 16.5 / 9.2) {}',
 		// At-rule name, feature name, unit, and keyword are ASCII case-insensitive
 		'@MEDIA (WIDTH: 10PX) {}',
 		'@media (HOVER: NONE) {}',
@@ -228,6 +234,11 @@ test.snapshot({
 		'@media (nav-controls: forward) {}',
 		'@media (display-state: open) {}',
 		'@media (horizontal-viewport-segments: 0.5) {}',
+		// Removed values, an unprefixed nonstandard feature, and an old Internet Explorer hack, which browsers reject
+		'@media (prefers-color-scheme: no-preference) {}',
+		'@media (prefers-contrast: forced) {}',
+		'@media (device-pixel-ratio: 2) {}',
+		String.raw`@media screen and (min-width: 0\0) {}`,
 		// Range notation is not allowed for discrete features
 		'@media (color-gamut > srgb) {}',
 		'@media (scan > progressive) {}',
@@ -245,6 +256,11 @@ test.snapshot({
 		// Nested and imported media queries
 		'@media screen { .element { @media (min-width) { color: red; } } }',
 		'@import "theme.css" (width: red);',
+		'@media (aspect-ratio: -1 / 2) {}',
+		'@media (resolution: 1in) {}',
+		'@media (min-width: 2dppx) {}',
+		'@media (width: attr(data-width px)) {}',
+		'@import url("theme.css") supports(display: grid) (orientation: sideways);',
 	],
 });
 

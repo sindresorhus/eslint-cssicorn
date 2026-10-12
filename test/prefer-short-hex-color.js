@@ -109,5 +109,8 @@ test.snapshot({
 		'@layer theme { a { color: #aabbcc; } }',
 		'@container (width > 0px) { a { color: #ffffff; } }',
 		'@scope (.card) { a { color: #ffffff; } }',
+		'a { COLOR: #AABBCC; }',
+		'a { color: rgb(from #aabbcc r g b); }',
+		'@font-palette-values --palette { override-colors: 0 #ffffff; }',
 	],
 });
