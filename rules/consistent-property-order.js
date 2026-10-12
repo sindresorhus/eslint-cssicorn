@@ -169,6 +169,7 @@ const getRunProblem = declarations => {
 const create = context => {
 	const {sourceCode} = context;
 	const {order} = /** @type {{order: 'concentric-css' | 'alphabetical' | string[]}} */ (context.options[0]);
+	const unlistedRank = Array.isArray(order) ? order.length : undefined;
 	let ranks = concentricRanks;
 	if (Array.isArray(order)) {
 		ranks = new Map();
@@ -210,7 +211,7 @@ const create = context => {
 		let declarations = [];
 		for (const node of block.children) {
 			const property = node.type === 'Declaration' ? normalizeCssIdentifier(node.property) : '';
-			const rank = order === 'alphabetical' ? property : ranks.get(property);
+			const rank = order === 'alphabetical' ? property : ranks.get(property) ?? unlistedRank;
 			if (
 				node.type !== 'Declaration'
 				|| node.value.type === 'Raw'
@@ -263,7 +264,7 @@ const config = {
 		type: 'suggestion',
 		docs: {
 			description: 'Enforce consistent ordering of CSS properties.',
-			recommended: true,
+			recommended: false,
 		},
 		fixable: 'code',
 		hasSuggestions: true,

@@ -134,6 +134,18 @@ test('presets enable no-disabled-pinch-zoom only in recommended and all', async 
 	}));
 });
 
+test('presets enable consistent-property-order only in all', async () => {
+	await Promise.all(Object.entries(eslintCssicorn.configs).map(async ([name, config]) => {
+		const eslint = new ESLint({
+			baseConfig: config,
+			overrideConfigFile: true,
+		});
+
+		const [result] = await eslint.lintText('a { color: red; display: flex; }', {filePath: 'file.css'});
+		assert.equal(result.messages.some(message => message.ruleId === 'cssicorn/consistent-property-order'), name === 'all', name);
+	}));
+});
+
 test('presets report invalid media feature notation', async () => {
 	await Promise.all(Object.values(eslintCssicorn.configs).map(async config => {
 		const eslint = new ESLint({
@@ -210,6 +222,8 @@ test('Plugin should have metadata', () => {
 
 // Rules that cannot work well in normal projects. Every other rule belongs in `recommended`.
 const RULES_NOT_RECOMMENDED = new Set([
+	// Broad formatting preference that can require manual review of cascade-sensitive declaration sequences.
+	'consistent-property-order',
 	// Component stylesheet policy that intentionally rejects global and reset styles.
 	'require-selector-scope',
 	// Only sees `@keyframes` in the same file.

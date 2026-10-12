@@ -31,7 +31,7 @@ test.snapshot({
 		':import("example.css") { color: red; display: flex; }',
 		{code: 'a { color: red; display: flex; }', options: alphabetical},
 		{code: 'a { color: red; display: flex; }', options: [{order: ['color', 'display']}]},
-		{code: 'a { color: red; width: 1px; display: flex; }', options: [{order: ['display', 'color']}]},
+		{code: 'a { color: red; width: 1px; height: 2px; }', options: [{order: ['display']}]},
 		{code: 'a { color: red; display: flex; }', options: [{order: ['color', 'COLOR', 'display']}]},
 	],
 	invalid: [
@@ -142,6 +142,49 @@ const getConfig = (options = {}) => ({
 const getTailwindConfig = (options = {}) => ({
 	...getConfig(options),
 	languageOptions: {customSyntax: tailwind4},
+});
+
+nodeTest('partial custom orders put listed properties first and preserve unlisted declaration order', () => {
+	const linter = new Linter();
+	const config = getConfig({order: ['DISPLAY', 'position']});
+	const code = 'a { color: red; width: 1px; height: 2px; position: relative; display: -webkit-box; display: flex; color: blue; interpolate-size: allow-keywords; }';
+	const result = linter.verifyAndFix(code, config);
+	assert.equal(result.output, 'a { display: -webkit-box; display: flex; position: relative; color: red; width: 1px; height: 2px; color: blue; interpolate-size: allow-keywords; }');
+	assert.equal(result.fixed, true);
+	assert.deepEqual(result.messages, []);
+	assert.equal(linter.verifyAndFix(result.output, config).fixed, false);
+});
+
+nodeTest('partial custom orders require suggestions when listed properties cross conflicting unlisted properties', () => {
+	const linter = new Linter();
+	for (const [property, code, output] of [
+		['margin', 'a { margin-left: 2px; margin: 1px; }', 'a { margin: 1px; margin-left: 2px; }'],
+		['font-width', 'a { font-stretch: expanded; font-width: condensed; }', 'a { font-width: condensed; font-stretch: expanded; }'],
+		['all', 'a { color: red; all: initial; }', 'a { all: initial; color: red; }'],
+		['color', 'a { all: initial; color: red; }', 'a { color: red; all: initial; }'],
+	]) {
+		const config = getConfig({order: [property]});
+		const result = linter.verifyAndFix(code, config);
+		assert.equal(result.output, code);
+		assert.equal(result.fixed, false);
+		assert.equal(result.messages.length, 1);
+		assert.equal(result.messages[0].suggestions.length, 1);
+		const [{fix: {range, text}}] = result.messages[0].suggestions;
+		assert.equal(code.slice(0, range[0]) + text + code.slice(range[1]), output);
+		assert.deepEqual(linter.verify(output, config), []);
+	}
+});
+
+nodeTest('partial custom orders retain declaration group boundaries', () => {
+	const linter = new Linter();
+	const config = getConfig({order: ['display']});
+	for (const boundary of ['/* keep */', '\n\n', '--example: 1;', 'unknown-property: 1;', '-webkit-appearance: none;']) {
+		const code = 'a { color: red; ' + boundary + ' width: 1px; display: flex; }';
+		const result = linter.verifyAndFix(code, config);
+		assert.equal(result.output, 'a { color: red; ' + boundary + ' display: flex; width: 1px; }');
+		assert.equal(result.fixed, true);
+		assert.deepEqual(result.messages, []);
+	}
 });
 
 nodeTest('sorts Tailwind utility runs around nested selectors', () => {

@@ -2,14 +2,14 @@
 
 📝 Enforce consistent ordering of CSS properties.
 
-💼🚫 This rule is enabled in the ✅ `recommended` [config](https://github.com/sindresorhus/eslint-cssicorn#recommended-config). This rule is _disabled_ in the ☑️ `unopinionated` [config](https://github.com/sindresorhus/eslint-cssicorn#recommended-config).
+🚫 This rule is _disabled_ in the following [configs](https://github.com/sindresorhus/eslint-cssicorn#recommended-config): ✅ `recommended`, ☑️ `unopinionated`.
 
 🔧💡 This rule is automatically fixable by the [`--fix` CLI option](https://eslint.org/docs/latest/user-guide/command-line-interface#--fix) and manually fixable by [editor suggestions](https://eslint.org/docs/latest/use/core-concepts#rule-suggestions).
 
 <!-- end auto-generated rule header -->
 <!-- Do not manually modify this header. Run: `npm run fix:eslint-docs` -->
 
-This rule enforces consistent property ordering within declaration groups. By default, it uses [Concentric CSS](https://github.com/brandon-rhodes/Concentric-CSS), which orders properties from layout and positioning through the box model to typography. The property order is adapted from [`css-declaration-sorter`](https://github.com/Siilwyn/css-declaration-sorter).
+This rule enforces consistent property ordering within declaration groups. By default, it uses [Concentric CSS](https://github.com/brandon-rhodes/Concentric-CSS), which orders properties from layout and positioning through the box model to typography.
 
 ## Examples
 
@@ -38,7 +38,7 @@ Default: `'concentric-css'`
 
 Use the Concentric CSS property order, as shown above. The preset uses a [fixed property list](https://github.com/Siilwyn/css-declaration-sorter/blob/v7.4.0/src/orders/concentric-css.mjs).
 
-The modern `font-width` property shares the position of its legacy alias, `font-stretch`. Their relative order is preserved in this mode. Other properties absent from the list, such as `interpolate-size`, remain in place and separate declaration groups. Alphabetical and custom ordering can include them when their interaction metadata is supported.
+The modern `font-width` property shares the position of its legacy alias, `font-stretch`. Their relative order is preserved in this mode. Other properties absent from the list, such as `interpolate-size`, remain in place and separate declaration groups. Alphabetical and custom ordering can include other supported properties.
 
 #### `'alphabetical'`
 
@@ -46,9 +46,7 @@ Order properties alphabetically, comparing normalized CSS property names.
 
 ```js
 {
-	rules: {
-		'cssicorn/consistent-property-order': ['error', {order: 'alphabetical'}],
-	},
+	order: 'alphabetical',
 }
 ```
 
@@ -68,19 +66,18 @@ a {
 
 #### Custom order
 
-Provide a nonempty array of unique property names. The array replaces the default order. Property names are matched case-insensitively; when differently written names normalize to the same property, the first occurrence determines its position.
+Provide a nonempty array of unique property names. Listed properties come first in the specified order; other supported properties follow in their original relative order. Property names are matched case-insensitively; when differently written names normalize to the same property, the first occurrence determines its position.
 
 ```js
 {
-	rules: {
-		'cssicorn/consistent-property-order': ['error', {
-			order: ['display', 'position', 'margin', 'padding', 'color'],
-		}],
-	},
+	order: [
+		'display',
+		'position',
+	],
 }
 ```
 
-Properties not listed in the array separate declaration groups and are left in place. A custom order does not enable sorting unsupported properties.
+You only need to list properties you want first. A custom order does not enable sorting unsupported properties.
 
 ## Autofixes and suggestions
 
@@ -106,33 +103,12 @@ The safety check is conservative. Properties in the same logical-property group,
 
 ## Declaration groups
 
-Comments, blank lines, nested rules, and nested at-rules separate declaration groups. Declarations containing comments remain in place. The rule preserves semicolons, indentation, and line endings, including when the final declaration has no semicolon.
+Comments, blank lines, nested constructs, custom properties, and unsupported properties separate groups. Concentric ordering also treats unlisted properties as boundaries. Declarations containing comments stay in place. Unsupported properties include most vendor-prefixed properties and some legacy aliases.
 
-Custom properties, unknown properties, legacy `page-break-*` and `glyph-orientation-vertical` properties, and properties missing from the selected order also separate groups. The `rule-inset-cap`, `rule-inset-junction`, and `rule-visibility-items` shorthands are also excluded because their interaction metadata is incomplete.
+The rule applies to style rules, keyframes, nested grouping at-rules, `@position-try`, `@page`, and its direct page-margin boxes. Other descriptor blocks and CSS Modules interop blocks are excluded.
 
-The standardized `-webkit-text-fill-color`, `-webkit-text-stroke`, `-webkit-text-stroke-width`, and `-webkit-text-stroke-color` properties are supported. `-webkit-line-clamp` is also supported in alphabetical and custom orders; it is absent from the default preset. Other vendor-prefixed properties separate groups.
-
-Style declarations inside keyframes and nested grouping at-rules are supported, as are declarations in `@position-try`, `@page`, and page-margin boxes directly inside `@page`. Unsupported page descriptors, such as `page-orientation`, remain in place and separate groups. Other descriptor blocks, such as `@font-face` and `@property`, and CSS Modules interop blocks are excluded.
-
-Blocks spanning a line targeted by `eslint-disable-line` or `eslint-disable-next-line` are skipped so sorting cannot change the directive's target.
+Formatting and semicolons are preserved. Blocks containing target lines of `eslint-disable-line` or `eslint-disable-next-line` are skipped to preserve suppression targets.
 
 ## Tailwind CSS
 
-The rule supports declarations in `@utility` definitions and nested `@variant` applications, including nested grouping at-rules. Repeated functional utility declarations retain their fallback order. `@apply` and custom properties, including compiler markers such as `--tw-sort`, remain fixed boundaries.
-
-Configure the [Tailwind parser extension](https://github.com/eslint/css#configuring-tailwind-syntax) to parse mixed declaration and nested-rule blocks:
-
-```js
-import cssicorn from 'eslint-cssicorn';
-import {tailwind4} from 'tailwind-csstree';
-
-export default [
-	cssicorn.configs.recommended,
-	{
-		files: ['**/*.css'],
-		languageOptions: {customSyntax: tailwind4},
-	},
-];
-```
-
-`@theme`, `@plugin`, `@custom-variant`, and unknown at-rules are not treated as declaration contexts. A `@variant` must be inside a style rule or utility definition.
+Supports `@utility` definitions and `@variant` blocks inside style rules or utilities with the [Tailwind parser extension](https://github.com/eslint/css#configuring-tailwind-syntax). `@apply` separates groups; other Tailwind at-rule blocks are skipped.
