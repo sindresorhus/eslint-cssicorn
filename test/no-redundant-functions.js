@@ -540,6 +540,11 @@ test.snapshot({
 		// A shape between the two sizes is invalid. Removing it would make the gradient apply.
 		'a { background: radial-gradient(10% ellipse 20%, red, blue); }',
 		'a { background: repeating-radial-gradient(10px /* shape */ ELLIPSE 20px at left, red, blue); }',
+		// A color interpolation method between the shape, size, angle, and position parts is invalid. Removing the parts around it would make the gradient apply.
+		'a { background: radial-gradient(ellipse in oklab at center, red, blue); }',
+		'a { background: radial-gradient(farthest-corner IN HSL LONGER HUE at 50% 50%, red, blue); }',
+		'a { background: repeating-radial-gradient(ellipse in oklab 10px 20px, red, blue); }',
+		'a { background: conic-gradient(from 0deg /* method */ in oklab at center, red, blue); }',
 		'a { background: conic-gradient(from -0deg at left, red, blue); }',
 		'a { background: conic-gradient(from 1e-999deg at left, red, blue); }',
 		'a { background: linear-gradient(181deg in oklab, red, blue); }',
@@ -637,6 +642,8 @@ test.snapshot({
 		'a { width: calc(/* mix */ calc-mix(10px 50%, 20px 50%) /* end */); }',
 		'a { --width: calc(calc-mix(10px 50%, 20px 50%)); }',
 		'a {\r\n  clip-path: inset(10px round 2px 2px);\r\n  transition-timing-function: linear(0 0%, .5, 1 100%);\r\n}',
+		'a { background: radial-gradient(ellipse at center in hsl shorter hue, red, blue); background-image: radial-gradient(in oklab ellipse at center, red, blue); }',
+		'a { background: conic-gradient(from 0deg at center IN OKLAB, red, blue); mask: repeating-conic-gradient(in oklab from 0deg at center, red, blue); }',
 	],
 });
 

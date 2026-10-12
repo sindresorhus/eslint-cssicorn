@@ -10554,6 +10554,34 @@ Output:
 
 `;
 
+exports[`invalid(69): a { background: radial-gradient(ellipse at center in hsl shorter hue, red, blue); background-image: radial-gradient(in oklab ellipse at center, red, blue); } 1`] = `
+
+  1 | a { background: radial-gradient(ellipse at center in hsl shorter hue, red, blue); background-image: radial-gradient(in oklab ellipse at center, red, blue); }
+
+`;
+
+exports[`invalid(69): a { background: radial-gradient(ellipse at center in hsl shorter hue, red, blue); background-image: radial-gradient(in oklab ellipse at center, red, blue); } 2`] = `
+
+Message:
+> 1 | a { background: radial-gradient(ellipse at center in hsl shorter hue, red, blue); background-image: radial-gradient(in oklab ellipse at center, red, blue); }
+    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`radial-gradient()\`.
+
+Output:
+  1 | a { background: radial-gradient( at center in hsl  , red, blue); background-image: radial-gradient(in oklab ellipse at center, red, blue); }
+
+`;
+
+exports[`invalid(69): a { background: radial-gradient(ellipse at center in hsl shorter hue, red, blue); background-image: radial-gradient(in oklab ellipse at center, red, blue); } 3`] = `
+
+Message:
+> 1 | a { background: radial-gradient(ellipse at center in hsl shorter hue, red, blue); background-image: radial-gradient(in oklab ellipse at center, red, blue); }
+    |                                                                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`radial-gradient()\`.
+
+Output:
+  1 | a { background: radial-gradient(ellipse at center in hsl shorter hue, red, blue); background-image: radial-gradient(in oklab ellipse  , red, blue); }
+
+`;
+
 exports[`invalid(7): a { --border: light-dark(red, red)var(--style); } 1`] = `
 
   1 | a { --border: light-dark(red, red)var(--style); }
@@ -10816,6 +10844,34 @@ Message:
 
 Output:
   1 | a { width: min(100%, 2 * (20rem + 2vw)); }
+
+`;
+
+exports[`invalid(70): a { background: conic-gradient(from 0deg at center IN OKLAB, red, blue); mask: repeating-conic-gradient(in oklab from 0deg at center, red, blue); } 1`] = `
+
+  1 | a { background: conic-gradient(from 0deg at center IN OKLAB, red, blue); mask: repeating-conic-gradient(in oklab from 0deg at center, red, blue); }
+
+`;
+
+exports[`invalid(70): a { background: conic-gradient(from 0deg at center IN OKLAB, red, blue); mask: repeating-conic-gradient(in oklab from 0deg at center, red, blue); } 2`] = `
+
+Message:
+> 1 | a { background: conic-gradient(from 0deg at center IN OKLAB, red, blue); mask: repeating-conic-gradient(in oklab from 0deg at center, red, blue); }
+    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`conic-gradient()\`.
+
+Output:
+  1 | a { background: conic-gradient(  at center IN OKLAB, red, blue); mask: repeating-conic-gradient(in oklab from 0deg at center, red, blue); }
+
+`;
+
+exports[`invalid(70): a { background: conic-gradient(from 0deg at center IN OKLAB, red, blue); mask: repeating-conic-gradient(in oklab from 0deg at center, red, blue); } 3`] = `
+
+Message:
+> 1 | a { background: conic-gradient(from 0deg at center IN OKLAB, red, blue); mask: repeating-conic-gradient(in oklab from 0deg at center, red, blue); }
+    |                                                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`repeating-conic-gradient()\`.
+
+Output:
+  1 | a { background: conic-gradient(from 0deg at center IN OKLAB, red, blue); mask: repeating-conic-gradient(in oklab from 0deg  , red, blue); }
 
 `;
 

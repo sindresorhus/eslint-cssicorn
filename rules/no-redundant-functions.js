@@ -843,6 +843,13 @@ function getDefaultGradientTokens(name, nodes, context) {
 		return getDefaultLinearDirectionTokens(nodes);
 	}
 
+	// A color interpolation method must come before or after the other parts. Between them, the gradient is invalid, and removing the parts around it would make it apply.
+	const interpolationIndex = nodes.findIndex(node => isKeyword(node, 'in'));
+	const interpolationLength = isKeyword(nodes[interpolationIndex + 3], 'hue') ? 4 : 2;
+	if (interpolationIndex > 0 && nodes.length > interpolationIndex + interpolationLength) {
+		return [];
+	}
+
 	const tokens = [];
 	const positionIndex = nodes.findIndex(node => isKeyword(node, 'at'));
 	if (positionIndex !== -1 && isCenterPosition(nodes.slice(positionIndex))) {
