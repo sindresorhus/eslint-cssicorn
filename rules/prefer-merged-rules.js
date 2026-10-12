@@ -124,14 +124,9 @@ const isUncertainPseudo = node => {
 		return true;
 	}
 
-	if (name === 'dir') {
+	// Chrome does not support lists or quoted ranges in `:lang()`.
+	if (name === 'dir' || name === 'lang') {
 		return node.children.length !== 1 || node.children.at(0)?.type !== 'Identifier';
-	}
-
-	if (name === 'lang') {
-		return node.children.length % 2 === 0 || node.children.some((child, index) => index % 2 === 0
-			? !['Identifier', 'String'].includes(child.type)
-			: child.type !== 'Operator' || child.value !== ',');
 	}
 
 	// `canMatchSelector` rejects `of S` in `:nth-of-type()` and `:nth-last-of-type()`.
