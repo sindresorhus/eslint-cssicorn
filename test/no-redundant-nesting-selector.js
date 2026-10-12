@@ -58,6 +58,15 @@ test.snapshot({
 		'a { & |span > .child {} }',
 		'@-webkit-keyframes animation { & .child {} }',
 		'a { @-webkit-keyframes animation { from { & .child {} } } }',
+		// The parser rejects a nested selector starting with `+` directly followed by an identifier, like `+span`.
+		'a { &+span {} & +svg|span {} &+-x {} }',
+		String.raw`a { &+\73 pan {} }`,
+		'a { &+SPAN:hover {} @media all { &+span.child {} } }',
+		// The parser reads these nested rules without `&` as declarations.
+		'a { & span::before {} & SPAN::PART(label) {} }',
+		'a { & span:hover .a .b .c .d .e .f .g {} }',
+		'a { & span:hover .a .b .c .d {} & span:hover.a.b.c.d.e.f {} }',
+		'a { & span:hover, .a .b .c .d .e .f .g {} }',
 	],
 	invalid: [
 		'a { & span {} }',
@@ -124,6 +133,15 @@ test.snapshot({
 		'a { @layer a { & .child {} } @layer b { & > .child {} } }',
 		'@media all { @supports (display: grid) { a { & .child {} } } }',
 		'a {\n\t& > .child {\n\t\t& span {}\n\t}\n}',
+		'a { &+ span {} &+/* keep */span {} }',
+		'a { &+*|span {} &+|span {} &+.child {} &+#identifier {} &+[data-x] {} &+:hover {} }',
+		'a { &~span {} &>span {} }',
+		'a { & span.child::before {} & > span::before {} & + span::before {} }',
+		'a { & span:hover {} & span:not(.a, .b) {} }',
+		// Only the start of the selector list decides whether the parser reads a rule.
+		'a { .child, & span::after {} .child, &+span {} .child, & |span {} }',
+		'a { & .child, & span::before {} }',
+		'a { & span:hover /* a long comment */ /* before the block */ {} }',
 	],
 });
 
@@ -172,7 +190,7 @@ nodeTest('fixes selector lists and multiple nesting levels completely', () => {
 		},
 		{
 			code: String.raw`a { & .child, & --element:hover, & |span, & \7c span {} }`,
-			output: String.raw`a { .child, & --element:hover, & |span, \7c span {} }`,
+			output: String.raw`a { .child, & --element:hover, |span, \7c span {} }`,
 		},
 	];
 	for (const {code, output} of cases) {

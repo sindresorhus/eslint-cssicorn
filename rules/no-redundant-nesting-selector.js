@@ -2,7 +2,7 @@
 
 import {find} from '@eslint/css-tree';
 import {getParentStyleRule, hasNestingSelectorInRawArgument} from './shared/css-selector-specificity.js';
-import {isDashedIdentifier} from './utils/index.js';
+import {isDashedIdentifier, parse} from './utils/index.js';
 
 /**
 @import {SelectorPlain} from '@eslint/css-tree';
@@ -14,6 +14,22 @@ import {isDashedIdentifier} from './utils/index.js';
 const MESSAGE_ID = 'no-redundant-nesting-selector';
 const messages = {
 	[MESSAGE_ID]: 'Remove the redundant nesting selector `&`.',
+};
+
+/**
+Check whether the parser reads a nested rule with this prelude as a rule. It reads some, like `span::before {}`, as declarations and rejects others, like `+span {}` and `|span {}`.
+
+@param {string} preludeText
+@returns {boolean}
+*/
+const isParsedAsNestedRule = preludeText => {
+	let hasParseError = false;
+	const stylesheet = parse(`a{${preludeText}{}}`, {
+		onParseError() {
+			hasParseError = true;
+		},
+	});
+	return !hasParseError && stylesheet.children.first?.block.children.first?.type === 'Rule';
 };
 
 /**
@@ -46,14 +62,17 @@ const create = context => {
 				}
 
 				// Removing & could make the selector look like a custom property declaration.
-				// The parser also rejects nested selectors starting with an empty namespace.
-				// TODO: Remove the empty-namespace exclusion once the minimum supported parser accepts implicit nested |span selectors.
-				if (
-					firstRemainingNode.type === 'TypeSelector'
-					&& (firstRemainingNode.name.startsWith('|') || isDashedIdentifier(firstRemainingNode.name))
-				) {
+				if (firstRemainingNode.type === 'TypeSelector' && isDashedIdentifier(firstRemainingNode.name)) {
 					continue;
 				}
+			}
+
+			const [start, end] = sourceCode.getRange(nestingSelector);
+			const whitespace = sourceCode.text.slice(end).match(/^[\t ]*/v)?.[0] ?? '';
+			// The fixed prelude must still parse as a nested rule, or the whole file stops linting. The parser looks ahead a limited number of tokens, so check the whole prelude up to the block.
+			const fixedPreludeText = sourceCode.text.slice(sourceCode.getRange(rule.prelude)[0], start) + sourceCode.text.slice(end + whitespace.length, sourceCode.getRange(rule.block)[0]);
+			if (!isParsedAsNestedRule(fixedPreludeText)) {
+				continue;
 			}
 
 			yield {
@@ -62,11 +81,7 @@ const create = context => {
 				/**
 				@param {Parameters<CssicornRuleFixer>[0]} fixer
 				*/
-				fix(fixer) {
-					const [start, end] = sourceCode.getRange(nestingSelector);
-					const whitespace = sourceCode.text.slice(end).match(/^[\t ]*/v)?.[0] ?? '';
-					return fixer.removeRange([start, end + whitespace.length]);
-				},
+				fix: fixer => fixer.removeRange([start, end + whitespace.length]),
 			};
 		}
 	});

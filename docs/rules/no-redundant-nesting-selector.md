@@ -86,7 +86,7 @@ A leading descendant `&` is also necessary when the selector contains another ne
 
 Targets modern native CSS. It follows parsed nesting through `@media`, `@supports`, `@container`, and `@layer`, skipping `@scope` and unknown at-rule boundaries.
 
-Skips raw parser content and descendant selectors starting with `--` or an empty namespace (`& |span`), where removing `&` can cause parsing problems.
+Skips raw parser content and descendant selectors starting with `--`. It also keeps `&` when the bundled parser would not read the fixed selector list as a nested rule, like `& span::before`, `& |span`, and `&+span`, because the fixed file would fail to parse.
 
 ## Related rules
 

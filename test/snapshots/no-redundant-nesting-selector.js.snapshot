@@ -1198,6 +1198,201 @@ Output:
 
 `;
 
+exports[`invalid(65): a { &+ span {} &+/* keep */span {} } 1`] = `
+
+  1 | a { &+ span {} &+/* keep */span {} }
+
+`;
+
+exports[`invalid(65): a { &+ span {} &+/* keep */span {} } 2`] = `
+
+Message:
+> 1 | a { &+ span {} &+/* keep */span {} }
+    |     ^ Remove the redundant nesting selector \`&\`.
+
+Output:
+  1 | a { + span {} &+/* keep */span {} }
+
+`;
+
+exports[`invalid(65): a { &+ span {} &+/* keep */span {} } 3`] = `
+
+Message:
+> 1 | a { &+ span {} &+/* keep */span {} }
+    |                ^ Remove the redundant nesting selector \`&\`.
+
+Output:
+  1 | a { &+ span {} +/* keep */span {} }
+
+`;
+
+exports[`invalid(66): a { &+*|span {} &+|span {} &+.child {} &+#identifier {} &+[data-x] {} &+:hover {} } 1`] = `
+
+  1 | a { &+*|span {} &+|span {} &+.child {} &+#identifier {} &+[data-x] {} &+:hover {} }
+
+`;
+
+exports[`invalid(66): a { &+*|span {} &+|span {} &+.child {} &+#identifier {} &+[data-x] {} &+:hover {} } 2`] = `
+
+Message:
+> 1 | a { &+*|span {} &+|span {} &+.child {} &+#identifier {} &+[data-x] {} &+:hover {} }
+    |     ^ Remove the redundant nesting selector \`&\`.
+
+Output:
+  1 | a { +*|span {} &+|span {} &+.child {} &+#identifier {} &+[data-x] {} &+:hover {} }
+
+`;
+
+exports[`invalid(66): a { &+*|span {} &+|span {} &+.child {} &+#identifier {} &+[data-x] {} &+:hover {} } 3`] = `
+
+Message:
+> 1 | a { &+*|span {} &+|span {} &+.child {} &+#identifier {} &+[data-x] {} &+:hover {} }
+    |                 ^ Remove the redundant nesting selector \`&\`.
+
+Output:
+  1 | a { &+*|span {} +|span {} &+.child {} &+#identifier {} &+[data-x] {} &+:hover {} }
+
+`;
+
+exports[`invalid(66): a { &+*|span {} &+|span {} &+.child {} &+#identifier {} &+[data-x] {} &+:hover {} } 4`] = `
+
+Message:
+> 1 | a { &+*|span {} &+|span {} &+.child {} &+#identifier {} &+[data-x] {} &+:hover {} }
+    |                            ^ Remove the redundant nesting selector \`&\`.
+
+Output:
+  1 | a { &+*|span {} &+|span {} +.child {} &+#identifier {} &+[data-x] {} &+:hover {} }
+
+`;
+
+exports[`invalid(66): a { &+*|span {} &+|span {} &+.child {} &+#identifier {} &+[data-x] {} &+:hover {} } 5`] = `
+
+Message:
+> 1 | a { &+*|span {} &+|span {} &+.child {} &+#identifier {} &+[data-x] {} &+:hover {} }
+    |                                        ^ Remove the redundant nesting selector \`&\`.
+
+Output:
+  1 | a { &+*|span {} &+|span {} &+.child {} +#identifier {} &+[data-x] {} &+:hover {} }
+
+`;
+
+exports[`invalid(66): a { &+*|span {} &+|span {} &+.child {} &+#identifier {} &+[data-x] {} &+:hover {} } 6`] = `
+
+Message:
+> 1 | a { &+*|span {} &+|span {} &+.child {} &+#identifier {} &+[data-x] {} &+:hover {} }
+    |                                                         ^ Remove the redundant nesting selector \`&\`.
+
+Output:
+  1 | a { &+*|span {} &+|span {} &+.child {} &+#identifier {} +[data-x] {} &+:hover {} }
+
+`;
+
+exports[`invalid(66): a { &+*|span {} &+|span {} &+.child {} &+#identifier {} &+[data-x] {} &+:hover {} } 7`] = `
+
+Message:
+> 1 | a { &+*|span {} &+|span {} &+.child {} &+#identifier {} &+[data-x] {} &+:hover {} }
+    |                                                                       ^ Remove the redundant nesting selector \`&\`.
+
+Output:
+  1 | a { &+*|span {} &+|span {} &+.child {} &+#identifier {} &+[data-x] {} +:hover {} }
+
+`;
+
+exports[`invalid(67): a { &~span {} &>span {} } 1`] = `
+
+  1 | a { &~span {} &>span {} }
+
+`;
+
+exports[`invalid(67): a { &~span {} &>span {} } 2`] = `
+
+Message:
+> 1 | a { &~span {} &>span {} }
+    |     ^ Remove the redundant nesting selector \`&\`.
+
+Output:
+  1 | a { ~span {} &>span {} }
+
+`;
+
+exports[`invalid(67): a { &~span {} &>span {} } 3`] = `
+
+Message:
+> 1 | a { &~span {} &>span {} }
+    |               ^ Remove the redundant nesting selector \`&\`.
+
+Output:
+  1 | a { &~span {} >span {} }
+
+`;
+
+exports[`invalid(68): a { & span.child::before {} & > span::before {} & + span::before {} } 1`] = `
+
+  1 | a { & span.child::before {} & > span::before {} & + span::before {} }
+
+`;
+
+exports[`invalid(68): a { & span.child::before {} & > span::before {} & + span::before {} } 2`] = `
+
+Message:
+> 1 | a { & span.child::before {} & > span::before {} & + span::before {} }
+    |     ^ Remove the redundant nesting selector \`&\`.
+
+Output:
+  1 | a { span.child::before {} & > span::before {} & + span::before {} }
+
+`;
+
+exports[`invalid(68): a { & span.child::before {} & > span::before {} & + span::before {} } 3`] = `
+
+Message:
+> 1 | a { & span.child::before {} & > span::before {} & + span::before {} }
+    |                             ^ Remove the redundant nesting selector \`&\`.
+
+Output:
+  1 | a { & span.child::before {} > span::before {} & + span::before {} }
+
+`;
+
+exports[`invalid(68): a { & span.child::before {} & > span::before {} & + span::before {} } 4`] = `
+
+Message:
+> 1 | a { & span.child::before {} & > span::before {} & + span::before {} }
+    |                                                 ^ Remove the redundant nesting selector \`&\`.
+
+Output:
+  1 | a { & span.child::before {} & > span::before {} + span::before {} }
+
+`;
+
+exports[`invalid(69): a { & span:hover {} & span:not(.a, .b) {} } 1`] = `
+
+  1 | a { & span:hover {} & span:not(.a, .b) {} }
+
+`;
+
+exports[`invalid(69): a { & span:hover {} & span:not(.a, .b) {} } 2`] = `
+
+Message:
+> 1 | a { & span:hover {} & span:not(.a, .b) {} }
+    |     ^ Remove the redundant nesting selector \`&\`.
+
+Output:
+  1 | a { span:hover {} & span:not(.a, .b) {} }
+
+`;
+
+exports[`invalid(69): a { & span:hover {} & span:not(.a, .b) {} } 3`] = `
+
+Message:
+> 1 | a { & span:hover {} & span:not(.a, .b) {} }
+    |                     ^ Remove the redundant nesting selector \`&\`.
+
+Output:
+  1 | a { & span:hover {} span:not(.a, .b) {} }
+
+`;
+
 exports[`invalid(7): a { & :hover {} } 1`] = `
 
   1 | a { & :hover {} }
@@ -1212,6 +1407,90 @@ Message:
 
 Output:
   1 | a { :hover {} }
+
+`;
+
+exports[`invalid(70): a { .child, & span::after {} .child, &+span {} .child, & |span {} } 1`] = `
+
+  1 | a { .child, & span::after {} .child, &+span {} .child, & |span {} }
+
+`;
+
+exports[`invalid(70): a { .child, & span::after {} .child, &+span {} .child, & |span {} } 2`] = `
+
+Message:
+> 1 | a { .child, & span::after {} .child, &+span {} .child, & |span {} }
+    |             ^ Remove the redundant nesting selector \`&\`.
+
+Output:
+  1 | a { .child, span::after {} .child, &+span {} .child, & |span {} }
+
+`;
+
+exports[`invalid(70): a { .child, & span::after {} .child, &+span {} .child, & |span {} } 3`] = `
+
+Message:
+> 1 | a { .child, & span::after {} .child, &+span {} .child, & |span {} }
+    |                                      ^ Remove the redundant nesting selector \`&\`.
+
+Output:
+  1 | a { .child, & span::after {} .child, +span {} .child, & |span {} }
+
+`;
+
+exports[`invalid(70): a { .child, & span::after {} .child, &+span {} .child, & |span {} } 4`] = `
+
+Message:
+> 1 | a { .child, & span::after {} .child, &+span {} .child, & |span {} }
+    |                                                        ^ Remove the redundant nesting selector \`&\`.
+
+Output:
+  1 | a { .child, & span::after {} .child, &+span {} .child, |span {} }
+
+`;
+
+exports[`invalid(71): a { & .child, & span::before {} } 1`] = `
+
+  1 | a { & .child, & span::before {} }
+
+`;
+
+exports[`invalid(71): a { & .child, & span::before {} } 2`] = `
+
+Message:
+> 1 | a { & .child, & span::before {} }
+    |     ^ Remove the redundant nesting selector \`&\`.
+
+Output:
+  1 | a { .child, & span::before {} }
+
+`;
+
+exports[`invalid(71): a { & .child, & span::before {} } 3`] = `
+
+Message:
+> 1 | a { & .child, & span::before {} }
+    |               ^ Remove the redundant nesting selector \`&\`.
+
+Output:
+  1 | a { & .child, span::before {} }
+
+`;
+
+exports[`invalid(72): a { & span:hover /* a long comment */ /* before the block */ {} } 1`] = `
+
+  1 | a { & span:hover /* a long comment */ /* before the block */ {} }
+
+`;
+
+exports[`invalid(72): a { & span:hover /* a long comment */ /* before the block */ {} } 2`] = `
+
+Message:
+> 1 | a { & span:hover /* a long comment */ /* before the block */ {} }
+    |     ^ Remove the redundant nesting selector \`&\`.
+
+Output:
+  1 | a { span:hover /* a long comment */ /* before the block */ {} }
 
 `;
 
