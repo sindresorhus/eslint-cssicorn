@@ -51,6 +51,9 @@ test.snapshot({
 		'a { margin: var(--space) 0px; padding: 0px env(safe-area-inset-bottom); }',
 		'a { margin: 0px /* keep */; }',
 		'a { margin: +0.000PX -0rem 0e3cqw; }',
+		// Every zero length of a declaration, also when the whole declaration does not match.
+		'a { box-shadow: 0px 0px 0px 1px red, inset 0PX 1px 0px 0px blue; }',
+		'a { margin: 0px 0px 0px 0px 0px; }',
 		'@media (width > 0px) { a { margin: 0px; } }',
 		'@media (min-width: 0px) and (0px < height) { a { margin: 0px; } }',
 		'@media (max-device-width: 0px) {}',

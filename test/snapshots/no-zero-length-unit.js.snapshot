@@ -15,13 +15,69 @@ Output:
 
 `;
 
-exports[`invalid(10): @container (block-size > 0px) {} 1`] = `
+exports[`invalid(10): @container (width > 0px) { a { padding: 0em; } } 1`] = `
+
+  1 | @container (width > 0px) { a { padding: 0em; } }
+
+`;
+
+exports[`invalid(10): @container (width > 0px) { a { padding: 0em; } } 2`] = `
+
+Message:
+> 1 | @container (width > 0px) { a { padding: 0em; } }
+    |                      ^^ Remove the unit from this zero length.
+
+Output:
+  1 | @container (width > 0) { a { padding: 0em; } }
+
+`;
+
+exports[`invalid(10): @container (width > 0px) { a { padding: 0em; } } 3`] = `
+
+Message:
+> 1 | @container (width > 0px) { a { padding: 0em; } }
+    |                                          ^^ Remove the unit from this zero length.
+
+Output:
+  1 | @container (width > 0px) { a { padding: 0; } }
+
+`;
+
+exports[`invalid(11): @container (inline-size: 0px) { a { padding: 0em; } } 1`] = `
+
+  1 | @container (inline-size: 0px) { a { padding: 0em; } }
+
+`;
+
+exports[`invalid(11): @container (inline-size: 0px) { a { padding: 0em; } } 2`] = `
+
+Message:
+> 1 | @container (inline-size: 0px) { a { padding: 0em; } }
+    |                           ^^ Remove the unit from this zero length.
+
+Output:
+  1 | @container (inline-size: 0) { a { padding: 0em; } }
+
+`;
+
+exports[`invalid(11): @container (inline-size: 0px) { a { padding: 0em; } } 3`] = `
+
+Message:
+> 1 | @container (inline-size: 0px) { a { padding: 0em; } }
+    |                                               ^^ Remove the unit from this zero length.
+
+Output:
+  1 | @container (inline-size: 0px) { a { padding: 0; } }
+
+`;
+
+exports[`invalid(12): @container (block-size > 0px) {} 1`] = `
 
   1 | @container (block-size > 0px) {}
 
 `;
 
-exports[`invalid(10): @container (block-size > 0px) {} 2`] = `
+exports[`invalid(12): @container (block-size > 0px) {} 2`] = `
 
 Message:
 > 1 | @container (block-size > 0px) {}
@@ -32,13 +88,13 @@ Output:
 
 `;
 
-exports[`invalid(11): @supports (margin: 0px) { a { padding: 0em; } } 1`] = `
+exports[`invalid(13): @supports (margin: 0px) { a { padding: 0em; } } 1`] = `
 
   1 | @supports (margin: 0px) { a { padding: 0em; } }
 
 `;
 
-exports[`invalid(11): @supports (margin: 0px) { a { padding: 0em; } } 2`] = `
+exports[`invalid(13): @supports (margin: 0px) { a { padding: 0em; } } 2`] = `
 
 Message:
 > 1 | @supports (margin: 0px) { a { padding: 0em; } }
@@ -49,7 +105,7 @@ Output:
 
 `;
 
-exports[`invalid(11): @supports (margin: 0px) { a { padding: 0em; } } 3`] = `
+exports[`invalid(13): @supports (margin: 0px) { a { padding: 0em; } } 3`] = `
 
 Message:
 > 1 | @supports (margin: 0px) { a { padding: 0em; } }
@@ -60,13 +116,13 @@ Output:
 
 `;
 
-exports[`invalid(12): a { flex-basis: 0px; } 1`] = `
+exports[`invalid(14): a { flex-basis: 0px; } 1`] = `
 
   1 | a { flex-basis: 0px; }
 
 `;
 
-exports[`invalid(12): a { flex-basis: 0px; } 2`] = `
+exports[`invalid(14): a { flex-basis: 0px; } 2`] = `
 
 Message:
 > 1 | a { flex-basis: 0px; }
@@ -77,13 +133,13 @@ Output:
 
 `;
 
-exports[`invalid(13): a { transform: translate(0px, 0rem); filter: blur(0px); grid-template-columns: minmax(0px, 1fr); } 1`] = `
+exports[`invalid(15): a { transform: translate(0px, 0rem); filter: blur(0px); grid-template-columns: minmax(0px, 1fr); } 1`] = `
 
   1 | a { transform: translate(0px, 0rem); filter: blur(0px); grid-template-columns: minmax(0px, 1fr); }
 
 `;
 
-exports[`invalid(13): a { transform: translate(0px, 0rem); filter: blur(0px); grid-template-columns: minmax(0px, 1fr); } 2`] = `
+exports[`invalid(15): a { transform: translate(0px, 0rem); filter: blur(0px); grid-template-columns: minmax(0px, 1fr); } 2`] = `
 
 Message:
 > 1 | a { transform: translate(0px, 0rem); filter: blur(0px); grid-template-columns: minmax(0px, 1fr); }
@@ -94,7 +150,7 @@ Output:
 
 `;
 
-exports[`invalid(13): a { transform: translate(0px, 0rem); filter: blur(0px); grid-template-columns: minmax(0px, 1fr); } 3`] = `
+exports[`invalid(15): a { transform: translate(0px, 0rem); filter: blur(0px); grid-template-columns: minmax(0px, 1fr); } 3`] = `
 
 Message:
 > 1 | a { transform: translate(0px, 0rem); filter: blur(0px); grid-template-columns: minmax(0px, 1fr); }
@@ -105,7 +161,7 @@ Output:
 
 `;
 
-exports[`invalid(13): a { transform: translate(0px, 0rem); filter: blur(0px); grid-template-columns: minmax(0px, 1fr); } 4`] = `
+exports[`invalid(15): a { transform: translate(0px, 0rem); filter: blur(0px); grid-template-columns: minmax(0px, 1fr); } 4`] = `
 
 Message:
 > 1 | a { transform: translate(0px, 0rem); filter: blur(0px); grid-template-columns: minmax(0px, 1fr); }
@@ -116,7 +172,7 @@ Output:
 
 `;
 
-exports[`invalid(13): a { transform: translate(0px, 0rem); filter: blur(0px); grid-template-columns: minmax(0px, 1fr); } 5`] = `
+exports[`invalid(15): a { transform: translate(0px, 0rem); filter: blur(0px); grid-template-columns: minmax(0px, 1fr); } 5`] = `
 
 Message:
 > 1 | a { transform: translate(0px, 0rem); filter: blur(0px); grid-template-columns: minmax(0px, 1fr); }
@@ -127,13 +183,13 @@ Output:
 
 `;
 
-exports[`invalid(14): a { border: 0q solid; } 1`] = `
+exports[`invalid(16): a { border: 0q solid; } 1`] = `
 
   1 | a { border: 0q solid; }
 
 `;
 
-exports[`invalid(14): a { border: 0q solid; } 2`] = `
+exports[`invalid(16): a { border: 0q solid; } 2`] = `
 
 Message:
 > 1 | a { border: 0q solid; }
@@ -144,13 +200,13 @@ Output:
 
 `;
 
-exports[`invalid(15): a { width: 0.0px; } 1`] = `
+exports[`invalid(17): a { width: 0.0px; } 1`] = `
 
   1 | a { width: 0.0px; }
 
 `;
 
-exports[`invalid(15): a { width: 0.0px; } 2`] = `
+exports[`invalid(17): a { width: 0.0px; } 2`] = `
 
 Message:
 > 1 | a { width: 0.0px; }
@@ -161,13 +217,13 @@ Output:
 
 `;
 
-exports[`invalid(16): a { width: 0e999px; } 1`] = `
+exports[`invalid(18): a { width: 0e999px; } 1`] = `
 
   1 | a { width: 0e999px; }
 
 `;
 
-exports[`invalid(16): a { width: 0e999px; } 2`] = `
+exports[`invalid(18): a { width: 0e999px; } 2`] = `
 
 Message:
 > 1 | a { width: 0e999px; }
@@ -178,13 +234,13 @@ Output:
 
 `;
 
-exports[`invalid(17): .a:export { gap: 0px; } :export, .a { gap: 0px; } 1`] = `
+exports[`invalid(19): .a:export { gap: 0px; } :export, .a { gap: 0px; } 1`] = `
 
   1 | .a:export { gap: 0px; } :export, .a { gap: 0px; }
 
 `;
 
-exports[`invalid(17): .a:export { gap: 0px; } :export, .a { gap: 0px; } 2`] = `
+exports[`invalid(19): .a:export { gap: 0px; } :export, .a { gap: 0px; } 2`] = `
 
 Message:
 > 1 | .a:export { gap: 0px; } :export, .a { gap: 0px; }
@@ -195,7 +251,7 @@ Output:
 
 `;
 
-exports[`invalid(17): .a:export { gap: 0px; } :export, .a { gap: 0px; } 3`] = `
+exports[`invalid(19): .a:export { gap: 0px; } :export, .a { gap: 0px; } 3`] = `
 
 Message:
 > 1 | .a:export { gap: 0px; } :export, .a { gap: 0px; }
@@ -203,73 +259,6 @@ Message:
 
 Output:
   1 | .a:export { gap: 0px; } :export, .a { gap: 0; }
-
-`;
-
-exports[`invalid(18): a { margin: 0px 0rem 0em 0q; } 1`] = `
-
-  1 | a { margin: 0px 0rem 0em 0q; }
-
-`;
-
-exports[`invalid(18): a { margin: 0px 0rem 0em 0q; } 2`] = `
-
-Message:
-> 1 | a { margin: 0px 0rem 0em 0q; }
-    |              ^^ Remove the unit from this zero length.
-
-Output:
-  1 | a { margin: 0 0rem 0em 0q; }
-
-`;
-
-exports[`invalid(18): a { margin: 0px 0rem 0em 0q; } 3`] = `
-
-Message:
-> 1 | a { margin: 0px 0rem 0em 0q; }
-    |                  ^^^ Remove the unit from this zero length.
-
-Output:
-  1 | a { margin: 0px 0 0em 0q; }
-
-`;
-
-exports[`invalid(18): a { margin: 0px 0rem 0em 0q; } 4`] = `
-
-Message:
-> 1 | a { margin: 0px 0rem 0em 0q; }
-    |                       ^^ Remove the unit from this zero length.
-
-Output:
-  1 | a { margin: 0px 0rem 0 0q; }
-
-`;
-
-exports[`invalid(18): a { margin: 0px 0rem 0em 0q; } 5`] = `
-
-Message:
-> 1 | a { margin: 0px 0rem 0em 0q; }
-    |                           ^ Remove the unit from this zero length.
-
-Output:
-  1 | a { margin: 0px 0rem 0em 0; }
-
-`;
-
-exports[`invalid(19): a { padding: 0px 0; } 1`] = `
-
-  1 | a { padding: 0px 0; }
-
-`;
-
-exports[`invalid(19): a { padding: 0px 0; } 2`] = `
-
-Message:
-> 1 | a { padding: 0px 0; }
-    |               ^^ Remove the unit from this zero length.
-
-Output:
-  1 | a { padding: 0 0; }
 
 `;
 
@@ -301,13 +290,80 @@ Output:
 
 `;
 
-exports[`invalid(20): a { width: 00px; } 1`] = `
+exports[`invalid(20): a { margin: 0px 0rem 0em 0q; } 1`] = `
+
+  1 | a { margin: 0px 0rem 0em 0q; }
+
+`;
+
+exports[`invalid(20): a { margin: 0px 0rem 0em 0q; } 2`] = `
+
+Message:
+> 1 | a { margin: 0px 0rem 0em 0q; }
+    |              ^^ Remove the unit from this zero length.
+
+Output:
+  1 | a { margin: 0 0rem 0em 0q; }
+
+`;
+
+exports[`invalid(20): a { margin: 0px 0rem 0em 0q; } 3`] = `
+
+Message:
+> 1 | a { margin: 0px 0rem 0em 0q; }
+    |                  ^^^ Remove the unit from this zero length.
+
+Output:
+  1 | a { margin: 0px 0 0em 0q; }
+
+`;
+
+exports[`invalid(20): a { margin: 0px 0rem 0em 0q; } 4`] = `
+
+Message:
+> 1 | a { margin: 0px 0rem 0em 0q; }
+    |                       ^^ Remove the unit from this zero length.
+
+Output:
+  1 | a { margin: 0px 0rem 0 0q; }
+
+`;
+
+exports[`invalid(20): a { margin: 0px 0rem 0em 0q; } 5`] = `
+
+Message:
+> 1 | a { margin: 0px 0rem 0em 0q; }
+    |                           ^ Remove the unit from this zero length.
+
+Output:
+  1 | a { margin: 0px 0rem 0em 0; }
+
+`;
+
+exports[`invalid(21): a { padding: 0px 0; } 1`] = `
+
+  1 | a { padding: 0px 0; }
+
+`;
+
+exports[`invalid(21): a { padding: 0px 0; } 2`] = `
+
+Message:
+> 1 | a { padding: 0px 0; }
+    |               ^^ Remove the unit from this zero length.
+
+Output:
+  1 | a { padding: 0 0; }
+
+`;
+
+exports[`invalid(22): a { width: 00px; } 1`] = `
 
   1 | a { width: 00px; }
 
 `;
 
-exports[`invalid(20): a { width: 00px; } 2`] = `
+exports[`invalid(22): a { width: 00px; } 2`] = `
 
 Message:
 > 1 | a { width: 00px; }
@@ -318,13 +374,13 @@ Output:
 
 `;
 
-exports[`invalid(21): a { width: +0px; } 1`] = `
+exports[`invalid(23): a { width: +0px; } 1`] = `
 
   1 | a { width: +0px; }
 
 `;
 
-exports[`invalid(21): a { width: +0px; } 2`] = `
+exports[`invalid(23): a { width: +0px; } 2`] = `
 
 Message:
 > 1 | a { width: +0px; }
@@ -335,13 +391,13 @@ Output:
 
 `;
 
-exports[`invalid(22): a { width: -0px; } 1`] = `
+exports[`invalid(24): a { width: -0px; } 1`] = `
 
   1 | a { width: -0px; }
 
 `;
 
-exports[`invalid(22): a { width: -0px; } 2`] = `
+exports[`invalid(24): a { width: -0px; } 2`] = `
 
 Message:
 > 1 | a { width: -0px; }
@@ -352,13 +408,13 @@ Output:
 
 `;
 
-exports[`invalid(23): a { width: .0px; } 1`] = `
+exports[`invalid(25): a { width: .0px; } 1`] = `
 
   1 | a { width: .0px; }
 
 `;
 
-exports[`invalid(23): a { width: .0px; } 2`] = `
+exports[`invalid(25): a { width: .0px; } 2`] = `
 
 Message:
 > 1 | a { width: .0px; }
@@ -369,13 +425,13 @@ Output:
 
 `;
 
-exports[`invalid(24): a { width: 0E3px; } 1`] = `
+exports[`invalid(26): a { width: 0E3px; } 1`] = `
 
   1 | a { width: 0E3px; }
 
 `;
 
-exports[`invalid(24): a { width: 0E3px; } 2`] = `
+exports[`invalid(26): a { width: 0E3px; } 2`] = `
 
 Message:
 > 1 | a { width: 0E3px; }
@@ -386,13 +442,13 @@ Output:
 
 `;
 
-exports[`invalid(25): a { margin: /* keep */ 0px; } 1`] = `
+exports[`invalid(27): a { margin: /* keep */ 0px; } 1`] = `
 
   1 | a { margin: /* keep */ 0px; }
 
 `;
 
-exports[`invalid(25): a { margin: /* keep */ 0px; } 2`] = `
+exports[`invalid(27): a { margin: /* keep */ 0px; } 2`] = `
 
 Message:
 > 1 | a { margin: /* keep */ 0px; }
@@ -403,13 +459,13 @@ Output:
 
 `;
 
-exports[`invalid(26): a { margin: 0px !important; } 1`] = `
+exports[`invalid(28): a { margin: 0px !important; } 1`] = `
 
   1 | a { margin: 0px !important; }
 
 `;
 
-exports[`invalid(26): a { margin: 0px !important; } 2`] = `
+exports[`invalid(28): a { margin: 0px !important; } 2`] = `
 
 Message:
 > 1 | a { margin: 0px !important; }
@@ -420,13 +476,13 @@ Output:
 
 `;
 
-exports[`invalid(27): a { top: 0px; left: 0px; border-width: 0px; } 1`] = `
+exports[`invalid(29): a { top: 0px; left: 0px; border-width: 0px; } 1`] = `
 
   1 | a { top: 0px; left: 0px; border-width: 0px; }
 
 `;
 
-exports[`invalid(27): a { top: 0px; left: 0px; border-width: 0px; } 2`] = `
+exports[`invalid(29): a { top: 0px; left: 0px; border-width: 0px; } 2`] = `
 
 Message:
 > 1 | a { top: 0px; left: 0px; border-width: 0px; }
@@ -437,7 +493,7 @@ Output:
 
 `;
 
-exports[`invalid(27): a { top: 0px; left: 0px; border-width: 0px; } 3`] = `
+exports[`invalid(29): a { top: 0px; left: 0px; border-width: 0px; } 3`] = `
 
 Message:
 > 1 | a { top: 0px; left: 0px; border-width: 0px; }
@@ -448,7 +504,7 @@ Output:
 
 `;
 
-exports[`invalid(27): a { top: 0px; left: 0px; border-width: 0px; } 4`] = `
+exports[`invalid(29): a { top: 0px; left: 0px; border-width: 0px; } 4`] = `
 
 Message:
 > 1 | a { top: 0px; left: 0px; border-width: 0px; }
@@ -456,51 +512,6 @@ Message:
 
 Output:
   1 | a { top: 0px; left: 0px; border-width: 0; }
-
-`;
-
-exports[`invalid(28): a { margin: 0px; padding: 0px; } 1`] = `
-
-  1 | a { margin: 0px; padding: 0px; }
-
-`;
-
-exports[`invalid(28): a { margin: 0px; padding: 0px; } 2`] = `
-
-Message:
-> 1 | a { margin: 0px; padding: 0px; }
-    |              ^^ Remove the unit from this zero length.
-
-Output:
-  1 | a { margin: 0; padding: 0px; }
-
-`;
-
-exports[`invalid(28): a { margin: 0px; padding: 0px; } 3`] = `
-
-Message:
-> 1 | a { margin: 0px; padding: 0px; }
-    |                            ^^ Remove the unit from this zero length.
-
-Output:
-  1 | a { margin: 0px; padding: 0; }
-
-`;
-
-exports[`invalid(29): @media (width: 0px) {} 1`] = `
-
-  1 | @media (width: 0px) {}
-
-`;
-
-exports[`invalid(29): @media (width: 0px) {} 2`] = `
-
-Message:
-> 1 | @media (width: 0px) {}
-    |                 ^^ Remove the unit from this zero length.
-
-Output:
-  1 | @media (width: 0) {}
 
 `;
 
@@ -521,13 +532,58 @@ Output:
 
 `;
 
-exports[`invalid(30): @media (width >= 0px) {} 1`] = `
+exports[`invalid(30): a { margin: 0px; padding: 0px; } 1`] = `
+
+  1 | a { margin: 0px; padding: 0px; }
+
+`;
+
+exports[`invalid(30): a { margin: 0px; padding: 0px; } 2`] = `
+
+Message:
+> 1 | a { margin: 0px; padding: 0px; }
+    |              ^^ Remove the unit from this zero length.
+
+Output:
+  1 | a { margin: 0; padding: 0px; }
+
+`;
+
+exports[`invalid(30): a { margin: 0px; padding: 0px; } 3`] = `
+
+Message:
+> 1 | a { margin: 0px; padding: 0px; }
+    |                            ^^ Remove the unit from this zero length.
+
+Output:
+  1 | a { margin: 0px; padding: 0; }
+
+`;
+
+exports[`invalid(31): @media (width: 0px) {} 1`] = `
+
+  1 | @media (width: 0px) {}
+
+`;
+
+exports[`invalid(31): @media (width: 0px) {} 2`] = `
+
+Message:
+> 1 | @media (width: 0px) {}
+    |                 ^^ Remove the unit from this zero length.
+
+Output:
+  1 | @media (width: 0) {}
+
+`;
+
+exports[`invalid(32): @media (width >= 0px) {} 1`] = `
 
   1 | @media (width >= 0px) {}
 
 `;
 
-exports[`invalid(30): @media (width >= 0px) {} 2`] = `
+exports[`invalid(32): @media (width >= 0px) {} 2`] = `
 
 Message:
 > 1 | @media (width >= 0px) {}
@@ -538,13 +594,13 @@ Output:
 
 `;
 
-exports[`invalid(31): @media (device-width: 0px) {} 1`] = `
+exports[`invalid(33): @media (device-width: 0px) {} 1`] = `
 
   1 | @media (device-width: 0px) {}
 
 `;
 
-exports[`invalid(31): @media (device-width: 0px) {} 2`] = `
+exports[`invalid(33): @media (device-width: 0px) {} 2`] = `
 
 Message:
 > 1 | @media (device-width: 0px) {}
@@ -555,13 +611,13 @@ Output:
 
 `;
 
-exports[`invalid(32): @media (0px < width < 100px) {} 1`] = `
+exports[`invalid(34): @media (0px < width < 100px) {} 1`] = `
 
   1 | @media (0px < width < 100px) {}
 
 `;
 
-exports[`invalid(32): @media (0px < width < 100px) {} 2`] = `
+exports[`invalid(34): @media (0px < width < 100px) {} 2`] = `
 
 Message:
 > 1 | @media (0px < width < 100px) {}
@@ -572,13 +628,13 @@ Output:
 
 `;
 
-exports[`invalid(33): @container (min-width: 0px) {} 1`] = `
+exports[`invalid(35): @container (min-width: 0px) {} 1`] = `
 
   1 | @container (min-width: 0px) {}
 
 `;
 
-exports[`invalid(33): @container (min-width: 0px) {} 2`] = `
+exports[`invalid(35): @container (min-width: 0px) {} 2`] = `
 
 Message:
 > 1 | @container (min-width: 0px) {}
@@ -589,13 +645,13 @@ Output:
 
 `;
 
-exports[`invalid(34): @container (0px < width <= 100px) {} 1`] = `
+exports[`invalid(36): @container (0px < width <= 100px) {} 1`] = `
 
   1 | @container (0px < width <= 100px) {}
 
 `;
 
-exports[`invalid(34): @container (0px < width <= 100px) {} 2`] = `
+exports[`invalid(36): @container (0px < width <= 100px) {} 2`] = `
 
 Message:
 > 1 | @container (0px < width <= 100px) {}
@@ -606,13 +662,13 @@ Output:
 
 `;
 
-exports[`invalid(35): a { &:hover { margin: 0px; } } 1`] = `
+exports[`invalid(37): a { &:hover { margin: 0px; } } 1`] = `
 
   1 | a { &:hover { margin: 0px; } }
 
 `;
 
-exports[`invalid(35): a { &:hover { margin: 0px; } } 2`] = `
+exports[`invalid(37): a { &:hover { margin: 0px; } } 2`] = `
 
 Message:
 > 1 | a { &:hover { margin: 0px; } }
@@ -623,13 +679,13 @@ Output:
 
 `;
 
-exports[`invalid(36): @layer theme { a { margin: 0px; } } 1`] = `
+exports[`invalid(38): @layer theme { a { margin: 0px; } } 1`] = `
 
   1 | @layer theme { a { margin: 0px; } }
 
 `;
 
-exports[`invalid(36): @layer theme { a { margin: 0px; } } 2`] = `
+exports[`invalid(38): @layer theme { a { margin: 0px; } } 2`] = `
 
 Message:
 > 1 | @layer theme { a { margin: 0px; } }
@@ -640,13 +696,13 @@ Output:
 
 `;
 
-exports[`invalid(37): @scope (.card) { a { margin: 0px; } } 1`] = `
+exports[`invalid(39): @scope (.card) { a { margin: 0px; } } 1`] = `
 
   1 | @scope (.card) { a { margin: 0px; } }
 
 `;
 
-exports[`invalid(37): @scope (.card) { a { margin: 0px; } } 2`] = `
+exports[`invalid(39): @scope (.card) { a { margin: 0px; } } 2`] = `
 
 Message:
 > 1 | @scope (.card) { a { margin: 0px; } }
@@ -654,23 +710,6 @@ Message:
 
 Output:
   1 | @scope (.card) { a { margin: 0; } }
-
-`;
-
-exports[`invalid(38): @supports (padding: 0px) { a { margin: 0; } } 1`] = `
-
-  1 | @supports (padding: 0px) { a { margin: 0; } }
-
-`;
-
-exports[`invalid(38): @supports (padding: 0px) { a { margin: 0; } } 2`] = `
-
-Message:
-> 1 | @supports (padding: 0px) { a { margin: 0; } }
-    |                      ^^ Remove the unit from this zero length.
-
-Output:
-  1 | @supports (padding: 0) { a { margin: 0; } }
 
 `;
 
@@ -713,13 +752,163 @@ Output:
 
 `;
 
-exports[`invalid(5): @media (width > 0px) { a { margin: 0px; } } 1`] = `
+exports[`invalid(40): @supports (padding: 0px) { a { margin: 0; } } 1`] = `
+
+  1 | @supports (padding: 0px) { a { margin: 0; } }
+
+`;
+
+exports[`invalid(40): @supports (padding: 0px) { a { margin: 0; } } 2`] = `
+
+Message:
+> 1 | @supports (padding: 0px) { a { margin: 0; } }
+    |                      ^^ Remove the unit from this zero length.
+
+Output:
+  1 | @supports (padding: 0) { a { margin: 0; } }
+
+`;
+
+exports[`invalid(5): a { box-shadow: 0px 0px 0px 1px red, inset 0PX 1px 0px 0px blue; } 1`] = `
+
+  1 | a { box-shadow: 0px 0px 0px 1px red, inset 0PX 1px 0px 0px blue; }
+
+`;
+
+exports[`invalid(5): a { box-shadow: 0px 0px 0px 1px red, inset 0PX 1px 0px 0px blue; } 2`] = `
+
+Message:
+> 1 | a { box-shadow: 0px 0px 0px 1px red, inset 0PX 1px 0px 0px blue; }
+    |                  ^^ Remove the unit from this zero length.
+
+Output:
+  1 | a { box-shadow: 0 0px 0px 1px red, inset 0PX 1px 0px 0px blue; }
+
+`;
+
+exports[`invalid(5): a { box-shadow: 0px 0px 0px 1px red, inset 0PX 1px 0px 0px blue; } 3`] = `
+
+Message:
+> 1 | a { box-shadow: 0px 0px 0px 1px red, inset 0PX 1px 0px 0px blue; }
+    |                      ^^ Remove the unit from this zero length.
+
+Output:
+  1 | a { box-shadow: 0px 0 0px 1px red, inset 0PX 1px 0px 0px blue; }
+
+`;
+
+exports[`invalid(5): a { box-shadow: 0px 0px 0px 1px red, inset 0PX 1px 0px 0px blue; } 4`] = `
+
+Message:
+> 1 | a { box-shadow: 0px 0px 0px 1px red, inset 0PX 1px 0px 0px blue; }
+    |                          ^^ Remove the unit from this zero length.
+
+Output:
+  1 | a { box-shadow: 0px 0px 0 1px red, inset 0PX 1px 0px 0px blue; }
+
+`;
+
+exports[`invalid(5): a { box-shadow: 0px 0px 0px 1px red, inset 0PX 1px 0px 0px blue; } 5`] = `
+
+Message:
+> 1 | a { box-shadow: 0px 0px 0px 1px red, inset 0PX 1px 0px 0px blue; }
+    |                                             ^^ Remove the unit from this zero length.
+
+Output:
+  1 | a { box-shadow: 0px 0px 0px 1px red, inset 0 1px 0px 0px blue; }
+
+`;
+
+exports[`invalid(5): a { box-shadow: 0px 0px 0px 1px red, inset 0PX 1px 0px 0px blue; } 6`] = `
+
+Message:
+> 1 | a { box-shadow: 0px 0px 0px 1px red, inset 0PX 1px 0px 0px blue; }
+    |                                                     ^^ Remove the unit from this zero length.
+
+Output:
+  1 | a { box-shadow: 0px 0px 0px 1px red, inset 0PX 1px 0 0px blue; }
+
+`;
+
+exports[`invalid(5): a { box-shadow: 0px 0px 0px 1px red, inset 0PX 1px 0px 0px blue; } 7`] = `
+
+Message:
+> 1 | a { box-shadow: 0px 0px 0px 1px red, inset 0PX 1px 0px 0px blue; }
+    |                                                         ^^ Remove the unit from this zero length.
+
+Output:
+  1 | a { box-shadow: 0px 0px 0px 1px red, inset 0PX 1px 0px 0 blue; }
+
+`;
+
+exports[`invalid(6): a { margin: 0px 0px 0px 0px 0px; } 1`] = `
+
+  1 | a { margin: 0px 0px 0px 0px 0px; }
+
+`;
+
+exports[`invalid(6): a { margin: 0px 0px 0px 0px 0px; } 2`] = `
+
+Message:
+> 1 | a { margin: 0px 0px 0px 0px 0px; }
+    |              ^^ Remove the unit from this zero length.
+
+Output:
+  1 | a { margin: 0 0px 0px 0px 0px; }
+
+`;
+
+exports[`invalid(6): a { margin: 0px 0px 0px 0px 0px; } 3`] = `
+
+Message:
+> 1 | a { margin: 0px 0px 0px 0px 0px; }
+    |                  ^^ Remove the unit from this zero length.
+
+Output:
+  1 | a { margin: 0px 0 0px 0px 0px; }
+
+`;
+
+exports[`invalid(6): a { margin: 0px 0px 0px 0px 0px; } 4`] = `
+
+Message:
+> 1 | a { margin: 0px 0px 0px 0px 0px; }
+    |                      ^^ Remove the unit from this zero length.
+
+Output:
+  1 | a { margin: 0px 0px 0 0px 0px; }
+
+`;
+
+exports[`invalid(6): a { margin: 0px 0px 0px 0px 0px; } 5`] = `
+
+Message:
+> 1 | a { margin: 0px 0px 0px 0px 0px; }
+    |                          ^^ Remove the unit from this zero length.
+
+Output:
+  1 | a { margin: 0px 0px 0px 0 0px; }
+
+`;
+
+exports[`invalid(6): a { margin: 0px 0px 0px 0px 0px; } 6`] = `
+
+Message:
+> 1 | a { margin: 0px 0px 0px 0px 0px; }
+    |                              ^^ Remove the unit from this zero length.
+
+Output:
+  1 | a { margin: 0px 0px 0px 0px 0; }
+
+`;
+
+exports[`invalid(7): @media (width > 0px) { a { margin: 0px; } } 1`] = `
 
   1 | @media (width > 0px) { a { margin: 0px; } }
 
 `;
 
-exports[`invalid(5): @media (width > 0px) { a { margin: 0px; } } 2`] = `
+exports[`invalid(7): @media (width > 0px) { a { margin: 0px; } } 2`] = `
 
 Message:
 > 1 | @media (width > 0px) { a { margin: 0px; } }
@@ -730,7 +919,7 @@ Output:
 
 `;
 
-exports[`invalid(5): @media (width > 0px) { a { margin: 0px; } } 3`] = `
+exports[`invalid(7): @media (width > 0px) { a { margin: 0px; } } 3`] = `
 
 Message:
 > 1 | @media (width > 0px) { a { margin: 0px; } }
@@ -741,13 +930,13 @@ Output:
 
 `;
 
-exports[`invalid(6): @media (min-width: 0px) and (0px < height) { a { margin: 0px; } } 1`] = `
+exports[`invalid(8): @media (min-width: 0px) and (0px < height) { a { margin: 0px; } } 1`] = `
 
   1 | @media (min-width: 0px) and (0px < height) { a { margin: 0px; } }
 
 `;
 
-exports[`invalid(6): @media (min-width: 0px) and (0px < height) { a { margin: 0px; } } 2`] = `
+exports[`invalid(8): @media (min-width: 0px) and (0px < height) { a { margin: 0px; } } 2`] = `
 
 Message:
 > 1 | @media (min-width: 0px) and (0px < height) { a { margin: 0px; } }
@@ -758,7 +947,7 @@ Output:
 
 `;
 
-exports[`invalid(6): @media (min-width: 0px) and (0px < height) { a { margin: 0px; } } 3`] = `
+exports[`invalid(8): @media (min-width: 0px) and (0px < height) { a { margin: 0px; } } 3`] = `
 
 Message:
 > 1 | @media (min-width: 0px) and (0px < height) { a { margin: 0px; } }
@@ -769,7 +958,7 @@ Output:
 
 `;
 
-exports[`invalid(6): @media (min-width: 0px) and (0px < height) { a { margin: 0px; } } 4`] = `
+exports[`invalid(8): @media (min-width: 0px) and (0px < height) { a { margin: 0px; } } 4`] = `
 
 Message:
 > 1 | @media (min-width: 0px) and (0px < height) { a { margin: 0px; } }
@@ -780,13 +969,13 @@ Output:
 
 `;
 
-exports[`invalid(7): @media (max-device-width: 0px) {} 1`] = `
+exports[`invalid(9): @media (max-device-width: 0px) {} 1`] = `
 
   1 | @media (max-device-width: 0px) {}
 
 `;
 
-exports[`invalid(7): @media (max-device-width: 0px) {} 2`] = `
+exports[`invalid(9): @media (max-device-width: 0px) {} 2`] = `
 
 Message:
 > 1 | @media (max-device-width: 0px) {}
@@ -794,61 +983,5 @@ Message:
 
 Output:
   1 | @media (max-device-width: 0) {}
-
-`;
-
-exports[`invalid(8): @container (width > 0px) { a { padding: 0em; } } 1`] = `
-
-  1 | @container (width > 0px) { a { padding: 0em; } }
-
-`;
-
-exports[`invalid(8): @container (width > 0px) { a { padding: 0em; } } 2`] = `
-
-Message:
-> 1 | @container (width > 0px) { a { padding: 0em; } }
-    |                      ^^ Remove the unit from this zero length.
-
-Output:
-  1 | @container (width > 0) { a { padding: 0em; } }
-
-`;
-
-exports[`invalid(8): @container (width > 0px) { a { padding: 0em; } } 3`] = `
-
-Message:
-> 1 | @container (width > 0px) { a { padding: 0em; } }
-    |                                          ^^ Remove the unit from this zero length.
-
-Output:
-  1 | @container (width > 0px) { a { padding: 0; } }
-
-`;
-
-exports[`invalid(9): @container (inline-size: 0px) { a { padding: 0em; } } 1`] = `
-
-  1 | @container (inline-size: 0px) { a { padding: 0em; } }
-
-`;
-
-exports[`invalid(9): @container (inline-size: 0px) { a { padding: 0em; } } 2`] = `
-
-Message:
-> 1 | @container (inline-size: 0px) { a { padding: 0em; } }
-    |                           ^^ Remove the unit from this zero length.
-
-Output:
-  1 | @container (inline-size: 0) { a { padding: 0em; } }
-
-`;
-
-exports[`invalid(9): @container (inline-size: 0px) { a { padding: 0em; } } 3`] = `
-
-Message:
-> 1 | @container (inline-size: 0px) { a { padding: 0em; } }
-    |                                               ^^ Remove the unit from this zero length.
-
-Output:
-  1 | @container (inline-size: 0px) { a { padding: 0; } }
 
 `;

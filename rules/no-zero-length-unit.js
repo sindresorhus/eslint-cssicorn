@@ -59,6 +59,17 @@ const isExcludedContext = ancestors => ancestors.some(ancestor => {
 	return false;
 });
 
+// A declaration is matched once, not once for every zero length in it.
+const declarationMatches = new WeakMap();
+
+const isDeclarationMatched = (declaration, sourceCode) => {
+	if (!declarationMatches.has(declaration)) {
+		declarationMatches.set(declaration, sourceCode.lexer.matchDeclaration(declaration).matched);
+	}
+
+	return declarationMatches.get(declaration);
+};
+
 const isSupportedContext = (node, ancestors, context) => {
 	const {sourceCode} = context;
 	const declaration = ancestors.findLast(ancestor => ancestor.type === 'Declaration');
@@ -68,7 +79,7 @@ const isSupportedContext = (node, ancestors, context) => {
 		}
 
 		return Boolean(
-			sourceCode.lexer.matchDeclaration(declaration).matched
+			isDeclarationMatched(declaration, sourceCode)
 			|| (sourceCode.getParent(node) === declaration.value && sourceCode.lexer.matchProperty(decodeCssIdentifier(declaration.property), node).matched),
 		);
 	}
