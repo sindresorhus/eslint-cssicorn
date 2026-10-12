@@ -17,6 +17,8 @@ test.snapshot({
 		'a { font: 12px/0px sans-serif; border-image: url(image.png) 30 / 0px / 0px; }',
 		'a { mask-border-width: 0px; mask-border-outset: 0px; mask-border: url(image.png) 30 / 0px / 0px; }',
 		'a { stroke-width: 0px; stroke-dashoffset: 0px; stroke-dasharray: 0px 1px; }',
+		// Chrome rejects a bare unitless zero in `overflow-clip-margin`.
+		'a { overflow-clip-margin: 0px; overflow-clip-margin: content-box 0px; OVERFLOW-CLIP-MARGIN: 0PX !important; }',
 		'@property --space { syntax: "*"; inherits: false; initial-value: 0px; }',
 		'@supports (line-height: 0px) { a { margin: 0; } } @container style(--space: 0px) { a { margin: 0; } }',
 		'a { FLEX: 0px; width: CALC(0px + 1px); transform: translateX(calc(0px + 1px)); }',

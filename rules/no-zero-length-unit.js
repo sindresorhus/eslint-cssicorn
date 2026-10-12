@@ -35,6 +35,8 @@ const excludedProperties = new Set([
 	'mask-border',
 	'mask-border-outset',
 	'mask-border-width',
+	// Chrome rejects a bare unitless zero, like `overflow-clip-margin: 0`.
+	'overflow-clip-margin',
 	'stroke-dasharray',
 	'stroke-dashoffset',
 	'stroke-width',

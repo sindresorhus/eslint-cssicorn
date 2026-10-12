@@ -13,7 +13,7 @@ In most contexts, zero CSS lengths do not need a unit. Use `0` instead of `0px`,
 
 The rule checks lengths in declarations and media and container queries when it can validate their context. It skips unresolved values, such as `translate(0px, var(--space))`, and ignores angles, times, percentages, `fr`, unknown or escaped units, custom and vendor-prefixed properties and functions, and math functions such as `calc()`, where units may be required.
 
-It also ignores properties that accept both lengths and unitless numeric values, including `line-height`, `columns`, and the `flex` shorthand, and registered custom property `initial-value` descriptors. Removing units in those contexts can change the value's meaning. Declarations in CSS Modules `:export` and `:import()` blocks are ignored, because JavaScript reads them as exact strings.
+It also ignores properties that accept both lengths and unitless numeric values, including `line-height`, `columns`, and the `flex` shorthand, and registered custom property `initial-value` descriptors. Removing units in those contexts can change the value's meaning. It also ignores `overflow-clip-margin`, because Chrome rejects a bare unitless zero there. Declarations in CSS Modules `:export` and `:import()` blocks are ignored, because JavaScript reads them as exact strings.
 
 Use this rule with [`unicorn/no-zero-fractions`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/main/docs/rules/no-zero-fractions.md) to turn `0.0px` into `0`.
 
