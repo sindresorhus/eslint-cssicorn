@@ -21,11 +21,25 @@ test({
 		':is(.foo > .bar, .baz) {}',
 		'a :is(.foo > .bar) {}',
 		'.outer { .target :is(.foo > &, .baz) {} }',
+		// The parser rejects a nested rule that starts with an empty type namespace.
+		'.foo { color: red; } |a.foo { color: blue; }',
+		'.x { color: red; } |a .x { color: blue; }',
+		'.x { color: red; } |a > .x { color: blue; }',
 	],
 	invalid: [
 		{
 			code: '.outer { > .card {} > .card .title {} }',
 			output: '.outer { > .card { & .title {} } }',
+			errors: 1,
+		},
+		{
+			code: '.x { color: red; } *|a .x { color: blue; }',
+			output: '.x { color: red; *|a & { color: blue; } }',
+			errors: 1,
+		},
+		{
+			code: '.x { color: red; } .x |a { color: blue; }',
+			output: '.x { color: red; & |a { color: blue; } }',
 			errors: 1,
 		},
 		...['.page .card', '.page > .card', '.page + .card', '.page ~ .card'].map(parent => ({
@@ -422,10 +436,8 @@ test.snapshot({
 		'@scope (.parent) { a :is(.foo, .bar) { color: red; } }',
 		'@scope (.scope) { :is(body, html) :scope a { color: red; } }',
 		'@scope (.scope) { @media (width > 0px) { .parent { :is(.foo, .bar) a { color: red; } } } }',
-		// The parser can read a nested selector that starts with a type and a pseudo-class, even after whitespace, as a declaration
+		// The parser rejects some nested selectors, like `html :root:not(.dark, .light) & {}`
 		'.card { color: red; } html :root:not(.dark, .light) .card { color: blue; }',
-		'.card { color: red; } body :hover .card { color: blue; }',
-		'.card { color: red; } BODY :HOVER .card { color: blue; }',
 	],
 	invalid: [
 		'a :is(.foo, .bar) {}',
@@ -494,6 +506,14 @@ test.snapshot({
 		'.x :is(.a, .b)+div { color: red; }',
 		'.parent { &:is(.a, .b)+div { color: red; } }',
 		'.parent { :is(&.a, &.b)+div { color: red; } }',
+		'.card { color: red; } body :hover .card { color: blue; }',
+		'.card { color: red; } BODY :HOVER .card { color: blue; }',
+		'.card { color: red; } a:not(.x) .a .card { color: blue; }',
+		'.p { :is(html:not(.a) &, p &) .d { color: red; } }',
+		// The parser rejects some nested selector lists, like `html:not(.a, .b) &, p & {}`, so these are reported without a fix
+		'.p { :is(html:not(.a, .b) &, p &) .d { color: red; } }',
+		'.p { :is(div:is(.a, .b) &, p &) > span { color: red; } }',
+		'.p { :is(div:not(.a, .b) & .x, p & .y) .d { color: red; } }',
 	],
 });
 

@@ -13,6 +13,7 @@ import {
 import {
 	getNodesRange,
 	hasCommentInRange,
+	isParsedAsNestedRule,
 	normalizeCssIdentifier,
 	transparentGroupingAtRules,
 } from './utils/index.js';
@@ -399,6 +400,19 @@ const getNestedContent = ({rule, inner, blockNode = rule.block, blockText, neste
 	return `${lineBreak}${indentation}${indentationStep}${indentedInner} ${indentedBlock}${lineBreak}${indentation}`;
 };
 
+// The bundled parser rejects some valid nested selectors, like `html:not(.a, .b) &, p &`, and the fixed file must still parse.
+const getNestedReplacement = (rule, parentText, inner, context) => {
+	const content = getNestedContent({rule, inner}, context);
+	if (content === undefined || !isParsedAsNestedRule(content)) {
+		return;
+	}
+
+	const replacement = `${parentText} {${content}}`;
+	if (!hasAncestorStyleRule(rule, context) || isParsedAsNestedRule(replacement)) {
+		return replacement;
+	}
+};
+
 const isSameSelectorNode = (first, second, sourceCode) => first.type === second.type && (first.type === 'Combinator'
 	? first.name === second.name
 	: sourceCode.getText(first) === sourceCode.getText(second));
@@ -540,17 +554,15 @@ const getRelativeSelectorText = (parentSelector, selector, rule, context) => {
 	const prefix = getNodesText(prefixNodes, sourceCode);
 	const parentEnd = sourceCode.getRange(selector.children[parentStart + parentNodes.length - 1])[1];
 	const suffix = sourceCode.text.slice(parentEnd, sourceCode.getRange(selector.children.at(-1))[1]);
-	if (prefixNodes[0].type === 'TypeSelector' && prefixNodes.length > 1) {
-		if (previous.type !== 'Combinator' && prefixNodes.every(node => node.type !== 'Combinator')) {
-			// Keep & immediately after a leading type so the parser recognizes a selector before any pseudo-class.
-			const typeText = sourceCode.getText(prefixNodes[0]);
-			return `${typeText}&${prefix.slice(typeText.length)}${suffix}`;
-		}
-
-		// The parser can read a leading type followed by a pseudo-class, even after whitespace, as a declaration.
-		if (prefixNodes.slice(1).find(node => !isDescendantCombinator(node)).type === 'PseudoClassSelector') {
-			return;
-		}
+	if (
+		prefixNodes[0].type === 'TypeSelector'
+		&& prefixNodes.length > 1
+		&& previous.type !== 'Combinator'
+		&& prefixNodes.every(node => node.type !== 'Combinator')
+	) {
+		// Keep & immediately after a leading type so the parser recognizes a selector before any pseudo-class.
+		const typeText = sourceCode.getText(prefixNodes[0]);
+		return `${typeText}&${prefix.slice(typeText.length)}${suffix}`;
 	}
 
 	return prefix + (previous.type === 'Combinator' ? ' &' : '&') + suffix;
@@ -583,7 +595,8 @@ const getGroupedSelectorText = (parents, rule, context, getSelectorText = getRel
 		return;
 	}
 
-	return [...innerSelectors].join(', ');
+	const text = [...innerSelectors].join(', ');
+	return isParsedAsNestedRule(`${text} {}`) ? text : undefined;
 };
 
 const getRelatedSelectorText = (parents, rule, context) => {
@@ -609,7 +622,8 @@ const getRelatedSelectorText = (parents, rule, context) => {
 		previousEnd = sourceCode.getRange(selector)[1];
 	}
 
-	return result;
+	// The bundled parser rejects some valid nested selectors, like `|a &`, and the fixed file must still parse.
+	return isParsedAsNestedRule(`${result} {}`) ? result : undefined;
 };
 
 const getInferredParents = (rule, context) => {
@@ -939,8 +953,7 @@ const create = context => {
 			({parentText} = candidate);
 		}
 
-		const content = getNestedContent({rule, inner: candidate.inner}, context);
-		const replacement = content === undefined ? undefined : `${parentText} {${content}}`;
+		const replacement = getNestedReplacement(rule, parentText, candidate.inner, context);
 		return {
 			node: candidate.node,
 			messageId: candidate.node.type === 'PseudoClassSelector' ? MESSAGE_ID : MESSAGE_ID_RELATED_RULES,

@@ -143,8 +143,6 @@ test({
 		':host .title, .card.active .title, :host .body, .card.active .body {}',
 		'.outer { :host(&.a), :host(&.b) {} :host(&.a) .title, :host(&.b) .title {} }',
 		'.outer { :host(.active) {} :host(.active) & .title {} }',
-		'.card {} body:has(.theme) .card {}',
-		'.card {} fieldset:disabled .card {}',
 		'.card {} input:not([type=submit], [type=button], [type=reset]) .card {}',
 		'.card {} input:not([type=submit], [type=button], [type=reset]) + .card {}',
 		'.page .card {} body .page .card:hover {}',
@@ -158,6 +156,11 @@ test({
 	],
 	invalid: [
 		...cases.map(({code, output}) => ({code, output, errors: [{messageId: 'prefer-nesting/related-rules'}]})),
+		// A type followed by a pseudo-class is fine when the fixed nested rule still parses.
+		...[
+			['.card {} body:has(.theme) .card {}', '.card { body:has(.theme) & {} }'],
+			['.card {} fieldset:disabled .card {}', '.card { fieldset:disabled & {} }'],
+		].map(([code, output]) => ({code, output, errors: [{messageId: 'prefer-nesting/related-rules'}]})),
 		...[
 			':host {} /* keep */ :host .title {}',
 			':host(.active) {} :host(.active) .title { /* keep */ color: blue; }',

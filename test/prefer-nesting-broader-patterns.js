@@ -246,7 +246,6 @@ const cases = [
 
 test({
 	valid: [
-		'.card {} input:not([type=submit]) .card { color: blue; }',
 		'& .theme .card, & .other .card {}',
 		'.outer { .a, #b {} .a .title, #b .title {} }',
 		'.a, .b {} .a .title {}',
@@ -273,6 +272,11 @@ test({
 			errors: 2,
 		},
 		...cases.map(({code, output}) => ({code, output, errors: 1})),
+		{
+			code: '.card {} input:not([type=submit]) .card { color: blue; }',
+			output: '.card { input:not([type=submit]) & { color: blue; } }',
+			errors: 1,
+		},
 		...[
 			'.theme .card, /* keep */ .other .card { color: blue; }',
 			'.a, .b {} .a .title, .b /* keep */ .title { color: blue; }',

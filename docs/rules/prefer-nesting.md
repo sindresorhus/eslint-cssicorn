@@ -135,6 +135,6 @@ Leading and attached `:is()` groups preserve maximum specificity. Mixed `:is()` 
 
 Inferred groups use the first compound as parent, including a leading combinator. Conditional discovery follows first-child paths; every moved child must relate to the parent. `:is()` and `:where()` conversions require one outer selector and at least two arguments. Attached groups need a following suffix to be unwrapped.
 
-Skips ambiguous grouped matches, parser-sensitive type/pseudo-class prefixes, opaque parent arguments, `@scope`, and files with `@namespace`. Suffix and contextual factoring skip selectors beginning with a combinator. Related parent factoring skips ancestor references inside `:host()` or `:host-context()`. Comments, missing semicolons, or unsafe formatting can prevent fixes.
+Skips ambiguous grouped matches, nested selectors that the parser cannot read, opaque parent arguments, `@scope`, and files with `@namespace`. Suffix and contextual factoring skip selectors beginning with a combinator. Related parent factoring skips ancestor references inside `:host()` or `:host-context()`. Comments, missing semicolons, or unsafe formatting can prevent fixes.
 
 Autofixes target HTML and SVG elements. Other XML namespaces are unsupported.

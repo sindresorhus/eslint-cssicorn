@@ -1155,6 +1155,40 @@ Output:
 
 `;
 
+exports[`invalid(68): .card { color: red; } body :hover .card { color: blue; } 1`] = `
+
+  1 | .card { color: red; } body :hover .card { color: blue; }
+
+`;
+
+exports[`invalid(68): .card { color: red; } body :hover .card { color: blue; } 2`] = `
+
+Message:
+> 1 | .card { color: red; } body :hover .card { color: blue; }
+    |                       ^^^^^^^^^^^^^^^^^ Prefer CSS nesting for related rules.
+
+Output:
+  1 | .card { color: red; body :hover & { color: blue; } }
+
+`;
+
+exports[`invalid(69): .card { color: red; } BODY :HOVER .card { color: blue; } 1`] = `
+
+  1 | .card { color: red; } BODY :HOVER .card { color: blue; }
+
+`;
+
+exports[`invalid(69): .card { color: red; } BODY :HOVER .card { color: blue; } 2`] = `
+
+Message:
+> 1 | .card { color: red; } BODY :HOVER .card { color: blue; }
+    |                       ^^^^^^^^^^^^^^^^^ Prefer CSS nesting for related rules.
+
+Output:
+  1 | .card { color: red; BODY :HOVER & { color: blue; } }
+
+`;
+
 exports[`invalid(7): a :IS(.foo, .bar) { COLOR: RED !important; } 1`] = `
 
   1 | a :IS(.foo, .bar) { COLOR: RED !important; }
@@ -1169,6 +1203,82 @@ Message:
 
 Output:
   1 | a { .foo, .bar { COLOR: RED !important; } }
+
+`;
+
+exports[`invalid(70): .card { color: red; } a:not(.x) .a .card { color: blue; } 1`] = `
+
+  1 | .card { color: red; } a:not(.x) .a .card { color: blue; }
+
+`;
+
+exports[`invalid(70): .card { color: red; } a:not(.x) .a .card { color: blue; } 2`] = `
+
+Message:
+> 1 | .card { color: red; } a:not(.x) .a .card { color: blue; }
+    |                       ^^^^^^^^^^^^^^^^^^ Prefer CSS nesting for related rules.
+
+Output:
+  1 | .card { color: red; a:not(.x) .a & { color: blue; } }
+
+`;
+
+exports[`invalid(71): .p { :is(html:not(.a) &, p &) .d { color: red; } } 1`] = `
+
+  1 | .p { :is(html:not(.a) &, p &) .d { color: red; } }
+
+`;
+
+exports[`invalid(71): .p { :is(html:not(.a) &, p &) .d { color: red; } } 2`] = `
+
+Message:
+> 1 | .p { :is(html:not(.a) &, p &) .d { color: red; } }
+    |      ^^^^^^^^^^^^^^^^^^^^^^^^ Prefer CSS nesting over \`:is()\`.
+
+Output:
+  1 | .p { html:not(.a) &, p & { .d { color: red; } } }
+
+`;
+
+exports[`invalid(72): .p { :is(html:not(.a, .b) &, p &) .d { color: red; } } 1`] = `
+
+  1 | .p { :is(html:not(.a, .b) &, p &) .d { color: red; } }
+
+`;
+
+exports[`invalid(72): .p { :is(html:not(.a, .b) &, p &) .d { color: red; } } 2`] = `
+
+Message:
+> 1 | .p { :is(html:not(.a, .b) &, p &) .d { color: red; } }
+    |      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Prefer CSS nesting over \`:is()\`.
+
+`;
+
+exports[`invalid(73): .p { :is(div:is(.a, .b) &, p &) > span { color: red; } } 1`] = `
+
+  1 | .p { :is(div:is(.a, .b) &, p &) > span { color: red; } }
+
+`;
+
+exports[`invalid(73): .p { :is(div:is(.a, .b) &, p &) > span { color: red; } } 2`] = `
+
+Message:
+> 1 | .p { :is(div:is(.a, .b) &, p &) > span { color: red; } }
+    |      ^^^^^^^^^^^^^^^^^^^^^^^^^^ Prefer CSS nesting over \`:is()\`.
+
+`;
+
+exports[`invalid(74): .p { :is(div:not(.a, .b) & .x, p & .y) .d { color: red; } } 1`] = `
+
+  1 | .p { :is(div:not(.a, .b) & .x, p & .y) .d { color: red; } }
+
+`;
+
+exports[`invalid(74): .p { :is(div:not(.a, .b) & .x, p & .y) .d { color: red; } } 2`] = `
+
+Message:
+> 1 | .p { :is(div:not(.a, .b) & .x, p & .y) .d { color: red; } }
+    |      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Prefer CSS nesting over \`:is()\`.
 
 `;
 
