@@ -2,7 +2,7 @@
 
 import {find} from '@eslint/css-tree';
 import {getParentStyleRule, hasNestingSelectorInRawArgument} from './shared/css-selector-specificity.js';
-import {isDashedIdentifier, parse} from './utils/index.js';
+import {isDashedIdentifier, isParsedAsNestedRule} from './utils/index.js';
 
 /**
 @import {SelectorPlain} from '@eslint/css-tree';
@@ -14,22 +14,6 @@ import {isDashedIdentifier, parse} from './utils/index.js';
 const MESSAGE_ID = 'no-redundant-nesting-selector';
 const messages = {
 	[MESSAGE_ID]: 'Remove the redundant nesting selector `&`.',
-};
-
-/**
-Check whether the parser reads a nested rule with this prelude as a rule. It reads some, like `span::before {}`, as declarations and rejects others, like `+span {}` and `|span {}`.
-
-@param {string} preludeText
-@returns {boolean}
-*/
-const isParsedAsNestedRule = preludeText => {
-	let hasParseError = false;
-	const stylesheet = parse(`a{${preludeText}{}}`, {
-		onParseError() {
-			hasParseError = true;
-		},
-	});
-	return !hasParseError && stylesheet.children.first?.block.children.first?.type === 'Rule';
 };
 
 /**
@@ -71,7 +55,7 @@ const create = context => {
 			const whitespace = sourceCode.text.slice(end).match(/^[\t ]*/v)?.[0] ?? '';
 			// The fixed prelude must still parse as a nested rule, or the whole file stops linting. The parser looks ahead a limited number of tokens, so check the whole prelude up to the block.
 			const fixedPreludeText = sourceCode.text.slice(sourceCode.getRange(rule.prelude)[0], start) + sourceCode.text.slice(end + whitespace.length, sourceCode.getRange(rule.block)[0]);
-			if (!isParsedAsNestedRule(fixedPreludeText)) {
+			if (!isParsedAsNestedRule(`${fixedPreludeText}{}`)) {
 				continue;
 			}
 

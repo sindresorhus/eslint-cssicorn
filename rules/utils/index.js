@@ -24,6 +24,7 @@ export {default as isCssWideKeyword} from './is-css-wide-keyword.js';
 export {default as isDashedIdentifier} from './is-dashed-identifier.js';
 export {default as isImportantDeclaration} from './is-important-declaration.js';
 export {default as isKeyframesAtRule} from './is-keyframes-at-rule.js';
+export {default as isParsedAsNestedRule} from './is-parsed-as-nested-rule.js';
 export {default as isStyleBlock} from './is-style-block.js';
 export {default as isStyleDeclaration, groupingAtRules, transparentGroupingAtRules} from './is-style-declaration.js';
 export {default as isSubstitutionFunction, substitutionFunctions} from './is-substitution-function.js';

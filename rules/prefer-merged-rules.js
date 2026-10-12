@@ -16,9 +16,9 @@ import {
 	getPseudoSelectorName,
 	hasCommentInRange,
 	isDashedIdentifier,
+	isParsedAsNestedRule,
 	normalizeCssIdentifier,
 	normalizePropertyName,
-	parse,
 	trimCssWhitespace,
 } from './utils/index.js';
 
@@ -244,9 +244,6 @@ const getMergeKey = (rule, context) => {
 
 	return JSON.stringify(['selectors', declarations]);
 };
-
-// The parser reads a long nested selector list that starts with a type selector and a pseudo-class, like `a:hover, button:focus, …`, as a declaration.
-const isParsedAsNestedRule = text => parse(`a{${text}}`, {positions: false}).children.first.block.children.first?.type === 'Rule';
 
 const getMergedSelectors = (rules, sourceCode) => {
 	const seenSelectors = new Set();
