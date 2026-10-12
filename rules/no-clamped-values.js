@@ -1,5 +1,6 @@
-import {walk} from '@eslint/css-tree';
+import {definitionSyntax, walk} from '@eslint/css-tree';
 import colorFunctionsWithAlpha from './shared/css-color-functions.js';
+import {shorthandToAffectedProperties} from './shared/css-shorthand-properties.js';
 import {
 	evaluateCssMath,
 	getBasePropertyName,
@@ -272,6 +273,26 @@ function getRangeEndpoint(endpoint, unit, fallback) {
 	return quantity?.unit === unit ? quantity.value : undefined;
 }
 
+/**
+Name the longhand that a shorthand component sets. Fall back to the declared property when the grammar only reuses another property, like `block-size` reusing `width`, or when the grammar repeats one longhand for siblings that share its syntax, like `<'padding-top'>{1,4}` for all sides of `padding`.
+*/
+function getTargetProperty(property, declarationProperty, lexer) {
+	const longhands = shorthandToAffectedProperties.get(declarationProperty);
+	if (!longhands?.has(property)) {
+		return declarationProperty;
+	}
+
+	const getSyntax = name => {
+		const definition = lexer.getProperty(name);
+		return definition && definitionSyntax.generate(definition.syntax);
+	};
+
+	const syntax = getSyntax(property);
+	const shorthandSyntax = getSyntax(declarationProperty);
+	const isAmbiguous = [...longhands].some(longhand => longhand !== property && getSyntax(longhand) === syntax && !shorthandSyntax.includes(`<'${longhand}'>`));
+	return isAmbiguous ? declarationProperty : property;
+}
+
 function getCalculationProblem(node, trace, declarationProperty, sourceCode) {
 	if (!trace) {
 		return;
@@ -311,7 +332,7 @@ function getCalculationProblem(node, trace, declarationProperty, sourceCode) {
 		return;
 	}
 
-	return getClampingProblem(node, property, quantity, {minimum, maximum, sourceCode});
+	return getClampingProblem(node, getTargetProperty(property, declarationProperty, lexer), quantity, {minimum, maximum, sourceCode});
 }
 
 /**

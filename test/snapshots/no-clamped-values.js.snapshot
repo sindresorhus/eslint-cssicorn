@@ -874,17 +874,135 @@ exports[`invalid(140): a { padding: calc(1px - 2px); } 2`] = `
 
 Message:
 > 1 | a { padding: calc(1px - 2px); }
-    |              ^^^^^^^^^^^^^^^ 'padding-top' evaluates to -1px, which the browser clamps to 0px.
+    |              ^^^^^^^^^^^^^^^ 'padding' evaluates to -1px, which the browser clamps to 0px.
 
 `;
 
-exports[`invalid(141): a { border-image: url(a) 50% / calc(-1px); } 1`] = `
+exports[`invalid(141): a { padding: 1px calc(-1px); } 1`] = `
+
+  1 | a { padding: 1px calc(-1px); }
+
+`;
+
+exports[`invalid(141): a { padding: 1px calc(-1px); } 2`] = `
+
+Message:
+> 1 | a { padding: 1px calc(-1px); }
+    |                  ^^^^^^^^^^ 'padding' evaluates to -1px, which the browser clamps to 0px.
+
+`;
+
+exports[`invalid(142): a { block-size: calc(-1px); max-inline-size: calc(-1px); padding-inline-start: calc(-1px); } 1`] = `
+
+  1 | a { block-size: calc(-1px); max-inline-size: calc(-1px); padding-inline-start: calc(-1px); }
+
+`;
+
+exports[`invalid(142): a { block-size: calc(-1px); max-inline-size: calc(-1px); padding-inline-start: calc(-1px); } 2`] = `
+
+Message:
+> 1 | a { block-size: calc(-1px); max-inline-size: calc(-1px); padding-inline-start: calc(-1px); }
+    |                 ^^^^^^^^^^ 'block-size' evaluates to -1px, which the browser clamps to 0px.
+
+`;
+
+exports[`invalid(142): a { block-size: calc(-1px); max-inline-size: calc(-1px); padding-inline-start: calc(-1px); } 3`] = `
+
+Message:
+> 1 | a { block-size: calc(-1px); max-inline-size: calc(-1px); padding-inline-start: calc(-1px); }
+    |                                              ^^^^^^^^^^ 'max-inline-size' evaluates to -1px, which the browser clamps to 0px.
+
+`;
+
+exports[`invalid(142): a { block-size: calc(-1px); max-inline-size: calc(-1px); padding-inline-start: calc(-1px); } 4`] = `
+
+Message:
+> 1 | a { block-size: calc(-1px); max-inline-size: calc(-1px); padding-inline-start: calc(-1px); }
+    |                                                                                ^^^^^^^^^^ 'padding-inline-start' evaluates to -1px, which the browser clamps to 0px.
+
+`;
+
+exports[`invalid(143): a { PADDING-BLOCK: CALC(-1PX) !important; } 1`] = `
+
+  1 | a { PADDING-BLOCK: CALC(-1PX) !important; }
+
+`;
+
+exports[`invalid(143): a { PADDING-BLOCK: CALC(-1PX) !important; } 2`] = `
+
+Message:
+> 1 | a { PADDING-BLOCK: CALC(-1PX) !important; }
+    |                    ^^^^^^^^^^ 'padding-block' evaluates to -1px, which the browser clamps to 0px.
+
+`;
+
+exports[`invalid(144): a { font: calc(-1px)/1 serif; animation: fade calc(-1s); columns: calc(0) 10px; } 1`] = `
+
+  1 | a { font: calc(-1px)/1 serif; animation: fade calc(-1s); columns: calc(0) 10px; }
+
+`;
+
+exports[`invalid(144): a { font: calc(-1px)/1 serif; animation: fade calc(-1s); columns: calc(0) 10px; } 2`] = `
+
+Message:
+> 1 | a { font: calc(-1px)/1 serif; animation: fade calc(-1s); columns: calc(0) 10px; }
+    |           ^^^^^^^^^^ 'font-size' evaluates to -1px, which the browser clamps to 0px.
+
+`;
+
+exports[`invalid(144): a { font: calc(-1px)/1 serif; animation: fade calc(-1s); columns: calc(0) 10px; } 3`] = `
+
+Message:
+> 1 | a { font: calc(-1px)/1 serif; animation: fade calc(-1s); columns: calc(0) 10px; }
+    |                                               ^^^^^^^^^ 'animation-duration' evaluates to -1s, which the browser clamps to 0s.
+
+`;
+
+exports[`invalid(144): a { font: calc(-1px)/1 serif; animation: fade calc(-1s); columns: calc(0) 10px; } 4`] = `
+
+Message:
+> 1 | a { font: calc(-1px)/1 serif; animation: fade calc(-1s); columns: calc(0) 10px; }
+    |                                                                   ^^^^^^^ 'column-count' evaluates to 0, which the browser clamps to 1.
+
+`;
+
+exports[`invalid(145): a { columns: calc(-1px); column-rule: none; } b { columns: 1px / calc(-1px); } c { flex: 1 1 calc(-1px); } 1`] = `
+
+  1 | a { columns: calc(-1px); column-rule: none; } b { columns: 1px / calc(-1px); } c { flex: 1 1 calc(-1px); }
+
+`;
+
+exports[`invalid(145): a { columns: calc(-1px); column-rule: none; } b { columns: 1px / calc(-1px); } c { flex: 1 1 calc(-1px); } 2`] = `
+
+Message:
+> 1 | a { columns: calc(-1px); column-rule: none; } b { columns: 1px / calc(-1px); } c { flex: 1 1 calc(-1px); }
+    |              ^^^^^^^^^^ 'column-width' evaluates to -1px, which the browser clamps to 0px.
+
+`;
+
+exports[`invalid(145): a { columns: calc(-1px); column-rule: none; } b { columns: 1px / calc(-1px); } c { flex: 1 1 calc(-1px); } 3`] = `
+
+Message:
+> 1 | a { columns: calc(-1px); column-rule: none; } b { columns: 1px / calc(-1px); } c { flex: 1 1 calc(-1px); }
+    |                                                                  ^^^^^^^^^^ 'column-height' evaluates to -1px, which the browser clamps to 0px.
+
+`;
+
+exports[`invalid(145): a { columns: calc(-1px); column-rule: none; } b { columns: 1px / calc(-1px); } c { flex: 1 1 calc(-1px); } 4`] = `
+
+Message:
+> 1 | a { columns: calc(-1px); column-rule: none; } b { columns: 1px / calc(-1px); } c { flex: 1 1 calc(-1px); }
+    |                                                                                              ^^^^^^^^^^ 'flex' evaluates to -1px, which the browser clamps to 0px.
+
+`;
+
+exports[`invalid(146): a { border-image: url(a) 50% / calc(-1px); } 1`] = `
 
   1 | a { border-image: url(a) 50% / calc(-1px); }
 
 `;
 
-exports[`invalid(141): a { border-image: url(a) 50% / calc(-1px); } 2`] = `
+exports[`invalid(146): a { border-image: url(a) 50% / calc(-1px); } 2`] = `
 
 Message:
 > 1 | a { border-image: url(a) 50% / calc(-1px); }
@@ -892,13 +1010,13 @@ Message:
 
 `;
 
-exports[`invalid(142): a { font-weight: calc(1200); } 1`] = `
+exports[`invalid(147): a { font-weight: calc(1200); } 1`] = `
 
   1 | a { font-weight: calc(1200); }
 
 `;
 
-exports[`invalid(142): a { font-weight: calc(1200); } 2`] = `
+exports[`invalid(147): a { font-weight: calc(1200); } 2`] = `
 
 Message:
 > 1 | a { font-weight: calc(1200); }
@@ -906,13 +1024,13 @@ Message:
 
 `;
 
-exports[`invalid(143): a { animation-duration: calc(-1s); } 1`] = `
+exports[`invalid(148): a { animation-duration: calc(-1s); } 1`] = `
 
   1 | a { animation-duration: calc(-1s); }
 
 `;
 
-exports[`invalid(143): a { animation-duration: calc(-1s); } 2`] = `
+exports[`invalid(148): a { animation-duration: calc(-1s); } 2`] = `
 
 Message:
 > 1 | a { animation-duration: calc(-1s); }
@@ -920,13 +1038,13 @@ Message:
 
 `;
 
-exports[`invalid(144): a { column-count: calc(.4); orphans: calc(.4); widows: calc(.4); } 1`] = `
+exports[`invalid(149): a { column-count: calc(.4); orphans: calc(.4); widows: calc(.4); } 1`] = `
 
   1 | a { column-count: calc(.4); orphans: calc(.4); widows: calc(.4); }
 
 `;
 
-exports[`invalid(144): a { column-count: calc(.4); orphans: calc(.4); widows: calc(.4); } 2`] = `
+exports[`invalid(149): a { column-count: calc(.4); orphans: calc(.4); widows: calc(.4); } 2`] = `
 
 Message:
 > 1 | a { column-count: calc(.4); orphans: calc(.4); widows: calc(.4); }
@@ -934,7 +1052,7 @@ Message:
 
 `;
 
-exports[`invalid(144): a { column-count: calc(.4); orphans: calc(.4); widows: calc(.4); } 3`] = `
+exports[`invalid(149): a { column-count: calc(.4); orphans: calc(.4); widows: calc(.4); } 3`] = `
 
 Message:
 > 1 | a { column-count: calc(.4); orphans: calc(.4); widows: calc(.4); }
@@ -942,113 +1060,11 @@ Message:
 
 `;
 
-exports[`invalid(144): a { column-count: calc(.4); orphans: calc(.4); widows: calc(.4); } 4`] = `
+exports[`invalid(149): a { column-count: calc(.4); orphans: calc(.4); widows: calc(.4); } 4`] = `
 
 Message:
 > 1 | a { column-count: calc(.4); orphans: calc(.4); widows: calc(.4); }
     |                                                        ^^^^^^^^ 'widows' evaluates to 0, which the browser clamps to 1.
-
-`;
-
-exports[`invalid(145): @font-face { font-family: test; src: url(a); font-weight: calc(1200); } 1`] = `
-
-  1 | @font-face { font-family: test; src: url(a); font-weight: calc(1200); }
-
-`;
-
-exports[`invalid(145): @font-face { font-family: test; src: url(a); font-weight: calc(1200); } 2`] = `
-
-Message:
-> 1 | @font-face { font-family: test; src: url(a); font-weight: calc(1200); }
-    |                                                           ^^^^^^^^^^ 'font-weight' evaluates to 1200, which the browser clamps to 1000.
-
-`;
-
-exports[`invalid(146): @position-try --test { width: calc(-1px); } 1`] = `
-
-  1 | @position-try --test { width: calc(-1px); }
-
-`;
-
-exports[`invalid(146): @position-try --test { width: calc(-1px); } 2`] = `
-
-Message:
-> 1 | @position-try --test { width: calc(-1px); }
-    |                               ^^^^^^^^^^ 'width' evaluates to -1px, which the browser clamps to 0px.
-
-`;
-
-exports[`invalid(147): a { OPACITY: 50 !important; color: RGB(0 0 0 / 50); filter: GRAYSCALE(50); } 1`] = `
-
-  1 | a { OPACITY: 50 !important; color: RGB(0 0 0 / 50); filter: GRAYSCALE(50); }
-
-`;
-
-exports[`invalid(147): a { OPACITY: 50 !important; color: RGB(0 0 0 / 50); filter: GRAYSCALE(50); } 2`] = `
-
-Message:
-> 1 | a { OPACITY: 50 !important; color: RGB(0 0 0 / 50); filter: GRAYSCALE(50); }
-    |              ^^ 'opacity' evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
-
-`;
-
-exports[`invalid(147): a { OPACITY: 50 !important; color: RGB(0 0 0 / 50); filter: GRAYSCALE(50); } 3`] = `
-
-Message:
-> 1 | a { OPACITY: 50 !important; color: RGB(0 0 0 / 50); filter: GRAYSCALE(50); }
-    |                                                ^^ 'rgb() alpha' evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
-
-`;
-
-exports[`invalid(147): a { OPACITY: 50 !important; color: RGB(0 0 0 / 50); filter: GRAYSCALE(50); } 4`] = `
-
-Message:
-> 1 | a { OPACITY: 50 !important; color: RGB(0 0 0 / 50); filter: GRAYSCALE(50); }
-    |                                                                       ^^ 'grayscale() amount' evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
-
-`;
-
-exports[`invalid(148): a { WIDTH: CALC(-1px); opacity: MAX(2, 1); } 1`] = `
-
-  1 | a { WIDTH: CALC(-1px); opacity: MAX(2, 1); }
-
-`;
-
-exports[`invalid(148): a { WIDTH: CALC(-1px); opacity: MAX(2, 1); } 2`] = `
-
-Message:
-> 1 | a { WIDTH: CALC(-1px); opacity: MAX(2, 1); }
-    |            ^^^^^^^^^^ 'width' evaluates to -1px, which the browser clamps to 0px.
-
-`;
-
-exports[`invalid(148): a { WIDTH: CALC(-1px); opacity: MAX(2, 1); } 3`] = `
-
-Message:
-> 1 | a { WIDTH: CALC(-1px); opacity: MAX(2, 1); }
-    |                                 ^^^^^^^^^ 'opacity' evaluates to 2, which the browser clamps to 1. Did you mean a percentage?
-
-`;
-
-exports[`invalid(149): a { filter: \\67 rayscale(50); color: r\\67 b(0 0 0 / 50); } 1`] = `
-
-  1 | a { filter: \\67 rayscale(50); color: r\\67 b(0 0 0 / 50); }
-
-`;
-
-exports[`invalid(149): a { filter: \\67 rayscale(50); color: r\\67 b(0 0 0 / 50); } 2`] = `
-
-Message:
-> 1 | a { filter: \\67 rayscale(50); color: r\\67 b(0 0 0 / 50); }
-    |                          ^^ 'grayscale() amount' evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
-
-`;
-
-exports[`invalid(149): a { filter: \\67 rayscale(50); color: r\\67 b(0 0 0 / 50); } 3`] = `
-
-Message:
-> 1 | a { filter: \\67 rayscale(50); color: r\\67 b(0 0 0 / 50); }
-    |                                                     ^^ 'rgb() alpha' evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
 
 `;
 
@@ -1066,13 +1082,115 @@ Message:
 
 `;
 
-exports[`invalid(150): a { opacity: /* keep */ 50; color: rgb(0 0 0 / /* keep */ 50); } 1`] = `
+exports[`invalid(150): @font-face { font-family: test; src: url(a); font-weight: calc(1200); } 1`] = `
+
+  1 | @font-face { font-family: test; src: url(a); font-weight: calc(1200); }
+
+`;
+
+exports[`invalid(150): @font-face { font-family: test; src: url(a); font-weight: calc(1200); } 2`] = `
+
+Message:
+> 1 | @font-face { font-family: test; src: url(a); font-weight: calc(1200); }
+    |                                                           ^^^^^^^^^^ 'font-weight' evaluates to 1200, which the browser clamps to 1000.
+
+`;
+
+exports[`invalid(151): @position-try --test { width: calc(-1px); } 1`] = `
+
+  1 | @position-try --test { width: calc(-1px); }
+
+`;
+
+exports[`invalid(151): @position-try --test { width: calc(-1px); } 2`] = `
+
+Message:
+> 1 | @position-try --test { width: calc(-1px); }
+    |                               ^^^^^^^^^^ 'width' evaluates to -1px, which the browser clamps to 0px.
+
+`;
+
+exports[`invalid(152): a { OPACITY: 50 !important; color: RGB(0 0 0 / 50); filter: GRAYSCALE(50); } 1`] = `
+
+  1 | a { OPACITY: 50 !important; color: RGB(0 0 0 / 50); filter: GRAYSCALE(50); }
+
+`;
+
+exports[`invalid(152): a { OPACITY: 50 !important; color: RGB(0 0 0 / 50); filter: GRAYSCALE(50); } 2`] = `
+
+Message:
+> 1 | a { OPACITY: 50 !important; color: RGB(0 0 0 / 50); filter: GRAYSCALE(50); }
+    |              ^^ 'opacity' evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
+
+`;
+
+exports[`invalid(152): a { OPACITY: 50 !important; color: RGB(0 0 0 / 50); filter: GRAYSCALE(50); } 3`] = `
+
+Message:
+> 1 | a { OPACITY: 50 !important; color: RGB(0 0 0 / 50); filter: GRAYSCALE(50); }
+    |                                                ^^ 'rgb() alpha' evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
+
+`;
+
+exports[`invalid(152): a { OPACITY: 50 !important; color: RGB(0 0 0 / 50); filter: GRAYSCALE(50); } 4`] = `
+
+Message:
+> 1 | a { OPACITY: 50 !important; color: RGB(0 0 0 / 50); filter: GRAYSCALE(50); }
+    |                                                                       ^^ 'grayscale() amount' evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
+
+`;
+
+exports[`invalid(153): a { WIDTH: CALC(-1px); opacity: MAX(2, 1); } 1`] = `
+
+  1 | a { WIDTH: CALC(-1px); opacity: MAX(2, 1); }
+
+`;
+
+exports[`invalid(153): a { WIDTH: CALC(-1px); opacity: MAX(2, 1); } 2`] = `
+
+Message:
+> 1 | a { WIDTH: CALC(-1px); opacity: MAX(2, 1); }
+    |            ^^^^^^^^^^ 'width' evaluates to -1px, which the browser clamps to 0px.
+
+`;
+
+exports[`invalid(153): a { WIDTH: CALC(-1px); opacity: MAX(2, 1); } 3`] = `
+
+Message:
+> 1 | a { WIDTH: CALC(-1px); opacity: MAX(2, 1); }
+    |                                 ^^^^^^^^^ 'opacity' evaluates to 2, which the browser clamps to 1. Did you mean a percentage?
+
+`;
+
+exports[`invalid(154): a { filter: \\67 rayscale(50); color: r\\67 b(0 0 0 / 50); } 1`] = `
+
+  1 | a { filter: \\67 rayscale(50); color: r\\67 b(0 0 0 / 50); }
+
+`;
+
+exports[`invalid(154): a { filter: \\67 rayscale(50); color: r\\67 b(0 0 0 / 50); } 2`] = `
+
+Message:
+> 1 | a { filter: \\67 rayscale(50); color: r\\67 b(0 0 0 / 50); }
+    |                          ^^ 'grayscale() amount' evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
+
+`;
+
+exports[`invalid(154): a { filter: \\67 rayscale(50); color: r\\67 b(0 0 0 / 50); } 3`] = `
+
+Message:
+> 1 | a { filter: \\67 rayscale(50); color: r\\67 b(0 0 0 / 50); }
+    |                                                     ^^ 'rgb() alpha' evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
+
+`;
+
+exports[`invalid(155): a { opacity: /* keep */ 50; color: rgb(0 0 0 / /* keep */ 50); } 1`] = `
 
   1 | a { opacity: /* keep */ 50; color: rgb(0 0 0 / /* keep */ 50); }
 
 `;
 
-exports[`invalid(150): a { opacity: /* keep */ 50; color: rgb(0 0 0 / /* keep */ 50); } 2`] = `
+exports[`invalid(155): a { opacity: /* keep */ 50; color: rgb(0 0 0 / /* keep */ 50); } 2`] = `
 
 Message:
 > 1 | a { opacity: /* keep */ 50; color: rgb(0 0 0 / /* keep */ 50); }
@@ -1080,7 +1198,7 @@ Message:
 
 `;
 
-exports[`invalid(150): a { opacity: /* keep */ 50; color: rgb(0 0 0 / /* keep */ 50); } 3`] = `
+exports[`invalid(155): a { opacity: /* keep */ 50; color: rgb(0 0 0 / /* keep */ 50); } 3`] = `
 
 Message:
 > 1 | a { opacity: /* keep */ 50; color: rgb(0 0 0 / /* keep */ 50); }
@@ -1088,13 +1206,13 @@ Message:
 
 `;
 
-exports[`invalid(151): @media (width > 1px) { @supports (display: grid) { a { opacity: 50; } } } 1`] = `
+exports[`invalid(156): @media (width > 1px) { @supports (display: grid) { a { opacity: 50; } } } 1`] = `
 
   1 | @media (width > 1px) { @supports (display: grid) { a { opacity: 50; } } }
 
 `;
 
-exports[`invalid(151): @media (width > 1px) { @supports (display: grid) { a { opacity: 50; } } } 2`] = `
+exports[`invalid(156): @media (width > 1px) { @supports (display: grid) { a { opacity: 50; } } } 2`] = `
 
 Message:
 > 1 | @media (width > 1px) { @supports (display: grid) { a { opacity: 50; } } }
@@ -1102,13 +1220,13 @@ Message:
 
 `;
 
-exports[`invalid(152): @container (width > 1px) { @layer theme { @scope (.a) { .b { opacity: 50; } } } } 1`] = `
+exports[`invalid(157): @container (width > 1px) { @layer theme { @scope (.a) { .b { opacity: 50; } } } } 1`] = `
 
   1 | @container (width > 1px) { @layer theme { @scope (.a) { .b { opacity: 50; } } } }
 
 `;
 
-exports[`invalid(152): @container (width > 1px) { @layer theme { @scope (.a) { .b { opacity: 50; } } } } 2`] = `
+exports[`invalid(157): @container (width > 1px) { @layer theme { @scope (.a) { .b { opacity: 50; } } } } 2`] = `
 
 Message:
 > 1 | @container (width > 1px) { @layer theme { @scope (.a) { .b { opacity: 50; } } } }
@@ -1116,13 +1234,13 @@ Message:
 
 `;
 
-exports[`invalid(153): a { & .b { opacity: 50; } } @keyframes fade { to { filter: grayscale(50); } } 1`] = `
+exports[`invalid(158): a { & .b { opacity: 50; } } @keyframes fade { to { filter: grayscale(50); } } 1`] = `
 
   1 | a { & .b { opacity: 50; } } @keyframes fade { to { filter: grayscale(50); } }
 
 `;
 
-exports[`invalid(153): a { & .b { opacity: 50; } } @keyframes fade { to { filter: grayscale(50); } } 2`] = `
+exports[`invalid(158): a { & .b { opacity: 50; } } @keyframes fade { to { filter: grayscale(50); } } 2`] = `
 
 Message:
 > 1 | a { & .b { opacity: 50; } } @keyframes fade { to { filter: grayscale(50); } }
@@ -1130,7 +1248,7 @@ Message:
 
 `;
 
-exports[`invalid(153): a { & .b { opacity: 50; } } @keyframes fade { to { filter: grayscale(50); } } 3`] = `
+exports[`invalid(158): a { & .b { opacity: 50; } } @keyframes fade { to { filter: grayscale(50); } } 3`] = `
 
 Message:
 > 1 | a { & .b { opacity: 50; } } @keyframes fade { to { filter: grayscale(50); } }
@@ -1138,45 +1256,17 @@ Message:
 
 `;
 
-exports[`invalid(154): a { color: rgba(0, 0, 0, 150%); } 1`] = `
+exports[`invalid(159): a { color: rgba(0, 0, 0, 150%); } 1`] = `
 
   1 | a { color: rgba(0, 0, 0, 150%); }
 
 `;
 
-exports[`invalid(154): a { color: rgba(0, 0, 0, 150%); } 2`] = `
+exports[`invalid(159): a { color: rgba(0, 0, 0, 150%); } 2`] = `
 
 Message:
 > 1 | a { color: rgba(0, 0, 0, 150%); }
     |                          ^^^^ 'rgba() alpha' evaluates to 150%, which the browser clamps to 100%.
-
-`;
-
-exports[`invalid(155): a { text-decoration-thickness: 0%; } 1`] = `
-
-  1 | a { text-decoration-thickness: 0%; }
-
-`;
-
-exports[`invalid(155): a { text-decoration-thickness: 0%; } 2`] = `
-
-Message:
-> 1 | a { text-decoration-thickness: 0%; }
-    |                                ^^ 'text-decoration-thickness' evaluates to 0%, which the browser floors to one device pixel.
-
-`;
-
-exports[`invalid(156): a { -webkit-filter: grayscale(50); } 1`] = `
-
-  1 | a { -webkit-filter: grayscale(50); }
-
-`;
-
-exports[`invalid(156): a { -webkit-filter: grayscale(50); } 2`] = `
-
-Message:
-> 1 | a { -webkit-filter: grayscale(50); }
-    |                               ^^ 'grayscale() amount' evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
 
 `;
 
@@ -1191,6 +1281,34 @@ exports[`invalid(16): a { stroke-opacity: 2; } 2`] = `
 Message:
 > 1 | a { stroke-opacity: 2; }
     |                     ^ 'stroke-opacity' evaluates to 2, which the browser clamps to 1. Did you mean a percentage?
+
+`;
+
+exports[`invalid(160): a { text-decoration-thickness: 0%; } 1`] = `
+
+  1 | a { text-decoration-thickness: 0%; }
+
+`;
+
+exports[`invalid(160): a { text-decoration-thickness: 0%; } 2`] = `
+
+Message:
+> 1 | a { text-decoration-thickness: 0%; }
+    |                                ^^ 'text-decoration-thickness' evaluates to 0%, which the browser floors to one device pixel.
+
+`;
+
+exports[`invalid(161): a { -webkit-filter: grayscale(50); } 1`] = `
+
+  1 | a { -webkit-filter: grayscale(50); }
+
+`;
+
+exports[`invalid(161): a { -webkit-filter: grayscale(50); } 2`] = `
+
+Message:
+> 1 | a { -webkit-filter: grayscale(50); }
+    |                               ^^ 'grayscale() amount' evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
 
 `;
 
