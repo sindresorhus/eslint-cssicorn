@@ -537,6 +537,9 @@ test.snapshot({
 		'a { background: radial-gradient(ellipse 10px, red, blue); }',
 		'a { background: radial-gradient(circle var(--radius) at center, red, blue); }',
 		'a { background: radial-gradient(ellipse closest-side var(--position), red, blue); }',
+		// A shape between the two sizes is invalid. Removing it would make the gradient apply.
+		'a { background: radial-gradient(10% ellipse 20%, red, blue); }',
+		'a { background: repeating-radial-gradient(10px /* shape */ ELLIPSE 20px at left, red, blue); }',
 		'a { background: conic-gradient(from -0deg at left, red, blue); }',
 		'a { background: conic-gradient(from 1e-999deg at left, red, blue); }',
 		'a { background: linear-gradient(181deg in oklab, red, blue); }',
@@ -583,7 +586,7 @@ test.snapshot({
 		'a { clip-path: inset(10px round /* start */ 2px /* repeat */ 2px /* end */); }',
 		'a { --shape: inset(10px round 2px 2px / 3px 3px); }',
 		'a { background: radial-gradient(ellipse 10px 20px, red, blue); }',
-		'a { background: radial-gradient(10% ellipse 20%, red, blue); }',
+		'a { background: radial-gradient(10% 20% ELLIPSE, red, blue); }',
 		'a { background: radial-gradient(ellipse closest-side at left, red, blue); }',
 		'a { background: radial-gradient(farthest-side ellipse, red, blue); }',
 		'a { background: radial-gradient(circle 10px, red, blue); }',

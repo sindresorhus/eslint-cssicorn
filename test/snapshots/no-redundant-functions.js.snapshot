@@ -2293,20 +2293,20 @@ Output:
 
 `;
 
-exports[`invalid(18): a { background: radial-gradient(10% ellipse 20%, red, blue); } 1`] = `
+exports[`invalid(18): a { background: radial-gradient(10% 20% ELLIPSE, red, blue); } 1`] = `
 
-  1 | a { background: radial-gradient(10% ellipse 20%, red, blue); }
+  1 | a { background: radial-gradient(10% 20% ELLIPSE, red, blue); }
 
 `;
 
-exports[`invalid(18): a { background: radial-gradient(10% ellipse 20%, red, blue); } 2`] = `
+exports[`invalid(18): a { background: radial-gradient(10% 20% ELLIPSE, red, blue); } 2`] = `
 
 Message:
-> 1 | a { background: radial-gradient(10% ellipse 20%, red, blue); }
+> 1 | a { background: radial-gradient(10% 20% ELLIPSE, red, blue); }
     |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`radial-gradient()\`.
 
 Output:
-  1 | a { background: radial-gradient(10%  20%, red, blue); }
+  1 | a { background: radial-gradient(10% 20% , red, blue); }
 
 `;
 

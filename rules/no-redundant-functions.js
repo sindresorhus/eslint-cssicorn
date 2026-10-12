@@ -863,7 +863,8 @@ function getDefaultGradientTokens(name, nodes, context) {
 		tokens.push(sizes[0]);
 	}
 
-	if (shape && isImpliedRadialShape(shape, sizes, context)) {
+	// A shape between two sizes is invalid, so removing it would make the gradient apply.
+	if (shape && !(sizes.length === 2 && prefix[1] === shape) && isImpliedRadialShape(shape, sizes, context)) {
 		tokens.push(shape);
 	}
 
