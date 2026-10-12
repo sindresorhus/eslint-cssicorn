@@ -968,6 +968,40 @@ Output:
 
 `;
 
+exports[`invalid(58): .card { color: red; } body .theme .card { color: blue; } 1`] = `
+
+  1 | .card { color: red; } body .theme .card { color: blue; }
+
+`;
+
+exports[`invalid(58): .card { color: red; } body .theme .card { color: blue; } 2`] = `
+
+Message:
+> 1 | .card { color: red; } body .theme .card { color: blue; }
+    |                       ^^^^^^^^^^^^^^^^^ Prefer CSS nesting for related rules.
+
+Output:
+  1 | .card { color: red; body .theme & { color: blue; } }
+
+`;
+
+exports[`invalid(59): .card { color: red; } body.dark :hover .card { color: blue; } 1`] = `
+
+  1 | .card { color: red; } body.dark :hover .card { color: blue; }
+
+`;
+
+exports[`invalid(59): .card { color: red; } body.dark :hover .card { color: blue; } 2`] = `
+
+Message:
+> 1 | .card { color: red; } body.dark :hover .card { color: blue; }
+    |                       ^^^^^^^^^^^^^^^^^^^^^^ Prefer CSS nesting for related rules.
+
+Output:
+  1 | .card { color: red; body.dark :hover & { color: blue; } }
+
+`;
+
 exports[`invalid(6): :is(.foo, #bar).active {} 1`] = `
 
   1 | :is(.foo, #bar).active {}
@@ -982,6 +1016,23 @@ Message:
 
 Output:
   1 | .foo, #bar { &.active {} }
+
+`;
+
+exports[`invalid(60): .card { color: red; } body > .theme:hover .card { color: blue; } 1`] = `
+
+  1 | .card { color: red; } body > .theme:hover .card { color: blue; }
+
+`;
+
+exports[`invalid(60): .card { color: red; } body > .theme:hover .card { color: blue; } 2`] = `
+
+Message:
+> 1 | .card { color: red; } body > .theme:hover .card { color: blue; }
+    |                       ^^^^^^^^^^^^^^^^^^^^^^^^^ Prefer CSS nesting for related rules.
+
+Output:
+  1 | .card { color: red; body > .theme:hover & { color: blue; } }
 
 `;
 

@@ -543,7 +543,8 @@ const getRelativeSelectorText = (parentSelector, selector, rule, context) => {
 			return `${typeText}&${prefix.slice(typeText.length)}${suffix}`;
 		}
 
-		if (prefixNodes[1].type === 'PseudoClassSelector') {
+		// The parser can read a leading type followed by a pseudo-class, even after whitespace, as a declaration.
+		if (prefixNodes.slice(1).find(node => !isDescendantCombinator(node)).type === 'PseudoClassSelector') {
 			return;
 		}
 	}

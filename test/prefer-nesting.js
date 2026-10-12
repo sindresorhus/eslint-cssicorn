@@ -422,6 +422,10 @@ test.snapshot({
 		'@scope (.parent) { a :is(.foo, .bar) { color: red; } }',
 		'@scope (.scope) { :is(body, html) :scope a { color: red; } }',
 		'@scope (.scope) { @media (width > 0px) { .parent { :is(.foo, .bar) a { color: red; } } } }',
+		// The parser can read a nested selector that starts with a type and a pseudo-class, even after whitespace, as a declaration
+		'.card { color: red; } html :root:not(.dark, .light) .card { color: blue; }',
+		'.card { color: red; } body :hover .card { color: blue; }',
+		'.card { color: red; } BODY :HOVER .card { color: blue; }',
 	],
 	invalid: [
 		'a :is(.foo, .bar) {}',
@@ -479,6 +483,9 @@ test.snapshot({
 		':is(span:is(.a, .b), button.c) .child { color: red; }',
 		'div :is(span, button) {\n  color: red;\n}',
 		'.parent {\r\n\t:is(span, button) .child {\r\n\t\tcolor: red;\r\n\t}\r\n}',
+		'.card { color: red; } body .theme .card { color: blue; }',
+		'.card { color: red; } body.dark :hover .card { color: blue; }',
+		'.card { color: red; } body > .theme:hover .card { color: blue; }',
 	],
 });
 
