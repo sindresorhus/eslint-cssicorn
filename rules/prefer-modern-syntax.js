@@ -167,6 +167,24 @@ function getColorProblem(node, context, reportNode = node) {
 	};
 }
 
+// `@eslint/css` parses a nested rule that starts with `a::after` as a declaration, so `a:after` cannot be fixed there.
+function isAfterLeadingNestedTypeSelector(node, context) {
+	const ancestors = context.sourceCode.getAncestors(node);
+	const [rule, selectorList, selector] = ancestors.slice(-3);
+	if (
+		rule?.type !== 'Rule'
+		|| selectorList.children.at(0) !== selector
+		|| ancestors.slice(0, -3).every(ancestor => ancestor.type !== 'Rule')
+	) {
+		return false;
+	}
+
+	const [first, second, third] = selector.children;
+	return first.type === 'TypeSelector'
+		&& !/[*\|]/v.test(first.name)
+		&& (second === node || (second.type === 'Combinator' && second.name === ' ' && third === node));
+}
+
 /**
 @param {import('eslint').Rule.RuleContext} context
 */
@@ -226,7 +244,7 @@ const create = context => {
 			node,
 			messageId: MESSAGE_ID_PSEUDO_ELEMENT,
 			data: {name},
-			fix: fixer => fixer.replaceTextRange([start, start + 1], '::'),
+			fix: isAfterLeadingNestedTypeSelector(node, context) ? undefined : fixer => fixer.replaceTextRange([start, start + 1], '::'),
 		};
 	});
 };
