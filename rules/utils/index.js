@@ -11,6 +11,7 @@ export {default as getDeclarationRemovalRange} from './get-declaration-removal-r
 export {default as getDescriptorAtRule} from './get-descriptor-at-rule.js';
 export {default as getFeatureNameRange} from './get-feature-name-range.js';
 export {default as getNodesRange} from './get-nodes-range.js';
+export {default as getParsableNestedRulePrelude} from './get-parsable-nested-rule-prelude.js';
 export {default as getPseudoSelectorArgument} from './get-pseudo-selector-argument.js';
 export {default as getPseudoSelectorName} from './get-pseudo-selector-name.js';
 export {default as getSingleValueIdentifier} from './get-single-value-identifier.js';

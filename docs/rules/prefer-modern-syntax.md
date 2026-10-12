@@ -72,6 +72,7 @@ a {
 - Color functions with comments are reported without an autofix.
 - Ambiguous or invalid legacy arguments, including math color channels, are reported without an autofix to preserve validity.
 - Scientific-notation alpha is reported without conversion; other parts of the function may still be fixed.
+- The bundled parser reads some nested rules as declarations, like `a::after` inside a style rule. The autofix then adds an explicit `&`, like `& a::after`, which matches the same elements. When that is not possible, like in `@scope` or in a selector list that already has `&`, the legacy pseudo-element is reported without an autofix.
 
 For example:
 

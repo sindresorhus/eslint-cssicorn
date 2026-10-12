@@ -178,16 +178,19 @@ ruleTest({
 			output: String.raw`.foo\61 :hover {}`,
 			errors: [{messageId: 'no-useless-is'}],
 		},
-		// `@eslint/css` can parse a nested rule that starts like `a::before` or `a ::before` as a declaration.
+		// `@eslint/css` can parse a nested rule that starts like `a::before` or `a ::before` as a declaration. To keep it simple, the explicit `&` is not added to a selector list that has `&` anywhere, or in `@scope`.
 		...[
-			'.wrap { :is(a)::before { color: red; } }',
-			'.wrap { :is(A)::BEFORE { color: red; } }',
-			'.wrap { :is(a) ::before { color: red; } }',
-			'.wrap { :is(a)\n::before { color: red; } }',
-			'.wrap { :is(input):not([type=checkbox], [type=radio], [type=range]) { color: red; } }',
-			'.wrap { @media (width > 1px) { :is(a)::before { color: red; } } }',
+			'.wrap { :is(a)::before, & .b { color: red; } }',
+			'@scope (.x) { .wrap { :is(a)::before { color: red; } } }',
 		].map(code => ({code, errors: [{messageId: 'no-useless-is'}]})),
 		...[
+			// The fix adds an explicit `&`, which does not change what the nested rule matches.
+			['.wrap { :is(a)::before { color: red; } }', '.wrap { & a::before { color: red; } }'],
+			['.wrap { :is(A)::BEFORE { color: red; } }', '.wrap { & A::BEFORE { color: red; } }'],
+			['.wrap { :is(a) ::before { color: red; } }', '.wrap { & a ::before { color: red; } }'],
+			['.wrap { :is(a)\n::before { color: red; } }', '.wrap { & a\n::before { color: red; } }'],
+			['.wrap { :is(input):not([type=checkbox], [type=radio], [type=range]) { color: red; } }', '.wrap { & input:not([type=checkbox], [type=radio], [type=range]) { color: red; } }'],
+			['.wrap { @media (width > 1px) { :is(a)::before { color: red; } } }', '.wrap { @media (width > 1px) { & a::before { color: red; } } }'],
 			['.wrap { :is(a):hover { color: red; } }', '.wrap { a:hover { color: red; } }'],
 			['.wrap { :is(a:hover) { color: red; } }', '.wrap { a:hover { color: red; } }'],
 			['.wrap { :is(a) .b::before { color: red; } }', '.wrap { a .b::before { color: red; } }'],
@@ -202,6 +205,12 @@ ruleTest({
 		{
 			code: '/* 🌈 */\r\n@media (width > 1px) {\r\n  .card:\\69 s(\r\n    .active\r\n  ) { color: red; }\r\n}',
 			output: '/* 🌈 */\r\n@media (width > 1px) {\r\n  .card.active { color: red; }\r\n}',
+			errors: [{messageId: 'no-useless-is'}],
+		},
+		// A fix in a nested rule replaces the whole prelude and keeps its comments and line endings.
+		{
+			code: '.wrap {\r\n\t:is(.a) /* keep */ .b,\r\n\t.c { color: red; }\r\n}',
+			output: '.wrap {\r\n\t.a /* keep */ .b,\r\n\t.c { color: red; }\r\n}',
 			errors: [{messageId: 'no-useless-is'}],
 		},
 	],

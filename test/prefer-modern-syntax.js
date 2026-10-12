@@ -143,15 +143,22 @@ ruleTest({
 		{code: 'a:first-line { color: red; }', output: 'a::first-line { color: red; }', errors: 1},
 		{code: 'a:first-letter { color: red; }', output: 'a::first-letter { color: red; }', errors: 1},
 		{code: 'a:not(:hover):before { color: red; }', output: 'a:not(:hover)::before { color: red; }', errors: 1},
-		// `@eslint/css` parses a nested rule starting with `a::after` as a declaration.
-		{code: '.card { a:after { color: red; } }', errors: 1},
-		{code: '.card { A:AFTER { color: red; } }', errors: 1},
-		{code: '.card { a :after { color: red; } }', errors: 1},
-		{code: '.card { @media (width > 1px) { a:after { color: red; } } }', errors: 1},
-		{code: '.card { a:before, b:after { color: red; } }', output: '.card { a:before, b::after { color: red; } }', errors: 2},
+		// `@eslint/css` parses a nested rule starting with `a::after` as a declaration, so the fix adds an explicit `&`, which does not change what the nested rule matches.
+		{code: '.card { a:after { color: red; } }', output: '.card { & a::after { color: red; } }', errors: 1},
+		{code: '.card { A:AFTER { color: red; } }', output: '.card { & A::AFTER { color: red; } }', errors: 1},
+		{code: '.card { a :after { color: red; } }', output: '.card { & a ::after { color: red; } }', errors: 1},
+		{code: '.card { @media (width > 1px) { a:after { color: red; } } }', output: '.card { @media (width > 1px) { & a::after { color: red; } } }', errors: 1},
+		// To keep it simple, the explicit `&` is not added to a selector list that has `&` anywhere, or in `@scope`.
+		{code: '.card { a:after, & .b { color: red; } }', errors: 1},
+		{code: '@scope (.x) { .card { a:after { color: red; } } }', errors: 1},
+		{code: '.card { a:before, b:after { color: red; } }', output: '.card { & a::before, b:after { color: red; } }', errors: 2},
+		// The parser looks ahead a limited number of tokens, so it reads a long selector list starting with `a:hover` as a declaration.
+		{code: '.menu {\n\ta:hover, ul li.item.active:after { color: red; }\n}', output: '.menu {\n\t& a:hover, ul li.item.active::after { color: red; }\n}', errors: 1},
 		{code: '.card { a:hover:after { color: red; } }', output: '.card { a:hover::after { color: red; } }', errors: 1},
-		{code: '.card { .item:after, &:before, *:after, a.item:after { color: red; } }', output: '.card { .item::after, &::before, *::after, a.item::after { color: red; } }', errors: 4},
+		// A fix in a nested rule replaces the whole prelude, so each pass fixes one of them.
+		{code: '.card { .item:after, &:before, *:after, a.item:after { color: red; } }', output: '.card { .item::after, &:before, *:after, a.item:after { color: red; } }', errors: 4},
 		{code: '.card { :is(a:after) { color: red; } }', output: '.card { :is(a::after) { color: red; } }', errors: 1},
+		{code: '.card {\r\n\t/* a */ .item /* b */ :after,\r\n\t.other { color: red; }\r\n}', output: '.card {\r\n\t/* a */ .item /* b */ ::after,\r\n\t.other { color: red; }\r\n}', errors: 1},
 		{code: '@media (width > 1px) { a:after { color: red; } }', output: '@media (width > 1px) { a::after { color: red; } }', errors: 1},
 		{code: 'a { color: rgb(0, /* keep */ 0, 0); }', errors: 1},
 		{code: 'a { color: rgb(0 0 0 / /* keep */ .5); }', errors: 1},
@@ -229,6 +236,7 @@ test('fixes are stable', () => {
 	for (const [code, expected] of [
 		['a:before { --brand: rgba(0, 0, 0, .5); }', 'a::before { --brand: rgb(0 0 0 / 50%); }'],
 		['a:after { --brand: rgb(from rgba(1, 2, 3, .25) r g b / .5); }', 'a::after { --brand: rgb(from rgb(1 2 3 / 25%) r g b / 50%); }'],
+		['.card { .item:after, &:before, *:after, a.item:after { color: red; } }', '.card { .item::after, &::before, *::after, a.item::after { color: red; } }'],
 	]) {
 		const first = linter.verifyAndFix(code, config, {filename: 'test.css'});
 		assert.equal(first.fixed, true);

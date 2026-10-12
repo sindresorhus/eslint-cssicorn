@@ -53,8 +53,10 @@ const create = context => {
 
 			const [start, end] = sourceCode.getRange(nestingSelector);
 			const whitespace = sourceCode.text.slice(end).match(/^[\t ]*/v)?.[0] ?? '';
+			const removedRange = /** @type {[number, number]} */ ([start, end + whitespace.length]);
 			// The fixed prelude must still parse as a nested rule, or the whole file stops linting. The parser looks ahead a limited number of tokens, so check the whole prelude up to the block.
-			const fixedPreludeText = sourceCode.text.slice(sourceCode.getRange(rule.prelude)[0], start) + sourceCode.text.slice(end + whitespace.length, sourceCode.getRange(rule.block)[0]);
+			const [preludeStart] = sourceCode.getRange(rule.prelude);
+			const fixedPreludeText = sourceCode.text.slice(preludeStart, start) + sourceCode.text.slice(removedRange[1], sourceCode.getRange(rule.block)[0]);
 			if (!isParsedAsNestedRule(`${fixedPreludeText}{}`)) {
 				continue;
 			}
@@ -65,7 +67,8 @@ const create = context => {
 				/**
 				@param {Parameters<CssicornRuleFixer>[0]} fixer
 				*/
-				fix: fixer => fixer.removeRange([start, end + whitespace.length]),
+				// Remove only the `&`, unlike the rules that add tokens to a nested prelude and replace all of it. The parser decides between a rule and a declaration from the start of the prelude, and removing tokens only brings `{` closer, so ESLint can safely apply every `&` removal in a prelude in the same pass. Replacing the whole prelude here would remove one `&` per pass and leave many fixable problems after `--fix` because of ESLint's 10-pass limit. The fixes of the other rules still overlap this range, so they wait for the next pass.
+				fix: fixer => fixer.removeRange(removedRange),
 			};
 		}
 	});

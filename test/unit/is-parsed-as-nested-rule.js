@@ -11,6 +11,7 @@ test('nested rules that the parser reads as rules', () => {
 		'+ span {}',
 		'span .a {}',
 		'a:hover, a:focus { color: red; }',
+		'html :root:not(.a, .b) &{}',
 	]) {
 		assert.equal(isParsedAsNestedRule(ruleText), true, ruleText);
 	}
@@ -25,6 +26,8 @@ test('nested rules that the parser reads as declarations or rejects', () => {
 		'a:hover, button:focus, span:hover, div:hover { color: red; }',
 		'input:not([type=checkbox], [type=radio], [type=range]) {}',
 		'color: red;',
+		// Whitespace before `{` counts toward the parser lookahead.
+		'html :root:not(.a, .b) & {}',
 	]) {
 		assert.equal(isParsedAsNestedRule(ruleText), false, ruleText);
 	}

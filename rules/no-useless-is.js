@@ -8,9 +8,9 @@ import {
 } from './shared/css-selector-specificity.js';
 import {
 	decodeCssIdentifier,
+	getParsableNestedRulePrelude,
 	getPseudoSelectorArgument,
 	hasCommentInRange,
-	isParsedAsNestedRule,
 	normalizeCssIdentifier,
 } from './utils/index.js';
 
@@ -153,16 +153,20 @@ const create = context => {
 					selectorText += ' ';
 				}
 
-				// `@eslint/css` can parse a nested rule that starts like `a::before` or `a ::before` as a declaration, and the fixed file must still parse.
-				if (hasAncestorStyleRule(owner, context)) {
-					const [nodeStart, nodeEnd] = sourceCode.getRange(node);
-					const fixedPreludeText = sourceCode.text.slice(sourceCode.getRange(owner.prelude)[0], nodeStart) + selectorText + sourceCode.text.slice(nodeEnd, sourceCode.getRange(owner.block)[0]);
-					if (!isParsedAsNestedRule(`${fixedPreludeText}{}`)) {
-						return abort();
-					}
+				if (!hasAncestorStyleRule(owner, context)) {
+					yield fixer.replaceText(node, selectorText);
+					return;
 				}
 
-				yield fixer.replaceText(node, selectorText);
+				// `@eslint/css` can parse a nested rule that starts like `a::before` or `a ::before` as a declaration, and the fixed file must still parse. Replace the whole prelude so that other fixes in the same prelude wait for the next pass.
+				const [nodeStart, nodeEnd] = sourceCode.getRange(node);
+				const preludeRange = [sourceCode.getRange(owner.prelude)[0], sourceCode.getRange(owner.block)[0]];
+				const fixedPreludeText = getParsableNestedRulePrelude(sourceCode.text.slice(preludeRange[0], nodeStart) + selectorText + sourceCode.text.slice(nodeEnd, preludeRange[1]), {canAddNestingSelector: !hasScopeAncestor(owner, context)});
+				if (fixedPreludeText === undefined) {
+					return abort();
+				}
+
+				yield fixer.replaceTextRange(preludeRange, fixedPreludeText);
 			},
 		};
 	});

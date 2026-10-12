@@ -1,8 +1,14 @@
 import {walk} from '@eslint/css-tree';
 import colorFunctionsWithAlpha from './shared/css-color-functions.js';
-import {LEGACY_PSEUDO_ELEMENTS} from './shared/css-selector-specificity.js';
+import {
+	getOwningStyleRule,
+	hasAncestorStyleRule,
+	hasScopeAncestor,
+	LEGACY_PSEUDO_ELEMENTS,
+} from './shared/css-selector-specificity.js';
 import {
 	getContainingDeclaration,
+	getParsableNestedRulePrelude,
 	isCssModulesInteropDeclaration,
 	isSubstitutionFunction,
 	normalizeCssIdentifier,
@@ -167,24 +173,6 @@ function getColorProblem(node, context, reportNode = node) {
 	};
 }
 
-// `@eslint/css` parses a nested rule that starts with `a::after` as a declaration, so `a:after` cannot be fixed there.
-function isAfterLeadingNestedTypeSelector(node, context) {
-	const ancestors = context.sourceCode.getAncestors(node);
-	const [rule, selectorList, selector] = ancestors.slice(-3);
-	if (
-		rule?.type !== 'Rule'
-		|| selectorList.children.at(0) !== selector
-		|| ancestors.slice(0, -3).every(ancestor => ancestor.type !== 'Rule')
-	) {
-		return false;
-	}
-
-	const [first, second, third] = selector.children;
-	return first.type === 'TypeSelector'
-		&& !/[*\|]/v.test(first.name)
-		&& (second === node || (second.type === 'Combinator' && second.name === ' ' && third === node));
-}
-
 /**
 @param {import('eslint').Rule.RuleContext} context
 */
@@ -239,13 +227,26 @@ const create = context => {
 			return;
 		}
 
-		const [start] = context.sourceCode.getRange(node);
-		return {
+		const {sourceCode} = context;
+		const [start] = sourceCode.getRange(node);
+		const problem = {
 			node,
 			messageId: MESSAGE_ID_PSEUDO_ELEMENT,
 			data: {name},
-			fix: isAfterLeadingNestedTypeSelector(node, context) ? undefined : fixer => fixer.replaceTextRange([start, start + 1], '::'),
 		};
+		const rule = getOwningStyleRule(node, context);
+		if (!rule || !hasAncestorStyleRule(rule, context)) {
+			return {...problem, fix: fixer => fixer.replaceTextRange([start, start + 1], '::')};
+		}
+
+		// `@eslint/css` can parse a nested rule that starts like `a::after` as a declaration, and the fixed file must still parse. Replace the whole prelude so that other fixes in the same prelude wait for the next pass.
+		const preludeRange = [sourceCode.getRange(rule.prelude)[0], sourceCode.getRange(rule.block)[0]];
+		const fixedPreludeText = getParsableNestedRulePrelude(sourceCode.text.slice(preludeRange[0], start) + ':' + sourceCode.text.slice(start, preludeRange[1]), {canAddNestingSelector: !hasScopeAncestor(rule, context)});
+		if (fixedPreludeText === undefined) {
+			return problem;
+		}
+
+		return {...problem, fix: fixer => fixer.replaceTextRange(preludeRange, fixedPreludeText)};
 	});
 };
 
