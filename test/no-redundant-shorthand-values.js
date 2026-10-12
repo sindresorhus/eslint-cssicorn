@@ -55,6 +55,10 @@ test.snapshot({
 		'a { overflow-x: 1px 1px; }',
 		'a { -webkit-margin-collapse: 1px 1px; }',
 		'a { border-radius: 1px 2px 3px 4px / 1px 2px 3px 4px; }',
+		// WebKit and Blink parse `-webkit-border-radius: 1px 2px` as `1px / 2px`, so it is never reduced to two values.
+		'a { -webkit-border-radius: 1px 2px 1px 2px; }',
+		'a { -webkit-border-radius: 1px 2px 1px; }',
+		'a { -WEBKIT-BORDER-RADIUS: 1px 2px 1px 2px; }',
 	],
 	invalid: [
 		'a { margin: 1px 1px; }',
@@ -138,6 +142,10 @@ test.snapshot({
 		'a { border-radius: 1px 2px 1px 2px / 3px 4px 3px 4px; }',
 		'a { border-radius: 1px 1px / 2px 3px 3px; }',
 		'a { inset: 1px 2px /* c */ 1px 2px; }',
+		'a { -webkit-border-radius: 1px 1px 1px 1px; }',
+		'a { -webkit-border-radius: 1px 2px 3px 2px; }',
+		'a { -webkit-border-radius: 1px 2px 1px 2px / 3px 3px; }',
+		'a { -moz-border-radius: 1px 2px 1px 2px; }',
 	],
 });
 

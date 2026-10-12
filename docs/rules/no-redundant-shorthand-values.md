@@ -22,6 +22,8 @@ Four-value edge declarations are not reduced to three because explicitly naming 
 
 Slash-separated `border-radius` values are shortened independently without removing the slash.
 
+`-webkit-border-radius` without a slash is never shortened to two values, because WebKit and Blink parse `-webkit-border-radius: 1px 2px` as `1px / 2px`.
+
 Declarations that cannot be validated and declarations containing potentially non-repeatable functions are ignored. This includes `var()`, `attr()`, `env()`, `if()`, `inherit()`, `random()`, `random-item()`, and custom functions such as `--spacing()`. Other functions are compared without evaluation, and numeric spellings such as `1px` and `1.0px` are kept distinct. Declarations in CSS Modules `:export` and `:import()` blocks are ignored, because JavaScript reads them as exact strings.
 
 The autofix is skipped if it would remove a comment.

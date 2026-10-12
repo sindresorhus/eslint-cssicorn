@@ -5,6 +5,7 @@ import {
 	hasCommentInRange,
 	hasSubstitutionOrRandomFunction,
 	isCssModulesInteropDeclaration,
+	normalizeCssIdentifier,
 } from './utils/index.js';
 
 const MESSAGE_ID = 'no-redundant-shorthand-values';
@@ -65,9 +66,14 @@ const getSimpleReduction = (values, preserveFourValueEdges, sourceCode) => {
 	return getReduction(values, getCondensedValueCount(values, preserveFourValueEdges), sourceCode);
 };
 
-const getBorderRadiusResult = (values, sourceCode) => {
+const getBorderRadiusResult = (values, isWebkitBorderRadius, sourceCode) => {
 	const slashIndex = values.findIndex(node => node.type === 'Operator' && node.value === '/');
 	if (slashIndex === -1) {
+		// WebKit and Blink parse `-webkit-border-radius: 1px 2px` as `1px / 2px`, so it must not be reduced to two values.
+		if (isWebkitBorderRadius && getCondensedValueCount(values, false) === 2) {
+			return;
+		}
+
 		const reduction = getSimpleReduction(values, false, sourceCode);
 		return reduction && {
 			reductions: [reduction],
@@ -135,7 +141,7 @@ const create = context => {
 		const values = value.children;
 		let result;
 		if (property === 'border-radius') {
-			result = getBorderRadiusResult(values, sourceCode);
+			result = getBorderRadiusResult(values, normalizeCssIdentifier(declaration.property) === '-webkit-border-radius', sourceCode);
 		} else {
 			const reduction = placeProperties.has(property)
 				? getPlaceReduction(values, sourceCode)
