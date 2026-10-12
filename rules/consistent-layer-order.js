@@ -9,7 +9,7 @@ import {decodeCssIdentifier, hasCommentInRange, normalizeCssIdentifier} from './
 */
 
 /**
-@typedef {{children: Map<string, LayerScope>, order: Map<string, number> | undefined, eligible: boolean}} LayerScope
+@typedef {{children: Map<string, LayerScope>, order: Map<string, number> | undefined, eligible: boolean, imported: boolean}} LayerScope
 @typedef {{node: Layer, ranks: (number | undefined)[], scope: LayerScope, undeclaredName: string | undefined}} LayerReference
 @typedef {Map<string, {rank: number | undefined, node: Layer}>} LayerGroup
 */
@@ -24,9 +24,24 @@ const messages = {
 /**
 Create the state for one group of sibling layers.
 
+@param {boolean} [imported] - Whether an imported file can declare these layers first.
 @returns {LayerScope}
 */
-const createScope = () => ({children: new Map(), order: undefined, eligible: true});
+const createScope = (imported = false) => ({
+	children: new Map(), order: undefined, eligible: true, imported,
+});
+
+/**
+Mark a scope and its known descendants as imported, because the imported file can declare their child layers first.
+
+@param {LayerScope} scope
+*/
+const markImported = scope => {
+	scope.imported = true;
+	for (const child of scope.children.values()) {
+		markImported(child);
+	}
+};
 
 /**
 Get the decoded segments of a layer name without treating escaped dots as separators.
@@ -75,6 +90,15 @@ const getLayerNodes = (atRule, name) => {
 	const layer = layerFunction.children.at(0);
 	return layer?.type === 'Layer' ? [layer] : [];
 };
+
+/**
+Check whether an import puts the imported layers inside a layer, with `layer` or `layer()`.
+
+@param {AtrulePlain} atRule
+@returns {boolean}
+*/
+const isLayeredImport = atRule => atRule.prelude?.type === 'AtrulePrelude'
+	&& atRule.prelude.children.some(child => (child.type === 'Identifier' || child.type === 'Function') && normalizeCssIdentifier(child.name) === 'layer');
 
 /**
 Compare references by their sibling ranks, keeping ancestors before descendants.
@@ -126,7 +150,7 @@ const getLayerReference = (node, parentScope, groups) => {
 
 		let childScope = scope.children.get(segment);
 		if (!childScope) {
-			childScope = createScope();
+			childScope = createScope(scope.imported);
 			scope.children.set(segment, childScope);
 		}
 
@@ -187,6 +211,11 @@ const create = context => {
 		if (nodes.length === 0) {
 			// An import can introduce layers from another file, even without a layer name.
 			parentScope.eligible = false;
+			// An unlayered import can also declare child layers of any layer first. An anonymous `layer` import keeps them inside a new layer.
+			if (name === 'import' && !isLayeredImport(atRule)) {
+				markImported(parentScope);
+			}
+
 			if (atRule.block && !atRule.prelude) {
 				blockScopes.set(atRule, createScope());
 			}
@@ -215,6 +244,11 @@ const create = context => {
 			}
 
 			references.push(reference);
+			// The imported file can declare child layers of the named layer first, at any depth.
+			if (name === 'import') {
+				markImported(scope);
+			}
+
 			if (atRule.block) {
 				blockScopes.set(atRule, scope);
 			}
@@ -226,7 +260,7 @@ const create = context => {
 				inversion = getGroupInversion(group);
 			}
 
-			if (isStatement && isUnconditional && scope.eligible) {
+			if (isStatement && isUnconditional && scope.eligible && !scope.imported) {
 				scope.order = new Map(Array.from(group.keys(), (segment, index) => [segment, index]));
 			}
 

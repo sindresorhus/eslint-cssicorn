@@ -22,6 +22,17 @@ test.snapshot({
 		'@import "theme.css" layer(theme); @layer reset, theme; @layer theme, reset;',
 		'@import "theme.css" layer(theme.base); @layer theme.components, theme.base; @layer theme.base, theme.components;',
 		'@import "theme.css" layer; @layer reset, theme; @layer theme, reset;',
+		// The imported file can declare child layers of a named import first.
+		'@import "theme.css" layer(theme); @layer theme { @layer base, components; } @layer theme { @layer components, base; }',
+		'@import "theme.css" layer(theme); @layer theme.base, theme.components; @layer theme.components, theme.base;',
+		'@import "theme.css" layer(theme.base); @layer theme.base { @layer a, b; @layer b, a; }',
+		'@import "theme.css" layer(theme); @layer theme { @layer base { @layer a, b; @layer b, a; } }',
+		'@import "theme.css" layer(theme); @layer theme.base.a, theme.base.b; @layer theme.base.b, theme.base.a;',
+		'@layer theme.base; @import "theme.css" layer(theme); @layer theme.base.a, theme.base.b; @layer theme.base.b, theme.base.a;',
+		'@IMPORT url("theme.css") LAYER(theme); @layer theme { @layer base, components; @layer components, base; }',
+		// An unlayered import can declare child layers of any layer first.
+		'@import "theme.css"; @layer theme.base, theme.components; @layer theme.components, theme.base;',
+		'@import "theme.css"; @layer theme { @layer base, components; } @layer theme { @layer components, base; }',
 		'@import "theme.css"; @layer reset, theme; @layer theme, reset;',
 		'@layer {} @layer reset, theme; @layer theme, reset;',
 		'@media screen { @layer theme {} } @layer reset, theme; @layer theme, reset;',
@@ -97,6 +108,15 @@ test.snapshot({
 		'@layer a, b, c; @layer c, b;',
 		'@layer a, b; @layer b.x, a;',
 		'@layer a, b; @import "x.css"; @layer b, a;',
+		'@layer theme.base, theme.components; @import "theme.css" layer(theme); @layer theme.components, theme.base;',
+		'@layer theme.base.a, theme.base.b; @import "theme.css" layer(theme); @layer theme.base.b, theme.base.a;',
+		'@layer theme.base, theme.components; @import "theme.css"; @layer theme.components, theme.base;',
+		// An anonymous layer import keeps its layers inside a new layer.
+		'@import "theme.css" layer; @layer theme.base, theme.components; @layer theme.components, theme.base;',
+		'@import url("theme.css") LAYER supports(display: grid); @layer theme { @layer a, b; } @layer theme { @layer b, a; }',
+		// Layer names are case-sensitive, so `THEME` is not the imported layer.
+		'@import "theme.css" layer(THEME); @layer theme { @layer base { @layer a, b; } } @layer theme.base { @layer b, a; }',
+		'@import "theme.css" layer(theme); @layer reset { @layer a, b; @layer b, a; }',
 		'@layer base, theme; /* keep */ @layer theme, base;',
 		'@layer /* keep */ base, theme; @layer theme, base;',
 		'@layer base, theme; @layer theme, base; /*x*/ @layer base, theme;',
@@ -126,6 +146,7 @@ test.snapshot({
 		{code: '@layer base, theme; @layer theme.components, theme.buttons;', options: [{checkUndeclaredLayers: true}]},
 		{code: '@layer theme.base, theme.components; @layer theme { @layer base.bar {} }', options: [{checkUndeclaredLayers: true}]},
 		{code: String.raw`@layer base, theme; @layer base, \62 ase;`, options: [{checkUndeclaredLayers: true}]},
+		{code: '@import "theme.css" layer(theme); @layer theme { @layer base; } @layer theme.components {}', options: [{checkUndeclaredLayers: true}]},
 	],
 	invalid: [
 		{code: '@layer base, theme; @layer themes {}', options: [{checkUndeclaredLayers: true}]},
