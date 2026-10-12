@@ -34,6 +34,8 @@ The rule skips invalid values, duplicate longhands, mixed `!important` declarati
 
 `transition` longhands are only combined when `transition-behavior` is `normal`, which the shorthand leaves out, because browsers without `transition-behavior` support drop a `transition` declaration that contains a behavior keyword.
 
+`text-decoration` longhands are only combined when the style, color, and thickness are initial (`solid`, `currentcolor`, and `auto`), which the shorthand leaves out, because Safari before 26.2 drops a `text-decoration` declaration with a style, color, or thickness.
+
 Comma-separated values can repeat across shorthand layers, but lists longer than the primary list are skipped. If a shorthand would also reset another property, such as `border-image`, the rule only reports when it can verify that reset is safe.
 
 Autofix requires contiguous declarations with no comments in the replaced text. Otherwise, the rule reports without fixing. If the same block declares the shorthand earlier with the same `!important` flag, the fix replaces that declaration too, so `gap: 0; row-gap: 1px; column-gap: 2px;` becomes `gap: 1px 2px;`. This also removes an earlier shorthand that was meant as a fallback for browsers that do not support the longhand values, like `overflow: hidden` before `overflow-x: clip; overflow-y: clip;`. Disable the rule for that declaration if you need the fallback. It preserves explicit `background-blend-mode` declarations to account for browser differences.

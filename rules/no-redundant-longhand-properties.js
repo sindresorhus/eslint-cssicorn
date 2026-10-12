@@ -90,6 +90,8 @@ const serializeBorderRadius = (declarations, sourceCode) => {
 
 const serializeBorderImage = values => `${values[0]} ${values[1]} / ${values[2]} / ${values[3]} ${values[4]}`;
 const serializeColumns = values => toAsciiLowerCase(values[2]) === 'auto' ? values.slice(0, 2).join(' ') : undefined;
+// Safari before 26.2 drops a `text-decoration` with a style, color, or thickness, so the longhands are only combined when those are initial, and they are omitted.
+const serializeTextDecoration = values => toAsciiLowerCase(values[1]) === 'solid' && toAsciiLowerCase(values[2]) === 'currentcolor' && toAsciiLowerCase(values[3]) === 'auto' ? values[0] : undefined;
 const serializeFont = values => `${values.slice(0, 4).join(' ')} ${values[4]} / ${values[5]} ${values[6]}`;
 
 const serializeFontSynthesis = values => {
@@ -270,6 +272,7 @@ const serializers = new Map([
 	['grid', serializeGrid],
 	['grid-template', serializeGridTemplate],
 	['mask', serializeMask],
+	['text-decoration', (declarations, sourceCode) => serializeTextDecoration(declarations.map(declaration => getValue(declaration, sourceCode)))],
 	['transition', serializeTransition],
 ]);
 

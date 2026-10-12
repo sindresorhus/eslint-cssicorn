@@ -312,6 +312,12 @@ testRule({
 			code: 'a { transition-behavior: normal; transition-property: opacity; transition-duration: 1s; transition-timing-function: ease; transition-delay: 0s; }',
 			options: [{ignoreShorthands: ['transition']}],
 		},
+		// Safari before 26.2 drops a `text-decoration` with a style, color, or thickness.
+		'a { text-decoration-line: underline; text-decoration-style: solid; text-decoration-color: currentcolor; text-decoration-thickness: 2px; }',
+		'a { text-decoration-line: underline; text-decoration-style: solid; text-decoration-color: currentcolor; text-decoration-thickness: from-font; }',
+		'a { text-decoration-line: underline; text-decoration-style: solid; text-decoration-color: red; text-decoration-thickness: auto; }',
+		'a { text-decoration-line: underline; text-decoration-style: wavy; text-decoration-color: currentcolor; text-decoration-thickness: auto; }',
+		'a { text-decoration-line: underline; text-decoration-style: dotted; text-decoration-color: blue; text-decoration-thickness: 1px; }',
 		// Tolerant mode keeps invalid values as `Raw` nodes without children.
 		{
 			code: 'a { overflow: .; overflow-x: auto; overflow-y: auto; }',
@@ -374,9 +380,20 @@ testRule({
 			output: 'a { text-emphasis: filled circle red; }',
 			errors: 1,
 		},
+		// Safari before 26.2 drops a `text-decoration` with a style, color, or thickness, so the initial values are omitted.
 		{
-			code: 'a { text-decoration-line: underline; text-decoration-style: solid; text-decoration-color: red; text-decoration-thickness: 2px; }',
-			output: 'a { text-decoration: underline solid red 2px; }',
+			code: 'a { text-decoration-line: underline; text-decoration-style: solid; text-decoration-color: currentcolor; text-decoration-thickness: auto; }',
+			output: 'a { text-decoration: underline; }',
+			errors: 1,
+		},
+		{
+			code: 'a { text-decoration-line: underline overline; text-decoration-style: SOLID; text-decoration-color: currentColor; text-decoration-thickness: AUTO; }',
+			output: 'a { text-decoration: underline overline; }',
+			errors: 1,
+		},
+		{
+			code: 'a { text-decoration-line: none !important; text-decoration-style: solid !important; text-decoration-color: currentcolor !important; text-decoration-thickness: auto !important; }',
+			output: 'a { text-decoration: none !important; }',
 			errors: 1,
 		},
 		{

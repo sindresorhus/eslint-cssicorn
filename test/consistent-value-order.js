@@ -561,8 +561,8 @@ nodeTest('fixes converge with longhand combination and are idempotent', () => {
 			'a { flex-flow: column wrap; outline: 1px solid red; columns: 20em 3; }',
 		],
 		[
-			'a { text-decoration-color: red; text-decoration-style: wavy; text-decoration-line: underline; text-decoration-thickness: 2px; text-emphasis-color: blue; text-emphasis-style: circle; }',
-			'a { text-decoration: underline 2px wavy red; text-emphasis: circle blue; }',
+			'a { text-decoration-color: currentcolor; text-decoration-style: solid; text-decoration-line: underline; text-decoration-thickness: auto; text-emphasis-color: blue; text-emphasis-style: circle; }',
+			'a { text-decoration: underline; text-emphasis: circle blue; }',
 		],
 	]) {
 		const result = linter.verifyAndFix(code, config, {filename: 'test.css'});
