@@ -1,7 +1,6 @@
 import {tokenize, tokenTypes} from '@eslint/css-tree';
 import {
 	hasCommentInRange,
-	isDashedIdentifier,
 	toLocation,
 } from './utils/index.js';
 
@@ -23,11 +22,8 @@ const create = context => {
 	const {sourceCode} = context;
 
 	context.on('Declaration', declaration => {
-		const {important, property} = declaration;
-		if (
-			!important
-			|| isDashedIdentifier(property)
-		) {
+		// Custom properties are checked too, because their values cannot contain a top-level `!`, so an unknown annotation drops the declaration.
+		if (!declaration.important) {
 			return;
 		}
 

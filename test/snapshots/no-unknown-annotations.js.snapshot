@@ -471,6 +471,88 @@ Suggestion 1/1: Replace with \`!important\`.:
 
 `;
 
+exports[`invalid(35): a { --priority: red !imprtant; } 1`] = `
+
+  1 | a { --priority: red !imprtant; }
+
+`;
+
+exports[`invalid(35): a { --priority: red !imprtant; } 2`] = `
+
+Message:
+> 1 | a { --priority: red !imprtant; }
+    |                     ^^^^^^^^^ CSS annotations must use the canonical form \`!important\`.
+
+Suggestion 1/1: Replace with \`!important\`.:
+  1 | a { --priority: red !important; }
+
+`;
+
+exports[`invalid(36): a { --priority: !imprtant; } 1`] = `
+
+  1 | a { --priority: !imprtant; }
+
+`;
+
+exports[`invalid(36): a { --priority: !imprtant; } 2`] = `
+
+Message:
+> 1 | a { --priority: !imprtant; }
+    |                 ^^^^^^^^^ CSS annotations must use the canonical form \`!important\`.
+
+Suggestion 1/1: Replace with \`!important\`.:
+  1 | a { --priority: !important; }
+
+`;
+
+exports[`invalid(37): a { --priority: red ! /* comment */ IMPRTANT; } 1`] = `
+
+  1 | a { --priority: red ! /* comment */ IMPRTANT; }
+
+`;
+
+exports[`invalid(37): a { --priority: red ! /* comment */ IMPRTANT; } 2`] = `
+
+Message:
+> 1 | a { --priority: red ! /* comment */ IMPRTANT; }
+    |                     ^^^^^^^^^^^^^^^^^^^^^^^^ CSS annotations must use the canonical form \`!important\`.
+
+`;
+
+exports[`invalid(38): a { -\\2d priority: red !imprtant; } 1`] = `
+
+  1 | a { -\\2d priority: red !imprtant; }
+
+`;
+
+exports[`invalid(38): a { -\\2d priority: red !imprtant; } 2`] = `
+
+Message:
+> 1 | a { -\\2d priority: red !imprtant; }
+    |                        ^^^^^^^^^ CSS annotations must use the canonical form \`!important\`.
+
+Suggestion 1/1: Replace with \`!important\`.:
+  1 | a { -\\2d priority: red !important; }
+
+`;
+
+exports[`invalid(39): a { --\\2d priority: red !imprtant; } 1`] = `
+
+  1 | a { --\\2d priority: red !imprtant; }
+
+`;
+
+exports[`invalid(39): a { --\\2d priority: red !imprtant; } 2`] = `
+
+Message:
+> 1 | a { --\\2d priority: red !imprtant; }
+    |                         ^^^^^^^^^ CSS annotations must use the canonical form \`!important\`.
+
+Suggestion 1/1: Replace with \`!important\`.:
+  1 | a { --\\2d priority: red !important; }
+
+`;
+
 exports[`invalid(4): a { color: red !\\49 MPORTANT; } 1`] = `
 
   1 | a { color: red !\\49 MPORTANT; }
@@ -485,6 +567,23 @@ Message:
 
 Suggestion 1/1: Replace with \`!important\`.:
   1 | a { color: red !important; }
+
+`;
+
+exports[`invalid(40): a { --priority: red !IMPORTANT; } 1`] = `
+
+  1 | a { --priority: red !IMPORTANT; }
+
+`;
+
+exports[`invalid(40): a { --priority: red !IMPORTANT; } 2`] = `
+
+Message:
+> 1 | a { --priority: red !IMPORTANT; }
+    |                     ^^^^^^^^^^ CSS annotations must use the canonical form \`!important\`.
+
+Suggestion 1/1: Replace with \`!important\`.:
+  1 | a { --priority: red !important; }
 
 `;
 

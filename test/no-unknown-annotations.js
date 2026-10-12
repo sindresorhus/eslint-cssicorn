@@ -11,18 +11,12 @@ test.snapshot({
 		'a { background-image: url(!imprtant); }',
 		'a { color: fn("!imprtant"); }',
 		'a { /* !imprtant */ color: red; }',
-		'a { --priority: red !imprtant; }',
-		'a { --priority: red ! /* comment */ IMPRTANT; }',
-		String.raw`a { -\2d priority: red !imprtant; }`,
-		String.raw`a { \2d\2d priority: red !imprtant; }`,
 		// The canonical form is allowed even with comments around it.
 		'a { color: red /* before */ !important; }',
 		'a { color: red !important /* after */; }',
-		// Custom properties are opaque, so any `!identifier` is allowed.
-		'a { --priority: red !IMPORTANT; }',
-		'a { --priority: !imprtant; }',
-		String.raw`a { --\2d priority: red !imprtant; }`,
 		'a { --priority: red !important; }',
+		// A `!` inside a function or brackets is part of the custom property value, not an annotation.
+		'a { --priority: fn(!imprtant) [!imprtant]; }',
 		'@media (width > 0px) { a { color: red !important; } }',
 		'a { &:hover { color: red !important; } }',
 		'@property --brand { syntax: "*"; inherits: false; initial-value: red !important; }',
@@ -69,5 +63,12 @@ test.snapshot({
 		'a { color: red !IMPORTANT /* trailing */; }',
 		String.raw`a { color: red !importan\74; }`,
 		String.raw`a { color: red ! \69mportant; }`,
+		// Custom property values cannot contain a top-level `!`, so browsers drop the declaration.
+		'a { --priority: red !imprtant; }',
+		'a { --priority: !imprtant; }',
+		'a { --priority: red ! /* comment */ IMPRTANT; }',
+		String.raw`a { -\2d priority: red !imprtant; }`,
+		String.raw`a { --\2d priority: red !imprtant; }`,
+		'a { --priority: red !IMPORTANT; }',
 	],
 });

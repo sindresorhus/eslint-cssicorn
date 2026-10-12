@@ -27,4 +27,4 @@ This rule only allows the canonical `!important` form. Alternative spellings acc
 }
 ```
 
-Custom properties are intentionally ignored because their values are opaque and can validly end in `!identifier`.
+Custom properties are checked too. Their values can contain almost anything, but not a top-level `!`, so browsers also drop a custom property with an unknown annotation, like `--accent: red !imprtant`.
