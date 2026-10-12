@@ -244,7 +244,7 @@ const create = context => {
 	*/
 	const records = [];
 	/**
-	@type {Map<string, Map<string, {record: DeclarationRecord, selector: SelectorAnalysis}[]>>}
+	@type {Map<string, Map<string, {record: DeclarationRecord, selector: SelectorAnalysis, order: number}[][]>>}
 	*/
 	const recordsByProperty = new Map();
 	/**
@@ -349,15 +349,17 @@ const create = context => {
 			recordsByProperty.set(property, recordsByLookupKey);
 		}
 
+		// Group by cascade priority, which decides whether a base can block an override at all. Declarations with the same priority never block each other, so many of them with the same selector are not compared pairwise.
+		const priority = (important ? 2 : 0) + (record.layered ? 1 : 0);
 		for (const selector of record.selectors) {
 			const [key] = selector.lookupKeys;
-			let entries = recordsByLookupKey.get(key);
-			if (!entries) {
-				entries = [];
-				recordsByLookupKey.set(key, entries);
+			let entriesByPriority = recordsByLookupKey.get(key);
+			if (!entriesByPriority) {
+				entriesByPriority = [[], [], [], []];
+				recordsByLookupKey.set(key, entriesByPriority);
 			}
 
-			entries.push({record, selector});
+			entriesByPriority[priority].push({record, selector, order: records.length});
 		}
 	});
 
@@ -369,15 +371,25 @@ const create = context => {
 		// Probe every condition: a base's anchor may occur anywhere in the override.
 		const recordsByLookupKey = recordsByProperty.get(override.property);
 		for (const lookupKey of selector.lookupKeys) {
-			const entries = recordsByLookupKey?.get(lookupKey) ?? [];
-			const blocker = entries.find(({record: base, selector: baseSelector}) => base.declaration !== override.declaration
-				&& getBlockingReason(base, override)
-				&& base.conditions.isSubsetOf(override.conditions)
-				&& (baseSelector.terminalKeys.size < selector.terminalKeys.size || base.conditions.size < override.conditions.size || base.layered !== override.layered)
-				// Added conditions must preserve every condition of the base selector.
-				// Sharing an anchor is insufficient: `.button.active` does not retain `.button.primary`.
-				&& baseSelector.terminalKeys.isSubsetOf(selector.terminalKeys)
-				&& isUsableBlocker(base));
+			let blocker;
+			for (const entries of recordsByLookupKey?.get(lookupKey) ?? []) {
+				if (entries.length === 0 || !getBlockingReason(entries[0].record, override)) {
+					continue;
+				}
+
+				const entry = entries.find(({record: base, selector: baseSelector}) => base.declaration !== override.declaration
+					&& base.conditions.isSubsetOf(override.conditions)
+					&& (baseSelector.terminalKeys.size < selector.terminalKeys.size || base.conditions.size < override.conditions.size || base.layered !== override.layered)
+					// Added conditions must preserve every condition of the base selector.
+					// Sharing an anchor is insufficient: `.button.active` does not retain `.button.primary`.
+					&& baseSelector.terminalKeys.isSubsetOf(selector.terminalKeys)
+					&& isUsableBlocker(base));
+				// Report the first blocker in source order, regardless of its priority.
+				if (entry && (!blocker || entry.order < blocker.order)) {
+					blocker = entry;
+				}
+			}
+
 			if (blocker) {
 				return blocker.record;
 			}

@@ -574,5 +574,11 @@ test.snapshot({
 		'@layer components { .button.primary { color: red !important; } } .disabled.primary.button:hover { color: blue !important; }',
 		'.button.button { color: red !important; } @media print { .button { color: blue; } }',
 		'.button.primary.primary { color: red !important; } .disabled.primary.button:hover { color: blue; }',
+		// The first blocker in source order is reported, whatever its cascade priority.
+		'.button { color: red; }\n.button { color: blue !important; }\n@layer states { .button:hover { color: green; } }',
+		'.button { color: blue !important; }\n.button { color: red; }\n@layer states { .button:hover { color: green; } }',
+		'@layer states { .button:hover { color: green; } }\n.button { color: blue !important; }\n.button { color: red; }',
+		// Declarations with the same cascade priority do not block each other, but a later one with another priority does.
+		'.button { color: red; } .button { color: red; } .button:hover { color: blue; } .button { color: red !important; }',
 	],
 });

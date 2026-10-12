@@ -1184,6 +1184,24 @@ Message:
 
 `;
 
+exports[`invalid(18): .button { color: red; }\n.button { color: blue !important; }\n@layer states { .button:hover { color: green; } } 1`] = `
+
+  1 | .button { color: red; }
+  2 | .button { color: blue !important; }
+  3 | @layer states { .button:hover { color: green; } }
+
+`;
+
+exports[`invalid(18): .button { color: red; }\n.button { color: blue !important; }\n@layer states { .button:hover { color: green; } } 2`] = `
+
+Message:
+  1 | .button { color: red; }
+  2 | .button { color: blue !important; }
+> 3 | @layer states { .button:hover { color: green; } }
+    |                                 ^^^^^^^^^^^^ \`color\` cannot override the declaration on line 1 because unlayered normal declarations take precedence over layered declarations.
+
+`;
+
 exports[`invalid(18): .button, .link { color: red !important; } .button:hover, .link:focus { color: blue; } 1`] = `
 
   1 | .button, .link { color: red !important; } .button:hover, .link:focus { color: blue; }
@@ -1195,6 +1213,24 @@ exports[`invalid(18): .button, .link { color: red !important; } .button:hover, .
 Message:
 > 1 | .button, .link { color: red !important; } .button:hover, .link:focus { color: blue; }
     |                                                                        ^^^^^^^^^^^ \`color\` cannot override the declaration on line 1 because it is marked \`!important\`.
+
+`;
+
+exports[`invalid(19): .button { color: blue !important; }\n.button { color: red; }\n@layer states { .button:hover { color: green; } } 1`] = `
+
+  1 | .button { color: blue !important; }
+  2 | .button { color: red; }
+  3 | @layer states { .button:hover { color: green; } }
+
+`;
+
+exports[`invalid(19): .button { color: blue !important; }\n.button { color: red; }\n@layer states { .button:hover { color: green; } } 2`] = `
+
+Message:
+  1 | .button { color: blue !important; }
+  2 | .button { color: red; }
+> 3 | @layer states { .button:hover { color: green; } }
+    |                                 ^^^^^^^^^^^^ \`color\` cannot override the declaration on line 1 because it is marked \`!important\`.
 
 `;
 
@@ -1436,6 +1472,24 @@ Message:
 
 `;
 
+exports[`invalid(20): @layer states { .button:hover { color: green; } }\n.button { color: blue !important; }\n.button { color: red; } 1`] = `
+
+  1 | @layer states { .button:hover { color: green; } }
+  2 | .button { color: blue !important; }
+  3 | .button { color: red; }
+
+`;
+
+exports[`invalid(20): @layer states { .button:hover { color: green; } }\n.button { color: blue !important; }\n.button { color: red; } 2`] = `
+
+Message:
+> 1 | @layer states { .button:hover { color: green; } }
+    |                                 ^^^^^^^^^^^^ \`color\` cannot override the declaration on line 2 because it is marked \`!important\`.
+  2 | .button { color: blue !important; }
+  3 | .button { color: red; }
+
+`;
+
 exports[`invalid(21): .button { color: red !important; &:hover { color: blue; } } 1`] = `
 
   1 | .button { color: red !important; &:hover { color: blue; } }
@@ -1447,6 +1501,20 @@ exports[`invalid(21): .button { color: red !important; &:hover { color: blue; } 
 Message:
 > 1 | .button { color: red !important; &:hover { color: blue; } }
     |                                            ^^^^^^^^^^^ \`color\` cannot override the declaration on line 1 because it is marked \`!important\`.
+
+`;
+
+exports[`invalid(21): .button { color: red; } .button { color: red; } .button:hover { color: blue; } .button { color: red !important; } 1`] = `
+
+  1 | .button { color: red; } .button { color: red; } .button:hover { color: blue; } .button { color: red !important; }
+
+`;
+
+exports[`invalid(21): .button { color: red; } .button { color: red; } .button:hover { color: blue; } .button { color: red !important; } 2`] = `
+
+Message:
+> 1 | .button { color: red; } .button { color: red; } .button:hover { color: blue; } .button { color: red !important; }
+    |                                                                 ^^^^^^^^^^^ \`color\` cannot override the declaration on line 1 because it is marked \`!important\`.
 
 `;
 
