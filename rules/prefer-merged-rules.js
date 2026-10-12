@@ -18,6 +18,7 @@ import {
 	isDashedIdentifier,
 	normalizeCssIdentifier,
 	normalizePropertyName,
+	parse,
 } from './utils/index.js';
 
 /**
@@ -244,6 +245,9 @@ const getMergeKey = (rule, context) => {
 	return JSON.stringify(['selectors', declarations]);
 };
 
+// The parser reads a long nested selector list that starts with a type selector and a pseudo-class, like `a:hover, button:focus, …`, as a declaration.
+const isParsedAsNestedRule = text => parse(`a{${text}}`, {positions: false}).children.first.block.children.first?.type === 'Rule';
+
 const getMergedSelectors = (rules, sourceCode) => {
 	const seenSelectors = new Set();
 	let selectorsText = '';
@@ -379,7 +383,10 @@ const create = context => {
 					const replacement = isConditional
 						? getMergedWrappers(rules, sourceCode)
 						: getMergedSelectors(rules, sourceCode) + sourceCode.text.slice(sourceCode.getRange(firstRule.prelude)[1], sourceCode.getRange(firstRule)[1]);
-					if (replacement === undefined) {
+					if (
+						replacement === undefined
+						|| (!isConditional && hasAncestorStyleRule(firstRule, context) && !isParsedAsNestedRule(replacement))
+					) {
 						abort();
 					}
 

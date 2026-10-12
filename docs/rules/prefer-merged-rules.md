@@ -43,8 +43,8 @@ Also merges adjacent `@media`, `@supports`, and `@container` wrappers with ident
 
 ## Details
 
-Works inside nested and grouping rules. Selector bodies must contain only declarations matching in order, value, and importance. Custom property names are case-sensitive; raw values must match exactly.
+Works inside nested and grouping rules. Selector bodies must contain only declarations matching in order, value, and importance. Custom property names are case-sensitive; raw values must match exactly, apart from leading and trailing whitespace.
 
 Empty or malformed blocks and keyframe steps are skipped. Selector merging targets current stable Chrome, Firefox, and Safari, skipping uncertain selectors and random functions.
 
-Intervening comments prevent merging; comments inside matching rules prevent autofixing.
+Intervening comments prevent merging; comments inside matching rules prevent autofixing. The autofix is also skipped when the parser would misread the merged nested selector list as a declaration, as with a long list like `a:hover, button:focus, …` inside a style rule.

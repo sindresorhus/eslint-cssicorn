@@ -225,6 +225,14 @@ test.snapshot({
 		'.a {\n\t--x: red\n}\n.b {\n\t--x: red;\n}',
 		'.a {\r\n\t--x: red\r\n}\r\n.b {\r\n\t--x: red;\r\n}',
 		'.parent { .a { --x: red; } .b { --x: red } }',
+		// The parser reads a long nested selector list that starts with a type selector and a pseudo-class as a declaration
+		'.nav { a:hover { color: red; } button:focus { color: red; } span:hover { color: red; } div:hover { color: red; } }',
+		'.nav { @media (width > 1px) { a:hover { color: red; } button:focus { color: red; } span:hover { color: red; } div:hover { color: red; } } }',
+		'.nav { A:HOVER { color: red; } button :focus { color: red; } span:hover { color: red; } div:hover { color: red; } }',
+		'.nav { a:hover { color: red; } a:focus { color: red; } }',
+		'.nav { .a:hover { color: red; } .b:focus { color: red; } .c:hover { color: red; } .d:hover { color: red; } }',
+		'a:hover { color: red; } button:focus { color: red; } span:hover { color: red; } div:hover { color: red; }',
+		'@media (width > 1px) { a:hover { color: red; } button:focus { color: red; } span:hover { color: red; } div:hover { color: red; } }',
 	],
 });
 
