@@ -1199,6 +1199,12 @@ test.snapshot({
 		'a { width: calc(-1px); padding: calc(-20%); animation-duration: calc(-1s); }',
 		'a { margin-left: calc(-20px); animation-delay: calc(-1s); opacity: calc(-1); }',
 		'a { z-index: calc(1.5); columns: calc(2.5); }',
+		// The browser clamps a calculated oblique angle to 90deg, but rejects a literal one above 90deg.
+		'a { font-style: oblique calc(120deg); }',
+		'a { FONT-STYLE: OBLIQUE CALC(91DEG); }',
+		'a { font-style: oblique calc(101grad); font-style: oblique calc(1.6rad); font-style: oblique calc(.3turn); }',
+		'a { font: oblique calc(120deg) 16px serif; }',
+		'@font-face { font-style: oblique calc(120deg); }',
 		'a { width: calc(0); opacity: calc(0); rotate: calc(-0deg); }',
 		'a { --length: calc(20px); --percentage: calc(20%); --number: calc(2); }',
 		'a { unknown-property: calc(20px); width: calc(20unknown); }',
@@ -1227,6 +1233,9 @@ test.snapshot({
 		'a { width: abs(/* keep */ 20px); }',
 		'@media (width > 1px) { a { &:hover { width: calc(20px); } } }',
 		'a {\r\n  width: calc(\r\n    20px\r\n  );\r\n}',
+		'a { font-style: oblique calc(90deg); font-style: oblique calc(100grad); font: oblique calc(45deg) 16px serif; }',
+		'a { font-style: oblique max(120deg); }',
+		'a { rotate: calc(120deg); }',
 	],
 });
 

@@ -6,6 +6,7 @@ import {getNumericLiteralKey, isSafeIntegerSpelling} from './shared/css-numeric-
 import mathFunctions from './shared/css-math-functions.js';
 import {areEqualValues, getCondensedValueCount} from './shared/css-shorthand-values.js';
 import {
+	evaluateCssMath,
 	getBasePropertyName,
 	getCommaSeparatedGroups,
 	hasCommentInRange,
@@ -153,6 +154,16 @@ function getFunctionReplacementProblem(node, replacement, context) {
 	});
 }
 
+// The bundled grammar omits the 90deg bound of oblique angles, which the browser clamps in calculations but rejects in literals.
+function isOverObliqueAngle(literal, property) {
+	if (literal.type !== 'Dimension' || !['font', 'font-style'].includes(property)) {
+		return false;
+	}
+
+	const angle = evaluateCssMath(literal);
+	return angle?.unit === 'deg' && angle.value > 90;
+}
+
 function getLiteralCalculationProblem(node, declaration, parentFunction, context) {
 	const property = normalizeCssIdentifier(declaration.property);
 	const container = parentFunction ?? declaration.value;
@@ -167,6 +178,7 @@ function getLiteralCalculationProblem(node, declaration, parentFunction, context
 	if (children.length !== 1 || !['Number', 'Dimension', 'Percentage'].includes(literal.type) || !Number.isFinite(Number(literal.value)) || literal.value.startsWith('-')
 		|| (literal.type === 'Number' && Number(literal.value) === 0)
 		|| (literal.type === 'Dimension' && normalizeCssIdentifier(literal.unit) === 'fr')
+		|| isOverObliqueAngle(literal, property)
 	) {
 		return;
 	}

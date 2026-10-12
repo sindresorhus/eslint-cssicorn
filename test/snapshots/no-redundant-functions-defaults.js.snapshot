@@ -2889,6 +2889,45 @@ Output:
 
 `;
 
+exports[`invalid(16): a { font-style: oblique calc(90deg); font-style: oblique calc(100grad); font: oblique calc(45deg) 16px serif; } 1`] = `
+
+  1 | a { font-style: oblique calc(90deg); font-style: oblique calc(100grad); font: oblique calc(45deg) 16px serif; }
+
+`;
+
+exports[`invalid(16): a { font-style: oblique calc(90deg); font-style: oblique calc(100grad); font: oblique calc(45deg) 16px serif; } 2`] = `
+
+Message:
+> 1 | a { font-style: oblique calc(90deg); font-style: oblique calc(100grad); font: oblique calc(45deg) 16px serif; }
+    |                         ^^^^^^^^^^^ Simplify this redundant use of \`calc()\`.
+
+Output:
+  1 | a { font-style: oblique 90deg; font-style: oblique calc(100grad); font: oblique calc(45deg) 16px serif; }
+
+`;
+
+exports[`invalid(16): a { font-style: oblique calc(90deg); font-style: oblique calc(100grad); font: oblique calc(45deg) 16px serif; } 3`] = `
+
+Message:
+> 1 | a { font-style: oblique calc(90deg); font-style: oblique calc(100grad); font: oblique calc(45deg) 16px serif; }
+    |                                                          ^^^^^^^^^^^^^ Simplify this redundant use of \`calc()\`.
+
+Output:
+  1 | a { font-style: oblique calc(90deg); font-style: oblique 100grad; font: oblique calc(45deg) 16px serif; }
+
+`;
+
+exports[`invalid(16): a { font-style: oblique calc(90deg); font-style: oblique calc(100grad); font: oblique calc(45deg) 16px serif; } 4`] = `
+
+Message:
+> 1 | a { font-style: oblique calc(90deg); font-style: oblique calc(100grad); font: oblique calc(45deg) 16px serif; }
+    |                                                                                       ^^^^^^^^^^^ Simplify this redundant use of \`calc()\`.
+
+Output:
+  1 | a { font-style: oblique calc(90deg); font-style: oblique calc(100grad); font: oblique 45deg 16px serif; }
+
+`;
+
 exports[`invalid(16): a { grid-template-columns: repeat(calc(2), calc(20px)); } 1`] = `
 
   1 | a { grid-template-columns: repeat(calc(2), calc(20px)); }
@@ -3224,6 +3263,23 @@ Message:
 
 Output:
   1 | a { filter: drop-shadow(1px .5px red); }
+
+`;
+
+exports[`invalid(17): a { font-style: oblique max(120deg); } 1`] = `
+
+  1 | a { font-style: oblique max(120deg); }
+
+`;
+
+exports[`invalid(17): a { font-style: oblique max(120deg); } 2`] = `
+
+Message:
+> 1 | a { font-style: oblique max(120deg); }
+    |                         ^^^^^^^^^^^ Simplify this redundant use of \`max()\`.
+
+Output:
+  1 | a { font-style: oblique calc(120deg); }
 
 `;
 
@@ -3603,6 +3659,23 @@ Message:
 
 Output:
   1 | a { opacity: sign(0); }
+
+`;
+
+exports[`invalid(18): a { rotate: calc(120deg); } 1`] = `
+
+  1 | a { rotate: calc(120deg); }
+
+`;
+
+exports[`invalid(18): a { rotate: calc(120deg); } 2`] = `
+
+Message:
+> 1 | a { rotate: calc(120deg); }
+    |             ^^^^^^^^^^^^ Simplify this redundant use of \`calc()\`.
+
+Output:
+  1 | a { rotate: 120deg; }
 
 `;
 
