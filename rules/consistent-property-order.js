@@ -11,7 +11,7 @@ import {
 } from './utils/index.js';
 
 /**
-@import {CssNodePlain, DeclarationPlain} from '@eslint/css-tree';
+@import {BlockPlain, CssNodePlain, DeclarationPlain} from '@eslint/css-tree';
 @import {CssicornContext} from './rule/cssicorn-context.js';
 @import {CssicornRule} from './rule/to-eslint-rule.js';
 @import {CssicornRuleFixer} from './rule/to-eslint-rule-fixer.js';
@@ -91,6 +91,22 @@ const isPropertyOrderingContext = (declaration, context) => {
 	}
 
 	return owner?.type === 'Rule';
+};
+
+/**
+Check for a comment inside a block child or starting on the line where it ends, like a note after `color: red;`. Moving the declaration would detach such a comment from it.
+
+@param {BlockPlain} block
+@param {number} index
+@param {CssicornContext} context
+*/
+const hasAttachedComment = (block, index, context) => {
+	const {sourceCode} = context;
+	const [start, end] = sourceCode.getRange(block.children[index]);
+	const next = block.children[index + 1];
+	// Only whitespace, semicolons, and comments can appear before the next sibling or the end of the block.
+	const followingText = sourceCode.text.slice(end, next ? sourceCode.getRange(next)[0] : sourceCode.getRange(block)[1]);
+	return hasCommentInRange(context, [start, end]) || /^[^\n\f\r]*\/\*/v.test(followingText);
 };
 
 /**
@@ -209,7 +225,7 @@ const create = context => {
 		@type {DeclarationEntry[]}
 		*/
 		let declarations = [];
-		for (const node of block.children) {
+		for (const [index, node] of block.children.entries()) {
 			const property = node.type === 'Declaration' ? normalizeCssIdentifier(node.property) : '';
 			const rank = order === 'alphabetical' ? property : ranks.get(property) ?? unlistedRank;
 			if (
@@ -217,7 +233,7 @@ const create = context => {
 				|| node.value.type === 'Raw'
 				|| !propertyInteractions.has(property)
 				|| rank === undefined
-				|| hasCommentInRange(context, sourceCode.getRange(node))
+				|| hasAttachedComment(block, index, context)
 			) {
 				yield getRunProblem(declarations);
 				declarations = [];

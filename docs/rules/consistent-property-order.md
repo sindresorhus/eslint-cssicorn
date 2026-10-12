@@ -103,7 +103,7 @@ The safety check is conservative. Properties in the same logical-property group,
 
 ## Declaration groups
 
-Comments, blank lines, nested constructs, custom properties, and unsupported properties separate groups. Concentric ordering also treats unlisted properties as boundaries. Declarations containing comments stay in place. Unsupported properties include most vendor-prefixed properties and some legacy aliases.
+Comments, blank lines, nested constructs, custom properties, and unsupported properties separate groups. Concentric ordering also treats unlisted properties as boundaries. Declarations containing comments, or followed by a comment on the same line, stay in place. Unsupported properties include most vendor-prefixed properties and some legacy aliases.
 
 The rule applies to style rules, keyframes, nested grouping at-rules, `@position-try`, `@page`, and its direct page-margin boxes. Other descriptor blocks and CSS Modules interop blocks are excluded.
 
