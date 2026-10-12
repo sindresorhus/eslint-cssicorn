@@ -168,10 +168,14 @@ const getGroupSuffixCandidate = (children, groupIndex, sourceCode) => {
 	}
 
 	const isDescendant = isDescendantCombinator(suffix);
-	const innerNodes = children.slice(groupIndex + (isDescendant ? 2 : 1));
+	const isNextSibling = suffix.type === 'Combinator' && suffix.name === '+';
+	const innerNodes = children.slice(groupIndex + (isDescendant || isNextSibling ? 2 : 1));
 	let prefix = '';
 	if (suffix.type !== 'Combinator') {
 		prefix = '&';
+	} else if (isNextSibling) {
+		// The parser reads an unspaced `+` before a type selector, like `+div`, as a declaration hack.
+		prefix = '+ ';
 	} else if (isDescendant && (groupIndex > 0 || innerNodes[0].type === 'TypeSelector')) {
 		// Explicit nesting avoids interpreting a leading type selector as a declaration.
 		prefix = '& ';

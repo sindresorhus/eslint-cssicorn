@@ -1036,6 +1036,125 @@ Output:
 
 `;
 
+exports[`invalid(61): :is(.a, .b)+div { color: red; } 1`] = `
+
+  1 | :is(.a, .b)+div { color: red; }
+
+`;
+
+exports[`invalid(61): :is(.a, .b)+div { color: red; } 2`] = `
+
+Message:
+> 1 | :is(.a, .b)+div { color: red; }
+    | ^^^^^^^^^^^ Prefer CSS nesting over \`:is()\`.
+
+Output:
+  1 | .a, .b { + div { color: red; } }
+
+`;
+
+exports[`invalid(62): :is(.a, .b)>div { color: red; } 1`] = `
+
+  1 | :is(.a, .b)>div { color: red; }
+
+`;
+
+exports[`invalid(62): :is(.a, .b)>div { color: red; } 2`] = `
+
+Message:
+> 1 | :is(.a, .b)>div { color: red; }
+    | ^^^^^^^^^^^ Prefer CSS nesting over \`:is()\`.
+
+Output:
+  1 | .a, .b { >div { color: red; } }
+
+`;
+
+exports[`invalid(63): :is(.a, .b)~DIV { color: red; } 1`] = `
+
+  1 | :is(.a, .b)~DIV { color: red; }
+
+`;
+
+exports[`invalid(63): :is(.a, .b)~DIV { color: red; } 2`] = `
+
+Message:
+> 1 | :is(.a, .b)~DIV { color: red; }
+    | ^^^^^^^^^^^ Prefer CSS nesting over \`:is()\`.
+
+Output:
+  1 | .a, .b { ~DIV { color: red; } }
+
+`;
+
+exports[`invalid(64): :is(.a, .b)+.c { color: red; } 1`] = `
+
+  1 | :is(.a, .b)+.c { color: red; }
+
+`;
+
+exports[`invalid(64): :is(.a, .b)+.c { color: red; } 2`] = `
+
+Message:
+> 1 | :is(.a, .b)+.c { color: red; }
+    | ^^^^^^^^^^^ Prefer CSS nesting over \`:is()\`.
+
+Output:
+  1 | .a, .b { + .c { color: red; } }
+
+`;
+
+exports[`invalid(65): .x :is(.a, .b)+div { color: red; } 1`] = `
+
+  1 | .x :is(.a, .b)+div { color: red; }
+
+`;
+
+exports[`invalid(65): .x :is(.a, .b)+div { color: red; } 2`] = `
+
+Message:
+> 1 | .x :is(.a, .b)+div { color: red; }
+    |    ^^^^^^^^^^^ Prefer CSS nesting over \`:is()\`.
+
+Output:
+  1 | .x { :is(.a, .b)+div { color: red; } }
+
+`;
+
+exports[`invalid(66): .parent { &:is(.a, .b)+div { color: red; } } 1`] = `
+
+  1 | .parent { &:is(.a, .b)+div { color: red; } }
+
+`;
+
+exports[`invalid(66): .parent { &:is(.a, .b)+div { color: red; } } 2`] = `
+
+Message:
+> 1 | .parent { &:is(.a, .b)+div { color: red; } }
+    |            ^^^^^^^^^^^ Prefer CSS nesting over \`:is()\`.
+
+Output:
+  1 | .parent { &.a, &.b { + div { color: red; } } }
+
+`;
+
+exports[`invalid(67): .parent { :is(&.a, &.b)+div { color: red; } } 1`] = `
+
+  1 | .parent { :is(&.a, &.b)+div { color: red; } }
+
+`;
+
+exports[`invalid(67): .parent { :is(&.a, &.b)+div { color: red; } } 2`] = `
+
+Message:
+> 1 | .parent { :is(&.a, &.b)+div { color: red; } }
+    |           ^^^^^^^^^^^^^ Prefer CSS nesting over \`:is()\`.
+
+Output:
+  1 | .parent { &.a, &.b { + div { color: red; } } }
+
+`;
+
 exports[`invalid(7): a :IS(.foo, .bar) { COLOR: RED !important; } 1`] = `
 
   1 | a :IS(.foo, .bar) { COLOR: RED !important; }

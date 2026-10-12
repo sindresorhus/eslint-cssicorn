@@ -486,6 +486,14 @@ test.snapshot({
 		'.card { color: red; } body .theme .card { color: blue; }',
 		'.card { color: red; } body.dark :hover .card { color: blue; }',
 		'.card { color: red; } body > .theme:hover .card { color: blue; }',
+		// The parser reads `+div` as a declaration hack, so a leading combinator gets a space
+		':is(.a, .b)+div { color: red; }',
+		':is(.a, .b)>div { color: red; }',
+		':is(.a, .b)~DIV { color: red; }',
+		':is(.a, .b)+.c { color: red; }',
+		'.x :is(.a, .b)+div { color: red; }',
+		'.parent { &:is(.a, .b)+div { color: red; } }',
+		'.parent { :is(&.a, &.b)+div { color: red; } }',
 	],
 });
 
