@@ -134,7 +134,8 @@ const isUncertainPseudo = node => {
 			: child.type !== 'Operator' || child.value !== ',');
 	}
 
-	return (name === 'nth-of-type' || name === 'nth-last-of-type') && node.children.at(0)?.selector !== null;
+	// `canMatchSelector` rejects `of S` in `:nth-of-type()` and `:nth-last-of-type()`.
+	return false;
 };
 
 const isUncertainSelectorNode = node => {
