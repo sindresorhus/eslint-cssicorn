@@ -314,9 +314,8 @@ Check whether a percentage is a valid mix weight, like `50%` in `color-mix(in ok
 */
 const isPercentageWeight = percentage => !percentage.value.startsWith('-') && isSafeIntegerSpelling(percentage.value) && Number(percentage.value) <= 100;
 
-const isIdentifierArgument = (argument, name) => argument.nodes.length === 1
-	&& argument.nodes[0].type === 'Identifier'
-	&& normalizeCssIdentifier(argument.nodes[0].name) === name;
+const isKeyword = (node, name) => node?.type === 'Identifier' && normalizeCssIdentifier(node.name) === name;
+const isIdentifierArgument = (argument, name) => argument.nodes.length === 1 && isKeyword(argument.nodes[0], name);
 const isNumberArgument = (argument, value) => argument.nodes.length === 1
 	&& argument.nodes[0].type === 'Number'
 	&& Number(argument.nodes[0].value) === value;
@@ -355,7 +354,7 @@ function isPositiveZero(node, type, context) {
 
 function getDropShadowProblem(node, children, context) {
 	const lengths = children.filter(child => child.type === 'Number' || child.type === 'Dimension' || isMathFunction(child));
-	const tokens = children.filter(child => child.type === 'Identifier' && normalizeCssIdentifier(child.name) === 'currentcolor');
+	const tokens = children.filter(child => isKeyword(child, 'currentcolor'));
 	if (lengths.length === 3 && isPositiveZero(lengths[2], 'length', context)) {
 		tokens.push(lengths[2]);
 	}
@@ -410,7 +409,7 @@ function areEqualScaleValues(first, second) {
 function getAlphaProblem(node, context) {
 	const children = [...node.children];
 	const [first] = children;
-	const isRelative = first?.type === 'Identifier' && normalizeCssIdentifier(first.name) === 'from';
+	const isRelative = isKeyword(first, 'from');
 	// An origin-color substitution is bounded by the fixed channel arguments. Other substitutions can change the slash alpha's grammar.
 	if (children.some((child, index) => isSubstitutionFunction(child) && !(isRelative && index === 1))) {
 		return;
@@ -424,7 +423,7 @@ function getAlphaProblem(node, context) {
 	const alpha = children.at(-1);
 	// Preserve over-range absolute alpha for diagnostics; relative colors inherit their origin's alpha when omitted.
 	const redundant = isRelative
-		? alpha.type === 'Identifier' && normalizeCssIdentifier(alpha.name) === 'alpha'
+		? isKeyword(alpha, 'alpha')
 		: (alpha.type === 'Number' && Number(alpha.value) === 1) || (alpha.type === 'Percentage' && Number(alpha.value) === 100);
 	if (redundant) {
 		return getTokenRemovalProblem(node, [separator, alpha], context);
@@ -516,7 +515,7 @@ function getContentProblem(node, context) {
 	}
 
 	if (name === 'symbols') {
-		if (children.length > 1 && children[0].type === 'Identifier' && normalizeCssIdentifier(children[0].name) === 'symbolic') {
+		if (children.length > 1 && isKeyword(children[0], 'symbolic')) {
 			return getTokenRemovalProblem(node, [children[0]], context);
 		}
 
@@ -651,8 +650,8 @@ function getAttributeProblem(node, context) {
 }
 
 const isCenterPosition = nodes => (nodes.length === 2 || nodes.length === 3)
-	&& nodes[0].type === 'Identifier' && normalizeCssIdentifier(nodes[0].name) === 'at'
-	&& nodes.slice(1).every(node => (node.type === 'Identifier' && normalizeCssIdentifier(node.name) === 'center') || (node.type === 'Percentage' && Number(node.value) === 50));
+	&& isKeyword(nodes[0], 'at')
+	&& nodes.slice(1).every(node => isKeyword(node, 'center') || (node.type === 'Percentage' && Number(node.value) === 50));
 
 function getRepeatedLengthTokens(values, context) {
 	return values.length >= 2 && values.length <= 4
@@ -662,7 +661,7 @@ function getRepeatedLengthTokens(values, context) {
 }
 
 function getRectangleProblem(node, children, context) {
-	const roundIndex = children.findIndex(child => child.type === 'Identifier' && normalizeCssIdentifier(child.name) === 'round');
+	const roundIndex = children.findIndex(child => isKeyword(child, 'round'));
 	const offsets = roundIndex === -1 ? children : children.slice(0, roundIndex);
 	const tokens = [];
 	if (normalizeCssIdentifier(node.name) === 'inset') {
@@ -703,7 +702,7 @@ function getShapeCommandTokens(node, context) {
 		const name = normalizeCssIdentifier(command.name);
 		if (name === 'arc') {
 			tokens.push(...nodes.filter(child => child.type === 'Identifier' && ['small', 'ccw'].includes(normalizeCssIdentifier(child.name))));
-			const radiusIndex = nodes.findIndex(child => child.type === 'Identifier' && normalizeCssIdentifier(child.name) === 'of');
+			const radiusIndex = nodes.findIndex(child => isKeyword(child, 'of'));
 			if (radiusIndex !== -1) {
 				const radii = nodes.slice(radiusIndex + 1, radiusIndex + 3);
 				// A single percentage radius uses the direction-agnostic size instead of the separate width and height.
@@ -712,7 +711,7 @@ function getShapeCommandTokens(node, context) {
 				}
 			}
 
-			const rotationIndex = nodes.findIndex(child => child.type === 'Identifier' && normalizeCssIdentifier(child.name) === 'rotate');
+			const rotationIndex = nodes.findIndex(child => isKeyword(child, 'rotate'));
 			if (rotationIndex !== -1 && isPositiveZero(nodes[rotationIndex + 1], 'angle', context)) {
 				tokens.push(...nodes.slice(rotationIndex, rotationIndex + 2));
 			}
@@ -720,8 +719,8 @@ function getShapeCommandTokens(node, context) {
 			// Absolute commands default to the reference-box origin; relative commands default to their starting point.
 			const defaultOrigin = {to: 'origin', by: 'start'}[normalizeCssIdentifier(mode.name)];
 			for (const [index, child] of nodes.entries()) {
-				if (child.type === 'Identifier' && normalizeCssIdentifier(child.name) === 'from'
-					&& nodes[index + 1]?.type === 'Identifier' && normalizeCssIdentifier(nodes[index + 1].name) === defaultOrigin
+				if (isKeyword(child, 'from')
+					&& isKeyword(nodes[index + 1], defaultOrigin)
 				) {
 					tokens.push(child, nodes[index + 1]);
 				}
@@ -772,13 +771,13 @@ function getShapeProblem(node, declaration, context) {
 
 	if (name === 'ray') {
 		// The origin still depends on offset-position, so only the default size is removed.
-		return getTokenRemovalProblem(node, children.filter(child => child.type === 'Identifier' && normalizeCssIdentifier(child.name) === 'closest-side'), context);
+		return getTokenRemovalProblem(node, children.filter(child => isKeyword(child, 'closest-side')), context);
 	}
 
 	if (name === 'polygon') {
 		const [argument] = getCommaSeparatedGroups(node);
-		const tokens = argument.nodes.filter(child => child.type === 'Identifier' && normalizeCssIdentifier(child.name) === 'nonzero');
-		const roundIndex = argument.nodes.findIndex(child => child.type === 'Identifier' && normalizeCssIdentifier(child.name) === 'round');
+		const tokens = argument.nodes.filter(child => isKeyword(child, 'nonzero'));
+		const roundIndex = argument.nodes.findIndex(child => isKeyword(child, 'round'));
 		if (roundIndex !== -1 && argument.nodes.length === roundIndex + 2 && isPositiveZero(argument.nodes[roundIndex + 1], 'length', context)) {
 			tokens.push(...argument.nodes.slice(roundIndex));
 		}
@@ -790,10 +789,10 @@ function getShapeProblem(node, declaration, context) {
 		return getTokenRemovalProblem(node, tokens, context);
 	}
 
-	const positionIndex = children.findIndex(child => child.type === 'Identifier' && normalizeCssIdentifier(child.name) === 'at');
+	const positionIndex = children.findIndex(child => isKeyword(child, 'at'));
 	const radii = positionIndex === -1 ? children : children.slice(0, positionIndex);
 	const tokens = [];
-	if (radii.length === (name === 'circle' ? 1 : 2) && radii.every(child => child.type === 'Identifier' && normalizeCssIdentifier(child.name) === 'closest-side')) {
+	if (radii.length === (name === 'circle' ? 1 : 2) && radii.every(child => isKeyword(child, 'closest-side'))) {
 		tokens.push(...radii);
 	}
 
@@ -816,7 +815,7 @@ function getTimelineProblem(node, context) {
 		|| (name === 'scroll' && normalizeCssIdentifier(child.name) === 'nearest')));
 	if (name === 'view') {
 		const insets = children.filter(child => !(child.type === 'Identifier' && timelineAxes.has(normalizeCssIdentifier(child.name))));
-		if (insets.length > 0 && insets.length <= 2 && insets.every(child => child.type === 'Identifier' && normalizeCssIdentifier(child.name) === 'auto')) {
+		if (insets.length > 0 && insets.length <= 2 && insets.every(child => isKeyword(child, 'auto'))) {
 			tokens.push(...insets);
 		} else if (insets.length === 2) {
 			tokens.push(...getRepeatedLengthTokens(insets, context));
@@ -832,8 +831,8 @@ function getDefaultLinearDirectionTokens(nodes) {
 		return [direction];
 	}
 
-	return nodes.length >= 2 && nodes.slice(0, 2).every((node, index) => node.type === 'Identifier' && normalizeCssIdentifier(node.name) === ['to', 'bottom'][index])
-		&& (nodes.length === 2 || (nodes[2].type === 'Identifier' && normalizeCssIdentifier(nodes[2].name) === 'in'))
+	return nodes.length >= 2 && nodes.slice(0, 2).every((node, index) => isKeyword(node, ['to', 'bottom'][index]))
+		&& (nodes.length === 2 || isKeyword(nodes[2], 'in'))
 		? nodes.slice(0, 2)
 		: [];
 }
@@ -844,13 +843,13 @@ function getDefaultGradientTokens(name, nodes, context) {
 	}
 
 	const tokens = [];
-	const positionIndex = nodes.findIndex(node => node.type === 'Identifier' && normalizeCssIdentifier(node.name) === 'at');
+	const positionIndex = nodes.findIndex(node => isKeyword(node, 'at'));
 	if (positionIndex !== -1 && isCenterPosition(nodes.slice(positionIndex))) {
 		tokens.push(...nodes.slice(positionIndex));
 	}
 
 	if (name.endsWith('conic-gradient')) {
-		if (nodes[0]?.type === 'Identifier' && normalizeCssIdentifier(nodes[0].name) === 'from' && isPositiveZero(nodes[1], 'angle', context)) {
+		if (isKeyword(nodes[0], 'from') && isPositiveZero(nodes[1], 'angle', context)) {
 			tokens.push(...nodes.slice(0, 2));
 		}
 
@@ -861,7 +860,7 @@ function getDefaultGradientTokens(name, nodes, context) {
 	const prefix = endIndex === -1 ? nodes : nodes.slice(0, endIndex);
 	const shape = prefix.find(node => node.type === 'Identifier' && ['circle', 'ellipse'].includes(normalizeCssIdentifier(node.name)));
 	const sizes = prefix.filter(node => node !== shape);
-	if (sizes.length === 1 && sizes[0].type === 'Identifier' && normalizeCssIdentifier(sizes[0].name) === 'farthest-corner') {
+	if (sizes.length === 1 && isKeyword(sizes[0], 'farthest-corner')) {
 		tokens.push(sizes[0]);
 	}
 
@@ -904,7 +903,7 @@ function getMixProblem(node, context) {
 	const arguments_ = getCommaSeparatedGroups(node);
 	const name = normalizeCssIdentifier(node.name);
 	const [prelude] = arguments_;
-	const hasPrelude = ['color-mix', 'palette-mix'].includes(name) && prelude.nodes[0]?.type === 'Identifier' && normalizeCssIdentifier(prelude.nodes[0].name) === 'in';
+	const hasPrelude = ['color-mix', 'palette-mix'].includes(name) && isKeyword(prelude.nodes[0], 'in');
 	const inputs = arguments_.slice(hasPrelude ? 1 : 0);
 	if (inputs.length === 0 || inputs.some(argument => argument.nodes.length === 0) || [...node.children].some(child => isSubstitutionFunction(child))) {
 		return;
