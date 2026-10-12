@@ -48,6 +48,19 @@ test.snapshot({
 			[String.raw`\2d -Color: white;`, '--color: black;'],
 			['border-image: linear-gradient(white, red); border: 1px solid white;', 'border: 1px solid black;'],
 			['color: white;', 'color: black; color: blue; color: red;'],
+			['-webkit-text-fill-color: white;', '-webkit-text-fill-color: black;'],
+			['text-decoration: underline white; -webkit-text-decoration-color: red;', 'text-decoration: underline black;'],
+			['-WEBKIT-COLUMN-RULE-COLOR: red; column-rule: 1px solid white;', 'column-rule: 1px solid black;'],
+			['border-top-color: white; -webkit-border-before-color: red;', 'border-top-color: black;'],
+			['border-top-color: white;', '-webkit-border-before-color: green; border-top-color: black;'],
+			['border-color: white; -WEBKIT-BORDER-START-COLOR: red;', 'border-color: black;'],
+			['border: 1px solid white; -webkit-border-after: 2px solid red;', 'border: 1px solid black;'],
+			['border-right-color: white; -moz-border-end-color: red;', 'border-right-color: black;'],
+			// Legacy prefixed logical names alias the standard logical properties too.
+			['border-block-start-color: white; -webkit-border-before-color: red;', 'border-block-start-color: black;'],
+			['border-inline-start-color: white;', '-webkit-border-start-color: red; border-inline-start-color: black;'],
+			['border-inline-end: 1px solid white; -moz-border-end: 2px solid red;', 'border-inline-end: 1px solid black;'],
+			['box-shadow: 0 0 1px white; -webkit-box-shadow: 0 0 1px white;', 'box-shadow: 0 0 1px black;'],
 			['color: white;', 'color-scheme: var(--scheme); color: black;'],
 			['--color: white blue;', '--color: black red;'],
 			['color: white;', 'color: black !important;'],
@@ -198,6 +211,13 @@ test.snapshot({
 		pair('text-shadow: 0 1px white;', 'text-shadow: 0 1px black;'),
 		// Both blocks declare the dual color-scheme.
 		'a { color-scheme: light dark; color: white; } @media (prefers-color-scheme: dark) { a { color-scheme: light dark; color: black; } }',
+		// Unrelated vendor-prefixed declarations do not prevent pairing.
+		pair('-webkit-font-smoothing: antialiased; color: white;', 'color: black;'),
+		pair('background: white; -moz-osx-font-smoothing: grayscale;', 'background: black; -webkit-tap-highlight-color: transparent;'),
+		root + 'a { -WEBKIT-FONT-SMOOTHING: antialiased; color: white; @media (prefers-color-scheme: dark) { color: black; } }',
+		pair('-webkit-text-fill-color: red; color: white;', 'color: black;'),
+		// Standard logical radius properties are not legacy prefixed logical border names.
+		pair('border-color: white; border-end-end-radius: 4px;', 'border-color: black;'),
 		// Setup and base rule inside the same `@layer`.
 		'@layer theme { :root { color-scheme: light dark; } a { color: white; } @media (prefers-color-scheme: dark) { a { color: black; } } }',
 	],

@@ -155,9 +155,15 @@ function hasPropertyConflict(property, properties) {
 	}
 
 	const affected = shorthandToAffectedProperties.get(property) ?? new Set();
-	for (const other of properties) {
-		if (other === property) {
+	for (const declaredProperty of properties) {
+		if (declaredProperty === property) {
 			continue;
+		}
+
+		// Unprefixed names reveal conflicts with vendor-prefixed aliases, like `-webkit-box-shadow` and `-webkit-column-rule-color`.
+		const other = declaredProperty.slice(getVendorPrefix(declaredProperty).length);
+		if (other === property) {
+			return true;
 		}
 
 		const otherAffected = shorthandToAffectedProperties.get(other);
@@ -167,6 +173,11 @@ function hasPropertyConflict(property, properties) {
 
 		// Logical and physical border declarations can address the same edge depending on writing mode.
 		if (/^border(?:-|$)/v.test(property) && /^border(?:-|$)/v.test(other) && /^border-(?:block|inline)(?:-|$)/v.test(property) !== /^border-(?:block|inline)(?:-|$)/v.test(other)) {
+			return true;
+		}
+
+		// Legacy prefixed logical names, like `-webkit-border-before-color`, alias logical and physical border properties under other names.
+		if (other !== declaredProperty && /^border(?:-|$)/v.test(property) && /^border-(?:before|after|start|end)(?:-|$)/v.test(other)) {
 			return true;
 		}
 	}
@@ -317,8 +328,7 @@ function getRemovalRange(override, media, context) {
 */
 function * getPairProblems({baseRule, declarations, media, overrides, mode}, context, hasRootScheme) {
 	const {sourceCode} = context;
-	if ([...declarations, ...overrides].some(declaration => getVendorPrefix(getProperty(declaration)))
-		|| !hasCompatibleScheme(declarations) || !hasCompatibleScheme(overrides)
+	if (!hasCompatibleScheme(declarations) || !hasCompatibleScheme(overrides)
 		|| (getSchemes(declarations).length === 0 && !hasRootScheme())
 		|| sourceCode.getAncestors(baseRule).some(node => node.type === 'Atrule' && !groupingAtRules.has(normalizeCssIdentifier(node.name)))
 		|| (declarations[0] && isCssModulesInteropDeclaration(declarations[0], context))) {
@@ -330,7 +340,7 @@ function * getPairProblems({baseRule, declarations, media, overrides, mode}, con
 	const properties = new Set([...baseMap.keys(), ...overrideMap.keys()]);
 	for (const [property, override] of overrideMap) {
 		const base = baseMap.get(property);
-		if (!base || !override || Boolean(base.important) !== Boolean(override.important) || hasPropertyConflict(property, properties)) {
+		if (!base || !override || getVendorPrefix(property) || Boolean(base.important) !== Boolean(override.important) || hasPropertyConflict(property, properties)) {
 			continue;
 		}
 
