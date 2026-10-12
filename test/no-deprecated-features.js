@@ -60,6 +60,10 @@ test.snapshot({
 		'a { word-wrap: break-word; grid-gap: 1rem; grid-row-gap: 2rem; grid-column-gap: 3rem; }',
 		'a { page-break-before: always; page-break-after: always; page-break-inside: avoid; }',
 		'a { overflow: overlay; overflow-x: OVERLAY; overflow-y: overlay; text-orientation: sideways-right; }',
+		// Safari does not support `sideways-right`, so replacing it would apply `sideways` there
+		'a { writing-mode: vertical-rl; text-orientation: SIDEWAYS-RIGHT; }',
+		'a { text-orientation: sideways-right !important; }',
+		'a { text-orientation: sideways-right; text-orientation: sideways; }',
 		'a { appearance: button; image-rendering: optimizeQuality; text-justify: distribute; user-select: element; zoom: reset; }',
 		'a { color: activecaption; border-color: red inactiveborder; scrollbar-color: menu transparent; }',
 		'a { scrollbar-color: custom(background) menu; }',

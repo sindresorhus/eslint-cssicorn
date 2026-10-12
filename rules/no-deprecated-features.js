@@ -164,7 +164,8 @@ const deprecatedValueKeywords = {
 	'stop-color': deprecatedSystemColors,
 };
 
-const fixableValueAliases = new Set(['overflow: overlay', 'overflow-x: overlay', 'overflow-y: overlay', 'text-orientation: sideways-right']);
+// `text-orientation: sideways-right` is not included, because Safari does not support it, so replacing it would apply `sideways` there.
+const fixableValueAliases = new Set(['overflow: overlay', 'overflow-x: overlay', 'overflow-y: overlay']);
 const colorFunctions = new Set([...standardColorFunctions, 'color-contrast']);
 
 const deprecatedHtmlTypeSelectors = new Set([
