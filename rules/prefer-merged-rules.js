@@ -189,6 +189,8 @@ const hasRandomFunction = value => {
 	return hasRandom;
 };
 
+const trimCssWhitespace = string => string.replaceAll(/^[\t\n\f\r ]+|[\t\n\f\r ]+$/gv, '');
+
 const hasMalformedContent = rule => Boolean(find(rule.block, node => (
 	node.type === 'Block' && node.children.some(child => child.type === 'Raw')
 ) || (
@@ -233,7 +235,8 @@ const getMergeKey = (rule, context) => {
 
 		declarations.push([
 			normalizePropertyName(declaration.property),
-			generate(declaration.value),
+			// Leading and trailing whitespace is not part of a custom property value.
+			customProperty ? trimCssWhitespace(declaration.value.value) : generate(declaration.value),
 			declaration.important,
 		]);
 	}

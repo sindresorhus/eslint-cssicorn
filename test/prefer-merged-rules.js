@@ -162,6 +162,9 @@ test.snapshot({
 		'@font-face { font-family: example; } @font-face { font-family: example; }',
 		'.a { color: RED; } .b { color: red; }',
 		'@supports (display: grid) and (color) { .a {} } @supports (color) and (display: grid) { .b {} }',
+		// A no-break space is not CSS whitespace, so it is part of the custom property value
+		'.a { --x: red\u00A0; } .b { --x: red; }',
+		'.a { --x: \u00A0red; } .b { --x: red; }',
 	],
 	invalid: [
 		'.a{color:red}.b{color:red}.c{color:red}',
@@ -214,6 +217,14 @@ test.snapshot({
 		'@container style(--theme: dark) { .a { color: red; } } @container style(--theme: dark) { .b { color: blue; } }',
 		'@media not screen and (color) { .a {} } @media not screen and (color) { .b {} }',
 		'.a + .b { color: red; } .c ~ .d { color: red; }',
+		// Leading and trailing whitespace is not part of a custom property value
+		'.a { --x: red; } .b { --x: red }',
+		'.a { --x:red; } .b { --x: red; }',
+		'.a { --x: a  b; } .b { --x:a  b }',
+		'.a { --x: red !important; } .b { --x: red!important; }',
+		'.a {\n\t--x: red\n}\n.b {\n\t--x: red;\n}',
+		'.a {\r\n\t--x: red\r\n}\r\n.b {\r\n\t--x: red;\r\n}',
+		'.parent { .a { --x: red; } .b { --x: red } }',
 	],
 });
 
