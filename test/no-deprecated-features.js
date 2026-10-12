@@ -46,6 +46,16 @@ test.snapshot({
 		'acronym, APPLET, altGlyph, glyphRef { color: red; }',
 		String.raw`@namespace svg url("x"); svg|font, *|acronym, |applet, svg|altGlyph, svg|alt\47 lyph { color: red; }`,
 		':matches(article), :-webkit-any(article), :focus-ring { color: red; }',
+		// Only Safari supports `:matches()`, so replacing it would apply the rule in Chrome and Firefox
+		'.z { color: blue; } .z:matches(.x) { color: red; }',
+		'A:MATCHES(.x, .y) .z { color: red; }',
+		'.a { & :matches(.x) { color: red; } }',
+		':matches(/* keep */ a) {}',
+		'@supports selector(:matches(acronym)) {}',
+		'@supports selector(\n\t:contains(\n\t\t:matches(acronym)\n\t)\n) {}',
+		':contains(:matches(acronym)), :contains(:drop(acronym)) {}',
+		':foo(:matches(acronym)), :--foo(:drop(popup)) {}',
+		'::cue(acronym), ::cue-region(:matches(acronym)) {}',
 		'::content, ::shadow { color: red; }',
 		'a { word-wrap: break-word; grid-gap: 1rem; grid-row-gap: 2rem; grid-column-gap: 3rem; }',
 		'a { page-break-before: always; page-break-after: always; page-break-inside: avoid; }',
@@ -118,21 +128,6 @@ test({
 			errors: [{messageId: 'no-deprecated-features/error'}],
 		},
 		{
-			code: ':matches(/* keep */ a) {}',
-			output: ':is(/* keep */ a) {}',
-			errors: [{messageId: 'no-deprecated-features/error'}],
-		},
-		{
-			code: '@supports selector(:matches(acronym)) {}',
-			output: '@supports selector(:is(acronym)) {}',
-			errors: 2,
-		},
-		{
-			code: '@supports selector(\n\t:contains(\n\t\t:matches(acronym)\n\t)\n) {}',
-			output: '@supports selector(\n\t:contains(\n\t\t:is(acronym)\n\t)\n) {}',
-			errors: 3,
-		},
-		{
 			code: String.raw`a { overflow: o\76 erlay; }`,
 			output: 'a { overflow: auto; }',
 			errors: [{messageId: 'no-deprecated-features/error'}],
@@ -200,16 +195,6 @@ test({
 			],
 		},
 		{
-			code: ':contains(:matches(acronym)), :contains(:drop(acronym)) {}',
-			output: ':contains(:is(acronym)), :contains(:drop(acronym)) {}',
-			errors: 6,
-		},
-		{
-			code: ':foo(:matches(acronym)), :--foo(:drop(popup)) {}',
-			output: ':foo(:is(acronym)), :--foo(:drop(popup)) {}',
-			errors: 4,
-		},
-		{
 			code: ':contains(svg|altGlyph) { color: red; }',
 			errors: [
 				{
@@ -219,11 +204,6 @@ test({
 					messageId: 'no-deprecated-features/error', data: {feature: 'selector', name: 'altGlyph'}, column: 15, endColumn: 23,
 				},
 			],
-		},
-		{
-			code: '::cue(acronym), ::cue-region(:matches(acronym)) {}',
-			output: '::cue(acronym), ::cue-region(:is(acronym)) {}',
-			errors: 3,
 		},
 		{
 			code: ':deep(a acronym) {}',

@@ -300,6 +300,13 @@ const shouldParseRawSelectorArguments = node => {
 	return node.type !== 'PseudoClassSelector' || !nonSelectorArgumentPseudoClasses.has(normalizeCssIdentifier(node.name));
 };
 
+// Only Safari supports `:matches()`, so `:is()` would start applying the rule in Chrome and Firefox.
+const getMatchesSuggestion = range => ({
+	messageId: MESSAGE_ID_SUGGESTION,
+	data: {name: ':matches', replacement: ':is'},
+	fix: fixer => fixer.replaceTextRange(range, ':is'),
+});
+
 const getParsedSelectorProblems = ({selector, sourceStart, node, context, allow}) => {
 	const problems = [];
 
@@ -314,7 +321,7 @@ const getParsedSelectorProblems = ({selector, sourceStart, node, context, allow}
 		const {start} = location;
 		let name;
 		let range;
-		let fix;
+		let suggest;
 		switch (currentSelector.type) {
 			case 'TypeSelector': {
 				const deprecatedSelector = getDeprecatedTypeSelector(currentSelector.name);
@@ -331,7 +338,7 @@ const getParsedSelectorProblems = ({selector, sourceStart, node, context, allow}
 				if (deprecatedPseudoClasses.has(pseudoClass)) {
 					name = `:${pseudoClass}`;
 					range = [sourceStart + start.offset, sourceStart + start.offset + 1 + currentSelector.name.length];
-					fix = pseudoClass === 'matches' ? fixer => fixer.replaceTextRange(range, ':is') : undefined;
+					suggest = pseudoClass === 'matches' ? getMatchesSuggestion(range) : undefined;
 				}
 
 				break;
@@ -354,7 +361,7 @@ const getParsedSelectorProblems = ({selector, sourceStart, node, context, allow}
 
 		if (name) {
 			const problem = getProblem({
-				node, location: toLocation(range, context), feature: 'selector', name, fix,
+				node, location: toLocation(range, context), feature: 'selector', name, suggest,
 			}, allow);
 			if (problem) {
 				problems.push(problem);
@@ -662,10 +669,10 @@ const create = context => {
 
 		const name = `:${pseudoClass}`;
 		const range = getNameRange(node, 1, context);
-		const fix = pseudoClass === 'matches' ? fixer => fixer.replaceTextRange(range, ':is') : undefined;
+		const suggest = pseudoClass === 'matches' ? getMatchesSuggestion(range) : undefined;
 		return [
 			getProblem({
-				node, location: toLocation(range, context), feature: 'selector', name, fix,
+				node, location: toLocation(range, context), feature: 'selector', name, suggest,
 			}, allow),
 			...nestedProblems,
 		].filter(Boolean);
