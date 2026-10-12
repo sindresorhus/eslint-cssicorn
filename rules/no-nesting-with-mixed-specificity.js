@@ -45,19 +45,42 @@ const create = context => {
 	*/
 	const ruleSpecificities = new WeakMap();
 
+	/**
+	Computed lazily, because most rules have no nested rules that need them.
+
+	@param {RulePlain} rule
+	@returns {Specificity[] | undefined}
+	*/
+	const getSpecificities = rule => {
+		if (rule.prelude.type !== 'SelectorList') {
+			return;
+		}
+
+		const cachedSpecificities = ruleSpecificities.get(rule);
+		if (cachedSpecificities !== undefined) {
+			return cachedSpecificities;
+		}
+
+		const parentRule = getParentStyleRule(rule, context);
+		const parentSpecificities = parentRule && getSpecificities(parentRule);
+		const nestingSpecificity = getMaximumSpecificity(parentSpecificities ?? []);
+		const hasUnresolvedParent = !parentRule && hasAncestorStyleRule(rule, context);
+		const hasTopLevelRelativeSelector = !parentRule && !hasScopeAncestor(rule, context) && rule.prelude.children.some(selector => hasLeadingCombinator(selector));
+		/**
+		@type {Specificity[]}
+		*/
+		const specificities = parentSpecificities?.length === 0 || hasUnresolvedParent || hasTopLevelRelativeSelector ? [] : getRuleSpecificities(rule, nestingSpecificity);
+		ruleSpecificities.set(rule, specificities);
+		return specificities;
+	};
+
 	context.on('Rule', rule => {
 		if (rule.prelude.type !== 'SelectorList') {
 			return;
 		}
 
 		const parentRule = getParentStyleRule(rule, context);
-		const parentSpecificities = parentRule && ruleSpecificities.get(parentRule);
-		const nestingSpecificity = getMaximumSpecificity(parentSpecificities ?? []);
-		const hasUnresolvedParent = !parentRule && hasAncestorStyleRule(rule, context);
-		const hasTopLevelRelativeSelector = !parentRule && !hasScopeAncestor(rule, context) && rule.prelude.children.some(selector => hasLeadingCombinator(selector));
-		const specificities = parentSpecificities?.length === 0 || hasUnresolvedParent || hasTopLevelRelativeSelector ? [] : getRuleSpecificities(rule, nestingSpecificity);
-		ruleSpecificities.set(rule, specificities);
-
+		const parentSpecificities = parentRule && getSpecificities(parentRule);
 		if (parentSpecificities && hasMixedSpecificity(parentSpecificities)) {
 			return {
 				node: rule.prelude,
@@ -94,7 +117,7 @@ const create = context => {
 		}
 
 		const parentRule = getParentStyleRule(owner, context);
-		const parentSpecificities = parentRule && ruleSpecificities.get(parentRule);
+		const parentSpecificities = parentRule && getSpecificities(parentRule);
 		const nestingSpecificity = getMaximumSpecificity(parentSpecificities ?? []);
 		const specificities = selectors.map(selector => getSelectorSpecificity(selector, nestingSpecificity).specificity);
 		if (!hasMixedSpecificity(specificities)) {
