@@ -223,6 +223,11 @@ const isPseudoSelectorRepresentable = (node, allowPseudoElements) => {
 	}
 
 	const selectorArgument = getSelectorArgument(node);
+	// Only `:nth-child()` and `:nth-last-child()` accept an `of S` selector list, like `:nth-child(2n of .item)`.
+	if (selectorArgument && node.children.at(0).type === 'Nth' && !NTH_PSEUDO_CLASSES.has(name)) {
+		return false;
+	}
+
 	if (node.type === 'PseudoClassSelector' && SELECTOR_LIST_PSEUDO_CLASSES.has(name) && !selectorArgument) {
 		return false;
 	}

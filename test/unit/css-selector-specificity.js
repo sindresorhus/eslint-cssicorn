@@ -100,3 +100,13 @@ test('recognizes supported pseudo-selector forms', () => {
 	assert.equal(canMatchSelector(parseSelector('a*')), false);
 	assert.equal(canMatchSelector(parseSelector('a::before::marker')), false);
 });
+
+test('only accepts an `of` selector list in `:nth-child()` and `:nth-last-child()`', () => {
+	assert.equal(canMatchSelector(parseSelector(':nth-child(2n of .item)')), true);
+	assert.equal(canMatchSelector(parseSelector(':NTH-LAST-CHILD(odd of .item)')), true);
+	assert.equal(canMatchSelector(parseSelector(':nth-of-type(2n)')), true);
+	assert.equal(canMatchSelector(parseSelector(':nth-of-type(2n of .item)')), false);
+	assert.equal(canMatchSelector(parseSelector(':nth-last-of-type(odd of .item)')), false);
+	assert.equal(canMatchSelector(parseSelector(':is(:nth-of-type(2n of .item), .item)')), true);
+	assert.equal(canMatchSelector(parseSelector(':not(:nth-of-type(2n of .item))')), false);
+});

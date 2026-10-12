@@ -168,6 +168,9 @@ test.snapshot({
 		'b a::slotted { color: red; } a::slotted { color: blue; }',
 		'b a:lang { color: red; } a { color: blue; }',
 		'b a:nth-of-type { color: red; } a { color: blue; }',
+		// Only `:nth-child()` and `:nth-last-child()` accept `of S`, so browsers drop these rules.
+		'b a:nth-of-type(2n of .x) { color: red; } a { color: blue; }',
+		'b a:NTH-LAST-OF-TYPE(odd of .x) { color: red; } a { color: blue; }',
 		'b a::part { color: red; } a::part { color: blue; }',
 		'a:unknown(#dialog) { color: red; } a { color: blue; }',
 		'b a, a:unknown(#dialog) { color: red; } a { color: blue; }',
