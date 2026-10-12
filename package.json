@@ -20,6 +20,7 @@
 		"create-rules-index-file": "node ./scripts/create-rules-index-file.js",
 		"fix": "run-p --continue-on-error \"fix:*\"",
 		"fix:css-property-animation-types": "node ./scripts/create-css-property-animation-types.js",
+		"fix:css-property-interactions": "node ./scripts/create-css-property-interactions.js",
 		"fix:css-pseudo-selectors": "node ./scripts/create-css-pseudo-selectors.js",
 		"fix:eslint-docs": "eslint-doc-generator",
 		"fix:js": "eslint --fix",
@@ -27,6 +28,7 @@
 		"fix:snapshots": "node --test --test-update-snapshots \"test/*.js\" \"test/unit/*.js\"",
 		"lint": "run-p --continue-on-error \"lint:*\"",
 		"lint:css-property-animation-types": "node ./scripts/create-css-property-animation-types.js --check",
+		"lint:css-property-interactions": "node ./scripts/create-css-property-interactions.js --check",
 		"lint:css-pseudo-selectors": "node ./scripts/create-css-pseudo-selectors.js --check",
 		"lint:eslint-docs": "eslint-doc-generator --check",
 		"lint:js": "eslint",
@@ -75,6 +77,7 @@
 		"npm-run-all2": "^9.0.3",
 		"open-editor": "^6.0.0",
 		"outdent": "^0.8.0",
+		"tailwind-csstree": "^0.4.1",
 		"typescript": "^6.0.3",
 		"yaml": "^2.9.1"
 	},
