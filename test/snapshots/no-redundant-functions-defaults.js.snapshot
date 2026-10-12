@@ -8414,6 +8414,34 @@ Output:
 
 `;
 
+exports[`invalid(42): a { grid-template-columns: min(1fr); grid-auto-columns: max(1fr, 1fr); } 1`] = `
+
+  1 | a { grid-template-columns: min(1fr); grid-auto-columns: max(1fr, 1fr); }
+
+`;
+
+exports[`invalid(42): a { grid-template-columns: min(1fr); grid-auto-columns: max(1fr, 1fr); } 2`] = `
+
+Message:
+> 1 | a { grid-template-columns: min(1fr); grid-auto-columns: max(1fr, 1fr); }
+    |                            ^^^^^^^^ Simplify this redundant use of \`min()\`.
+
+Output:
+  1 | a { grid-template-columns: calc(1fr); grid-auto-columns: max(1fr, 1fr); }
+
+`;
+
+exports[`invalid(42): a { grid-template-columns: min(1fr); grid-auto-columns: max(1fr, 1fr); } 3`] = `
+
+Message:
+> 1 | a { grid-template-columns: min(1fr); grid-auto-columns: max(1fr, 1fr); }
+    |                                                         ^^^^^^^^^^^^^ Simplify this redundant use of \`max()\`.
+
+Output:
+  1 | a { grid-template-columns: min(1fr); grid-auto-columns: max(1fr ); }
+
+`;
+
 exports[`invalid(42): a { opacity: round(/* strategy */ up /* comma */, /* value */ round(down, .8) /* end */); } 1`] = `
 
   1 | a { opacity: round(/* strategy */ up /* comma */, /* value */ round(down, .8) /* end */); }

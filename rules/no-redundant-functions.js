@@ -162,8 +162,10 @@ function getLiteralCalculationProblem(node, declaration, parentFunction, context
 
 	const children = [...node.children];
 	const [literal] = children;
+	// Calculations cannot produce flex values, so `calc(1fr)` is invalid and must not become a valid `1fr`.
 	if (children.length !== 1 || !['Number', 'Dimension', 'Percentage'].includes(literal.type) || !Number.isFinite(Number(literal.value)) || literal.value.startsWith('-')
 		|| (literal.type === 'Number' && Number(literal.value) === 0)
+		|| (literal.type === 'Dimension' && normalizeCssIdentifier(literal.unit) === 'fr')
 	) {
 		return;
 	}

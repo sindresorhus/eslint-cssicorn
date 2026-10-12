@@ -764,6 +764,9 @@ test.snapshot({
 		'a { animation-timing-function: cubic-bezier(calc(2), .5, .5, 1); }',
 		'a { grid-template-columns: minmax(calc(20px), var(--max)); }',
 		'a { grid-template-columns: minmax(calc(-1px), 1fr); }',
+		// Calculations cannot produce flex values, so `calc(1fr)` is invalid. Unwrapping it would make the declaration apply.
+		'a { grid-template-columns: calc(1fr) minmax(calc(1fr), 1fr) repeat(2, calc(2FR)); grid-auto-rows: CALC(1fr) !important; }',
+		'a { grid-template-rows: calc(/* flex */ .5fr) calc(1Fr); }',
 		'a { --image: paint(custom, calc(20)); --fallback: attr(data-size, calc(20px)); }',
 		'a { --value: unknown(calc(20px)); }',
 		'a { content: "rgb(calc(20) 30 40)"; background: url("circle(calc(20px))"); }',
@@ -812,6 +815,7 @@ test.snapshot({
 		'a { background: linear-gradient(red calc(/* stop */ 20%), blue); }',
 		'@media (width > 10px) { a { &:hover { clip-path: circle(calc(20px)); } } }',
 		'a {\r\n  color: rgb(calc(\r\n    20\r\n  ) 30 40);\r\n}',
+		'a { grid-template-columns: min(1fr); grid-auto-columns: max(1fr, 1fr); }',
 	],
 });
 
