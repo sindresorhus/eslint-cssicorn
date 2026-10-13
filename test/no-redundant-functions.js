@@ -545,6 +545,21 @@ test.snapshot({
 		'a { background: radial-gradient(farthest-corner IN HSL LONGER HUE at 50% 50%, red, blue); }',
 		'a { background: repeating-radial-gradient(ellipse in oklab 10px 20px, red, blue); }',
 		'a { background: conic-gradient(from 0deg /* method */ in oklab at center, red, blue); }',
+		// A missing comma after the gradient line or position is invalid. Removing the default parts would make the gradient apply.
+		'a { background: linear-gradient(180deg red, blue); }',
+		'a { background: LINEAR-GRADIENT(180DEG red, blue); }',
+		'a { background: linear-gradient(180deg 10px, red, blue); }',
+		'a { background: repeating-linear-gradient(to bottom red, blue); }',
+		'a { background: conic-gradient(from 0deg red, blue); }',
+		'a { background: radial-gradient(ellipse red, blue); }',
+		// Removing a default first group would make a misplaced second prelude the valid first group.
+		'a { background: linear-gradient(to bottom, in oklab, red, blue); }',
+		'a { background: linear-gradient(to bottom, to right, red, blue); }',
+		'a { background: conic-gradient(from 0deg, from 90deg, red, blue); }',
+		'a { background: radial-gradient(farthest-corner, circle 10px, red, blue); }',
+		// A first group that starts with a color stop and contains gradient parts is invalid. Removing the default parts would make the gradient apply.
+		'a { background: radial-gradient(red at center, blue); }',
+		'a { background: linear-gradient(red in hsl shorter hue, blue); }',
 		'a { background: conic-gradient(from -0deg at left, red, blue); }',
 		'a { background: conic-gradient(from 1e-999deg at left, red, blue); }',
 		'a { background: linear-gradient(181deg in oklab, red, blue); }',
@@ -594,12 +609,17 @@ test.snapshot({
 		'a { background: radial-gradient(10% 20% ELLIPSE, red, blue); }',
 		'a { background: radial-gradient(ellipse closest-side at left, red, blue); }',
 		'a { background: radial-gradient(farthest-side ellipse, red, blue); }',
+		// The lexer cannot match nested `var()` and some newer colors in the stops, so only the first group is matched.
+		'a { background: linear-gradient(to bottom, rgba(var(--rgb), 0.5) 0%, transparent); }',
+		'a { background: linear-gradient(180deg, color-mix(in srgb, var(--a), transparent), blue); }',
+		'a { background: linear-gradient(to bottom, red calc(100% - env(safe-area-inset-top)), blue 100%); }',
+		'a { background: radial-gradient(circle at center, oklch(from var(--c) l c h) 0%, transparent); }',
+		'a { background: conic-gradient(from 0deg, contrast-color(red), blue); }',
 		'a { background: radial-gradient(circle 10px, red, blue); }',
 		'a { background: radial-gradient(circle 0, red, blue); }',
 		'a { background: radial-gradient(+0 circle at left, red, blue); }',
 		'a { background: repeating-radial-gradient(circle .0, red, blue); }',
 		'a { background: RADIAL-GRADIENT(CIRCLE 0e2, RED, BLUE) !important; }',
-		String.raw`a { background: radial-gradient(c\69 rcle 0.00 in oklab, red, blue); }`,
 		'a { background: radial-gradient(/* shape */ circle /* radius */ 0 /* end */, red, blue); }',
 		'a { --image: radial-gradient(circle 0 at left, red, blue); }',
 		'@media (width > 10px) { a { & b { background: radial-gradient(circle 0, red, blue); } } }',
@@ -614,7 +634,6 @@ test.snapshot({
 		'a { background: radial-gradient(closest-side at 50% 50%, red, blue); }',
 		'a { background: radial-gradient(ellipse closest-side in oklch, red, blue); }',
 		'a { background: RADIAL-GRADIENT(ELLIPSE 10PX 20PX, RED, BLUE) !important; }',
-		String.raw`a { background: radial-gradient(e\6c lipse 10px 20px, red, blue); }`,
 		'a { background: radial-gradient(circle /* radius */ 10px /* end */, red, blue); }',
 		'a { background: linear-gradient(to bottom in oklch, red, blue); }',
 		'a { background: repeating-linear-gradient(180deg in oklab, red, blue); }',
@@ -1014,8 +1033,6 @@ test.snapshot({
 		':export { filter: brightness(1); }',
 	],
 	invalid: [
-		String.raw`a { background: linear-gradient(r\65 d 0%, b\6c ue 100%); }`,
-		String.raw`a { background: linear-gradient(r\67 b(100% 0% 0%) 0%, blue 100%); }`,
 		'a { background: radial-gradient(10px 20px, red 0%, blue 100%); }',
 		'a { background: radial-gradient(calc(10px + 2vw), red 0%, blue 100%); }',
 		'a { background: linear-gradient(in oklab, red 0%, blue 100%); }',
@@ -1586,4 +1603,15 @@ test.snapshot({
 		'a { opacity: round(nearest, random(1, 10)); }',
 		'a {\r\n  width: clamp(none /* bound */,\r\n    5vw, 100px);\r\n  opacity: log(10, /* base */ e);\r\n}',
 	],
+});
+
+// The lexer does not decode escaped keywords, so it cannot check that the first argument of these gradients is valid, and they are not checked.
+test({
+	valid: [
+		String.raw`a { background: radial-gradient(c\69 rcle 0.00 in oklab, red, blue); }`,
+		String.raw`a { background: radial-gradient(e\6c lipse 10px 20px, red, blue); }`,
+		String.raw`a { background: linear-gradient(r\65 d 0%, b\6c ue 100%); }`,
+		String.raw`a { background: linear-gradient(r\67 b(100% 0% 0%) 0%, blue 100%); }`,
+	],
+	invalid: [],
 });

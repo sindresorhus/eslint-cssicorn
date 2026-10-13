@@ -92,7 +92,7 @@ Gradients and `color-mix()` / `palette-mix()` omit default `shorter hue` interpo
 - Radial: `farthest-corner`, implied `circle` / `ellipse`, and center positions.
 - Conic: Positive-zero `from` angles and center positions.
 
-Gradients also omit single first-stop `0%` and last-stop `100%` positions, including equivalent conic angles. Double-position stops and transition hints remain.
+Gradients also omit single first-stop `0%` and last-stop `100%` positions, including equivalent conic angles. Double-position stops and transition hints remain. Gradients are only checked when the bundled grammar matches their first argument, because removing a part from an invalid gradient, like `linear-gradient(180deg red, blue)` without the comma, could make it apply. So gradients with a nested `var()`, a newer color function, or an escaped keyword like `r\65 d` in the first argument are not checked.
 
 ### Easing
 

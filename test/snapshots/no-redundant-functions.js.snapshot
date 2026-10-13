@@ -1,17 +1,17 @@
-exports[`invalid(1): a { background: linear-gradient(r\\65 d 0%, b\\6c ue 100%); } 1`] = `
+exports[`invalid(1): a { background: radial-gradient(10px 20px, red 0%, blue 100%); } 1`] = `
 
-  1 | a { background: linear-gradient(r\\65 d 0%, b\\6c ue 100%); }
+  1 | a { background: radial-gradient(10px 20px, red 0%, blue 100%); }
 
 `;
 
-exports[`invalid(1): a { background: linear-gradient(r\\65 d 0%, b\\6c ue 100%); } 2`] = `
+exports[`invalid(1): a { background: radial-gradient(10px 20px, red 0%, blue 100%); } 2`] = `
 
 Message:
-> 1 | a { background: linear-gradient(r\\65 d 0%, b\\6c ue 100%); }
-    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`linear-gradient()\`.
+> 1 | a { background: radial-gradient(10px 20px, red 0%, blue 100%); }
+    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`radial-gradient()\`.
 
 Output:
-  1 | a { background: linear-gradient(r\\65 d , b\\6c ue ); }
+  1 | a { background: radial-gradient(10px 20px, red , blue ); }
 
 `;
 
@@ -269,45 +269,6 @@ Output:
 
 `;
 
-exports[`invalid(10): a { backdrop-filter: brightness(+1.0) blur(.0rem) hue-rotate(0e2rad); } 1`] = `
-
-  1 | a { backdrop-filter: brightness(+1.0) blur(.0rem) hue-rotate(0e2rad); }
-
-`;
-
-exports[`invalid(10): a { backdrop-filter: brightness(+1.0) blur(.0rem) hue-rotate(0e2rad); } 2`] = `
-
-Message:
-> 1 | a { backdrop-filter: brightness(+1.0) blur(.0rem) hue-rotate(0e2rad); }
-    |                      ^^^^^^^^^^^^^^^^ Simplify this redundant use of \`brightness()\`.
-
-Output:
-  1 | a { backdrop-filter: brightness() blur(.0rem) hue-rotate(0e2rad); }
-
-`;
-
-exports[`invalid(10): a { backdrop-filter: brightness(+1.0) blur(.0rem) hue-rotate(0e2rad); } 3`] = `
-
-Message:
-> 1 | a { backdrop-filter: brightness(+1.0) blur(.0rem) hue-rotate(0e2rad); }
-    |                                       ^^^^^^^^^^^ Simplify this redundant use of \`blur()\`.
-
-Output:
-  1 | a { backdrop-filter: brightness(+1.0) blur() hue-rotate(0e2rad); }
-
-`;
-
-exports[`invalid(10): a { backdrop-filter: brightness(+1.0) blur(.0rem) hue-rotate(0e2rad); } 4`] = `
-
-Message:
-> 1 | a { backdrop-filter: brightness(+1.0) blur(.0rem) hue-rotate(0e2rad); }
-    |                                                   ^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`hue-rotate()\`.
-
-Output:
-  1 | a { backdrop-filter: brightness(+1.0) blur(.0rem) hue-rotate(); }
-
-`;
-
 exports[`invalid(10): a { background: cross-fade(url(a.png) 50%, url(b.png)); } 1`] = `
 
   1 | a { background: cross-fade(url(a.png) 50%, url(b.png)); }
@@ -387,6 +348,23 @@ Message:
 
 Output:
   1 | a { color: r\\67 b(fr\\6f m var(--color) r g b  ); }
+
+`;
+
+exports[`invalid(10): a { filter: blur(0p\\78); } 1`] = `
+
+  1 | a { filter: blur(0p\\78); }
+
+`;
+
+exports[`invalid(10): a { filter: blur(0p\\78); } 2`] = `
+
+Message:
+> 1 | a { filter: blur(0p\\78); }
+    |             ^^^^^^^^^^^ Simplify this redundant use of \`blur()\`.
+
+Output:
+  1 | a { filter: blur(); }
 
 `;
 
@@ -514,6 +492,34 @@ Output:
 
 `;
 
+exports[`invalid(11): a { --filter: brightness(1); -webkit-filter: blur(0px); } 1`] = `
+
+  1 | a { --filter: brightness(1); -webkit-filter: blur(0px); }
+
+`;
+
+exports[`invalid(11): a { --filter: brightness(1); -webkit-filter: blur(0px); } 2`] = `
+
+Message:
+> 1 | a { --filter: brightness(1); -webkit-filter: blur(0px); }
+    |               ^^^^^^^^^^^^^ Simplify this redundant use of \`brightness()\`.
+
+Output:
+  1 | a { --filter: brightness(); -webkit-filter: blur(0px); }
+
+`;
+
+exports[`invalid(11): a { --filter: brightness(1); -webkit-filter: blur(0px); } 3`] = `
+
+Message:
+> 1 | a { --filter: brightness(1); -webkit-filter: blur(0px); }
+    |                                              ^^^^^^^^^ Simplify this redundant use of \`blur()\`.
+
+Output:
+  1 | a { --filter: brightness(1); -webkit-filter: blur(); }
+
+`;
+
 exports[`invalid(11): a { background: cross-fade(url(a.png), url(b.png) 50%); } 1`] = `
 
   1 | a { background: cross-fade(url(a.png), url(b.png) 50%); }
@@ -576,23 +582,6 @@ Message:
 
 Output:
   1 | a { color: rgb(from red r g b /* before */  /* alpha */  /* end */); }
-
-`;
-
-exports[`invalid(11): a { filter: brightness(/* default */ 1 /* end */); } 1`] = `
-
-  1 | a { filter: brightness(/* default */ 1 /* end */); }
-
-`;
-
-exports[`invalid(11): a { filter: brightness(/* default */ 1 /* end */); } 2`] = `
-
-Message:
-> 1 | a { filter: brightness(/* default */ 1 /* end */); }
-    |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`brightness()\`.
-
-Output:
-  1 | a { filter: brightness(/* default */  /* end */); }
 
 `;
 
@@ -901,23 +890,6 @@ Output:
 
 `;
 
-exports[`invalid(12): a { filter: blur(0p\\78); } 1`] = `
-
-  1 | a { filter: blur(0p\\78); }
-
-`;
-
-exports[`invalid(12): a { filter: blur(0p\\78); } 2`] = `
-
-Message:
-> 1 | a { filter: blur(0p\\78); }
-    |             ^^^^^^^^^^^ Simplify this redundant use of \`blur()\`.
-
-Output:
-  1 | a { filter: blur(); }
-
-`;
-
 exports[`invalid(12): a { offset-path: inset(10px round 2px 2px); } 1`] = `
 
   1 | a { offset-path: inset(10px round 2px 2px); }
@@ -949,6 +921,45 @@ Message:
 
 Output:
   1 | a { opacity: round(/* strategy */  /* a */ 1.5 /* b */ /* step */ ); }
+
+`;
+
+exports[`invalid(12): a { transform: translate(10px, 0) translate(20%, 0px) translate(1em, 0%); } 1`] = `
+
+  1 | a { transform: translate(10px, 0) translate(20%, 0px) translate(1em, 0%); }
+
+`;
+
+exports[`invalid(12): a { transform: translate(10px, 0) translate(20%, 0px) translate(1em, 0%); } 2`] = `
+
+Message:
+> 1 | a { transform: translate(10px, 0) translate(20%, 0px) translate(1em, 0%); }
+    |                ^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`translate()\`.
+
+Output:
+  1 | a { transform: translate(10px ) translate(20%, 0px) translate(1em, 0%); }
+
+`;
+
+exports[`invalid(12): a { transform: translate(10px, 0) translate(20%, 0px) translate(1em, 0%); } 3`] = `
+
+Message:
+> 1 | a { transform: translate(10px, 0) translate(20%, 0px) translate(1em, 0%); }
+    |                                   ^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`translate()\`.
+
+Output:
+  1 | a { transform: translate(10px, 0) translate(20% ) translate(1em, 0%); }
+
+`;
+
+exports[`invalid(12): a { transform: translate(10px, 0) translate(20%, 0px) translate(1em, 0%); } 4`] = `
+
+Message:
+> 1 | a { transform: translate(10px, 0) translate(20%, 0px) translate(1em, 0%); }
+    |                                                       ^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`translate()\`.
+
+Output:
+  1 | a { transform: translate(10px, 0) translate(20%, 0px) translate(1em ); }
 
 `;
 
@@ -1005,34 +1016,6 @@ Message:
 
 Output:
   1 | a { width: round(nearest, calc(10px + 2vw), 1px + 1px); }
-
-`;
-
-exports[`invalid(13): a { --filter: brightness(1); -webkit-filter: blur(0px); } 1`] = `
-
-  1 | a { --filter: brightness(1); -webkit-filter: blur(0px); }
-
-`;
-
-exports[`invalid(13): a { --filter: brightness(1); -webkit-filter: blur(0px); } 2`] = `
-
-Message:
-> 1 | a { --filter: brightness(1); -webkit-filter: blur(0px); }
-    |               ^^^^^^^^^^^^^ Simplify this redundant use of \`brightness()\`.
-
-Output:
-  1 | a { --filter: brightness(); -webkit-filter: blur(0px); }
-
-`;
-
-exports[`invalid(13): a { --filter: brightness(1); -webkit-filter: blur(0px); } 3`] = `
-
-Message:
-> 1 | a { --filter: brightness(1); -webkit-filter: blur(0px); }
-    |                                              ^^^^^^^^^ Simplify this redundant use of \`blur()\`.
-
-Output:
-  1 | a { --filter: brightness(1); -webkit-filter: blur(); }
 
 `;
 
@@ -1152,6 +1135,34 @@ Message:
 
 Output:
   1 | a { list-style-type: symbols( "*" "†"); }
+
+`;
+
+exports[`invalid(13): a { transform: skew(20deg, 0) skew(.5turn, 0rad); } 1`] = `
+
+  1 | a { transform: skew(20deg, 0) skew(.5turn, 0rad); }
+
+`;
+
+exports[`invalid(13): a { transform: skew(20deg, 0) skew(.5turn, 0rad); } 2`] = `
+
+Message:
+> 1 | a { transform: skew(20deg, 0) skew(.5turn, 0rad); }
+    |                ^^^^^^^^^^^^^^ Simplify this redundant use of \`skew()\`.
+
+Output:
+  1 | a { transform: skew(20deg ) skew(.5turn, 0rad); }
+
+`;
+
+exports[`invalid(13): a { transform: skew(20deg, 0) skew(.5turn, 0rad); } 3`] = `
+
+Message:
+> 1 | a { transform: skew(20deg, 0) skew(.5turn, 0rad); }
+    |                               ^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`skew()\`.
+
+Output:
+  1 | a { transform: skew(20deg, 0) skew(.5turn ); }
 
 `;
 
@@ -1397,42 +1408,42 @@ Output:
 
 `;
 
-exports[`invalid(14): a { transform: translate(10px, 0) translate(20%, 0px) translate(1em, 0%); } 1`] = `
+exports[`invalid(14): a { transform: scale(2, 2) scale(200%, 200%) scale(-0, -0); } 1`] = `
 
-  1 | a { transform: translate(10px, 0) translate(20%, 0px) translate(1em, 0%); }
-
-`;
-
-exports[`invalid(14): a { transform: translate(10px, 0) translate(20%, 0px) translate(1em, 0%); } 2`] = `
-
-Message:
-> 1 | a { transform: translate(10px, 0) translate(20%, 0px) translate(1em, 0%); }
-    |                ^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`translate()\`.
-
-Output:
-  1 | a { transform: translate(10px ) translate(20%, 0px) translate(1em, 0%); }
+  1 | a { transform: scale(2, 2) scale(200%, 200%) scale(-0, -0); }
 
 `;
 
-exports[`invalid(14): a { transform: translate(10px, 0) translate(20%, 0px) translate(1em, 0%); } 3`] = `
+exports[`invalid(14): a { transform: scale(2, 2) scale(200%, 200%) scale(-0, -0); } 2`] = `
 
 Message:
-> 1 | a { transform: translate(10px, 0) translate(20%, 0px) translate(1em, 0%); }
-    |                                   ^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`translate()\`.
+> 1 | a { transform: scale(2, 2) scale(200%, 200%) scale(-0, -0); }
+    |                ^^^^^^^^^^^ Simplify this redundant use of \`scale()\`.
 
 Output:
-  1 | a { transform: translate(10px, 0) translate(20% ) translate(1em, 0%); }
+  1 | a { transform: scale(2 ) scale(200%, 200%) scale(-0, -0); }
 
 `;
 
-exports[`invalid(14): a { transform: translate(10px, 0) translate(20%, 0px) translate(1em, 0%); } 4`] = `
+exports[`invalid(14): a { transform: scale(2, 2) scale(200%, 200%) scale(-0, -0); } 3`] = `
 
 Message:
-> 1 | a { transform: translate(10px, 0) translate(20%, 0px) translate(1em, 0%); }
-    |                                                       ^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`translate()\`.
+> 1 | a { transform: scale(2, 2) scale(200%, 200%) scale(-0, -0); }
+    |                            ^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`scale()\`.
 
 Output:
-  1 | a { transform: translate(10px, 0) translate(20%, 0px) translate(1em ); }
+  1 | a { transform: scale(2, 2) scale(200% ) scale(-0, -0); }
+
+`;
+
+exports[`invalid(14): a { transform: scale(2, 2) scale(200%, 200%) scale(-0, -0); } 4`] = `
+
+Message:
+> 1 | a { transform: scale(2, 2) scale(200%, 200%) scale(-0, -0); }
+    |                                              ^^^^^^^^^^^^^ Simplify this redundant use of \`scale()\`.
+
+Output:
+  1 | a { transform: scale(2, 2) scale(200%, 200%) scale(-0 ); }
 
 `;
 
@@ -1690,31 +1701,31 @@ Output:
 
 `;
 
-exports[`invalid(15): a { transform: skew(20deg, 0) skew(.5turn, 0rad); } 1`] = `
+exports[`invalid(15): a { transform: translate(calc(10px + 2vw), 0px) skew(random(0deg, 90deg), 0deg); } 1`] = `
 
-  1 | a { transform: skew(20deg, 0) skew(.5turn, 0rad); }
-
-`;
-
-exports[`invalid(15): a { transform: skew(20deg, 0) skew(.5turn, 0rad); } 2`] = `
-
-Message:
-> 1 | a { transform: skew(20deg, 0) skew(.5turn, 0rad); }
-    |                ^^^^^^^^^^^^^^ Simplify this redundant use of \`skew()\`.
-
-Output:
-  1 | a { transform: skew(20deg ) skew(.5turn, 0rad); }
+  1 | a { transform: translate(calc(10px + 2vw), 0px) skew(random(0deg, 90deg), 0deg); }
 
 `;
 
-exports[`invalid(15): a { transform: skew(20deg, 0) skew(.5turn, 0rad); } 3`] = `
+exports[`invalid(15): a { transform: translate(calc(10px + 2vw), 0px) skew(random(0deg, 90deg), 0deg); } 2`] = `
 
 Message:
-> 1 | a { transform: skew(20deg, 0) skew(.5turn, 0rad); }
-    |                               ^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`skew()\`.
+> 1 | a { transform: translate(calc(10px + 2vw), 0px) skew(random(0deg, 90deg), 0deg); }
+    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`translate()\`.
 
 Output:
-  1 | a { transform: skew(20deg, 0) skew(.5turn ); }
+  1 | a { transform: translate(calc(10px + 2vw) ) skew(random(0deg, 90deg), 0deg); }
+
+`;
+
+exports[`invalid(15): a { transform: translate(calc(10px + 2vw), 0px) skew(random(0deg, 90deg), 0deg); } 3`] = `
+
+Message:
+> 1 | a { transform: translate(calc(10px + 2vw), 0px) skew(random(0deg, 90deg), 0deg); }
+    |                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`skew()\`.
+
+Output:
+  1 | a { transform: translate(calc(10px + 2vw), 0px) skew(random(0deg, 90deg) ); }
 
 `;
 
@@ -1882,42 +1893,20 @@ Output:
 
 `;
 
-exports[`invalid(16): a { transform: scale(2, 2) scale(200%, 200%) scale(-0, -0); } 1`] = `
+exports[`invalid(16): a { transform: scale(/* x */ 2, /* y */ 2 /* end */); } 1`] = `
 
-  1 | a { transform: scale(2, 2) scale(200%, 200%) scale(-0, -0); }
-
-`;
-
-exports[`invalid(16): a { transform: scale(2, 2) scale(200%, 200%) scale(-0, -0); } 2`] = `
-
-Message:
-> 1 | a { transform: scale(2, 2) scale(200%, 200%) scale(-0, -0); }
-    |                ^^^^^^^^^^^ Simplify this redundant use of \`scale()\`.
-
-Output:
-  1 | a { transform: scale(2 ) scale(200%, 200%) scale(-0, -0); }
+  1 | a { transform: scale(/* x */ 2, /* y */ 2 /* end */); }
 
 `;
 
-exports[`invalid(16): a { transform: scale(2, 2) scale(200%, 200%) scale(-0, -0); } 3`] = `
+exports[`invalid(16): a { transform: scale(/* x */ 2, /* y */ 2 /* end */); } 2`] = `
 
 Message:
-> 1 | a { transform: scale(2, 2) scale(200%, 200%) scale(-0, -0); }
-    |                            ^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`scale()\`.
+> 1 | a { transform: scale(/* x */ 2, /* y */ 2 /* end */); }
+    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`scale()\`.
 
 Output:
-  1 | a { transform: scale(2, 2) scale(200% ) scale(-0, -0); }
-
-`;
-
-exports[`invalid(16): a { transform: scale(2, 2) scale(200%, 200%) scale(-0, -0); } 4`] = `
-
-Message:
-> 1 | a { transform: scale(2, 2) scale(200%, 200%) scale(-0, -0); }
-    |                                              ^^^^^^^^^^^^^ Simplify this redundant use of \`scale()\`.
-
-Output:
-  1 | a { transform: scale(2, 2) scale(200%, 200%) scale(-0 ); }
+  1 | a { transform: scale(/* x */ 2 /* y */  /* end */); }
 
 `;
 
@@ -2008,6 +1997,34 @@ Message:
 
 Output:
   1 | a { --counter: counters(section, "." ); }
+
+`;
+
+exports[`invalid(17): a { --transform: translate(10px, 0px); -webkit-transform: scale(2, 2); } 1`] = `
+
+  1 | a { --transform: translate(10px, 0px); -webkit-transform: scale(2, 2); }
+
+`;
+
+exports[`invalid(17): a { --transform: translate(10px, 0px); -webkit-transform: scale(2, 2); } 2`] = `
+
+Message:
+> 1 | a { --transform: translate(10px, 0px); -webkit-transform: scale(2, 2); }
+    |                  ^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`translate()\`.
+
+Output:
+  1 | a { --transform: translate(10px ); -webkit-transform: scale(2, 2); }
+
+`;
+
+exports[`invalid(17): a { --transform: translate(10px, 0px); -webkit-transform: scale(2, 2); } 3`] = `
+
+Message:
+> 1 | a { --transform: translate(10px, 0px); -webkit-transform: scale(2, 2); }
+    |                                                           ^^^^^^^^^^^ Simplify this redundant use of \`scale()\`.
+
+Output:
+  1 | a { --transform: translate(10px, 0px); -webkit-transform: scale(2 ); }
 
 `;
 
@@ -2127,34 +2144,6 @@ Message:
 
 Output:
   1 | a { color: color-mix(in srgb, red , green , blue ); }
-
-`;
-
-exports[`invalid(17): a { transform: translate(calc(10px + 2vw), 0px) skew(random(0deg, 90deg), 0deg); } 1`] = `
-
-  1 | a { transform: translate(calc(10px + 2vw), 0px) skew(random(0deg, 90deg), 0deg); }
-
-`;
-
-exports[`invalid(17): a { transform: translate(calc(10px + 2vw), 0px) skew(random(0deg, 90deg), 0deg); } 2`] = `
-
-Message:
-> 1 | a { transform: translate(calc(10px + 2vw), 0px) skew(random(0deg, 90deg), 0deg); }
-    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`translate()\`.
-
-Output:
-  1 | a { transform: translate(calc(10px + 2vw) ) skew(random(0deg, 90deg), 0deg); }
-
-`;
-
-exports[`invalid(17): a { transform: translate(calc(10px + 2vw), 0px) skew(random(0deg, 90deg), 0deg); } 3`] = `
-
-Message:
-> 1 | a { transform: translate(calc(10px + 2vw), 0px) skew(random(0deg, 90deg), 0deg); }
-    |                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`skew()\`.
-
-Output:
-  1 | a { transform: translate(calc(10px + 2vw), 0px) skew(random(0deg, 90deg) ); }
 
 `;
 
@@ -2293,6 +2282,23 @@ Output:
 
 `;
 
+exports[`invalid(18): a { background: linear-gradient(to bottom, red, blue); } 1`] = `
+
+  1 | a { background: linear-gradient(to bottom, red, blue); }
+
+`;
+
+exports[`invalid(18): a { background: linear-gradient(to bottom, red, blue); } 2`] = `
+
+Message:
+> 1 | a { background: linear-gradient(to bottom, red, blue); }
+    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`linear-gradient()\`.
+
+Output:
+  1 | a { background: linear-gradient(  red, blue); }
+
+`;
+
 exports[`invalid(18): a { background: radial-gradient(10% 20% ELLIPSE, red, blue); } 1`] = `
 
   1 | a { background: radial-gradient(10% 20% ELLIPSE, red, blue); }
@@ -2378,23 +2384,6 @@ Output:
 
 `;
 
-exports[`invalid(18): a { transform: scale(/* x */ 2, /* y */ 2 /* end */); } 1`] = `
-
-  1 | a { transform: scale(/* x */ 2, /* y */ 2 /* end */); }
-
-`;
-
-exports[`invalid(18): a { transform: scale(/* x */ 2, /* y */ 2 /* end */); } 2`] = `
-
-Message:
-> 1 | a { transform: scale(/* x */ 2, /* y */ 2 /* end */); }
-    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`scale()\`.
-
-Output:
-  1 | a { transform: scale(/* x */ 2 /* y */  /* end */); }
-
-`;
-
 exports[`invalid(18): a { width: calc(random(10px, 20px)); } 1`] = `
 
   1 | a { width: calc(random(10px, 20px)); }
@@ -2474,34 +2463,6 @@ Output:
 
 `;
 
-exports[`invalid(19): a { --transform: translate(10px, 0px); -webkit-transform: scale(2, 2); } 1`] = `
-
-  1 | a { --transform: translate(10px, 0px); -webkit-transform: scale(2, 2); }
-
-`;
-
-exports[`invalid(19): a { --transform: translate(10px, 0px); -webkit-transform: scale(2, 2); } 2`] = `
-
-Message:
-> 1 | a { --transform: translate(10px, 0px); -webkit-transform: scale(2, 2); }
-    |                  ^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`translate()\`.
-
-Output:
-  1 | a { --transform: translate(10px ); -webkit-transform: scale(2, 2); }
-
-`;
-
-exports[`invalid(19): a { --transform: translate(10px, 0px); -webkit-transform: scale(2, 2); } 3`] = `
-
-Message:
-> 1 | a { --transform: translate(10px, 0px); -webkit-transform: scale(2, 2); }
-    |                                                           ^^^^^^^^^^^ Simplify this redundant use of \`scale()\`.
-
-Output:
-  1 | a { --transform: translate(10px, 0px); -webkit-transform: scale(2 ); }
-
-`;
-
 exports[`invalid(19): a { animation-timing-function: linear(0, 1), linear(0 0%, 1 100%); } 1`] = `
 
   1 | a { animation-timing-function: linear(0, 1), linear(0 0%, 1 100%); }
@@ -2544,6 +2505,23 @@ Message:
 
 Output:
   1 | a { background: cross-fade(url(a.png) /* first */  /* comma */, url(b.png) /* second */ ); }
+
+`;
+
+exports[`invalid(19): a { background: linear-gradient(180deg, red, blue); } 1`] = `
+
+  1 | a { background: linear-gradient(180deg, red, blue); }
+
+`;
+
+exports[`invalid(19): a { background: linear-gradient(180deg, red, blue); } 2`] = `
+
+Message:
+> 1 | a { background: linear-gradient(180deg, red, blue); }
+    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`linear-gradient()\`.
+
+Output:
+  1 | a { background: linear-gradient( red, blue); }
 
 `;
 
@@ -2683,20 +2661,20 @@ Output:
 
 `;
 
-exports[`invalid(2): a { background: linear-gradient(r\\67 b(100% 0% 0%) 0%, blue 100%); } 1`] = `
+exports[`invalid(2): a { background: radial-gradient(calc(10px + 2vw), red 0%, blue 100%); } 1`] = `
 
-  1 | a { background: linear-gradient(r\\67 b(100% 0% 0%) 0%, blue 100%); }
+  1 | a { background: radial-gradient(calc(10px + 2vw), red 0%, blue 100%); }
 
 `;
 
-exports[`invalid(2): a { background: linear-gradient(r\\67 b(100% 0% 0%) 0%, blue 100%); } 2`] = `
+exports[`invalid(2): a { background: radial-gradient(calc(10px + 2vw), red 0%, blue 100%); } 2`] = `
 
 Message:
-> 1 | a { background: linear-gradient(r\\67 b(100% 0% 0%) 0%, blue 100%); }
-    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`linear-gradient()\`.
+> 1 | a { background: radial-gradient(calc(10px + 2vw), red 0%, blue 100%); }
+    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`radial-gradient()\`.
 
 Output:
-  1 | a { background: linear-gradient(r\\67 b(100% 0% 0%) , blue ); }
+  1 | a { background: radial-gradient(calc(10px + 2vw), red , blue ); }
 
 `;
 
@@ -2999,23 +2977,6 @@ Output:
 
 `;
 
-exports[`invalid(20): a { background: linear-gradient(to bottom, red, blue); } 1`] = `
-
-  1 | a { background: linear-gradient(to bottom, red, blue); }
-
-`;
-
-exports[`invalid(20): a { background: linear-gradient(to bottom, red, blue); } 2`] = `
-
-Message:
-> 1 | a { background: linear-gradient(to bottom, red, blue); }
-    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`linear-gradient()\`.
-
-Output:
-  1 | a { background: linear-gradient(  red, blue); }
-
-`;
-
 exports[`invalid(20): a { background: radial-gradient(farthest-side ellipse, red, blue); } 1`] = `
 
   1 | a { background: radial-gradient(farthest-side ellipse, red, blue); }
@@ -3030,6 +2991,23 @@ Message:
 
 Output:
   1 | a { background: radial-gradient(farthest-side , red, blue); }
+
+`;
+
+exports[`invalid(20): a { background: repeating-linear-gradient(.5turn, red, blue); } 1`] = `
+
+  1 | a { background: repeating-linear-gradient(.5turn, red, blue); }
+
+`;
+
+exports[`invalid(20): a { background: repeating-linear-gradient(.5turn, red, blue); } 2`] = `
+
+Message:
+> 1 | a { background: repeating-linear-gradient(.5turn, red, blue); }
+    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`repeating-linear-gradient()\`.
+
+Output:
+  1 | a { background: repeating-linear-gradient( red, blue); }
 
 `;
 
@@ -3191,37 +3169,37 @@ Output:
 
 `;
 
-exports[`invalid(21): a { background: linear-gradient(180deg, red, blue); } 1`] = `
+exports[`invalid(21): a { background: linear-gradient(200grad, red, blue); } 1`] = `
 
-  1 | a { background: linear-gradient(180deg, red, blue); }
+  1 | a { background: linear-gradient(200grad, red, blue); }
 
 `;
 
-exports[`invalid(21): a { background: linear-gradient(180deg, red, blue); } 2`] = `
+exports[`invalid(21): a { background: linear-gradient(200grad, red, blue); } 2`] = `
 
 Message:
-> 1 | a { background: linear-gradient(180deg, red, blue); }
-    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`linear-gradient()\`.
+> 1 | a { background: linear-gradient(200grad, red, blue); }
+    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`linear-gradient()\`.
 
 Output:
   1 | a { background: linear-gradient( red, blue); }
 
 `;
 
-exports[`invalid(21): a { background: radial-gradient(circle 10px, red, blue); } 1`] = `
+exports[`invalid(21): a { background: linear-gradient(to bottom, rgba(var(--rgb), 0.5) 0%, transparent); } 1`] = `
 
-  1 | a { background: radial-gradient(circle 10px, red, blue); }
+  1 | a { background: linear-gradient(to bottom, rgba(var(--rgb), 0.5) 0%, transparent); }
 
 `;
 
-exports[`invalid(21): a { background: radial-gradient(circle 10px, red, blue); } 2`] = `
+exports[`invalid(21): a { background: linear-gradient(to bottom, rgba(var(--rgb), 0.5) 0%, transparent); } 2`] = `
 
 Message:
-> 1 | a { background: radial-gradient(circle 10px, red, blue); }
-    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`radial-gradient()\`.
+> 1 | a { background: linear-gradient(to bottom, rgba(var(--rgb), 0.5) 0%, transparent); }
+    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`linear-gradient()\`.
 
 Output:
-  1 | a { background: radial-gradient( 10px, red, blue); }
+  1 | a { background: linear-gradient(  rgba(var(--rgb), 0.5) 0%, transparent); }
 
 `;
 
@@ -3456,37 +3434,37 @@ Output:
 
 `;
 
-exports[`invalid(22): a { background: radial-gradient(circle 0, red, blue); } 1`] = `
+exports[`invalid(22): a { background: linear-gradient(180deg, color-mix(in srgb, var(--a), transparent), blue); } 1`] = `
 
-  1 | a { background: radial-gradient(circle 0, red, blue); }
+  1 | a { background: linear-gradient(180deg, color-mix(in srgb, var(--a), transparent), blue); }
 
 `;
 
-exports[`invalid(22): a { background: radial-gradient(circle 0, red, blue); } 2`] = `
+exports[`invalid(22): a { background: linear-gradient(180deg, color-mix(in srgb, var(--a), transparent), blue); } 2`] = `
 
 Message:
-> 1 | a { background: radial-gradient(circle 0, red, blue); }
-    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`radial-gradient()\`.
+> 1 | a { background: linear-gradient(180deg, color-mix(in srgb, var(--a), transparent), blue); }
+    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`linear-gradient()\`.
 
 Output:
-  1 | a { background: radial-gradient( 0, red, blue); }
+  1 | a { background: linear-gradient( color-mix(in srgb, var(--a), transparent), blue); }
 
 `;
 
-exports[`invalid(22): a { background: repeating-linear-gradient(.5turn, red, blue); } 1`] = `
+exports[`invalid(22): a { background: radial-gradient(ellipse, red, blue); } 1`] = `
 
-  1 | a { background: repeating-linear-gradient(.5turn, red, blue); }
+  1 | a { background: radial-gradient(ellipse, red, blue); }
 
 `;
 
-exports[`invalid(22): a { background: repeating-linear-gradient(.5turn, red, blue); } 2`] = `
+exports[`invalid(22): a { background: radial-gradient(ellipse, red, blue); } 2`] = `
 
 Message:
-> 1 | a { background: repeating-linear-gradient(.5turn, red, blue); }
-    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`repeating-linear-gradient()\`.
+> 1 | a { background: radial-gradient(ellipse, red, blue); }
+    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`radial-gradient()\`.
 
 Output:
-  1 | a { background: repeating-linear-gradient( red, blue); }
+  1 | a { background: radial-gradient( red, blue); }
 
 `;
 
@@ -3637,37 +3615,37 @@ Output:
 
 `;
 
-exports[`invalid(23): a { background: linear-gradient(200grad, red, blue); } 1`] = `
+exports[`invalid(23): a { background: linear-gradient(to bottom, red calc(100% - env(safe-area-inset-top)), blue 100%); } 1`] = `
 
-  1 | a { background: linear-gradient(200grad, red, blue); }
+  1 | a { background: linear-gradient(to bottom, red calc(100% - env(safe-area-inset-top)), blue 100%); }
 
 `;
 
-exports[`invalid(23): a { background: linear-gradient(200grad, red, blue); } 2`] = `
+exports[`invalid(23): a { background: linear-gradient(to bottom, red calc(100% - env(safe-area-inset-top)), blue 100%); } 2`] = `
 
 Message:
-> 1 | a { background: linear-gradient(200grad, red, blue); }
-    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`linear-gradient()\`.
+> 1 | a { background: linear-gradient(to bottom, red calc(100% - env(safe-area-inset-top)), blue 100%); }
+    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`linear-gradient()\`.
 
 Output:
-  1 | a { background: linear-gradient( red, blue); }
+  1 | a { background: linear-gradient(  red calc(100% - env(safe-area-inset-top)), blue ); }
 
 `;
 
-exports[`invalid(23): a { background: radial-gradient(+0 circle at left, red, blue); } 1`] = `
+exports[`invalid(23): a { background: radial-gradient(farthest-corner, red, blue); } 1`] = `
 
-  1 | a { background: radial-gradient(+0 circle at left, red, blue); }
+  1 | a { background: radial-gradient(farthest-corner, red, blue); }
 
 `;
 
-exports[`invalid(23): a { background: radial-gradient(+0 circle at left, red, blue); } 2`] = `
+exports[`invalid(23): a { background: radial-gradient(farthest-corner, red, blue); } 2`] = `
 
 Message:
-> 1 | a { background: radial-gradient(+0 circle at left, red, blue); }
-    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`radial-gradient()\`.
+> 1 | a { background: radial-gradient(farthest-corner, red, blue); }
+    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`radial-gradient()\`.
 
 Output:
-  1 | a { background: radial-gradient(+0  at left, red, blue); }
+  1 | a { background: radial-gradient( red, blue); }
 
 `;
 
@@ -3896,37 +3874,37 @@ Output:
 
 `;
 
-exports[`invalid(24): a { background: radial-gradient(ellipse, red, blue); } 1`] = `
+exports[`invalid(24): a { background: radial-gradient(circle at center, oklch(from var(--c) l c h) 0%, transparent); } 1`] = `
 
-  1 | a { background: radial-gradient(ellipse, red, blue); }
+  1 | a { background: radial-gradient(circle at center, oklch(from var(--c) l c h) 0%, transparent); }
 
 `;
 
-exports[`invalid(24): a { background: radial-gradient(ellipse, red, blue); } 2`] = `
+exports[`invalid(24): a { background: radial-gradient(circle at center, oklch(from var(--c) l c h) 0%, transparent); } 2`] = `
 
 Message:
-> 1 | a { background: radial-gradient(ellipse, red, blue); }
-    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`radial-gradient()\`.
+> 1 | a { background: radial-gradient(circle at center, oklch(from var(--c) l c h) 0%, transparent); }
+    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`radial-gradient()\`.
 
 Output:
-  1 | a { background: radial-gradient( red, blue); }
+  1 | a { background: radial-gradient(circle  , oklch(from var(--c) l c h) 0%, transparent); }
 
 `;
 
-exports[`invalid(24): a { background: repeating-radial-gradient(circle .0, red, blue); } 1`] = `
+exports[`invalid(24): a { background: repeating-radial-gradient(farthest-corner ellipse at center center, red, blue); } 1`] = `
 
-  1 | a { background: repeating-radial-gradient(circle .0, red, blue); }
+  1 | a { background: repeating-radial-gradient(farthest-corner ellipse at center center, red, blue); }
 
 `;
 
-exports[`invalid(24): a { background: repeating-radial-gradient(circle .0, red, blue); } 2`] = `
+exports[`invalid(24): a { background: repeating-radial-gradient(farthest-corner ellipse at center center, red, blue); } 2`] = `
 
 Message:
-> 1 | a { background: repeating-radial-gradient(circle .0, red, blue); }
-    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`repeating-radial-gradient()\`.
+> 1 | a { background: repeating-radial-gradient(farthest-corner ellipse at center center, red, blue); }
+    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`repeating-radial-gradient()\`.
 
 Output:
-  1 | a { background: repeating-radial-gradient( .0, red, blue); }
+  1 | a { background: repeating-radial-gradient(     red, blue); }
 
 `;
 
@@ -4094,20 +4072,20 @@ Output:
 
 `;
 
-exports[`invalid(25): a { background: RADIAL-GRADIENT(CIRCLE 0e2, RED, BLUE) !important; } 1`] = `
+exports[`invalid(25): a { background: conic-gradient(from 0deg, contrast-color(red), blue); } 1`] = `
 
-  1 | a { background: RADIAL-GRADIENT(CIRCLE 0e2, RED, BLUE) !important; }
+  1 | a { background: conic-gradient(from 0deg, contrast-color(red), blue); }
 
 `;
 
-exports[`invalid(25): a { background: RADIAL-GRADIENT(CIRCLE 0e2, RED, BLUE) !important; } 2`] = `
+exports[`invalid(25): a { background: conic-gradient(from 0deg, contrast-color(red), blue); } 2`] = `
 
 Message:
-> 1 | a { background: RADIAL-GRADIENT(CIRCLE 0e2, RED, BLUE) !important; }
-    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`radial-gradient()\`.
+> 1 | a { background: conic-gradient(from 0deg, contrast-color(red), blue); }
+    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`conic-gradient()\`.
 
 Output:
-  1 | a { background: RADIAL-GRADIENT( 0e2, RED, BLUE) !important; }
+  1 | a { background: conic-gradient(  contrast-color(red), blue); }
 
 `;
 
@@ -4128,20 +4106,20 @@ Output:
 
 `;
 
-exports[`invalid(25): a { background: radial-gradient(farthest-corner, red, blue); } 1`] = `
+exports[`invalid(25): a { background: radial-gradient(at center, red, blue); } 1`] = `
 
-  1 | a { background: radial-gradient(farthest-corner, red, blue); }
+  1 | a { background: radial-gradient(at center, red, blue); }
 
 `;
 
-exports[`invalid(25): a { background: radial-gradient(farthest-corner, red, blue); } 2`] = `
+exports[`invalid(25): a { background: radial-gradient(at center, red, blue); } 2`] = `
 
 Message:
-> 1 | a { background: radial-gradient(farthest-corner, red, blue); }
-    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`radial-gradient()\`.
+> 1 | a { background: radial-gradient(at center, red, blue); }
+    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`radial-gradient()\`.
 
 Output:
-  1 | a { background: radial-gradient( red, blue); }
+  1 | a { background: radial-gradient(  red, blue); }
 
 `;
 
@@ -4326,6 +4304,23 @@ Output:
 
 `;
 
+exports[`invalid(26): a { background: conic-gradient(from 0deg, red, blue); } 1`] = `
+
+  1 | a { background: conic-gradient(from 0deg, red, blue); }
+
+`;
+
+exports[`invalid(26): a { background: conic-gradient(from 0deg, red, blue); } 2`] = `
+
+Message:
+> 1 | a { background: conic-gradient(from 0deg, red, blue); }
+    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`conic-gradient()\`.
+
+Output:
+  1 | a { background: conic-gradient(  red, blue); }
+
+`;
+
 exports[`invalid(26): a { background: cross-fade(25% red, blue 25%, 25% green, white 25%); } 1`] = `
 
   1 | a { background: cross-fade(25% red, blue 25%, 25% green, white 25%); }
@@ -4343,37 +4338,20 @@ Output:
 
 `;
 
-exports[`invalid(26): a { background: radial-gradient(c\\69 rcle 0.00 in oklab, red, blue); } 1`] = `
+exports[`invalid(26): a { background: radial-gradient(circle 10px, red, blue); } 1`] = `
 
-  1 | a { background: radial-gradient(c\\69 rcle 0.00 in oklab, red, blue); }
+  1 | a { background: radial-gradient(circle 10px, red, blue); }
 
 `;
 
-exports[`invalid(26): a { background: radial-gradient(c\\69 rcle 0.00 in oklab, red, blue); } 2`] = `
+exports[`invalid(26): a { background: radial-gradient(circle 10px, red, blue); } 2`] = `
 
 Message:
-> 1 | a { background: radial-gradient(c\\69 rcle 0.00 in oklab, red, blue); }
-    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`radial-gradient()\`.
+> 1 | a { background: radial-gradient(circle 10px, red, blue); }
+    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`radial-gradient()\`.
 
 Output:
-  1 | a { background: radial-gradient( 0.00 in oklab, red, blue); }
-
-`;
-
-exports[`invalid(26): a { background: repeating-radial-gradient(farthest-corner ellipse at center center, red, blue); } 1`] = `
-
-  1 | a { background: repeating-radial-gradient(farthest-corner ellipse at center center, red, blue); }
-
-`;
-
-exports[`invalid(26): a { background: repeating-radial-gradient(farthest-corner ellipse at center center, red, blue); } 2`] = `
-
-Message:
-> 1 | a { background: repeating-radial-gradient(farthest-corner ellipse at center center, red, blue); }
-    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`repeating-radial-gradient()\`.
-
-Output:
-  1 | a { background: repeating-radial-gradient(     red, blue); }
+  1 | a { background: radial-gradient( 10px, red, blue); }
 
 `;
 
@@ -4490,23 +4468,6 @@ Output:
 
 `;
 
-exports[`invalid(27): a { background: radial-gradient(/* shape */ circle /* radius */ 0 /* end */, red, blue); } 1`] = `
-
-  1 | a { background: radial-gradient(/* shape */ circle /* radius */ 0 /* end */, red, blue); }
-
-`;
-
-exports[`invalid(27): a { background: radial-gradient(/* shape */ circle /* radius */ 0 /* end */, red, blue); } 2`] = `
-
-Message:
-> 1 | a { background: radial-gradient(/* shape */ circle /* radius */ 0 /* end */, red, blue); }
-    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`radial-gradient()\`.
-
-Output:
-  1 | a { background: radial-gradient(/* shape */  /* radius */ 0 /* end */, red, blue); }
-
-`;
-
 exports[`invalid(27): a { background: radial-gradient(at 50%, red, blue); } 1`] = `
 
   1 | a { background: radial-gradient(at 50%, red, blue); }
@@ -4524,20 +4485,37 @@ Output:
 
 `;
 
-exports[`invalid(27): a { background: radial-gradient(at center, red, blue); } 1`] = `
+exports[`invalid(27): a { background: radial-gradient(circle 0, red, blue); } 1`] = `
 
-  1 | a { background: radial-gradient(at center, red, blue); }
+  1 | a { background: radial-gradient(circle 0, red, blue); }
 
 `;
 
-exports[`invalid(27): a { background: radial-gradient(at center, red, blue); } 2`] = `
+exports[`invalid(27): a { background: radial-gradient(circle 0, red, blue); } 2`] = `
 
 Message:
-> 1 | a { background: radial-gradient(at center, red, blue); }
-    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`radial-gradient()\`.
+> 1 | a { background: radial-gradient(circle 0, red, blue); }
+    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`radial-gradient()\`.
 
 Output:
-  1 | a { background: radial-gradient(  red, blue); }
+  1 | a { background: radial-gradient( 0, red, blue); }
+
+`;
+
+exports[`invalid(27): a { background: repeating-conic-gradient(from 0 at center, red, blue); } 1`] = `
+
+  1 | a { background: repeating-conic-gradient(from 0 at center, red, blue); }
+
+`;
+
+exports[`invalid(27): a { background: repeating-conic-gradient(from 0 at center, red, blue); } 2`] = `
+
+Message:
+> 1 | a { background: repeating-conic-gradient(from 0 at center, red, blue); }
+    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`repeating-conic-gradient()\`.
+
+Output:
+  1 | a { background: repeating-conic-gradient(    red, blue); }
 
 `;
 
@@ -4660,23 +4638,6 @@ Output:
 
 `;
 
-exports[`invalid(28): a { --image: radial-gradient(circle 0 at left, red, blue); } 1`] = `
-
-  1 | a { --image: radial-gradient(circle 0 at left, red, blue); }
-
-`;
-
-exports[`invalid(28): a { --image: radial-gradient(circle 0 at left, red, blue); } 2`] = `
-
-Message:
-> 1 | a { --image: radial-gradient(circle 0 at left, red, blue); }
-    |              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`radial-gradient()\`.
-
-Output:
-  1 | a { --image: radial-gradient( 0 at left, red, blue); }
-
-`;
-
 exports[`invalid(28): a { -webkit-animation: slide 1s steps(1); -moz-transition-timing-function: cubic-bezier(.25, .1, .25, 1); } 1`] = `
 
   1 | a { -webkit-animation: slide 1s steps(1); -moz-transition-timing-function: cubic-bezier(.25, .1, .25, 1); }
@@ -4722,20 +4683,37 @@ Output:
 
 `;
 
-exports[`invalid(28): a { background: conic-gradient(from 0deg, red, blue); } 1`] = `
+exports[`invalid(28): a { background: conic-gradient(at center center, red, blue); } 1`] = `
 
-  1 | a { background: conic-gradient(from 0deg, red, blue); }
+  1 | a { background: conic-gradient(at center center, red, blue); }
 
 `;
 
-exports[`invalid(28): a { background: conic-gradient(from 0deg, red, blue); } 2`] = `
+exports[`invalid(28): a { background: conic-gradient(at center center, red, blue); } 2`] = `
 
 Message:
-> 1 | a { background: conic-gradient(from 0deg, red, blue); }
-    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`conic-gradient()\`.
+> 1 | a { background: conic-gradient(at center center, red, blue); }
+    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`conic-gradient()\`.
 
 Output:
-  1 | a { background: conic-gradient(  red, blue); }
+  1 | a { background: conic-gradient(   red, blue); }
+
+`;
+
+exports[`invalid(28): a { background: radial-gradient(+0 circle at left, red, blue); } 1`] = `
+
+  1 | a { background: radial-gradient(+0 circle at left, red, blue); }
+
+`;
+
+exports[`invalid(28): a { background: radial-gradient(+0 circle at left, red, blue); } 2`] = `
+
+Message:
+> 1 | a { background: radial-gradient(+0 circle at left, red, blue); }
+    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`radial-gradient()\`.
+
+Output:
+  1 | a { background: radial-gradient(+0  at left, red, blue); }
 
 `;
 
@@ -4869,23 +4847,6 @@ Output:
 
 `;
 
-exports[`invalid(29): @media (width > 10px) { a { & b { background: radial-gradient(circle 0, red, blue); } } } 1`] = `
-
-  1 | @media (width > 10px) { a { & b { background: radial-gradient(circle 0, red, blue); } } }
-
-`;
-
-exports[`invalid(29): @media (width > 10px) { a { & b { background: radial-gradient(circle 0, red, blue); } } } 2`] = `
-
-Message:
-> 1 | @media (width > 10px) { a { & b { background: radial-gradient(circle 0, red, blue); } } }
-    |                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`radial-gradient()\`.
-
-Output:
-  1 | @media (width > 10px) { a { & b { background: radial-gradient( 0, red, blue); } } }
-
-`;
-
 exports[`invalid(29): a { animation-timing-function: steps(3, /* default */ end /* end */); } 1`] = `
 
   1 | a { animation-timing-function: steps(3, /* default */ end /* end */); }
@@ -4920,20 +4881,37 @@ Output:
 
 `;
 
-exports[`invalid(29): a { background: repeating-conic-gradient(from 0 at center, red, blue); } 1`] = `
+exports[`invalid(29): a { background: linear-gradient(red 0%, blue 100%); } 1`] = `
 
-  1 | a { background: repeating-conic-gradient(from 0 at center, red, blue); }
+  1 | a { background: linear-gradient(red 0%, blue 100%); }
 
 `;
 
-exports[`invalid(29): a { background: repeating-conic-gradient(from 0 at center, red, blue); } 2`] = `
+exports[`invalid(29): a { background: linear-gradient(red 0%, blue 100%); } 2`] = `
 
 Message:
-> 1 | a { background: repeating-conic-gradient(from 0 at center, red, blue); }
-    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`repeating-conic-gradient()\`.
+> 1 | a { background: linear-gradient(red 0%, blue 100%); }
+    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`linear-gradient()\`.
 
 Output:
-  1 | a { background: repeating-conic-gradient(    red, blue); }
+  1 | a { background: linear-gradient(red , blue ); }
+
+`;
+
+exports[`invalid(29): a { background: repeating-radial-gradient(circle .0, red, blue); } 1`] = `
+
+  1 | a { background: repeating-radial-gradient(circle .0, red, blue); }
+
+`;
+
+exports[`invalid(29): a { background: repeating-radial-gradient(circle .0, red, blue); } 2`] = `
+
+Message:
+> 1 | a { background: repeating-radial-gradient(circle .0, red, blue); }
+    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`repeating-radial-gradient()\`.
+
+Output:
+  1 | a { background: repeating-radial-gradient( .0, red, blue); }
 
 `;
 
@@ -5067,20 +5045,20 @@ Output:
 
 `;
 
-exports[`invalid(3): a { background: radial-gradient(10px 20px, red 0%, blue 100%); } 1`] = `
+exports[`invalid(3): a { background: linear-gradient(in oklab, red 0%, blue 100%); } 1`] = `
 
-  1 | a { background: radial-gradient(10px 20px, red 0%, blue 100%); }
+  1 | a { background: linear-gradient(in oklab, red 0%, blue 100%); }
 
 `;
 
-exports[`invalid(3): a { background: radial-gradient(10px 20px, red 0%, blue 100%); } 2`] = `
+exports[`invalid(3): a { background: linear-gradient(in oklab, red 0%, blue 100%); } 2`] = `
 
 Message:
-> 1 | a { background: radial-gradient(10px 20px, red 0%, blue 100%); }
-    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`radial-gradient()\`.
+> 1 | a { background: linear-gradient(in oklab, red 0%, blue 100%); }
+    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`linear-gradient()\`.
 
 Output:
-  1 | a { background: radial-gradient(10px 20px, red , blue ); }
+  1 | a { background: linear-gradient(in oklab, red , blue ); }
 
 `;
 
@@ -5374,20 +5352,20 @@ Message:
 
 `;
 
-exports[`invalid(30): a { background: conic-gradient(at center center, red, blue); } 1`] = `
+exports[`invalid(30): a { background: RADIAL-GRADIENT(CIRCLE 0e2, RED, BLUE) !important; } 1`] = `
 
-  1 | a { background: conic-gradient(at center center, red, blue); }
+  1 | a { background: RADIAL-GRADIENT(CIRCLE 0e2, RED, BLUE) !important; }
 
 `;
 
-exports[`invalid(30): a { background: conic-gradient(at center center, red, blue); } 2`] = `
+exports[`invalid(30): a { background: RADIAL-GRADIENT(CIRCLE 0e2, RED, BLUE) !important; } 2`] = `
 
 Message:
-> 1 | a { background: conic-gradient(at center center, red, blue); }
-    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`conic-gradient()\`.
+> 1 | a { background: RADIAL-GRADIENT(CIRCLE 0e2, RED, BLUE) !important; }
+    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`radial-gradient()\`.
 
 Output:
-  1 | a { background: conic-gradient(   red, blue); }
+  1 | a { background: RADIAL-GRADIENT( 0e2, RED, BLUE) !important; }
 
 `;
 
@@ -5405,6 +5383,23 @@ Message:
 
 Output:
   1 | a { background: conic-gradient(     red, blue); }
+
+`;
+
+exports[`invalid(30): a { background: radial-gradient(circle, red 0%, blue 100%); } 1`] = `
+
+  1 | a { background: radial-gradient(circle, red 0%, blue 100%); }
+
+`;
+
+exports[`invalid(30): a { background: radial-gradient(circle, red 0%, blue 100%); } 2`] = `
+
+Message:
+> 1 | a { background: radial-gradient(circle, red 0%, blue 100%); }
+    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`radial-gradient()\`.
+
+Output:
+  1 | a { background: radial-gradient(circle, red , blue ); }
 
 `;
 
@@ -5510,29 +5505,6 @@ Output:
 
 `;
 
-exports[`invalid(30): a {\r\n  background: radial-gradient(circle 0 at left, red, blue);\r\n} 1`] = `
-
-  1 | a {
-  2 |   background: radial-gradient(circle 0 at left, red, blue);
-  3 | }
-
-`;
-
-exports[`invalid(30): a {\r\n  background: radial-gradient(circle 0 at left, red, blue);\r\n} 2`] = `
-
-Message:
-  1 | a {
-> 2 |   background: radial-gradient(circle 0 at left, red, blue);
-    |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`radial-gradient()\`.
-  3 | }
-
-Output:
-  1 | a {
-  2 |   background: radial-gradient( 0 at left, red, blue);
-  3 | }
-
-`;
-
 exports[`invalid(31): a { &:hover { width: clamp(none, 5vw, 100px); } } 1`] = `
 
   1 | a { &:hover { width: clamp(none, 5vw, 100px); } }
@@ -5615,37 +5587,37 @@ Output:
 
 `;
 
-exports[`invalid(31): a { background: linear-gradient(red 0%, blue 100%); } 1`] = `
+exports[`invalid(31): a { background: conic-gradient(red 0%, blue 100%); } 1`] = `
 
-  1 | a { background: linear-gradient(red 0%, blue 100%); }
+  1 | a { background: conic-gradient(red 0%, blue 100%); }
 
 `;
 
-exports[`invalid(31): a { background: linear-gradient(red 0%, blue 100%); } 2`] = `
+exports[`invalid(31): a { background: conic-gradient(red 0%, blue 100%); } 2`] = `
 
 Message:
-> 1 | a { background: linear-gradient(red 0%, blue 100%); }
-    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`linear-gradient()\`.
+> 1 | a { background: conic-gradient(red 0%, blue 100%); }
+    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`conic-gradient()\`.
 
 Output:
-  1 | a { background: linear-gradient(red , blue ); }
+  1 | a { background: conic-gradient(red , blue ); }
 
 `;
 
-exports[`invalid(31): a { background: repeating-radial-gradient(10px circle at left, red, blue); } 1`] = `
+exports[`invalid(31): a { background: radial-gradient(/* shape */ circle /* radius */ 0 /* end */, red, blue); } 1`] = `
 
-  1 | a { background: repeating-radial-gradient(10px circle at left, red, blue); }
+  1 | a { background: radial-gradient(/* shape */ circle /* radius */ 0 /* end */, red, blue); }
 
 `;
 
-exports[`invalid(31): a { background: repeating-radial-gradient(10px circle at left, red, blue); } 2`] = `
+exports[`invalid(31): a { background: radial-gradient(/* shape */ circle /* radius */ 0 /* end */, red, blue); } 2`] = `
 
 Message:
-> 1 | a { background: repeating-radial-gradient(10px circle at left, red, blue); }
-    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`repeating-radial-gradient()\`.
+> 1 | a { background: radial-gradient(/* shape */ circle /* radius */ 0 /* end */, red, blue); }
+    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`radial-gradient()\`.
 
 Output:
-  1 | a { background: repeating-radial-gradient(10px  at left, red, blue); }
+  1 | a { background: radial-gradient(/* shape */  /* radius */ 0 /* end */, red, blue); }
 
 `;
 
@@ -5734,6 +5706,23 @@ Output:
 
 `;
 
+exports[`invalid(32): a { --image: radial-gradient(circle 0 at left, red, blue); } 1`] = `
+
+  1 | a { --image: radial-gradient(circle 0 at left, red, blue); }
+
+`;
+
+exports[`invalid(32): a { --image: radial-gradient(circle 0 at left, red, blue); } 2`] = `
+
+Message:
+> 1 | a { --image: radial-gradient(circle 0 at left, red, blue); }
+    |              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`radial-gradient()\`.
+
+Output:
+  1 | a { --image: radial-gradient( 0 at left, red, blue); }
+
+`;
+
 exports[`invalid(32): a { animation-timeline: scroll(block), scroll(nearest); } 1`] = `
 
   1 | a { animation-timeline: scroll(block), scroll(nearest); }
@@ -5776,6 +5765,23 @@ Message:
 
 `;
 
+exports[`invalid(32): a { background: linear-gradient(90deg, red 0%, green -10%, blue 100%); } 1`] = `
+
+  1 | a { background: linear-gradient(90deg, red 0%, green -10%, blue 100%); }
+
+`;
+
+exports[`invalid(32): a { background: linear-gradient(90deg, red 0%, green -10%, blue 100%); } 2`] = `
+
+Message:
+> 1 | a { background: linear-gradient(90deg, red 0%, green -10%, blue 100%); }
+    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`linear-gradient()\`.
+
+Output:
+  1 | a { background: linear-gradient(90deg, red , green -10%, blue ); }
+
+`;
+
 exports[`invalid(32): a { background: radial-gradient(at /* x */ 50% /* y */ 50%, red, blue); } 1`] = `
 
   1 | a { background: radial-gradient(at /* x */ 50% /* y */ 50%, red, blue); }
@@ -5790,40 +5796,6 @@ Message:
 
 Output:
   1 | a { background: radial-gradient( /* x */  /* y */  red, blue); }
-
-`;
-
-exports[`invalid(32): a { background: radial-gradient(circle farthest-corner at left, red, blue); } 1`] = `
-
-  1 | a { background: radial-gradient(circle farthest-corner at left, red, blue); }
-
-`;
-
-exports[`invalid(32): a { background: radial-gradient(circle farthest-corner at left, red, blue); } 2`] = `
-
-Message:
-> 1 | a { background: radial-gradient(circle farthest-corner at left, red, blue); }
-    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`radial-gradient()\`.
-
-Output:
-  1 | a { background: radial-gradient(circle  at left, red, blue); }
-
-`;
-
-exports[`invalid(32): a { background: radial-gradient(circle, red 0%, blue 100%); } 1`] = `
-
-  1 | a { background: radial-gradient(circle, red 0%, blue 100%); }
-
-`;
-
-exports[`invalid(32): a { background: radial-gradient(circle, red 0%, blue 100%); } 2`] = `
-
-Message:
-> 1 | a { background: radial-gradient(circle, red 0%, blue 100%); }
-    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`radial-gradient()\`.
-
-Output:
-  1 | a { background: radial-gradient(circle, red , blue ); }
 
 `;
 
@@ -5912,6 +5884,23 @@ Output:
 
 `;
 
+exports[`invalid(33): @media (width > 10px) { a { & b { background: radial-gradient(circle 0, red, blue); } } } 1`] = `
+
+  1 | @media (width > 10px) { a { & b { background: radial-gradient(circle 0, red, blue); } } }
+
+`;
+
+exports[`invalid(33): @media (width > 10px) { a { & b { background: radial-gradient(circle 0, red, blue); } } } 2`] = `
+
+Message:
+> 1 | @media (width > 10px) { a { & b { background: radial-gradient(circle 0, red, blue); } } }
+    |                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`radial-gradient()\`.
+
+Output:
+  1 | @media (width > 10px) { a { & b { background: radial-gradient( 0, red, blue); } } }
+
+`;
+
 exports[`invalid(33): @media (width > 1px) { a { animation-timing-function: steps(1); } } 1`] = `
 
   1 | @media (width > 1px) { a { animation-timing-function: steps(1); } }
@@ -5974,37 +5963,20 @@ Output:
 
 `;
 
-exports[`invalid(33): a { background: conic-gradient(red 0%, blue 100%); } 1`] = `
+exports[`invalid(33): a { background: linear-gradient(red 0%, green 110%, blue 100%); } 1`] = `
 
-  1 | a { background: conic-gradient(red 0%, blue 100%); }
+  1 | a { background: linear-gradient(red 0%, green 110%, blue 100%); }
 
 `;
 
-exports[`invalid(33): a { background: conic-gradient(red 0%, blue 100%); } 2`] = `
+exports[`invalid(33): a { background: linear-gradient(red 0%, green 110%, blue 100%); } 2`] = `
 
 Message:
-> 1 | a { background: conic-gradient(red 0%, blue 100%); }
-    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`conic-gradient()\`.
+> 1 | a { background: linear-gradient(red 0%, green 110%, blue 100%); }
+    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`linear-gradient()\`.
 
 Output:
-  1 | a { background: conic-gradient(red , blue ); }
-
-`;
-
-exports[`invalid(33): a { background: radial-gradient(ellipse at left, red, blue); } 1`] = `
-
-  1 | a { background: radial-gradient(ellipse at left, red, blue); }
-
-`;
-
-exports[`invalid(33): a { background: radial-gradient(ellipse at left, red, blue); } 2`] = `
-
-Message:
-> 1 | a { background: radial-gradient(ellipse at left, red, blue); }
-    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`radial-gradient()\`.
-
-Output:
-  1 | a { background: radial-gradient( at left, red, blue); }
+  1 | a { background: linear-gradient(red , green 110%, blue ); }
 
 `;
 
@@ -6166,37 +6138,20 @@ Output:
 
 `;
 
-exports[`invalid(34): a { background: linear-gradient(90deg, red 0%, green -10%, blue 100%); } 1`] = `
+exports[`invalid(34): a { background: linear-gradient(/* direction */ to /* edge */ bottom /* end */, red /* stop */ 0%, blue 100%); } 1`] = `
 
-  1 | a { background: linear-gradient(90deg, red 0%, green -10%, blue 100%); }
+  1 | a { background: linear-gradient(/* direction */ to /* edge */ bottom /* end */, red /* stop */ 0%, blue 100%); }
 
 `;
 
-exports[`invalid(34): a { background: linear-gradient(90deg, red 0%, green -10%, blue 100%); } 2`] = `
+exports[`invalid(34): a { background: linear-gradient(/* direction */ to /* edge */ bottom /* end */, red /* stop */ 0%, blue 100%); } 2`] = `
 
 Message:
-> 1 | a { background: linear-gradient(90deg, red 0%, green -10%, blue 100%); }
-    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`linear-gradient()\`.
+> 1 | a { background: linear-gradient(/* direction */ to /* edge */ bottom /* end */, red /* stop */ 0%, blue 100%); }
+    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`linear-gradient()\`.
 
 Output:
-  1 | a { background: linear-gradient(90deg, red , green -10%, blue ); }
-
-`;
-
-exports[`invalid(34): a { background: radial-gradient(circle at center, red, blue); } 1`] = `
-
-  1 | a { background: radial-gradient(circle at center, red, blue); }
-
-`;
-
-exports[`invalid(34): a { background: radial-gradient(circle at center, red, blue); } 2`] = `
-
-Message:
-> 1 | a { background: radial-gradient(circle at center, red, blue); }
-    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`radial-gradient()\`.
-
-Output:
-  1 | a { background: radial-gradient(circle  , red, blue); }
+  1 | a { background: linear-gradient(/* direction */  /* edge */  /* end */ red /* stop */ , blue ); }
 
 `;
 
@@ -6313,6 +6268,29 @@ Output:
 
 `;
 
+exports[`invalid(34): a {\r\n  background: radial-gradient(circle 0 at left, red, blue);\r\n} 1`] = `
+
+  1 | a {
+  2 |   background: radial-gradient(circle 0 at left, red, blue);
+  3 | }
+
+`;
+
+exports[`invalid(34): a {\r\n  background: radial-gradient(circle 0 at left, red, blue);\r\n} 2`] = `
+
+Message:
+  1 | a {
+> 2 |   background: radial-gradient(circle 0 at left, red, blue);
+    |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`radial-gradient()\`.
+  3 | }
+
+Output:
+  1 | a {
+  2 |   background: radial-gradient( 0 at left, red, blue);
+  3 | }
+
+`;
+
 exports[`invalid(34): a {\r\n  opacity: round(nearest, 1.5, 1);\r\n  animation-timing-function: linear(0, 1);\r\n} 1`] = `
 
   1 | a {
@@ -6353,6 +6331,23 @@ Output:
   2 |   opacity: round(nearest, 1.5, 1);
   3 |   animation-timing-function: linear;
   4 | }
+
+`;
+
+exports[`invalid(35): a { --image: linear-gradient(to bottom, red 0%, blue 100%); } 1`] = `
+
+  1 | a { --image: linear-gradient(to bottom, red 0%, blue 100%); }
+
+`;
+
+exports[`invalid(35): a { --image: linear-gradient(to bottom, red 0%, blue 100%); } 2`] = `
+
+Message:
+> 1 | a { --image: linear-gradient(to bottom, red 0%, blue 100%); }
+    |              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`linear-gradient()\`.
+
+Output:
+  1 | a { --image: linear-gradient(  red , blue ); }
 
 `;
 
@@ -6418,37 +6413,20 @@ Output:
 
 `;
 
-exports[`invalid(35): a { background: linear-gradient(red 0%, green 110%, blue 100%); } 1`] = `
+exports[`invalid(35): a { background: repeating-radial-gradient(10px circle at left, red, blue); } 1`] = `
 
-  1 | a { background: linear-gradient(red 0%, green 110%, blue 100%); }
+  1 | a { background: repeating-radial-gradient(10px circle at left, red, blue); }
 
 `;
 
-exports[`invalid(35): a { background: linear-gradient(red 0%, green 110%, blue 100%); } 2`] = `
+exports[`invalid(35): a { background: repeating-radial-gradient(10px circle at left, red, blue); } 2`] = `
 
 Message:
-> 1 | a { background: linear-gradient(red 0%, green 110%, blue 100%); }
-    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`linear-gradient()\`.
+> 1 | a { background: repeating-radial-gradient(10px circle at left, red, blue); }
+    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`repeating-radial-gradient()\`.
 
 Output:
-  1 | a { background: linear-gradient(red , green 110%, blue ); }
-
-`;
-
-exports[`invalid(35): a { background: radial-gradient(circle at 50% 50%, red, blue); } 1`] = `
-
-  1 | a { background: radial-gradient(circle at 50% 50%, red, blue); }
-
-`;
-
-exports[`invalid(35): a { background: radial-gradient(circle at 50% 50%, red, blue); } 2`] = `
-
-Message:
-> 1 | a { background: radial-gradient(circle at 50% 50%, red, blue); }
-    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`radial-gradient()\`.
-
-Output:
-  1 | a { background: radial-gradient(circle   , red, blue); }
+  1 | a { background: repeating-radial-gradient(10px  at left, red, blue); }
 
 `;
 
@@ -6662,37 +6640,48 @@ Output:
 
 `;
 
-exports[`invalid(36): a { background: linear-gradient(/* direction */ to /* edge */ bottom /* end */, red /* stop */ 0%, blue 100%); } 1`] = `
+exports[`invalid(36): a { background: image-set(linear-gradient(to bottom, red, blue) 1x); } 1`] = `
 
-  1 | a { background: linear-gradient(/* direction */ to /* edge */ bottom /* end */, red /* stop */ 0%, blue 100%); }
+  1 | a { background: image-set(linear-gradient(to bottom, red, blue) 1x); }
 
 `;
 
-exports[`invalid(36): a { background: linear-gradient(/* direction */ to /* edge */ bottom /* end */, red /* stop */ 0%, blue 100%); } 2`] = `
+exports[`invalid(36): a { background: image-set(linear-gradient(to bottom, red, blue) 1x); } 2`] = `
 
 Message:
-> 1 | a { background: linear-gradient(/* direction */ to /* edge */ bottom /* end */, red /* stop */ 0%, blue 100%); }
-    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`linear-gradient()\`.
+> 1 | a { background: image-set(linear-gradient(to bottom, red, blue) 1x); }
+    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`image-set()\`.
 
 Output:
-  1 | a { background: linear-gradient(/* direction */  /* edge */  /* end */ red /* stop */ , blue ); }
+  1 | a { background: image-set(linear-gradient(to bottom, red, blue) ); }
 
 `;
 
-exports[`invalid(36): a { background: radial-gradient(circle farthest-corner at center, red, blue); } 1`] = `
-
-  1 | a { background: radial-gradient(circle farthest-corner at center, red, blue); }
-
-`;
-
-exports[`invalid(36): a { background: radial-gradient(circle farthest-corner at center, red, blue); } 2`] = `
+exports[`invalid(36): a { background: image-set(linear-gradient(to bottom, red, blue) 1x); } 3`] = `
 
 Message:
-> 1 | a { background: radial-gradient(circle farthest-corner at center, red, blue); }
-    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`radial-gradient()\`.
+> 1 | a { background: image-set(linear-gradient(to bottom, red, blue) 1x); }
+    |                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`linear-gradient()\`.
 
 Output:
-  1 | a { background: radial-gradient(circle   , red, blue); }
+  1 | a { background: image-set(linear-gradient(  red, blue) 1x); }
+
+`;
+
+exports[`invalid(36): a { background: radial-gradient(circle farthest-corner at left, red, blue); } 1`] = `
+
+  1 | a { background: radial-gradient(circle farthest-corner at left, red, blue); }
+
+`;
+
+exports[`invalid(36): a { background: radial-gradient(circle farthest-corner at left, red, blue); } 2`] = `
+
+Message:
+> 1 | a { background: radial-gradient(circle farthest-corner at left, red, blue); }
+    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`radial-gradient()\`.
+
+Output:
+  1 | a { background: radial-gradient(circle  at left, red, blue); }
 
 `;
 
@@ -6744,23 +6733,6 @@ Message:
 
 Output:
   1 | a { width: clamp((none), 10px, 100px); }
-
-`;
-
-exports[`invalid(37): a { --image: linear-gradient(to bottom, red 0%, blue 100%); } 1`] = `
-
-  1 | a { --image: linear-gradient(to bottom, red 0%, blue 100%); }
-
-`;
-
-exports[`invalid(37): a { --image: linear-gradient(to bottom, red 0%, blue 100%); } 2`] = `
-
-Message:
-> 1 | a { --image: linear-gradient(to bottom, red 0%, blue 100%); }
-    |              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`linear-gradient()\`.
-
-Output:
-  1 | a { --image: linear-gradient(  red , blue ); }
 
 `;
 
@@ -6826,20 +6798,20 @@ Output:
 
 `;
 
-exports[`invalid(37): a { background: radial-gradient(ellipse at 10% 20%, red, blue); } 1`] = `
+exports[`invalid(37): a { background: radial-gradient(ellipse at left, red, blue); } 1`] = `
 
-  1 | a { background: radial-gradient(ellipse at 10% 20%, red, blue); }
+  1 | a { background: radial-gradient(ellipse at left, red, blue); }
 
 `;
 
-exports[`invalid(37): a { background: radial-gradient(ellipse at 10% 20%, red, blue); } 2`] = `
+exports[`invalid(37): a { background: radial-gradient(ellipse at left, red, blue); } 2`] = `
 
 Message:
-> 1 | a { background: radial-gradient(ellipse at 10% 20%, red, blue); }
-    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`radial-gradient()\`.
+> 1 | a { background: radial-gradient(ellipse at left, red, blue); }
+    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`radial-gradient()\`.
 
 Output:
-  1 | a { background: radial-gradient( at 10% 20%, red, blue); }
+  1 | a { background: radial-gradient( at left, red, blue); }
 
 `;
 
@@ -6891,6 +6863,34 @@ Message:
 
 Output:
   1 | a { width: min(100%, random(1px, 100px) + random(1px, 100px)); }
+
+`;
+
+exports[`invalid(37): a { width: min(1px, 1px, 2px); height: max(2em, 1em, 2em); } 1`] = `
+
+  1 | a { width: min(1px, 1px, 2px); height: max(2em, 1em, 2em); }
+
+`;
+
+exports[`invalid(37): a { width: min(1px, 1px, 2px); height: max(2em, 1em, 2em); } 2`] = `
+
+Message:
+> 1 | a { width: min(1px, 1px, 2px); height: max(2em, 1em, 2em); }
+    |            ^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`min()\`.
+
+Output:
+  1 | a { width: min(1px , 2px); height: max(2em, 1em, 2em); }
+
+`;
+
+exports[`invalid(37): a { width: min(1px, 1px, 2px); height: max(2em, 1em, 2em); } 3`] = `
+
+Message:
+> 1 | a { width: min(1px, 1px, 2px); height: max(2em, 1em, 2em); }
+    |                                        ^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`max()\`.
+
+Output:
+  1 | a { width: min(1px, 1px, 2px); height: max(2em, 1em ); }
 
 `;
 
@@ -6987,48 +6987,20 @@ Output:
 
 `;
 
-exports[`invalid(38): a { background: image-set(linear-gradient(to bottom, red, blue) 1x); } 1`] = `
+exports[`invalid(38): a { background: radial-gradient(circle at center, red, blue); } 1`] = `
 
-  1 | a { background: image-set(linear-gradient(to bottom, red, blue) 1x); }
+  1 | a { background: radial-gradient(circle at center, red, blue); }
 
 `;
 
-exports[`invalid(38): a { background: image-set(linear-gradient(to bottom, red, blue) 1x); } 2`] = `
+exports[`invalid(38): a { background: radial-gradient(circle at center, red, blue); } 2`] = `
 
 Message:
-> 1 | a { background: image-set(linear-gradient(to bottom, red, blue) 1x); }
-    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`image-set()\`.
+> 1 | a { background: radial-gradient(circle at center, red, blue); }
+    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`radial-gradient()\`.
 
 Output:
-  1 | a { background: image-set(linear-gradient(to bottom, red, blue) ); }
-
-`;
-
-exports[`invalid(38): a { background: image-set(linear-gradient(to bottom, red, blue) 1x); } 3`] = `
-
-Message:
-> 1 | a { background: image-set(linear-gradient(to bottom, red, blue) 1x); }
-    |                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`linear-gradient()\`.
-
-Output:
-  1 | a { background: image-set(linear-gradient(  red, blue) 1x); }
-
-`;
-
-exports[`invalid(38): a { background: radial-gradient(closest-side at 50% 50%, red, blue); } 1`] = `
-
-  1 | a { background: radial-gradient(closest-side at 50% 50%, red, blue); }
-
-`;
-
-exports[`invalid(38): a { background: radial-gradient(closest-side at 50% 50%, red, blue); } 2`] = `
-
-Message:
-> 1 | a { background: radial-gradient(closest-side at 50% 50%, red, blue); }
-    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`radial-gradient()\`.
-
-Output:
-  1 | a { background: radial-gradient(closest-side   , red, blue); }
+  1 | a { background: radial-gradient(circle  , red, blue); }
 
 `;
 
@@ -7117,6 +7089,34 @@ Output:
 
 `;
 
+exports[`invalid(38): a { width: min(0px, 0px, 0px); opacity: max(-0, -0); } 1`] = `
+
+  1 | a { width: min(0px, 0px, 0px); opacity: max(-0, -0); }
+
+`;
+
+exports[`invalid(38): a { width: min(0px, 0px, 0px); opacity: max(-0, -0); } 2`] = `
+
+Message:
+> 1 | a { width: min(0px, 0px, 0px); opacity: max(-0, -0); }
+    |            ^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`min()\`.
+
+Output:
+  1 | a { width: min(0px  ); opacity: max(-0, -0); }
+
+`;
+
+exports[`invalid(38): a { width: min(0px, 0px, 0px); opacity: max(-0, -0); } 3`] = `
+
+Message:
+> 1 | a { width: min(0px, 0px, 0px); opacity: max(-0, -0); }
+    |                                         ^^^^^^^^^^^ Simplify this redundant use of \`max()\`.
+
+Output:
+  1 | a { width: min(0px, 0px, 0px); opacity: max(-0 ); }
+
+`;
+
 exports[`invalid(39): a { --shape: ellipse(closest-side closest-side at center); } 1`] = `
 
   1 | a { --shape: ellipse(closest-side closest-side at center); }
@@ -7196,20 +7196,20 @@ Output:
 
 `;
 
-exports[`invalid(39): a { background: radial-gradient(ellipse closest-side in oklch, red, blue); } 1`] = `
+exports[`invalid(39): a { background: radial-gradient(circle at 50% 50%, red, blue); } 1`] = `
 
-  1 | a { background: radial-gradient(ellipse closest-side in oklch, red, blue); }
+  1 | a { background: radial-gradient(circle at 50% 50%, red, blue); }
 
 `;
 
-exports[`invalid(39): a { background: radial-gradient(ellipse closest-side in oklch, red, blue); } 2`] = `
+exports[`invalid(39): a { background: radial-gradient(circle at 50% 50%, red, blue); } 2`] = `
 
 Message:
-> 1 | a { background: radial-gradient(ellipse closest-side in oklch, red, blue); }
-    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`radial-gradient()\`.
+> 1 | a { background: radial-gradient(circle at 50% 50%, red, blue); }
+    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`radial-gradient()\`.
 
 Output:
-  1 | a { background: radial-gradient( closest-side in oklch, red, blue); }
+  1 | a { background: radial-gradient(circle   , red, blue); }
 
 `;
 
@@ -7264,48 +7264,37 @@ Output:
 
 `;
 
-exports[`invalid(39): a { width: min(1px, 1px, 2px); height: max(2em, 1em, 2em); } 1`] = `
+exports[`invalid(39): a { width: min(var(--sizes), 1px, 1px); } 1`] = `
 
-  1 | a { width: min(1px, 1px, 2px); height: max(2em, 1em, 2em); }
+  1 | a { width: min(var(--sizes), 1px, 1px); }
 
 `;
 
-exports[`invalid(39): a { width: min(1px, 1px, 2px); height: max(2em, 1em, 2em); } 2`] = `
+exports[`invalid(39): a { width: min(var(--sizes), 1px, 1px); } 2`] = `
 
 Message:
-> 1 | a { width: min(1px, 1px, 2px); height: max(2em, 1em, 2em); }
-    |            ^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`min()\`.
+> 1 | a { width: min(var(--sizes), 1px, 1px); }
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`min()\`.
 
 Output:
-  1 | a { width: min(1px , 2px); height: max(2em, 1em, 2em); }
+  1 | a { width: min(var(--sizes), 1px ); }
 
 `;
 
-exports[`invalid(39): a { width: min(1px, 1px, 2px); height: max(2em, 1em, 2em); } 3`] = `
+exports[`invalid(4): a { background: linear-gradient(0, red 0%, blue 100%); } 1`] = `
+
+  1 | a { background: linear-gradient(0, red 0%, blue 100%); }
+
+`;
+
+exports[`invalid(4): a { background: linear-gradient(0, red 0%, blue 100%); } 2`] = `
 
 Message:
-> 1 | a { width: min(1px, 1px, 2px); height: max(2em, 1em, 2em); }
-    |                                        ^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`max()\`.
+> 1 | a { background: linear-gradient(0, red 0%, blue 100%); }
+    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`linear-gradient()\`.
 
 Output:
-  1 | a { width: min(1px, 1px, 2px); height: max(2em, 1em ); }
-
-`;
-
-exports[`invalid(4): a { background: radial-gradient(calc(10px + 2vw), red 0%, blue 100%); } 1`] = `
-
-  1 | a { background: radial-gradient(calc(10px + 2vw), red 0%, blue 100%); }
-
-`;
-
-exports[`invalid(4): a { background: radial-gradient(calc(10px + 2vw), red 0%, blue 100%); } 2`] = `
-
-Message:
-> 1 | a { background: radial-gradient(calc(10px + 2vw), red 0%, blue 100%); }
-    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`radial-gradient()\`.
-
-Output:
-  1 | a { background: radial-gradient(calc(10px + 2vw), red , blue ); }
+  1 | a { background: linear-gradient(0, red , blue ); }
 
 `;
 
@@ -7602,23 +7591,6 @@ Output:
 
 `;
 
-exports[`invalid(40): a { background: RADIAL-GRADIENT(ELLIPSE 10PX 20PX, RED, BLUE) !important; } 1`] = `
-
-  1 | a { background: RADIAL-GRADIENT(ELLIPSE 10PX 20PX, RED, BLUE) !important; }
-
-`;
-
-exports[`invalid(40): a { background: RADIAL-GRADIENT(ELLIPSE 10PX 20PX, RED, BLUE) !important; } 2`] = `
-
-Message:
-> 1 | a { background: RADIAL-GRADIENT(ELLIPSE 10PX 20PX, RED, BLUE) !important; }
-    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`radial-gradient()\`.
-
-Output:
-  1 | a { background: RADIAL-GRADIENT( 10PX 20PX, RED, BLUE) !important; }
-
-`;
-
 exports[`invalid(40): a { background: conic-gradient(from 45deg, red 0deg, blue 1turn); } 1`] = `
 
   1 | a { background: conic-gradient(from 45deg, red 0deg, blue 1turn); }
@@ -7633,6 +7605,23 @@ Message:
 
 Output:
   1 | a { background: conic-gradient(from 45deg, red , blue ); }
+
+`;
+
+exports[`invalid(40): a { background: radial-gradient(circle farthest-corner at center, red, blue); } 1`] = `
+
+  1 | a { background: radial-gradient(circle farthest-corner at center, red, blue); }
+
+`;
+
+exports[`invalid(40): a { background: radial-gradient(circle farthest-corner at center, red, blue); } 2`] = `
+
+Message:
+> 1 | a { background: radial-gradient(circle farthest-corner at center, red, blue); }
+    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`radial-gradient()\`.
+
+Output:
+  1 | a { background: radial-gradient(circle   , red, blue); }
 
 `;
 
@@ -7748,31 +7737,20 @@ Output:
 
 `;
 
-exports[`invalid(40): a { width: min(0px, 0px, 0px); opacity: max(-0, -0); } 1`] = `
+exports[`invalid(40): a { width: min(1px, /* duplicate */ 1px /* end */, 1px); } 1`] = `
 
-  1 | a { width: min(0px, 0px, 0px); opacity: max(-0, -0); }
-
-`;
-
-exports[`invalid(40): a { width: min(0px, 0px, 0px); opacity: max(-0, -0); } 2`] = `
-
-Message:
-> 1 | a { width: min(0px, 0px, 0px); opacity: max(-0, -0); }
-    |            ^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`min()\`.
-
-Output:
-  1 | a { width: min(0px  ); opacity: max(-0, -0); }
+  1 | a { width: min(1px, /* duplicate */ 1px /* end */, 1px); }
 
 `;
 
-exports[`invalid(40): a { width: min(0px, 0px, 0px); opacity: max(-0, -0); } 3`] = `
+exports[`invalid(40): a { width: min(1px, /* duplicate */ 1px /* end */, 1px); } 2`] = `
 
 Message:
-> 1 | a { width: min(0px, 0px, 0px); opacity: max(-0, -0); }
-    |                                         ^^^^^^^^^^^ Simplify this redundant use of \`max()\`.
+> 1 | a { width: min(1px, /* duplicate */ 1px /* end */, 1px); }
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`min()\`.
 
 Output:
-  1 | a { width: min(0px, 0px, 0px); opacity: max(-0 ); }
+  1 | a { width: min(1px /* duplicate */  /* end */ ); }
 
 `;
 
@@ -7827,6 +7805,45 @@ Output:
 
 `;
 
+exports[`invalid(41): a { FILTER: BRIGHTNESS(1); TRANSFORM: SCALE(2, 2); BACKGROUND: LINEAR-GRADIENT(TO BOTTOM, RED, BLUE) !important; } 1`] = `
+
+  1 | a { FILTER: BRIGHTNESS(1); TRANSFORM: SCALE(2, 2); BACKGROUND: LINEAR-GRADIENT(TO BOTTOM, RED, BLUE) !important; }
+
+`;
+
+exports[`invalid(41): a { FILTER: BRIGHTNESS(1); TRANSFORM: SCALE(2, 2); BACKGROUND: LINEAR-GRADIENT(TO BOTTOM, RED, BLUE) !important; } 2`] = `
+
+Message:
+> 1 | a { FILTER: BRIGHTNESS(1); TRANSFORM: SCALE(2, 2); BACKGROUND: LINEAR-GRADIENT(TO BOTTOM, RED, BLUE) !important; }
+    |             ^^^^^^^^^^^^^ Simplify this redundant use of \`brightness()\`.
+
+Output:
+  1 | a { FILTER: BRIGHTNESS(); TRANSFORM: SCALE(2, 2); BACKGROUND: LINEAR-GRADIENT(TO BOTTOM, RED, BLUE) !important; }
+
+`;
+
+exports[`invalid(41): a { FILTER: BRIGHTNESS(1); TRANSFORM: SCALE(2, 2); BACKGROUND: LINEAR-GRADIENT(TO BOTTOM, RED, BLUE) !important; } 3`] = `
+
+Message:
+> 1 | a { FILTER: BRIGHTNESS(1); TRANSFORM: SCALE(2, 2); BACKGROUND: LINEAR-GRADIENT(TO BOTTOM, RED, BLUE) !important; }
+    |                                       ^^^^^^^^^^^ Simplify this redundant use of \`scale()\`.
+
+Output:
+  1 | a { FILTER: BRIGHTNESS(1); TRANSFORM: SCALE(2 ); BACKGROUND: LINEAR-GRADIENT(TO BOTTOM, RED, BLUE) !important; }
+
+`;
+
+exports[`invalid(41): a { FILTER: BRIGHTNESS(1); TRANSFORM: SCALE(2, 2); BACKGROUND: LINEAR-GRADIENT(TO BOTTOM, RED, BLUE) !important; } 4`] = `
+
+Message:
+> 1 | a { FILTER: BRIGHTNESS(1); TRANSFORM: SCALE(2, 2); BACKGROUND: LINEAR-GRADIENT(TO BOTTOM, RED, BLUE) !important; }
+    |                                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`linear-gradient()\`.
+
+Output:
+  1 | a { FILTER: BRIGHTNESS(1); TRANSFORM: SCALE(2, 2); BACKGROUND: LINEAR-GRADIENT(  RED, BLUE) !important; }
+
+`;
+
 exports[`invalid(41): a { animation-timeline: view(0px 0px), view(-0px -0px); } 1`] = `
 
   1 | a { animation-timeline: view(0px 0px), view(-0px -0px); }
@@ -7872,20 +7889,20 @@ Output:
 
 `;
 
-exports[`invalid(41): a { background: radial-gradient(e\\6c lipse 10px 20px, red, blue); } 1`] = `
+exports[`invalid(41): a { background: radial-gradient(ellipse at 10% 20%, red, blue); } 1`] = `
 
-  1 | a { background: radial-gradient(e\\6c lipse 10px 20px, red, blue); }
+  1 | a { background: radial-gradient(ellipse at 10% 20%, red, blue); }
 
 `;
 
-exports[`invalid(41): a { background: radial-gradient(e\\6c lipse 10px 20px, red, blue); } 2`] = `
+exports[`invalid(41): a { background: radial-gradient(ellipse at 10% 20%, red, blue); } 2`] = `
 
 Message:
-> 1 | a { background: radial-gradient(e\\6c lipse 10px 20px, red, blue); }
-    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`radial-gradient()\`.
+> 1 | a { background: radial-gradient(ellipse at 10% 20%, red, blue); }
+    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`radial-gradient()\`.
 
 Output:
-  1 | a { background: radial-gradient( 10px 20px, red, blue); }
+  1 | a { background: radial-gradient( at 10% 20%, red, blue); }
 
 `;
 
@@ -7920,23 +7937,6 @@ Message:
 
 Output:
   1 | a { color: hsla(from var(--color) h s l  ); }
-
-`;
-
-exports[`invalid(41): a { width: min(var(--sizes), 1px, 1px); } 1`] = `
-
-  1 | a { width: min(var(--sizes), 1px, 1px); }
-
-`;
-
-exports[`invalid(41): a { width: min(var(--sizes), 1px, 1px); } 2`] = `
-
-Message:
-> 1 | a { width: min(var(--sizes), 1px, 1px); }
-    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`min()\`.
-
-Output:
-  1 | a { width: min(var(--sizes), 1px ); }
 
 `;
 
@@ -8036,20 +8036,20 @@ Output:
 
 `;
 
-exports[`invalid(42): a { background: radial-gradient(circle /* radius */ 10px /* end */, red, blue); } 1`] = `
+exports[`invalid(42): a { background: radial-gradient(closest-side at 50% 50%, red, blue); } 1`] = `
 
-  1 | a { background: radial-gradient(circle /* radius */ 10px /* end */, red, blue); }
+  1 | a { background: radial-gradient(closest-side at 50% 50%, red, blue); }
 
 `;
 
-exports[`invalid(42): a { background: radial-gradient(circle /* radius */ 10px /* end */, red, blue); } 2`] = `
+exports[`invalid(42): a { background: radial-gradient(closest-side at 50% 50%, red, blue); } 2`] = `
 
 Message:
-> 1 | a { background: radial-gradient(circle /* radius */ 10px /* end */, red, blue); }
-    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`radial-gradient()\`.
+> 1 | a { background: radial-gradient(closest-side at 50% 50%, red, blue); }
+    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`radial-gradient()\`.
 
 Output:
-  1 | a { background: radial-gradient( /* radius */ 10px /* end */, red, blue); }
+  1 | a { background: radial-gradient(closest-side   , red, blue); }
 
 `;
 
@@ -8087,20 +8087,31 @@ Output:
 
 `;
 
-exports[`invalid(42): a { width: min(1px, /* duplicate */ 1px /* end */, 1px); } 1`] = `
+exports[`invalid(42): a { filter: b\\72 ightness(1); transform: tr\\61 nslate(1px, 0p\\78); background: linear-gradient(t\\6f b\\6f ttom, red, blue); } 1`] = `
 
-  1 | a { width: min(1px, /* duplicate */ 1px /* end */, 1px); }
+  1 | a { filter: b\\72 ightness(1); transform: tr\\61 nslate(1px, 0p\\78); background: linear-gradient(t\\6f b\\6f ttom, red, blue); }
 
 `;
 
-exports[`invalid(42): a { width: min(1px, /* duplicate */ 1px /* end */, 1px); } 2`] = `
+exports[`invalid(42): a { filter: b\\72 ightness(1); transform: tr\\61 nslate(1px, 0p\\78); background: linear-gradient(t\\6f b\\6f ttom, red, blue); } 2`] = `
 
 Message:
-> 1 | a { width: min(1px, /* duplicate */ 1px /* end */, 1px); }
-    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`min()\`.
+> 1 | a { filter: b\\72 ightness(1); transform: tr\\61 nslate(1px, 0p\\78); background: linear-gradient(t\\6f b\\6f ttom, red, blue); }
+    |             ^^^^^^^^^^^^^^^^ Simplify this redundant use of \`brightness()\`.
 
 Output:
-  1 | a { width: min(1px /* duplicate */  /* end */ ); }
+  1 | a { filter: b\\72 ightness(); transform: tr\\61 nslate(1px, 0p\\78); background: linear-gradient(t\\6f b\\6f ttom, red, blue); }
+
+`;
+
+exports[`invalid(42): a { filter: b\\72 ightness(1); transform: tr\\61 nslate(1px, 0p\\78); background: linear-gradient(t\\6f b\\6f ttom, red, blue); } 3`] = `
+
+Message:
+> 1 | a { filter: b\\72 ightness(1); transform: tr\\61 nslate(1px, 0p\\78); background: linear-gradient(t\\6f b\\6f ttom, red, blue); }
+    |                                          ^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`translate()\`.
+
+Output:
+  1 | a { filter: b\\72 ightness(1); transform: tr\\61 nslate(1px ); background: linear-gradient(t\\6f b\\6f ttom, red, blue); }
 
 `;
 
@@ -8121,42 +8132,20 @@ Output:
 
 `;
 
-exports[`invalid(43): a { FILTER: BRIGHTNESS(1); TRANSFORM: SCALE(2, 2); BACKGROUND: LINEAR-GRADIENT(TO BOTTOM, RED, BLUE) !important; } 1`] = `
+exports[`invalid(43): a { &:hover { filter: brightness(1); } } 1`] = `
 
-  1 | a { FILTER: BRIGHTNESS(1); TRANSFORM: SCALE(2, 2); BACKGROUND: LINEAR-GRADIENT(TO BOTTOM, RED, BLUE) !important; }
-
-`;
-
-exports[`invalid(43): a { FILTER: BRIGHTNESS(1); TRANSFORM: SCALE(2, 2); BACKGROUND: LINEAR-GRADIENT(TO BOTTOM, RED, BLUE) !important; } 2`] = `
-
-Message:
-> 1 | a { FILTER: BRIGHTNESS(1); TRANSFORM: SCALE(2, 2); BACKGROUND: LINEAR-GRADIENT(TO BOTTOM, RED, BLUE) !important; }
-    |             ^^^^^^^^^^^^^ Simplify this redundant use of \`brightness()\`.
-
-Output:
-  1 | a { FILTER: BRIGHTNESS(); TRANSFORM: SCALE(2, 2); BACKGROUND: LINEAR-GRADIENT(TO BOTTOM, RED, BLUE) !important; }
+  1 | a { &:hover { filter: brightness(1); } }
 
 `;
 
-exports[`invalid(43): a { FILTER: BRIGHTNESS(1); TRANSFORM: SCALE(2, 2); BACKGROUND: LINEAR-GRADIENT(TO BOTTOM, RED, BLUE) !important; } 3`] = `
+exports[`invalid(43): a { &:hover { filter: brightness(1); } } 2`] = `
 
 Message:
-> 1 | a { FILTER: BRIGHTNESS(1); TRANSFORM: SCALE(2, 2); BACKGROUND: LINEAR-GRADIENT(TO BOTTOM, RED, BLUE) !important; }
-    |                                       ^^^^^^^^^^^ Simplify this redundant use of \`scale()\`.
+> 1 | a { &:hover { filter: brightness(1); } }
+    |                       ^^^^^^^^^^^^^ Simplify this redundant use of \`brightness()\`.
 
 Output:
-  1 | a { FILTER: BRIGHTNESS(1); TRANSFORM: SCALE(2 ); BACKGROUND: LINEAR-GRADIENT(TO BOTTOM, RED, BLUE) !important; }
-
-`;
-
-exports[`invalid(43): a { FILTER: BRIGHTNESS(1); TRANSFORM: SCALE(2, 2); BACKGROUND: LINEAR-GRADIENT(TO BOTTOM, RED, BLUE) !important; } 4`] = `
-
-Message:
-> 1 | a { FILTER: BRIGHTNESS(1); TRANSFORM: SCALE(2, 2); BACKGROUND: LINEAR-GRADIENT(TO BOTTOM, RED, BLUE) !important; }
-    |                                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`linear-gradient()\`.
-
-Output:
-  1 | a { FILTER: BRIGHTNESS(1); TRANSFORM: SCALE(2, 2); BACKGROUND: LINEAR-GRADIENT(  RED, BLUE) !important; }
+  1 | a { &:hover { filter: brightness(); } }
 
 `;
 
@@ -8205,20 +8194,20 @@ Output:
 
 `;
 
-exports[`invalid(43): a { background: linear-gradient(to bottom in oklch, red, blue); } 1`] = `
+exports[`invalid(43): a { background: radial-gradient(ellipse closest-side in oklch, red, blue); } 1`] = `
 
-  1 | a { background: linear-gradient(to bottom in oklch, red, blue); }
+  1 | a { background: radial-gradient(ellipse closest-side in oklch, red, blue); }
 
 `;
 
-exports[`invalid(43): a { background: linear-gradient(to bottom in oklch, red, blue); } 2`] = `
+exports[`invalid(43): a { background: radial-gradient(ellipse closest-side in oklch, red, blue); } 2`] = `
 
 Message:
-> 1 | a { background: linear-gradient(to bottom in oklch, red, blue); }
-    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`linear-gradient()\`.
+> 1 | a { background: radial-gradient(ellipse closest-side in oklch, red, blue); }
+    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`radial-gradient()\`.
 
 Output:
-  1 | a { background: linear-gradient(  in oklch, red, blue); }
+  1 | a { background: radial-gradient( closest-side in oklch, red, blue); }
 
 `;
 
@@ -8359,6 +8348,23 @@ Output:
 
 `;
 
+exports[`invalid(44): @layer theme { a { background: conic-gradient(from 0deg, red, blue); } } 1`] = `
+
+  1 | @layer theme { a { background: conic-gradient(from 0deg, red, blue); } }
+
+`;
+
+exports[`invalid(44): @layer theme { a { background: conic-gradient(from 0deg, red, blue); } } 2`] = `
+
+Message:
+> 1 | @layer theme { a { background: conic-gradient(from 0deg, red, blue); } }
+    |                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`conic-gradient()\`.
+
+Output:
+  1 | @layer theme { a { background: conic-gradient(  red, blue); } }
+
+`;
+
 exports[`invalid(44): a { animation-timeline: view(10PX 10px); } 1`] = `
 
   1 | a { animation-timeline: view(10PX 10px); }
@@ -8373,6 +8379,23 @@ Message:
 
 Output:
   1 | a { animation-timeline: view(10PX ); }
+
+`;
+
+exports[`invalid(44): a { background: RADIAL-GRADIENT(ELLIPSE 10PX 20PX, RED, BLUE) !important; } 1`] = `
+
+  1 | a { background: RADIAL-GRADIENT(ELLIPSE 10PX 20PX, RED, BLUE) !important; }
+
+`;
+
+exports[`invalid(44): a { background: RADIAL-GRADIENT(ELLIPSE 10PX 20PX, RED, BLUE) !important; } 2`] = `
+
+Message:
+> 1 | a { background: RADIAL-GRADIENT(ELLIPSE 10PX 20PX, RED, BLUE) !important; }
+    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`radial-gradient()\`.
+
+Output:
+  1 | a { background: RADIAL-GRADIENT( 10PX 20PX, RED, BLUE) !important; }
 
 `;
 
@@ -8393,23 +8416,6 @@ Output:
 
 `;
 
-exports[`invalid(44): a { background: repeating-linear-gradient(180deg in oklab, red, blue); } 1`] = `
-
-  1 | a { background: repeating-linear-gradient(180deg in oklab, red, blue); }
-
-`;
-
-exports[`invalid(44): a { background: repeating-linear-gradient(180deg in oklab, red, blue); } 2`] = `
-
-Message:
-> 1 | a { background: repeating-linear-gradient(180deg in oklab, red, blue); }
-    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`repeating-linear-gradient()\`.
-
-Output:
-  1 | a { background: repeating-linear-gradient( in oklab, red, blue); }
-
-`;
-
 exports[`invalid(44): a { color: lch(from var(--color) l c h / alpha); } 1`] = `
 
   1 | a { color: lch(from var(--color) l c h / alpha); }
@@ -8424,34 +8430,6 @@ Message:
 
 Output:
   1 | a { color: lch(from var(--color) l c h  ); }
-
-`;
-
-exports[`invalid(44): a { filter: b\\72 ightness(1); transform: tr\\61 nslate(1px, 0p\\78); background: linear-gradient(t\\6f b\\6f ttom, red, blue); } 1`] = `
-
-  1 | a { filter: b\\72 ightness(1); transform: tr\\61 nslate(1px, 0p\\78); background: linear-gradient(t\\6f b\\6f ttom, red, blue); }
-
-`;
-
-exports[`invalid(44): a { filter: b\\72 ightness(1); transform: tr\\61 nslate(1px, 0p\\78); background: linear-gradient(t\\6f b\\6f ttom, red, blue); } 2`] = `
-
-Message:
-> 1 | a { filter: b\\72 ightness(1); transform: tr\\61 nslate(1px, 0p\\78); background: linear-gradient(t\\6f b\\6f ttom, red, blue); }
-    |             ^^^^^^^^^^^^^^^^ Simplify this redundant use of \`brightness()\`.
-
-Output:
-  1 | a { filter: b\\72 ightness(); transform: tr\\61 nslate(1px, 0p\\78); background: linear-gradient(t\\6f b\\6f ttom, red, blue); }
-
-`;
-
-exports[`invalid(44): a { filter: b\\72 ightness(1); transform: tr\\61 nslate(1px, 0p\\78); background: linear-gradient(t\\6f b\\6f ttom, red, blue); } 3`] = `
-
-Message:
-> 1 | a { filter: b\\72 ightness(1); transform: tr\\61 nslate(1px, 0p\\78); background: linear-gradient(t\\6f b\\6f ttom, red, blue); }
-    |                                          ^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`translate()\`.
-
-Output:
-  1 | a { filter: b\\72 ightness(1); transform: tr\\61 nslate(1px ); background: linear-gradient(t\\6f b\\6f ttom, red, blue); }
 
 `;
 
@@ -8489,23 +8467,6 @@ Output:
 
 `;
 
-exports[`invalid(45): a { &:hover { filter: brightness(1); } } 1`] = `
-
-  1 | a { &:hover { filter: brightness(1); } }
-
-`;
-
-exports[`invalid(45): a { &:hover { filter: brightness(1); } } 2`] = `
-
-Message:
-> 1 | a { &:hover { filter: brightness(1); } }
-    |                       ^^^^^^^^^^^^^ Simplify this redundant use of \`brightness()\`.
-
-Output:
-  1 | a { &:hover { filter: brightness(); } }
-
-`;
-
 exports[`invalid(45): a { animation-timeline: view(block /* axis */ auto /* inset */ auto /* end */); } 1`] = `
 
   1 | a { animation-timeline: view(block /* axis */ auto /* inset */ auto /* end */); }
@@ -8523,20 +8484,20 @@ Output:
 
 `;
 
-exports[`invalid(45): a { background: conic-gradient(from 0deg at left, red, blue); } 1`] = `
+exports[`invalid(45): a { background: radial-gradient(circle /* radius */ 10px /* end */, red, blue); } 1`] = `
 
-  1 | a { background: conic-gradient(from 0deg at left, red, blue); }
+  1 | a { background: radial-gradient(circle /* radius */ 10px /* end */, red, blue); }
 
 `;
 
-exports[`invalid(45): a { background: conic-gradient(from 0deg at left, red, blue); } 2`] = `
+exports[`invalid(45): a { background: radial-gradient(circle /* radius */ 10px /* end */, red, blue); } 2`] = `
 
 Message:
-> 1 | a { background: conic-gradient(from 0deg at left, red, blue); }
-    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`conic-gradient()\`.
+> 1 | a { background: radial-gradient(circle /* radius */ 10px /* end */, red, blue); }
+    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`radial-gradient()\`.
 
 Output:
-  1 | a { background: conic-gradient(  at left, red, blue); }
+  1 | a { background: radial-gradient( /* radius */ 10px /* end */, red, blue); }
 
 `;
 
@@ -8591,20 +8552,46 @@ Output:
 
 `;
 
-exports[`invalid(46): @layer theme { a { background: conic-gradient(from 0deg, red, blue); } } 1`] = `
+exports[`invalid(45): a {\r\n  filter: brightness(/* keep */ 1);\r\n  transform: translate(1px, 0px);\r\n} 1`] = `
 
-  1 | @layer theme { a { background: conic-gradient(from 0deg, red, blue); } }
+  1 | a {
+  2 |   filter: brightness(/* keep */ 1);
+  3 |   transform: translate(1px, 0px);
+  4 | }
 
 `;
 
-exports[`invalid(46): @layer theme { a { background: conic-gradient(from 0deg, red, blue); } } 2`] = `
+exports[`invalid(45): a {\r\n  filter: brightness(/* keep */ 1);\r\n  transform: translate(1px, 0px);\r\n} 2`] = `
 
 Message:
-> 1 | @layer theme { a { background: conic-gradient(from 0deg, red, blue); } }
-    |                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`conic-gradient()\`.
+  1 | a {
+> 2 |   filter: brightness(/* keep */ 1);
+    |           ^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`brightness()\`.
+  3 |   transform: translate(1px, 0px);
+  4 | }
 
 Output:
-  1 | @layer theme { a { background: conic-gradient(  red, blue); } }
+  1 | a {
+  2 |   filter: brightness(/* keep */ );
+  3 |   transform: translate(1px, 0px);
+  4 | }
+
+`;
+
+exports[`invalid(45): a {\r\n  filter: brightness(/* keep */ 1);\r\n  transform: translate(1px, 0px);\r\n} 3`] = `
+
+Message:
+  1 | a {
+  2 |   filter: brightness(/* keep */ 1);
+> 3 |   transform: translate(1px, 0px);
+    |              ^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`translate()\`.
+  4 | }
+
+Output:
+  1 | a {
+  2 |   filter: brightness(/* keep */ 1);
+  3 |   transform: translate(1px );
+  4 | }
 
 `;
 
@@ -8659,20 +8646,20 @@ Output:
 
 `;
 
-exports[`invalid(46): a { background: conic-gradient(from 45deg at center, red, blue); } 1`] = `
+exports[`invalid(46): a { background: linear-gradient(to bottom in oklch, red, blue); } 1`] = `
 
-  1 | a { background: conic-gradient(from 45deg at center, red, blue); }
+  1 | a { background: linear-gradient(to bottom in oklch, red, blue); }
 
 `;
 
-exports[`invalid(46): a { background: conic-gradient(from 45deg at center, red, blue); } 2`] = `
+exports[`invalid(46): a { background: linear-gradient(to bottom in oklch, red, blue); } 2`] = `
 
 Message:
-> 1 | a { background: conic-gradient(from 45deg at center, red, blue); }
-    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`conic-gradient()\`.
+> 1 | a { background: linear-gradient(to bottom in oklch, red, blue); }
+    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`linear-gradient()\`.
 
 Output:
-  1 | a { background: conic-gradient(from 45deg  , red, blue); }
+  1 | a { background: linear-gradient(  in oklch, red, blue); }
 
 `;
 
@@ -8755,20 +8742,20 @@ Output:
 
 `;
 
-exports[`invalid(47): a { background: conic-gradient(from 0deg in oklch longer hue, red, blue); } 1`] = `
+exports[`invalid(47): a { background: repeating-linear-gradient(180deg in oklab, red, blue); } 1`] = `
 
-  1 | a { background: conic-gradient(from 0deg in oklch longer hue, red, blue); }
+  1 | a { background: repeating-linear-gradient(180deg in oklab, red, blue); }
 
 `;
 
-exports[`invalid(47): a { background: conic-gradient(from 0deg in oklch longer hue, red, blue); } 2`] = `
+exports[`invalid(47): a { background: repeating-linear-gradient(180deg in oklab, red, blue); } 2`] = `
 
 Message:
-> 1 | a { background: conic-gradient(from 0deg in oklch longer hue, red, blue); }
-    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`conic-gradient()\`.
+> 1 | a { background: repeating-linear-gradient(180deg in oklab, red, blue); }
+    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`repeating-linear-gradient()\`.
 
 Output:
-  1 | a { background: conic-gradient(  in oklch longer hue, red, blue); }
+  1 | a { background: repeating-linear-gradient( in oklab, red, blue); }
 
 `;
 
@@ -8823,49 +8810,6 @@ Output:
 
 `;
 
-exports[`invalid(47): a {\r\n  filter: brightness(/* keep */ 1);\r\n  transform: translate(1px, 0px);\r\n} 1`] = `
-
-  1 | a {
-  2 |   filter: brightness(/* keep */ 1);
-  3 |   transform: translate(1px, 0px);
-  4 | }
-
-`;
-
-exports[`invalid(47): a {\r\n  filter: brightness(/* keep */ 1);\r\n  transform: translate(1px, 0px);\r\n} 2`] = `
-
-Message:
-  1 | a {
-> 2 |   filter: brightness(/* keep */ 1);
-    |           ^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`brightness()\`.
-  3 |   transform: translate(1px, 0px);
-  4 | }
-
-Output:
-  1 | a {
-  2 |   filter: brightness(/* keep */ );
-  3 |   transform: translate(1px, 0px);
-  4 | }
-
-`;
-
-exports[`invalid(47): a {\r\n  filter: brightness(/* keep */ 1);\r\n  transform: translate(1px, 0px);\r\n} 3`] = `
-
-Message:
-  1 | a {
-  2 |   filter: brightness(/* keep */ 1);
-> 3 |   transform: translate(1px, 0px);
-    |              ^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`translate()\`.
-  4 | }
-
-Output:
-  1 | a {
-  2 |   filter: brightness(/* keep */ 1);
-  3 |   transform: translate(1px );
-  4 | }
-
-`;
-
 exports[`invalid(48): @container (width > 1px) { a { animation-timeline: view(block auto); } } 1`] = `
 
   1 | @container (width > 1px) { a { animation-timeline: view(block auto); } }
@@ -8883,20 +8827,20 @@ Output:
 
 `;
 
-exports[`invalid(48): a { background: conic-gradient(in oklch from 45deg at 50%, red, blue); } 1`] = `
+exports[`invalid(48): a { background: conic-gradient(from 0deg at left, red, blue); } 1`] = `
 
-  1 | a { background: conic-gradient(in oklch from 45deg at 50%, red, blue); }
+  1 | a { background: conic-gradient(from 0deg at left, red, blue); }
 
 `;
 
-exports[`invalid(48): a { background: conic-gradient(in oklch from 45deg at 50%, red, blue); } 2`] = `
+exports[`invalid(48): a { background: conic-gradient(from 0deg at left, red, blue); } 2`] = `
 
 Message:
-> 1 | a { background: conic-gradient(in oklch from 45deg at 50%, red, blue); }
-    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`conic-gradient()\`.
+> 1 | a { background: conic-gradient(from 0deg at left, red, blue); }
+    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`conic-gradient()\`.
 
 Output:
-  1 | a { background: conic-gradient(in oklch from 45deg  , red, blue); }
+  1 | a { background: conic-gradient(  at left, red, blue); }
 
 `;
 
@@ -8934,20 +8878,20 @@ Output:
 
 `;
 
-exports[`invalid(49): a { --image: radial-gradient(ellipse 10px 20px at center, red, blue); } 1`] = `
+exports[`invalid(49): a { background: conic-gradient(from 45deg at center, red, blue); } 1`] = `
 
-  1 | a { --image: radial-gradient(ellipse 10px 20px at center, red, blue); }
+  1 | a { background: conic-gradient(from 45deg at center, red, blue); }
 
 `;
 
-exports[`invalid(49): a { --image: radial-gradient(ellipse 10px 20px at center, red, blue); } 2`] = `
+exports[`invalid(49): a { background: conic-gradient(from 45deg at center, red, blue); } 2`] = `
 
 Message:
-> 1 | a { --image: radial-gradient(ellipse 10px 20px at center, red, blue); }
-    |              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`radial-gradient()\`.
+> 1 | a { background: conic-gradient(from 45deg at center, red, blue); }
+    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`conic-gradient()\`.
 
 Output:
-  1 | a { --image: radial-gradient( 10px 20px  , red, blue); }
+  1 | a { background: conic-gradient(from 45deg  , red, blue); }
 
 `;
 
@@ -8999,23 +8943,6 @@ Message:
 
 Output:
   1 | a { z-index: sibling-\\69ndex(); }
-
-`;
-
-exports[`invalid(5): a { background: linear-gradient(in oklab, red 0%, blue 100%); } 1`] = `
-
-  1 | a { background: linear-gradient(in oklab, red 0%, blue 100%); }
-
-`;
-
-exports[`invalid(5): a { background: linear-gradient(in oklab, red 0%, blue 100%); } 2`] = `
-
-Message:
-> 1 | a { background: linear-gradient(in oklab, red 0%, blue 100%); }
-    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`linear-gradient()\`.
-
-Output:
-  1 | a { background: linear-gradient(in oklab, red , blue ); }
 
 `;
 
@@ -9132,6 +9059,56 @@ Output:
 
 `;
 
+exports[`invalid(5): a { filter: brightness(1) contrast(100%) grayscale(1) invert(100%); } 1`] = `
+
+  1 | a { filter: brightness(1) contrast(100%) grayscale(1) invert(100%); }
+
+`;
+
+exports[`invalid(5): a { filter: brightness(1) contrast(100%) grayscale(1) invert(100%); } 2`] = `
+
+Message:
+> 1 | a { filter: brightness(1) contrast(100%) grayscale(1) invert(100%); }
+    |             ^^^^^^^^^^^^^ Simplify this redundant use of \`brightness()\`.
+
+Output:
+  1 | a { filter: brightness() contrast(100%) grayscale(1) invert(100%); }
+
+`;
+
+exports[`invalid(5): a { filter: brightness(1) contrast(100%) grayscale(1) invert(100%); } 3`] = `
+
+Message:
+> 1 | a { filter: brightness(1) contrast(100%) grayscale(1) invert(100%); }
+    |                           ^^^^^^^^^^^^^^ Simplify this redundant use of \`contrast()\`.
+
+Output:
+  1 | a { filter: brightness(1) contrast() grayscale(1) invert(100%); }
+
+`;
+
+exports[`invalid(5): a { filter: brightness(1) contrast(100%) grayscale(1) invert(100%); } 4`] = `
+
+Message:
+> 1 | a { filter: brightness(1) contrast(100%) grayscale(1) invert(100%); }
+    |                                          ^^^^^^^^^^^^ Simplify this redundant use of \`grayscale()\`.
+
+Output:
+  1 | a { filter: brightness(1) contrast(100%) grayscale() invert(100%); }
+
+`;
+
+exports[`invalid(5): a { filter: brightness(1) contrast(100%) grayscale(1) invert(100%); } 5`] = `
+
+Message:
+> 1 | a { filter: brightness(1) contrast(100%) grayscale(1) invert(100%); }
+    |                                                       ^^^^^^^^^^^^ Simplify this redundant use of \`invert()\`.
+
+Output:
+  1 | a { filter: brightness(1) contrast(100%) grayscale(1) invert(); }
+
+`;
+
 exports[`invalid(5): a { opacity: pow(abs(NaN), 0); } 1`] = `
 
   1 | a { opacity: pow(abs(NaN), 0); }
@@ -9245,20 +9222,20 @@ Output:
 
 `;
 
-exports[`invalid(50): a { animation-timing-function: linear(0 0%, .5 25%, 1 100%); } 1`] = `
+exports[`invalid(50): a { background: conic-gradient(from 0deg in oklch longer hue, red, blue); } 1`] = `
 
-  1 | a { animation-timing-function: linear(0 0%, .5 25%, 1 100%); }
+  1 | a { background: conic-gradient(from 0deg in oklch longer hue, red, blue); }
 
 `;
 
-exports[`invalid(50): a { animation-timing-function: linear(0 0%, .5 25%, 1 100%); } 2`] = `
+exports[`invalid(50): a { background: conic-gradient(from 0deg in oklch longer hue, red, blue); } 2`] = `
 
 Message:
-> 1 | a { animation-timing-function: linear(0 0%, .5 25%, 1 100%); }
-    |                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`linear()\`.
+> 1 | a { background: conic-gradient(from 0deg in oklch longer hue, red, blue); }
+    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`conic-gradient()\`.
 
 Output:
-  1 | a { animation-timing-function: linear(0 , .5 25%, 1 ); }
+  1 | a { background: conic-gradient(  in oklch longer hue, red, blue); }
 
 `;
 
@@ -9352,20 +9329,20 @@ Output:
 
 `;
 
-exports[`invalid(51): a { animation-timing-function: linear(-1 0%, .2, 2 100%); } 1`] = `
+exports[`invalid(51): a { background: conic-gradient(in oklch from 45deg at 50%, red, blue); } 1`] = `
 
-  1 | a { animation-timing-function: linear(-1 0%, .2, 2 100%); }
+  1 | a { background: conic-gradient(in oklch from 45deg at 50%, red, blue); }
 
 `;
 
-exports[`invalid(51): a { animation-timing-function: linear(-1 0%, .2, 2 100%); } 2`] = `
+exports[`invalid(51): a { background: conic-gradient(in oklch from 45deg at 50%, red, blue); } 2`] = `
 
 Message:
-> 1 | a { animation-timing-function: linear(-1 0%, .2, 2 100%); }
-    |                                ^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`linear()\`.
+> 1 | a { background: conic-gradient(in oklch from 45deg at 50%, red, blue); }
+    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`conic-gradient()\`.
 
 Output:
-  1 | a { animation-timing-function: linear(-1 , .2, 2 ); }
+  1 | a { background: conic-gradient(in oklch from 45deg  , red, blue); }
 
 `;
 
@@ -9403,6 +9380,23 @@ Output:
 
 `;
 
+exports[`invalid(52): a { --image: radial-gradient(ellipse 10px 20px at center, red, blue); } 1`] = `
+
+  1 | a { --image: radial-gradient(ellipse 10px 20px at center, red, blue); }
+
+`;
+
+exports[`invalid(52): a { --image: radial-gradient(ellipse 10px 20px at center, red, blue); } 2`] = `
+
+Message:
+> 1 | a { --image: radial-gradient(ellipse 10px 20px at center, red, blue); }
+    |              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`radial-gradient()\`.
+
+Output:
+  1 | a { --image: radial-gradient( 10px 20px  , red, blue); }
+
+`;
+
 exports[`invalid(52): a { --index: calc(sibling-index()); } 1`] = `
 
   1 | a { --index: calc(sibling-index()); }
@@ -9417,23 +9411,6 @@ Message:
 
 Output:
   1 | a { --index: sibling-index(); }
-
-`;
-
-exports[`invalid(52): a { animation-timing-function: linear(0 0%, .5 150%, 1 100%); } 1`] = `
-
-  1 | a { animation-timing-function: linear(0 0%, .5 150%, 1 100%); }
-
-`;
-
-exports[`invalid(52): a { animation-timing-function: linear(0 0%, .5 150%, 1 100%); } 2`] = `
-
-Message:
-> 1 | a { animation-timing-function: linear(0 0%, .5 150%, 1 100%); }
-    |                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`linear()\`.
-
-Output:
-  1 | a { animation-timing-function: linear(0 , .5 150%, 1 ); }
 
 `;
 
@@ -9538,20 +9515,20 @@ Output:
 
 `;
 
-exports[`invalid(53): a { animation-timing-function: linear(0 0%, .5 -50%, 1 100%); } 1`] = `
+exports[`invalid(53): a { animation-timing-function: linear(0 0%, .5 25%, 1 100%); } 1`] = `
 
-  1 | a { animation-timing-function: linear(0 0%, .5 -50%, 1 100%); }
+  1 | a { animation-timing-function: linear(0 0%, .5 25%, 1 100%); }
 
 `;
 
-exports[`invalid(53): a { animation-timing-function: linear(0 0%, .5 -50%, 1 100%); } 2`] = `
+exports[`invalid(53): a { animation-timing-function: linear(0 0%, .5 25%, 1 100%); } 2`] = `
 
 Message:
-> 1 | a { animation-timing-function: linear(0 0%, .5 -50%, 1 100%); }
-    |                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`linear()\`.
+> 1 | a { animation-timing-function: linear(0 0%, .5 25%, 1 100%); }
+    |                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`linear()\`.
 
 Output:
-  1 | a { animation-timing-function: linear(0 , .5 -50%, 1 ); }
+  1 | a { animation-timing-function: linear(0 , .5 25%, 1 ); }
 
 `;
 
@@ -9589,20 +9566,20 @@ Output:
 
 `;
 
-exports[`invalid(54): a { animation-timing-function: linear(0 0%, .5 20% 40%, 1 100%); } 1`] = `
+exports[`invalid(54): a { animation-timing-function: linear(-1 0%, .2, 2 100%); } 1`] = `
 
-  1 | a { animation-timing-function: linear(0 0%, .5 20% 40%, 1 100%); }
+  1 | a { animation-timing-function: linear(-1 0%, .2, 2 100%); }
 
 `;
 
-exports[`invalid(54): a { animation-timing-function: linear(0 0%, .5 20% 40%, 1 100%); } 2`] = `
+exports[`invalid(54): a { animation-timing-function: linear(-1 0%, .2, 2 100%); } 2`] = `
 
 Message:
-> 1 | a { animation-timing-function: linear(0 0%, .5 20% 40%, 1 100%); }
-    |                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`linear()\`.
+> 1 | a { animation-timing-function: linear(-1 0%, .2, 2 100%); }
+    |                                ^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`linear()\`.
 
 Output:
-  1 | a { animation-timing-function: linear(0 , .5 20% 40%, 1 ); }
+  1 | a { animation-timing-function: linear(-1 , .2, 2 ); }
 
 `;
 
@@ -9663,20 +9640,20 @@ Output:
 
 `;
 
-exports[`invalid(55): a { animation-timing-function: linear(0% 0, .5, 100% 1); } 1`] = `
+exports[`invalid(55): a { animation-timing-function: linear(0 0%, .5 150%, 1 100%); } 1`] = `
 
-  1 | a { animation-timing-function: linear(0% 0, .5, 100% 1); }
+  1 | a { animation-timing-function: linear(0 0%, .5 150%, 1 100%); }
 
 `;
 
-exports[`invalid(55): a { animation-timing-function: linear(0% 0, .5, 100% 1); } 2`] = `
+exports[`invalid(55): a { animation-timing-function: linear(0 0%, .5 150%, 1 100%); } 2`] = `
 
 Message:
-> 1 | a { animation-timing-function: linear(0% 0, .5, 100% 1); }
-    |                                ^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`linear()\`.
+> 1 | a { animation-timing-function: linear(0 0%, .5 150%, 1 100%); }
+    |                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`linear()\`.
 
 Output:
-  1 | a { animation-timing-function: linear( 0, .5,  1); }
+  1 | a { animation-timing-function: linear(0 , .5 150%, 1 ); }
 
 `;
 
@@ -9697,20 +9674,20 @@ Output:
 
 `;
 
-exports[`invalid(56): a { animation-timing-function: linear(0 0%, .5, 1 90%); } 1`] = `
+exports[`invalid(56): a { animation-timing-function: linear(0 0%, .5 -50%, 1 100%); } 1`] = `
 
-  1 | a { animation-timing-function: linear(0 0%, .5, 1 90%); }
+  1 | a { animation-timing-function: linear(0 0%, .5 -50%, 1 100%); }
 
 `;
 
-exports[`invalid(56): a { animation-timing-function: linear(0 0%, .5, 1 90%); } 2`] = `
+exports[`invalid(56): a { animation-timing-function: linear(0 0%, .5 -50%, 1 100%); } 2`] = `
 
 Message:
-> 1 | a { animation-timing-function: linear(0 0%, .5, 1 90%); }
-    |                                ^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`linear()\`.
+> 1 | a { animation-timing-function: linear(0 0%, .5 -50%, 1 100%); }
+    |                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`linear()\`.
 
 Output:
-  1 | a { animation-timing-function: linear(0 , .5, 1 90%); }
+  1 | a { animation-timing-function: linear(0 , .5 -50%, 1 ); }
 
 `;
 
@@ -9774,20 +9751,20 @@ Output:
 
 `;
 
-exports[`invalid(57): a { animation-timing-function: linear(0 -10%, .5, 1 100%); } 1`] = `
+exports[`invalid(57): a { animation-timing-function: linear(0 0%, .5 20% 40%, 1 100%); } 1`] = `
 
-  1 | a { animation-timing-function: linear(0 -10%, .5, 1 100%); }
+  1 | a { animation-timing-function: linear(0 0%, .5 20% 40%, 1 100%); }
 
 `;
 
-exports[`invalid(57): a { animation-timing-function: linear(0 -10%, .5, 1 100%); } 2`] = `
+exports[`invalid(57): a { animation-timing-function: linear(0 0%, .5 20% 40%, 1 100%); } 2`] = `
 
 Message:
-> 1 | a { animation-timing-function: linear(0 -10%, .5, 1 100%); }
-    |                                ^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`linear()\`.
+> 1 | a { animation-timing-function: linear(0 0%, .5 20% 40%, 1 100%); }
+    |                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`linear()\`.
 
 Output:
-  1 | a { animation-timing-function: linear(0 -10%, .5, 1 ); }
+  1 | a { animation-timing-function: linear(0 , .5 20% 40%, 1 ); }
 
 `;
 
@@ -9808,20 +9785,20 @@ Output:
 
 `;
 
-exports[`invalid(58): a { -webkit-animation: bounce 1s LINEAR(0 +0.0%, .5, 1 1e2%) !important; } 1`] = `
+exports[`invalid(58): a { animation-timing-function: linear(0% 0, .5, 100% 1); } 1`] = `
 
-  1 | a { -webkit-animation: bounce 1s LINEAR(0 +0.0%, .5, 1 1e2%) !important; }
+  1 | a { animation-timing-function: linear(0% 0, .5, 100% 1); }
 
 `;
 
-exports[`invalid(58): a { -webkit-animation: bounce 1s LINEAR(0 +0.0%, .5, 1 1e2%) !important; } 2`] = `
+exports[`invalid(58): a { animation-timing-function: linear(0% 0, .5, 100% 1); } 2`] = `
 
 Message:
-> 1 | a { -webkit-animation: bounce 1s LINEAR(0 +0.0%, .5, 1 1e2%) !important; }
-    |                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`linear()\`.
+> 1 | a { animation-timing-function: linear(0% 0, .5, 100% 1); }
+    |                                ^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`linear()\`.
 
 Output:
-  1 | a { -webkit-animation: bounce 1s LINEAR(0 , .5, 1 ) !important; }
+  1 | a { animation-timing-function: linear( 0, .5,  1); }
 
 `;
 
@@ -9842,6 +9819,23 @@ Output:
 
 `;
 
+exports[`invalid(59): a { animation-timing-function: linear(0 0%, .5, 1 90%); } 1`] = `
+
+  1 | a { animation-timing-function: linear(0 0%, .5, 1 90%); }
+
+`;
+
+exports[`invalid(59): a { animation-timing-function: linear(0 0%, .5, 1 90%); } 2`] = `
+
+Message:
+> 1 | a { animation-timing-function: linear(0 0%, .5, 1 90%); }
+    |                                ^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`linear()\`.
+
+Output:
+  1 | a { animation-timing-function: linear(0 , .5, 1 90%); }
+
+`;
+
 exports[`invalid(59): a { clip-path: shape(from 0 0, smooth to 10px 20px with 5px 6px from origin); } 1`] = `
 
   1 | a { clip-path: shape(from 0 0, smooth to 10px 20px with 5px 6px from origin); }
@@ -9856,40 +9850,6 @@ Message:
 
 Output:
   1 | a { clip-path: shape(from 0 0, smooth to 10px 20px with 5px 6px  ); }
-
-`;
-
-exports[`invalid(59): a { transition-timing-function: l\\69near(0 0%, .5, 1 100%); } 1`] = `
-
-  1 | a { transition-timing-function: l\\69near(0 0%, .5, 1 100%); }
-
-`;
-
-exports[`invalid(59): a { transition-timing-function: l\\69near(0 0%, .5, 1 100%); } 2`] = `
-
-Message:
-> 1 | a { transition-timing-function: l\\69near(0 0%, .5, 1 100%); }
-    |                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`linear()\`.
-
-Output:
-  1 | a { transition-timing-function: l\\69near(0 , .5, 1 ); }
-
-`;
-
-exports[`invalid(6): a { background: linear-gradient(0, red 0%, blue 100%); } 1`] = `
-
-  1 | a { background: linear-gradient(0, red 0%, blue 100%); }
-
-`;
-
-exports[`invalid(6): a { background: linear-gradient(0, red 0%, blue 100%); } 2`] = `
-
-Message:
-> 1 | a { background: linear-gradient(0, red 0%, blue 100%); }
-    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`linear-gradient()\`.
-
-Output:
-  1 | a { background: linear-gradient(0, red , blue ); }
 
 `;
 
@@ -9992,6 +9952,45 @@ Message:
 
 Output:
   1 | a { content: \\61ttr(\\64 ata-label , "fallback"); }
+
+`;
+
+exports[`invalid(6): a { filter: opacity(1) saturate(100%) sepia(1); } 1`] = `
+
+  1 | a { filter: opacity(1) saturate(100%) sepia(1); }
+
+`;
+
+exports[`invalid(6): a { filter: opacity(1) saturate(100%) sepia(1); } 2`] = `
+
+Message:
+> 1 | a { filter: opacity(1) saturate(100%) sepia(1); }
+    |             ^^^^^^^^^^ Simplify this redundant use of \`opacity()\`.
+
+Output:
+  1 | a { filter: opacity() saturate(100%) sepia(1); }
+
+`;
+
+exports[`invalid(6): a { filter: opacity(1) saturate(100%) sepia(1); } 3`] = `
+
+Message:
+> 1 | a { filter: opacity(1) saturate(100%) sepia(1); }
+    |                        ^^^^^^^^^^^^^^ Simplify this redundant use of \`saturate()\`.
+
+Output:
+  1 | a { filter: opacity(1) saturate() sepia(1); }
+
+`;
+
+exports[`invalid(6): a { filter: opacity(1) saturate(100%) sepia(1); } 4`] = `
+
+Message:
+> 1 | a { filter: opacity(1) saturate(100%) sepia(1); }
+    |                                       ^^^^^^^^ Simplify this redundant use of \`sepia()\`.
+
+Output:
+  1 | a { filter: opacity(1) saturate(100%) sepia(); }
 
 `;
 
@@ -10119,20 +10118,20 @@ Output:
 
 `;
 
-exports[`invalid(60): a { animation-timing-function: linear(0 /* start */ 0%, .5, 1 /* end */ 100%); } 1`] = `
+exports[`invalid(60): a { animation-timing-function: linear(0 -10%, .5, 1 100%); } 1`] = `
 
-  1 | a { animation-timing-function: linear(0 /* start */ 0%, .5, 1 /* end */ 100%); }
+  1 | a { animation-timing-function: linear(0 -10%, .5, 1 100%); }
 
 `;
 
-exports[`invalid(60): a { animation-timing-function: linear(0 /* start */ 0%, .5, 1 /* end */ 100%); } 2`] = `
+exports[`invalid(60): a { animation-timing-function: linear(0 -10%, .5, 1 100%); } 2`] = `
 
 Message:
-> 1 | a { animation-timing-function: linear(0 /* start */ 0%, .5, 1 /* end */ 100%); }
-    |                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`linear()\`.
+> 1 | a { animation-timing-function: linear(0 -10%, .5, 1 100%); }
+    |                                ^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`linear()\`.
 
 Output:
-  1 | a { animation-timing-function: linear(0 /* start */ , .5, 1 /* end */ ); }
+  1 | a { animation-timing-function: linear(0 -10%, .5, 1 ); }
 
 `;
 
@@ -10153,6 +10152,23 @@ Output:
 
 `;
 
+exports[`invalid(61): a { -webkit-animation: bounce 1s LINEAR(0 +0.0%, .5, 1 1e2%) !important; } 1`] = `
+
+  1 | a { -webkit-animation: bounce 1s LINEAR(0 +0.0%, .5, 1 1e2%) !important; }
+
+`;
+
+exports[`invalid(61): a { -webkit-animation: bounce 1s LINEAR(0 +0.0%, .5, 1 1e2%) !important; } 2`] = `
+
+Message:
+> 1 | a { -webkit-animation: bounce 1s LINEAR(0 +0.0%, .5, 1 1e2%) !important; }
+    |                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`linear()\`.
+
+Output:
+  1 | a { -webkit-animation: bounce 1s LINEAR(0 , .5, 1 ) !important; }
+
+`;
+
 exports[`invalid(61): a { clip-path: SHAPE(FROM 0 0, ARC TO 100% 100% OF 20PX SMALL CCW ROTATE 0DEG) !important; } 1`] = `
 
   1 | a { clip-path: SHAPE(FROM 0 0, ARC TO 100% 100% OF 20PX SMALL CCW ROTATE 0DEG) !important; }
@@ -10167,34 +10183,6 @@ Message:
 
 Output:
   1 | a { clip-path: SHAPE(FROM 0 0, ARC TO 100% 100% OF 20PX    ) !important; }
-
-`;
-
-exports[`invalid(61): a { width: calc(calc-mix(10px 50%, 20px 50%)); } 1`] = `
-
-  1 | a { width: calc(calc-mix(10px 50%, 20px 50%)); }
-
-`;
-
-exports[`invalid(61): a { width: calc(calc-mix(10px 50%, 20px 50%)); } 2`] = `
-
-Message:
-> 1 | a { width: calc(calc-mix(10px 50%, 20px 50%)); }
-    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`calc()\`.
-
-Output:
-  1 | a { width: calc-mix(10px 50%, 20px 50%); }
-
-`;
-
-exports[`invalid(61): a { width: calc(calc-mix(10px 50%, 20px 50%)); } 3`] = `
-
-Message:
-> 1 | a { width: calc(calc-mix(10px 50%, 20px 50%)); }
-    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`calc-mix()\`.
-
-Output:
-  1 | a { width: calc(calc-mix(10px , 20px )); }
 
 `;
 
@@ -10215,31 +10203,37 @@ Output:
 
 `;
 
-exports[`invalid(62): a { width: min(calc-mix(10px 50%, 20px 50%)); } 1`] = `
+exports[`invalid(62): a { transition-timing-function: l\\69near(0 0%, .5, 1 100%); } 1`] = `
 
-  1 | a { width: min(calc-mix(10px 50%, 20px 50%)); }
-
-`;
-
-exports[`invalid(62): a { width: min(calc-mix(10px 50%, 20px 50%)); } 2`] = `
-
-Message:
-> 1 | a { width: min(calc-mix(10px 50%, 20px 50%)); }
-    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`min()\`.
-
-Output:
-  1 | a { width: calc-mix(10px 50%, 20px 50%); }
+  1 | a { transition-timing-function: l\\69near(0 0%, .5, 1 100%); }
 
 `;
 
-exports[`invalid(62): a { width: min(calc-mix(10px 50%, 20px 50%)); } 3`] = `
+exports[`invalid(62): a { transition-timing-function: l\\69near(0 0%, .5, 1 100%); } 2`] = `
 
 Message:
-> 1 | a { width: min(calc-mix(10px 50%, 20px 50%)); }
-    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`calc-mix()\`.
+> 1 | a { transition-timing-function: l\\69near(0 0%, .5, 1 100%); }
+    |                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`linear()\`.
 
 Output:
-  1 | a { width: min(calc-mix(10px , 20px )); }
+  1 | a { transition-timing-function: l\\69near(0 , .5, 1 ); }
+
+`;
+
+exports[`invalid(63): a { animation-timing-function: linear(0 /* start */ 0%, .5, 1 /* end */ 100%); } 1`] = `
+
+  1 | a { animation-timing-function: linear(0 /* start */ 0%, .5, 1 /* end */ 100%); }
+
+`;
+
+exports[`invalid(63): a { animation-timing-function: linear(0 /* start */ 0%, .5, 1 /* end */ 100%); } 2`] = `
+
+Message:
+> 1 | a { animation-timing-function: linear(0 /* start */ 0%, .5, 1 /* end */ 100%); }
+    |                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`linear()\`.
+
+Output:
+  1 | a { animation-timing-function: linear(0 /* start */ , .5, 1 /* end */ ); }
 
 `;
 
@@ -10260,34 +10254,6 @@ Output:
 
 `;
 
-exports[`invalid(63): a { width: max(calc-mix(10px 50%, 20px 50%)); } 1`] = `
-
-  1 | a { width: max(calc-mix(10px 50%, 20px 50%)); }
-
-`;
-
-exports[`invalid(63): a { width: max(calc-mix(10px 50%, 20px 50%)); } 2`] = `
-
-Message:
-> 1 | a { width: max(calc-mix(10px 50%, 20px 50%)); }
-    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`max()\`.
-
-Output:
-  1 | a { width: calc-mix(10px 50%, 20px 50%); }
-
-`;
-
-exports[`invalid(63): a { width: max(calc-mix(10px 50%, 20px 50%)); } 3`] = `
-
-Message:
-> 1 | a { width: max(calc-mix(10px 50%, 20px 50%)); }
-    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`calc-mix()\`.
-
-Output:
-  1 | a { width: max(calc-mix(10px , 20px )); }
-
-`;
-
 exports[`invalid(64): a { clip-path: shape(from 0 0, curve by 10px 20px with 5px 6px /* before */ from /* origin */ start /* end */); } 1`] = `
 
   1 | a { clip-path: shape(from 0 0, curve by 10px 20px with 5px 6px /* before */ from /* origin */ start /* end */); }
@@ -10305,31 +10271,31 @@ Output:
 
 `;
 
-exports[`invalid(64): a { width: CALC(CALC-MIX(0PX 50%, 20PX 50%)); } 1`] = `
+exports[`invalid(64): a { width: calc(calc-mix(10px 50%, 20px 50%)); } 1`] = `
 
-  1 | a { width: CALC(CALC-MIX(0PX 50%, 20PX 50%)); }
-
-`;
-
-exports[`invalid(64): a { width: CALC(CALC-MIX(0PX 50%, 20PX 50%)); } 2`] = `
-
-Message:
-> 1 | a { width: CALC(CALC-MIX(0PX 50%, 20PX 50%)); }
-    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`calc()\`.
-
-Output:
-  1 | a { width: CALC-MIX(0PX 50%, 20PX 50%); }
+  1 | a { width: calc(calc-mix(10px 50%, 20px 50%)); }
 
 `;
 
-exports[`invalid(64): a { width: CALC(CALC-MIX(0PX 50%, 20PX 50%)); } 3`] = `
+exports[`invalid(64): a { width: calc(calc-mix(10px 50%, 20px 50%)); } 2`] = `
 
 Message:
-> 1 | a { width: CALC(CALC-MIX(0PX 50%, 20PX 50%)); }
-    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`calc-mix()\`.
+> 1 | a { width: calc(calc-mix(10px 50%, 20px 50%)); }
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`calc()\`.
 
 Output:
-  1 | a { width: CALC(CALC-MIX(0PX , 20PX )); }
+  1 | a { width: calc-mix(10px 50%, 20px 50%); }
+
+`;
+
+exports[`invalid(64): a { width: calc(calc-mix(10px 50%, 20px 50%)); } 3`] = `
+
+Message:
+> 1 | a { width: calc(calc-mix(10px 50%, 20px 50%)); }
+    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`calc-mix()\`.
+
+Output:
+  1 | a { width: calc(calc-mix(10px , 20px )); }
 
 `;
 
@@ -10350,31 +10316,31 @@ Output:
 
 `;
 
-exports[`invalid(65): a { width: calc(c\\61lc-mix(10px 50%,20px 50%)); } 1`] = `
+exports[`invalid(65): a { width: min(calc-mix(10px 50%, 20px 50%)); } 1`] = `
 
-  1 | a { width: calc(c\\61lc-mix(10px 50%,20px 50%)); }
-
-`;
-
-exports[`invalid(65): a { width: calc(c\\61lc-mix(10px 50%,20px 50%)); } 2`] = `
-
-Message:
-> 1 | a { width: calc(c\\61lc-mix(10px 50%,20px 50%)); }
-    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`calc()\`.
-
-Output:
-  1 | a { width: c\\61lc-mix(10px 50%,20px 50%); }
+  1 | a { width: min(calc-mix(10px 50%, 20px 50%)); }
 
 `;
 
-exports[`invalid(65): a { width: calc(c\\61lc-mix(10px 50%,20px 50%)); } 3`] = `
+exports[`invalid(65): a { width: min(calc-mix(10px 50%, 20px 50%)); } 2`] = `
 
 Message:
-> 1 | a { width: calc(c\\61lc-mix(10px 50%,20px 50%)); }
-    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`calc-mix()\`.
+> 1 | a { width: min(calc-mix(10px 50%, 20px 50%)); }
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`min()\`.
 
 Output:
-  1 | a { width: calc(c\\61lc-mix(10px ,20px )); }
+  1 | a { width: calc-mix(10px 50%, 20px 50%); }
+
+`;
+
+exports[`invalid(65): a { width: min(calc-mix(10px 50%, 20px 50%)); } 3`] = `
+
+Message:
+> 1 | a { width: min(calc-mix(10px 50%, 20px 50%)); }
+    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`calc-mix()\`.
+
+Output:
+  1 | a { width: min(calc-mix(10px , 20px )); }
 
 `;
 
@@ -10395,59 +10361,59 @@ Output:
 
 `;
 
-exports[`invalid(66): a { width: calc(/* mix */ calc-mix(10px 50%, 20px 50%) /* end */); } 1`] = `
+exports[`invalid(66): a { width: max(calc-mix(10px 50%, 20px 50%)); } 1`] = `
 
-  1 | a { width: calc(/* mix */ calc-mix(10px 50%, 20px 50%) /* end */); }
+  1 | a { width: max(calc-mix(10px 50%, 20px 50%)); }
 
 `;
 
-exports[`invalid(66): a { width: calc(/* mix */ calc-mix(10px 50%, 20px 50%) /* end */); } 2`] = `
+exports[`invalid(66): a { width: max(calc-mix(10px 50%, 20px 50%)); } 2`] = `
 
 Message:
-> 1 | a { width: calc(/* mix */ calc-mix(10px 50%, 20px 50%) /* end */); }
-    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`calc()\`.
+> 1 | a { width: max(calc-mix(10px 50%, 20px 50%)); }
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`max()\`.
 
 Output:
-  1 | a { width: /* mix */ calc-mix(10px 50%, 20px 50%) /* end */; }
+  1 | a { width: calc-mix(10px 50%, 20px 50%); }
 
 `;
 
-exports[`invalid(66): a { width: calc(/* mix */ calc-mix(10px 50%, 20px 50%) /* end */); } 3`] = `
+exports[`invalid(66): a { width: max(calc-mix(10px 50%, 20px 50%)); } 3`] = `
 
 Message:
-> 1 | a { width: calc(/* mix */ calc-mix(10px 50%, 20px 50%) /* end */); }
-    |                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`calc-mix()\`.
+> 1 | a { width: max(calc-mix(10px 50%, 20px 50%)); }
+    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`calc-mix()\`.
 
 Output:
-  1 | a { width: calc(/* mix */ calc-mix(10px , 20px ) /* end */); }
+  1 | a { width: max(calc-mix(10px , 20px )); }
 
 `;
 
-exports[`invalid(67): a { --width: calc(calc-mix(10px 50%, 20px 50%)); } 1`] = `
+exports[`invalid(67): a { width: CALC(CALC-MIX(0PX 50%, 20PX 50%)); } 1`] = `
 
-  1 | a { --width: calc(calc-mix(10px 50%, 20px 50%)); }
+  1 | a { width: CALC(CALC-MIX(0PX 50%, 20PX 50%)); }
 
 `;
 
-exports[`invalid(67): a { --width: calc(calc-mix(10px 50%, 20px 50%)); } 2`] = `
+exports[`invalid(67): a { width: CALC(CALC-MIX(0PX 50%, 20PX 50%)); } 2`] = `
 
 Message:
-> 1 | a { --width: calc(calc-mix(10px 50%, 20px 50%)); }
-    |              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`calc()\`.
+> 1 | a { width: CALC(CALC-MIX(0PX 50%, 20PX 50%)); }
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`calc()\`.
 
 Output:
-  1 | a { --width: calc-mix(10px 50%, 20px 50%); }
+  1 | a { width: CALC-MIX(0PX 50%, 20PX 50%); }
 
 `;
 
-exports[`invalid(67): a { --width: calc(calc-mix(10px 50%, 20px 50%)); } 3`] = `
+exports[`invalid(67): a { width: CALC(CALC-MIX(0PX 50%, 20PX 50%)); } 3`] = `
 
 Message:
-> 1 | a { --width: calc(calc-mix(10px 50%, 20px 50%)); }
-    |                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`calc-mix()\`.
+> 1 | a { width: CALC(CALC-MIX(0PX 50%, 20PX 50%)); }
+    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`calc-mix()\`.
 
 Output:
-  1 | a { --width: calc(calc-mix(10px , 20px )); }
+  1 | a { width: CALC(CALC-MIX(0PX , 20PX )); }
 
 `;
 
@@ -10511,74 +10477,59 @@ Output:
 
 `;
 
-exports[`invalid(68): a {\r\n  clip-path: inset(10px round 2px 2px);\r\n  transition-timing-function: linear(0 0%, .5, 1 100%);\r\n} 1`] = `
+exports[`invalid(68): a { width: calc(c\\61lc-mix(10px 50%,20px 50%)); } 1`] = `
 
-  1 | a {
-  2 |   clip-path: inset(10px round 2px 2px);
-  3 |   transition-timing-function: linear(0 0%, .5, 1 100%);
-  4 | }
+  1 | a { width: calc(c\\61lc-mix(10px 50%,20px 50%)); }
 
 `;
 
-exports[`invalid(68): a {\r\n  clip-path: inset(10px round 2px 2px);\r\n  transition-timing-function: linear(0 0%, .5, 1 100%);\r\n} 2`] = `
+exports[`invalid(68): a { width: calc(c\\61lc-mix(10px 50%,20px 50%)); } 2`] = `
 
 Message:
-  1 | a {
-> 2 |   clip-path: inset(10px round 2px 2px);
-    |              ^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`inset()\`.
-  3 |   transition-timing-function: linear(0 0%, .5, 1 100%);
-  4 | }
+> 1 | a { width: calc(c\\61lc-mix(10px 50%,20px 50%)); }
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`calc()\`.
 
 Output:
-  1 | a {
-  2 |   clip-path: inset(10px round 2px );
-  3 |   transition-timing-function: linear(0 0%, .5, 1 100%);
-  4 | }
+  1 | a { width: c\\61lc-mix(10px 50%,20px 50%); }
 
 `;
 
-exports[`invalid(68): a {\r\n  clip-path: inset(10px round 2px 2px);\r\n  transition-timing-function: linear(0 0%, .5, 1 100%);\r\n} 3`] = `
+exports[`invalid(68): a { width: calc(c\\61lc-mix(10px 50%,20px 50%)); } 3`] = `
 
 Message:
-  1 | a {
-  2 |   clip-path: inset(10px round 2px 2px);
-> 3 |   transition-timing-function: linear(0 0%, .5, 1 100%);
-    |                               ^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`linear()\`.
-  4 | }
+> 1 | a { width: calc(c\\61lc-mix(10px 50%,20px 50%)); }
+    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`calc-mix()\`.
 
 Output:
-  1 | a {
-  2 |   clip-path: inset(10px round 2px 2px);
-  3 |   transition-timing-function: linear(0 , .5, 1 );
-  4 | }
+  1 | a { width: calc(c\\61lc-mix(10px ,20px )); }
 
 `;
 
-exports[`invalid(69): a { background: radial-gradient(ellipse at center in hsl shorter hue, red, blue); background-image: radial-gradient(in oklab ellipse at center, red, blue); } 1`] = `
+exports[`invalid(69): a { width: calc(/* mix */ calc-mix(10px 50%, 20px 50%) /* end */); } 1`] = `
 
-  1 | a { background: radial-gradient(ellipse at center in hsl shorter hue, red, blue); background-image: radial-gradient(in oklab ellipse at center, red, blue); }
+  1 | a { width: calc(/* mix */ calc-mix(10px 50%, 20px 50%) /* end */); }
 
 `;
 
-exports[`invalid(69): a { background: radial-gradient(ellipse at center in hsl shorter hue, red, blue); background-image: radial-gradient(in oklab ellipse at center, red, blue); } 2`] = `
+exports[`invalid(69): a { width: calc(/* mix */ calc-mix(10px 50%, 20px 50%) /* end */); } 2`] = `
 
 Message:
-> 1 | a { background: radial-gradient(ellipse at center in hsl shorter hue, red, blue); background-image: radial-gradient(in oklab ellipse at center, red, blue); }
-    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`radial-gradient()\`.
+> 1 | a { width: calc(/* mix */ calc-mix(10px 50%, 20px 50%) /* end */); }
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`calc()\`.
 
 Output:
-  1 | a { background: radial-gradient( at center in hsl  , red, blue); background-image: radial-gradient(in oklab ellipse at center, red, blue); }
+  1 | a { width: /* mix */ calc-mix(10px 50%, 20px 50%) /* end */; }
 
 `;
 
-exports[`invalid(69): a { background: radial-gradient(ellipse at center in hsl shorter hue, red, blue); background-image: radial-gradient(in oklab ellipse at center, red, blue); } 3`] = `
+exports[`invalid(69): a { width: calc(/* mix */ calc-mix(10px 50%, 20px 50%) /* end */); } 3`] = `
 
 Message:
-> 1 | a { background: radial-gradient(ellipse at center in hsl shorter hue, red, blue); background-image: radial-gradient(in oklab ellipse at center, red, blue); }
-    |                                                                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`radial-gradient()\`.
+> 1 | a { width: calc(/* mix */ calc-mix(10px 50%, 20px 50%) /* end */); }
+    |                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`calc-mix()\`.
 
 Output:
-  1 | a { background: radial-gradient(ellipse at center in hsl shorter hue, red, blue); background-image: radial-gradient(in oklab ellipse  , red, blue); }
+  1 | a { width: calc(/* mix */ calc-mix(10px , 20px ) /* end */); }
 
 `;
 
@@ -10684,53 +10635,75 @@ Output:
 
 `;
 
-exports[`invalid(7): a { filter: brightness(1) contrast(100%) grayscale(1) invert(100%); } 1`] = `
+exports[`invalid(7): a { filter: blur(0) blur(0px) blur(0em) hue-rotate(0) hue-rotate(0deg) hue-rotate(0turn); } 1`] = `
 
-  1 | a { filter: brightness(1) contrast(100%) grayscale(1) invert(100%); }
-
-`;
-
-exports[`invalid(7): a { filter: brightness(1) contrast(100%) grayscale(1) invert(100%); } 2`] = `
-
-Message:
-> 1 | a { filter: brightness(1) contrast(100%) grayscale(1) invert(100%); }
-    |             ^^^^^^^^^^^^^ Simplify this redundant use of \`brightness()\`.
-
-Output:
-  1 | a { filter: brightness() contrast(100%) grayscale(1) invert(100%); }
+  1 | a { filter: blur(0) blur(0px) blur(0em) hue-rotate(0) hue-rotate(0deg) hue-rotate(0turn); }
 
 `;
 
-exports[`invalid(7): a { filter: brightness(1) contrast(100%) grayscale(1) invert(100%); } 3`] = `
+exports[`invalid(7): a { filter: blur(0) blur(0px) blur(0em) hue-rotate(0) hue-rotate(0deg) hue-rotate(0turn); } 2`] = `
 
 Message:
-> 1 | a { filter: brightness(1) contrast(100%) grayscale(1) invert(100%); }
-    |                           ^^^^^^^^^^^^^^ Simplify this redundant use of \`contrast()\`.
+> 1 | a { filter: blur(0) blur(0px) blur(0em) hue-rotate(0) hue-rotate(0deg) hue-rotate(0turn); }
+    |             ^^^^^^^ Simplify this redundant use of \`blur()\`.
 
 Output:
-  1 | a { filter: brightness(1) contrast() grayscale(1) invert(100%); }
+  1 | a { filter: blur() blur(0px) blur(0em) hue-rotate(0) hue-rotate(0deg) hue-rotate(0turn); }
 
 `;
 
-exports[`invalid(7): a { filter: brightness(1) contrast(100%) grayscale(1) invert(100%); } 4`] = `
+exports[`invalid(7): a { filter: blur(0) blur(0px) blur(0em) hue-rotate(0) hue-rotate(0deg) hue-rotate(0turn); } 3`] = `
 
 Message:
-> 1 | a { filter: brightness(1) contrast(100%) grayscale(1) invert(100%); }
-    |                                          ^^^^^^^^^^^^ Simplify this redundant use of \`grayscale()\`.
+> 1 | a { filter: blur(0) blur(0px) blur(0em) hue-rotate(0) hue-rotate(0deg) hue-rotate(0turn); }
+    |                     ^^^^^^^^^ Simplify this redundant use of \`blur()\`.
 
 Output:
-  1 | a { filter: brightness(1) contrast(100%) grayscale() invert(100%); }
+  1 | a { filter: blur(0) blur() blur(0em) hue-rotate(0) hue-rotate(0deg) hue-rotate(0turn); }
 
 `;
 
-exports[`invalid(7): a { filter: brightness(1) contrast(100%) grayscale(1) invert(100%); } 5`] = `
+exports[`invalid(7): a { filter: blur(0) blur(0px) blur(0em) hue-rotate(0) hue-rotate(0deg) hue-rotate(0turn); } 4`] = `
 
 Message:
-> 1 | a { filter: brightness(1) contrast(100%) grayscale(1) invert(100%); }
-    |                                                       ^^^^^^^^^^^^ Simplify this redundant use of \`invert()\`.
+> 1 | a { filter: blur(0) blur(0px) blur(0em) hue-rotate(0) hue-rotate(0deg) hue-rotate(0turn); }
+    |                               ^^^^^^^^^ Simplify this redundant use of \`blur()\`.
 
 Output:
-  1 | a { filter: brightness(1) contrast(100%) grayscale(1) invert(); }
+  1 | a { filter: blur(0) blur(0px) blur() hue-rotate(0) hue-rotate(0deg) hue-rotate(0turn); }
+
+`;
+
+exports[`invalid(7): a { filter: blur(0) blur(0px) blur(0em) hue-rotate(0) hue-rotate(0deg) hue-rotate(0turn); } 5`] = `
+
+Message:
+> 1 | a { filter: blur(0) blur(0px) blur(0em) hue-rotate(0) hue-rotate(0deg) hue-rotate(0turn); }
+    |                                         ^^^^^^^^^^^^^ Simplify this redundant use of \`hue-rotate()\`.
+
+Output:
+  1 | a { filter: blur(0) blur(0px) blur(0em) hue-rotate() hue-rotate(0deg) hue-rotate(0turn); }
+
+`;
+
+exports[`invalid(7): a { filter: blur(0) blur(0px) blur(0em) hue-rotate(0) hue-rotate(0deg) hue-rotate(0turn); } 6`] = `
+
+Message:
+> 1 | a { filter: blur(0) blur(0px) blur(0em) hue-rotate(0) hue-rotate(0deg) hue-rotate(0turn); }
+    |                                                       ^^^^^^^^^^^^^^^^ Simplify this redundant use of \`hue-rotate()\`.
+
+Output:
+  1 | a { filter: blur(0) blur(0px) blur(0em) hue-rotate(0) hue-rotate() hue-rotate(0turn); }
+
+`;
+
+exports[`invalid(7): a { filter: blur(0) blur(0px) blur(0em) hue-rotate(0) hue-rotate(0deg) hue-rotate(0turn); } 7`] = `
+
+Message:
+> 1 | a { filter: blur(0) blur(0px) blur(0em) hue-rotate(0) hue-rotate(0deg) hue-rotate(0turn); }
+    |                                                                        ^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`hue-rotate()\`.
+
+Output:
+  1 | a { filter: blur(0) blur(0px) blur(0em) hue-rotate(0) hue-rotate(0deg) hue-rotate(); }
 
 `;
 
@@ -10847,13 +10820,112 @@ Output:
 
 `;
 
-exports[`invalid(70): a { background: conic-gradient(from 0deg at center IN OKLAB, red, blue); mask: repeating-conic-gradient(in oklab from 0deg at center, red, blue); } 1`] = `
+exports[`invalid(70): a { --width: calc(calc-mix(10px 50%, 20px 50%)); } 1`] = `
+
+  1 | a { --width: calc(calc-mix(10px 50%, 20px 50%)); }
+
+`;
+
+exports[`invalid(70): a { --width: calc(calc-mix(10px 50%, 20px 50%)); } 2`] = `
+
+Message:
+> 1 | a { --width: calc(calc-mix(10px 50%, 20px 50%)); }
+    |              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`calc()\`.
+
+Output:
+  1 | a { --width: calc-mix(10px 50%, 20px 50%); }
+
+`;
+
+exports[`invalid(70): a { --width: calc(calc-mix(10px 50%, 20px 50%)); } 3`] = `
+
+Message:
+> 1 | a { --width: calc(calc-mix(10px 50%, 20px 50%)); }
+    |                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`calc-mix()\`.
+
+Output:
+  1 | a { --width: calc(calc-mix(10px , 20px )); }
+
+`;
+
+exports[`invalid(71): a {\r\n  clip-path: inset(10px round 2px 2px);\r\n  transition-timing-function: linear(0 0%, .5, 1 100%);\r\n} 1`] = `
+
+  1 | a {
+  2 |   clip-path: inset(10px round 2px 2px);
+  3 |   transition-timing-function: linear(0 0%, .5, 1 100%);
+  4 | }
+
+`;
+
+exports[`invalid(71): a {\r\n  clip-path: inset(10px round 2px 2px);\r\n  transition-timing-function: linear(0 0%, .5, 1 100%);\r\n} 2`] = `
+
+Message:
+  1 | a {
+> 2 |   clip-path: inset(10px round 2px 2px);
+    |              ^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`inset()\`.
+  3 |   transition-timing-function: linear(0 0%, .5, 1 100%);
+  4 | }
+
+Output:
+  1 | a {
+  2 |   clip-path: inset(10px round 2px );
+  3 |   transition-timing-function: linear(0 0%, .5, 1 100%);
+  4 | }
+
+`;
+
+exports[`invalid(71): a {\r\n  clip-path: inset(10px round 2px 2px);\r\n  transition-timing-function: linear(0 0%, .5, 1 100%);\r\n} 3`] = `
+
+Message:
+  1 | a {
+  2 |   clip-path: inset(10px round 2px 2px);
+> 3 |   transition-timing-function: linear(0 0%, .5, 1 100%);
+    |                               ^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`linear()\`.
+  4 | }
+
+Output:
+  1 | a {
+  2 |   clip-path: inset(10px round 2px 2px);
+  3 |   transition-timing-function: linear(0 , .5, 1 );
+  4 | }
+
+`;
+
+exports[`invalid(72): a { background: radial-gradient(ellipse at center in hsl shorter hue, red, blue); background-image: radial-gradient(in oklab ellipse at center, red, blue); } 1`] = `
+
+  1 | a { background: radial-gradient(ellipse at center in hsl shorter hue, red, blue); background-image: radial-gradient(in oklab ellipse at center, red, blue); }
+
+`;
+
+exports[`invalid(72): a { background: radial-gradient(ellipse at center in hsl shorter hue, red, blue); background-image: radial-gradient(in oklab ellipse at center, red, blue); } 2`] = `
+
+Message:
+> 1 | a { background: radial-gradient(ellipse at center in hsl shorter hue, red, blue); background-image: radial-gradient(in oklab ellipse at center, red, blue); }
+    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`radial-gradient()\`.
+
+Output:
+  1 | a { background: radial-gradient( at center in hsl  , red, blue); background-image: radial-gradient(in oklab ellipse at center, red, blue); }
+
+`;
+
+exports[`invalid(72): a { background: radial-gradient(ellipse at center in hsl shorter hue, red, blue); background-image: radial-gradient(in oklab ellipse at center, red, blue); } 3`] = `
+
+Message:
+> 1 | a { background: radial-gradient(ellipse at center in hsl shorter hue, red, blue); background-image: radial-gradient(in oklab ellipse at center, red, blue); }
+    |                                                                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`radial-gradient()\`.
+
+Output:
+  1 | a { background: radial-gradient(ellipse at center in hsl shorter hue, red, blue); background-image: radial-gradient(in oklab ellipse  , red, blue); }
+
+`;
+
+exports[`invalid(73): a { background: conic-gradient(from 0deg at center IN OKLAB, red, blue); mask: repeating-conic-gradient(in oklab from 0deg at center, red, blue); } 1`] = `
 
   1 | a { background: conic-gradient(from 0deg at center IN OKLAB, red, blue); mask: repeating-conic-gradient(in oklab from 0deg at center, red, blue); }
 
 `;
 
-exports[`invalid(70): a { background: conic-gradient(from 0deg at center IN OKLAB, red, blue); mask: repeating-conic-gradient(in oklab from 0deg at center, red, blue); } 2`] = `
+exports[`invalid(73): a { background: conic-gradient(from 0deg at center IN OKLAB, red, blue); mask: repeating-conic-gradient(in oklab from 0deg at center, red, blue); } 2`] = `
 
 Message:
 > 1 | a { background: conic-gradient(from 0deg at center IN OKLAB, red, blue); mask: repeating-conic-gradient(in oklab from 0deg at center, red, blue); }
@@ -10864,7 +10936,7 @@ Output:
 
 `;
 
-exports[`invalid(70): a { background: conic-gradient(from 0deg at center IN OKLAB, red, blue); mask: repeating-conic-gradient(in oklab from 0deg at center, red, blue); } 3`] = `
+exports[`invalid(73): a { background: conic-gradient(from 0deg at center IN OKLAB, red, blue); mask: repeating-conic-gradient(in oklab from 0deg at center, red, blue); } 3`] = `
 
 Message:
 > 1 | a { background: conic-gradient(from 0deg at center IN OKLAB, red, blue); mask: repeating-conic-gradient(in oklab from 0deg at center, red, blue); }
@@ -10923,6 +10995,45 @@ Message:
 
 Output:
   1 | a { --value: sign(var(--size)); }
+
+`;
+
+exports[`invalid(8): a { backdrop-filter: brightness(+1.0) blur(.0rem) hue-rotate(0e2rad); } 1`] = `
+
+  1 | a { backdrop-filter: brightness(+1.0) blur(.0rem) hue-rotate(0e2rad); }
+
+`;
+
+exports[`invalid(8): a { backdrop-filter: brightness(+1.0) blur(.0rem) hue-rotate(0e2rad); } 2`] = `
+
+Message:
+> 1 | a { backdrop-filter: brightness(+1.0) blur(.0rem) hue-rotate(0e2rad); }
+    |                      ^^^^^^^^^^^^^^^^ Simplify this redundant use of \`brightness()\`.
+
+Output:
+  1 | a { backdrop-filter: brightness() blur(.0rem) hue-rotate(0e2rad); }
+
+`;
+
+exports[`invalid(8): a { backdrop-filter: brightness(+1.0) blur(.0rem) hue-rotate(0e2rad); } 3`] = `
+
+Message:
+> 1 | a { backdrop-filter: brightness(+1.0) blur(.0rem) hue-rotate(0e2rad); }
+    |                                       ^^^^^^^^^^^ Simplify this redundant use of \`blur()\`.
+
+Output:
+  1 | a { backdrop-filter: brightness(+1.0) blur() hue-rotate(0e2rad); }
+
+`;
+
+exports[`invalid(8): a { backdrop-filter: brightness(+1.0) blur(.0rem) hue-rotate(0e2rad); } 4`] = `
+
+Message:
+> 1 | a { backdrop-filter: brightness(+1.0) blur(.0rem) hue-rotate(0e2rad); }
+    |                                                   ^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`hue-rotate()\`.
+
+Output:
+  1 | a { backdrop-filter: brightness(+1.0) blur(.0rem) hue-rotate(); }
 
 `;
 
@@ -10991,45 +11102,6 @@ Message:
 
 Output:
   1 | a { color: rgb(from color(from var(--color) srgb r g b) r g b  ); }
-
-`;
-
-exports[`invalid(8): a { filter: opacity(1) saturate(100%) sepia(1); } 1`] = `
-
-  1 | a { filter: opacity(1) saturate(100%) sepia(1); }
-
-`;
-
-exports[`invalid(8): a { filter: opacity(1) saturate(100%) sepia(1); } 2`] = `
-
-Message:
-> 1 | a { filter: opacity(1) saturate(100%) sepia(1); }
-    |             ^^^^^^^^^^ Simplify this redundant use of \`opacity()\`.
-
-Output:
-  1 | a { filter: opacity() saturate(100%) sepia(1); }
-
-`;
-
-exports[`invalid(8): a { filter: opacity(1) saturate(100%) sepia(1); } 3`] = `
-
-Message:
-> 1 | a { filter: opacity(1) saturate(100%) sepia(1); }
-    |                        ^^^^^^^^^^^^^^ Simplify this redundant use of \`saturate()\`.
-
-Output:
-  1 | a { filter: opacity(1) saturate() sepia(1); }
-
-`;
-
-exports[`invalid(8): a { filter: opacity(1) saturate(100%) sepia(1); } 4`] = `
-
-Message:
-> 1 | a { filter: opacity(1) saturate(100%) sepia(1); }
-    |                                       ^^^^^^^^ Simplify this redundant use of \`sepia()\`.
-
-Output:
-  1 | a { filter: opacity(1) saturate(100%) sepia(); }
 
 `;
 
@@ -11267,75 +11339,20 @@ Output:
 
 `;
 
-exports[`invalid(9): a { filter: blur(0) blur(0px) blur(0em) hue-rotate(0) hue-rotate(0deg) hue-rotate(0turn); } 1`] = `
+exports[`invalid(9): a { filter: brightness(/* default */ 1 /* end */); } 1`] = `
 
-  1 | a { filter: blur(0) blur(0px) blur(0em) hue-rotate(0) hue-rotate(0deg) hue-rotate(0turn); }
-
-`;
-
-exports[`invalid(9): a { filter: blur(0) blur(0px) blur(0em) hue-rotate(0) hue-rotate(0deg) hue-rotate(0turn); } 2`] = `
-
-Message:
-> 1 | a { filter: blur(0) blur(0px) blur(0em) hue-rotate(0) hue-rotate(0deg) hue-rotate(0turn); }
-    |             ^^^^^^^ Simplify this redundant use of \`blur()\`.
-
-Output:
-  1 | a { filter: blur() blur(0px) blur(0em) hue-rotate(0) hue-rotate(0deg) hue-rotate(0turn); }
+  1 | a { filter: brightness(/* default */ 1 /* end */); }
 
 `;
 
-exports[`invalid(9): a { filter: blur(0) blur(0px) blur(0em) hue-rotate(0) hue-rotate(0deg) hue-rotate(0turn); } 3`] = `
+exports[`invalid(9): a { filter: brightness(/* default */ 1 /* end */); } 2`] = `
 
 Message:
-> 1 | a { filter: blur(0) blur(0px) blur(0em) hue-rotate(0) hue-rotate(0deg) hue-rotate(0turn); }
-    |                     ^^^^^^^^^ Simplify this redundant use of \`blur()\`.
+> 1 | a { filter: brightness(/* default */ 1 /* end */); }
+    |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`brightness()\`.
 
 Output:
-  1 | a { filter: blur(0) blur() blur(0em) hue-rotate(0) hue-rotate(0deg) hue-rotate(0turn); }
-
-`;
-
-exports[`invalid(9): a { filter: blur(0) blur(0px) blur(0em) hue-rotate(0) hue-rotate(0deg) hue-rotate(0turn); } 4`] = `
-
-Message:
-> 1 | a { filter: blur(0) blur(0px) blur(0em) hue-rotate(0) hue-rotate(0deg) hue-rotate(0turn); }
-    |                               ^^^^^^^^^ Simplify this redundant use of \`blur()\`.
-
-Output:
-  1 | a { filter: blur(0) blur(0px) blur() hue-rotate(0) hue-rotate(0deg) hue-rotate(0turn); }
-
-`;
-
-exports[`invalid(9): a { filter: blur(0) blur(0px) blur(0em) hue-rotate(0) hue-rotate(0deg) hue-rotate(0turn); } 5`] = `
-
-Message:
-> 1 | a { filter: blur(0) blur(0px) blur(0em) hue-rotate(0) hue-rotate(0deg) hue-rotate(0turn); }
-    |                                         ^^^^^^^^^^^^^ Simplify this redundant use of \`hue-rotate()\`.
-
-Output:
-  1 | a { filter: blur(0) blur(0px) blur(0em) hue-rotate() hue-rotate(0deg) hue-rotate(0turn); }
-
-`;
-
-exports[`invalid(9): a { filter: blur(0) blur(0px) blur(0em) hue-rotate(0) hue-rotate(0deg) hue-rotate(0turn); } 6`] = `
-
-Message:
-> 1 | a { filter: blur(0) blur(0px) blur(0em) hue-rotate(0) hue-rotate(0deg) hue-rotate(0turn); }
-    |                                                       ^^^^^^^^^^^^^^^^ Simplify this redundant use of \`hue-rotate()\`.
-
-Output:
-  1 | a { filter: blur(0) blur(0px) blur(0em) hue-rotate(0) hue-rotate() hue-rotate(0turn); }
-
-`;
-
-exports[`invalid(9): a { filter: blur(0) blur(0px) blur(0em) hue-rotate(0) hue-rotate(0deg) hue-rotate(0turn); } 7`] = `
-
-Message:
-> 1 | a { filter: blur(0) blur(0px) blur(0em) hue-rotate(0) hue-rotate(0deg) hue-rotate(0turn); }
-    |                                                                        ^^^^^^^^^^^^^^^^^ Simplify this redundant use of \`hue-rotate()\`.
-
-Output:
-  1 | a { filter: blur(0) blur(0px) blur(0em) hue-rotate(0) hue-rotate(0deg) hue-rotate(); }
+  1 | a { filter: brightness(/* default */  /* end */); }
 
 `;
 

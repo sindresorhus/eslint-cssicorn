@@ -9,6 +9,7 @@ import {
 	evaluateCssMath,
 	getBasePropertyName,
 	getCommaSeparatedGroups,
+	getNodesRange,
 	hasCommentInRange,
 	isCssModulesInteropDeclaration,
 	isSubstitutionFunction,
@@ -855,13 +856,6 @@ function getDefaultGradientTokens(name, nodes, context) {
 		return getDefaultLinearDirectionTokens(nodes);
 	}
 
-	// A color interpolation method must come before or after the other parts. Between them, the gradient is invalid, and removing the parts around it would make it apply.
-	const interpolationIndex = nodes.findIndex(node => isKeyword(node, 'in'));
-	const interpolationLength = isKeyword(nodes[interpolationIndex + 3], 'hue') ? 4 : 2;
-	if (interpolationIndex > 0 && nodes.length > interpolationIndex + interpolationLength) {
-		return [];
-	}
-
 	const tokens = [];
 	const positionIndex = nodes.findIndex(node => isKeyword(node, 'at'));
 	if (positionIndex !== -1 && isCenterPosition(nodes.slice(positionIndex))) {
@@ -884,8 +878,7 @@ function getDefaultGradientTokens(name, nodes, context) {
 		tokens.push(sizes[0]);
 	}
 
-	// A shape between two sizes is invalid, so removing it would make the gradient apply.
-	if (shape && !(sizes.length === 2 && prefix[1] === shape) && isImpliedRadialShape(shape, sizes, context)) {
+	if (shape && isImpliedRadialShape(shape, sizes, context)) {
 		tokens.push(shape);
 	}
 
@@ -989,6 +982,13 @@ function getMixWeightTokens(arguments_, name, context) {
 	return percentages.every(Boolean) && total === 100 ? [percentages.at(-1)] : [];
 }
 
+// Identify the prelude positively: an unrecognized color must never turn the second stop into the first.
+function isGradientPrelude(argument) {
+	const [firstNode] = argument.nodes;
+	return ['Number', 'Dimension', 'Percentage'].includes(firstNode.type) || isMathFunction(firstNode)
+		|| (firstNode.type === 'Identifier' && gradientPreludeKeywords.has(normalizeCssIdentifier(firstNode.name)));
+}
+
 function getGradientProblem(node, context) {
 	if (hasSubstitutionChild(node)) {
 		return;
@@ -999,18 +999,25 @@ function getGradientProblem(node, context) {
 		return;
 	}
 
-	const tokens = getDefaultHueTokens(arguments_[0].nodes);
+	// An invalid first group, like `180deg red` without the comma, makes the browser ignore the gradient, and removing its default parts could make it apply. Only the first group is matched, because the stops are checked separately, and the lexer cannot match a nested `var()` or some newer colors. A first group that the lexer cannot match is skipped too.
+	const {sourceCode} = context;
 	const name = normalizeCssIdentifier(node.name);
+	if (!sourceCode.lexer.matchType('gradient', `${name}(${sourceCode.text.slice(...getNodesRange(arguments_[0].nodes, {sourceCode}))}, red, red)`).matched) {
+		return;
+	}
+
+	const tokens = getDefaultHueTokens(arguments_[0].nodes);
 	tokens.push(...getDefaultGradientTokens(name, arguments_[0].nodes, context));
 	if (tokens.length === arguments_[0].nodes.length) {
+		// Removing the whole first group would make a misplaced second prelude, like `in oklab` in `to bottom, in oklab, red, blue`, the valid first group.
+		if (isGradientPrelude(arguments_[1])) {
+			return;
+		}
+
 		tokens.push(arguments_[0].nextComma);
 	}
 
-	// Identify the prelude positively: an unrecognized color must never turn the second stop into the first.
-	const firstNode = arguments_[0].nodes[0];
-	const hasPrelude = ['Number', 'Dimension', 'Percentage'].includes(firstNode.type) || isMathFunction(firstNode)
-		|| (firstNode.type === 'Identifier' && gradientPreludeKeywords.has(normalizeCssIdentifier(firstNode.name)));
-	const firstColorIndex = hasPrelude ? 1 : 0;
+	const firstColorIndex = isGradientPrelude(arguments_[0]) ? 1 : 0;
 	for (const [argument, position] of [[arguments_[firstColorIndex], 0], [arguments_.at(-1), 100]]) {
 		const [color, stop] = argument.nodes;
 		if (argument.nodes.length !== 2) {
