@@ -1,6 +1,5 @@
 import htmlTags from 'html-tags';
 import svgTags from 'svg-tags';
-import {mathmlTagNames} from 'mathml-tag-names';
 import {deprecatedHtmlTypeSelectors, deprecatedSvgTypeSelectors, getTypeSelectorIdentifier} from './shared/css-type-selectors.js';
 import {
 	decodeCssIdentifier,
@@ -21,10 +20,59 @@ const messages = {
 	[MESSAGE_ID]: 'Unknown type selector \'{{selector}}\'.',
 };
 
-// The catalog includes the invalid example `mfraction` and the changelog typo `piecewice`: https://www.w3.org/TR/mathml4/#presm.merror and https://www.w3.org/TR/MathML2/appendixj.html
-const knownMathmlNames = mathmlTagNames.filter(name => name !== 'mfraction' && name !== 'piecewice');
-const caseInsensitiveNames = new Set([...htmlTags, ...knownMathmlNames, ...deprecatedHtmlTypeSelectors]);
-const svgNames = new Set([...svgTags, ...deprecatedSvgTypeSelectors, 'discard', 'feDropShadow']);
+// MathML Core elements (https://w3c.github.io/mathml-core/) and presentation elements from earlier MathML versions (https://w3c.github.io/mathml/). Content Markup, like `card` and `list`, is not rendered by browsers.
+const mathmlNames = [
+	'annotation',
+	'annotation-xml',
+	'maction',
+	'math',
+	'merror',
+	'mfrac',
+	'mi',
+	'mmultiscripts',
+	'mn',
+	'mo',
+	'mover',
+	'mpadded',
+	'mphantom',
+	'mprescripts',
+	'mroot',
+	'mrow',
+	'ms',
+	'mspace',
+	'msqrt',
+	'mstyle',
+	'msub',
+	'msubsup',
+	'msup',
+	'mtable',
+	'mtd',
+	'mtext',
+	'mtr',
+	'munder',
+	'munderover',
+	'semantics',
+	// Legacy
+	'maligngroup',
+	'malignmark',
+	'menclose',
+	'mfenced',
+	'mglyph',
+	'mlabeledtr',
+	'mlongdiv',
+	'mscarries',
+	'mscarry',
+	'msgroup',
+	'msline',
+	'msrow',
+	'mstack',
+];
+
+// Type selectors match HTML elements ASCII case-insensitively, and other elements case-sensitively: https://html.spec.whatwg.org/multipage/semantics-other.html#case-sensitivity-of-selectors
+// `html-tags` includes the `math` and `svg` root elements, which are not in the HTML namespace.
+// Browsers also ship some elements that are not in the HTML standard yet, like the permission elements in Chrome and `<model>` in Safari.
+const htmlNames = new Set([...htmlTags.filter(name => name !== 'math' && name !== 'svg'), ...deprecatedHtmlTypeSelectors, 'camera', 'fencedframe', 'geolocation', 'microphone', 'model', 'usermedia']);
+const caseSensitiveNames = new Set([...svgTags, ...deprecatedSvgTypeSelectors, 'discard', 'feDropShadow', ...mathmlNames]);
 const reservedCustomElementNames = new Set([
 	'annotation-xml',
 	'color-profile',
@@ -64,9 +112,9 @@ const getTypeSelectorProblem = (node, context, {checkCustomElements, allow}) => 
 
 	const name = decodeCssIdentifier(identifier.value);
 	if (
-		caseInsensitiveNames.has(toAsciiLowerCase(name))
-		|| svgNames.has(name)
-		|| (!checkCustomElements && isCustomElementName(name))
+		htmlNames.has(toAsciiLowerCase(name))
+		|| caseSensitiveNames.has(name)
+		|| (!checkCustomElements && isCustomElementName(toAsciiLowerCase(name)))
 		|| isAllowed(name, allow)
 	) {
 		return;

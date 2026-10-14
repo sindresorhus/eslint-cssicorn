@@ -11,10 +11,15 @@ const MESSAGE_ID = 'no-unknown-type-selectors';
 test.snapshot({
 	valid: [
 		'input {} ul li {} DIV {}',
+		'geolocation {} camera {} microphone {} usermedia {} fencedframe {} model {}',
 		'svg {} circle {} foreignObject {} linearGradient {} feDropShadow {} discard {}',
-		'math {} mrow {} MI {} annotation-xml {} mfrac {} piecewise {}',
+		'math {} mrow {} mi {} annotation-xml {} mfrac {} mprescripts {} semantics {}',
+		'mfenced {} menclose {} mglyph {} mlabeledtr {} maligngroup {} malignmark {} mstack {} mlongdiv {} msgroup {} msrow {} mscarries {} mscarry {} msline {}',
 		'acronym {} MARQUEE {} font-face {} altGlyph {} hatchPath {}',
 		'my-element {} app-widget {} x-foo {}',
+		// Custom elements are in the HTML namespace, so they match ASCII case-insensitively.
+		'MY-WIDGET {} x-Foo {} X-foo {}',
+		String.raw`x-\41 {}`,
 		'math-α {} emotion-😍 {} x-É {}',
 		String.raw`d\69 v {} foreign\4f bject {} my-\65 lement {}`,
 		'* {} svg|* {} *|* {} |* {}',
@@ -62,13 +67,17 @@ test.snapshot({
 			code: 'div {} font-face {} annotation-xml {}',
 			options: [{checkCustomElements: true}],
 		},
+		{
+			code: '_:-ms-fullscreen, :root .x {}',
+			options: [{allow: ['_']}],
+		},
 	],
 	invalid: [
 		'unknown {}',
 		'buton {} .list > lable {}',
 		'foreignobject {} lineargradient {} FEDROPSHADOW {}',
-		'x-Foo {} X-foo {} -my-element {} _my-element {}',
-		String.raw`x-\41 {} x-\20 foo {} x-\/foo {} x-\a {}`,
+		'-my-element {} _my-element {}',
+		String.raw`x-\20 foo {} x-\/foo {} x-\a {}`,
 		'from {} to {}',
 		'unknown, input, buton:hover {}',
 		'ns|unknown {} *|buton {} |lable {}',
@@ -89,6 +98,10 @@ test.snapshot({
 			options: [{checkCustomElements: true}],
 		},
 		{
+			code: 'MY-WIDGET {}',
+			options: [{checkCustomElements: true}],
+		},
+		{
 			code: 'WIDGET {} other {}',
 			options: [{allow: ['widget']}],
 		},
@@ -96,9 +109,18 @@ test.snapshot({
 			code: 'app-widget {}',
 			options: [{checkCustomElements: true, allow: ['/^app-/']}],
 		},
-		'mfraction {} piecewice {} MFRACTION {} PIECEWICE {}',
+		// MathML Content Markup is not rendered by browsers, and is a likely missing `.` before a class name.
+		'card {} list {} root {} min {} max {} true {} apply {} condition {}',
+		'piecewise {} fn {} mfraction {} piecewice {}',
+		// MathML and SVG names are case-sensitive, including the `math` and `svg` root elements.
+		'MI {} MATH {} Mrow {} SVG {}',
+		// `<none/>` is not a MathML Core or MathML 4 element.
+		'none {}',
+		// Browser hacks are reported. Add `_` to `allow` to permit them.
+		'_:-ms-fullscreen, :root .x {}',
 		':deep(:nth-child(2n of lable), :global(:not(buton))) {}',
 		':is(:deep(buton)) {} @supports selector(:deep(lable)) {}',
+		'encoding {} function {}',
 	],
 });
 

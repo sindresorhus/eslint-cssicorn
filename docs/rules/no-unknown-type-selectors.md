@@ -7,9 +7,9 @@
 <!-- end auto-generated rule header -->
 <!-- Do not manually modify this header. Run: `npm run fix:eslint-docs` -->
 
-This rule checks type selectors against known HTML, SVG, and MathML element names, including obsolete elements. It catches likely typos; it does not check the document's markup or whether an element exists.
+This rule checks type selectors against known HTML and SVG element names, including obsolete elements and elements that browsers ship before they are in the HTML standard, like `geolocation`, and MathML Core and legacy MathML presentation element names. MathML Content Markup names, such as `card` and `list`, are not known, because browsers do not render them. The rule catches likely typos and a missing `.` before a class name; it does not check the document's markup or whether an element exists.
 
-HTML and MathML names are ASCII case-insensitive. SVG names are case-sensitive.
+HTML names are ASCII case-insensitive. SVG and MathML names are case-sensitive, including the `svg` and `math` root elements.
 
 ## Examples
 
@@ -29,7 +29,17 @@ foreignobject {}
 foreignObject {}
 ```
 
-Valid custom element names, such as `my-widget`, are allowed by default. Names containing uppercase ASCII letters, such as `my-Widget`, are not valid custom element names.
+```css
+/* ❌ */
+card {}
+
+/* ✅ */
+.card {}
+```
+
+Valid custom element names, such as `my-widget`, are allowed by default. Custom elements are HTML elements, so their names are ASCII case-insensitive and `MY-WIDGET` is also allowed.
+
+Browser hacks such as `_:-ms-fullscreen, :root .x {}` are reported (`_`). Add `_` to `allow` to permit them.
 
 The rule checks parsed selector arguments and framework forms such as Vue's `:deep()` and `:slotted()`. Opaque arguments, including `::cue()` and `::cue-region()`, are not checked. Keyframe selectors and named `@page` selectors are ignored.
 
@@ -54,7 +64,7 @@ Report custom element names unless they match an entry in `allow`. This does not
 Type: `(string | RegExp)[]`\
 Default: `[]`
 
-Additional local element names to allow, with or without a namespace prefix. Strings match exactly and case-sensitively. Regular expressions match using their own flags; use anchors when you want to match the whole name. CSS escapes are decoded before matching.
+Additional local element names to allow. Namespace prefixes are ignored when matching. Strings match exactly and case-sensitively. Regular expressions match using their own flags; use anchors when you want to match the whole name. CSS escapes are decoded before matching.
 
 Use actual regular expressions. Strings such as `'/^app-/'` are literal names, not patterns.
 

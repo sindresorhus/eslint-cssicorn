@@ -418,7 +418,25 @@ Message:
 
 `;
 
-exports[`invalid(22): WIDGET {} other {} 1`] = `
+exports[`invalid(22): MY-WIDGET {} 1`] = `
+
+Options:
+- checkCustomElements: true
+
+Code:
+  1 | MY-WIDGET {}
+
+`;
+
+exports[`invalid(22): MY-WIDGET {} 2`] = `
+
+Message:
+> 1 | MY-WIDGET {}
+    | ^^^^^^^^^ Unknown type selector 'MY-WIDGET'.
+
+`;
+
+exports[`invalid(23): WIDGET {} other {} 1`] = `
 
 Options:
 - allow:
@@ -429,7 +447,7 @@ Code:
 
 `;
 
-exports[`invalid(22): WIDGET {} other {} 2`] = `
+exports[`invalid(23): WIDGET {} other {} 2`] = `
 
 Message:
 > 1 | WIDGET {} other {}
@@ -437,7 +455,7 @@ Message:
 
 `;
 
-exports[`invalid(22): WIDGET {} other {} 3`] = `
+exports[`invalid(23): WIDGET {} other {} 3`] = `
 
 Message:
 > 1 | WIDGET {} other {}
@@ -445,7 +463,7 @@ Message:
 
 `;
 
-exports[`invalid(23): app-widget {} 1`] = `
+exports[`invalid(24): app-widget {} 1`] = `
 
 Options:
 - checkCustomElements: true
@@ -457,7 +475,7 @@ Code:
 
 `;
 
-exports[`invalid(23): app-widget {} 2`] = `
+exports[`invalid(24): app-widget {} 2`] = `
 
 Message:
 > 1 | app-widget {}
@@ -465,85 +483,177 @@ Message:
 
 `;
 
-exports[`invalid(24): mfraction {} piecewice {} MFRACTION {} PIECEWICE {} 1`] = `
+exports[`invalid(25): card {} list {} root {} min {} max {} true {} apply {} condition {} 1`] = `
 
-  1 | mfraction {} piecewice {} MFRACTION {} PIECEWICE {}
+  1 | card {} list {} root {} min {} max {} true {} apply {} condition {}
 
 `;
 
-exports[`invalid(24): mfraction {} piecewice {} MFRACTION {} PIECEWICE {} 2`] = `
+exports[`invalid(25): card {} list {} root {} min {} max {} true {} apply {} condition {} 2`] = `
 
 Message:
-> 1 | mfraction {} piecewice {} MFRACTION {} PIECEWICE {}
-    | ^^^^^^^^^ Unknown type selector 'mfraction'.
+> 1 | card {} list {} root {} min {} max {} true {} apply {} condition {}
+    | ^^^^ Unknown type selector 'card'.
 
 `;
 
-exports[`invalid(24): mfraction {} piecewice {} MFRACTION {} PIECEWICE {} 3`] = `
+exports[`invalid(25): card {} list {} root {} min {} max {} true {} apply {} condition {} 3`] = `
 
 Message:
-> 1 | mfraction {} piecewice {} MFRACTION {} PIECEWICE {}
-    |              ^^^^^^^^^ Unknown type selector 'piecewice'.
+> 1 | card {} list {} root {} min {} max {} true {} apply {} condition {}
+    |         ^^^^ Unknown type selector 'list'.
 
 `;
 
-exports[`invalid(24): mfraction {} piecewice {} MFRACTION {} PIECEWICE {} 4`] = `
+exports[`invalid(25): card {} list {} root {} min {} max {} true {} apply {} condition {} 4`] = `
 
 Message:
-> 1 | mfraction {} piecewice {} MFRACTION {} PIECEWICE {}
-    |                           ^^^^^^^^^ Unknown type selector 'MFRACTION'.
+> 1 | card {} list {} root {} min {} max {} true {} apply {} condition {}
+    |                 ^^^^ Unknown type selector 'root'.
 
 `;
 
-exports[`invalid(24): mfraction {} piecewice {} MFRACTION {} PIECEWICE {} 5`] = `
+exports[`invalid(25): card {} list {} root {} min {} max {} true {} apply {} condition {} 5`] = `
 
 Message:
-> 1 | mfraction {} piecewice {} MFRACTION {} PIECEWICE {}
-    |                                        ^^^^^^^^^ Unknown type selector 'PIECEWICE'.
+> 1 | card {} list {} root {} min {} max {} true {} apply {} condition {}
+    |                         ^^^ Unknown type selector 'min'.
 
 `;
 
-exports[`invalid(25): :deep(:nth-child(2n of lable), :global(:not(buton))) {} 1`] = `
-
-  1 | :deep(:nth-child(2n of lable), :global(:not(buton))) {}
-
-`;
-
-exports[`invalid(25): :deep(:nth-child(2n of lable), :global(:not(buton))) {} 2`] = `
+exports[`invalid(25): card {} list {} root {} min {} max {} true {} apply {} condition {} 6`] = `
 
 Message:
-> 1 | :deep(:nth-child(2n of lable), :global(:not(buton))) {}
-    |                        ^^^^^ Unknown type selector 'lable'.
+> 1 | card {} list {} root {} min {} max {} true {} apply {} condition {}
+    |                                ^^^ Unknown type selector 'max'.
 
 `;
 
-exports[`invalid(25): :deep(:nth-child(2n of lable), :global(:not(buton))) {} 3`] = `
+exports[`invalid(25): card {} list {} root {} min {} max {} true {} apply {} condition {} 7`] = `
 
 Message:
-> 1 | :deep(:nth-child(2n of lable), :global(:not(buton))) {}
-    |                                             ^^^^^ Unknown type selector 'buton'.
+> 1 | card {} list {} root {} min {} max {} true {} apply {} condition {}
+    |                                       ^^^^ Unknown type selector 'true'.
 
 `;
 
-exports[`invalid(26): :is(:deep(buton)) {} @supports selector(:deep(lable)) {} 1`] = `
-
-  1 | :is(:deep(buton)) {} @supports selector(:deep(lable)) {}
-
-`;
-
-exports[`invalid(26): :is(:deep(buton)) {} @supports selector(:deep(lable)) {} 2`] = `
+exports[`invalid(25): card {} list {} root {} min {} max {} true {} apply {} condition {} 8`] = `
 
 Message:
-> 1 | :is(:deep(buton)) {} @supports selector(:deep(lable)) {}
-    |           ^^^^^ Unknown type selector 'buton'.
+> 1 | card {} list {} root {} min {} max {} true {} apply {} condition {}
+    |                                               ^^^^^ Unknown type selector 'apply'.
 
 `;
 
-exports[`invalid(26): :is(:deep(buton)) {} @supports selector(:deep(lable)) {} 3`] = `
+exports[`invalid(25): card {} list {} root {} min {} max {} true {} apply {} condition {} 9`] = `
 
 Message:
-> 1 | :is(:deep(buton)) {} @supports selector(:deep(lable)) {}
-    |                                               ^^^^^ Unknown type selector 'lable'.
+> 1 | card {} list {} root {} min {} max {} true {} apply {} condition {}
+    |                                                        ^^^^^^^^^ Unknown type selector 'condition'.
+
+`;
+
+exports[`invalid(26): piecewise {} fn {} mfraction {} piecewice {} 1`] = `
+
+  1 | piecewise {} fn {} mfraction {} piecewice {}
+
+`;
+
+exports[`invalid(26): piecewise {} fn {} mfraction {} piecewice {} 2`] = `
+
+Message:
+> 1 | piecewise {} fn {} mfraction {} piecewice {}
+    | ^^^^^^^^^ Unknown type selector 'piecewise'.
+
+`;
+
+exports[`invalid(26): piecewise {} fn {} mfraction {} piecewice {} 3`] = `
+
+Message:
+> 1 | piecewise {} fn {} mfraction {} piecewice {}
+    |              ^^ Unknown type selector 'fn'.
+
+`;
+
+exports[`invalid(26): piecewise {} fn {} mfraction {} piecewice {} 4`] = `
+
+Message:
+> 1 | piecewise {} fn {} mfraction {} piecewice {}
+    |                    ^^^^^^^^^ Unknown type selector 'mfraction'.
+
+`;
+
+exports[`invalid(26): piecewise {} fn {} mfraction {} piecewice {} 5`] = `
+
+Message:
+> 1 | piecewise {} fn {} mfraction {} piecewice {}
+    |                                 ^^^^^^^^^ Unknown type selector 'piecewice'.
+
+`;
+
+exports[`invalid(27): MI {} MATH {} Mrow {} SVG {} 1`] = `
+
+  1 | MI {} MATH {} Mrow {} SVG {}
+
+`;
+
+exports[`invalid(27): MI {} MATH {} Mrow {} SVG {} 2`] = `
+
+Message:
+> 1 | MI {} MATH {} Mrow {} SVG {}
+    | ^^ Unknown type selector 'MI'.
+
+`;
+
+exports[`invalid(27): MI {} MATH {} Mrow {} SVG {} 3`] = `
+
+Message:
+> 1 | MI {} MATH {} Mrow {} SVG {}
+    |       ^^^^ Unknown type selector 'MATH'.
+
+`;
+
+exports[`invalid(27): MI {} MATH {} Mrow {} SVG {} 4`] = `
+
+Message:
+> 1 | MI {} MATH {} Mrow {} SVG {}
+    |               ^^^^ Unknown type selector 'Mrow'.
+
+`;
+
+exports[`invalid(27): MI {} MATH {} Mrow {} SVG {} 5`] = `
+
+Message:
+> 1 | MI {} MATH {} Mrow {} SVG {}
+    |                       ^^^ Unknown type selector 'SVG'.
+
+`;
+
+exports[`invalid(28): none {} 1`] = `
+
+  1 | none {}
+
+`;
+
+exports[`invalid(28): none {} 2`] = `
+
+Message:
+> 1 | none {}
+    | ^^^^ Unknown type selector 'none'.
+
+`;
+
+exports[`invalid(29): _:-ms-fullscreen, :root .x {} 1`] = `
+
+  1 | _:-ms-fullscreen, :root .x {}
+
+`;
+
+exports[`invalid(29): _:-ms-fullscreen, :root .x {} 2`] = `
+
+Message:
+> 1 | _:-ms-fullscreen, :root .x {}
+    | ^ Unknown type selector '_'.
 
 `;
 
@@ -577,79 +687,121 @@ Message:
 
 `;
 
-exports[`invalid(4): x-Foo {} X-foo {} -my-element {} _my-element {} 1`] = `
+exports[`invalid(30): :deep(:nth-child(2n of lable), :global(:not(buton))) {} 1`] = `
 
-  1 | x-Foo {} X-foo {} -my-element {} _my-element {}
+  1 | :deep(:nth-child(2n of lable), :global(:not(buton))) {}
 
 `;
 
-exports[`invalid(4): x-Foo {} X-foo {} -my-element {} _my-element {} 2`] = `
+exports[`invalid(30): :deep(:nth-child(2n of lable), :global(:not(buton))) {} 2`] = `
 
 Message:
-> 1 | x-Foo {} X-foo {} -my-element {} _my-element {}
-    | ^^^^^ Unknown type selector 'x-Foo'.
+> 1 | :deep(:nth-child(2n of lable), :global(:not(buton))) {}
+    |                        ^^^^^ Unknown type selector 'lable'.
 
 `;
 
-exports[`invalid(4): x-Foo {} X-foo {} -my-element {} _my-element {} 3`] = `
+exports[`invalid(30): :deep(:nth-child(2n of lable), :global(:not(buton))) {} 3`] = `
 
 Message:
-> 1 | x-Foo {} X-foo {} -my-element {} _my-element {}
-    |          ^^^^^ Unknown type selector 'X-foo'.
+> 1 | :deep(:nth-child(2n of lable), :global(:not(buton))) {}
+    |                                             ^^^^^ Unknown type selector 'buton'.
 
 `;
 
-exports[`invalid(4): x-Foo {} X-foo {} -my-element {} _my-element {} 4`] = `
+exports[`invalid(31): :is(:deep(buton)) {} @supports selector(:deep(lable)) {} 1`] = `
+
+  1 | :is(:deep(buton)) {} @supports selector(:deep(lable)) {}
+
+`;
+
+exports[`invalid(31): :is(:deep(buton)) {} @supports selector(:deep(lable)) {} 2`] = `
 
 Message:
-> 1 | x-Foo {} X-foo {} -my-element {} _my-element {}
-    |                   ^^^^^^^^^^^ Unknown type selector '-my-element'.
+> 1 | :is(:deep(buton)) {} @supports selector(:deep(lable)) {}
+    |           ^^^^^ Unknown type selector 'buton'.
 
 `;
 
-exports[`invalid(4): x-Foo {} X-foo {} -my-element {} _my-element {} 5`] = `
+exports[`invalid(31): :is(:deep(buton)) {} @supports selector(:deep(lable)) {} 3`] = `
 
 Message:
-> 1 | x-Foo {} X-foo {} -my-element {} _my-element {}
-    |                                  ^^^^^^^^^^^ Unknown type selector '_my-element'.
+> 1 | :is(:deep(buton)) {} @supports selector(:deep(lable)) {}
+    |                                               ^^^^^ Unknown type selector 'lable'.
 
 `;
 
-exports[`invalid(5): x-\\41 {} x-\\20 foo {} x-\\/foo {} x-\\a {} 1`] = `
+exports[`invalid(32): encoding {} function {} 1`] = `
 
-  1 | x-\\41 {} x-\\20 foo {} x-\\/foo {} x-\\a {}
+  1 | encoding {} function {}
 
 `;
 
-exports[`invalid(5): x-\\41 {} x-\\20 foo {} x-\\/foo {} x-\\a {} 2`] = `
+exports[`invalid(32): encoding {} function {} 2`] = `
 
 Message:
-> 1 | x-\\41 {} x-\\20 foo {} x-\\/foo {} x-\\a {}
-    | ^^^^^^ Unknown type selector 'x-A'.
+> 1 | encoding {} function {}
+    | ^^^^^^^^ Unknown type selector 'encoding'.
 
 `;
 
-exports[`invalid(5): x-\\41 {} x-\\20 foo {} x-\\/foo {} x-\\a {} 3`] = `
+exports[`invalid(32): encoding {} function {} 3`] = `
 
 Message:
-> 1 | x-\\41 {} x-\\20 foo {} x-\\/foo {} x-\\a {}
-    |          ^^^^^^^^^ Unknown type selector 'x- foo'.
+> 1 | encoding {} function {}
+    |             ^^^^^^^^ Unknown type selector 'function'.
 
 `;
 
-exports[`invalid(5): x-\\41 {} x-\\20 foo {} x-\\/foo {} x-\\a {} 4`] = `
+exports[`invalid(4): -my-element {} _my-element {} 1`] = `
 
-Message:
-> 1 | x-\\41 {} x-\\20 foo {} x-\\/foo {} x-\\a {}
-    |                       ^^^^^^^ Unknown type selector 'x-/foo'.
+  1 | -my-element {} _my-element {}
 
 `;
 
-exports[`invalid(5): x-\\41 {} x-\\20 foo {} x-\\/foo {} x-\\a {} 5`] = `
+exports[`invalid(4): -my-element {} _my-element {} 2`] = `
 
 Message:
-> 1 | x-\\41 {} x-\\20 foo {} x-\\/foo {} x-\\a {}
-    |                                  ^^^^^ Unknown type selector 'x-
+> 1 | -my-element {} _my-element {}
+    | ^^^^^^^^^^^ Unknown type selector '-my-element'.
+
+`;
+
+exports[`invalid(4): -my-element {} _my-element {} 3`] = `
+
+Message:
+> 1 | -my-element {} _my-element {}
+    |                ^^^^^^^^^^^ Unknown type selector '_my-element'.
+
+`;
+
+exports[`invalid(5): x-\\20 foo {} x-\\/foo {} x-\\a {} 1`] = `
+
+  1 | x-\\20 foo {} x-\\/foo {} x-\\a {}
+
+`;
+
+exports[`invalid(5): x-\\20 foo {} x-\\/foo {} x-\\a {} 2`] = `
+
+Message:
+> 1 | x-\\20 foo {} x-\\/foo {} x-\\a {}
+    | ^^^^^^^^^ Unknown type selector 'x- foo'.
+
+`;
+
+exports[`invalid(5): x-\\20 foo {} x-\\/foo {} x-\\a {} 3`] = `
+
+Message:
+> 1 | x-\\20 foo {} x-\\/foo {} x-\\a {}
+    |              ^^^^^^^ Unknown type selector 'x-/foo'.
+
+`;
+
+exports[`invalid(5): x-\\20 foo {} x-\\/foo {} x-\\a {} 4`] = `
+
+Message:
+> 1 | x-\\20 foo {} x-\\/foo {} x-\\a {}
+    |                         ^^^^^ Unknown type selector 'x-
 '.
 
 `;
