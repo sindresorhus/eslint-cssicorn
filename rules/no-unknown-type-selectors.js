@@ -21,7 +21,9 @@ const messages = {
 	[MESSAGE_ID]: 'Unknown type selector \'{{selector}}\'.',
 };
 
-const caseInsensitiveNames = new Set([...htmlTags, ...mathmlTagNames, ...deprecatedHtmlTypeSelectors]);
+// The catalog includes the invalid example `mfraction` and the changelog typo `piecewice`: https://www.w3.org/TR/mathml4/#presm.merror and https://www.w3.org/TR/MathML2/appendixj.html
+const knownMathmlNames = mathmlTagNames.filter(name => name !== 'mfraction' && name !== 'piecewice');
+const caseInsensitiveNames = new Set([...htmlTags, ...knownMathmlNames, ...deprecatedHtmlTypeSelectors]);
 const svgNames = new Set([...svgTags, ...deprecatedSvgTypeSelectors, 'discard', 'feDropShadow']);
 const reservedCustomElementNames = new Set([
 	'annotation-xml',

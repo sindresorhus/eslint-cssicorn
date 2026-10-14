@@ -465,6 +465,88 @@ Message:
 
 `;
 
+exports[`invalid(24): mfraction {} piecewice {} MFRACTION {} PIECEWICE {} 1`] = `
+
+  1 | mfraction {} piecewice {} MFRACTION {} PIECEWICE {}
+
+`;
+
+exports[`invalid(24): mfraction {} piecewice {} MFRACTION {} PIECEWICE {} 2`] = `
+
+Message:
+> 1 | mfraction {} piecewice {} MFRACTION {} PIECEWICE {}
+    | ^^^^^^^^^ Unknown type selector 'mfraction'.
+
+`;
+
+exports[`invalid(24): mfraction {} piecewice {} MFRACTION {} PIECEWICE {} 3`] = `
+
+Message:
+> 1 | mfraction {} piecewice {} MFRACTION {} PIECEWICE {}
+    |              ^^^^^^^^^ Unknown type selector 'piecewice'.
+
+`;
+
+exports[`invalid(24): mfraction {} piecewice {} MFRACTION {} PIECEWICE {} 4`] = `
+
+Message:
+> 1 | mfraction {} piecewice {} MFRACTION {} PIECEWICE {}
+    |                           ^^^^^^^^^ Unknown type selector 'MFRACTION'.
+
+`;
+
+exports[`invalid(24): mfraction {} piecewice {} MFRACTION {} PIECEWICE {} 5`] = `
+
+Message:
+> 1 | mfraction {} piecewice {} MFRACTION {} PIECEWICE {}
+    |                                        ^^^^^^^^^ Unknown type selector 'PIECEWICE'.
+
+`;
+
+exports[`invalid(25): :deep(:nth-child(2n of lable), :global(:not(buton))) {} 1`] = `
+
+  1 | :deep(:nth-child(2n of lable), :global(:not(buton))) {}
+
+`;
+
+exports[`invalid(25): :deep(:nth-child(2n of lable), :global(:not(buton))) {} 2`] = `
+
+Message:
+> 1 | :deep(:nth-child(2n of lable), :global(:not(buton))) {}
+    |                        ^^^^^ Unknown type selector 'lable'.
+
+`;
+
+exports[`invalid(25): :deep(:nth-child(2n of lable), :global(:not(buton))) {} 3`] = `
+
+Message:
+> 1 | :deep(:nth-child(2n of lable), :global(:not(buton))) {}
+    |                                             ^^^^^ Unknown type selector 'buton'.
+
+`;
+
+exports[`invalid(26): :is(:deep(buton)) {} @supports selector(:deep(lable)) {} 1`] = `
+
+  1 | :is(:deep(buton)) {} @supports selector(:deep(lable)) {}
+
+`;
+
+exports[`invalid(26): :is(:deep(buton)) {} @supports selector(:deep(lable)) {} 2`] = `
+
+Message:
+> 1 | :is(:deep(buton)) {} @supports selector(:deep(lable)) {}
+    |           ^^^^^ Unknown type selector 'buton'.
+
+`;
+
+exports[`invalid(26): :is(:deep(buton)) {} @supports selector(:deep(lable)) {} 3`] = `
+
+Message:
+> 1 | :is(:deep(buton)) {} @supports selector(:deep(lable)) {}
+    |                                               ^^^^^ Unknown type selector 'lable'.
+
+`;
+
 exports[`invalid(3): foreignobject {} lineargradient {} FEDROPSHADOW {} 1`] = `
 
   1 | foreignobject {} lineargradient {} FEDROPSHADOW {}

@@ -12,7 +12,7 @@ test.snapshot({
 	valid: [
 		'input {} ul li {} DIV {}',
 		'svg {} circle {} foreignObject {} linearGradient {} feDropShadow {} discard {}',
-		'math {} mrow {} MI {} annotation-xml {}',
+		'math {} mrow {} MI {} annotation-xml {} mfrac {} piecewise {}',
 		'acronym {} MARQUEE {} font-face {} altGlyph {} hatchPath {}',
 		'my-element {} app-widget {} x-foo {}',
 		'math-α {} emotion-😍 {} x-É {}',
@@ -26,6 +26,7 @@ test.snapshot({
 		'@page invoice { @top-left { content: "buton"; } }',
 		// WebVTT cue arguments remain opaque and have their own element vocabulary.
 		'::cue(buton) {} ::cue-region(unknown) {}',
+		':deep(:state(buton), ::part(lable), ::cue(unknown), :lang(buton)) {}',
 		':lang(buton) {} :dir(lable) {} :state(unknown) {} ::part(unknown) {} ::highlight(unknown) {} ::view-transition-group(unknown) {} :active-view-transition-type(unknown) {}',
 		':is(div, :where(button)) {} :has(> input) {} :nth-child(2n of li) {} ::slotted(span) {}',
 		':deep(button) {} :global(div) {} :local(input) {} :slotted(span) {} ::v-deep(button) {} ::v-slotted(span) {} ::v-global(div) {}',
@@ -95,6 +96,9 @@ test.snapshot({
 			code: 'app-widget {}',
 			options: [{checkCustomElements: true, allow: ['/^app-/']}],
 		},
+		'mfraction {} piecewice {} MFRACTION {} PIECEWICE {}',
+		':deep(:nth-child(2n of lable), :global(:not(buton))) {}',
+		':is(:deep(buton)) {} @supports selector(:deep(lable)) {}',
 	],
 });
 
