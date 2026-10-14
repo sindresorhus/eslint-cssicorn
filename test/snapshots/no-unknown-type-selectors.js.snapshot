@@ -753,6 +753,20 @@ Message:
 
 `;
 
+exports[`invalid(33): x-\\> {} 1`] = `
+
+  1 | x-\\> {}
+
+`;
+
+exports[`invalid(33): x-\\> {} 2`] = `
+
+Message:
+> 1 | x-\\> {}
+    | ^^^^ Unknown type selector 'x->'.
+
+`;
+
 exports[`invalid(4): -my-element {} _my-element {} 1`] = `
 
   1 | -my-element {} _my-element {}

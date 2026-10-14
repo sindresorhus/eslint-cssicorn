@@ -21,6 +21,7 @@ test.snapshot({
 		'MY-WIDGET {} x-Foo {} X-foo {}',
 		String.raw`x-\41 {}`,
 		'math-α {} emotion-😍 {} x-É {}',
+		String.raw`x-\? {}`,
 		String.raw`d\69 v {} foreign\4f bject {} my-\65 lement {}`,
 		'* {} svg|* {} *|* {} |* {}',
 		'html|DIV {} svg|foreignObject {} *|mi {} |button {}',
@@ -121,6 +122,7 @@ test.snapshot({
 		':deep(:nth-child(2n of lable), :global(:not(buton))) {}',
 		':is(:deep(buton)) {} @supports selector(:deep(lable)) {}',
 		'encoding {} function {}',
+		String.raw`x-\> {}`,
 	],
 });
 
@@ -163,5 +165,30 @@ nodeTest('rejects allow entries that are not strings or regular expressions', ()
 nodeTest('rejects invalid option shapes', () => {
 	for (const options of [{unknown: true}, {checkCustomElements: 'yes'}, {allow: 'widget'}, {allow: [1]}]) {
 		assert.throws(() => lint(options), /Key "rules"/v);
+	}
+});
+
+nodeTest('matches frozen stateful regexes without changing their lastIndex', () => {
+	const rule = plugin.rules['no-unknown-type-selectors'];
+	for (const pattern of [/^widget$/gv, /^widget$/vy]) {
+		pattern.lastIndex = 4;
+		Object.freeze(pattern);
+		const ruleWithFrozenOptions = {
+			...rule,
+			create(context) {
+				// ESLint clones configuration options, so inject the frozen regex directly.
+				return rule.create(Object.create(context, {
+					options: {value: [{checkCustomElements: false, allow: [pattern]}]},
+				}));
+			},
+		};
+		const messages = new Linter().verify('widget {} widget {} :deep(widget, widget) {}', {
+			files: ['**'],
+			language: 'css/css',
+			plugins: {css, cssicorn: {rules: {'no-unknown-type-selectors': ruleWithFrozenOptions}}},
+			rules: {'cssicorn/no-unknown-type-selectors': 'error'},
+		}, {filename: 'file.css'});
+		assert.deepEqual(messages, []);
+		assert.equal(pattern.lastIndex, 4);
 	}
 });

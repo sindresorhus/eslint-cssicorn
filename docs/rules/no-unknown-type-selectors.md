@@ -43,6 +43,8 @@ Browser hacks such as `_:-ms-fullscreen, :root .x {}` are reported (`_`). Add `_
 
 The rule checks parsed selector arguments and framework forms such as Vue's `:deep()` and `:slotted()`. Opaque arguments, including `::cue()` and `::cue-region()`, are not checked. Keyframe selectors and named `@page` selectors are ignored.
 
+To lint `<style>` blocks in Vue files, configure a processor that extracts CSS.
+
 ## Options
 
 ### checkCustomElements

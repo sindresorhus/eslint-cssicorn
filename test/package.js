@@ -4,6 +4,7 @@ import test, {before} from 'node:test';
 import assert from 'node:assert/strict';
 import {ESLint} from 'eslint';
 import {defineConfig} from 'eslint/config';
+import markdown from '@eslint/markdown';
 import eslintCssicorn from '../index.js';
 
 let ruleFiles;
@@ -300,4 +301,29 @@ test('presets report unknown type selectors and allow custom elements by default
 		assert.equal(messages.length, 1, config.name);
 		assert.equal(messages[0].message, 'Unknown type selector \'buton\'.', config.name);
 	}));
+});
+
+test('unknown type selectors in Markdown CSS fences use original document locations', async () => {
+	const eslint = new ESLint({
+		overrideConfigFile: true,
+		baseConfig: [
+			{
+				files: ['**/*.md'],
+				plugins: {markdown},
+				language: 'markdown/commonmark',
+				processor: 'markdown/markdown',
+			},
+			eslintCssicorn.configs.unopinionated,
+		],
+	});
+	const [result] = await eslint.lintText('# Example\n\n```css\nbuton {}\nmy-widget {}\n```\n', {filePath: 'example.md'});
+	assert.deepEqual(result.messages.map(message => ({
+		ruleId: message.ruleId,
+		message: message.message,
+		range: [message.line, message.column, message.endLine, message.endColumn],
+	})), [{
+		ruleId: 'cssicorn/no-unknown-type-selectors',
+		message: 'Unknown type selector \'buton\'.',
+		range: [4, 1, 4, 6],
+	}]);
 });
