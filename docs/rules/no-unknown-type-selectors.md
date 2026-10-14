@@ -76,4 +76,6 @@ Use actual regular expressions. Strings such as `'/^app-/'` are literal names, n
 
 With this configuration, `widget`, `app|widget`, and `APP|app-button` are allowed.
 
+When using ESLint's `--cache`, run ESLint once without `--cache` after changing a regular expression's pattern or flags in `allow`. ESLint's cache does not distinguish regular expressions in rule options.
+
 For stylesheets targeting arbitrary XML vocabularies or nonstandard markup, add their element names to `allow` or disable the rule. Namespace prefixes do not determine which element catalog is used.
