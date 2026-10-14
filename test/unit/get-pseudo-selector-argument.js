@@ -45,7 +45,19 @@ test('preserves nested escaped argument ranges after comments and CRLF', () => {
 });
 
 test('ignores missing, opaque, and malformed arguments', () => {
-	for (const code of [':host', ':unknown(.card)', ':lang(en)', String.raw`:\69s(.card ?)`]) {
+	for (const code of [':host', ':unknown(.card)', ':lang(en)', ':deep(.card ?)', String.raw`:\69s(.card ?)`]) {
 		assert.equal(getPseudoSelectorArgument(parsePseudo(code), {sourceCode}), undefined);
+	}
+});
+
+test('parses framework selector lists with their source ranges', () => {
+	for (const name of [':deep', ':global', ':local', '::v-deep', '::v-slotted', '::v-global']) {
+		const code = `${name}(button, :deep(input))`;
+		const argument = getPseudoSelectorArgument(parsePseudo(code), {sourceCode});
+		assert.equal(argument.type, 'SelectorList');
+		assert.equal(code.slice(...sourceCode.getRange(argument)), 'button, :deep(input)');
+		const nestedNode = argument.children.at(1).children.at(0);
+		const nestedArgument = getPseudoSelectorArgument(nestedNode, {sourceCode});
+		assert.equal(code.slice(...sourceCode.getRange(nestedArgument)), 'input');
 	}
 });

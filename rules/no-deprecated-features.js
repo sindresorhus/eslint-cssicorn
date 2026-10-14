@@ -1,4 +1,5 @@
 import {tokenize, tokenTypes} from '@eslint/css-tree';
+import {deprecatedHtmlTypeSelectors, deprecatedSvgTypeSelectors, getTypeSelectorIdentifier} from './shared/css-type-selectors.js';
 import {colorFunctions as standardColorFunctions} from './shared/css-color-functions.js';
 import {
 	decodeCssIdentifier,
@@ -168,60 +169,6 @@ const deprecatedValueKeywords = {
 const fixableValueAliases = new Set(['overflow: overlay', 'overflow-x: overlay', 'overflow-y: overlay']);
 const colorFunctions = new Set([...standardColorFunctions, 'color-contrast']);
 
-const deprecatedHtmlTypeSelectors = new Set([
-	'acronym',
-	'applet',
-	'basefont',
-	'big',
-	'bgsound',
-	'blink',
-	'center',
-	'content',
-	'dir',
-	'font',
-	'frame',
-	'frameset',
-	'isindex',
-	'keygen',
-	'listing',
-	'marquee',
-	'menuitem',
-	'multicol',
-	'nextid',
-	'nobr',
-	'noembed',
-	'noframes',
-	'plaintext',
-	'param',
-	'popup',
-	'rb',
-	'rtc',
-	'selectmenu',
-	'shadow',
-	'spacer',
-	'strike',
-	'tt',
-	'xmp',
-]);
-const deprecatedSvgTypeSelectors = new Set([
-	'altGlyph',
-	'altGlyphDef',
-	'altGlyphItem',
-	'cursor',
-	'font',
-	'font-face',
-	'font-face-format',
-	'font-face-name',
-	'font-face-src',
-	'font-face-uri',
-	'glyph',
-	'glyphRef',
-	'hatchPath',
-	'hkern',
-	'missing-glyph',
-	'tref',
-	'vkern',
-]);
 const deprecatedPseudoClasses = new Set(['-moz-any', '-webkit-any', 'contains', 'drop', 'focus-ring', 'fullscreen-ancestor', 'matches', 'popup-open', 'top-layer', 'user-error']);
 const deprecatedPseudoElements = new Set(['content', 'shadow']);
 const nonSelectorArgumentPseudoClasses = new Set(['active-view-transition-type', 'heading', 'state']);
@@ -249,16 +196,8 @@ const getNameRange = (node, prefixLength, context) => {
 };
 
 const getDeprecatedTypeSelector = value => {
-	let identifier;
-	let lastTokenType;
-	tokenize(value, (type, start, end) => {
-		lastTokenType = type;
-		if (type === tokenTypes.Ident) {
-			identifier = {value: value.slice(start, end), offsets: [start, end]};
-		}
-	});
-
-	if (lastTokenType !== tokenTypes.Ident) {
+	const identifier = getTypeSelectorIdentifier(value);
+	if (!identifier) {
 		return;
 	}
 

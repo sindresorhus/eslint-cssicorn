@@ -1,0 +1,677 @@
+exports[`invalid(1): unknown {} 1`] = `
+
+  1 | unknown {}
+
+`;
+
+exports[`invalid(1): unknown {} 2`] = `
+
+Message:
+> 1 | unknown {}
+    | ^^^^^^^ Unknown type selector 'unknown'.
+
+`;
+
+exports[`invalid(10): :is(buton, :where(lable)) {} :has(> unknown) {} :not(buton) {} 1`] = `
+
+  1 | :is(buton, :where(lable)) {} :has(> unknown) {} :not(buton) {}
+
+`;
+
+exports[`invalid(10): :is(buton, :where(lable)) {} :has(> unknown) {} :not(buton) {} 2`] = `
+
+Message:
+> 1 | :is(buton, :where(lable)) {} :has(> unknown) {} :not(buton) {}
+    |     ^^^^^ Unknown type selector 'buton'.
+
+`;
+
+exports[`invalid(10): :is(buton, :where(lable)) {} :has(> unknown) {} :not(buton) {} 3`] = `
+
+Message:
+> 1 | :is(buton, :where(lable)) {} :has(> unknown) {} :not(buton) {}
+    |                   ^^^^^ Unknown type selector 'lable'.
+
+`;
+
+exports[`invalid(10): :is(buton, :where(lable)) {} :has(> unknown) {} :not(buton) {} 4`] = `
+
+Message:
+> 1 | :is(buton, :where(lable)) {} :has(> unknown) {} :not(buton) {}
+    |                                     ^^^^^^^ Unknown type selector 'unknown'.
+
+`;
+
+exports[`invalid(10): :is(buton, :where(lable)) {} :has(> unknown) {} :not(buton) {} 5`] = `
+
+Message:
+> 1 | :is(buton, :where(lable)) {} :has(> unknown) {} :not(buton) {}
+    |                                                      ^^^^^ Unknown type selector 'buton'.
+
+`;
+
+exports[`invalid(11): :nth-child(2n of buton) {} :nth-last-child(odd of lable) {} ::slotted(unknown) {} :host(buton) {} :host-context(lable) {} 1`] = `
+
+  1 | :nth-child(2n of buton) {} :nth-last-child(odd of lable) {} ::slotted(unknown) {} :host(buton) {} :host-context(lable) {}
+
+`;
+
+exports[`invalid(11): :nth-child(2n of buton) {} :nth-last-child(odd of lable) {} ::slotted(unknown) {} :host(buton) {} :host-context(lable) {} 2`] = `
+
+Message:
+> 1 | :nth-child(2n of buton) {} :nth-last-child(odd of lable) {} ::slotted(unknown) {} :host(buton) {} :host-context(lable) {}
+    |                  ^^^^^ Unknown type selector 'buton'.
+
+`;
+
+exports[`invalid(11): :nth-child(2n of buton) {} :nth-last-child(odd of lable) {} ::slotted(unknown) {} :host(buton) {} :host-context(lable) {} 3`] = `
+
+Message:
+> 1 | :nth-child(2n of buton) {} :nth-last-child(odd of lable) {} ::slotted(unknown) {} :host(buton) {} :host-context(lable) {}
+    |                                                   ^^^^^ Unknown type selector 'lable'.
+
+`;
+
+exports[`invalid(11): :nth-child(2n of buton) {} :nth-last-child(odd of lable) {} ::slotted(unknown) {} :host(buton) {} :host-context(lable) {} 4`] = `
+
+Message:
+> 1 | :nth-child(2n of buton) {} :nth-last-child(odd of lable) {} ::slotted(unknown) {} :host(buton) {} :host-context(lable) {}
+    |                                                                       ^^^^^^^ Unknown type selector 'unknown'.
+
+`;
+
+exports[`invalid(11): :nth-child(2n of buton) {} :nth-last-child(odd of lable) {} ::slotted(unknown) {} :host(buton) {} :host-context(lable) {} 5`] = `
+
+Message:
+> 1 | :nth-child(2n of buton) {} :nth-last-child(odd of lable) {} ::slotted(unknown) {} :host(buton) {} :host-context(lable) {}
+    |                                                                                         ^^^^^ Unknown type selector 'buton'.
+
+`;
+
+exports[`invalid(11): :nth-child(2n of buton) {} :nth-last-child(odd of lable) {} ::slotted(unknown) {} :host(buton) {} :host-context(lable) {} 6`] = `
+
+Message:
+> 1 | :nth-child(2n of buton) {} :nth-last-child(odd of lable) {} ::slotted(unknown) {} :host(buton) {} :host-context(lable) {}
+    |                                                                                                                 ^^^^^ Unknown type selector 'lable'.
+
+`;
+
+exports[`invalid(12): :deep(buton) {} :slotted(lable) {} :global(unknown) {} :local(buton) {} 1`] = `
+
+  1 | :deep(buton) {} :slotted(lable) {} :global(unknown) {} :local(buton) {}
+
+`;
+
+exports[`invalid(12): :deep(buton) {} :slotted(lable) {} :global(unknown) {} :local(buton) {} 2`] = `
+
+Message:
+> 1 | :deep(buton) {} :slotted(lable) {} :global(unknown) {} :local(buton) {}
+    |       ^^^^^ Unknown type selector 'buton'.
+
+`;
+
+exports[`invalid(12): :deep(buton) {} :slotted(lable) {} :global(unknown) {} :local(buton) {} 3`] = `
+
+Message:
+> 1 | :deep(buton) {} :slotted(lable) {} :global(unknown) {} :local(buton) {}
+    |                          ^^^^^ Unknown type selector 'lable'.
+
+`;
+
+exports[`invalid(12): :deep(buton) {} :slotted(lable) {} :global(unknown) {} :local(buton) {} 4`] = `
+
+Message:
+> 1 | :deep(buton) {} :slotted(lable) {} :global(unknown) {} :local(buton) {}
+    |                                            ^^^^^^^ Unknown type selector 'unknown'.
+
+`;
+
+exports[`invalid(12): :deep(buton) {} :slotted(lable) {} :global(unknown) {} :local(buton) {} 5`] = `
+
+Message:
+> 1 | :deep(buton) {} :slotted(lable) {} :global(unknown) {} :local(buton) {}
+    |                                                               ^^^^^ Unknown type selector 'buton'.
+
+`;
+
+exports[`invalid(13): ::v-deep(buton) {} ::v-slotted(lable) {} ::v-global(unknown) {} 1`] = `
+
+  1 | ::v-deep(buton) {} ::v-slotted(lable) {} ::v-global(unknown) {}
+
+`;
+
+exports[`invalid(13): ::v-deep(buton) {} ::v-slotted(lable) {} ::v-global(unknown) {} 2`] = `
+
+Message:
+> 1 | ::v-deep(buton) {} ::v-slotted(lable) {} ::v-global(unknown) {}
+    |          ^^^^^ Unknown type selector 'buton'.
+
+`;
+
+exports[`invalid(13): ::v-deep(buton) {} ::v-slotted(lable) {} ::v-global(unknown) {} 3`] = `
+
+Message:
+> 1 | ::v-deep(buton) {} ::v-slotted(lable) {} ::v-global(unknown) {}
+    |                                ^^^^^ Unknown type selector 'lable'.
+
+`;
+
+exports[`invalid(13): ::v-deep(buton) {} ::v-slotted(lable) {} ::v-global(unknown) {} 4`] = `
+
+Message:
+> 1 | ::v-deep(buton) {} ::v-slotted(lable) {} ::v-global(unknown) {}
+    |                                                     ^^^^^^^ Unknown type selector 'unknown'.
+
+`;
+
+exports[`invalid(14): :deep(:is(buton, :deep(lable))) {} 1`] = `
+
+  1 | :deep(:is(buton, :deep(lable))) {}
+
+`;
+
+exports[`invalid(14): :deep(:is(buton, :deep(lable))) {} 2`] = `
+
+Message:
+> 1 | :deep(:is(buton, :deep(lable))) {}
+    |           ^^^^^ Unknown type selector 'buton'.
+
+`;
+
+exports[`invalid(14): :deep(:is(buton, :deep(lable))) {} 3`] = `
+
+Message:
+> 1 | :deep(:is(buton, :deep(lable))) {}
+    |                        ^^^^^ Unknown type selector 'lable'.
+
+`;
+
+exports[`invalid(15): :\\64 eep(buton) {} :\\69 s(lable) {} ::\\73 lotted(unknown) {} 1`] = `
+
+  1 | :\\64 eep(buton) {} :\\69 s(lable) {} ::\\73 lotted(unknown) {}
+
+`;
+
+exports[`invalid(15): :\\64 eep(buton) {} :\\69 s(lable) {} ::\\73 lotted(unknown) {} 2`] = `
+
+Message:
+> 1 | :\\64 eep(buton) {} :\\69 s(lable) {} ::\\73 lotted(unknown) {}
+    |          ^^^^^ Unknown type selector 'buton'.
+
+`;
+
+exports[`invalid(15): :\\64 eep(buton) {} :\\69 s(lable) {} ::\\73 lotted(unknown) {} 3`] = `
+
+Message:
+> 1 | :\\64 eep(buton) {} :\\69 s(lable) {} ::\\73 lotted(unknown) {}
+    |                           ^^^^^ Unknown type selector 'lable'.
+
+`;
+
+exports[`invalid(15): :\\64 eep(buton) {} :\\69 s(lable) {} ::\\73 lotted(unknown) {} 4`] = `
+
+Message:
+> 1 | :\\64 eep(buton) {} :\\69 s(lable) {} ::\\73 lotted(unknown) {}
+    |                                                  ^^^^^^^ Unknown type selector 'unknown'.
+
+`;
+
+exports[`invalid(16): /* 🌈 */\r\n:deep(\r\n  buton,\r\n  :global(lable)\r\n) {} 1`] = `
+
+  1 | /* 🌈 */
+  2 | :deep(
+  3 |   buton,
+  4 |   :global(lable)
+  5 | ) {}
+
+`;
+
+exports[`invalid(16): /* 🌈 */\r\n:deep(\r\n  buton,\r\n  :global(lable)\r\n) {} 2`] = `
+
+Message:
+  1 | /* 🌈 */
+  2 | :deep(
+> 3 |   buton,
+    |   ^^^^^ Unknown type selector 'buton'.
+  4 |   :global(lable)
+  5 | ) {}
+
+`;
+
+exports[`invalid(16): /* 🌈 */\r\n:deep(\r\n  buton,\r\n  :global(lable)\r\n) {} 3`] = `
+
+Message:
+  1 | /* 🌈 */
+  2 | :deep(
+  3 |   buton,
+> 4 |   :global(lable)
+    |           ^^^^^ Unknown type selector 'lable'.
+  5 | ) {}
+
+`;
+
+exports[`invalid(17): div { & > buton {} @media (width > 0px) { lable {} } } 1`] = `
+
+  1 | div { & > buton {} @media (width > 0px) { lable {} } }
+
+`;
+
+exports[`invalid(17): div { & > buton {} @media (width > 0px) { lable {} } } 2`] = `
+
+Message:
+> 1 | div { & > buton {} @media (width > 0px) { lable {} } }
+    |           ^^^^^ Unknown type selector 'buton'.
+
+`;
+
+exports[`invalid(17): div { & > buton {} @media (width > 0px) { lable {} } } 3`] = `
+
+Message:
+> 1 | div { & > buton {} @media (width > 0px) { lable {} } }
+    |                                           ^^^^^ Unknown type selector 'lable'.
+
+`;
+
+exports[`invalid(18): @media (width > 0px) { buton {} } @supports (display: grid) { lable {} } @container card (width > 0px) { unknown {} } @layer theme { buton {} } 1`] = `
+
+  1 | @media (width > 0px) { buton {} } @supports (display: grid) { lable {} } @container card (width > 0px) { unknown {} } @layer theme { buton {} }
+
+`;
+
+exports[`invalid(18): @media (width > 0px) { buton {} } @supports (display: grid) { lable {} } @container card (width > 0px) { unknown {} } @layer theme { buton {} } 2`] = `
+
+Message:
+> 1 | @media (width > 0px) { buton {} } @supports (display: grid) { lable {} } @container card (width > 0px) { unknown {} } @layer theme { buton {} }
+    |                        ^^^^^ Unknown type selector 'buton'.
+
+`;
+
+exports[`invalid(18): @media (width > 0px) { buton {} } @supports (display: grid) { lable {} } @container card (width > 0px) { unknown {} } @layer theme { buton {} } 3`] = `
+
+Message:
+> 1 | @media (width > 0px) { buton {} } @supports (display: grid) { lable {} } @container card (width > 0px) { unknown {} } @layer theme { buton {} }
+    |                                                               ^^^^^ Unknown type selector 'lable'.
+
+`;
+
+exports[`invalid(18): @media (width > 0px) { buton {} } @supports (display: grid) { lable {} } @container card (width > 0px) { unknown {} } @layer theme { buton {} } 4`] = `
+
+Message:
+> 1 | @media (width > 0px) { buton {} } @supports (display: grid) { lable {} } @container card (width > 0px) { unknown {} } @layer theme { buton {} }
+    |                                                                                                          ^^^^^^^ Unknown type selector 'unknown'.
+
+`;
+
+exports[`invalid(18): @media (width > 0px) { buton {} } @supports (display: grid) { lable {} } @container card (width > 0px) { unknown {} } @layer theme { buton {} } 5`] = `
+
+Message:
+> 1 | @media (width > 0px) { buton {} } @supports (display: grid) { lable {} } @container card (width > 0px) { unknown {} } @layer theme { buton {} }
+    |                                                                                                                                      ^^^^^ Unknown type selector 'buton'.
+
+`;
+
+exports[`invalid(19): @scope (buton) to (lable) { unknown {} } @supports selector(buton) {} 1`] = `
+
+  1 | @scope (buton) to (lable) { unknown {} } @supports selector(buton) {}
+
+`;
+
+exports[`invalid(19): @scope (buton) to (lable) { unknown {} } @supports selector(buton) {} 2`] = `
+
+Message:
+> 1 | @scope (buton) to (lable) { unknown {} } @supports selector(buton) {}
+    |         ^^^^^ Unknown type selector 'buton'.
+
+`;
+
+exports[`invalid(19): @scope (buton) to (lable) { unknown {} } @supports selector(buton) {} 3`] = `
+
+Message:
+> 1 | @scope (buton) to (lable) { unknown {} } @supports selector(buton) {}
+    |                    ^^^^^ Unknown type selector 'lable'.
+
+`;
+
+exports[`invalid(19): @scope (buton) to (lable) { unknown {} } @supports selector(buton) {} 4`] = `
+
+Message:
+> 1 | @scope (buton) to (lable) { unknown {} } @supports selector(buton) {}
+    |                             ^^^^^^^ Unknown type selector 'unknown'.
+
+`;
+
+exports[`invalid(19): @scope (buton) to (lable) { unknown {} } @supports selector(buton) {} 5`] = `
+
+Message:
+> 1 | @scope (buton) to (lable) { unknown {} } @supports selector(buton) {}
+    |                                                             ^^^^^ Unknown type selector 'buton'.
+
+`;
+
+exports[`invalid(2): buton {} .list > lable {} 1`] = `
+
+  1 | buton {} .list > lable {}
+
+`;
+
+exports[`invalid(2): buton {} .list > lable {} 2`] = `
+
+Message:
+> 1 | buton {} .list > lable {}
+    | ^^^^^ Unknown type selector 'buton'.
+
+`;
+
+exports[`invalid(2): buton {} .list > lable {} 3`] = `
+
+Message:
+> 1 | buton {} .list > lable {}
+    |                  ^^^^^ Unknown type selector 'lable'.
+
+`;
+
+exports[`invalid(20): buton /* keep */ > lable {} 1`] = `
+
+  1 | buton /* keep */ > lable {}
+
+`;
+
+exports[`invalid(20): buton /* keep */ > lable {} 2`] = `
+
+Message:
+> 1 | buton /* keep */ > lable {}
+    | ^^^^^ Unknown type selector 'buton'.
+
+`;
+
+exports[`invalid(20): buton /* keep */ > lable {} 3`] = `
+
+Message:
+> 1 | buton /* keep */ > lable {}
+    |                    ^^^^^ Unknown type selector 'lable'.
+
+`;
+
+exports[`invalid(21): my-element {} :deep(app-widget) {} 1`] = `
+
+Options:
+- checkCustomElements: true
+
+Code:
+  1 | my-element {} :deep(app-widget) {}
+
+`;
+
+exports[`invalid(21): my-element {} :deep(app-widget) {} 2`] = `
+
+Message:
+> 1 | my-element {} :deep(app-widget) {}
+    | ^^^^^^^^^^ Unknown type selector 'my-element'.
+
+`;
+
+exports[`invalid(21): my-element {} :deep(app-widget) {} 3`] = `
+
+Message:
+> 1 | my-element {} :deep(app-widget) {}
+    |                     ^^^^^^^^^^ Unknown type selector 'app-widget'.
+
+`;
+
+exports[`invalid(22): WIDGET {} other {} 1`] = `
+
+Options:
+- allow:
+    - 'widget'
+
+Code:
+  1 | WIDGET {} other {}
+
+`;
+
+exports[`invalid(22): WIDGET {} other {} 2`] = `
+
+Message:
+> 1 | WIDGET {} other {}
+    | ^^^^^^ Unknown type selector 'WIDGET'.
+
+`;
+
+exports[`invalid(22): WIDGET {} other {} 3`] = `
+
+Message:
+> 1 | WIDGET {} other {}
+    |           ^^^^^ Unknown type selector 'other'.
+
+`;
+
+exports[`invalid(23): app-widget {} 1`] = `
+
+Options:
+- checkCustomElements: true
+  allow:
+    - '/^app-/'
+
+Code:
+  1 | app-widget {}
+
+`;
+
+exports[`invalid(23): app-widget {} 2`] = `
+
+Message:
+> 1 | app-widget {}
+    | ^^^^^^^^^^ Unknown type selector 'app-widget'.
+
+`;
+
+exports[`invalid(3): foreignobject {} lineargradient {} FEDROPSHADOW {} 1`] = `
+
+  1 | foreignobject {} lineargradient {} FEDROPSHADOW {}
+
+`;
+
+exports[`invalid(3): foreignobject {} lineargradient {} FEDROPSHADOW {} 2`] = `
+
+Message:
+> 1 | foreignobject {} lineargradient {} FEDROPSHADOW {}
+    | ^^^^^^^^^^^^^ Unknown type selector 'foreignobject'.
+
+`;
+
+exports[`invalid(3): foreignobject {} lineargradient {} FEDROPSHADOW {} 3`] = `
+
+Message:
+> 1 | foreignobject {} lineargradient {} FEDROPSHADOW {}
+    |                  ^^^^^^^^^^^^^^ Unknown type selector 'lineargradient'.
+
+`;
+
+exports[`invalid(3): foreignobject {} lineargradient {} FEDROPSHADOW {} 4`] = `
+
+Message:
+> 1 | foreignobject {} lineargradient {} FEDROPSHADOW {}
+    |                                    ^^^^^^^^^^^^ Unknown type selector 'FEDROPSHADOW'.
+
+`;
+
+exports[`invalid(4): x-Foo {} X-foo {} -my-element {} _my-element {} 1`] = `
+
+  1 | x-Foo {} X-foo {} -my-element {} _my-element {}
+
+`;
+
+exports[`invalid(4): x-Foo {} X-foo {} -my-element {} _my-element {} 2`] = `
+
+Message:
+> 1 | x-Foo {} X-foo {} -my-element {} _my-element {}
+    | ^^^^^ Unknown type selector 'x-Foo'.
+
+`;
+
+exports[`invalid(4): x-Foo {} X-foo {} -my-element {} _my-element {} 3`] = `
+
+Message:
+> 1 | x-Foo {} X-foo {} -my-element {} _my-element {}
+    |          ^^^^^ Unknown type selector 'X-foo'.
+
+`;
+
+exports[`invalid(4): x-Foo {} X-foo {} -my-element {} _my-element {} 4`] = `
+
+Message:
+> 1 | x-Foo {} X-foo {} -my-element {} _my-element {}
+    |                   ^^^^^^^^^^^ Unknown type selector '-my-element'.
+
+`;
+
+exports[`invalid(4): x-Foo {} X-foo {} -my-element {} _my-element {} 5`] = `
+
+Message:
+> 1 | x-Foo {} X-foo {} -my-element {} _my-element {}
+    |                                  ^^^^^^^^^^^ Unknown type selector '_my-element'.
+
+`;
+
+exports[`invalid(5): x-\\41 {} x-\\20 foo {} x-\\/foo {} x-\\a {} 1`] = `
+
+  1 | x-\\41 {} x-\\20 foo {} x-\\/foo {} x-\\a {}
+
+`;
+
+exports[`invalid(5): x-\\41 {} x-\\20 foo {} x-\\/foo {} x-\\a {} 2`] = `
+
+Message:
+> 1 | x-\\41 {} x-\\20 foo {} x-\\/foo {} x-\\a {}
+    | ^^^^^^ Unknown type selector 'x-A'.
+
+`;
+
+exports[`invalid(5): x-\\41 {} x-\\20 foo {} x-\\/foo {} x-\\a {} 3`] = `
+
+Message:
+> 1 | x-\\41 {} x-\\20 foo {} x-\\/foo {} x-\\a {}
+    |          ^^^^^^^^^ Unknown type selector 'x- foo'.
+
+`;
+
+exports[`invalid(5): x-\\41 {} x-\\20 foo {} x-\\/foo {} x-\\a {} 4`] = `
+
+Message:
+> 1 | x-\\41 {} x-\\20 foo {} x-\\/foo {} x-\\a {}
+    |                       ^^^^^^^ Unknown type selector 'x-/foo'.
+
+`;
+
+exports[`invalid(5): x-\\41 {} x-\\20 foo {} x-\\/foo {} x-\\a {} 5`] = `
+
+Message:
+> 1 | x-\\41 {} x-\\20 foo {} x-\\/foo {} x-\\a {}
+    |                                  ^^^^^ Unknown type selector 'x-
+'.
+
+`;
+
+exports[`invalid(6): from {} to {} 1`] = `
+
+  1 | from {} to {}
+
+`;
+
+exports[`invalid(6): from {} to {} 2`] = `
+
+Message:
+> 1 | from {} to {}
+    | ^^^^ Unknown type selector 'from'.
+
+`;
+
+exports[`invalid(6): from {} to {} 3`] = `
+
+Message:
+> 1 | from {} to {}
+    |         ^^ Unknown type selector 'to'.
+
+`;
+
+exports[`invalid(7): unknown, input, buton:hover {} 1`] = `
+
+  1 | unknown, input, buton:hover {}
+
+`;
+
+exports[`invalid(7): unknown, input, buton:hover {} 2`] = `
+
+Message:
+> 1 | unknown, input, buton:hover {}
+    | ^^^^^^^ Unknown type selector 'unknown'.
+
+`;
+
+exports[`invalid(7): unknown, input, buton:hover {} 3`] = `
+
+Message:
+> 1 | unknown, input, buton:hover {}
+    |                 ^^^^^ Unknown type selector 'buton'.
+
+`;
+
+exports[`invalid(8): ns|unknown {} *|buton {} |lable {} 1`] = `
+
+  1 | ns|unknown {} *|buton {} |lable {}
+
+`;
+
+exports[`invalid(8): ns|unknown {} *|buton {} |lable {} 2`] = `
+
+Message:
+> 1 | ns|unknown {} *|buton {} |lable {}
+    |    ^^^^^^^ Unknown type selector 'unknown'.
+
+`;
+
+exports[`invalid(8): ns|unknown {} *|buton {} |lable {} 3`] = `
+
+Message:
+> 1 | ns|unknown {} *|buton {} |lable {}
+    |                 ^^^^^ Unknown type selector 'buton'.
+
+`;
+
+exports[`invalid(8): ns|unknown {} *|buton {} |lable {} 4`] = `
+
+Message:
+> 1 | ns|unknown {} *|buton {} |lable {}
+    |                           ^^^^^ Unknown type selector 'lable'.
+
+`;
+
+exports[`invalid(9): ns\\|prefix|buton {} ns|bu\\74 on {} unknown\\|tag {} 1`] = `
+
+  1 | ns\\|prefix|buton {} ns|bu\\74 on {} unknown\\|tag {}
+
+`;
+
+exports[`invalid(9): ns\\|prefix|buton {} ns|bu\\74 on {} unknown\\|tag {} 2`] = `
+
+Message:
+> 1 | ns\\|prefix|buton {} ns|bu\\74 on {} unknown\\|tag {}
+    |            ^^^^^ Unknown type selector 'buton'.
+
+`;
+
+exports[`invalid(9): ns\\|prefix|buton {} ns|bu\\74 on {} unknown\\|tag {} 3`] = `
+
+Message:
+> 1 | ns\\|prefix|buton {} ns|bu\\74 on {} unknown\\|tag {}
+    |                        ^^^^^^^^ Unknown type selector 'buton'.
+
+`;
+
+exports[`invalid(9): ns\\|prefix|buton {} ns|bu\\74 on {} unknown\\|tag {} 4`] = `
+
+Message:
+> 1 | ns\\|prefix|buton {} ns|bu\\74 on {} unknown\\|tag {}
+    |                                    ^^^^^^^^^^^^ Unknown type selector 'unknown|tag'.
+
+`;

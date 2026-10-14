@@ -34,6 +34,7 @@ export {default as 'no-self-referencing-custom-properties'} from './no-self-refe
 export {default as 'no-unknown-animations'} from './no-unknown-animations.js';
 export {default as 'no-unknown-annotations'} from './no-unknown-annotations.js';
 export {default as 'no-unknown-pseudo-selectors'} from './no-unknown-pseudo-selectors.js';
+export {default as 'no-unknown-type-selectors'} from './no-unknown-type-selectors.js';
 export {default as 'no-unscoped-nesting-selector'} from './no-unscoped-nesting-selector.js';
 export {default as 'no-useless-is'} from './no-useless-is.js';
 export {default as 'no-zero-length-unit'} from './no-zero-length-unit.js';

@@ -53,7 +53,10 @@
 		"style"
 	],
 	"dependencies": {
-		"@eslint/css-tree": "^4.1.1"
+		"@eslint/css-tree": "^4.1.1",
+		"html-tags": "^5.1.0",
+		"mathml-tag-names": "^4.0.0",
+		"svg-tags": "^1.0.0"
 	},
 	"devDependencies": {
 		"@babel/code-frame": "^8.0.6",

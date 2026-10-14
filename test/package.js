@@ -291,3 +291,13 @@ test('require-selector-scope component configuration preserves scoped flat selec
 		assert.deepEqual(globalResult.messages, []);
 	}
 });
+
+test('presets report unknown type selectors and allow custom elements by default', async () => {
+	await Promise.all(Object.values(eslintCssicorn.configs).map(async config => {
+		const eslint = new ESLint({baseConfig: config, overrideConfigFile: true});
+		const [result] = await eslint.lintText('buton {} my-widget {}', {filePath: 'file.css'});
+		const messages = result.messages.filter(message => message.ruleId === 'cssicorn/no-unknown-type-selectors');
+		assert.equal(messages.length, 1, config.name);
+		assert.equal(messages[0].message, 'Unknown type selector \'buton\'.', config.name);
+	}));
+});

@@ -2,8 +2,17 @@ import {toPlainObject} from '@eslint/css-tree';
 import getPseudoSelectorName from './get-pseudo-selector-name.js';
 import {parse} from './parse.js';
 
+const frameworkSelectorLists = new Set([
+	':deep',
+	':global',
+	':local',
+	'::v-deep',
+	'::v-slotted',
+	'::v-global',
+]);
+
 /**
-Get a pseudo-selector's selector argument, parsing arguments of escaped names while preserving their source ranges.
+Get a pseudo-selector's selector argument, parsing framework arguments and arguments of escaped names while preserving their source ranges.
 
 @param {import('@eslint/css-tree').PseudoClassSelectorPlain | import('@eslint/css-tree').PseudoElementSelectorPlain} node
 @param {import('../rule/cssicorn-context.js').CssicornContext} context
@@ -15,10 +24,19 @@ export default function getPseudoSelectorArgument(node, context) {
 	}
 
 	let [argument] = node.children;
-	// CSSTree leaves arguments of escaped pseudo-selector names unparsed.
+	// CSSTree leaves framework arguments and arguments of escaped pseudo-selector names unparsed.
 	if (argument.type === 'Raw') {
-		const prefix = `${getPseudoSelectorName(node)}(`;
+		const name = getPseudoSelectorName(node);
+		const prefix = `${name}(`;
 		try {
+			if (frameworkSelectorLists.has(name)) {
+				return toPlainObject(parse(argument.value, {
+					context: 'selectorList',
+					positions: true,
+					offset: context.sourceCode.getRange(argument)[0],
+				}));
+			}
+
 			const selector = toPlainObject(parse(`${prefix}${argument.value})`, {
 				context: 'selector',
 				positions: true,
