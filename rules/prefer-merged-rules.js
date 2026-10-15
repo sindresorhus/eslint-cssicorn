@@ -187,6 +187,8 @@ const hasRandomFunction = value => {
 	return hasRandom;
 };
 
+const isNestedRule = node => node.type === 'Rule' || (node.type === 'Atrule' && node.block !== null);
+
 const hasMalformedContent = rule => Boolean(find(rule.block, node => (
 	node.type === 'Block' && node.children.some(child => child.type === 'Raw')
 ) || (
@@ -352,8 +354,15 @@ const create = context => {
 			}
 
 			const rules = [firstRule];
-			while (index + 1 < children.length && canMergeWith(rules.at(-1), children[index + 1])) {
+			let hasNestedRule = firstRule.block.children.some(child => isNestedRule(child));
+			// Older nesting implementations move declarations before nested rules, so merging must not put a declaration after a nested rule.
+			while (
+				index + 1 < children.length
+				&& canMergeWith(rules.at(-1), children[index + 1])
+				&& !(hasNestedRule && children[index + 1].block.children.some(child => child.type === 'Declaration'))
+			) {
 				rules.push(children[index + 1]);
+				hasNestedRule ||= children[index + 1].block.children.some(child => isNestedRule(child));
 				index++;
 			}
 

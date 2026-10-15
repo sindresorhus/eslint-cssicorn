@@ -20,6 +20,7 @@ test({
 		'.a{color:red}.b::slotted(:unknown){color:red}',
 		'@container style(--mode: a b){.a{color:red}}@container style(--mode:ab){.b{color:blue}}',
 		'@container style(--mode: a  b){.a{color:red}}@container style(--mode: a b){.b{color:blue}}',
+		'.parent{@media (width>1px){color:red;&.a{color:blue}background:red}@media (width>1px){color:green;&.b{color:purple}border:0}}',
 	],
 	invalid: [{
 		code: '.button { padding: 1rem; border-radius: 0.5rem; }\n.badge { padding: 1rem; border-radius: 0.5rem; }',
@@ -46,8 +47,8 @@ test({
 		output: '.a,\r\n.b {\r\n\tcolor: red;\r\n}',
 		errors: [{messageId: 'prefer-merged-rules/selectors'}],
 	}, {
-		code: '.parent{@media (width>1px){color:red;&.a{color:blue}background:red}@media (width>1px){color:green;&.b{color:purple}border:0}}',
-		output: '.parent{@media (width>1px){color:red;&.a{color:blue}background:red;color:green;&.b{color:purple}border:0}}',
+		code: '.parent{@media (width>1px){color:red;background:red}@media (width>1px){color:green;&.b{color:purple}}}',
+		output: '.parent{@media (width>1px){color:red;background:red;color:green;&.b{color:purple}}}',
 		errors: [{messageId: 'prefer-merged-rules/conditions'}],
 	}, {
 		code: '@media all{@layer first;}@media all{@layer second;}',
@@ -177,6 +178,10 @@ test.snapshot({
 		'@scope (.parent) { > .a { color: red; } > .b { color: red; } }',
 		'.a { color: red; } .b:is(.c, :-webkit-autofill) { color: red; }',
 		'.a { color: red; } .b::before:hover { color: red; }',
+		// Merging would put a declaration after a nested rule
+		'.parent { @media (width > 1px) { & .a { color: red; } } @media (width > 1px) { color: blue; } }',
+		'.parent { @media (width > 1px) { & { color: red; } } @media (width > 1px) { color: blue; } }',
+		'.parent { @supports (display: grid) { @media (color) { color: red; } } @supports (display: grid) { color: blue; } }',
 	],
 	invalid: [
 		'.a{color:red}.b{color:red}.c{color:red}',
@@ -249,7 +254,9 @@ test.snapshot({
 		'@starting-style { .a { opacity: 0; } .b { opacity: 0; } }',
 		'@container (width > 1px) { .a { color: red; } .b { color: red; } }',
 		'.a { color: red !IMPORTANT; } .b { color: red !important; }',
-		'.parent { @media (width > 1px) { & .a { color: red; } } @media (width > 1px) { color: blue; } }',
+		'.parent { @media (width > 1px) { color: blue; } @media (width > 1px) { & { color: red; } } }',
+		'.parent { @media (width > 1px) { color: blue; } @media (width > 1px) { & { color: red; } } @media (width > 1px) { color: green; } }',
+		'.parent { @media (width > 1px) { & { color: red; } } @media (width > 1px) { @layer x; } @media (width > 1px) { color: blue; } }',
 	],
 });
 
@@ -289,4 +296,26 @@ nodeTest('fixes converge with nesting and duplicate-selector rules', () => {
 	const secondResult = linter.verifyAndFix(result.output, combinedConfiguration, {filename: 'test.css'});
 	assert.equal(secondResult.fixed, false);
 	assert.equal(secondResult.output, result.output);
+});
+
+nodeTest('does not put declarations after nested rules', () => {
+	const linter = new Linter();
+	const combinedConfiguration = {
+		...configuration,
+		rules: {
+			...configuration.rules,
+			'cssicorn/no-declarations-after-nested-rules': 'error',
+		},
+	};
+	const code = [
+		'.parent {',
+		'@media (width > 1px) { & { color: red; } }',
+		'@media (width > 1px) { color: blue; }',
+		'@media (width > 1px) { & .a { color: red; } }',
+		'@media (width > 1px) { @layer x; }',
+		'@media (width > 1px) { color: green; }',
+		'}',
+	].join('\n');
+	const result = linter.verifyAndFix(code, combinedConfiguration, {filename: 'test.css'});
+	assert.deepEqual(result.messages.filter(message => message.ruleId === 'cssicorn/no-declarations-after-nested-rules'), []);
 });

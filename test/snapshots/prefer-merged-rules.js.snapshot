@@ -1164,20 +1164,20 @@ Output:
 
 `;
 
-exports[`invalid(69): .parent { @media (width > 1px) { & .a { color: red; } } @media (width > 1px) { color: blue; } } 1`] = `
+exports[`invalid(69): .parent { @media (width > 1px) { color: blue; } @media (width > 1px) { & { color: red; } } } 1`] = `
 
-  1 | .parent { @media (width > 1px) { & .a { color: red; } } @media (width > 1px) { color: blue; } }
+  1 | .parent { @media (width > 1px) { color: blue; } @media (width > 1px) { & { color: red; } } }
 
 `;
 
-exports[`invalid(69): .parent { @media (width > 1px) { & .a { color: red; } } @media (width > 1px) { color: blue; } } 2`] = `
+exports[`invalid(69): .parent { @media (width > 1px) { color: blue; } @media (width > 1px) { & { color: red; } } } 2`] = `
 
 Message:
-> 1 | .parent { @media (width > 1px) { & .a { color: red; } } @media (width > 1px) { color: blue; } }
-    |                                                                ^^^^^^^^^^^^^^ Merge these adjacent \`@media\` rules with the same condition.
+> 1 | .parent { @media (width > 1px) { color: blue; } @media (width > 1px) { & { color: red; } } }
+    |                                                        ^^^^^^^^^^^^^^ Merge these adjacent \`@media\` rules with the same condition.
 
 Output:
-  1 | .parent { @media (width > 1px) { & .a { color: red; } color: blue; } }
+  1 | .parent { @media (width > 1px) { color: blue; & { color: red; } } }
 
 `;
 
@@ -1195,6 +1195,40 @@ Message:
 
 Output:
   1 | .a, .b { color: RED; }
+
+`;
+
+exports[`invalid(70): .parent { @media (width > 1px) { color: blue; } @media (width > 1px) { & { color: red; } } @media (width > 1px) { color: green; } } 1`] = `
+
+  1 | .parent { @media (width > 1px) { color: blue; } @media (width > 1px) { & { color: red; } } @media (width > 1px) { color: green; } }
+
+`;
+
+exports[`invalid(70): .parent { @media (width > 1px) { color: blue; } @media (width > 1px) { & { color: red; } } @media (width > 1px) { color: green; } } 2`] = `
+
+Message:
+> 1 | .parent { @media (width > 1px) { color: blue; } @media (width > 1px) { & { color: red; } } @media (width > 1px) { color: green; } }
+    |                                                        ^^^^^^^^^^^^^^ Merge these adjacent \`@media\` rules with the same condition.
+
+Output:
+  1 | .parent { @media (width > 1px) { color: blue; & { color: red; } } @media (width > 1px) { color: green; } }
+
+`;
+
+exports[`invalid(71): .parent { @media (width > 1px) { & { color: red; } } @media (width > 1px) { @layer x; } @media (width > 1px) { color: blue; } } 1`] = `
+
+  1 | .parent { @media (width > 1px) { & { color: red; } } @media (width > 1px) { @layer x; } @media (width > 1px) { color: blue; } }
+
+`;
+
+exports[`invalid(71): .parent { @media (width > 1px) { & { color: red; } } @media (width > 1px) { @layer x; } @media (width > 1px) { color: blue; } } 2`] = `
+
+Message:
+> 1 | .parent { @media (width > 1px) { & { color: red; } } @media (width > 1px) { @layer x; } @media (width > 1px) { color: blue; } }
+    |                                                             ^^^^^^^^^^^^^^ Merge these adjacent \`@media\` rules with the same condition.
+
+Output:
+  1 | .parent { @media (width > 1px) { & { color: red; } @layer x; } @media (width > 1px) { color: blue; } }
 
 `;
 
