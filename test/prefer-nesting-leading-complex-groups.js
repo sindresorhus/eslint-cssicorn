@@ -79,15 +79,15 @@ const retainedCases = [
 	}))),
 	...[' ', ' > ', ' + ', ' ~ '].map(combinator => ({
 		code: `.outer { .theme:is(.dark, .light) &${combinator}.title { color: red; & .body { color: blue; } } }`,
-		output: `.outer { .theme:is(.dark, .light) & { ${combinator === ' ' ? '& ' : combinator.trimStart()}.title { color: red; & .body { color: blue; } } } }`,
+		output: `.outer { .theme:is(.dark, .light) & { ${combinator.trimStart()}.title { color: red; & .body { color: blue; } } } }`,
 	})),
 	{
 		code: '.outer { :is(.foo, .bar):where(&.active, .open) & .title { color: red; } }',
-		output: '.outer { :is(.foo, .bar):where(&.active, .open) & { & .title { color: red; } } }',
+		output: '.outer { :is(.foo, .bar):where(&.active, .open) & { .title { color: red; } } }',
 	},
 	{
 		code: '.card { :is(& > .foo, &#bar) & .title { color: red; } }',
-		output: '.card { :is(& > .foo, &#bar) & { & .title { color: red; } } }',
+		output: '.card { :is(& > .foo, &#bar) & { .title { color: red; } } }',
 	},
 	{
 		code: String.raw`.outer { :IS(.f\6f o, .bar):NOT(&.disabled)::before { content: "test"; } }`,
@@ -107,7 +107,7 @@ const retainedCases = [
 	},
 	{
 		code: '.outer { :is(.foo, .bar):where(&.active, .open) .title { color: red; } }',
-		output: '.outer { :is(.foo, .bar):where(&.active, .open) { & .title { color: red; } } }',
+		output: '.outer { :is(.foo, .bar):where(&.active, .open) { .title { color: red; } } }',
 	},
 	{
 		code: '.outer { :is(.foo, .bar):where(&.active, .open):is(.title, .body) { color: red; } }',

@@ -119,7 +119,7 @@ test({
 		},
 		{
 			code: '.outer, #outer { :is(.foo ~ .bar, .baz) a { color: red; } }',
-			output: '.outer, #outer { :is(.foo ~ .bar, .baz) { & a { color: red; } } }',
+			output: '.outer, #outer { :is(.foo ~ .bar, .baz) { a { color: red; } } }',
 			errors: 1,
 		},
 	],
@@ -155,7 +155,7 @@ test({
 		},
 		{
 			code: ':is(.foo, .bar) a:not(.button) { color: blue; }',
-			output: '.foo, .bar { & a:not(.button) { color: blue; } }',
+			output: '.foo, .bar { a:not(.button) { color: blue; } }',
 			errors: 1,
 		},
 		{
@@ -482,10 +482,13 @@ test.snapshot({
 		':is(.foo .bar, .baz) a {}',
 		':is(.foo > .bar, .baz).active {}',
 		':is(.foo .bar, .baz) > a {}',
-		// A nested selector that starts with a type selector gets an explicit `&`, so the parser does not read it as a declaration
+		// A nested selector list gets an explicit `&` only when the parser would read it as a declaration
 		'div :is(span, button) { color: red; }',
 		'.x :is(span:is(.a, .b), button.c) { color: red; }',
 		'.x :IS(SPAN:not(.a, .b), .c) { color: red; }',
+		'.x :IS(SPAN:IS(.A, .B), BUTTON.C) { COLOR: RED; }',
+		':is(.a, .b) span::before { color: red; }',
+		'.parent { :is(span:is(.a, .b), button.c) .child { color: red; } }',
 		'.parent { :is(span:not(.a, .b), button.c) .child { color: red; } }',
 		'.parent { :is(span, .b) > .child { color: red; } }',
 		'.parent { :is(span&, button&) .child { color: red; } }',
@@ -498,7 +501,7 @@ test.snapshot({
 		'.card { color: red; } body .theme .card { color: blue; }',
 		'.card { color: red; } body.dark :hover .card { color: blue; }',
 		'.card { color: red; } body > .theme:hover .card { color: blue; }',
-		// The parser reads `+div` as a declaration hack, so a leading combinator gets a space
+		// The parser reads `+div` as a declaration hack, so it gets an explicit `&`
 		':is(.a, .b)+div { color: red; }',
 		':is(.a, .b)>div { color: red; }',
 		':is(.a, .b)~DIV { color: red; }',
@@ -625,7 +628,7 @@ test({
 		},
 		{
 			code: ':is(.foo, #123) a { color: red; }',
-			output: ':is(.foo, #123) { & a { color: red; } }',
+			output: ':is(.foo, #123) { a { color: red; } }',
 			errors: 1,
 		},
 		{
@@ -640,7 +643,7 @@ test({
 		},
 		{
 			code: String.raw`:is(.foo, #\31 23) a { color: red; }`,
-			output: String.raw`.foo, #\31 23 { & a { color: red; } }`,
+			output: String.raw`.foo, #\31 23 { a { color: red; } }`,
 			errors: 1,
 		},
 		{
@@ -673,7 +676,7 @@ test({
 		},
 		{
 			code: ':is(.foo, :blank) a { color: red; }',
-			output: ':is(.foo, :blank) { & a { color: red; } }',
+			output: ':is(.foo, :blank) { a { color: red; } }',
 			errors: 1,
 		},
 		{
@@ -683,7 +686,7 @@ test({
 		},
 		{
 			code: ':is(.foo, [x="a" s]) a { color: red; }',
-			output: ':is(.foo, [x="a" s]) { & a { color: red; } }',
+			output: ':is(.foo, [x="a" s]) { a { color: red; } }',
 			errors: 1,
 		},
 		{
@@ -693,7 +696,7 @@ test({
 		},
 		{
 			code: ':is(foo|b, c) a { color: red; }',
-			output: ':is(foo|b, c) { & a { color: red; } }',
+			output: ':is(foo|b, c) { a { color: red; } }',
 			errors: 1,
 		},
 		{
@@ -750,19 +753,19 @@ nodeTest('nesting fixes settle across overlapping and repeated candidates', () =
 		},
 		{
 			code: 'a :where(.foo, #bar) b { color: red; }',
-			output: 'a { :where(.foo, #bar) { & b { color: red; } } }',
+			output: 'a { :where(.foo, #bar) { b { color: red; } } }',
 		},
 		{
 			code: 'a :is(.foo, .bar) b :where(.baz, #qux).active { color: red; }',
-			output: 'a { .foo, .bar { & b { :where(.baz, #qux) { &.active { color: red; } } } } }',
+			output: 'a { .foo, .bar { b { :where(.baz, #qux) { &.active { color: red; } } } } }',
 		},
 		{
 			code: ':where(.foo, #bar) a :is(.baz, .qux).active { color: red; }',
-			output: ':where(.foo, #bar) { & a { .baz, .qux { &.active { color: red; } } } }',
+			output: ':where(.foo, #bar) { a { .baz, .qux { &.active { color: red; } } } }',
 		},
 		{
 			code: ':is(.foo, :blank) a :is(.bar, :blank) { color: red; }',
-			output: ':is(.foo, :blank) { & a { :is(.bar, :blank) { color: red; } } }',
+			output: ':is(.foo, :blank) { a { :is(.bar, :blank) { color: red; } } }',
 		},
 	];
 
@@ -921,7 +924,7 @@ nodeTest('nesting fixes work with the other nesting rules', () => {
 	assert.equal(linter.verifyAndFix(trailingCombinator.output, config, {filename: 'test.css'}).fixed, false);
 
 	const mixedSpecificity = linter.verifyAndFix(':is(.foo, #bar) a { color: red; }', config, {filename: 'test.css'});
-	assert.equal(mixedSpecificity.output, '.foo, #bar { & a { color: red; } }');
+	assert.equal(mixedSpecificity.output, '.foo, #bar { a { color: red; } }');
 	assert.deepEqual(mixedSpecificity.messages.map(message => message.ruleId), ['cssicorn/no-nesting-with-mixed-specificity']);
 });
 
@@ -1019,7 +1022,7 @@ test({
 			output: `a { :where(${argumentsText}) { color: red; } }`,
 			errors: 1,
 		})),
-		...[['.active', '&.active'], ['::before', '&::before'], [' a', '& a'], [' > a', '> a'], [' + a', '+ a'], [' ~ a', '~ a']].map(([suffix, inner]) => ({
+		...[['.active', '&.active'], ['::before', '&::before'], [' a', 'a'], [' > a', '> a'], [' + a', '+ a'], [' ~ a', '~ a']].map(([suffix, inner]) => ({
 			code: `:where(.foo, #bar)${suffix} { color: red; }`,
 			output: `:where(.foo, #bar) { ${inner} { color: red; } }`,
 			errors: 1,

@@ -12,6 +12,7 @@ import {
 } from './shared/css-selector-specificity.js';
 import {
 	getNodesRange,
+	getParsableNestedRulePrelude,
 	hasCommentInRange,
 	isParsedAsNestedRule,
 	normalizeCssIdentifier,
@@ -169,24 +170,11 @@ const getGroupSuffixCandidate = (children, groupIndex, sourceCode) => {
 		return;
 	}
 
-	const isDescendant = isDescendantCombinator(suffix);
-	const isNextSibling = suffix.type === 'Combinator' && suffix.name === '+';
-	const innerNodes = children.slice(groupIndex + (isDescendant || isNextSibling ? 2 : 1));
-	let prefix = '';
-	if (suffix.type !== 'Combinator') {
-		prefix = '&';
-	} else if (isNextSibling) {
-		// The parser reads an unspaced `+` before a type selector, like `+div`, as a declaration hack.
-		prefix = '+ ';
-	} else if (isDescendant && (groupIndex > 0 || innerNodes[0].type === 'TypeSelector')) {
-		// Explicit nesting avoids interpreting a leading type selector as a declaration.
-		prefix = '& ';
-	}
-
+	const innerNodes = children.slice(groupIndex + (isDescendantCombinator(suffix) ? 2 : 1));
 	return {
 		node: children[groupIndex],
 		outerNodes: children.slice(0, groupIndex + 1),
-		inner: prefix + getNodesText(innerNodes, sourceCode),
+		inner: (suffix.type === 'Combinator' ? '' : '&') + getNodesText(innerNodes, sourceCode),
 	};
 };
 
@@ -220,7 +208,7 @@ const getLeadingGroupCandidate = (children, rule, context) => {
 	let parentText;
 	if (canUnwrap) {
 		// The inner selector inherits the list's maximum specificity, just like :is().
-		parentText = hasAncestor ? getNestedSelectorListText(argumentsList.children, sourceCode) : getNodesText(argumentsList.children, sourceCode);
+		parentText = getNodesText(argumentsList.children, sourceCode);
 		if (leadingNode) {
 			parentText = argumentsList.children.map(argument => {
 				const nodes = argument.children;
@@ -278,7 +266,7 @@ const getCandidate = (selector, rule, context) => {
 		const specificities = argumentsList.children.map(argument => getRuleSelectorSpecificity(argument, [0, 0, 0]));
 		const hasEqualSpecificity = specificities.every(specificity => compareSpecificity(specificity, specificities[0]) === 0);
 		if (hasEqualSpecificity && canUnwrapSelectorList(argumentsList)) {
-			inner = getNestedSelectorListText(argumentsList.children, sourceCode);
+			inner = getNodesText(argumentsList.children, sourceCode);
 		}
 	}
 
@@ -290,21 +278,6 @@ const getCandidate = (selector, rule, context) => {
 };
 
 const getNodesText = (nodes, sourceCode) => sourceCode.text.slice(...getNodesRange(nodes, {sourceCode}));
-
-// Explicit nesting avoids interpreting a leading type selector as a declaration, as in `span:is(.a, .b), .c`.
-const getNestedSelectorListText = (selectors, sourceCode) => {
-	let text = '';
-	let previousEnd;
-	for (const selector of selectors) {
-		const [start, end] = getNodesRange(selector.children, {sourceCode});
-		const [firstNode] = selector.children;
-		const prefix = firstNode.type === 'TypeSelector' && firstNode.name !== '*' && !hasNestingSelector(selector) ? '& ' : '';
-		text += (previousEnd === undefined ? '' : sourceCode.text.slice(previousEnd, start)) + prefix + sourceCode.text.slice(start, end);
-		previousEnd = end;
-	}
-
-	return text;
-};
 
 const getIndentation = (rule, sourceCode) => {
 	const [ruleStart] = sourceCode.getRange(rule);
@@ -401,15 +374,21 @@ const getNestedContent = ({rule, inner, blockNode = rule.block, blockText, neste
 	return `${lineBreak}${indentation}${indentationStep}${indentedInner} ${indentedBlock}${lineBreak}${indentation}`;
 };
 
-// The bundled parser rejects some valid nested selectors, like `html:not(.a, .b) &, p &`, and the fixed file must still parse.
+// The bundled parser reads some nested selectors as declarations, like `span::before`, and rejects some valid ones, like `html:not(.a, .b) &, p &`, and the fixed file must still parse. The rule skips `@scope`, so an added `&` always means the same as the implicit one.
 const getNestedReplacement = (rule, parentText, inner, context) => {
-	const content = getNestedContent({rule, inner}, context);
+	const innerPrelude = getParsableNestedRulePrelude(`${inner} `, {canAddNestingSelector: true});
+	const content = innerPrelude && getNestedContent({rule, inner: innerPrelude.slice(0, -1)}, context);
 	if (content === undefined || !isParsedAsNestedRule(content)) {
 		return;
 	}
 
-	const replacement = `${parentText} {${content}}`;
-	if (!hasAncestorStyleRule(rule, context) || isParsedAsNestedRule(replacement)) {
+	if (!hasAncestorStyleRule(rule, context)) {
+		return `${parentText} {${content}}`;
+	}
+
+	const parentPrelude = getParsableNestedRulePrelude(`${parentText} `, {canAddNestingSelector: true});
+	const replacement = parentPrelude && `${parentPrelude}{${content}}`;
+	if (replacement && isParsedAsNestedRule(replacement)) {
 		return replacement;
 	}
 };

@@ -8,7 +8,7 @@ const {test} = getTester(import.meta, 'prefer-nesting');
 
 const cases = ['>', '+', '~'].map(combinator => ({
 	code: `.outer { ${combinator} :is(.a:where(&), .b:where(&)) .title { color: red; } }`,
-	output: `.outer { ${combinator} .a:where(&), ${combinator} .b:where(&) { & .title { color: red; } } }`,
+	output: `.outer { ${combinator} .a:where(&), ${combinator} .b:where(&) { .title { color: red; } } }`,
 }));
 
 test({

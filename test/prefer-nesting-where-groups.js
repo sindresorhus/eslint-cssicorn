@@ -61,7 +61,7 @@ const cases = [
 	},
 	{
 		code: '@media (color) { .outer { @layer theme { &:is(:where(&.active), .foo) .title { color: red; } } } }',
-		output: '@media (color) { .outer { @layer theme { &:where(&.active), &.foo { & .title { color: red; } } } } }',
+		output: '@media (color) { .outer { @layer theme { &:where(&.active), &.foo { .title { color: red; } } } } }',
 	},
 	...['\n', '\r\n'].map(lineBreak => ({
 		code: ['.outer {', '  :is(.a:where(&), .b:where(&.active)).active {', '    color: red;', '  }', '}'].join(lineBreak),

@@ -130,7 +130,7 @@ Message:
     | ^^^^^^^^^^^^^^^ Prefer CSS nesting over \`:is()\`.
 
 Output:
-  1 | .foo, .bar { & a > b + c { color: red; } }
+  1 | .foo, .bar { a > b + c { color: red; } }
 
 `;
 
@@ -198,7 +198,7 @@ Message:
     | ^^^^^^^^^^^^^^^ Prefer CSS nesting over \`:is()\`.
 
 Output:
-  1 | .foo, .bar { & a[data-x] {} }
+  1 | .foo, .bar { a[data-x] {} }
 
 `;
 
@@ -249,7 +249,7 @@ Message:
     |           ^^^^^^^^^^^^^^^ Prefer CSS nesting over \`:is()\`.
 
 Output:
-  1 | .parent { .foo, .bar { & a { color: red; } } }
+  1 | .parent { .foo, .bar { a { color: red; } } }
 
 `;
 
@@ -538,7 +538,7 @@ Message:
 
 Output:
   1 | .foo, .bar {
-  2 | 	& a {
+  2 | 	a {
   3 | 		color: red;
   4 |
   5 | 		& > b {
@@ -687,7 +687,7 @@ Message:
     | ^^^^^^^^^^^^^^^^^^^^ Prefer CSS nesting over \`:is()\`.
 
 Output:
-  1 | .foo .bar, .baz { & a {} }
+  1 | .foo .bar, .baz { a {} }
 
 `;
 
@@ -738,7 +738,7 @@ Message:
     |     ^^^^^^^^^^^^^^^^^ Prefer CSS nesting over \`:is()\`.
 
 Output:
-  1 | div { & span, & button { color: red; } }
+  1 | div { span, button { color: red; } }
 
 `;
 
@@ -755,7 +755,7 @@ Message:
     |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Prefer CSS nesting over \`:is()\`.
 
 Output:
-  1 | .x { & span:is(.a, .b), & button.c { color: red; } }
+  1 | .x { & span:is(.a, .b), button.c { color: red; } }
 
 `;
 
@@ -776,20 +776,20 @@ Output:
 
 `;
 
-exports[`invalid(49): .parent { :is(span:not(.a, .b), button.c) .child { color: red; } } 1`] = `
+exports[`invalid(49): .x :IS(SPAN:IS(.A, .B), BUTTON.C) { COLOR: RED; } 1`] = `
 
-  1 | .parent { :is(span:not(.a, .b), button.c) .child { color: red; } }
+  1 | .x :IS(SPAN:IS(.A, .B), BUTTON.C) { COLOR: RED; }
 
 `;
 
-exports[`invalid(49): .parent { :is(span:not(.a, .b), button.c) .child { color: red; } } 2`] = `
+exports[`invalid(49): .x :IS(SPAN:IS(.A, .B), BUTTON.C) { COLOR: RED; } 2`] = `
 
 Message:
-> 1 | .parent { :is(span:not(.a, .b), button.c) .child { color: red; } }
-    |           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Prefer CSS nesting over \`:is()\`.
+> 1 | .x :IS(SPAN:IS(.A, .B), BUTTON.C) { COLOR: RED; }
+    |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Prefer CSS nesting over \`:is()\`.
 
 Output:
-  1 | .parent { & span:not(.a, .b), & button.c { .child { color: red; } } }
+  1 | .x { & SPAN:IS(.A, .B), BUTTON.C { COLOR: RED; } }
 
 `;
 
@@ -806,34 +806,85 @@ Message:
     | ^^^^^^^^^^^^^^^ Prefer CSS nesting over \`:is()\`.
 
 Output:
-  1 | .foo, #bar { & a {} }
+  1 | .foo, #bar { a {} }
 
 `;
 
-exports[`invalid(50): .parent { :is(span, .b) > .child { color: red; } } 1`] = `
+exports[`invalid(50): :is(.a, .b) span::before { color: red; } 1`] = `
+
+  1 | :is(.a, .b) span::before { color: red; }
+
+`;
+
+exports[`invalid(50): :is(.a, .b) span::before { color: red; } 2`] = `
+
+Message:
+> 1 | :is(.a, .b) span::before { color: red; }
+    | ^^^^^^^^^^^ Prefer CSS nesting over \`:is()\`.
+
+Output:
+  1 | .a, .b { & span::before { color: red; } }
+
+`;
+
+exports[`invalid(51): .parent { :is(span:is(.a, .b), button.c) .child { color: red; } } 1`] = `
+
+  1 | .parent { :is(span:is(.a, .b), button.c) .child { color: red; } }
+
+`;
+
+exports[`invalid(51): .parent { :is(span:is(.a, .b), button.c) .child { color: red; } } 2`] = `
+
+Message:
+> 1 | .parent { :is(span:is(.a, .b), button.c) .child { color: red; } }
+    |           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Prefer CSS nesting over \`:is()\`.
+
+Output:
+  1 | .parent { & span:is(.a, .b), button.c { .child { color: red; } } }
+
+`;
+
+exports[`invalid(52): .parent { :is(span:not(.a, .b), button.c) .child { color: red; } } 1`] = `
+
+  1 | .parent { :is(span:not(.a, .b), button.c) .child { color: red; } }
+
+`;
+
+exports[`invalid(52): .parent { :is(span:not(.a, .b), button.c) .child { color: red; } } 2`] = `
+
+Message:
+> 1 | .parent { :is(span:not(.a, .b), button.c) .child { color: red; } }
+    |           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Prefer CSS nesting over \`:is()\`.
+
+Output:
+  1 | .parent { & span:not(.a, .b), button.c { .child { color: red; } } }
+
+`;
+
+exports[`invalid(53): .parent { :is(span, .b) > .child { color: red; } } 1`] = `
 
   1 | .parent { :is(span, .b) > .child { color: red; } }
 
 `;
 
-exports[`invalid(50): .parent { :is(span, .b) > .child { color: red; } } 2`] = `
+exports[`invalid(53): .parent { :is(span, .b) > .child { color: red; } } 2`] = `
 
 Message:
 > 1 | .parent { :is(span, .b) > .child { color: red; } }
     |           ^^^^^^^^^^^^^ Prefer CSS nesting over \`:is()\`.
 
 Output:
-  1 | .parent { & span, .b { > .child { color: red; } } }
+  1 | .parent { span, .b { > .child { color: red; } } }
 
 `;
 
-exports[`invalid(51): .parent { :is(span&, button&) .child { color: red; } } 1`] = `
+exports[`invalid(54): .parent { :is(span&, button&) .child { color: red; } } 1`] = `
 
   1 | .parent { :is(span&, button&) .child { color: red; } }
 
 `;
 
-exports[`invalid(51): .parent { :is(span&, button&) .child { color: red; } } 2`] = `
+exports[`invalid(54): .parent { :is(span&, button&) .child { color: red; } } 2`] = `
 
 Message:
 > 1 | .parent { :is(span&, button&) .child { color: red; } }
@@ -844,64 +895,64 @@ Output:
 
 `;
 
-exports[`invalid(52): .parent { &:is(span, button) .child { color: red; } } 1`] = `
+exports[`invalid(55): .parent { &:is(span, button) .child { color: red; } } 1`] = `
 
   1 | .parent { &:is(span, button) .child { color: red; } }
 
 `;
 
-exports[`invalid(52): .parent { &:is(span, button) .child { color: red; } } 2`] = `
+exports[`invalid(55): .parent { &:is(span, button) .child { color: red; } } 2`] = `
 
 Message:
 > 1 | .parent { &:is(span, button) .child { color: red; } }
     |            ^^^^^^^^^^^^^^^^^ Prefer CSS nesting over \`:is()\`.
 
 Output:
-  1 | .parent { span&, button& { & .child { color: red; } } }
+  1 | .parent { span&, button& { .child { color: red; } } }
 
 `;
 
-exports[`invalid(53): .parent { > :is(span, button) .child { color: red; } } 1`] = `
+exports[`invalid(56): .parent { > :is(span, button) .child { color: red; } } 1`] = `
 
   1 | .parent { > :is(span, button) .child { color: red; } }
 
 `;
 
-exports[`invalid(53): .parent { > :is(span, button) .child { color: red; } } 2`] = `
+exports[`invalid(56): .parent { > :is(span, button) .child { color: red; } } 2`] = `
 
 Message:
 > 1 | .parent { > :is(span, button) .child { color: red; } }
     |             ^^^^^^^^^^^^^^^^^ Prefer CSS nesting over \`:is()\`.
 
 Output:
-  1 | .parent { > span, > button { & .child { color: red; } } }
+  1 | .parent { > span, > button { .child { color: red; } } }
 
 `;
 
-exports[`invalid(54): @media (width > 0px) { .parent { :is(span, .b) .child { color: red; } } } 1`] = `
+exports[`invalid(57): @media (width > 0px) { .parent { :is(span, .b) .child { color: red; } } } 1`] = `
 
   1 | @media (width > 0px) { .parent { :is(span, .b) .child { color: red; } } }
 
 `;
 
-exports[`invalid(54): @media (width > 0px) { .parent { :is(span, .b) .child { color: red; } } } 2`] = `
+exports[`invalid(57): @media (width > 0px) { .parent { :is(span, .b) .child { color: red; } } } 2`] = `
 
 Message:
 > 1 | @media (width > 0px) { .parent { :is(span, .b) .child { color: red; } } }
     |                                  ^^^^^^^^^^^^^ Prefer CSS nesting over \`:is()\`.
 
 Output:
-  1 | @media (width > 0px) { .parent { & span, .b { .child { color: red; } } } }
+  1 | @media (width > 0px) { .parent { span, .b { .child { color: red; } } } }
 
 `;
 
-exports[`invalid(55): :is(span:is(.a, .b), button.c) .child { color: red; } 1`] = `
+exports[`invalid(58): :is(span:is(.a, .b), button.c) .child { color: red; } 1`] = `
 
   1 | :is(span:is(.a, .b), button.c) .child { color: red; }
 
 `;
 
-exports[`invalid(55): :is(span:is(.a, .b), button.c) .child { color: red; } 2`] = `
+exports[`invalid(58): :is(span:is(.a, .b), button.c) .child { color: red; } 2`] = `
 
 Message:
 > 1 | :is(span:is(.a, .b), button.c) .child { color: red; }
@@ -912,7 +963,7 @@ Output:
 
 `;
 
-exports[`invalid(56): div :is(span, button) {\n  color: red;\n} 1`] = `
+exports[`invalid(59): div :is(span, button) {\n  color: red;\n} 1`] = `
 
   1 | div :is(span, button) {
   2 |   color: red;
@@ -920,7 +971,7 @@ exports[`invalid(56): div :is(span, button) {\n  color: red;\n} 1`] = `
 
 `;
 
-exports[`invalid(56): div :is(span, button) {\n  color: red;\n} 2`] = `
+exports[`invalid(59): div :is(span, button) {\n  color: red;\n} 2`] = `
 
 Message:
 > 1 | div :is(span, button) {
@@ -930,75 +981,10 @@ Message:
 
 Output:
   1 | div {
-  2 |   & span, & button {
+  2 |   span, button {
   3 |     color: red;
   4 |   }
   5 | }
-
-`;
-
-exports[`invalid(57): .parent {\r\n\t:is(span, button) .child {\r\n\t\tcolor: red;\r\n\t}\r\n} 1`] = `
-
-  1 | .parent {
-  2 | 	:is(span, button) .child {
-  3 | 		color: red;
-  4 | 	}
-  5 | }
-
-`;
-
-exports[`invalid(57): .parent {\r\n\t:is(span, button) .child {\r\n\t\tcolor: red;\r\n\t}\r\n} 2`] = `
-
-Message:
-  1 | .parent {
-> 2 | 	:is(span, button) .child {
-    | 	^^^^^^^^^^^^^^^^^ Prefer CSS nesting over \`:is()\`.
-  3 | 		color: red;
-  4 | 	}
-  5 | }
-
-Output:
-  1 | .parent {
-  2 | 	& span, & button {
-  3 | 		.child {
-  4 | 			color: red;
-  5 | 		}
-  6 | 	}
-  7 | }
-
-`;
-
-exports[`invalid(58): .card { color: red; } body .theme .card { color: blue; } 1`] = `
-
-  1 | .card { color: red; } body .theme .card { color: blue; }
-
-`;
-
-exports[`invalid(58): .card { color: red; } body .theme .card { color: blue; } 2`] = `
-
-Message:
-> 1 | .card { color: red; } body .theme .card { color: blue; }
-    |                       ^^^^^^^^^^^^^^^^^ Prefer CSS nesting for related rules.
-
-Output:
-  1 | .card { color: red; body .theme & { color: blue; } }
-
-`;
-
-exports[`invalid(59): .card { color: red; } body.dark :hover .card { color: blue; } 1`] = `
-
-  1 | .card { color: red; } body.dark :hover .card { color: blue; }
-
-`;
-
-exports[`invalid(59): .card { color: red; } body.dark :hover .card { color: blue; } 2`] = `
-
-Message:
-> 1 | .card { color: red; } body.dark :hover .card { color: blue; }
-    |                       ^^^^^^^^^^^^^^^^^^^^^^ Prefer CSS nesting for related rules.
-
-Output:
-  1 | .card { color: red; body.dark :hover & { color: blue; } }
 
 `;
 
@@ -1019,13 +1005,78 @@ Output:
 
 `;
 
-exports[`invalid(60): .card { color: red; } body > .theme:hover .card { color: blue; } 1`] = `
+exports[`invalid(60): .parent {\r\n\t:is(span, button) .child {\r\n\t\tcolor: red;\r\n\t}\r\n} 1`] = `
+
+  1 | .parent {
+  2 | 	:is(span, button) .child {
+  3 | 		color: red;
+  4 | 	}
+  5 | }
+
+`;
+
+exports[`invalid(60): .parent {\r\n\t:is(span, button) .child {\r\n\t\tcolor: red;\r\n\t}\r\n} 2`] = `
+
+Message:
+  1 | .parent {
+> 2 | 	:is(span, button) .child {
+    | 	^^^^^^^^^^^^^^^^^ Prefer CSS nesting over \`:is()\`.
+  3 | 		color: red;
+  4 | 	}
+  5 | }
+
+Output:
+  1 | .parent {
+  2 | 	span, button {
+  3 | 		.child {
+  4 | 			color: red;
+  5 | 		}
+  6 | 	}
+  7 | }
+
+`;
+
+exports[`invalid(61): .card { color: red; } body .theme .card { color: blue; } 1`] = `
+
+  1 | .card { color: red; } body .theme .card { color: blue; }
+
+`;
+
+exports[`invalid(61): .card { color: red; } body .theme .card { color: blue; } 2`] = `
+
+Message:
+> 1 | .card { color: red; } body .theme .card { color: blue; }
+    |                       ^^^^^^^^^^^^^^^^^ Prefer CSS nesting for related rules.
+
+Output:
+  1 | .card { color: red; body .theme & { color: blue; } }
+
+`;
+
+exports[`invalid(62): .card { color: red; } body.dark :hover .card { color: blue; } 1`] = `
+
+  1 | .card { color: red; } body.dark :hover .card { color: blue; }
+
+`;
+
+exports[`invalid(62): .card { color: red; } body.dark :hover .card { color: blue; } 2`] = `
+
+Message:
+> 1 | .card { color: red; } body.dark :hover .card { color: blue; }
+    |                       ^^^^^^^^^^^^^^^^^^^^^^ Prefer CSS nesting for related rules.
+
+Output:
+  1 | .card { color: red; body.dark :hover & { color: blue; } }
+
+`;
+
+exports[`invalid(63): .card { color: red; } body > .theme:hover .card { color: blue; } 1`] = `
 
   1 | .card { color: red; } body > .theme:hover .card { color: blue; }
 
 `;
 
-exports[`invalid(60): .card { color: red; } body > .theme:hover .card { color: blue; } 2`] = `
+exports[`invalid(63): .card { color: red; } body > .theme:hover .card { color: blue; } 2`] = `
 
 Message:
 > 1 | .card { color: red; } body > .theme:hover .card { color: blue; }
@@ -1036,30 +1087,30 @@ Output:
 
 `;
 
-exports[`invalid(61): :is(.a, .b)+div { color: red; } 1`] = `
+exports[`invalid(64): :is(.a, .b)+div { color: red; } 1`] = `
 
   1 | :is(.a, .b)+div { color: red; }
 
 `;
 
-exports[`invalid(61): :is(.a, .b)+div { color: red; } 2`] = `
+exports[`invalid(64): :is(.a, .b)+div { color: red; } 2`] = `
 
 Message:
 > 1 | :is(.a, .b)+div { color: red; }
     | ^^^^^^^^^^^ Prefer CSS nesting over \`:is()\`.
 
 Output:
-  1 | .a, .b { + div { color: red; } }
+  1 | .a, .b { & +div { color: red; } }
 
 `;
 
-exports[`invalid(62): :is(.a, .b)>div { color: red; } 1`] = `
+exports[`invalid(65): :is(.a, .b)>div { color: red; } 1`] = `
 
   1 | :is(.a, .b)>div { color: red; }
 
 `;
 
-exports[`invalid(62): :is(.a, .b)>div { color: red; } 2`] = `
+exports[`invalid(65): :is(.a, .b)>div { color: red; } 2`] = `
 
 Message:
 > 1 | :is(.a, .b)>div { color: red; }
@@ -1070,13 +1121,13 @@ Output:
 
 `;
 
-exports[`invalid(63): :is(.a, .b)~DIV { color: red; } 1`] = `
+exports[`invalid(66): :is(.a, .b)~DIV { color: red; } 1`] = `
 
   1 | :is(.a, .b)~DIV { color: red; }
 
 `;
 
-exports[`invalid(63): :is(.a, .b)~DIV { color: red; } 2`] = `
+exports[`invalid(66): :is(.a, .b)~DIV { color: red; } 2`] = `
 
 Message:
 > 1 | :is(.a, .b)~DIV { color: red; }
@@ -1087,30 +1138,30 @@ Output:
 
 `;
 
-exports[`invalid(64): :is(.a, .b)+.c { color: red; } 1`] = `
+exports[`invalid(67): :is(.a, .b)+.c { color: red; } 1`] = `
 
   1 | :is(.a, .b)+.c { color: red; }
 
 `;
 
-exports[`invalid(64): :is(.a, .b)+.c { color: red; } 2`] = `
+exports[`invalid(67): :is(.a, .b)+.c { color: red; } 2`] = `
 
 Message:
 > 1 | :is(.a, .b)+.c { color: red; }
     | ^^^^^^^^^^^ Prefer CSS nesting over \`:is()\`.
 
 Output:
-  1 | .a, .b { + .c { color: red; } }
+  1 | .a, .b { +.c { color: red; } }
 
 `;
 
-exports[`invalid(65): .x :is(.a, .b)+div { color: red; } 1`] = `
+exports[`invalid(68): .x :is(.a, .b)+div { color: red; } 1`] = `
 
   1 | .x :is(.a, .b)+div { color: red; }
 
 `;
 
-exports[`invalid(65): .x :is(.a, .b)+div { color: red; } 2`] = `
+exports[`invalid(68): .x :is(.a, .b)+div { color: red; } 2`] = `
 
 Message:
 > 1 | .x :is(.a, .b)+div { color: red; }
@@ -1121,71 +1172,20 @@ Output:
 
 `;
 
-exports[`invalid(66): .parent { &:is(.a, .b)+div { color: red; } } 1`] = `
+exports[`invalid(69): .parent { &:is(.a, .b)+div { color: red; } } 1`] = `
 
   1 | .parent { &:is(.a, .b)+div { color: red; } }
 
 `;
 
-exports[`invalid(66): .parent { &:is(.a, .b)+div { color: red; } } 2`] = `
+exports[`invalid(69): .parent { &:is(.a, .b)+div { color: red; } } 2`] = `
 
 Message:
 > 1 | .parent { &:is(.a, .b)+div { color: red; } }
     |            ^^^^^^^^^^^ Prefer CSS nesting over \`:is()\`.
 
 Output:
-  1 | .parent { &.a, &.b { + div { color: red; } } }
-
-`;
-
-exports[`invalid(67): .parent { :is(&.a, &.b)+div { color: red; } } 1`] = `
-
-  1 | .parent { :is(&.a, &.b)+div { color: red; } }
-
-`;
-
-exports[`invalid(67): .parent { :is(&.a, &.b)+div { color: red; } } 2`] = `
-
-Message:
-> 1 | .parent { :is(&.a, &.b)+div { color: red; } }
-    |           ^^^^^^^^^^^^^ Prefer CSS nesting over \`:is()\`.
-
-Output:
-  1 | .parent { &.a, &.b { + div { color: red; } } }
-
-`;
-
-exports[`invalid(68): .a { color: red; } @MEDIA (y) { .a .b { color: green; } } 1`] = `
-
-  1 | .a { color: red; } @MEDIA (y) { .a .b { color: green; } }
-
-`;
-
-exports[`invalid(68): .a { color: red; } @MEDIA (y) { .a .b { color: green; } } 2`] = `
-
-Message:
-> 1 | .a { color: red; } @MEDIA (y) { .a .b { color: green; } }
-    |                           ^^^^ Prefer CSS nesting for related rules.
-
-Output:
-  1 | .a { color: red; @MEDIA (y) { & .b { color: green; } } }
-
-`;
-
-exports[`invalid(69): .a { color: red; } @media (y) { .a { color: blue; } } .a .b { color: green; } 1`] = `
-
-  1 | .a { color: red; } @media (y) { .a { color: blue; } } .a .b { color: green; }
-
-`;
-
-exports[`invalid(69): .a { color: red; } @media (y) { .a { color: blue; } } .a .b { color: green; } 2`] = `
-
-Message:
-> 1 | .a { color: red; } @media (y) { .a { color: blue; } } .a .b { color: green; }
-    |                           ^^^^ Prefer CSS nesting for related rules.
-
-Output:
-  1 | .a { color: red; @media (y) { color: blue; } & .b { color: green; } }
+  1 | .parent { &.a, &.b { & +div { color: red; } } }
 
 `;
 
@@ -1206,13 +1206,64 @@ Output:
 
 `;
 
-exports[`invalid(70): @media (x) { .a { color: red; } } .a .b { color: blue; } 1`] = `
+exports[`invalid(70): .parent { :is(&.a, &.b)+div { color: red; } } 1`] = `
+
+  1 | .parent { :is(&.a, &.b)+div { color: red; } }
+
+`;
+
+exports[`invalid(70): .parent { :is(&.a, &.b)+div { color: red; } } 2`] = `
+
+Message:
+> 1 | .parent { :is(&.a, &.b)+div { color: red; } }
+    |           ^^^^^^^^^^^^^ Prefer CSS nesting over \`:is()\`.
+
+Output:
+  1 | .parent { &.a, &.b { & +div { color: red; } } }
+
+`;
+
+exports[`invalid(71): .a { color: red; } @MEDIA (y) { .a .b { color: green; } } 1`] = `
+
+  1 | .a { color: red; } @MEDIA (y) { .a .b { color: green; } }
+
+`;
+
+exports[`invalid(71): .a { color: red; } @MEDIA (y) { .a .b { color: green; } } 2`] = `
+
+Message:
+> 1 | .a { color: red; } @MEDIA (y) { .a .b { color: green; } }
+    |                           ^^^^ Prefer CSS nesting for related rules.
+
+Output:
+  1 | .a { color: red; @MEDIA (y) { & .b { color: green; } } }
+
+`;
+
+exports[`invalid(72): .a { color: red; } @media (y) { .a { color: blue; } } .a .b { color: green; } 1`] = `
+
+  1 | .a { color: red; } @media (y) { .a { color: blue; } } .a .b { color: green; }
+
+`;
+
+exports[`invalid(72): .a { color: red; } @media (y) { .a { color: blue; } } .a .b { color: green; } 2`] = `
+
+Message:
+> 1 | .a { color: red; } @media (y) { .a { color: blue; } } .a .b { color: green; }
+    |                           ^^^^ Prefer CSS nesting for related rules.
+
+Output:
+  1 | .a { color: red; @media (y) { color: blue; } & .b { color: green; } }
+
+`;
+
+exports[`invalid(73): @media (x) { .a { color: red; } } .a .b { color: blue; } 1`] = `
 
   1 | @media (x) { .a { color: red; } } .a .b { color: blue; }
 
 `;
 
-exports[`invalid(70): @media (x) { .a { color: red; } } .a .b { color: blue; } 2`] = `
+exports[`invalid(73): @media (x) { .a { color: red; } } .a .b { color: blue; } 2`] = `
 
 Message:
 > 1 | @media (x) { .a { color: red; } } .a .b { color: blue; }
@@ -1223,13 +1274,13 @@ Output:
 
 `;
 
-exports[`invalid(71): .a { color: red; } @layer x { .a .b { color: blue; } } 1`] = `
+exports[`invalid(74): .a { color: red; } @layer x { .a .b { color: blue; } } 1`] = `
 
   1 | .a { color: red; } @layer x { .a .b { color: blue; } }
 
 `;
 
-exports[`invalid(71): .a { color: red; } @layer x { .a .b { color: blue; } } 2`] = `
+exports[`invalid(74): .a { color: red; } @layer x { .a .b { color: blue; } } 2`] = `
 
 Message:
 > 1 | .a { color: red; } @layer x { .a .b { color: blue; } }
@@ -1240,7 +1291,7 @@ Output:
 
 `;
 
-exports[`invalid(72): .a {\r\n  color: red;\r\n}\r\n@media (x) {\r\n  .a .b {\r\n    color: blue;\r\n  }\r\n} 1`] = `
+exports[`invalid(75): .a {\r\n  color: red;\r\n}\r\n@media (x) {\r\n  .a .b {\r\n    color: blue;\r\n  }\r\n} 1`] = `
 
   1 | .a {
   2 |   color: red;
@@ -1253,7 +1304,7 @@ exports[`invalid(72): .a {\r\n  color: red;\r\n}\r\n@media (x) {\r\n  .a .b {\r\
 
 `;
 
-exports[`invalid(72): .a {\r\n  color: red;\r\n}\r\n@media (x) {\r\n  .a .b {\r\n    color: blue;\r\n  }\r\n} 2`] = `
+exports[`invalid(75): .a {\r\n  color: red;\r\n}\r\n@media (x) {\r\n  .a .b {\r\n    color: blue;\r\n  }\r\n} 2`] = `
 
 Message:
   1 | .a {
@@ -1278,13 +1329,13 @@ Output:
 
 `;
 
-exports[`invalid(73): .x .item, .y .item { color: red; } 1`] = `
+exports[`invalid(76): .x .item, .y .item { color: red; } 1`] = `
 
   1 | .x .item, .y .item { color: red; }
 
 `;
 
-exports[`invalid(73): .x .item, .y .item { color: red; } 2`] = `
+exports[`invalid(76): .x .item, .y .item { color: red; } 2`] = `
 
 Message:
 > 1 | .x .item, .y .item { color: red; }
@@ -1295,13 +1346,13 @@ Output:
 
 `;
 
-exports[`invalid(74): .card { > .a .item, > .b .item { color: red; } } 1`] = `
+exports[`invalid(77): .card { > .a .item, > .b .item { color: red; } } 1`] = `
 
   1 | .card { > .a .item, > .b .item { color: red; } }
 
 `;
 
-exports[`invalid(74): .card { > .a .item, > .b .item { color: red; } } 2`] = `
+exports[`invalid(77): .card { > .a .item, > .b .item { color: red; } } 2`] = `
 
 Message:
 > 1 | .card { > .a .item, > .b .item { color: red; } }
@@ -1312,88 +1363,37 @@ Output:
 
 `;
 
-exports[`invalid(75): :is(.a,.b)+a{color:red} 1`] = `
+exports[`invalid(78): :is(.a,.b)+a{color:red} 1`] = `
 
   1 | :is(.a,.b)+a{color:red}
 
 `;
 
-exports[`invalid(75): :is(.a,.b)+a{color:red} 2`] = `
+exports[`invalid(78): :is(.a,.b)+a{color:red} 2`] = `
 
 Message:
 > 1 | :is(.a,.b)+a{color:red}
     | ^^^^^^^^^^ Prefer CSS nesting over \`:is()\`.
 
 Output:
-  1 | .a,.b { + a {color:red} }
+  1 | .a,.b { & +a {color:red} }
 
 `;
 
-exports[`invalid(76): :is(.a, .b)+-x-a { color: red; } 1`] = `
+exports[`invalid(79): :is(.a, .b)+-x-a { color: red; } 1`] = `
 
   1 | :is(.a, .b)+-x-a { color: red; }
 
 `;
 
-exports[`invalid(76): :is(.a, .b)+-x-a { color: red; } 2`] = `
+exports[`invalid(79): :is(.a, .b)+-x-a { color: red; } 2`] = `
 
 Message:
 > 1 | :is(.a, .b)+-x-a { color: red; }
     | ^^^^^^^^^^^ Prefer CSS nesting over \`:is()\`.
 
 Output:
-  1 | .a, .b { + -x-a { color: red; } }
-
-`;
-
-exports[`invalid(77): :is(.a, .b)+*|a { color: red; } 1`] = `
-
-  1 | :is(.a, .b)+*|a { color: red; }
-
-`;
-
-exports[`invalid(77): :is(.a, .b)+*|a { color: red; } 2`] = `
-
-Message:
-> 1 | :is(.a, .b)+*|a { color: red; }
-    | ^^^^^^^^^^^ Prefer CSS nesting over \`:is()\`.
-
-Output:
-  1 | .a, .b { + *|a { color: red; } }
-
-`;
-
-exports[`invalid(78): .card { color: red; } body :hover .card { color: blue; } 1`] = `
-
-  1 | .card { color: red; } body :hover .card { color: blue; }
-
-`;
-
-exports[`invalid(78): .card { color: red; } body :hover .card { color: blue; } 2`] = `
-
-Message:
-> 1 | .card { color: red; } body :hover .card { color: blue; }
-    |                       ^^^^^^^^^^^^^^^^^ Prefer CSS nesting for related rules.
-
-Output:
-  1 | .card { color: red; body :hover & { color: blue; } }
-
-`;
-
-exports[`invalid(79): .card { color: red; } BODY :HOVER .card { color: blue; } 1`] = `
-
-  1 | .card { color: red; } BODY :HOVER .card { color: blue; }
-
-`;
-
-exports[`invalid(79): .card { color: red; } BODY :HOVER .card { color: blue; } 2`] = `
-
-Message:
-> 1 | .card { color: red; } BODY :HOVER .card { color: blue; }
-    |                       ^^^^^^^^^^^^^^^^^ Prefer CSS nesting for related rules.
-
-Output:
-  1 | .card { color: red; BODY :HOVER & { color: blue; } }
+  1 | .a, .b { & +-x-a { color: red; } }
 
 `;
 
@@ -1414,13 +1414,64 @@ Output:
 
 `;
 
-exports[`invalid(80): .card { color: red; } a:not(.x) .a .card { color: blue; } 1`] = `
+exports[`invalid(80): :is(.a, .b)+*|a { color: red; } 1`] = `
+
+  1 | :is(.a, .b)+*|a { color: red; }
+
+`;
+
+exports[`invalid(80): :is(.a, .b)+*|a { color: red; } 2`] = `
+
+Message:
+> 1 | :is(.a, .b)+*|a { color: red; }
+    | ^^^^^^^^^^^ Prefer CSS nesting over \`:is()\`.
+
+Output:
+  1 | .a, .b { +*|a { color: red; } }
+
+`;
+
+exports[`invalid(81): .card { color: red; } body :hover .card { color: blue; } 1`] = `
+
+  1 | .card { color: red; } body :hover .card { color: blue; }
+
+`;
+
+exports[`invalid(81): .card { color: red; } body :hover .card { color: blue; } 2`] = `
+
+Message:
+> 1 | .card { color: red; } body :hover .card { color: blue; }
+    |                       ^^^^^^^^^^^^^^^^^ Prefer CSS nesting for related rules.
+
+Output:
+  1 | .card { color: red; body :hover & { color: blue; } }
+
+`;
+
+exports[`invalid(82): .card { color: red; } BODY :HOVER .card { color: blue; } 1`] = `
+
+  1 | .card { color: red; } BODY :HOVER .card { color: blue; }
+
+`;
+
+exports[`invalid(82): .card { color: red; } BODY :HOVER .card { color: blue; } 2`] = `
+
+Message:
+> 1 | .card { color: red; } BODY :HOVER .card { color: blue; }
+    |                       ^^^^^^^^^^^^^^^^^ Prefer CSS nesting for related rules.
+
+Output:
+  1 | .card { color: red; BODY :HOVER & { color: blue; } }
+
+`;
+
+exports[`invalid(83): .card { color: red; } a:not(.x) .a .card { color: blue; } 1`] = `
 
   1 | .card { color: red; } a:not(.x) .a .card { color: blue; }
 
 `;
 
-exports[`invalid(80): .card { color: red; } a:not(.x) .a .card { color: blue; } 2`] = `
+exports[`invalid(83): .card { color: red; } a:not(.x) .a .card { color: blue; } 2`] = `
 
 Message:
 > 1 | .card { color: red; } a:not(.x) .a .card { color: blue; }
@@ -1431,13 +1482,13 @@ Output:
 
 `;
 
-exports[`invalid(81): .p { :is(html:not(.a) &, p &) .d { color: red; } } 1`] = `
+exports[`invalid(84): .p { :is(html:not(.a) &, p &) .d { color: red; } } 1`] = `
 
   1 | .p { :is(html:not(.a) &, p &) .d { color: red; } }
 
 `;
 
-exports[`invalid(81): .p { :is(html:not(.a) &, p &) .d { color: red; } } 2`] = `
+exports[`invalid(84): .p { :is(html:not(.a) &, p &) .d { color: red; } } 2`] = `
 
 Message:
 > 1 | .p { :is(html:not(.a) &, p &) .d { color: red; } }
@@ -1448,13 +1499,13 @@ Output:
 
 `;
 
-exports[`invalid(82): .p { :is(html:not(.a, .b) &, p &) .d { color: red; } } 1`] = `
+exports[`invalid(85): .p { :is(html:not(.a, .b) &, p &) .d { color: red; } } 1`] = `
 
   1 | .p { :is(html:not(.a, .b) &, p &) .d { color: red; } }
 
 `;
 
-exports[`invalid(82): .p { :is(html:not(.a, .b) &, p &) .d { color: red; } } 2`] = `
+exports[`invalid(85): .p { :is(html:not(.a, .b) &, p &) .d { color: red; } } 2`] = `
 
 Message:
 > 1 | .p { :is(html:not(.a, .b) &, p &) .d { color: red; } }
@@ -1462,13 +1513,13 @@ Message:
 
 `;
 
-exports[`invalid(83): .p { :is(div:is(.a, .b) &, p &) > span { color: red; } } 1`] = `
+exports[`invalid(86): .p { :is(div:is(.a, .b) &, p &) > span { color: red; } } 1`] = `
 
   1 | .p { :is(div:is(.a, .b) &, p &) > span { color: red; } }
 
 `;
 
-exports[`invalid(83): .p { :is(div:is(.a, .b) &, p &) > span { color: red; } } 2`] = `
+exports[`invalid(86): .p { :is(div:is(.a, .b) &, p &) > span { color: red; } } 2`] = `
 
 Message:
 > 1 | .p { :is(div:is(.a, .b) &, p &) > span { color: red; } }
@@ -1476,13 +1527,13 @@ Message:
 
 `;
 
-exports[`invalid(84): .p { :is(div:not(.a, .b) & .x, p & .y) .d { color: red; } } 1`] = `
+exports[`invalid(87): .p { :is(div:not(.a, .b) & .x, p & .y) .d { color: red; } } 1`] = `
 
   1 | .p { :is(div:not(.a, .b) & .x, p & .y) .d { color: red; } }
 
 `;
 
-exports[`invalid(84): .p { :is(div:not(.a, .b) & .x, p & .y) .d { color: red; } } 2`] = `
+exports[`invalid(87): .p { :is(div:not(.a, .b) & .x, p & .y) .d { color: red; } } 2`] = `
 
 Message:
 > 1 | .p { :is(div:not(.a, .b) & .x, p & .y) .d { color: red; } }

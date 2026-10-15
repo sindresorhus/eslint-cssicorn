@@ -15,11 +15,11 @@ const cases = [
 	},
 	{
 		code: '.card { &:is(.foo, #bar) & .title { color: red; } }',
-		output: '.card { &:is(.foo, #bar) & { & .title { color: red; } } }',
+		output: '.card { &:is(.foo, #bar) & { .title { color: red; } } }',
 	},
 	{
 		code: '.card { &:is(.context > .foo, #bar) & .title { color: red; } }',
-		output: '.card { &:is(.context > .foo, #bar) & { & .title { color: red; } } }',
+		output: '.card { &:is(.context > .foo, #bar) & { .title { color: red; } } }',
 	},
 	{
 		code: '.card { &:is(.foo, .bar).active { color: red; } }',
@@ -31,7 +31,7 @@ const cases = [
 	},
 	...[' ', ' + ', ' ~ '].map(combinator => ({
 		code: `.card { &:is(.foo, #bar)${combinator}.title { color: red; } }`,
-		output: `.card { &.foo, &#bar { ${combinator === ' ' ? '& ' : combinator.trimStart()}.title { color: red; } } }`,
+		output: `.card { &.foo, &#bar { ${combinator.trimStart()}.title { color: red; } } }`,
 	})),
 	{
 		code: '.card { &:IS(.foo, #bar):hover { COLOR: RED !important; } }',
@@ -47,7 +47,7 @@ const cases = [
 	},
 	{
 		code: '.card { &:is(:hover, :focus) svg { fill: red; } }',
-		output: '.card { &:hover, &:focus { & svg { fill: red; } } }',
+		output: '.card { &:hover, &:focus { svg { fill: red; } } }',
 	},
 	{
 		code: '.card { &:is(div, button)::before { content: "test"; } }',
@@ -79,7 +79,7 @@ const cases = [
 	})),
 	{
 		code: '.card { &:is(.context > button.primary, .panel input[data-kind="SUBMIT" i]) .title { color: red; } }',
-		output: '.card { .context > button&.primary, .panel input&[data-kind="SUBMIT" i] { & .title { color: red; } } }',
+		output: '.card { .context > button&.primary, .panel input&[data-kind="SUBMIT" i] { .title { color: red; } } }',
 	},
 	{
 		code: '.card { &:is(.context > *, .panel .foo).active { color: red; } }',
@@ -132,7 +132,7 @@ const cases = [
 	})),
 	{
 		code: '.card { &:is(.context > &.foo, &&#bar) .title { color: red; } }',
-		output: '.card { .context > &&.foo, &&&#bar { & .title { color: red; } } }',
+		output: '.card { .context > &&.foo, &&&#bar { .title { color: red; } } }',
 	},
 	{
 		code: '.card { &:is(.context > button&.primary, .panel input&[data-kind="SUBMIT" i])::before { content: "test"; } }',
@@ -169,7 +169,7 @@ const cases = [
 	},
 	{
 		code: '.card { &:is(.foo, &#bar) .title { color: red; } }',
-		output: '.card { &.foo, &&#bar { & .title { color: red; } } }',
+		output: '.card { &.foo, &&#bar { .title { color: red; } } }',
 	},
 	{
 		code: '.card, #other { &:is(button&.primary, input[data-kind="SUBMIT" i])::before { content: "test"; & .title { color: blue; } } }',

@@ -9,7 +9,7 @@ const {test} = getTester(import.meta, 'prefer-nesting');
 const cases = [
 	{
 		code: '.card { > :is(.foo, #bar) & .title { color: red; } }',
-		output: '.card { > :is(.foo, #bar) & { & .title { color: red; } } }',
+		output: '.card { > :is(.foo, #bar) & { .title { color: red; } } }',
 	},
 	...[' ', ' > ', ' + ', ' ~ '].flatMap(combinator => [
 		{
@@ -41,7 +41,7 @@ const cases = [
 		},
 		{
 			code: `.card { ${combinator} :is(.foo, #bar) .title { color: red; } }`,
-			output: `.card { ${combinator} .foo, ${combinator} #bar { & .title { color: red; } } }`,
+			output: `.card { ${combinator} .foo, ${combinator} #bar { .title { color: red; } } }`,
 		},
 		{
 			code: `.card { ${combinator} :is(.foo, #bar) > .title { color: red; } }`,
@@ -92,7 +92,7 @@ const cases = [
 		},
 		{
 			code: `.card { ${combinator} :is(&&.foo, .bar) .title { color: red; } }`,
-			output: `.card { ${combinator} &&.foo, ${combinator} .bar { & .title { color: red; } } }`,
+			output: `.card { ${combinator} &&.foo, ${combinator} .bar { .title { color: red; } } }`,
 		},
 	]),
 	{
