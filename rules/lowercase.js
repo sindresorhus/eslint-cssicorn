@@ -219,33 +219,33 @@ function normalizeMatchNode(node) {
 // A value is matched once, not once for every identifier in it, as matching a long value, like a font family list, is slow.
 const valueMatches = new WeakMap();
 
-function getValueMatch(matchValue, candidate, target, sourceCode) {
-	if (valueMatches.has(candidate)) {
-		return {match: valueMatches.get(candidate), target};
-	}
-
+function matchNormalizedValue(matchValue, candidate, sourceCode) {
 	if (!sourceCode.getText(candidate).includes('\\')) {
-		const match = matchValue(candidate);
-		valueMatches.set(candidate, match);
-		return {match, target};
+		return {match: matchValue(candidate)};
 	}
 
+	// The match is for a normalized copy, so the identifiers of the copy are found by the start offset of the original identifiers.
 	const normalizedCandidate = clone(candidate);
-	const [targetStart, targetEnd] = sourceCode.getRange(target);
-	let normalizedTarget;
+	const normalizedIdentifiers = new Map();
 	walk(normalizedCandidate, node => {
 		normalizeMatchNode(node);
-		if (node.type !== target.type) {
-			return;
-		}
-
-		const [nodeStart, nodeEnd] = sourceCode.getRange(node);
-		if (nodeStart === targetStart && nodeEnd === targetEnd) {
-			normalizedTarget = node;
+		if (node.type === 'Identifier') {
+			normalizedIdentifiers.set(sourceCode.getRange(node)[0], node);
 		}
 	});
 
-	return {match: matchValue(normalizedCandidate), target: normalizedTarget};
+	return {match: matchValue(normalizedCandidate), normalizedIdentifiers};
+}
+
+function getValueMatch(matchValue, candidate, identifier, sourceCode) {
+	let valueMatch = valueMatches.get(candidate);
+	if (!valueMatch) {
+		valueMatch = matchNormalizedValue(matchValue, candidate, sourceCode);
+		valueMatches.set(candidate, valueMatch);
+	}
+
+	const {match, normalizedIdentifiers} = valueMatch;
+	return {match, target: normalizedIdentifiers ? normalizedIdentifiers.get(sourceCode.getRange(identifier)[0]) : identifier};
 }
 
 const isSubstitutingFunction = name => name.startsWith('--') || substitutionFunctions.has(name);

@@ -183,6 +183,8 @@ test.snapshot({
 		'a { font-family: Arial, Helvetica, SANS-SERIF, Roboto, Segoe UI, SERIF; }',
 		String.raw`a { font-family: Arial, \53 ANS-SERIF, Roboto, SERIF; }`,
 		'a { transition: OPACITY 1S EASE-IN, Transform 2S LINEAR; }',
+		// A value with an escape anywhere, even in a string, is also matched once for all its identifiers.
+		String.raw`a { font-family: "\5FAE\8F6F\96C5\9ED1", Arial, SANS-SERIF, Roboto, SERIF; }`,
 		// The second `Linear` is the animation name.
 		'a { animation: 1S Linear Linear; }',
 		'@media (HOVER) and (1PX <= WIDTH) and (MIN-ASPECT-RATIO: 16/9) {}',

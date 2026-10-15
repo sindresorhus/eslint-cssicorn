@@ -2334,31 +2334,31 @@ Output:
 
 `;
 
-exports[`invalid(59): a { animation: 1S Linear Linear; } 1`] = `
+exports[`invalid(59): a { font-family: \"\\5FAE\\8F6F\\96C5\\9ED1\", Arial, SANS-SERIF, Roboto, SERIF; } 1`] = `
 
-  1 | a { animation: 1S Linear Linear; }
-
-`;
-
-exports[`invalid(59): a { animation: 1S Linear Linear; } 2`] = `
-
-Message:
-> 1 | a { animation: 1S Linear Linear; }
-    |                 ^ Use lowercase for CSS unit \`S\`.
-
-Output:
-  1 | a { animation: 1s Linear Linear; }
+  1 | a { font-family: "\\5FAE\\8F6F\\96C5\\9ED1", Arial, SANS-SERIF, Roboto, SERIF; }
 
 `;
 
-exports[`invalid(59): a { animation: 1S Linear Linear; } 3`] = `
+exports[`invalid(59): a { font-family: \"\\5FAE\\8F6F\\96C5\\9ED1\", Arial, SANS-SERIF, Roboto, SERIF; } 2`] = `
 
 Message:
-> 1 | a { animation: 1S Linear Linear; }
-    |                   ^^^^^^ Use lowercase for CSS value keyword \`Linear\`.
+> 1 | a { font-family: "\\5FAE\\8F6F\\96C5\\9ED1", Arial, SANS-SERIF, Roboto, SERIF; }
+    |                                                 ^^^^^^^^^^ Use lowercase for CSS value keyword \`SANS-SERIF\`.
 
 Output:
-  1 | a { animation: 1S linear Linear; }
+  1 | a { font-family: "\\5FAE\\8F6F\\96C5\\9ED1", Arial, sans-serif, Roboto, SERIF; }
+
+`;
+
+exports[`invalid(59): a { font-family: \"\\5FAE\\8F6F\\96C5\\9ED1\", Arial, SANS-SERIF, Roboto, SERIF; } 3`] = `
+
+Message:
+> 1 | a { font-family: "\\5FAE\\8F6F\\96C5\\9ED1", Arial, SANS-SERIF, Roboto, SERIF; }
+    |                                                                     ^^^^^ Use lowercase for CSS value keyword \`SERIF\`.
+
+Output:
+  1 | a { font-family: "\\5FAE\\8F6F\\96C5\\9ED1", Arial, SANS-SERIF, Roboto, serif; }
 
 `;
 
@@ -2379,13 +2379,41 @@ Output:
 
 `;
 
-exports[`invalid(60): @media (HOVER) and (1PX <= WIDTH) and (MIN-ASPECT-RATIO: 16/9) {} 1`] = `
+exports[`invalid(60): a { animation: 1S Linear Linear; } 1`] = `
+
+  1 | a { animation: 1S Linear Linear; }
+
+`;
+
+exports[`invalid(60): a { animation: 1S Linear Linear; } 2`] = `
+
+Message:
+> 1 | a { animation: 1S Linear Linear; }
+    |                 ^ Use lowercase for CSS unit \`S\`.
+
+Output:
+  1 | a { animation: 1s Linear Linear; }
+
+`;
+
+exports[`invalid(60): a { animation: 1S Linear Linear; } 3`] = `
+
+Message:
+> 1 | a { animation: 1S Linear Linear; }
+    |                   ^^^^^^ Use lowercase for CSS value keyword \`Linear\`.
+
+Output:
+  1 | a { animation: 1S linear Linear; }
+
+`;
+
+exports[`invalid(61): @media (HOVER) and (1PX <= WIDTH) and (MIN-ASPECT-RATIO: 16/9) {} 1`] = `
 
   1 | @media (HOVER) and (1PX <= WIDTH) and (MIN-ASPECT-RATIO: 16/9) {}
 
 `;
 
-exports[`invalid(60): @media (HOVER) and (1PX <= WIDTH) and (MIN-ASPECT-RATIO: 16/9) {} 2`] = `
+exports[`invalid(61): @media (HOVER) and (1PX <= WIDTH) and (MIN-ASPECT-RATIO: 16/9) {} 2`] = `
 
 Message:
 > 1 | @media (HOVER) and (1PX <= WIDTH) and (MIN-ASPECT-RATIO: 16/9) {}
@@ -2396,7 +2424,7 @@ Output:
 
 `;
 
-exports[`invalid(60): @media (HOVER) and (1PX <= WIDTH) and (MIN-ASPECT-RATIO: 16/9) {} 3`] = `
+exports[`invalid(61): @media (HOVER) and (1PX <= WIDTH) and (MIN-ASPECT-RATIO: 16/9) {} 3`] = `
 
 Message:
 > 1 | @media (HOVER) and (1PX <= WIDTH) and (MIN-ASPECT-RATIO: 16/9) {}
@@ -2407,7 +2435,7 @@ Output:
 
 `;
 
-exports[`invalid(60): @media (HOVER) and (1PX <= WIDTH) and (MIN-ASPECT-RATIO: 16/9) {} 4`] = `
+exports[`invalid(61): @media (HOVER) and (1PX <= WIDTH) and (MIN-ASPECT-RATIO: 16/9) {} 4`] = `
 
 Message:
 > 1 | @media (HOVER) and (1PX <= WIDTH) and (MIN-ASPECT-RATIO: 16/9) {}
@@ -2418,7 +2446,7 @@ Output:
 
 `;
 
-exports[`invalid(60): @media (HOVER) and (1PX <= WIDTH) and (MIN-ASPECT-RATIO: 16/9) {} 5`] = `
+exports[`invalid(61): @media (HOVER) and (1PX <= WIDTH) and (MIN-ASPECT-RATIO: 16/9) {} 5`] = `
 
 Message:
 > 1 | @media (HOVER) and (1PX <= WIDTH) and (MIN-ASPECT-RATIO: 16/9) {}
