@@ -174,7 +174,7 @@ const create = context => {
 		return {...problem, fix: selectorText === undefined ? undefined : fixer => fixer.replaceText(node, selectorText)};
 	});
 
-	// `@eslint/css` can parse a nested rule that starts like `a::before` or `a ::before` as a declaration, and the fixed file must still parse. Replace the whole prelude so that other fixes in the same prelude wait for the next pass. Every problem in the prelude gets the same fix with all the changes, because ESLint applies only one of the overlapping fixes per pass and stops after 10 passes.
+	// `@eslint/css` can parse a nested rule that starts like `a::before` or `a ::before` as a declaration, and the fixed file must still parse. Replace the whole prelude so that fixes of other rules in the same prelude wait for the next pass. Every problem in the prelude gets the same fix with all the changes, because ESLint applies only one of the overlapping fixes per pass and stops after 10 passes. When the prelude with all the changes cannot be parsed, none of them are fixed, even if some of them could be fixed alone.
 	context.onExit('Rule', function * (rule) {
 		const problems = nestedRuleProblems.get(rule);
 		if (!problems) {

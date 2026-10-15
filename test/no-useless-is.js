@@ -187,6 +187,8 @@ ruleTest({
 			'.wrap { :is(a)::before, & .b { color: red; } }',
 			'@scope (.x) { .wrap { :is(a)::before { color: red; } } }',
 		].map(code => ({code, errors: [{messageId: 'no-useless-is'}]})),
+		// One fix applies all changes in a nested prelude, so when the result cannot be parsed, none of them are fixed.
+		{code: '.wrap { :is(a)::before, & .b, :is(.c) { color: red; } }', errors: [{messageId: 'no-useless-is'}, {messageId: 'no-useless-is'}]},
 		...[
 			// The fix adds an explicit `&`, which does not change what the nested rule matches.
 			['.wrap { :is(a)::before { color: red; } }', '.wrap { & a::before { color: red; } }'],
