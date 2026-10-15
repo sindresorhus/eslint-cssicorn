@@ -9,14 +9,15 @@ import {
 	canMatchSelector,
 	hasAncestorStyleRule,
 	hasNamedNamespace,
+	hasScopeAncestor,
 	isStyleRule,
 } from './shared/css-selector-specificity.js';
 import {
 	getNodesRange,
+	getParsableNestedRulePrelude,
 	getPseudoSelectorName,
 	hasCommentInRange,
 	isDashedIdentifier,
-	isParsedAsNestedRule,
 	normalizeCssIdentifier,
 	normalizePropertyName,
 	trimCssWhitespace,
@@ -271,6 +272,22 @@ const getMergedSelectors = (rules, sourceCode) => {
 	return selectorsText;
 };
 
+const getMergedRule = (rules, context) => {
+	const {sourceCode} = context;
+	const [firstRule] = rules;
+	const [blockStart] = sourceCode.getRange(firstRule.block);
+	let prelude = getMergedSelectors(rules, sourceCode) + sourceCode.text.slice(sourceCode.getRange(firstRule.prelude)[1], blockStart);
+	// `@eslint/css` can parse a nested rule that starts like `a:hover` as a declaration, and the fixed file must still parse.
+	if (hasAncestorStyleRule(firstRule, context)) {
+		prelude = getParsableNestedRulePrelude(prelude, {canAddNestingSelector: !hasScopeAncestor(firstRule, context)});
+		if (prelude === undefined) {
+			return;
+		}
+	}
+
+	return prelude + sourceCode.text.slice(blockStart, sourceCode.getRange(firstRule)[1]);
+};
+
 const getWrapperParts = (rule, sourceCode, needsSeparator) => {
 	const [blockStart, blockEnd] = sourceCode.getRange(rule.block);
 	const [contentStart] = sourceCode.getRange(rule.block.children.at(0));
@@ -381,13 +398,8 @@ const create = context => {
 						abort();
 					}
 
-					const replacement = isConditional
-						? getMergedWrappers(rules, sourceCode)
-						: getMergedSelectors(rules, sourceCode) + sourceCode.text.slice(sourceCode.getRange(firstRule.prelude)[1], sourceCode.getRange(firstRule)[1]);
-					if (
-						replacement === undefined
-						|| (!isConditional && hasAncestorStyleRule(firstRule, context) && !isParsedAsNestedRule(replacement))
-					) {
+					const replacement = isConditional ? getMergedWrappers(rules, sourceCode) : getMergedRule(rules, context);
+					if (replacement === undefined) {
 						abort();
 					}
 

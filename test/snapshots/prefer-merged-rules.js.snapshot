@@ -981,6 +981,9 @@ Message:
 > 1 | .nav { a:hover { color: red; } button:focus { color: red; } span:hover { color: red; } div:hover { color: red; } }
     |                                ^^^^^^^^^^^^ Merge these adjacent rules with identical declarations.
 
+Output:
+  1 | .nav { & a:hover, button:focus, span:hover, div:hover { color: red; } }
+
 `;
 
 exports[`invalid(59): .nav { @media (width > 1px) { a:hover { color: red; } button:focus { color: red; } span:hover { color: red; } div:hover { color: red; } } } 1`] = `
@@ -994,6 +997,9 @@ exports[`invalid(59): .nav { @media (width > 1px) { a:hover { color: red; } butt
 Message:
 > 1 | .nav { @media (width > 1px) { a:hover { color: red; } button:focus { color: red; } span:hover { color: red; } div:hover { color: red; } } }
     |                                                       ^^^^^^^^^^^^ Merge these adjacent rules with identical declarations.
+
+Output:
+  1 | .nav { @media (width > 1px) { & a:hover, button:focus, span:hover, div:hover { color: red; } } }
 
 `;
 
@@ -1025,6 +1031,9 @@ exports[`invalid(60): .nav { A:HOVER { color: red; } button :focus { color: red;
 Message:
 > 1 | .nav { A:HOVER { color: red; } button :focus { color: red; } span:hover { color: red; } div:hover { color: red; } }
     |                                ^^^^^^^^^^^^^ Merge these adjacent rules with identical declarations.
+
+Output:
+  1 | .nav { & A:HOVER, button :focus, span:hover, div:hover { color: red; } }
 
 `;
 
@@ -1229,6 +1238,34 @@ Message:
 
 Output:
   1 | .parent { @media (width > 1px) { & { color: red; } @layer x; } @media (width > 1px) { color: blue; } }
+
+`;
+
+exports[`invalid(72): .nav { a:hover { color: red; } button:focus { color: red; } span:hover & { color: red; } div:hover { color: red; } } 1`] = `
+
+  1 | .nav { a:hover { color: red; } button:focus { color: red; } span:hover & { color: red; } div:hover { color: red; } }
+
+`;
+
+exports[`invalid(72): .nav { a:hover { color: red; } button:focus { color: red; } span:hover & { color: red; } div:hover { color: red; } } 2`] = `
+
+Message:
+> 1 | .nav { a:hover { color: red; } button:focus { color: red; } span:hover & { color: red; } div:hover { color: red; } }
+    |                                ^^^^^^^^^^^^ Merge these adjacent rules with identical declarations.
+
+`;
+
+exports[`invalid(73): @scope (.s) { .x { a:hover { color: red; } button:focus { color: red; } span:hover { color: red; } div:hover { color: red; } } } 1`] = `
+
+  1 | @scope (.s) { .x { a:hover { color: red; } button:focus { color: red; } span:hover { color: red; } div:hover { color: red; } } }
+
+`;
+
+exports[`invalid(73): @scope (.s) { .x { a:hover { color: red; } button:focus { color: red; } span:hover { color: red; } div:hover { color: red; } } } 2`] = `
+
+Message:
+> 1 | @scope (.s) { .x { a:hover { color: red; } button:focus { color: red; } span:hover { color: red; } div:hover { color: red; } } }
+    |                                            ^^^^^^^^^^^^ Merge these adjacent rules with identical declarations.
 
 `;
 

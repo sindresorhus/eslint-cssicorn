@@ -257,6 +257,10 @@ test.snapshot({
 		'.parent { @media (width > 1px) { color: blue; } @media (width > 1px) { & { color: red; } } }',
 		'.parent { @media (width > 1px) { color: blue; } @media (width > 1px) { & { color: red; } } @media (width > 1px) { color: green; } }',
 		'.parent { @media (width > 1px) { & { color: red; } } @media (width > 1px) { @layer x; } @media (width > 1px) { color: blue; } }',
+		// The merged list already has `&`, so the fix cannot add `& `
+		'.nav { a:hover { color: red; } button:focus { color: red; } span:hover & { color: red; } div:hover { color: red; } }',
+		// The fix does not add `& ` inside `@scope`
+		'@scope (.s) { .x { a:hover { color: red; } button:focus { color: red; } span:hover { color: red; } div:hover { color: red; } } }',
 	],
 });
 
@@ -318,4 +322,17 @@ nodeTest('does not put declarations after nested rules', () => {
 	].join('\n');
 	const result = linter.verifyAndFix(code, combinedConfiguration, {filename: 'test.css'});
 	assert.deepEqual(result.messages.filter(message => message.ruleId === 'cssicorn/no-declarations-after-nested-rules'), []);
+});
+
+nodeTest('fixes a long nested selector list that the parser could read as a declaration', () => {
+	const linter = new Linter();
+	const allRulesConfiguration = {
+		...configuration,
+		rules: Object.fromEntries(Object.keys(plugin.rules).map(name => [`cssicorn/${name}`, 'error'])),
+	};
+	const code = '.nav { a:hover { color: red; } button:focus { color: red; } span:hover { color: red; } div:hover { color: red; } }';
+	assert.equal(linter.verifyAndFix(code, configuration, {filename: 'test.css'}).output, '.nav { & a:hover, button:focus, span:hover, div:hover { color: red; } }');
+	const result = linter.verifyAndFix(code, allRulesConfiguration, {filename: 'test.css'});
+	assert.deepEqual(result.messages, []);
+	assert.equal(linter.verifyAndFix(result.output, allRulesConfiguration, {filename: 'test.css'}).fixed, false);
 });
