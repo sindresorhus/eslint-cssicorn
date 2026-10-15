@@ -16,6 +16,7 @@ import {
 	isParsedAsNestedRule,
 	normalizeCssIdentifier,
 	transparentGroupingAtRules,
+	trimCssWhitespaceEnd,
 } from './utils/index.js';
 
 /**
@@ -746,16 +747,6 @@ const getRelatedRule = (parents, rule, context, canNestStyleRules = true) => {
 
 	const blockText = getRelatedBlockText(parents, rule, context);
 	return blockText === undefined ? undefined : {rule, inner, blockText};
-};
-
-// A backward scan, because a `$`-anchored regex tries every position of the text, which can be a large rule.
-const trimCssWhitespaceEnd = text => {
-	let end = text.length;
-	while (end > 0 && '\t\n\f\r '.includes(text[end - 1])) {
-		end--;
-	}
-
-	return text.slice(0, end);
 };
 
 const getMergedReplacement = (parentRule, parents, relatedRules, context) => {

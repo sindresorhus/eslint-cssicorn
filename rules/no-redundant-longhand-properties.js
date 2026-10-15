@@ -15,7 +15,7 @@ import {
 	isCssWideKeyword,
 	normalizeCssIdentifier,
 	toAsciiLowerCase,
-	trimCssWhitespace,
+	trimCssWhitespaceEnd,
 } from './utils/index.js';
 
 /**
@@ -557,7 +557,7 @@ const getFix = (candidate, block, context) => {
 	const lastDeclaration = candidate.sourceDeclarations.at(-1);
 	const [, declarationEnd] = sourceCode.getRange(lastDeclaration);
 	const lastDeclarationText = sourceCode.getText(lastDeclaration);
-	const trailingWhitespaceLength = lastDeclarationText.length - trimCssWhitespace(lastDeclarationText).length;
+	const trailingWhitespaceLength = lastDeclarationText.length - trimCssWhitespaceEnd(lastDeclarationText).length;
 	const end = declarationEnd - trailingWhitespaceLength;
 	if (hasCommentInRange(context, [start, end])) {
 		return;

@@ -11,7 +11,7 @@ import {
 	isCssModulesInteropDeclaration,
 	isKeyframesAtRule,
 	normalizeCssIdentifier,
-	trimCssWhitespace,
+	trimCssWhitespaceEnd,
 } from './utils/index.js';
 
 /**
@@ -118,7 +118,7 @@ function getTransformProperties(value, sourceCode) {
 
 function getReplacement(declaration, properties, sourceCode, lineEnding) {
 	const [start] = sourceCode.getRange(declaration);
-	const end = start + trimCssWhitespace(sourceCode.getText(declaration)).length;
+	const end = start + trimCssWhitespaceEnd(sourceCode.getText(declaration)).length;
 	const [valueStart] = sourceCode.getRange(declaration.value);
 	const [, valueEnd] = sourceCode.getRange(declaration.value.children.at(-1));
 	const colon = sourceCode.text.slice(start + declaration.property.length, valueStart);

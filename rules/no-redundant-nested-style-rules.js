@@ -1,5 +1,5 @@
 import {getParentStyleRule, isPseudoElementNode} from './shared/css-selector-specificity.js';
-import {trimCssWhitespace} from './utils/index.js';
+import {trimCssWhitespace, trimCssWhitespaceEnd} from './utils/index.js';
 
 /**
 @import * as ESLint from 'eslint';
@@ -111,28 +111,7 @@ const isFixUnsafe = (node, sourceCode, multilineUnsafeRanges) => {
 	return multilineUnsafeRanges.some(([start, end]) => start >= nodeStart && end <= nodeEnd);
 };
 
-const getDeclarationSeparatorIndex = content => {
-	// A backward scan, because a `$`-anchored regex is quadratic for a long run of inner whitespace.
-	let separatorIndex = content.length;
-	while (separatorIndex > 0 && '\t\n\f\r '.includes(content[separatorIndex - 1])) {
-		separatorIndex--;
-	}
-
-	if (separatorIndex === content.length) {
-		return separatorIndex;
-	}
-
-	let backslashCount = 0;
-	for (let index = separatorIndex - 1; content[index] === '\\'; index--) {
-		backslashCount++;
-	}
-
-	if (backslashCount % 2 === 1) {
-		separatorIndex++;
-	}
-
-	return separatorIndex;
-};
+const getDeclarationSeparatorIndex = content => trimCssWhitespaceEnd(content).length;
 
 const addDeclarationSeparator = (node, content, sourceCode) => {
 	const lastChild = node.block.children.at(-1);

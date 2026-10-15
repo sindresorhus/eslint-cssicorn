@@ -171,6 +171,9 @@ test.snapshot({
 		// A no-break space is not CSS whitespace, so it is part of the custom property value
 		'.a { --x: red\u00A0; } .b { --x: red; }',
 		'.a { --x: \u00A0red; } .b { --x: red; }',
+		// A backslash escapes the trailing whitespace character, so it is part of the custom property value
+		'.a { --x: a\\ ; } .b { --x: a\\\t; }',
+		String.raw`.a { --x: a\ ; } .b { --x: a; }`,
 		'@scope (.parent) { > .a { color: red; } > .b { color: red; } }',
 		'.a { color: red; } .b:is(.c, :-webkit-autofill) { color: red; }',
 		'.a { color: red; } .b::before:hover { color: red; }',
