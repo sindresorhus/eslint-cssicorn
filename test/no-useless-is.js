@@ -252,6 +252,7 @@ test('fixes converge with other selector rules', () => {
 			'cssicorn/prefer-modern-syntax': 'error',
 		},
 	};
+	const names = Array.from({length: 13}, (_, index) => `.item${index}`);
 	for (const [code, expected] of [
 		[':is(.first):is(.second) {}', '.first.second {}'],
 		[':is(:is(.foo)) {}', '.foo {}'],
@@ -260,6 +261,10 @@ test('fixes converge with other selector rules', () => {
 		[':is(:where(.foo, #bar)) {}', ':where(.foo, #bar) {}'],
 		[':is(.foo, :is(.bar)) {}', ':is(.foo, .bar) {}'],
 		[':is(:has(:is(.foo))) {}', ':is(:has(.foo)) {}'],
+		// ESLint stops after 10 passes, so all `:is()` wrappers in a nested prelude must be fixed in one pass
+		[`.card { ${names.map(name => `:is(${name})`).join(', ')} {} }`, `.card { ${names.join(', ')} {} }`],
+		['.card { :is(:is(.a)), :is(.b):is(.c) {} }', '.card { .a, .b.c {} }'],
+		['.card { :is(span)::before, :is(.b) {} }', '.card { & span::before, .b {} }'],
 	]) {
 		const first = linter.verifyAndFix(code, config, {filename: 'test.css'});
 		assert.equal(first.fixed, true);

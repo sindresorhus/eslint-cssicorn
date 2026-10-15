@@ -177,6 +177,8 @@ function getColorProblem(node, context, reportNode = node) {
 @param {import('eslint').Rule.RuleContext} context
 */
 const create = context => {
+	const nestedRuleProblems = new Map();
+
 	context.on('Function', node => {
 		const problem = getColorProblem(node, context);
 		if (!problem) {
@@ -239,14 +241,31 @@ const create = context => {
 			return {...problem, fix: fixer => fixer.replaceTextRange([start, start + 1], '::')};
 		}
 
-		// `@eslint/css` can parse a nested rule that starts like `a::after` as a declaration, and the fixed file must still parse. Replace the whole prelude so that other fixes in the same prelude wait for the next pass.
-		const preludeRange = [sourceCode.getRange(rule.prelude)[0], sourceCode.getRange(rule.block)[0]];
-		const fixedPreludeText = getParsableNestedRulePrelude(sourceCode.text.slice(preludeRange[0], start) + ':' + sourceCode.text.slice(start, preludeRange[1]), {canAddNestingSelector: !hasScopeAncestor(rule, context)});
-		if (fixedPreludeText === undefined) {
-			return problem;
+		const problems = nestedRuleProblems.get(rule) ?? [];
+		problems.push({problem, start});
+		nestedRuleProblems.set(rule, problems);
+	});
+
+	// `@eslint/css` can parse a nested rule that starts like `a::after` as a declaration, and the fixed file must still parse. Replace the whole prelude so that other fixes in the same prelude wait for the next pass. Every problem in the prelude gets the same fix with all the changes, because ESLint applies only one of the overlapping fixes per pass and stops after 10 passes.
+	context.onExit('Rule', function * (rule) {
+		const problems = nestedRuleProblems.get(rule);
+		if (!problems) {
+			return;
 		}
 
-		return {...problem, fix: fixer => fixer.replaceTextRange(preludeRange, fixedPreludeText)};
+		const {sourceCode} = context;
+		const preludeRange = [sourceCode.getRange(rule.prelude)[0], sourceCode.getRange(rule.block)[0]];
+		let preludeText = sourceCode.text.slice(...preludeRange);
+		for (const {start} of problems.toReversed()) {
+			const offset = start - preludeRange[0];
+			preludeText = preludeText.slice(0, offset) + ':' + preludeText.slice(offset);
+		}
+
+		const fixedPreludeText = getParsableNestedRulePrelude(preludeText, {canAddNestingSelector: !hasScopeAncestor(rule, context)});
+		const fix = fixedPreludeText === undefined ? undefined : fixer => fixer.replaceTextRange(preludeRange, fixedPreludeText);
+		for (const {problem} of problems) {
+			yield {...problem, fix};
+		}
 	});
 };
 

@@ -81,6 +81,28 @@ const getSelectorArgument = (node, context) => {
 };
 
 /**
+Get the text that replaces the `:is()`, or `undefined` when the fix would remove a comment.
+
+@param {PseudoClassSelectorPlain} node
+@param {AnyCssNode} selector
+@param {CssicornContext} context
+*/
+const getSelectorText = (node, selector, context) => {
+	const {sourceCode} = context;
+	if (hasCommentInRange(context, sourceCode.getRange(node))) {
+		return;
+	}
+
+	let selectorText = sourceCode.text.slice(...sourceCode.getRange(selector));
+	// Terminate a trailing hex escape so it cannot consume surrounding selector whitespace.
+	if (selectorText.includes('\\') && decodeCssIdentifier(selectorText + ' ') === decodeCssIdentifier(selectorText)) {
+		selectorText += ' ';
+	}
+
+	return selectorText;
+};
+
+/**
 @param {CssicornContext} context
 */
 const create = context => {
@@ -89,6 +111,8 @@ const create = context => {
 	if (sourceCode.ast.children.some(node => node.type === 'Atrule' && normalizeCssIdentifier(node.name) === 'namespace')) {
 		return;
 	}
+
+	const nestedRuleProblems = new Map();
 
 	context.on('PseudoClassSelector', node => {
 		if (normalizeCssIdentifier(node.name) !== 'is') {
@@ -138,37 +162,45 @@ const create = context => {
 			return;
 		}
 
-		return {
-			node,
-			messageId: MESSAGE_ID,
-			* fix(fixer, {abort}) {
-				if (hasCommentInRange(context, sourceCode.getRange(node))) {
-					return abort();
-				}
+		const problem = {node, messageId: MESSAGE_ID};
+		const selectorText = getSelectorText(node, selector, context);
+		if (hasAncestorStyleRule(owner, context)) {
+			const problems = nestedRuleProblems.get(owner) ?? [];
+			problems.push({problem, selectorText});
+			nestedRuleProblems.set(owner, problems);
+			return;
+		}
 
-				const range = sourceCode.getRange(selector);
-				let selectorText = sourceCode.text.slice(...range);
-				// Terminate a trailing hex escape so it cannot consume surrounding selector whitespace.
-				if (selectorText.includes('\\') && decodeCssIdentifier(selectorText + ' ') === decodeCssIdentifier(selectorText)) {
-					selectorText += ' ';
-				}
+		return {...problem, fix: selectorText === undefined ? undefined : fixer => fixer.replaceText(node, selectorText)};
+	});
 
-				if (!hasAncestorStyleRule(owner, context)) {
-					yield fixer.replaceText(node, selectorText);
-					return;
-				}
+	// `@eslint/css` can parse a nested rule that starts like `a::before` or `a ::before` as a declaration, and the fixed file must still parse. Replace the whole prelude so that other fixes in the same prelude wait for the next pass. Every problem in the prelude gets the same fix with all the changes, because ESLint applies only one of the overlapping fixes per pass and stops after 10 passes.
+	context.onExit('Rule', function * (rule) {
+		const problems = nestedRuleProblems.get(rule);
+		if (!problems) {
+			return;
+		}
 
-				// `@eslint/css` can parse a nested rule that starts like `a::before` or `a ::before` as a declaration, and the fixed file must still parse. Replace the whole prelude so that other fixes in the same prelude wait for the next pass.
-				const [nodeStart, nodeEnd] = sourceCode.getRange(node);
-				const preludeRange = [sourceCode.getRange(owner.prelude)[0], sourceCode.getRange(owner.block)[0]];
-				const fixedPreludeText = getParsableNestedRulePrelude(sourceCode.text.slice(preludeRange[0], nodeStart) + selectorText + sourceCode.text.slice(nodeEnd, preludeRange[1]), {canAddNestingSelector: !hasScopeAncestor(owner, context)});
-				if (fixedPreludeText === undefined) {
-					return abort();
-				}
+		const changes = [];
+		for (const {problem, selectorText} of problems) {
+			const [start, end] = sourceCode.getRange(problem.node);
+			// An `:is()` inside another `:is()` that is unwrapped waits for the next pass.
+			if (selectorText !== undefined && start >= (changes.at(-1)?.end ?? 0)) {
+				changes.push({start, end, selectorText});
+			}
+		}
 
-				yield fixer.replaceTextRange(preludeRange, fixedPreludeText);
-			},
-		};
+		const preludeRange = [sourceCode.getRange(rule.prelude)[0], sourceCode.getRange(rule.block)[0]];
+		let preludeText = sourceCode.text.slice(...preludeRange);
+		for (const {start, end, selectorText} of changes.toReversed()) {
+			preludeText = preludeText.slice(0, start - preludeRange[0]) + selectorText + preludeText.slice(end - preludeRange[0]);
+		}
+
+		const fixedPreludeText = changes.length > 0 ? getParsableNestedRulePrelude(preludeText, {canAddNestingSelector: !hasScopeAncestor(rule, context)}) : undefined;
+		const fix = fixedPreludeText === undefined ? undefined : fixer => fixer.replaceTextRange(preludeRange, fixedPreludeText);
+		for (const {problem, selectorText} of problems) {
+			yield {...problem, fix: selectorText === undefined ? undefined : fix};
+		}
 	});
 };
 

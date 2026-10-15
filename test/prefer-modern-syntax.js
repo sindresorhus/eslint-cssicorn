@@ -153,12 +153,12 @@ ruleTest({
 		// To keep it simple, the explicit `&` is not added to a selector list that has `&` anywhere, or in `@scope`.
 		{code: '.card { a:after, & .b { color: red; } }', errors: 1},
 		{code: '@scope (.x) { .card { a:after { color: red; } } }', errors: 1},
-		{code: '.card { a:before, b:after { color: red; } }', output: '.card { & a::before, b:after { color: red; } }', errors: 2},
+		{code: '.card { a:before, b:after { color: red; } }', output: '.card { & a::before, b::after { color: red; } }', errors: 2},
 		// The parser looks ahead a limited number of tokens, so it reads a long selector list starting with `a:hover` as a declaration.
 		{code: '.menu {\n\ta:hover, ul li.item.active:after { color: red; }\n}', output: '.menu {\n\t& a:hover, ul li.item.active::after { color: red; }\n}', errors: 1},
 		{code: '.card { a:hover:after { color: red; } }', output: '.card { a:hover::after { color: red; } }', errors: 1},
-		// A fix in a nested rule replaces the whole prelude, so each pass fixes one of them.
-		{code: '.card { .item:after, &:before, *:after, a.item:after { color: red; } }', output: '.card { .item::after, &:before, *:after, a.item:after { color: red; } }', errors: 4},
+		// A fix in a nested rule replaces the whole prelude with all of its changes, so one pass fixes all of them.
+		{code: '.card { .item:after, &:before, *:after, a.item:after { color: red; } }', output: '.card { .item::after, &::before, *::after, a.item::after { color: red; } }', errors: 4},
 		{code: '.card { :is(a:after) { color: red; } }', output: '.card { :is(a::after) { color: red; } }', errors: 1},
 		{code: '.card {\r\n\t/* a */ .item /* b */ :after,\r\n\t.other { color: red; }\r\n}', output: '.card {\r\n\t/* a */ .item /* b */ ::after,\r\n\t.other { color: red; }\r\n}', errors: 1},
 		{code: '@media (width > 1px) { a:after { color: red; } }', output: '@media (width > 1px) { a::after { color: red; } }', errors: 1},
@@ -235,10 +235,14 @@ test('fixes are stable', () => {
 			'cssicorn/prefer-modern-syntax': 'error',
 		},
 	};
+	const names = Array.from({length: 12}, (_, index) => `.item${index}`);
 	for (const [code, expected] of [
 		['a:before { --brand: rgba(0, 0, 0, .5); }', 'a::before { --brand: rgb(0 0 0 / 50%); }'],
 		['a:after { --brand: rgb(from rgba(1, 2, 3, .25) r g b / .5); }', 'a::after { --brand: rgb(from rgb(1 2 3 / 25%) r g b / 50%); }'],
 		['.card { .item:after, &:before, *:after, a.item:after { color: red; } }', '.card { .item::after, &::before, *::after, a.item::after { color: red; } }'],
+		// ESLint stops after 10 passes, so all legacy pseudo-elements in a nested prelude must be fixed in one pass
+		[`.card { ${names.map(name => `${name}:after`).join(', ')}, .last:before {} }`, `.card { ${names.map(name => `${name}::after`).join(', ')}, .last::before {} }`],
+		['.card { span:after, .b:before {} }', '.card { & span::after, .b::before {} }'],
 	]) {
 		const first = linter.verifyAndFix(code, config, {filename: 'test.css'});
 		assert.equal(first.fixed, true);
