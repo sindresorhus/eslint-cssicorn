@@ -448,7 +448,7 @@ exports[`invalid(117): a { color: rgb(calc(10% / 20%) 0 0 / calc(30% / 10%)); } 
 
 Message:
 > 1 | a { color: rgb(calc(10% / 20%) 0 0 / calc(30% / 10%)); }
-    |                                      ^^^^^^^^^^^^^^^ 'rgb() alpha' evaluates to 2.9999999999999996, which the browser clamps to 1.
+    |                                      ^^^^^^^^^^^^^^^ 'rgb() alpha' evaluates to 3, which the browser clamps to 1.
 
 `;
 
@@ -888,7 +888,7 @@ exports[`invalid(140): a { opacity: calc(sin(1e-15deg) / 1e-18); } 2`] = `
 
 Message:
 > 1 | a { opacity: calc(sin(1e-15deg) / 1e-18); }
-    |              ^^^^^^^^^^^^^^^^^^^^^^^^^^^ 'opacity' evaluates to 17.453292519943293, which the browser clamps to 1. Did you mean a percentage?
+    |              ^^^^^^^^^^^^^^^^^^^^^^^^^^^ 'opacity' evaluates to 17.4532925199433, which the browser clamps to 1. Did you mean a percentage?
 
 `;
 
@@ -1492,7 +1492,7 @@ exports[`invalid(2): a { perspective: 1Q; } 2`] = `
 
 Message:
 > 1 | a { perspective: 1Q; }
-    |                  ^^ 'perspective' evaluates to 0.9448818897637796px, which the browser clamps to 1px.
+    |                  ^^ 'perspective' evaluates to 0.94488188976378px, which the browser clamps to 1px.
 
 `;
 

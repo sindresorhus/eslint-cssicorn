@@ -540,8 +540,7 @@ function getLiteralValue(target, basis) {
 	if (target.type === 'Percentage') {
 		return basis
 			? {
-				// Round away floating-point noise, like `110%` of `100` giving `110.00000000000001`, which no order of operations avoids for every input.
-				value: Number((value / 100 * basis.value).toPrecision(15)),
+				value: value / 100 * basis.value,
 				units: new Map(basis.units),
 				types: new Map(basis.types.size > 0 ? basis.types : [['percentage', 1]]),
 			}

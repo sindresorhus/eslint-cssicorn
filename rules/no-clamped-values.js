@@ -41,7 +41,8 @@ function isComponent(node) {
 }
 
 function formatQuantity({value, unit}) {
-	return `${value}${unit ?? ''}`;
+	// Round away floating-point noise, like `calc(1.1 * 100)` giving `110.00000000000001`, which no order of operations avoids for every input.
+	return `${Number(value.toPrecision(15))}${unit ?? ''}`;
 }
 
 function getClampingProblem(node, target, quantity, {minimum, maximum, percentageHint = false, sourceCode}) {
