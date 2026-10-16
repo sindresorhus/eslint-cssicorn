@@ -41,7 +41,7 @@ const cases = [
 	},
 	{
 		code: '@media (color) { .card.active { color: red; } .theme .card { color: blue; } } .card .title { color: green; }',
-		output: '.card { @media (color) { &.active { color: red; } .theme & { color: blue; } } & .title { color: green; } }',
+		output: '.card { @media (color) { &.active { color: red; } .theme & { color: blue; } } .title { color: green; } }',
 	},
 	{
 		code: '@layer { .theme .card { color: red !important; } .card.active { color: blue !important; } } @layer { .card { color: green !important; } }',
@@ -53,11 +53,11 @@ const cases = [
 	},
 	{
 		code: '@media (color) { .card.active { color: red; & .body { color: purple; } } @layer theme { .theme .card { color: blue; } } } .card .title { color: green; }',
-		output: '.card { @media (color) { &.active { color: red; & .body { color: purple; } } @layer theme { .theme & { color: blue; } } } & .title { color: green; } }',
+		output: '.card { @media (color) { &.active { color: red; & .body { color: purple; } } @layer theme { .theme & { color: blue; } } } .title { color: green; } }',
 	},
 	{
 		code: '@media (color) { @layer theme { .card.active { color: red; } .theme .card { color: blue; } } } .card .title { color: green; }',
-		output: '.card { @media (color) { @layer theme { &.active { color: red; } .theme & { color: blue; } } } & .title { color: green; } }',
+		output: '.card { @media (color) { @layer theme { &.active { color: red; } .theme & { color: blue; } } } .title { color: green; } }',
 	},
 	{
 		code: '@media (color) { .a.active, .b.active { color: red; } .theme .a, .theme .b { color: blue; } } @layer theme { .a, .b { color: green; } }',
@@ -69,7 +69,7 @@ const cases = [
 	},
 	{
 		code: '@media (color) { .card.active { color: red } .theme .card { color: blue } } .card .title { color: green }',
-		output: '.card { @media (color) { &.active { color: red } .theme & { color: blue } } & .title { color: green } }',
+		output: '.card { @media (color) { &.active { color: red } .theme & { color: blue } } .title { color: green } }',
 	},
 	...['\n', '\r\n'].flatMap(lineBreak => ['\t', '  '].flatMap(indentation => [
 		{
@@ -120,7 +120,7 @@ const cases = [
 				`${indentation}${indentation}${indentation}color: blue;`,
 				`${indentation}${indentation}}`,
 				`${indentation}}`,
-				`${indentation}& .title {`,
+				`${indentation}.title {`,
 				`${indentation}${indentation}color: green;`,
 				`${indentation}}`,
 				'}',

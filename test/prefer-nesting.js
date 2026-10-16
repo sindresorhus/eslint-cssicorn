@@ -28,8 +28,18 @@ test({
 	],
 	invalid: [
 		{
+			code: '.card { color: red; } .card span::before, .card.active { content: ""; }',
+			output: '.card { color: red; & span::before, &.active { content: ""; } }',
+			errors: 1,
+		},
+		{
+			code: '.card { color: red; } .card span::before, .card .title { content: ""; }',
+			output: '.card { color: red; & span::before, .title { content: ""; } }',
+			errors: 1,
+		},
+		{
 			code: '.outer { > .card {} > .card .title {} }',
-			output: '.outer { > .card { & .title {} } }',
+			output: '.outer { > .card { .title {} } }',
 			errors: 1,
 		},
 		{
@@ -44,22 +54,22 @@ test({
 		},
 		...['.page .card', '.page > .card', '.page + .card', '.page ~ .card'].map(parent => ({
 			code: `${parent} { color: red; } ${parent} .title, ${parent}:hover { color: blue; }`,
-			output: `${parent} { color: red; & .title, &:hover { color: blue; } }`,
+			output: `${parent} { color: red; .title, &:hover { color: blue; } }`,
 			errors: 1,
 		})),
 		{
 			code: '.page .card {} .page .card .title {}',
-			output: '.page .card { & .title {} }',
+			output: '.page .card { .title {} }',
 			errors: 1,
 		},
 		{
 			code: '.page  .card {} .page .card .title {}',
-			output: '.page  .card { & .title {} }',
+			output: '.page  .card { .title {} }',
 			errors: 1,
 		},
 		{
 			code: '.outer, #outer { .page > .card { color: red; } .page > .card .title { color: blue; } }',
-			output: '.outer, #outer { .page > .card { color: red; & .title { color: blue; } } }',
+			output: '.outer, #outer { .page > .card { color: red; .title { color: blue; } } }',
 			errors: 1,
 		},
 		{
@@ -69,12 +79,12 @@ test({
 		},
 		...['first-child', 'last-child', 'only-child', 'first-of-type', 'last-of-type', 'only-of-type', 'empty', 'root', 'target'].map(pseudoClass => ({
 			code: `.card:${pseudoClass} { color: red; } .card:${pseudoClass} + .hint { color: blue; }`,
-			output: `.card:${pseudoClass} { color: red; & + .hint { color: blue; } }`,
+			output: `.card:${pseudoClass} { color: red; + .hint { color: blue; } }`,
 			errors: 1,
 		})),
 		{
 			code: String.raw`.card:\46 IRST-CHILD { color: red; } .card:\46 IRST-CHILD .title { color: blue; }`,
-			output: String.raw`.card:\46 IRST-CHILD { color: red; & .title { color: blue; } }`,
+			output: String.raw`.card:\46 IRST-CHILD { color: red; .title { color: blue; } }`,
 			errors: 1,
 		},
 		...['container (width > 0px)', 'container layout (width > 0px)', 'container style(--theme: dark)', 'CONTAINER (width < 0px)'].map(atRule => ({
@@ -145,7 +155,7 @@ test({
 	invalid: [
 		{
 			code: '.message { color: red; } .message a:not(.button) { color: blue; }',
-			output: '.message { color: red; & a:not(.button) { color: blue; } }',
+			output: '.message { color: red; a:not(.button) { color: blue; } }',
 			errors: 1,
 		},
 		{
@@ -160,12 +170,12 @@ test({
 		},
 		{
 			code: '.card { color: red; } .card .title { color: blue; }',
-			output: '.card { color: red; & .title { color: blue; } }',
+			output: '.card { color: red; .title { color: blue; } }',
 			errors: [{messageId: 'prefer-nesting/related-rules'}],
 		},
 		...['>', '+', '~'].map(combinator => ({
 			code: `a { color: red; } a ${combinator} b { color: blue; }`,
-			output: `a { color: red; & ${combinator} b { color: blue; } }`,
+			output: `a { color: red; ${combinator} b { color: blue; } }`,
 			errors: 1,
 		})),
 		...['.active', ':hover', '::before'].map(suffix => ({
@@ -175,47 +185,47 @@ test({
 		})),
 		{
 			code: '[data-x].card { color: red; } [data-x].card .title { color: blue !important; }',
-			output: '[data-x].card { color: red; & .title { color: blue !important; } }',
+			output: '[data-x].card { color: red; .title { color: blue !important; } }',
 			errors: 1,
 		},
 		{
 			code: String.raw`.f\6f o { color: red; } .f\6f o .b\61 r { color: blue; }`,
-			output: String.raw`.f\6f o { color: red; & .b\61 r { color: blue; } }`,
+			output: String.raw`.f\6f o { color: red; .b\61 r { color: blue; } }`,
 			errors: 1,
 		},
 		{
 			code: '.card { color: red; } .card .title { color: blue; & > b { color: green; } }',
-			output: '.card { color: red; & .title { color: blue; & > b { color: green; } } }',
+			output: '.card { color: red; .title { color: blue; & > b { color: green; } } }',
 			errors: 1,
 		},
 		{
 			code: '.card { & > a { color: red; } } .card .title { color: blue; }',
-			output: '.card { & > a { color: red; } & .title { color: blue; } }',
+			output: '.card { & > a { color: red; } .title { color: blue; } }',
 			errors: 1,
 		},
 		{
 			code: '.card {} .card .title { color: blue; } .card .body { color: green; }',
-			output: '.card { & .title { color: blue; } & .body { color: green; } }',
+			output: '.card { .title { color: blue; } .body { color: green; } }',
 			errors: 1,
 		},
 		{
 			code: '.outer, #outer { .card { color: red; } .card .title { color: blue; } }',
-			output: '.outer, #outer { .card { color: red; & .title { color: blue; } } }',
+			output: '.outer, #outer { .card { color: red; .title { color: blue; } } }',
 			errors: 1,
 		},
 		...['media (width > 0px)', 'supports (display: grid)', 'container (width > 0px)', 'layer theme'].map(atRule => ({
 			code: `@${atRule} { .card { color: red; } .card .title { color: blue; } }`,
-			output: `@${atRule} { .card { color: red; & .title { color: blue; } } }`,
+			output: `@${atRule} { .card { color: red; .title { color: blue; } } }`,
 			errors: 1,
 		})),
 		{
 			code: '.card {\n\tcolor: red;\n}\n\n.card .title {\n\tcolor: blue;\n}',
-			output: '.card {\n\tcolor: red;\n\t& .title {\n\t\tcolor: blue;\n\t}\n}',
+			output: '.card {\n\tcolor: red;\n\t.title {\n\t\tcolor: blue;\n\t}\n}',
 			errors: 1,
 		},
 		{
 			code: '.card {\r\n  color: red;\r\n}\r\n.card .title {\r\n  color: blue;\r\n}',
-			output: '.card {\r\n  color: red;\r\n  & .title {\r\n    color: blue;\r\n  }\r\n}',
+			output: '.card {\r\n  color: red;\r\n  .title {\r\n    color: blue;\r\n  }\r\n}',
 			errors: 1,
 		},
 		...[
@@ -248,17 +258,17 @@ test({
 	invalid: [
 		{
 			code: '.card { color: red; } .card .title, .card .body { color: blue; }',
-			output: '.card { color: red; & .title, & .body { color: blue; } }',
+			output: '.card { color: red; .title, .body { color: blue; } }',
 			errors: [{messageId: 'prefer-nesting/related-rules'}],
 		},
 		{
 			code: '.card {} .card .title, .card > #body, .card:hover { color: blue; }',
-			output: '.card { & .title, & > #body, &:hover { color: blue; } }',
+			output: '.card { .title, > #body, &:hover { color: blue; } }',
 			errors: 1,
 		},
 		{
 			code: '.card {\n\tcolor: red;\n}\n.card .title,\n.card .body {\n\tcolor: blue;\n}',
-			output: '.card {\n\tcolor: red;\n\t& .title,\n\t& .body {\n\t\tcolor: blue;\n\t}\n}',
+			output: '.card {\n\tcolor: red;\n\t.title,\n\t.body {\n\t\tcolor: blue;\n\t}\n}',
 			errors: 1,
 		},
 		...[
@@ -280,17 +290,17 @@ test({
 			'placeholder-shown',
 		].map(pseudoClass => ({
 			code: `.card:${pseudoClass} { color: red; } .card:${pseudoClass} .title { color: blue; }`,
-			output: `.card:${pseudoClass} { color: red; & .title { color: blue; } }`,
+			output: `.card:${pseudoClass} { color: red; .title { color: blue; } }`,
 			errors: 1,
 		})),
 		{
 			code: String.raw`.card:\48 OVER { color: red; } .card:\48 OVER .title { color: blue; }`,
-			output: String.raw`.card:\48 OVER { color: red; & .title { color: blue; } }`,
+			output: String.raw`.card:\48 OVER { color: red; .title { color: blue; } }`,
 			errors: 1,
 		},
 		{
 			code: '.card:hover:focus {} .card:hover:focus .title, .card:hover:focus .body { color: blue; }',
-			output: '.card:hover:focus { & .title, & .body { color: blue; } }',
+			output: '.card:hover:focus { .title, .body { color: blue; } }',
 			errors: 1,
 		},
 		...['media (width > 0px)', 'supports (display: grid)', 'supports selector(&)', 'MEDIA (width < 0px)'].map(atRule => ({
@@ -310,7 +320,7 @@ test({
 		},
 		{
 			code: '.card { color: red; } @media (width > 0px) { .card { color: blue; } } .card .title { color: green; } @supports (display: grid) { .card { display: grid; } }',
-			output: '.card { color: red; @media (width > 0px) { color: blue; } & .title { color: green; } @supports (display: grid) { display: grid; } }',
+			output: '.card { color: red; @media (width > 0px) { color: blue; } .title { color: green; } @supports (display: grid) { display: grid; } }',
 			errors: 1,
 		},
 		{
@@ -355,27 +365,27 @@ test({
 	invalid: [
 		...['i', 's', 'I', 'S'].map(flag => ({
 			code: `[data-kind="CARD" ${flag}] { color: red; } [data-kind="CARD" ${flag}] .title { color: blue; }`,
-			output: `[data-kind="CARD" ${flag}] { color: red; & .title { color: blue; } }`,
+			output: `[data-kind="CARD" ${flag}] { color: red; .title { color: blue; } }`,
 			errors: 1,
 		})),
 		{
 			code: String.raw`[data-kind="CARD" \69] { color: red; } [data-kind="CARD" \69] .title { color: blue; }`,
-			output: String.raw`[data-kind="CARD" \69] { color: red; & .title { color: blue; } }`,
+			output: String.raw`[data-kind="CARD" \69] { color: red; .title { color: blue; } }`,
 			errors: 1,
 		},
 		{
 			code: String.raw`form:\49 NVALID { color: red; } form:\49 NVALID .message { color: blue; }`,
-			output: String.raw`form:\49 NVALID { color: red; & .message { color: blue; } }`,
+			output: String.raw`form:\49 NVALID { color: red; .message { color: blue; } }`,
 			errors: 1,
 		},
 		{
 			code: 'input:REQUIRED { color: red; } input:REQUIRED + .hint { color: blue; }',
-			output: 'input:REQUIRED { color: red; & + .hint { color: blue; } }',
+			output: 'input:REQUIRED { color: red; + .hint { color: blue; } }',
 			errors: 1,
 		},
 		{
 			code: '[data-kind="CARD" i]:invalid { color: red; } [data-kind="CARD" i]:invalid .title, [data-kind="CARD" i]:invalid::before { color: blue; }',
-			output: '[data-kind="CARD" i]:invalid { color: red; & .title, &::before { color: blue; } }',
+			output: '[data-kind="CARD" i]:invalid { color: red; .title, &::before { color: blue; } }',
 			errors: 1,
 		},
 		{
@@ -390,12 +400,12 @@ test({
 		},
 		{
 			code: '.outer { [data-kind="CARD" i] { color: red; } [data-kind="CARD" i] .title { color: blue; } }',
-			output: '.outer { [data-kind="CARD" i] { color: red; & .title { color: blue; } } }',
+			output: '.outer { [data-kind="CARD" i] { color: red; .title { color: blue; } } }',
 			errors: 1,
 		},
 		{
 			code: '[data-kind="CARD" i] {\r\n  color: red;\r\n}\r\n[data-kind="CARD" i] .title {\r\n  color: blue;\r\n}',
-			output: '[data-kind="CARD" i] {\r\n  color: red;\r\n  & .title {\r\n    color: blue;\r\n  }\r\n}',
+			output: '[data-kind="CARD" i] {\r\n  color: red;\r\n  .title {\r\n    color: blue;\r\n  }\r\n}',
 			errors: 1,
 		},
 		{
@@ -792,43 +802,43 @@ nodeTest('related rule fixes settle with selector groups and long adjacent runs'
 	const cases = [
 		{
 			code: '.card { color: red; } .card .title { color: blue; } .card .title > a { color: green; }',
-			output: '.card { color: red; & .title { color: blue; & > a { color: green; } } }',
+			output: '.card { color: red; .title { color: blue; > a { color: green; } } }',
 		},
 		{
 			code: '.card { color: red; } .card :is(.foo, :is(.bar)) { color: blue; }',
-			output: '.card { color: red; & :is(.foo, .bar) { color: blue; } }',
+			output: '.card { color: red; :is(.foo, .bar) { color: blue; } }',
 		},
 		{
 			code: `.card {} ${Array.from({length: 20}, (_, index) => `.card .child-${index} { color: red; }`).join(' ')}`,
-			output: `.card { ${Array.from({length: 20}, (_, index) => `& .child-${index} { color: red; }`).join(' ')} }`,
+			output: `.card { ${Array.from({length: 20}, (_, index) => `.child-${index} { color: red; }`).join(' ')} }`,
 		},
 		{
 			code: '.a .x {} .a .y {} .b {} .b .z {}',
-			output: '.a { & .x {} & .y {} } .b { & .z {} }',
+			output: '.a { .x {} .y {} } .b { .z {} }',
 		},
 		{
 			code: '.card .title {} .card .body {} @media (color) { .card { color: blue; } }',
-			output: '.card { & .title {} & .body {} @media (color) { color: blue; } }',
+			output: '.card { .title {} .body {} @media (color) { color: blue; } }',
 		},
 		{
 			code: '.card .title {} .card .body {} @layer theme { .card .footer { color: blue; } }',
-			output: '.card { & .title {} & .body {} @layer theme { & .footer { color: blue; } } }',
+			output: '.card { .title {} .body {} @layer theme { .footer { color: blue; } } }',
 		},
 		{
 			code: '.card .title, .card .body {} .card:hover {} .theme .card {}',
-			output: '.card { & .title, & .body {} &:hover {} .theme & {} }',
+			output: '.card { .title, .body {} &:hover {} .theme & {} }',
 		},
 		{
 			code: '.card:is(.foo, #bar) {} .card:is(.foo, #bar) .title {}',
-			output: '.card { &:is(.foo, #bar) { & .title {} } }',
+			output: '.card { &:is(.foo, #bar) { .title {} } }',
 		},
 		{
 			code: '.card {} @media (color) { .card .title, .card .body {} .card.active {} }',
-			output: '.card { @media (color) { & .title, & .body {} &.active {} } }',
+			output: '.card { @media (color) { .title, .body {} &.active {} } }',
 		},
 		{
 			code: '.card .title, .card .body {} @layer theme { .card .footer, .card .aside {} .card.active {} }',
-			output: '.card { & .title, & .body {} @layer theme { & .footer, & .aside {} &.active {} } }',
+			output: '.card { .title, .body {} @layer theme { .footer, .aside {} &.active {} } }',
 		},
 		// Moving `@layer b` before `@layer a { .other }` would change the layer order
 		{
@@ -864,7 +874,7 @@ nodeTest('nesting fixes work with the other nesting rules', () => {
 		},
 	};
 	const relatedRules = linter.verifyAndFix('.card { color: red; } .card .title { color: blue; }', config, {filename: 'test.css'});
-	assert.equal(relatedRules.output, '.card { color: red; & .title { color: blue; } }');
+	assert.equal(relatedRules.output, '.card { color: red; .title { color: blue; } }');
 	assert.deepEqual(relatedRules.messages, []);
 	assert.equal(linter.verifyAndFix(relatedRules.output, config, {filename: 'test.css'}).fixed, false);
 
@@ -958,12 +968,12 @@ test({
 			'nth-last-of-type(odd)',
 		].map(pseudoClass => ({
 			code: `.card:${pseudoClass} { color: red; } .card:${pseudoClass} .title { color: blue; }`,
-			output: `.card:${pseudoClass} { color: red; & .title { color: blue; } }`,
+			output: `.card:${pseudoClass} { color: red; .title { color: blue; } }`,
 			errors: 1,
 		})),
 		{
 			code: '.card:not(.disabled) {} .card:not(.disabled) .title {}',
-			output: '.card:not(.disabled) { & .title {} }',
+			output: '.card:not(.disabled) { .title {} }',
 			errors: 1,
 		},
 		{
@@ -989,7 +999,7 @@ test({
 		// The first layer stays first, so the layer order does not change.
 		{
 			code: '@layer x { .card .title { color: green; } } @layer y { .card { color: red; } }',
-			output: '.card { @layer x { & .title { color: green; } } @layer y { color: red; } }',
+			output: '.card { @layer x { .title { color: green; } } @layer y { color: red; } }',
 			errors: 1,
 		},
 		{
@@ -1108,12 +1118,12 @@ test({
 			'user-invalid',
 		].map(pseudoClass => ({
 			code: `.card:${pseudoClass} { color: red; } .card:${pseudoClass} .title { color: blue; }`,
-			output: `.card:${pseudoClass} { color: red; & .title { color: blue; } }`,
+			output: `.card:${pseudoClass} { color: red; .title { color: blue; } }`,
 			errors: 1,
 		})),
 		{
 			code: '.card:lang(en) {} .card:lang(en) .title {}',
-			output: '.card:lang(en) { & .title {} }',
+			output: '.card:lang(en) { .title {} }',
 			errors: 1,
 		},
 		{
@@ -1138,7 +1148,7 @@ test({
 		},
 		{
 			code: '.card:lang(en) {\n\tcolor: red;\n}\n.card:lang(en) .title {\n\tcolor: blue;\n}',
-			output: '.card:lang(en) {\n\tcolor: red;\n\t& .title {\n\t\tcolor: blue;\n\t}\n}',
+			output: '.card:lang(en) {\n\tcolor: red;\n\t.title {\n\t\tcolor: blue;\n\t}\n}',
 			errors: 1,
 		},
 		...[
@@ -1188,17 +1198,17 @@ test({
 	invalid: [
 		{
 			code: '.page .card {} .page .cardinal .title {}',
-			output: '.page { & .card {} & .cardinal .title {} }',
+			output: '.page { .card {} .cardinal .title {} }',
 			errors: 1,
 		},
 		{
 			code: '.page > .card {} .page + .card .title {}',
-			output: '.page { & > .card {} & + .card .title {} }',
+			output: '.page { > .card {} + .card .title {} }',
 			errors: 1,
 		},
 		{
 			code: '.card {} @media (width > 0px) { .card .title {} }',
-			output: '.card { @media (width > 0px) { & .title {} } }',
+			output: '.card { @media (width > 0px) { .title {} } }',
 			errors: 1,
 		},
 		{
@@ -1207,13 +1217,13 @@ test({
 			errors: 1,
 		},
 		...[
-			['.card .title', '.card .body', '.card', '& .title', '& .body'],
+			['.card .title', '.card .body', '.card', '.title', '.body'],
 			['.card.title', '.card.body', '.card', '&.title', '&.body'],
-			['.grid > .small', '.grid > .large', '.grid', '& > .small', '& > .large'],
-			['.card + .title', '.card ~ .body', '.card', '& + .title', '& ~ .body'],
-			['.page .card .title', '.page .card .body', '.page .card', '& .title', '& .body'],
+			['.grid > .small', '.grid > .large', '.grid', '> .small', '> .large'],
+			['.card + .title', '.card ~ .body', '.card', '+ .title', '~ .body'],
+			['.page .card .title', '.page .card .body', '.page .card', '.title', '.body'],
 			['.card::before', '.card::after', '.card', '&::before', '&::after'],
-			['.card:lang(en) .title', '.card:lang(en) .body', '.card:lang(en)', '& .title', '& .body'],
+			['.card:lang(en) .title', '.card:lang(en) .body', '.card:lang(en)', '.title', '.body'],
 		].map(([first, second, parent, firstInner, secondInner]) => ({
 			code: `${first} { color: red; } ${second} { color: blue; }`,
 			output: `${parent} { ${firstInner} { color: red; } ${secondInner} { color: blue; } }`,
@@ -1221,52 +1231,52 @@ test({
 		})),
 		{
 			code: '.card .title { color: red } .card .body { color: blue }',
-			output: '.card { & .title { color: red } & .body { color: blue } }',
+			output: '.card { .title { color: red } .body { color: blue } }',
 			errors: 1,
 		},
 		{
 			code: '.card .title {} .card .body {} .card:hover {}',
-			output: '.card { & .title {} & .body {} &:hover {} }',
+			output: '.card { .title {} .body {} &:hover {} }',
 			errors: 1,
 		},
 		{
 			code: '.card .title {} .card .body {} .card .footer, .card .aside { color: blue; }',
-			output: '.card { & .title {} & .body {} & .footer, & .aside { color: blue; } }',
+			output: '.card { .title {} .body {} .footer, .aside { color: blue; } }',
 			errors: 1,
 		},
 		{
 			code: '.outer, #outer { .card .title { color: red; } .card .body { color: blue; } }',
-			output: '.outer, #outer { .card { & .title { color: red; } & .body { color: blue; } } }',
+			output: '.outer, #outer { .card { .title { color: red; } .body { color: blue; } } }',
 			errors: 1,
 		},
 		{
 			code: String.raw`.c\61 rd .title { color: red; } .c\61 rd .body { color: blue; }`,
-			output: String.raw`.c\61 rd { & .title { color: red; } & .body { color: blue; } }`,
+			output: String.raw`.c\61 rd { .title { color: red; } .body { color: blue; } }`,
 			errors: 1,
 		},
 		{
 			code: '.card .title {\n\tcolor: red;\n}\n.card .body {\n\tcolor: blue;\n}',
-			output: '.card {\n\t& .title {\n\t\tcolor: red;\n\t}\n\t& .body {\n\t\tcolor: blue;\n\t}\n}',
+			output: '.card {\n\t.title {\n\t\tcolor: red;\n\t}\n\t.body {\n\t\tcolor: blue;\n\t}\n}',
 			errors: 1,
 		},
 		{
 			code: '.card .title {\r\n  color: red;\r\n}\r\n.card .body {\r\n  color: blue;\r\n}',
-			output: '.card {\r\n  & .title {\r\n    color: red;\r\n  }\r\n  & .body {\r\n    color: blue;\r\n  }\r\n}',
+			output: '.card {\r\n  .title {\r\n    color: red;\r\n  }\r\n  .body {\r\n    color: blue;\r\n  }\r\n}',
 			errors: 1,
 		},
 		...['media (color)', 'layer theme', 'layer', 'MEDIA (color)', String.raw`m\65 dia (color)`].map(atRule => ({
 			code: `.card { color: red; } @${atRule} { .card .title, .card:hover { color: blue; } }`,
-			output: `.card { color: red; @${atRule} { & .title, &:hover { color: blue; } } }`,
+			output: `.card { color: red; @${atRule} { .title, &:hover { color: blue; } } }`,
 			errors: 1,
 		})),
 		{
 			code: '.card { color: red; } @media (color) { .card .title { color: blue; & .link { color: green; } } }',
-			output: '.card { color: red; @media (color) { & .title { color: blue; & .link { color: green; } } } }',
+			output: '.card { color: red; @media (color) { .title { color: blue; & .link { color: green; } } } }',
 			errors: 1,
 		},
 		{
 			code: '.card {\n\tcolor: red;\n}\n@media (color) {\n\t.card .title {\n\t\tcolor: blue;\n\t}\n}',
-			output: '.card {\n\tcolor: red;\n\t@media (color) {\n\t\t& .title {\n\t\t\tcolor: blue;\n\t\t}\n\t}\n}',
+			output: '.card {\n\tcolor: red;\n\t@media (color) {\n\t\t.title {\n\t\t\tcolor: blue;\n\t\t}\n\t}\n}',
 			errors: 1,
 		},
 		{
@@ -1334,12 +1344,12 @@ test({
 	invalid: [
 		{
 			code: '.page .card {} .page .card .title, .page .other .body {}',
-			output: '.page { & .card {} & .card .title, & .other .body {} }',
+			output: '.page { .card {} .card .title, .other .body {} }',
 			errors: 1,
 		},
 		{
 			code: '.outer { > .card .title, > .card .body {} }',
-			output: '.outer { > .card { & .title, & .body {} } }',
+			output: '.outer { > .card { .title, .body {} } }',
 			errors: 1,
 		},
 		{
@@ -1359,18 +1369,18 @@ test({
 		},
 		{
 			code: '.card:lang("en") .title, .card:lang("en") .body {}',
-			output: '.card:lang("en") { & .title, & .body {} }',
+			output: '.card:lang("en") { .title, .body {} }',
 			errors: 1,
 		},
 		...[
-			['.card .title, .card .body', '.card', '& .title, & .body'],
+			['.card .title, .card .body', '.card', '.title, .body'],
 			['.card:hover, .card.active, .card[aria-disabled=true]', '.card', '&:hover, &.active, &[aria-disabled=true]'],
 			['input[type=checkbox], input[type=radio]', 'input', '&[type=checkbox], &[type=radio]'],
-			['.page .card > .title, .page .card + #body', '.page .card', '& > .title, & + #body'],
+			['.page .card > .title, .page .card + #body', '.page .card', '> .title, + #body'],
 			['.card::before, .card::after', '.card', '&::before, &::after'],
-			['[data-kind="CARD" i] .title, [data-kind="CARD" i] #body', '[data-kind="CARD" i]', '& .title, & #body'],
-			['.card:not(.disabled) .title, .card:not(.disabled) .body', '.card:not(.disabled)', '& .title, & .body'],
-			[String.raw`.c\61 rd .title, .c\61 rd .body`, String.raw`.c\61 rd`, '& .title, & .body'],
+			['[data-kind="CARD" i] .title, [data-kind="CARD" i] #body', '[data-kind="CARD" i]', '.title, #body'],
+			['.card:not(.disabled) .title, .card:not(.disabled) .body', '.card:not(.disabled)', '.title, .body'],
+			[String.raw`.c\61 rd .title, .c\61 rd .body`, String.raw`.c\61 rd`, '.title, .body'],
 		].map(([selector, parent, inner]) => ({
 			code: `${selector} { color: red !important; & .link { color: blue; } }`,
 			output: `${parent} { ${inner} { color: red !important; & .link { color: blue; } } }`,
@@ -1378,17 +1388,17 @@ test({
 		})),
 		{
 			code: '.outer, #outer { .card .title, .card #body { color: red; } }',
-			output: '.outer, #outer { .card { & .title, & #body { color: red; } } }',
+			output: '.outer, #outer { .card { .title, #body { color: red; } } }',
 			errors: 1,
 		},
 		{
 			code: '.card .title,\r\n.card .body {\r\n  color: red;\r\n}',
-			output: '.card {\r\n  & .title,\r\n  & .body {\r\n    color: red;\r\n  }\r\n}',
+			output: '.card {\r\n  .title,\r\n  .body {\r\n    color: red;\r\n  }\r\n}',
 			errors: 1,
 		},
 		...['media (color)', 'supports (display: grid)', 'container (width > 0px)', 'layer theme'].map(atRule => ({
 			code: `@${atRule} { .card .title, .card .body { color: red; } }`,
-			output: `@${atRule} { .card { & .title, & .body { color: red; } } }`,
+			output: `@${atRule} { .card { .title, .body { color: red; } } }`,
 			errors: 1,
 		})),
 		...['is', 'where', 'IS', 'WHERE'].flatMap(name => ['', '.active', '::before', ' > .title'].map(suffix => ({
@@ -1438,12 +1448,12 @@ test({
 		})),
 		...['media (color)', 'layer theme', 'layer', 'MEDIA (color)', String.raw`l\61 yer theme`].map(atRule => ({
 			code: `.card { color: red; } @${atRule} { .card .title, .card .body { color: blue; } .card:where(.active) { color: green; } }`,
-			output: `.card { color: red; @${atRule} { & .title, & .body { color: blue; } &:where(.active) { color: green; } } }`,
+			output: `.card { color: red; @${atRule} { .title, .body { color: blue; } &:where(.active) { color: green; } } }`,
 			errors: 1,
 		})),
 		{
 			code: '.card {\n\tcolor: red;\n}\n@media (color) {\n\t.card .title {\n\t\tcolor: blue;\n\t}\n\t.card:where(.active) {\n\t\tcolor: green;\n\t}\n}',
-			output: '.card {\n\tcolor: red;\n\t@media (color) {\n\t\t& .title {\n\t\t\tcolor: blue;\n\t\t}\n\t\t&:where(.active) {\n\t\t\tcolor: green;\n\t\t}\n\t}\n}',
+			output: '.card {\n\tcolor: red;\n\t@media (color) {\n\t\t.title {\n\t\t\tcolor: blue;\n\t\t}\n\t\t&:where(.active) {\n\t\t\tcolor: green;\n\t\t}\n\t}\n}',
 			errors: 1,
 		},
 		...[

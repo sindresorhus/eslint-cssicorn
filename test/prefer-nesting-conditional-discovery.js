@@ -9,11 +9,11 @@ const {test} = getTester(import.meta, 'prefer-nesting');
 const cases = [
 	{
 		code: '@media (width > 600px) { .card .title { color: blue; } } @media (width > 900px) { .card .body { color: green; } }',
-		output: '.card { @media (width > 600px) { & .title { color: blue; } } @media (width > 900px) { & .body { color: green; } } }',
+		output: '.card { @media (width > 600px) { .title { color: blue; } } @media (width > 900px) { .body { color: green; } } }',
 	},
 	{
 		code: '@media (color) { .card { color: red; } } .card .title { color: blue; }',
-		output: '.card { @media (color) { color: red; } & .title { color: blue; } }',
+		output: '.card { @media (color) { color: red; } .title { color: blue; } }',
 	},
 	{
 		code: '@layer { .card.small { color: red !important; } } @layer { .card.large { color: blue !important; } }',
@@ -29,15 +29,15 @@ const cases = [
 	})),
 	{
 		code: '@supports (display: grid) { @media (color) { .card { color: red; } } } .card .title { color: blue; }',
-		output: '.card { @supports (display: grid) { @media (color) { color: red; } } & .title { color: blue; } }',
+		output: '.card { @supports (display: grid) { @media (color) { color: red; } } .title { color: blue; } }',
 	},
 	{
 		code: '@media (color) { .a, .b { color: red; } } .b .title, .a .title { color: blue; }',
-		output: '.a, .b { @media (color) { color: red; } & .title { color: blue; } }',
+		output: '.a, .b { @media (color) { color: red; } .title { color: blue; } }',
 	},
 	{
 		code: '@media (color) { .card .title { color: red; & > .body { color: blue; } } } .card .body { color: green; }',
-		output: '.card { @media (color) { & .title { color: red; & > .body { color: blue; } } } & .body { color: green; } }',
+		output: '.card { @media (color) { .title { color: red; & > .body { color: blue; } } } .body { color: green; } }',
 	},
 	{
 		code: '.outer, #outer { @media (color) { & .card.small { color: red; } } @layer theme { & .card.large { color: blue; } } }',

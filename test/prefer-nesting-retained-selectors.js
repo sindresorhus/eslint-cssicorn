@@ -13,11 +13,11 @@ const cases = [
 	},
 	{
 		code: '.outer { && .title, && .body { color: blue; } }',
-		output: '.outer { && { & .title, & .body { color: blue; } } }',
+		output: '.outer { && { .title, .body { color: blue; } } }',
 	},
 	{
 		code: '.outer { .theme & .card {} .theme & .card .title { color: blue; } }',
-		output: '.outer { .theme & .card { & .title { color: blue; } } }',
+		output: '.outer { .theme & .card { .title { color: blue; } } }',
 	},
 	{
 		code: '.outer { .active& {} .active&:hover { color: blue; } }',
@@ -29,7 +29,7 @@ const cases = [
 	},
 	{
 		code: '.outer { &.a + &.b {} &.a + &.b .title { color: blue; } }',
-		output: '.outer { &.a + &.b { & .title { color: blue; } } }',
+		output: '.outer { &.a + &.b { .title { color: blue; } } }',
 	},
 	{
 		code: '.outer { &&.card {} &&.card.active { color: blue; } }',
@@ -37,15 +37,15 @@ const cases = [
 	},
 	{
 		code: '.outer { .theme &.a + &.b .title {} .theme &.a + &.b .body {} }',
-		output: '.outer { .theme &.a + &.b { & .title {} & .body {} } }',
+		output: '.outer { .theme &.a + &.b { .title {} .body {} } }',
 	},
 	{
 		code: '.outer { .theme & .card .title, .theme & .card .body { color: blue; } }',
-		output: '.outer { .theme & .card { & .title, & .body { color: blue; } } }',
+		output: '.outer { .theme & .card { .title, .body { color: blue; } } }',
 	},
 	{
 		code: '.outer { &.a + &.b .title, &.a + &.b .body { color: blue; } }',
-		output: '.outer { &.a + &.b { & .title, & .body { color: blue; } } }',
+		output: '.outer { &.a + &.b { .title, .body { color: blue; } } }',
 	},
 	{
 		code: '.outer { .theme & .card:is(.a, #missing) { color: blue; } }',
@@ -65,7 +65,7 @@ const cases = [
 	},
 	{
 		code: '.outer { .theme & .card {} @media (color) { @layer theme { .theme & .card .title { color: blue; } } } }',
-		output: '.outer { .theme & .card { @media (color) { @layer theme { & .title { color: blue; } } } } }',
+		output: '.outer { .theme & .card { @media (color) { @layer theme { .title { color: blue; } } } } }',
 	},
 	{
 		code: '.outer { &.a + &.b {} @media (color) { &.a + &.b { color: blue; } } }',
@@ -73,7 +73,7 @@ const cases = [
 	},
 	{
 		code: '.outer { .theme &.a, .theme &.b {} .theme &.a .title, .theme &.b .title { color: blue; } }',
-		output: '.outer { .theme &.a, .theme &.b { & .title { color: blue; } } }',
+		output: '.outer { .theme &.a, .theme &.b { .title { color: blue; } } }',
 	},
 	{
 		code: '.outer { &&.a, &&.b {} &&.b:hover, &&.a:hover { color: blue; } }',
@@ -81,11 +81,11 @@ const cases = [
 	},
 	{
 		code: '.outer { .a, &.b {} .a .title, &.b .title { color: blue; } }',
-		output: '.outer { .a, &.b { & .title { color: blue; } } }',
+		output: '.outer { .a, &.b { .title { color: blue; } } }',
 	},
 	{
 		code: '.outer, #missing { .theme & .card {} .theme & .card .title { color: blue !important; & .body { color: green; } } }',
-		output: '.outer, #missing { .theme & .card { & .title { color: blue !important; & .body { color: green; } } } }',
+		output: '.outer, #missing { .theme & .card { .title { color: blue !important; & .body { color: green; } } } }',
 	},
 	...['\n', '\r\n'].map(lineBreak => ({
 		code: [
@@ -102,7 +102,7 @@ const cases = [
 			'.outer {',
 			'  .theme & .card {',
 			'    color: red;',
-			'    & .title {',
+			'    .title {',
 			'      color: blue;',
 			'    }',
 			'  }',

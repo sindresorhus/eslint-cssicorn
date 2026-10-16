@@ -78,7 +78,7 @@ const cases = [
 	},
 	...['link', 'defined', 'fullscreen', 'autofill', 'modal', 'popover-open'].map(pseudoClass => ({
 		code: `.card:${pseudoClass} { color: red; } .card:${pseudoClass} .title { color: blue; }`,
-		output: `.card:${pseudoClass} { color: red; & .title { color: blue; } }`,
+		output: `.card:${pseudoClass} { color: red; .title { color: blue; } }`,
 	})),
 	{
 		code: 'a:LINK {} a:LINK:hover { color: blue; }',
@@ -86,7 +86,7 @@ const cases = [
 	},
 	{
 		code: String.raw`.card:\44 EFINED {} .card:\44 EFINED .title { color: blue; }`,
-		output: String.raw`.card:\44 EFINED { & .title { color: blue; } }`,
+		output: String.raw`.card:\44 EFINED { .title { color: blue; } }`,
 	},
 	{
 		code: String.raw`.card:\50 OPOVER-OPEN {} .card:\50 OPOVER-OPEN:hover { color: blue; }`,

@@ -21,7 +21,7 @@ const extendedRelatedRuleCases = [
 	},
 	{
 		code: '.card {} .card .title, .card {}',
-		output: '.card { & .title, & {} }',
+		output: '.card { .title, & {} }',
 	},
 	{
 		code: '.card.active {} .card.active .title, .card {}',
@@ -29,13 +29,13 @@ const extendedRelatedRuleCases = [
 	},
 	{
 		code: '.card {} @layer theme { .card .title {} @media (color) { .card .body {} } }',
-		output: '.card { @layer theme { & .title {} @media (color) { & .body {} } } }',
+		output: '.card { @layer theme { .title {} @media (color) { .body {} } } }',
 	},
 	...[
 		['.card, .card.active', '.card', '&, &.active'],
 		['.card.active, .card', '.card', '&.active, &'],
 		['.card, .card.active, .card::before', '.card', '&, &.active, &::before'],
-		['.page > .card, .page > .card .title', '.page > .card', '&, & .title'],
+		['.page > .card, .page > .card .title', '.page > .card', '&, .title'],
 		['[data-kind="CARD" i], [data-kind="CARD" i]:HOVER', '[data-kind="CARD" i]', '&, &:HOVER'],
 		[String.raw`.c\61 rd, .c\61 rd.active`, String.raw`.c\61 rd`, '&, &.active'],
 	].map(([selector, parent, inner]) => ({
@@ -45,9 +45,9 @@ const extendedRelatedRuleCases = [
 	...[
 		['.card.active, .theme .card', '&.active, .theme &'],
 		['.theme .card, .card.active', '.theme &, &.active'],
-		['.card .title, .theme > .card:hover', '& .title, .theme > &:hover'],
+		['.card .title, .theme > .card:hover', '.title, .theme > &:hover'],
 		['.card, .theme .card.active', '&, .theme &.active'],
-		['.card .title, .card', '& .title, &'],
+		['.card .title, .card', '.title, &'],
 		['.theme .card.active, #other + .card::before', '.theme &.active, #other + &::before'],
 		['.theme .card:where(.active)', '.theme &:where(.active)'],
 	].map(([selector, inner]) => ({

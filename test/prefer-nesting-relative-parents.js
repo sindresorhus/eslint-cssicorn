@@ -21,11 +21,11 @@ const cases = [
 	},
 	{
 		code: '.outer { > .card, + .panel {} > .card .title, + .panel .title { color: red; } }',
-		output: '.outer { > .card, + .panel { & .title { color: red; } } }',
+		output: '.outer { > .card, + .panel { .title { color: red; } } }',
 	},
 	{
 		code: '.outer { > &.card, &&.panel {} > &.card .title, &&.panel .title { color: red; } }',
-		output: '.outer { > &.card, &&.panel { & .title { color: red; } } }',
+		output: '.outer { > &.card, &&.panel { .title { color: red; } } }',
 	},
 	{
 		code: '.outer { > .card:where(&), .panel {} > .card:where(&).active, .panel.active { color: red; } }',
@@ -37,7 +37,7 @@ const cases = [
 	},
 	{
 		code: '@media (color) { .outer { > .card .title { color: red; } > .card .body { color: blue; &::before { content: "test"; } } } }',
-		output: '@media (color) { .outer { > .card { & .title { color: red; } & .body { color: blue; &::before { content: "test"; } } } } }',
+		output: '@media (color) { .outer { > .card { .title { color: red; } .body { color: blue; &::before { content: "test"; } } } } }',
 	},
 	...['\n', '\r\n'].map(lineBreak => ({
 		code: ['.outer {', '  > .card {', '    color: red;', '  }', '  > .card.active {', '    color: blue;', '  }', '}'].join(lineBreak),

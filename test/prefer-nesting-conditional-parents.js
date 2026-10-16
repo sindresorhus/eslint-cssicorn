@@ -9,11 +9,11 @@ const {test} = getTester(import.meta, 'prefer-nesting');
 const cases = [
 	{
 		code: '.card > .title { color: blue; } @media (width > 600px) { .card { color: red; } }',
-		output: '.card { & > .title { color: blue; } @media (width > 600px) { color: red; } }',
+		output: '.card { > .title { color: blue; } @media (width > 600px) { color: red; } }',
 	},
 	{
 		code: '.field-body .field .field { margin-bottom: 0; } @media (width > 769px) { .field-body { display: flex; & > .field { flex-grow: 1; } } }',
-		output: '.field-body { & .field .field { margin-bottom: 0; } @media (width > 769px) { display: flex; & > .field { flex-grow: 1; } } }',
+		output: '.field-body { .field .field { margin-bottom: 0; } @media (width > 769px) { display: flex; & > .field { flex-grow: 1; } } }',
 	},
 	{
 		code: '@media (width < 600px) { .card.active { color: blue !important; } } @layer theme { .card { color: red !important; } }',
@@ -21,19 +21,19 @@ const cases = [
 	},
 	{
 		code: '.a .title, .b .title { color: blue; } @media (color) { .a, .b { color: red; } }',
-		output: '.a, .b { & .title { color: blue; } @media (color) { color: red; } }',
+		output: '.a, .b { .title { color: blue; } @media (color) { color: red; } }',
 	},
 	{
 		code: '.b.active, .a.active, .a .title, .b .title { color: blue; } @layer { .a, .b { color: red; } }',
-		output: '.a, .b { &.active, & .title { color: blue; } @layer { color: red; } }',
+		output: '.a, .b { &.active, .title { color: blue; } @layer { color: red; } }',
 	},
 	{
 		code: '@media (color) { .a .title, .b .title { color: blue; } } @layer theme { .a, .b { color: red; } }',
-		output: '.a, .b { @media (color) { & .title { color: blue; } } @layer theme { color: red; } }',
+		output: '.a, .b { @media (color) { .title { color: blue; } } @layer theme { color: red; } }',
 	},
 	{
 		code: '.card.active { color: blue; } @media (color) { .card { color: red; } } .card .title { color: green; } @layer theme { .card { color: purple; } }',
-		output: '.card { &.active { color: blue; } @media (color) { color: red; } & .title { color: green; } @layer theme { color: purple; } }',
+		output: '.card { &.active { color: blue; } @media (color) { color: red; } .title { color: green; } @layer theme { color: purple; } }',
 	},
 	{
 		code: '.card.active { color: blue; } @media (color) { @supports (display: grid) { .card { display: grid; } } }',
@@ -78,7 +78,7 @@ const cases = [
 	...['\n', '\r\n'].flatMap(lineBreak => [
 		{
 			code: `.card .title {${lineBreak}  color: blue;${lineBreak}}${lineBreak}@media (color) {${lineBreak}  .card {${lineBreak}    color: red;${lineBreak}  }${lineBreak}}`,
-			output: `.card {${lineBreak}  & .title {${lineBreak}    color: blue;${lineBreak}  }${lineBreak}  @media (color) {${lineBreak}    color: red;${lineBreak}  }${lineBreak}}`,
+			output: `.card {${lineBreak}  .title {${lineBreak}    color: blue;${lineBreak}  }${lineBreak}  @media (color) {${lineBreak}    color: red;${lineBreak}  }${lineBreak}}`,
 		},
 		{
 			code: `h1, .h1 {${lineBreak}  font-size: 2rem;${lineBreak}}${lineBreak}@media (color) {${lineBreak}  h1, .h1 {${lineBreak}    font-size: 3rem;${lineBreak}  }${lineBreak}}`,

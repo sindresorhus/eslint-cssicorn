@@ -23,7 +23,7 @@ Nest shared literal prefixes in selector lists and adjacent rules, including adj
 
 /* ✅ */
 .card, .panel {
-	& .title, & .body {
+	.title, .body {
 		color: red;
 	}
 }
@@ -46,7 +46,7 @@ Nest related rules through `@media` and `@layer` chains, including sibling group
 .card {
 	color: red;
 	@media (width > 600px) {
-		& .title {
+		.title {
 			color: blue;
 		}
 	}

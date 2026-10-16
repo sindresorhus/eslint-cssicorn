@@ -9,11 +9,11 @@ const {test} = getTester(import.meta, 'prefer-nesting');
 const cases = [
 	{
 		code: '.card .title, .card .subtitle { color: blue; } .card .body, .card .footer { color: green; }',
-		output: '.card { & .title, & .subtitle { color: blue; } & .body, & .footer { color: green; } }',
+		output: '.card { .title, .subtitle { color: blue; } .body, .footer { color: green; } }',
 	},
 	{
 		code: '.card .title, .card .subtitle { color: blue; } .card .body { color: green; }',
-		output: '.card { & .title, & .subtitle { color: blue; } & .body { color: green; } }',
+		output: '.card { .title, .subtitle { color: blue; } .body { color: green; } }',
 	},
 	{
 		code: '.card:hover { color: blue; } .card:focus, .card:active { color: green; }',
@@ -29,47 +29,47 @@ const cases = [
 	},
 	{
 		code: '.card .title, .card .subtitle { color: blue !important; & .body { color: orange; } } .card .footer { --text: "a & b"; color: green !important; }',
-		output: '.card { & .title, & .subtitle { color: blue !important; & .body { color: orange; } } & .footer { --text: "a & b"; color: green !important; } }',
+		output: '.card { .title, .subtitle { color: blue !important; & .body { color: orange; } } .footer { --text: "a & b"; color: green !important; } }',
 	},
 	{
 		code: String.raw`.c\61 rd .t\69 tle, .c\61 rd .subtitle { color: blue; } .c\61 rd:HOVER { color: green; }`,
-		output: String.raw`.c\61 rd { & .t\69 tle, & .subtitle { color: blue; } &:HOVER { color: green; } }`,
+		output: String.raw`.c\61 rd { .t\69 tle, .subtitle { color: blue; } &:HOVER { color: green; } }`,
 	},
 	{
 		code: '.a .title, .b .title { color: blue; } .b .body, .a .body { color: green; }',
-		output: '.a, .b { & .title { color: blue; } & .body { color: green; } }',
+		output: '.a, .b { .title { color: blue; } .body { color: green; } }',
 	},
 	{
 		code: '.b .title, .a .title, .b .subtitle, .a .subtitle { color: blue; } .a .body, .b .body { color: green; }',
-		output: '.b, .a { & .title, & .subtitle { color: blue; } & .body { color: green; } }',
+		output: '.b, .a { .title, .subtitle { color: blue; } .body { color: green; } }',
 	},
 	{
 		code: 'thead > th, tfoot > th { text-align: left; } thead > td, tfoot > td { text-align: right; }',
-		output: 'thead, tfoot { & > th { text-align: left; } & > td { text-align: right; } }',
+		output: 'thead, tfoot { > th { text-align: left; } > td { text-align: right; } }',
 	},
 	{
 		code: '.a .title::before, .b .title::before { content: "title"; } .a .body::after, .b .body::after { content: "body"; }',
-		output: '.a, .b { & .title::before { content: "title"; } & .body::after { content: "body"; } }',
+		output: '.a, .b { .title::before { content: "title"; } .body::after { content: "body"; } }',
 	},
 	{
 		code: '.outer, #missing { &.a .title, &.b .title { color: blue; } &.a .body, &.b .body { color: green; } }',
-		output: '.outer, #missing { &.a, &.b { & .title { color: blue; } & .body { color: green; } } }',
+		output: '.outer, #missing { &.a, &.b { .title { color: blue; } .body { color: green; } } }',
 	},
 	{
 		code: '.outer { .a&& .title, .b&& .title { color: blue; } .a&& .body, .b&& .body { color: green; } }',
-		output: '.outer { .a&&, .b&& { & .title { color: blue; } & .body { color: green; } } }',
+		output: '.outer { .a&&, .b&& { .title { color: blue; } .body { color: green; } } }',
 	},
 	{
 		code: '.card .title, .card .subtitle { color: blue; } @media (color) { .card .body { color: green; } }',
-		output: '.card { & .title, & .subtitle { color: blue; } @media (color) { & .body { color: green; } } }',
+		output: '.card { .title, .subtitle { color: blue; } @media (color) { .body { color: green; } } }',
 	},
 	{
 		code: '@layer theme { .card .title, .card .subtitle { color: blue; } } .card .body { color: green; }',
-		output: '.card { @layer theme { & .title, & .subtitle { color: blue; } } & .body { color: green; } }',
+		output: '.card { @layer theme { .title, .subtitle { color: blue; } } .body { color: green; } }',
 	},
 	{
 		code: '@media (color) { .a .title, .b .title { color: blue; } } @layer theme { .a .body, .b .body { color: green; } }',
-		output: '.a, .b { @media (color) { & .title { color: blue; } } @layer theme { & .body { color: green; } } }',
+		output: '.a, .b { @media (color) { .title { color: blue; } } @layer theme { .body { color: green; } } }',
 	},
 	...['\n', '\r\n'].flatMap(lineBreak => ['\t', '  '].map(indentation => ({
 		code: [
@@ -82,10 +82,10 @@ const cases = [
 		].join(lineBreak),
 		output: [
 			'.card {',
-			`${indentation}& .title, & .subtitle {`,
+			`${indentation}.title, .subtitle {`,
 			`${indentation}${indentation}color: blue;`,
 			`${indentation}}`,
-			`${indentation}& .body {`,
+			`${indentation}.body {`,
 			`${indentation}${indentation}color: green;`,
 			`${indentation}}`,
 			'}',
@@ -158,11 +158,11 @@ nodeTest('adjacent list discovery retains existing coverage and parser boundarie
 		},
 		{
 			code: '.card .title, .card .subtitle {} @supports (display: grid) { .card .body {} }',
-			output: '.card { & .title, & .subtitle {} } @supports (display: grid) { .card .body {} }',
+			output: '.card { .title, .subtitle {} } @supports (display: grid) { .card .body {} }',
 		},
 		{
 			code: '.card .title, .card .subtitle {} .unrelated {} .card .body {}',
-			output: '.card { & .title, & .subtitle {} } .unrelated {} .card .body {}',
+			output: '.card { .title, .subtitle {} } .unrelated {} .card .body {}',
 		},
 	];
 	for (const {code, output} of cases) {

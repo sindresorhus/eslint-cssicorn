@@ -23,7 +23,7 @@ test({
 	invalid: [
 		{
 			code: '.outer { .card:is(#1, .foo) {} .card:is(#1, .foo) .title { color: red; } }',
-			output: '.outer { .card:is(#1, .foo) { & .title { color: red; } } }',
+			output: '.outer { .card:is(#1, .foo) { .title { color: red; } } }',
 			errors: [{messageId: 'prefer-nesting/related-rules'}],
 		},
 		{

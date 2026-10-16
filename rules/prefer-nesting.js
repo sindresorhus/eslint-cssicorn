@@ -489,8 +489,9 @@ const getPrefixedSelectorText = (parentSelector, selector, sourceCode) => {
 		return '&';
 	}
 
+	// A nested selector that starts with a combinator or has no `&` is relative to the parent, so `& .title` is written as `.title`.
 	const innerNodes = selector.children.slice(parentNodes.length + (isDescendantCombinator(suffix) ? 1 : 0));
-	return (suffix.type === 'Combinator' ? '& ' : '&') + getNodesText(innerNodes, sourceCode);
+	return (suffix.type === 'Combinator' ? '' : '&') + getNodesText(innerNodes, sourceCode);
 };
 
 const getRelativeSelectorText = (parentSelector, selector, rule, context) => {
@@ -548,6 +549,9 @@ const getRelativeSelectorText = (parentSelector, selector, rule, context) => {
 	return prefix + (previous.type === 'Combinator' ? ' &' : '&') + suffix;
 };
 
+// The bundled parser reads some nested selectors as declarations, like `span::before`, and rejects some valid ones, like `|a &`, and the fixed file must still parse. The rule skips `@scope`, so an added `&` always means the same as the implicit one.
+const getParsableNestedSelectorText = text => getParsableNestedRulePrelude(`${text} `, {canAddNestingSelector: true})?.slice(0, -1);
+
 const getGroupedSelectorText = (parents, rule, context, getSelectorText = getRelativeSelectorText) => {
 	const groups = parents.map(() => new Set());
 	const innerSelectors = new Set();
@@ -575,8 +579,7 @@ const getGroupedSelectorText = (parents, rule, context, getSelectorText = getRel
 		return;
 	}
 
-	const text = [...innerSelectors].join(', ');
-	return isParsedAsNestedRule(`${text} {}`) ? text : undefined;
+	return getParsableNestedSelectorText([...innerSelectors].join(', '));
 };
 
 const getRelatedSelectorText = (parents, rule, context) => {
@@ -602,8 +605,7 @@ const getRelatedSelectorText = (parents, rule, context) => {
 		previousEnd = sourceCode.getRange(selector)[1];
 	}
 
-	// The bundled parser rejects some valid nested selectors, like `|a &`, and the fixed file must still parse.
-	return isParsedAsNestedRule(`${result} {}`) ? result : undefined;
+	return getParsableNestedSelectorText(result);
 };
 
 const getInferredParents = (rule, context) => {

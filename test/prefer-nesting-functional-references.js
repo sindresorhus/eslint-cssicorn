@@ -25,7 +25,7 @@ const cases = [
 		':not(:where(&)).card',
 	].map(parent => ({
 		code: `.outer, #missing { ${parent} {} ${parent} .title { color: blue; } }`,
-		output: `.outer, #missing { ${parent} { & .title { color: blue; } } }`,
+		output: `.outer, #missing { ${parent} { .title { color: blue; } } }`,
 	})),
 	{
 		code: '.outer { .card:HAS(> &) {} .card:HAS(> &).active { color: blue; } }',
@@ -33,11 +33,11 @@ const cases = [
 	},
 	{
 		code: String.raw`.outer { .c\61 rd:not(&) {} .c\61 rd:not(&) > .t\69 tle { color: blue; } }`,
-		output: String.raw`.outer { .c\61 rd:not(&) { & > .t\69 tle { color: blue; } } }`,
+		output: String.raw`.outer { .c\61 rd:not(&) { > .t\69 tle { color: blue; } } }`,
 	},
 	{
 		code: '.outer { .card:has(> &:not(.disabled)) .title, .card:has(> &:not(.disabled)).active { color: blue; } }',
-		output: '.outer { .card:has(> &:not(.disabled)) { & .title, &.active { color: blue; } } }',
+		output: '.outer { .card:has(> &:not(.disabled)) { .title, &.active { color: blue; } } }',
 	},
 	{
 		code: '.outer { .card:is(&, :where(.foo))::before { content: "test"; } .card:is(&, :where(.foo))::after { content: "test"; } }',
@@ -74,7 +74,7 @@ const cases = [
 	},
 	{
 		code: '@media (color) { .outer { .card:has(> &) {} @layer theme { .card:has(> &) .title { color: blue; } } } }',
-		output: '@media (color) { .outer { .card:has(> &) { @layer theme { & .title { color: blue; } } } } }',
+		output: '@media (color) { .outer { .card:has(> &) { @layer theme { .title { color: blue; } } } } }',
 	},
 	{
 		code: '.outer { .card:has(> &) {} @media (color) { .card:has(> &) { color: blue; } } }',
@@ -143,7 +143,7 @@ const cases = [
 			'.outer {',
 			`${indentation}.card:has(> &) {`,
 			`${indentation.repeat(2)}color: red;`,
-			`${indentation.repeat(2)}& .title {`,
+			`${indentation.repeat(2)}.title {`,
 			`${indentation.repeat(3)}color: blue;`,
 			`${indentation.repeat(2)}}`,
 			`${indentation}}`,

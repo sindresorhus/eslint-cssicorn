@@ -13,11 +13,11 @@ const busySelector = `[aria-busy=true]:not(input, select, textarea).contrast:is(
 const cases = [
 	...[':host', ':host(.active)', ':host-context(.theme)', 'slot:has-slotted'].map(parent => ({
 		code: `${parent} { color: red; } ${parent} .title { color: blue; }`,
-		output: `${parent} { color: red; & .title { color: blue; } }`,
+		output: `${parent} { color: red; .title { color: blue; } }`,
 	})),
 	{
 		code: ':host { box-sizing: border-box; } :host *, :host *::before, :host *::after { box-sizing: inherit; }',
-		output: ':host { box-sizing: border-box; & *, & *::before, & *::after { box-sizing: inherit; } }',
+		output: ':host { box-sizing: border-box; *, *::before, *::after { box-sizing: inherit; } }',
 	},
 	{
 		code: '.label { :host(:not(:last-of-type)) & { color: blue; } :host(:not(:last-of-type)) &:hover { color: red; } :host(:not(:last-of-type)) &:active { color: green; } }',
@@ -29,7 +29,7 @@ const cases = [
 	},
 	{
 		code: String.raw`:h\6f st {} :h\6f st .t\69 tle { color: blue; }`,
-		output: String.raw`:h\6f st { & .t\69 tle { color: blue; } }`,
+		output: String.raw`:h\6f st { .t\69 tle { color: blue; } }`,
 	},
 	{
 		code: 'slot:HAS-SLOTTED {} slot:HAS-SLOTTED::before { content: "test"; }',
@@ -41,15 +41,15 @@ const cases = [
 	},
 	{
 		code: ':host(.active) .title, :host(.active) .body { color: blue; }',
-		output: ':host(.active) { & .title, & .body { color: blue; } }',
+		output: ':host(.active) { .title, .body { color: blue; } }',
 	},
 	{
 		code: ':host-context(.theme) {} @media (color) { :host-context(.theme) > .title { color: blue !important; & .body { color: green; } } }',
-		output: ':host-context(.theme) { @media (color) { & > .title { color: blue !important; & .body { color: green; } } } }',
+		output: ':host-context(.theme) { @media (color) { > .title { color: blue !important; & .body { color: green; } } } }',
 	},
 	{
 		code: '[data-kind="CARD" i]:host {} [data-kind="CARD" i]:host .title { color: blue; }',
-		output: '[data-kind="CARD" i]:host { & .title { color: blue; } }',
+		output: '[data-kind="CARD" i]:host { .title { color: blue; } }',
 	},
 	...[' ', ' > ', ' + ', ' ~ '].map(combinator => ({
 		code: `.card { color: red; } body${combinator}.card .title { color: blue; }`,
@@ -114,7 +114,7 @@ const cases = [
 	...['\n', '\r\n'].flatMap(lineBreak => ['  ', '\t'].flatMap(indentation => [
 		{
 			code: `:host {${lineBreak}${indentation}color: red;${lineBreak}}${lineBreak}:host .title {${lineBreak}${indentation}color: blue;${lineBreak}}`,
-			output: `:host {${lineBreak}${indentation}color: red;${lineBreak}${indentation}& .title {${lineBreak}${indentation.repeat(2)}color: blue;${lineBreak}${indentation}}${lineBreak}}`,
+			output: `:host {${lineBreak}${indentation}color: red;${lineBreak}${indentation}.title {${lineBreak}${indentation.repeat(2)}color: blue;${lineBreak}${indentation}}${lineBreak}}`,
 		},
 		{
 			code: `.card {${lineBreak}${indentation}color: red;${lineBreak}}${lineBreak}body .theme .card {${lineBreak}${indentation}color: blue;${lineBreak}}`,

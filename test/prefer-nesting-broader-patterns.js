@@ -13,7 +13,7 @@ const cases = [
 	},
 	{
 		code: 'input:not([type=submit]) .card, textarea:not([readonly]) .card { color: blue; }',
-		output: 'input:not([type=submit]), textarea:not([readonly]) { & .card { color: blue; } }',
+		output: 'input:not([type=submit]), textarea:not([readonly]) { .card { color: blue; } }',
 	},
 	{
 		code: 'input:not([type=submit]):focus, textarea:not([readonly]):focus { color: blue; }',
@@ -37,7 +37,7 @@ const cases = [
 	},
 	{
 		code: '.page .a, .theme .b {} .theme .b .title, .page .a .title { color: blue; }',
-		output: '.page .a, .theme .b { & .title { color: blue; } }',
+		output: '.page .a, .theme .b { .title { color: blue; } }',
 	},
 	{
 		code: ':where(.a), :where(.b) {} :where(.a).active, :where(.b).active { color: blue; }',
@@ -45,11 +45,11 @@ const cases = [
 	},
 	{
 		code: '.card {} @media (color) { @layer first { .card .title { color: blue; } } @layer second { .card:hover { color: green; } } }',
-		output: '.card { @media (color) { @layer first { & .title { color: blue; } } @layer second { &:hover { color: green; } } } }',
+		output: '.card { @media (color) { @layer first { .title { color: blue; } } @layer second { &:hover { color: green; } } } }',
 	},
 	{
 		code: '.card {} @media (color) { .card .title { color: blue; } @layer theme { .card:hover { color: green; } } }',
-		output: '.card { @media (color) { & .title { color: blue; } @layer theme { &:hover { color: green; } } } }',
+		output: '.card { @media (color) { .title { color: blue; } @layer theme { &:hover { color: green; } } } }',
 	},
 	{
 		code: '.card {} @supports (display: grid) { @media (color) { .card { color: blue; } } @layer theme { .card { color: green; } } }',
@@ -57,11 +57,11 @@ const cases = [
 	},
 	{
 		code: '.card {} @supports (display: grid) { @media (color) { .card .title {} } @layer theme { .card .body {} } }',
-		output: '.card {} @supports (display: grid) { .card { @media (color) { & .title {} } @layer theme { & .body {} } } }',
+		output: '.card {} @supports (display: grid) { .card { @media (color) { .title {} } @layer theme { .body {} } } }',
 	},
 	{
 		code: '.card {} @media (color) { @layer { @media (width > 0px) { .card .title { color: blue; & .body { color: green; } } } } }',
-		output: '.card { @media (color) { @layer { @media (width > 0px) { & .title { color: blue; & .body { color: green; } } } } } }',
+		output: '.card { @media (color) { @layer { @media (width > 0px) { .title { color: blue; & .body { color: green; } } } } } }',
 	},
 	{
 		code: '.card {} @media (width > 0px) { @supports (display: grid) { .card {} } }',
@@ -73,7 +73,7 @@ const cases = [
 	},
 	{
 		code: '.outer { & .card .title {} & .card .body {} }',
-		output: '.outer { & .card { & .title {} & .body {} } }',
+		output: '.outer { & .card { .title {} .body {} } }',
 	},
 	{
 		code: '.page .card {} .theme .page .card {}',
@@ -128,8 +128,8 @@ const cases = [
 		output: '.card { .a& { color: blue; } .b& { color: green; } }',
 	},
 	...[
-		['.a .title, .b .title', '& .title'],
-		['.b.active, .a .title, .a.active, .b .title', '&.active, & .title'],
+		['.a .title, .b .title', '.title'],
+		['.b.active, .a .title, .a.active, .b .title', '&.active, .title'],
 		['.a::before, .b::before, .b:hover, .a:hover', '&::before, &:hover'],
 		['.a, .b, .a.active, .b.active', '&, &.active'],
 	].map(([selectors, inner]) => ({
@@ -138,7 +138,7 @@ const cases = [
 	})),
 	{
 		code: '.a, .b {} @media (color) { .b .title, .a .title { color: blue; } }',
-		output: '.a, .b { @media (color) { & .title { color: blue; } } }',
+		output: '.a, .b { @media (color) { .title { color: blue; } } }',
 	},
 	{
 		code: '.outer, #outer { .a, .b {} .a:hover, .b:hover { color: blue; } }',
@@ -149,9 +149,9 @@ const cases = [
 		output: '.outer, #outer { &.a, &.b { &:hover { color: blue; } } }',
 	},
 	...[
-		['& .card {} & .card .title { color: blue; }', '& .card { & .title { color: blue; } }'],
-		['&.active {} &.active .title { color: blue; }', '&.active { & .title { color: blue; } }'],
-		['& .card .title, & .card .body { color: blue; }', '& .card { & .title, & .body { color: blue; } }'],
+		['& .card {} & .card .title { color: blue; }', '& .card { .title { color: blue; } }'],
+		['&.active {} &.active .title { color: blue; }', '&.active { .title { color: blue; } }'],
+		['& .card .title, & .card .body { color: blue; }', '& .card { .title, .body { color: blue; } }'],
 		['&.card:is(.a, #b) { color: blue; }', '&.card { &:is(.a, #b) { color: blue; } }'],
 		['& .card :is(.a, .b) { color: blue; }', '& .card { .a, .b { color: blue; } }'],
 	].map(([original, output]) => ({code: `.outer, #outer { ${original} }`, output: `.outer, #outer { ${output} }`})),
@@ -165,7 +165,7 @@ const cases = [
 	},
 	{
 		code: '.card {} @media (color) { @layer theme { .card .title { color: blue; } .card:hover { color: green; } } }',
-		output: '.card { @media (color) { @layer theme { & .title { color: blue; } &:hover { color: green; } } } }',
+		output: '.card { @media (color) { @layer theme { .title { color: blue; } &:hover { color: green; } } } }',
 	},
 	{
 		code: '.card {} @layer theme { @media (color) { .theme .card.active { color: blue; } } }',
@@ -240,7 +240,7 @@ const cases = [
 	]),
 	{
 		code: '.card {\n\tcolor: red;\n}\n@media (color) {\n\t@layer theme {\n\t\t.card .title {\n\t\t\tcolor: blue;\n\t\t}\n\t}\n}',
-		output: '.card {\n\tcolor: red;\n\t@media (color) {\n\t\t@layer theme {\n\t\t\t& .title {\n\t\t\t\tcolor: blue;\n\t\t\t}\n\t\t}\n\t}\n}',
+		output: '.card {\n\tcolor: red;\n\t@media (color) {\n\t\t@layer theme {\n\t\t\t.title {\n\t\t\t\tcolor: blue;\n\t\t\t}\n\t\t}\n\t}\n}',
 	},
 ];
 
@@ -268,7 +268,7 @@ test({
 	invalid: [
 		{
 			code: '.a, .a * {} .a * .title, .a .title {}',
-			output: '.a { &, & * {} } .a { & * .title, & .title {} }',
+			output: '.a { &, * {} } .a { * .title, .title {} }',
 			errors: 2,
 		},
 		...cases.map(({code, output}) => ({code, output, errors: 1})),
