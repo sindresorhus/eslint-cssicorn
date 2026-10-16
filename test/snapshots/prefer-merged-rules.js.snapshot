@@ -1253,6 +1253,9 @@ Message:
 > 1 | .nav { a:hover { color: red; } button:focus { color: red; } span:hover & { color: red; } div:hover { color: red; } }
     |                                ^^^^^^^^^^^^ Merge these adjacent rules with identical declarations.
 
+Output:
+  1 | .nav { & a:hover, button:focus, span:hover &, div:hover { color: red; } }
+
 `;
 
 exports[`invalid(73): @scope (.s) { .x { a:hover { color: red; } button:focus { color: red; } span:hover { color: red; } div:hover { color: red; } } } 1`] = `

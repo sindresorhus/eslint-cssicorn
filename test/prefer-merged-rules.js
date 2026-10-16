@@ -257,7 +257,7 @@ test.snapshot({
 		'.parent { @media (width > 1px) { color: blue; } @media (width > 1px) { & { color: red; } } }',
 		'.parent { @media (width > 1px) { color: blue; } @media (width > 1px) { & { color: red; } } @media (width > 1px) { color: green; } }',
 		'.parent { @media (width > 1px) { & { color: red; } } @media (width > 1px) { @layer x; } @media (width > 1px) { color: blue; } }',
-		// The merged list already has `&`, so the fix cannot add `& `
+		// The merged list has `&` only in a later selector, so the fix can add `& ` before the first one
 		'.nav { a:hover { color: red; } button:focus { color: red; } span:hover & { color: red; } div:hover { color: red; } }',
 		// The fix does not add `& ` inside `@scope`
 		'@scope (.s) { .x { a:hover { color: red; } button:focus { color: red; } span:hover { color: red; } div:hover { color: red; } } }',

@@ -182,16 +182,19 @@ ruleTest({
 			output: String.raw`.foo\61 :hover {}`,
 			errors: [{messageId: 'no-useless-is'}],
 		},
-		// `@eslint/css` can parse a nested rule that starts like `a::before` or `a ::before` as a declaration. To keep it simple, the explicit `&` is not added to a selector list that has `&` anywhere, or in `@scope`.
-		...[
-			'.wrap { :is(a)::before, & .b { color: red; } }',
-			'@scope (.x) { .wrap { :is(a)::before { color: red; } } }',
-		].map(code => ({code, errors: [{messageId: 'no-useless-is'}]})),
+		// `@eslint/css` can parse a nested rule that starts like `a::before` or `a ::before` as a declaration. To keep it simple, the explicit `&` is not added in `@scope`.
+		{code: '@scope (.x) { .wrap { :is(a)::before { color: red; } } }', errors: [{messageId: 'no-useless-is'}]},
 		// One fix applies all changes in a nested prelude, so when the result cannot be parsed, none of them are fixed.
-		{code: '.wrap { :is(a)::before, & .b, :is(.c) { color: red; } }', errors: [{messageId: 'no-useless-is'}, {messageId: 'no-useless-is'}]},
+		{code: '@scope (.x) { .wrap { :is(a)::before, :is(.c) { color: red; } } }', errors: [{messageId: 'no-useless-is'}, {messageId: 'no-useless-is'}]},
+		{
+			code: '.wrap { :is(a)::before, & .b, :is(.c) { color: red; } }',
+			output: '.wrap { & a::before, & .b, .c { color: red; } }',
+			errors: [{messageId: 'no-useless-is'}, {messageId: 'no-useless-is'}],
+		},
 		...[
 			// The fix adds an explicit `&`, which does not change what the nested rule matches.
 			['.wrap { :is(a)::before { color: red; } }', '.wrap { & a::before { color: red; } }'],
+			['.wrap { :is(a)::before, & .b { color: red; } }', '.wrap { & a::before, & .b { color: red; } }'],
 			['.wrap { :is(A)::BEFORE { color: red; } }', '.wrap { & A::BEFORE { color: red; } }'],
 			['.wrap { :is(a) ::before { color: red; } }', '.wrap { & a ::before { color: red; } }'],
 			['.wrap { :is(a)\n::before { color: red; } }', '.wrap { & a\n::before { color: red; } }'],

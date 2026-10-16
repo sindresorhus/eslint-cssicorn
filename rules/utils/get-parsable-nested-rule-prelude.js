@@ -3,6 +3,9 @@
 import {tokenize, tokenTypes} from '@eslint/css-tree';
 import isParsedAsNestedRule from './is-parsed-as-nested-rule.js';
 
+const openingTypes = new Set([tokenTypes.Function, tokenTypes.LeftParenthesis, tokenTypes.LeftSquareBracket]);
+const closingTypes = new Set([tokenTypes.RightParenthesis, tokenTypes.RightSquareBracket]);
+
 /**
 Get a nested rule prelude that the parser reads as a rule.
 
@@ -21,10 +24,22 @@ export default function getParsableNestedRulePrelude(prelude, {canAddNestingSele
 		return;
 	}
 
-	// A selector with `&` does not get the implicit `&`. Only the first selector matters, but to keep it simple, skip a list with `&` anywhere.
+	// A selector with `&` does not get the implicit `&`. The `&` is added only before the first selector, so only the first selector matters. It ends at the first comma outside of parentheses and brackets.
 	let hasNestingSelector = false;
+	let isFirstSelector = true;
+	let depth = 0;
 	tokenize(prelude, (type, start) => {
-		if (type === tokenTypes.Delim && prelude[start] === '&') {
+		if (!isFirstSelector) {
+			return;
+		}
+
+		if (openingTypes.has(type)) {
+			depth++;
+		} else if (closingTypes.has(type)) {
+			depth--;
+		} else if (type === tokenTypes.Comma && depth === 0) {
+			isFirstSelector = false;
+		} else if (type === tokenTypes.Delim && prelude[start] === '&') {
 			hasNestingSelector = true;
 		}
 	});

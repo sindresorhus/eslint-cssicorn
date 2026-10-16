@@ -150,11 +150,12 @@ ruleTest({
 		{code: '.card { A:AFTER { color: red; } }', output: '.card { & A::AFTER { color: red; } }', errors: 1},
 		{code: '.card { a :after { color: red; } }', output: '.card { & a ::after { color: red; } }', errors: 1},
 		{code: '.card { @media (width > 1px) { a:after { color: red; } } }', output: '.card { @media (width > 1px) { & a::after { color: red; } } }', errors: 1},
-		// To keep it simple, the explicit `&` is not added to a selector list that has `&` anywhere, or in `@scope`.
-		{code: '.card { a:after, & .b { color: red; } }', errors: 1},
-		// One fix applies all changes in a nested prelude, so when the result cannot be parsed, none of them are fixed.
-		{code: '.card { a:after, & .b:before { color: red; } }', errors: 2},
+		{code: '.card { a:after, & .b { color: red; } }', output: '.card { & a::after, & .b { color: red; } }', errors: 1},
+		{code: '.card { a:after, & .b:before { color: red; } }', output: '.card { & a::after, & .b::before { color: red; } }', errors: 2},
+		// To keep it simple, the explicit `&` is not added in `@scope`.
 		{code: '@scope (.x) { .card { a:after { color: red; } } }', errors: 1},
+		// One fix applies all changes in a nested prelude, so when the result cannot be parsed, none of them are fixed.
+		{code: '@scope (.x) { .card { a:after, .b:before { color: red; } } }', errors: 2},
 		{code: '.card { a:before, b:after { color: red; } }', output: '.card { & a::before, b::after { color: red; } }', errors: 2},
 		// The parser looks ahead a limited number of tokens, so it reads a long selector list starting with `a:hover` as a declaration.
 		{code: '.menu {\n\ta:hover, ul li.item.active:after { color: red; }\n}', output: '.menu {\n\t& a:hover, ul li.item.active::after { color: red; }\n}', errors: 1},
