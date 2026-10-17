@@ -71,7 +71,16 @@ const cases = [
 	},
 	...['\n', '\r\n'].flatMap(lineBreak => ['  ', '\t'].map(indentation => ({
 		code: ['.card .title {', `${indentation}color: red;`, '}', '.card .body {', `${indentation}color: blue;`, '}'].join(lineBreak),
-		output: ['.card {', `${indentation}.title {`, `${indentation.repeat(2)}color: red;`, `${indentation}}`, `${indentation}.body {`, `${indentation.repeat(2)}color: blue;`, `${indentation}}`, '}'].join(lineBreak),
+		output: [
+			'.card {',
+			`${indentation}.title {`,
+			`${indentation.repeat(2)}color: red;`,
+			`${indentation}}`,
+			`${indentation}.body {`,
+			`${indentation.repeat(2)}color: blue;`,
+			`${indentation}}`,
+			'}',
+		].join(lineBreak),
 	}))),
 ];
 
