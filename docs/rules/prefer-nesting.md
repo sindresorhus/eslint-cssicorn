@@ -89,7 +89,7 @@ a {
 }
 ```
 
-Following `@media` and `@layer` blocks can contain rules extending the existing parent. Paths through `@supports`, `@container`, or `@starting-style` require exact parent selectors and declaration-only overrides:
+Following `@media` and `@layer` blocks can contain rules extending the existing parent. A parser limitation restricts paths through `@supports`, `@container`, or `@starting-style` to exact parent selectors and declaration-only overrides, although [native CSS permits nested style rules in these blocks](https://drafts.csswg.org/css-nesting/#conditionals):
 
 ```css
 /* ❌ */
