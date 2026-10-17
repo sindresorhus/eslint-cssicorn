@@ -63,7 +63,7 @@ Attached groups with a following suffix can be expanded across multiple autofix 
 }
 ```
 
-Merge an uninterrupted run of following rules into an existing parent. The parent must match the beginning of each selector:
+Merge an uninterrupted run of following rules into an existing parent:
 
 ```css
 /* ❌ */
@@ -85,6 +85,26 @@ a {
 	}
 	&.upper {
 		color: green;
+	}
+}
+```
+
+Following rules can also add a context before the existing parent selector. Contextual merges require a single compound parent selector outside any ancestor style rule:
+
+```css
+/* ❌ */
+.button {
+	color: black;
+}
+[data-theme=dark] .button {
+	color: white;
+}
+
+/* ✅ */
+.button {
+	color: black;
+	[data-theme=dark] & {
+		color: white;
 	}
 }
 ```
@@ -115,7 +135,7 @@ Following `@media` and `@layer` blocks can contain rules extending the existing 
 
 ## Intentionally ignored
 
-The rule does not infer new parents from sibling rules or selector lists, reverse selectors to create contextual nesting, or introduce nesting solely to retain `:is()` or `:where()`:
+The rule does not infer new parents from sibling rules or selector lists, reorder compound selectors to find a parent, or introduce nesting solely to retain `:is()` or `:where()`:
 
 ```css
 /* ✅ */
@@ -123,9 +143,6 @@ a.under { color: red; }
 a.upper { color: blue; }
 
 .under a, .upper a { color: red; }
-
-.card { color: red; }
-.theme .card { color: blue; }
 
 a:is(.under, .upper) { color: red; }
 .card :is(.title, #title) { color: red; }

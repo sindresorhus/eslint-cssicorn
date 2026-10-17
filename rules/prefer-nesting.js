@@ -449,6 +449,33 @@ const getPrefixedSelectorText = (parentSelector, selector, sourceCode) => {
 	return (suffix.type === 'Combinator' ? '' : '&') + getNodesText(innerNodes, sourceCode);
 };
 
+const getContextualSelectorText = (parentSelector, selector, rule, context) => {
+	const {sourceCode} = context;
+	const parentNodes = parentSelector.children;
+	if (
+		parentNodes.some(node => node.type === 'Combinator')
+		|| selector.children.at(0)?.type === 'Combinator'
+		|| hasAncestorStyleRule(rule, context)
+		|| hasNestingSelector(selector)
+		|| !canUseRelatedSelector(selector)
+	) {
+		return;
+	}
+
+	// Only replace an exact parent at the start of a later compound; never reorder selectors to find a match.
+	const parentStart = selector.children.findIndex((node, index, nodes) => index > 0
+		&& nodes[index - 1].type === 'Combinator'
+		&& index + parentNodes.length <= nodes.length
+		&& parentNodes.every((parentNode, offset) => isSameSelectorNode(parentNode, nodes[index + offset], sourceCode)));
+	if (parentStart === -1) {
+		return;
+	}
+
+	const [start, end] = getNodesRange(selector.children.slice(parentStart, parentStart + parentNodes.length), {sourceCode});
+	const [selectorStart, selectorEnd] = sourceCode.getRange(selector);
+	return `${sourceCode.text.slice(selectorStart, start)}&${sourceCode.text.slice(end, selectorEnd)}`;
+};
+
 // The bundled parser reads some nested selectors as declarations, like `span::before`, and rejects some valid ones, like `|a`, and the fixed file must still parse. The rule skips `@scope`, so an added `&` always means the same as the implicit one.
 const getParsableNestedSelectorText = text => getParsableNestedRulePrelude(`${text} `, {canAddNestingSelector: true})?.slice(0, -1);
 
@@ -489,7 +516,8 @@ const getRelatedSelectorText = (parents, rule, context) => {
 
 	const {sourceCode} = context;
 	const [parentSelector] = parents;
-	const innerSelectors = rule.prelude.children.map(selector => getPrefixedSelectorText(parentSelector, selector, sourceCode));
+	const innerSelectors = rule.prelude.children.map(selector => getPrefixedSelectorText(parentSelector, selector, sourceCode)
+		?? getContextualSelectorText(parentSelector, selector, rule, context));
 	if (innerSelectors.includes(undefined) || innerSelectors.every(selector => selector === '&')) {
 		return;
 	}

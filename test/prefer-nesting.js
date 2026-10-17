@@ -26,7 +26,6 @@ test({
 		'.x { color: red; } |a .x { color: blue; }',
 		'.x { color: red; } |a > .x { color: blue; }',
 
-		'.x { color: red; } *|a .x { color: blue; }',
 		'a :is(.foo > .bar, #baz) { color: red; }',
 		'.outer, #outer { :is(.foo ~ .bar, .baz) a { color: red; } }',
 	],
@@ -445,7 +444,6 @@ test.snapshot({
 		'a > :is(.foo .bar, .baz) {}',
 		'a :is(.foo .bar, .baz .qux) {}',
 		'.x :IS(SPAN:not(.a, .b), .c) { color: red; }',
-		'.card { color: red; } body .theme .card { color: blue; }',
 		'@media (x) { .a { color: red; } } .a .b { color: blue; }',
 		'.x .item, .y .item { color: red; }',
 		'.card { > .a .item, > .b .item { color: red; } }',

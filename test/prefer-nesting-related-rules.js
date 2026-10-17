@@ -8,6 +8,14 @@ const {test} = getTester(import.meta, 'prefer-nesting');
 
 const extendedRelatedRuleCases = [
 	{
+		code: '.card {} .theme .card.active .title {}',
+		output: '.card { .theme &.active .title {} }',
+	},
+	{
+		code: '.card.active {} .theme > .card.active:hover { color: blue; }',
+		output: '.card.active { .theme > &:hover { color: blue; } }',
+	},
+	{
 		code: '.card {} .card .title, .card {}',
 		output: '.card { .title, & {} }',
 	},
@@ -61,11 +69,8 @@ const extendedRelatedRuleCases = [
 
 test({
 	valid: [
-		'.card {} .theme .card.active .title {}',
 		'.card.active {} .card.active .title, .card {}',
-		'.card.active {} .theme > .card.active:hover { color: blue; }',
 		'.card, .card.active { color: blue; /* keep */ }',
-		'.card {} .card:hover, .theme /* keep */ .card { color: blue; }',
 		'@media (color) { .card { color: red; } } /* keep */ @layer theme { .card { color: blue; } }',
 		'.card, .card {}',
 		'.card.active {} .card {}',
@@ -86,6 +91,7 @@ test({
 	invalid: [
 		...extendedRelatedRuleCases.map(({code, output}) => ({code, output, errors: 1})),
 		...[
+			'.card {} .card:hover, .theme /* keep */ .card { color: blue; }',
 			'.card { color: red; } .card:hover { color: blue; /* keep */ }',
 			'.card { color: red } .card:hover { color: blue; }',
 			'.card { color: red; } @layer theme { .card { color: blue; /* keep */ } }',

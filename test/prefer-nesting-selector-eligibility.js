@@ -11,6 +11,23 @@ const busyTypes = ['button', '[type=submit]', '[type=button]', '[type=reset]', '
 const busySelector = `[aria-busy=true]:not(input, select, textarea).contrast:is(${busyTypes}):not(.outline)::before`;
 
 const cases = [
+	// A type followed by a pseudo-class can provide context for an existing parent.
+	...['body:has(.theme)', 'fieldset:disabled'].map(context => ({
+		code: `.card {} ${context} .card {}`,
+		output: `.card { ${context} & {} }`,
+	})),
+	{
+		code: 'code { color: red; } a > code { color: blue; }',
+		output: 'code { color: red; a > & { color: blue; } }',
+	},
+	{
+		code: '.switch-paddle {} input + .switch-paddle { color: blue; }',
+		output: '.switch-paddle { input + & { color: blue; } }',
+	},
+	{
+		code: '.button {} .button[disabled], fieldset[disabled] .button { opacity: 0.5; }',
+		output: '.button { &[disabled], fieldset[disabled] & { opacity: 0.5; } }',
+	},
 	...[':host', ':host(.active)', ':host-context(.theme)', 'slot:has-slotted'].map(parent => ({
 		code: `${parent} { color: red; } ${parent} .title { color: blue; }`,
 		output: `${parent} { color: red; .title { color: blue; } }`,
@@ -55,13 +72,7 @@ const cases = [
 
 test({
 	valid: [
-		// A type followed by a pseudo-class does not justify contextual nesting.
-		'.card {} body:has(.theme) .card {}',
-		'.card {} fieldset:disabled .card {}',
 		':host(.active) .title, :host(.active) .body { color: blue; }',
-		'code { color: red; } a > code { color: blue; }',
-		'.switch-paddle {} input + .switch-paddle { color: blue; }',
-		'.button {} .button[disabled], fieldset[disabled] .button { opacity: 0.5; }',
 		'.card {} input:not([type=submit], [type=button], [type=reset]).card { color: blue; }',
 		'.outer { &.card {} body .theme &.card .title { color: blue; } }',
 		`:root:not([data-theme]) ${detailsSelector}, :host(:not([data-theme])) ${detailsSelector} { filter: brightness(0); }`,

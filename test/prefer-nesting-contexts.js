@@ -7,6 +7,10 @@ import {getTester} from './utils/test.js';
 const {test} = getTester(import.meta, 'prefer-nesting');
 
 const cases = [
+	{
+		code: '.card {} .theme .card .title { color: blue !important; & .body { color: green; } }',
+		output: '.card { .theme & .title { color: blue !important; & .body { color: green; } } }',
+	},
 	...['link', 'defined', 'fullscreen', 'autofill', 'modal', 'popover-open'].map(pseudoClass => ({
 		code: `.card:${pseudoClass} { color: red; } .card:${pseudoClass} .title { color: blue; }`,
 		output: `.card:${pseudoClass} { color: red; .title { color: blue; } }`,
@@ -32,7 +36,6 @@ const cases = [
 test({
 	valid: [
 		'.card { color: red; } .theme .active.card:hover { color: blue; }',
-		'.card {} .theme .card .title { color: blue !important; & .body { color: green; } }',
 		'.card {} .theme .active.card:hover, .other > .card .title { color: blue; }',
 		'.a, .b { color: red; } .theme .a:hover, .theme .b:hover { color: blue; }',
 		':where(.a), :where(.b) {} .theme :where(.b) .title, .theme :where(.a) .title { color: blue; }',

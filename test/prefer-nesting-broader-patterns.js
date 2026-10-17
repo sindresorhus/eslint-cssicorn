@@ -8,6 +8,10 @@ const {test} = getTester(import.meta, 'prefer-nesting');
 
 const cases = [
 	{
+		code: '.card {} body .card { color: blue; }',
+		output: '.card { body & { color: blue; } }',
+	},
+	{
 		code: '.page .a, .theme .b {} .theme .b .title, .page .a .title { color: blue; }',
 		output: '.page .a, .theme .b { .title { color: blue; } }',
 	},
@@ -135,7 +139,6 @@ const cases = [
 test({
 	valid: [
 		'.a, .a * {} .a * .title, .a .title {}',
-		'.card {} body .card { color: blue; }',
 		'.card {} input:not([type=submit]).active.card { color: blue; }',
 		'.card {} @supports (display: grid) { @media (color) { .card .title {} } @layer theme { .card .body {} } }',
 		'.outer { & .card .title {} & .card .body {} }',

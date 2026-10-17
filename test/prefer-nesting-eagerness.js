@@ -15,7 +15,6 @@ test({
 		'.card .title { color: red; } .card .body { color: blue; }',
 		'.card .title, .card .body { color: red; }',
 		'button.rgh-deep-reblame .octicon-versions { color: red; } .rgh-deep-reblame:hover .octicon-versions { color: blue; }',
-		'a { color: green; } .under a { color: red; } .upper a { color: blue; }',
 		'.rgh-fit-textareas { min-height: 4.5lh; } :root textarea.rgh-fit-textareas.form-control { height: auto; }',
 		'.card { color: red; } .other { color: blue; } .card:hover { color: green; }',
 		'@media (color) { .card { color: red; } } .card:hover { color: blue; }',
