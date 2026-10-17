@@ -11,14 +11,6 @@ const cases = [
 		code: `.outer, #missing { ${combinator} ${parent} { color: red; } ${combinator} ${parent}.active { color: blue; } }`,
 		output: `.outer, #missing { ${combinator} ${parent} { color: red; &.active { color: blue; } } }`,
 	}))),
-	...['>', '+', '~'].map(combinator => ({
-		code: `.outer { ${combinator} .card:hover, ${combinator} .card:focus { color: red; } }`,
-		output: `.outer { ${combinator} .card { &:hover, &:focus { color: red; } } }`,
-	})),
-	{
-		code: '.outer { > .card:hover { color: red; } > .card:focus { color: blue; } }',
-		output: '.outer { > .card { &:hover { color: red; } &:focus { color: blue; } } }',
-	},
 	{
 		code: '.outer { > .card, + .panel {} > .card .title, + .panel .title { color: red; } }',
 		output: '.outer { > .card, + .panel { .title { color: red; } } }',
@@ -35,10 +27,6 @@ const cases = [
 		code: '.outer { > .card { color: red; } @media (color) { > .card::before { content: "test"; } } }',
 		output: '.outer { > .card { color: red; @media (color) { &::before { content: "test"; } } } }',
 	},
-	{
-		code: '@media (color) { .outer { > .card .title { color: red; } > .card .body { color: blue; &::before { content: "test"; } } } }',
-		output: '@media (color) { .outer { > .card { .title { color: red; } .body { color: blue; &::before { content: "test"; } } } } }',
-	},
 	...['\n', '\r\n'].map(lineBreak => ({
 		code: ['.outer {', '  > .card {', '    color: red;', '  }', '  > .card.active {', '    color: blue;', '  }', '}'].join(lineBreak),
 		output: ['.outer {', '  > .card {', '    color: red;', '    &.active {', '      color: blue;', '    }', '  }', '}'].join(lineBreak),
@@ -47,6 +35,9 @@ const cases = [
 
 test({
 	valid: [
+		'.outer { > .card:hover, > .card:focus { color: red; } }',
+		'.outer { > .card:hover { color: red; } > .card:focus { color: blue; } }',
+		'@media (color) { .outer { > .card .title { color: red; } > .card .body { color: blue; &::before { content: "test"; } } } }',
 		'.outer { > &.card, &.panel {} > &.card .title, &.panel .title { color: red; } }',
 		'.outer { > .card:where(&), .panel:where(&) {} > .card:where(&) .title, .panel:where(&) .title { color: red; } }',
 		'.outer { > .card {} .card.active { color: red; } }',

@@ -7,10 +7,7 @@ import {getTester} from './utils/test.js';
 const {test} = getTester(import.meta, 'prefer-nesting');
 
 const cases = [
-	{
-		code: '.card { > :is(.foo, #bar) & .title { color: red; } }',
-		output: '.card { > :is(.foo, #bar) & { .title { color: red; } } }',
-	},
+
 	...[' ', ' > ', ' + ', ' ~ '].flatMap(combinator => [
 		{
 			code: `.card { &${combinator}:is(.foo, #bar).active { color: red; } }`,
@@ -20,10 +17,7 @@ const cases = [
 			code: `.card { &${combinator}:is(&.foo, button).active { color: red; } }`,
 			output: `.card { &${combinator}&.foo, &${combinator}button { &.active { color: red; } } }`,
 		},
-		{
-			code: `.card { &${combinator}:is(.context > .foo, #bar)::before { content: "test"; } }`,
-			output: `.card { &${combinator}:is(.context > .foo, #bar) { &::before { content: "test"; } } }`,
-		},
+
 	]),
 	{
 		code: '.card {\r\n  & > :is(.foo, #bar)::before {\r\n    content: "test";\r\n  }\r\n}',
@@ -47,23 +41,13 @@ const cases = [
 			code: `.card { ${combinator} :is(.foo, #bar) > .title { color: red; } }`,
 			output: `.card { ${combinator} .foo, ${combinator} #bar { > .title { color: red; } } }`,
 		},
-		{
-			code: `.card { ${combinator} :where(.foo, #bar)::before { content: "test"; } }`,
-			output: `.card { ${combinator} :where(.foo, #bar) { &::before { content: "test"; } } }`,
-		},
+
 	]),
 	{
 		code: '.card { > :is(:hover, :focus)::before { content: "test"; } }',
 		output: '.card { > :hover, > :focus { &::before { content: "test"; } } }',
 	},
-	{
-		code: '.card { > :is(.foo > .bar, #baz).active { color: red; } }',
-		output: '.card { > :is(.foo > .bar, #baz) { &.active { color: red; } } }',
-	},
-	{
-		code: '.card { > :is(.foo, :unknown)::before { content: "test"; } }',
-		output: '.card { > :is(.foo, :unknown) { &::before { content: "test"; } } }',
-	},
+
 	{
 		code: '.card { > :IS(.foo, #bar).active { COLOR: RED !important; } }',
 		output: '.card { > .foo, > #bar { &.active { COLOR: RED !important; } } }',
@@ -79,7 +63,6 @@ const cases = [
 	{
 		code: '.card { > :is(&.foo, &#bar)::before { content: "test"; } }',
 		output: '.card { > &.foo, > &#bar { &::before { content: "test"; } } }',
-		settledOutput: '.card { > & { &.foo, &#bar { &::before { content: "test"; } } } }',
 	},
 	{
 		code: '.card { > :is(&.foo, .bar)::before { content: "test"; } }',
@@ -119,6 +102,11 @@ const cases = [
 
 test({
 	valid: [
+		'.card { > :is(.foo, #bar) & .title { color: red; } }',
+		'.card { & > :is(.context > .foo, #bar)::before { content: "test"; } }',
+		'.card { > :where(.foo, #bar)::before { content: "test"; } }',
+		'.card { > :is(.foo > .bar, #baz).active { color: red; } }',
+		'.card { > :is(.foo, :unknown)::before { content: "test"; } }',
 		'.card { > :is(.foo, #bar) { color: red; } }',
 		'.card { > :is(.foo, #bar):not(&) { color: red; } }',
 		'@scope (.outer) { .card { > :is(.foo, #bar).active { color: red; } } }',

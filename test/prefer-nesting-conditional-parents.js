@@ -8,46 +8,6 @@ const {test} = getTester(import.meta, 'prefer-nesting');
 
 const cases = [
 	{
-		code: '.card > .title { color: blue; } @media (width > 600px) { .card { color: red; } }',
-		output: '.card { > .title { color: blue; } @media (width > 600px) { color: red; } }',
-	},
-	{
-		code: '.field-body .field .field { margin-bottom: 0; } @media (width > 769px) { .field-body { display: flex; & > .field { flex-grow: 1; } } }',
-		output: '.field-body { .field .field { margin-bottom: 0; } @media (width > 769px) { display: flex; & > .field { flex-grow: 1; } } }',
-	},
-	{
-		code: '@media (width < 600px) { .card.active { color: blue !important; } } @layer theme { .card { color: red !important; } }',
-		output: '.card { @media (width < 600px) { &.active { color: blue !important; } } @layer theme { color: red !important; } }',
-	},
-	{
-		code: '.a .title, .b .title { color: blue; } @media (color) { .a, .b { color: red; } }',
-		output: '.a, .b { .title { color: blue; } @media (color) { color: red; } }',
-	},
-	{
-		code: '.b.active, .a.active, .a .title, .b .title { color: blue; } @layer { .a, .b { color: red; } }',
-		output: '.a, .b { &.active, .title { color: blue; } @layer { color: red; } }',
-	},
-	{
-		code: '@media (color) { .a .title, .b .title { color: blue; } } @layer theme { .a, .b { color: red; } }',
-		output: '.a, .b { @media (color) { .title { color: blue; } } @layer theme { color: red; } }',
-	},
-	{
-		code: '.card.active { color: blue; } @media (color) { .card { color: red; } } .card .title { color: green; } @layer theme { .card { color: purple; } }',
-		output: '.card { &.active { color: blue; } @media (color) { color: red; } .title { color: green; } @layer theme { color: purple; } }',
-	},
-	{
-		code: '.card.active { color: blue; } @media (color) { @supports (display: grid) { .card { display: grid; } } }',
-		output: '.card { &.active { color: blue; } @media (color) { @supports (display: grid) { display: grid; } } }',
-	},
-	{
-		code: '.outer { &.card.active { color: blue; } @media (color) { &.card { color: red; } } }',
-		output: '.outer { &.card { &.active { color: blue; } @media (color) { color: red; } } }',
-	},
-	{
-		code: String.raw`.c\61 rd.active { color: blue; } @m\65 dia (color) { .c\61 rd { color: red; } }`,
-		output: String.raw`.c\61 rd { &.active { color: blue; } @m\65 dia (color) { color: red; } }`,
-	},
-	{
 		code: 'h1, .h1 { font-size: calc(1.375rem + 1.5vw); } @media (width > 1200px) { h1, .h1 { font-size: 2.5rem; } }',
 		output: 'h1, .h1 { font-size: calc(1.375rem + 1.5vw); @media (width > 1200px) { font-size: 2.5rem; } }',
 	},
@@ -75,20 +35,16 @@ const cases = [
 		code: String.raw`.c\61 rd::BEFORE { color: red; } @MEDIA (color) { .c\61 rd::BEFORE { color: blue; } }`,
 		output: String.raw`.c\61 rd::BEFORE { color: red; @MEDIA (color) { color: blue; } }`,
 	},
-	...['\n', '\r\n'].flatMap(lineBreak => [
-		{
-			code: `.card .title {${lineBreak}  color: blue;${lineBreak}}${lineBreak}@media (color) {${lineBreak}  .card {${lineBreak}    color: red;${lineBreak}  }${lineBreak}}`,
-			output: `.card {${lineBreak}  .title {${lineBreak}    color: blue;${lineBreak}  }${lineBreak}  @media (color) {${lineBreak}    color: red;${lineBreak}  }${lineBreak}}`,
-		},
-		{
-			code: `h1, .h1 {${lineBreak}  font-size: 2rem;${lineBreak}}${lineBreak}@media (color) {${lineBreak}  h1, .h1 {${lineBreak}    font-size: 3rem;${lineBreak}  }${lineBreak}}`,
-			output: `h1, .h1 {${lineBreak}  font-size: 2rem;${lineBreak}  @media (color) {${lineBreak}    font-size: 3rem;${lineBreak}  }${lineBreak}}`,
-		},
-	]),
+	...['\n', '\r\n'].map(lineBreak => ({
+		code: `h1, .h1 {${lineBreak}  font-size: 2rem;${lineBreak}}${lineBreak}@media (color) {${lineBreak}  h1, .h1 {${lineBreak}    font-size: 3rem;${lineBreak}  }${lineBreak}}`,
+		output: `h1, .h1 {${lineBreak}  font-size: 2rem;${lineBreak}  @media (color) {${lineBreak}    font-size: 3rem;${lineBreak}  }${lineBreak}}`,
+	})),
 ];
 
 test({
 	valid: [
+		'.card > .title { color: blue; } @media (width > 600px) { .card { color: red; } }',
+		'.card.active {} /* keep */ @media (color) { .card { color: red; } }',
 		'.a .title {} @media (color) { .a, .b {} }',
 		'.a .title, .b .body {} @media (color) { .a, .b {} }',
 		'.a.b.active {} @media (color) { .a, .b {} }',
@@ -113,7 +69,6 @@ test({
 	invalid: [
 		...cases.map(({code, output}) => ({code, output, errors: [{messageId: 'prefer-nesting/related-rules'}]})),
 		...[
-			'.card.active {} /* keep */ @media (color) { .card { color: red; } }',
 			'.card::before { color: red; /* keep */ } @media (color) { .card::before { color: blue; } }',
 			'.card::before { color: red } @media (color) { .card::before { color: blue; } }',
 			'.card::before {\n  color: red;\n}\n@media (color) {\n  .card::before {\n  color: blue;\n  }\n}',

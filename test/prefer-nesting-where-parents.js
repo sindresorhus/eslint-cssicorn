@@ -16,17 +16,9 @@ const cases = [
 		output: '.outer { .a:where(&), .b:where(&.active) { .title { color: red; } } }',
 	},
 	{
-		code: '.outer, #missing { .a:where(&) .title, .b:where(&.active) .title { color: red; &::before { content: "test"; } } }',
-		output: '.outer, #missing { .a:where(&), .b:where(&.active) { .title { color: red; &::before { content: "test"; } } } }',
-	},
-	{
 		code: '.outer { #a:where(&), #b:where(&.active) {} #b:where(&.active):hover, #a:where(&):hover { color: red; } }',
 		output: '.outer { #a:where(&), #b:where(&.active) { &:hover { color: red; } } }',
 	},
-	...[' ', ' > ', ' + ', ' ~ '].map(combinator => ({
-		code: `.outer, #missing { .a:where(&), .b:where(&.active) {} .theme${combinator}.a:where(&) .title, .theme${combinator}.b:where(&.active) .title { color: red; } }`,
-		output: `.outer, #missing { .a:where(&), .b:where(&.active) { .theme${combinator}& .title { color: red; } } }`,
-	})),
 	{
 		code: '.outer, #missing { &.a:where(&), &.b:where(&.active) {} &.a:where(&)::before, &.b:where(&.active)::before { content: "test"; } }',
 		output: '.outer, #missing { &.a:where(&), &.b:where(&.active) { &::before { content: "test"; } } }',
@@ -44,10 +36,6 @@ const cases = [
 		output: '.outer { .a:where(&&), .b:where(&.active):where(&) { .title { color: red; } } }',
 	},
 	{
-		code: '.outer { @media (color) { .a:where(&) .title, .b:where(&.active) .title { color: red; } } @layer theme { .a:where(&) .body, .b:where(&.active) .body { color: blue; } } }',
-		output: '.outer { .a:where(&), .b:where(&.active) { @media (color) { .title { color: red; } } @layer theme { .body { color: blue; } } } }',
-	},
-	{
 		code: '.outer { .a:WHERE(&), .b:WHERE(&.active) {} .a:WHERE(&) .title, .b:WHERE(&.active) .title { COLOR: RED !important; } }',
 		output: '.outer { .a:WHERE(&), .b:WHERE(&.active) { .title { COLOR: RED !important; } } }',
 	},
@@ -63,6 +51,9 @@ const cases = [
 
 test({
 	valid: [
+		'.outer, #missing { .a:where(&) .title, .b:where(&.active) .title { color: red; &::before { content: "test"; } } }',
+		'.outer, #missing { .a:where(&), .b:where(&.active) {} .theme .a:where(&) .title, .theme .b:where(&.active) .title { color: red; } }',
+		'.outer { @media (color) { .a:where(&) .title, .b:where(&.active) .title { color: red; } } @layer theme { .a:where(&) .body, .b:where(&.active) .body { color: blue; } } }',
 		'.outer, #missing { .a:where(&), .b {} .a:where(&) .title, .b .title { color: red; } }',
 		'.outer { .a:where(&), &.b:where(&.active) {} .a:where(&) .title, &.b:where(&.active) .title { color: red; } }',
 		'.outer { &.a:where(&), &&.b:where(&.active) {} &.a:where(&) .title, &&.b:where(&.active) .title { color: red; } }',

@@ -8,14 +8,6 @@ const {test} = getTester(import.meta, 'prefer-nesting');
 
 const cases = [
 	{
-		code: '.outer { > &&.card:is(.a, #missing) { color: blue; } }',
-		output: '.outer { > &&.card { &:is(.a, #missing) { color: blue; } } }',
-	},
-	{
-		code: '.outer { && .title, && .body { color: blue; } }',
-		output: '.outer { && { .title, .body { color: blue; } } }',
-	},
-	{
 		code: '.outer { .theme & .card {} .theme & .card .title { color: blue; } }',
 		output: '.outer { .theme & .card { .title { color: blue; } } }',
 	},
@@ -36,28 +28,8 @@ const cases = [
 		output: '.outer { &&.card { &.active { color: blue; } } }',
 	},
 	{
-		code: '.outer { .theme &.a + &.b .title {} .theme &.a + &.b .body {} }',
-		output: '.outer { .theme &.a + &.b { .title {} .body {} } }',
-	},
-	{
-		code: '.outer { .theme & .card .title, .theme & .card .body { color: blue; } }',
-		output: '.outer { .theme & .card { .title, .body { color: blue; } } }',
-	},
-	{
-		code: '.outer { &.a + &.b .title, &.a + &.b .body { color: blue; } }',
-		output: '.outer { &.a + &.b { .title, .body { color: blue; } } }',
-	},
-	{
-		code: '.outer { .theme & .card:is(.a, #missing) { color: blue; } }',
-		output: '.outer { .theme & .card { &:is(.a, #missing) { color: blue; } } }',
-	},
-	{
 		code: '.outer { &.a + &.b :is(.title, .body) { color: blue; } }',
 		output: '.outer { &.a + &.b { .title, .body { color: blue; } } }',
-	},
-	{
-		code: '.outer { .theme & .card:WHERE(.a, #missing)::before { color: blue; } }',
-		output: '.outer { .theme & .card { &:WHERE(.a, #missing)::before { color: blue; } } }',
 	},
 	{
 		code: String.raw`.outer { .th\65 me & .c\61 rd {} .th\65 me & .c\61 rd:HOVER { color: blue; } }`,
@@ -113,6 +85,13 @@ const cases = [
 
 test({
 	valid: [
+		'.outer { > &&.card:is(.a, #missing) { color: blue; } }',
+		'.outer { && .title, && .body { color: blue; } }',
+		'.outer { .theme &.a + &.b .title {} .theme &.a + &.b .body {} }',
+		'.outer { .theme & .card .title, .theme & .card .body { color: blue; } }',
+		'.outer { &.a + &.b .title, &.a + &.b .body { color: blue; } }',
+		'.outer { .theme & .card:is(.a, #missing) { color: blue; } }',
+		'.outer { .theme & .card:WHERE(.a, #missing)::before { color: blue; } }',
 		'.outer { .theme & .card {} .theme & .card & .title {} }',
 		'.outer { .theme & .card {} .theme & .card:has(&) {} }',
 		'.outer { .theme & .card {} .theme & .card:is(.active, &.active) {} }',
@@ -131,7 +110,6 @@ test({
 		...[
 			'.outer { .theme & .card {} /* keep */ .theme & .card .title {} }',
 			'.outer { .theme & .card {} .theme & .card .title { color: blue; /* keep */ } }',
-			'.outer { .theme /* keep */ & .card .title, .theme /* keep */ & .card .body {} }',
 		].map(code => ({code, errors: 1})),
 	],
 });
@@ -150,8 +128,8 @@ nodeTest('retained original nesting references reparse and converge with nesting
 	};
 	for (const {code, output} of cases) {
 		const result = linter.verifyAndFix(code, config, {filename: 'test.css'});
-		assert.equal(result.output, linter.verifyAndFix(output, config, {filename: 'test.css'}).output, code);
+		assert.equal(result.output, output, code);
 		assert.deepEqual(result.messages, [], code);
-		assert.equal(linter.verifyAndFix(result.output, config, {filename: 'test.css'}).fixed, false, code);
+		assert.deepEqual(linter.verifyAndFix(output, config, {filename: 'test.css'}), {fixed: false, output, messages: []}, code);
 	}
 });

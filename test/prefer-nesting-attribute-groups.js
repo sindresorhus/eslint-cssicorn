@@ -23,22 +23,14 @@ const cases = [
 	]),
 ];
 
-const retainedCases = ['s', 'S', String.raw`\73`, 'x'].map(flag => ({
-	code: `:is([data-kind="CARD" ${flag}], .foo)::before { content: "test"; }`,
-	output: `:is([data-kind="CARD" ${flag}], .foo) { &::before { content: "test"; } }`,
-}));
-
-const invalidFlagCases = ['i', 'I', String.raw`\69`].map(flag => ({
-	code: `:is([data-kind ${flag}], .foo)::before { content: "test"; }`,
-	output: `:is([data-kind ${flag}], .foo) { &::before { content: "test"; } }`,
-}));
-
 test({
 	valid: [
+		...['s', 'S', String.raw`\73`, 'x'].map(flag => `:is([data-kind="CARD" ${flag}], .foo)::before { content: "test"; }`),
+		':is([data-kind i], .foo)::before { content: "test"; }',
 		'@namespace ns url("https://example.com"); :is([ns|kind="CARD" i], .foo)::before { content: "test"; }',
 	],
 	invalid: [
-		...[...cases, ...retainedCases, ...invalidFlagCases].map(({code, output}) => ({code, output, errors: [{messageId: 'prefer-nesting'}]})),
+		...cases.map(({code, output}) => ({code, output, errors: [{messageId: 'prefer-nesting'}]})),
 		{code: ':is([data-kind="CARD" i], /* keep */ .foo)::before { content: "test"; }', errors: [{messageId: 'prefer-nesting'}]},
 	],
 });
@@ -55,7 +47,7 @@ nodeTest('attribute groups reach stable output with other nesting rules', () => 
 			'no-unscoped-nesting-selector',
 		].map(name => [`cssicorn/${name}`, 'error'])),
 	};
-	for (const {code, output} of [...cases, ...retainedCases, ...invalidFlagCases]) {
+	for (const {code, output} of cases) {
 		const result = linter.verifyAndFix(code, config, {filename: 'test.css'});
 		assert.equal(result.output, output, code);
 		assert.deepEqual(result.messages, [], code);

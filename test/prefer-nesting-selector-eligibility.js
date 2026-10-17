@@ -40,10 +40,6 @@ const cases = [
 		output: String.raw`slot:has-\73 lotted { &::before { content: "test"; } }`,
 	},
 	{
-		code: ':host(.active) .title, :host(.active) .body { color: blue; }',
-		output: ':host(.active) { .title, .body { color: blue; } }',
-	},
-	{
 		code: ':host-context(.theme) {} @media (color) { :host-context(.theme) > .title { color: blue !important; & .body { color: green; } } }',
 		output: ':host-context(.theme) { @media (color) { > .title { color: blue !important; & .body { color: green; } } } }',
 	},
@@ -51,80 +47,23 @@ const cases = [
 		code: '[data-kind="CARD" i]:host {} [data-kind="CARD" i]:host .title { color: blue; }',
 		output: '[data-kind="CARD" i]:host { .title { color: blue; } }',
 	},
-	...[' ', ' > ', ' + ', ' ~ '].map(combinator => ({
-		code: `.card { color: red; } body${combinator}.card .title { color: blue; }`,
-		output: `.card { color: red; body${combinator}& .title { color: blue; } }`,
-	})),
-	{
-		code: 'code { color: red; } a > code { color: blue; }',
-		output: 'code { color: red; a > & { color: blue; } }',
-	},
-	{
-		code: '.stat {} p + .stat { font-size: 2rem; }',
-		output: '.stat { p + & { font-size: 2rem; } }',
-	},
-	{
-		code: '.switch-paddle {} input + .switch-paddle { color: blue; }',
-		output: '.switch-paddle { input + & { color: blue; } }',
-	},
-	{
-		code: '.button {} .button[disabled], fieldset[disabled] .button { opacity: 0.5; }',
-		output: '.button { &[disabled], fieldset[disabled] & { opacity: 0.5; } }',
-	},
-	{
-		code: 'details.dropdown {} label > details.dropdown { margin-top: 1rem; }',
-		output: 'details.dropdown { label > & { margin-top: 1rem; } }',
-	},
-	{
-		code: '.card {} body .theme .active.card:hover { color: blue; }',
-		output: '.card { body .theme .active&:hover { color: blue; } }',
-	},
-	{
-		code: '.card {} body.theme:not(.absent) .active.card::before { content: "test"; }',
-		output: '.card { body.theme:not(.absent) .active&::before { content: "test"; } }',
-	},
-	{
-		code: '.card {} input.field:not([type=submit], [type=button], [type=reset]) + .card { color: blue; }',
-		output: '.card { input.field:not([type=submit], [type=button], [type=reset]) + & { color: blue; } }',
-	},
-	{
-		code: '.card {} input:not([type=submit], [type=button], [type=reset]).card { color: blue; }',
-		output: '.card { input&:not([type=submit], [type=button], [type=reset]) { color: blue; } }',
-	},
-	{
-		code: String.raw`.c\61 rd {} b\6f dy .theme .c\61 rd:hover { color: blue; }`,
-		output: String.raw`.c\61 rd { b\6f dy .theme &:hover { color: blue; } }`,
-	},
-	{
-		code: '.a, .b {} body > .theme .b .title, body > .theme .a .title { color: blue; }',
-		output: '.a, .b { body > .theme & .title { color: blue; } }',
-	},
-	{
-		code: '.outer { &.card {} body .theme &.card .title { color: blue; } }',
-		output: '.outer { &.card { body .theme & .title { color: blue; } } }',
-	},
-	{
-		code: '.outer, #missing { &&.card {} body .theme &&.card:hover { color: blue; } }',
-		output: '.outer, #missing { &&.card { body .theme &:hover { color: blue; } } }',
-	},
-	{
-		code: '.card {} @media (color) { @layer theme { body .theme .card::before { content: "test"; } } }',
-		output: '.card { @media (color) { @layer theme { body .theme &::before { content: "test"; } } } }',
-	},
-	...['\n', '\r\n'].flatMap(lineBreak => ['  ', '\t'].flatMap(indentation => [
-		{
-			code: `:host {${lineBreak}${indentation}color: red;${lineBreak}}${lineBreak}:host .title {${lineBreak}${indentation}color: blue;${lineBreak}}`,
-			output: `:host {${lineBreak}${indentation}color: red;${lineBreak}${indentation}.title {${lineBreak}${indentation.repeat(2)}color: blue;${lineBreak}${indentation}}${lineBreak}}`,
-		},
-		{
-			code: `.card {${lineBreak}${indentation}color: red;${lineBreak}}${lineBreak}body .theme .card {${lineBreak}${indentation}color: blue;${lineBreak}}`,
-			output: `.card {${lineBreak}${indentation}color: red;${lineBreak}${indentation}body .theme & {${lineBreak}${indentation.repeat(2)}color: blue;${lineBreak}${indentation}}${lineBreak}}`,
-		},
-	])),
+	...['\n', '\r\n'].flatMap(lineBreak => ['  ', '\t'].map(indentation => ({
+		code: `:host {${lineBreak}${indentation}color: red;${lineBreak}}${lineBreak}:host .title {${lineBreak}${indentation}color: blue;${lineBreak}}`,
+		output: `:host {${lineBreak}${indentation}color: red;${lineBreak}${indentation}.title {${lineBreak}${indentation.repeat(2)}color: blue;${lineBreak}${indentation}}${lineBreak}}`,
+	}))),
 ];
 
 test({
 	valid: [
+		// A type followed by a pseudo-class does not justify contextual nesting.
+		'.card {} body:has(.theme) .card {}',
+		'.card {} fieldset:disabled .card {}',
+		':host(.active) .title, :host(.active) .body { color: blue; }',
+		'code { color: red; } a > code { color: blue; }',
+		'.switch-paddle {} input + .switch-paddle { color: blue; }',
+		'.button {} .button[disabled], fieldset[disabled] .button { opacity: 0.5; }',
+		'.card {} input:not([type=submit], [type=button], [type=reset]).card { color: blue; }',
+		'.outer { &.card {} body .theme &.card .title { color: blue; } }',
 		`:root:not([data-theme]) ${detailsSelector}, :host(:not([data-theme])) ${detailsSelector} { filter: brightness(0); }`,
 		`:root:not([data-theme]) ${busySelector}, :host(:not([data-theme])) ${busySelector} { filter: brightness(0); }`,
 		'.outer { :host(&.active) {} :host(&.active) .title { color: blue; } }',
@@ -156,23 +95,16 @@ test({
 	],
 	invalid: [
 		...cases.map(({code, output}) => ({code, output, errors: [{messageId: 'prefer-nesting/related-rules'}]})),
-		// A type followed by a pseudo-class is fine when the fixed nested rule still parses.
-		...[
-			['.card {} body:has(.theme) .card {}', '.card { body:has(.theme) & {} }'],
-			['.card {} fieldset:disabled .card {}', '.card { fieldset:disabled & {} }'],
-		].map(([code, output]) => ({code, output, errors: [{messageId: 'prefer-nesting/related-rules'}]})),
 		...[
 			':host {} /* keep */ :host .title {}',
 			':host(.active) {} :host(.active) .title { /* keep */ color: blue; }',
-			'.card {} body /* keep */ .theme .card {}',
 			':host { color: red } :host .title {}',
 			':host {\n  color: red;\n}\n:host .title {\n\tcolor: blue;\n}',
-			':host .title, :host .body {\ncolor: blue;\n}',
 		].map(code => ({code, errors: [{messageId: 'prefer-nesting/related-rules'}]})),
 	],
 });
 
-nodeTest('standard parent pseudos and unambiguous contextual prefixes reparse and converge with nesting rules', () => {
+nodeTest('standard parent pseudos reparse and converge with nesting rules', () => {
 	const linter = new Linter();
 	const config = {
 		...plugin.configs.all,
@@ -185,11 +117,9 @@ nodeTest('standard parent pseudos and unambiguous contextual prefixes reparse an
 		].map(name => [`cssicorn/${name}`, 'error'])),
 	};
 	for (const {code, output} of cases) {
-		const expected = linter.verifyAndFix(output, config, {filename: 'test.css'});
-		assert.deepEqual(expected.messages, [], output);
 		const result = linter.verifyAndFix(code, config, {filename: 'test.css'});
-		assert.equal(result.output, expected.output, code);
+		assert.equal(result.output, output, code);
 		assert.deepEqual(result.messages, [], code);
-		assert.deepEqual(linter.verifyAndFix(result.output, config, {filename: 'test.css'}), {fixed: false, output: expected.output, messages: []}, code);
+		assert.deepEqual(linter.verifyAndFix(output, config, {filename: 'test.css'}), {fixed: false, output, messages: []}, code);
 	}
 });

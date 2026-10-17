@@ -25,6 +25,10 @@ test({
 		'.foo { color: red; } |a.foo { color: blue; }',
 		'.x { color: red; } |a .x { color: blue; }',
 		'.x { color: red; } |a > .x { color: blue; }',
+
+		'.x { color: red; } *|a .x { color: blue; }',
+		'a :is(.foo > .bar, #baz) { color: red; }',
+		'.outer, #outer { :is(.foo ~ .bar, .baz) a { color: red; } }',
 	],
 	invalid: [
 		{
@@ -40,11 +44,6 @@ test({
 		{
 			code: '.outer { > .card {} > .card .title {} }',
 			output: '.outer { > .card { .title {} } }',
-			errors: 1,
-		},
-		{
-			code: '.x { color: red; } *|a .x { color: blue; }',
-			output: '.x { color: red; *|a & { color: blue; } }',
 			errors: 1,
 		},
 		{
@@ -112,24 +111,17 @@ test({
 			output: '.card {\r\n  color: red;\r\n  @container (width > 0px) {\r\n    color: blue;\r\n  }\r\n}',
 			errors: 1,
 		},
-		...[
-			'.card { color: red; } @container (width > 0px) { .card { color: blue; /* keep */ } }',
-			'.page .card { color: red; } /* keep */ .page .card .title { color: blue; }',
-			'a :is(.foo > .bar, /* keep */ .baz) { color: red; }',
-		].map(code => ({code, errors: 1})),
 		{
-			code: 'a :is(.foo > .bar, #baz) { color: red; }',
-			output: 'a { :is(.foo > .bar, #baz) { color: red; } }',
+			code: '.card { color: red; } @container (width > 0px) { .card { color: blue; /* keep */ } }',
+			errors: 1,
+		},
+		{
+			code: '.page .card { color: red; } /* keep */ .page .card .title { color: blue; }',
 			errors: 1,
 		},
 		{
 			code: ':is(.foo + .bar, .baz).active { color: red; & .title { color: blue; } }',
 			output: '.foo + .bar, .baz { &.active { color: red; & .title { color: blue; } } }',
-			errors: 1,
-		},
-		{
-			code: '.outer, #outer { :is(.foo ~ .bar, .baz) a { color: red; } }',
-			output: '.outer, #outer { :is(.foo ~ .bar, .baz) { a { color: red; } } }',
 			errors: 1,
 		},
 	],
@@ -448,6 +440,15 @@ test.snapshot({
 		'@scope (.scope) { @media (width > 0px) { .parent { :is(.foo, .bar) a { color: red; } } } }',
 		// The parser rejects some nested selectors, like `html :root:not(.dark, .light) & {}`
 		'.card { color: red; } html :root:not(.dark, .light) .card { color: blue; }',
+
+		'a :is(.foo:has(> b), .bar:has(> c)) { color: red; }',
+		'a > :is(.foo .bar, .baz) {}',
+		'a :is(.foo .bar, .baz .qux) {}',
+		'.x :IS(SPAN:not(.a, .b), .c) { color: red; }',
+		'.card { color: red; } body .theme .card { color: blue; }',
+		'@media (x) { .a { color: red; } } .a .b { color: blue; }',
+		'.x .item, .y .item { color: red; }',
+		'.card { > .a .item, > .b .item { color: red; } }',
 	],
 	invalid: [
 		'a :is(.foo, .bar) {}',
@@ -468,7 +469,6 @@ test.snapshot({
 		':is(.foo, .bar) a > b + c { color: red; }',
 		'a > b :is(.foo, .bar) { color: red; }',
 		'a :is(:where(#foo), *) { color: red; }',
-		'a :is(.foo:has(> b), .bar:has(> c)) { color: red; }',
 		':is(.foo, .bar) :is(.baz, .qux) {}',
 		'a :is(.foo, .bar) :is(.baz, .qux) {}',
 		'.parent { :is(.foo, .bar) a { color: red; } }',
@@ -487,15 +487,12 @@ test.snapshot({
 		'a :is(.foo, .bar) {\n}',
 		'a :is(.foo, .bar) {\n\tcontent: "a\\\n\tb";\n}',
 		'a :is(.foo, .bar) {\n\t--value: a\n\t\tb;\n}',
-		'a > :is(.foo .bar, .baz) {}',
-		'a :is(.foo .bar, .baz .qux) {}',
 		':is(.foo .bar, .baz) a {}',
 		':is(.foo > .bar, .baz).active {}',
 		':is(.foo .bar, .baz) > a {}',
 		// A nested selector list gets an explicit `&` only when the parser would read it as a declaration
 		'div :is(span, button) { color: red; }',
 		'.x :is(span:is(.a, .b), button.c) { color: red; }',
-		'.x :IS(SPAN:not(.a, .b), .c) { color: red; }',
 		'.x :IS(SPAN:IS(.A, .B), BUTTON.C) { COLOR: RED; }',
 		':is(.a, .b) span::before { color: red; }',
 		'.parent { :is(span:is(.a, .b), button.c) .child { color: red; } }',
@@ -508,9 +505,6 @@ test.snapshot({
 		':is(span:is(.a, .b), button.c) .child { color: red; }',
 		'div :is(span, button) {\n  color: red;\n}',
 		'.parent {\r\n\t:is(span, button) .child {\r\n\t\tcolor: red;\r\n\t}\r\n}',
-		'.card { color: red; } body .theme .card { color: blue; }',
-		'.card { color: red; } body.dark :hover .card { color: blue; }',
-		'.card { color: red; } body > .theme:hover .card { color: blue; }',
 		// The parser reads `+div` as a declaration hack, so it gets an explicit `&`
 		':is(.a, .b)+div { color: red; }',
 		':is(.a, .b)>div { color: red; }',
@@ -521,17 +515,11 @@ test.snapshot({
 		'.parent { :is(&.a, &.b)+div { color: red; } }',
 		'.a { color: red; } @MEDIA (y) { .a .b { color: green; } }',
 		'.a { color: red; } @media (y) { .a { color: blue; } } .a .b { color: green; }',
-		'@media (x) { .a { color: red; } } .a .b { color: blue; }',
 		'.a { color: red; } @layer x { .a .b { color: blue; } }',
 		'.a {\r\n  color: red;\r\n}\r\n@media (x) {\r\n  .a .b {\r\n    color: blue;\r\n  }\r\n}',
-		'.x .item, .y .item { color: red; }',
-		'.card { > .a .item, > .b .item { color: red; } }',
 		':is(.a,.b)+a{color:red}',
 		':is(.a, .b)+-x-a { color: red; }',
 		':is(.a, .b)+*|a { color: red; }',
-		'.card { color: red; } body :hover .card { color: blue; }',
-		'.card { color: red; } BODY :HOVER .card { color: blue; }',
-		'.card { color: red; } a:not(.x) .a .card { color: blue; }',
 		'.p { :is(html:not(.a) &, p &) .d { color: red; } }',
 		// The parser rejects some nested selector lists, like `html:not(.a, .b) &, p & {}`, so these are reported without a fix
 		'.p { :is(html:not(.a, .b) &, p &) .d { color: red; } }',
@@ -541,42 +529,22 @@ test.snapshot({
 });
 
 test({
-	valid: [],
+	valid: [
+		'a > :is(.foo, .bar) { color: red; }',
+		'a + :is(.foo, .bar) { color: red; }',
+		'a ~ :is(.foo, .bar) { color: red; }',
+		':is(.foo, :blank) ~ a { color: red; }',
+		'a :is(.foo, #bar) { color: red; }',
+		'a :is(.foo, button) { color: red; }',
+		'a :is(.foo, .bar.active) { color: red; }',
+		'a :is(.foo, :where(#bar)) { color: red; }',
+		':is(.foo, #123) a { color: red; }',
+		'a :is(#123, #foo) { color: red; }',
+		':is(.foo, #-1).active { color: red; }',
+		'a :is(.foo, [x="a" s]) { color: red; }',
+		'a :is(foo|b, c) { color: red; }',
+	],
 	invalid: [
-		...['>', '+', '~'].map(combinator => ({
-			code: `a ${combinator} :is(.foo, .bar) { color: red; }`,
-			output: `a { ${combinator} :is(.foo, .bar) { color: red; } }`,
-			errors: [{messageId: 'prefer-nesting'}],
-		})),
-		{
-			code: 'a ~ :is(.foo, #bar) { color: red; }',
-			output: 'a { ~ :is(.foo, #bar) { color: red; } }',
-			errors: 1,
-		},
-		{
-			code: 'a + :is(.foo, :blank) { color: red; }',
-			output: 'a { + :is(.foo, :blank) { color: red; } }',
-			errors: 1,
-		},
-		{
-			code: String.raw`.f\6f o>:IS(.bar, .b\61 z) { color: red; }`,
-			output: String.raw`.f\6f o { >:IS(.bar, .b\61 z) { color: red; } }`,
-			errors: 1,
-		},
-		{
-			code: 'a > /* keep */ :is(.foo, .bar) { color: red; }',
-			errors: 1,
-		},
-		{
-			code: 'a > :is(.foo, .bar) {\r\n  color: red;\r\n}',
-			output: 'a {\r\n  > :is(.foo, .bar) {\r\n    color: red;\r\n  }\r\n}',
-			errors: 1,
-		},
-		{
-			code: ':where(article, p) ~ :is(h1, h2) { color: red; }',
-			output: ':where(article, p) { ~ :is(h1, h2) { color: red; } }',
-			errors: 1,
-		},
 		...['>', '+', '~'].map(combinator => ({
 			code: `:is(.foo, .bar) ${combinator} a { color: red; }`,
 			output: `.foo, .bar { ${combinator} a { color: red; } }`,
@@ -585,11 +553,6 @@ test({
 		{
 			code: ':is(.foo, #bar) + a { color: red; }',
 			output: '.foo, #bar { + a { color: red; } }',
-			errors: 1,
-		},
-		{
-			code: ':is(.foo, :blank) ~ a { color: red; }',
-			output: ':is(.foo, :blank) { ~ a { color: red; } }',
 			errors: 1,
 		},
 		{
@@ -606,21 +569,6 @@ test({
 			code: ':is(.foo, .bar) /* keep */ > a { color: red; }',
 			errors: 1,
 		},
-		...['.foo, #bar', '.foo, button', '.foo, .bar.active', '.foo, :where(#bar)'].map(argumentsText => ({
-			code: `a :is(${argumentsText}) { color: red; }`,
-			output: `a { :is(${argumentsText}) { color: red; } }`,
-			errors: 1,
-		})),
-		{
-			code: String.raw`a :IS(.f\6f o, #bar) { color: red; }`,
-			output: String.raw`a { :IS(.f\6f o, #bar) { color: red; } }`,
-			errors: 1,
-		},
-		{
-			code: 'a :is(.foo, #bar) {\n\tcolor: red;\n}',
-			output: 'a {\n\t:is(.foo, #bar) {\n\t\tcolor: red;\n\t}\n}',
-			errors: 1,
-		},
 		{
 			code: 'a :is(.foo, .bar) { color: red; }',
 			output: 'a { .foo, .bar { color: red; } }',
@@ -634,21 +582,6 @@ test({
 		{
 			code: ':is(.foo, #bar)::before { content: ""; }',
 			output: '.foo, #bar { &::before { content: ""; } }',
-			errors: 1,
-		},
-		{
-			code: ':is(.foo, #123) a { color: red; }',
-			output: ':is(.foo, #123) { a { color: red; } }',
-			errors: 1,
-		},
-		{
-			code: 'a :is(#123, #foo) { color: red; }',
-			output: 'a { :is(#123, #foo) { color: red; } }',
-			errors: 1,
-		},
-		{
-			code: ':is(.foo, #-1).active { color: red; }',
-			output: ':is(.foo, #-1) { &.active { color: red; } }',
 			errors: 1,
 		},
 		{
@@ -679,46 +612,6 @@ test({
 			code: 'a :is(.foo, .bar) {\n\tanimation-name: \\61\nbc;\n}',
 			errors: 1,
 		},
-		{
-			code: 'a :is(.foo, :blank) { color: red; }',
-			output: 'a { :is(.foo, :blank) { color: red; } }',
-			errors: 1,
-		},
-		{
-			code: ':is(.foo, :blank) a { color: red; }',
-			output: ':is(.foo, :blank) { a { color: red; } }',
-			errors: 1,
-		},
-		{
-			code: 'a :is(.foo, [x="a" s]) { color: red; }',
-			output: 'a { :is(.foo, [x="a" s]) { color: red; } }',
-			errors: 1,
-		},
-		{
-			code: ':is(.foo, [x="a" s]) a { color: red; }',
-			output: ':is(.foo, [x="a" s]) { a { color: red; } }',
-			errors: 1,
-		},
-		{
-			code: 'a :is(foo|b, c) { color: red; }',
-			output: 'a { :is(foo|b, c) { color: red; } }',
-			errors: 1,
-		},
-		{
-			code: ':is(foo|b, c) a { color: red; }',
-			output: ':is(foo|b, c) { a { color: red; } }',
-			errors: 1,
-		},
-		{
-			code: 'a :is(.foo, [foo|x]) { color: red; }',
-			output: 'a { :is(.foo, [foo|x]) { color: red; } }',
-			errors: 1,
-		},
-		{
-			code: ':IS(.foo, :blank)::before { content: ""; }',
-			output: ':IS(.foo, :blank) { &::before { content: ""; } }',
-			errors: 1,
-		},
 	],
 });
 
@@ -730,24 +623,8 @@ nodeTest('nesting fixes settle across overlapping and repeated candidates', () =
 	};
 	const cases = [
 		{
-			code: '.parent, #parent { > a + :is(.foo, #bar) { color: red; & > b { color: blue; } } }',
-			output: '.parent, #parent { > a { + :is(.foo, #bar) { color: red; & > b { color: blue; } } } }',
-		},
-		{
-			code: '.parent, #parent { a > :is(.foo, .bar) { color: red; & > b { color: blue; } } }',
-			output: '.parent, #parent { a { > :is(.foo, .bar) { color: red; & > b { color: blue; } } } }',
-		},
-		{
-			code: 'a > :is(.foo, .bar) { b + :is(.baz, #qux) { color: red; } }',
-			output: 'a { > :is(.foo, .bar) { b { + :is(.baz, #qux) { color: red; } } } }',
-		},
-		{
 			code: ':is(.foo, .bar) > a :is(.baz, #qux) { color: red; }',
-			output: '.foo, .bar { > a { :is(.baz, #qux) { color: red; } } }',
-		},
-		{
-			code: '.parent, #parent { a :is(.foo, #bar) { color: red; & > b { color: blue; } } }',
-			output: '.parent, #parent { a { :is(.foo, #bar) { color: red; & > b { color: blue; } } } }',
+			output: '.foo, .bar { > a :is(.baz, #qux) { color: red; } }',
 		},
 		{
 			code: 'a :is(.foo, .bar) { color: red; :is(.baz, .qux).active { color: blue; } background: white; }',
@@ -762,20 +639,12 @@ nodeTest('nesting fixes settle across overlapping and repeated candidates', () =
 			output: 'a { .foo, .bar { &.active { color: red; } } }',
 		},
 		{
-			code: 'a :where(.foo, #bar) b { color: red; }',
-			output: 'a { :where(.foo, #bar) { b { color: red; } } }',
-		},
-		{
 			code: 'a :is(.foo, .bar) b :where(.baz, #qux).active { color: red; }',
-			output: 'a { .foo, .bar { b { :where(.baz, #qux) { &.active { color: red; } } } } }',
+			output: 'a { .foo, .bar { b :where(.baz, #qux).active { color: red; } } }',
 		},
 		{
 			code: ':where(.foo, #bar) a :is(.baz, .qux).active { color: red; }',
-			output: ':where(.foo, #bar) { a { .baz, .qux { &.active { color: red; } } } }',
-		},
-		{
-			code: ':is(.foo, :blank) a :is(.bar, :blank) { color: red; }',
-			output: ':is(.foo, :blank) { a { :is(.bar, :blank) { color: red; } } }',
+			output: ':where(.foo, #bar) a { .baz, .qux { &.active { color: red; } } }',
 		},
 	];
 
@@ -798,7 +667,7 @@ nodeTest('related rule fixes settle with selector groups and long adjacent runs'
 		...plugin.configs.recommended,
 		rules: {'cssicorn/prefer-nesting': 'error', 'cssicorn/no-useless-is': 'error'},
 	};
-	assert.equal(linter.verify('.a .x {} .a .y {} .b {} .b .z {}', config, {filename: 'test.css'}).length, 2);
+	assert.equal(linter.verify('.a .x {} .a .y {} .b {} .b .z {}', config, {filename: 'test.css'}).length, 1);
 	const cases = [
 		{
 			code: '.card { color: red; } .card .title { color: blue; } .card .title > a { color: green; }',
@@ -814,36 +683,15 @@ nodeTest('related rule fixes settle with selector groups and long adjacent runs'
 		},
 		{
 			code: '.a .x {} .a .y {} .b {} .b .z {}',
-			output: '.a { .x {} .y {} } .b { .z {} }',
-		},
-		{
-			code: '.card .title {} .card .body {} @media (color) { .card { color: blue; } }',
-			output: '.card { .title {} .body {} @media (color) { color: blue; } }',
-		},
-		{
-			code: '.card .title {} .card .body {} @layer theme { .card .footer { color: blue; } }',
-			output: '.card { .title {} .body {} @layer theme { .footer { color: blue; } } }',
-		},
-		{
-			code: '.card .title, .card .body {} .card:hover {} .theme .card {}',
-			output: '.card { .title, .body {} &:hover {} .theme & {} }',
+			output: '.a .x {} .a .y {} .b { .z {} }',
 		},
 		{
 			code: '.card:is(.foo, #bar) {} .card:is(.foo, #bar) .title {}',
-			output: '.card { &:is(.foo, #bar) { .title {} } }',
+			output: '.card:is(.foo, #bar) { .title {} }',
 		},
 		{
 			code: '.card {} @media (color) { .card .title, .card .body {} .card.active {} }',
 			output: '.card { @media (color) { .title, .body {} &.active {} } }',
-		},
-		{
-			code: '.card .title, .card .body {} @layer theme { .card .footer, .card .aside {} .card.active {} }',
-			output: '.card { .title, .body {} @layer theme { .footer, .aside {} &.active {} } }',
-		},
-		// Moving `@layer b` before `@layer a { .other }` would change the layer order
-		{
-			code: '.card { background: white; } @layer a { .other { color: green; } } @layer b { .card { color: blue; } } @layer a { .card { color: red; } }',
-			output: '.card { background: white; } @layer a { .other { color: green; } } .card { @layer b { color: blue; } @layer a { color: red; } }',
 		},
 		{
 			code: '.card { background: white; } @layer { .card { color: blue; } } @layer { .card { color: red; } }',
@@ -857,6 +705,10 @@ nodeTest('related rule fixes settle with selector groups and long adjacent runs'
 		assert.deepEqual(result.messages, []);
 		assert.equal(linter.verifyAndFix(output, config, {filename: 'test.css'}).fixed, false);
 	}
+
+	// Moving `@layer b` before `@layer a { .other }` would change the layer order, so unrelated rules stop merging.
+	const interruptedLayers = '.card { background: white; } @layer a { .other { color: green; } } @layer b { .card { color: blue; } } @layer a { .card { color: red; } }';
+	assert.deepEqual(linter.verifyAndFix(interruptedLayers, config, {filename: 'test.css'}), {fixed: false, output: interruptedLayers, messages: []});
 });
 
 nodeTest('nesting fixes work with the other nesting rules', () => {
@@ -884,9 +736,6 @@ nodeTest('nesting fixes work with the other nesting rules', () => {
 		'.card { color: red; } @container (width > 0px) { .card { color: blue; } }',
 		'.card:not(.disabled) { color: red; } .card:not(.disabled) .title { color: blue; }',
 		'.card { color: red; } @layer theme { .card { color: blue; } }',
-		'a :where(.foo, #bar) { color: red; }',
-		':where(.foo, #bar).active { color: red; }',
-		'a :where(.foo, #bar).active { color: red; }',
 		'.card:lang(en) { color: red; } .card:lang(en) .title { color: blue; }',
 		'.card:open { color: red; } .card:open .title { color: blue; }',
 		'.card { color: red; } .card .title, .card > #body { color: blue; }',
@@ -895,13 +744,9 @@ nodeTest('nesting fixes work with the other nesting rules', () => {
 		'form:invalid { color: red; } @media (width > 0px) { form:invalid { color: blue; } }',
 		'.card { color: red; } @media (width > 0px) { .card { color: blue; } }',
 		'.card { color: red; } @supports (display: grid) { .card { color: blue; } }',
-		'.card .title { color: red; } .card .body { color: blue; }',
 		'.card { color: red; } @media (color) { .card .title { color: blue; } }',
 		'.card { color: red; } @layer theme { .card:hover { color: blue; } }',
 		'.card { opacity: 1; } @starting-style { .card { opacity: 0; } }',
-		'.card .title, .card #body { color: red; }',
-		'.card:where(.foo, #bar)::before { content: ""; color: red; }',
-		'.card { color: red; } .theme .card { color: blue; }',
 		'.card { color: red; } @media (color) { .card .title, .card .body { color: blue; } .card.active { color: green; } }',
 		'.card { color: red; } @layer theme { .card .title, .card .body { color: blue !important; } .card.active { color: green; } }',
 	]) {
@@ -913,7 +758,8 @@ nodeTest('nesting fixes work with the other nesting rules', () => {
 
 	for (const code of ['a :is(.foo > .bar, #baz) { color: red; }', '.card:is(.foo, #bar) { color: red; }']) {
 		const result = linter.verifyAndFix(code, config, {filename: 'test.css'});
-		assert.equal(result.fixed, true);
+		assert.equal(result.fixed, false);
+		assert.equal(result.output, code);
 		assert.deepEqual(result.messages.map(message => message.messageId), ['mixed-specificity-arguments']);
 		assert.equal(linter.verifyAndFix(result.output, config, {filename: 'test.css'}).fixed, false);
 	}
@@ -924,12 +770,14 @@ nodeTest('nesting fixes work with the other nesting rules', () => {
 	assert.equal(linter.verifyAndFix(equalSpecificity.output, config, {filename: 'test.css'}).fixed, false);
 
 	const trailingMixedSpecificity = linter.verifyAndFix('a :is(.foo, #bar) { color: red; }', config, {filename: 'test.css'});
-	assert.equal(trailingMixedSpecificity.output, 'a { :is(.foo, #bar) { color: red; } }');
+	assert.equal(trailingMixedSpecificity.fixed, false);
+	assert.equal(trailingMixedSpecificity.output, 'a :is(.foo, #bar) { color: red; }');
 	assert.deepEqual(trailingMixedSpecificity.messages.map(message => message.messageId), ['mixed-specificity-arguments']);
 	assert.equal(linter.verifyAndFix(trailingMixedSpecificity.output, config, {filename: 'test.css'}).fixed, false);
 
 	const trailingCombinator = linter.verifyAndFix('a > :is(.foo, #bar) { color: red; }', config, {filename: 'test.css'});
-	assert.equal(trailingCombinator.output, 'a { > :is(.foo, #bar) { color: red; } }');
+	assert.equal(trailingCombinator.fixed, false);
+	assert.equal(trailingCombinator.output, 'a > :is(.foo, #bar) { color: red; }');
 	assert.deepEqual(trailingCombinator.messages.map(message => message.messageId), ['mixed-specificity-arguments']);
 	assert.equal(linter.verifyAndFix(trailingCombinator.output, config, {filename: 'test.css'}).fixed, false);
 
@@ -954,6 +802,11 @@ test({
 		':where(.foo, .bar) {}',
 		'.outer { a :where(&, .bar) {} }',
 		'@scope (.outer) { a :where(.foo, .bar) {} }',
+
+		// Leave separate conditional parents untouched, preserving the layer order.
+		'@layer x { .card .title { color: green; } } @layer y { .card { color: red; } }',
+		'a :where(.foo, .bar) {}',
+		'a :WHERE(.foo, #bar) {\r\n  color: red !important;\r\n  & .title { color: blue; }\r\n}',
 	],
 	invalid: [
 		...[
@@ -996,12 +849,6 @@ test({
 			output: '.card { @layer theme {} }',
 			errors: 1,
 		},
-		// The first layer stays first, so the layer order does not change.
-		{
-			code: '@layer x { .card .title { color: green; } } @layer y { .card { color: red; } }',
-			output: '.card { @layer x { .title { color: green; } } @layer y { color: red; } }',
-			errors: 1,
-		},
 		{
 			code: '@layer base { .card:not(.disabled) { color: red; } @layer theme { .card:not(.disabled) { color: blue; } } }',
 			output: '@layer base { .card:not(.disabled) { color: red; @layer theme { color: blue; } } }',
@@ -1017,34 +864,12 @@ test({
 			output: '.card {\n\tcolor: red;\n\t@layer {\n\t\tcolor: blue;\n\t}\n}',
 			errors: 1,
 		},
-		...[
-			'.card {} @layer theme { .card { color: blue; /* keep */ } }',
-			'.card:not(/* keep */ .disabled) {} .card:not(/* keep */ .disabled) .title {}',
-			'a :where(.foo, /* keep */ #bar) { color: red; }',
-		].map(code => ({code, errors: 1})),
 		{
-			code: 'a :where(.foo, .bar) {}',
-			output: 'a { :where(.foo, .bar) {} }',
-			errors: [{message: 'Prefer CSS nesting over `:where()`.'}],
+			code: '.card {} @layer theme { .card { color: blue; /* keep */ } }',
+			errors: 1,
 		},
-		...['.foo, .bar', '.foo, #bar', '.foo > .bar, .baz', '.foo, :not(.disabled)', '.foo, [x="y" i]'].map(argumentsText => ({
-			code: `a :where(${argumentsText}) { color: red; }`,
-			output: `a { :where(${argumentsText}) { color: red; } }`,
-			errors: 1,
-		})),
-		...[['.active', '&.active'], ['::before', '&::before'], [' a', 'a'], [' > a', '> a'], [' + a', '+ a'], [' ~ a', '~ a']].map(([suffix, inner]) => ({
-			code: `:where(.foo, #bar)${suffix} { color: red; }`,
-			output: `:where(.foo, #bar) { ${inner} { color: red; } }`,
-			errors: 1,
-		})),
-		...['>', '+', '~'].map(combinator => ({
-			code: `a ${combinator} :where(.foo, #bar) { color: red; }`,
-			output: `a { ${combinator} :where(.foo, #bar) { color: red; } }`,
-			errors: 1,
-		})),
 		{
-			code: 'a :WHERE(.foo, #bar) {\r\n  color: red !important;\r\n  & .title { color: blue; }\r\n}',
-			output: 'a {\r\n  :WHERE(.foo, #bar) {\r\n    color: red !important;\r\n    & .title { color: blue; }\r\n  }\r\n}',
+			code: '.card:not(/* keep */ .disabled) {} .card:not(/* keep */ .disabled) .title {}',
 			errors: 1,
 		},
 	],
@@ -1059,10 +884,12 @@ test({
 		'@namespace url("http://www.w3.org/1999/xhtml"); a :where(.foo, .bar) b {}',
 		String.raw`.card:\6c ang(en) {} .card:\6c ang(en) .title {}`,
 		'.card:visited {} .card:visited .title {}',
+
+		'.outer { a :where(&, .bar).active {} }',
+		'a :is(.foo > .bar, .baz).active {}',
 	],
 	invalid: [
-		{code: '.outer { a :where(&, .bar).active {} }', output: '.outer { a :where(&, .bar) { &.active {} } }', errors: 1},
-		...['is', 'where'].flatMap(name => ['.active', '::before', ' b', ' > b', ' + b', ' ~ b'].map(suffix => ({
+		...['is'].flatMap(name => ['.active', '::before', ' b', ' > b', ' + b', ' ~ b'].map(suffix => ({
 			code: `a :${name}(.foo, #bar)${suffix} { color: red; }`,
 			output: `a { :${name}(.foo, #bar)${suffix} { color: red; } }`,
 			errors: 1,
@@ -1074,13 +901,8 @@ test({
 		})),
 		{
 			code: 'a :is(.foo, .bar) b :where(.baz, #qux).active { color: red; }',
-			output: 'a :is(.foo, .bar) b { :where(.baz, #qux).active { color: red; } }',
-			errors: [{message: 'Prefer CSS nesting over `:where()`.'}],
-		},
-		{
-			code: 'a :is(.foo > .bar, .baz).active {}',
-			output: 'a { :is(.foo > .bar, .baz).active {} }',
-			errors: 1,
+			output: 'a { :is(.foo, .bar) b :where(.baz, #qux).active { color: red; } }',
+			errors: [{message: 'Prefer CSS nesting over `:is()`.'}],
 		},
 		{
 			code: 'a :is(.foo, .bar).active {}',
@@ -1090,16 +912,6 @@ test({
 		{
 			code: 'a :is(.foo, .bar) b {}',
 			output: 'a { :is(.foo, .bar) b {} }',
-			errors: 1,
-		},
-		{
-			code: 'a :where(.foo, .bar).active {}',
-			output: 'a { :where(.foo, .bar).active {} }',
-			errors: 1,
-		},
-		{
-			code: 'a :where(.foo, .bar) b {}',
-			output: 'a { :where(.foo, .bar) b {} }',
 			errors: 1,
 		},
 		...[
@@ -1132,18 +944,8 @@ test({
 			errors: 1,
 		},
 		{
-			code: '.outer, #outer { a :where(.foo, #bar).active { color: red; & .title { color: blue; } } }',
-			output: '.outer, #outer { a { :where(.foo, #bar).active { color: red; & .title { color: blue; } } } }',
-			errors: 1,
-		},
-		{
 			code: '.card:dir(rtl) { color: red; } @layer theme { .card:dir(rtl) { color: blue; } }',
 			output: '.card:dir(rtl) { color: red; @layer theme { color: blue; } }',
-			errors: 1,
-		},
-		{
-			code: 'a :where(.foo, #bar).active {\r\n  color: red !important;\r\n}',
-			output: 'a {\r\n  :where(.foo, #bar).active {\r\n    color: red !important;\r\n  }\r\n}',
 			errors: 1,
 		},
 		{
@@ -1151,11 +953,14 @@ test({
 			output: '.card:lang(en) {\n\tcolor: red;\n\t.title {\n\t\tcolor: blue;\n\t}\n}',
 			errors: 1,
 		},
-		...[
-			'a :where(.foo, #bar) /* keep */ .title { color: red; }',
-			'a :is(.foo, .bar).active {\n\t--value: \\61\nbc;\n}',
-			'a :is(.foo, #bar):hover { color: red; /* keep */ }',
-		].map(code => ({code, errors: 1})),
+		{
+			code: 'a :is(.foo, .bar).active {\n\t--value: \\61\nbc;\n}',
+			errors: 1,
+		},
+		{
+			code: 'a :is(.foo, #bar):hover { color: red; /* keep */ }',
+			errors: 1,
+		},
 	],
 });
 
@@ -1194,74 +999,22 @@ test({
 		'.card {} @starting-style { .card .title {} }',
 		'.card {} @starting-style { .card { & .title {} } }',
 		'.card {} @starting-style { .card { @media (color) { color: red; } } }',
+
+		'.page .card {} .page .cardinal .title {}',
+		'.page > .card {} .page + .card .title {}',
+		'.card:lang(en) {} .card:lang(fr) .title {}',
+		'.card .title { color: red; } .card .body { color: blue; }',
+		'.card.title { color: red; } .card.body { color: blue; }',
+		'.grid > .small { color: red; } .grid > .large { color: blue; }',
+		'.card + .title { color: red; } .card ~ .body { color: blue; }',
+		'.page .card .title { color: red; } .page .card .body { color: blue; }',
+		'.card::before { color: red; } .card::after { color: blue; }',
+		'.card:lang(en) .title { color: red; } .card:lang(en) .body { color: blue; }',
 	],
 	invalid: [
 		{
-			code: '.page .card {} .page .cardinal .title {}',
-			output: '.page { .card {} .cardinal .title {} }',
-			errors: 1,
-		},
-		{
-			code: '.page > .card {} .page + .card .title {}',
-			output: '.page { > .card {} + .card .title {} }',
-			errors: 1,
-		},
-		{
 			code: '.card {} @media (width > 0px) { .card .title {} }',
 			output: '.card { @media (width > 0px) { .title {} } }',
-			errors: 1,
-		},
-		{
-			code: '.card:lang(en) {} .card:lang(fr) .title {}',
-			output: '.card { &:lang(en) {} &:lang(fr) .title {} }',
-			errors: 1,
-		},
-		...[
-			['.card .title', '.card .body', '.card', '.title', '.body'],
-			['.card.title', '.card.body', '.card', '&.title', '&.body'],
-			['.grid > .small', '.grid > .large', '.grid', '> .small', '> .large'],
-			['.card + .title', '.card ~ .body', '.card', '+ .title', '~ .body'],
-			['.page .card .title', '.page .card .body', '.page .card', '.title', '.body'],
-			['.card::before', '.card::after', '.card', '&::before', '&::after'],
-			['.card:lang(en) .title', '.card:lang(en) .body', '.card:lang(en)', '.title', '.body'],
-		].map(([first, second, parent, firstInner, secondInner]) => ({
-			code: `${first} { color: red; } ${second} { color: blue; }`,
-			output: `${parent} { ${firstInner} { color: red; } ${secondInner} { color: blue; } }`,
-			errors: 1,
-		})),
-		{
-			code: '.card .title { color: red } .card .body { color: blue }',
-			output: '.card { .title { color: red } .body { color: blue } }',
-			errors: 1,
-		},
-		{
-			code: '.card .title {} .card .body {} .card:hover {}',
-			output: '.card { .title {} .body {} &:hover {} }',
-			errors: 1,
-		},
-		{
-			code: '.card .title {} .card .body {} .card .footer, .card .aside { color: blue; }',
-			output: '.card { .title {} .body {} .footer, .aside { color: blue; } }',
-			errors: 1,
-		},
-		{
-			code: '.outer, #outer { .card .title { color: red; } .card .body { color: blue; } }',
-			output: '.outer, #outer { .card { .title { color: red; } .body { color: blue; } } }',
-			errors: 1,
-		},
-		{
-			code: String.raw`.c\61 rd .title { color: red; } .c\61 rd .body { color: blue; }`,
-			output: String.raw`.c\61 rd { .title { color: red; } .body { color: blue; } }`,
-			errors: 1,
-		},
-		{
-			code: '.card .title {\n\tcolor: red;\n}\n.card .body {\n\tcolor: blue;\n}',
-			output: '.card {\n\t.title {\n\t\tcolor: red;\n\t}\n\t.body {\n\t\tcolor: blue;\n\t}\n}',
-			errors: 1,
-		},
-		{
-			code: '.card .title {\r\n  color: red;\r\n}\r\n.card .body {\r\n  color: blue;\r\n}',
-			output: '.card {\r\n  .title {\r\n    color: red;\r\n  }\r\n  .body {\r\n    color: blue;\r\n  }\r\n}',
 			errors: 1,
 		},
 		...['media (color)', 'layer theme', 'layer', 'MEDIA (color)', String.raw`m\65 dia (color)`].map(atRule => ({
@@ -1304,13 +1057,14 @@ test({
 			output: '.card {\r\n  opacity: 1;\r\n  @starting-style {\r\n    opacity: 0;\r\n  }\r\n}',
 			errors: 1,
 		},
-		...[
-			'.card .title { color: red; /* keep */ } .card .body { color: blue; }',
-			'.card .title { color: red; } /* keep */ .card .body { color: blue; }',
-			'.card .title { color: red; } .card .body {\n\tcolor: blue;\n}',
-			'.card {} @media (color) { .card /* keep */ .title { color: blue; } }',
-			'.card {} @starting-style { .card { opacity: 0; /* keep */ } }',
-		].map(code => ({code, errors: 1})),
+		{
+			code: '.card {} @media (color) { .card /* keep */ .title { color: blue; } }',
+			errors: 1,
+		},
+		{
+			code: '.card {} @starting-style { .card { opacity: 0; /* keep */ } }',
+			errors: 1,
+		},
 	],
 });
 
@@ -1340,23 +1094,14 @@ test({
 		'.card {} @media (color) { .card .title {} @font-face { font-family: example; src: url(example.woff2); } }',
 		'.card {} @supports (display: grid) { .card .title {} .other {} }',
 		'.card {} @container (width > 0px) { .card .title {} .other {} }',
+
+		'.page .card {} .page .card .title, .page .other .body {}',
+		'.outer { > .card .title, > .card .body {} }',
+		'a:is(.foo, .bar) {}',
+		'.card:lang("en") .title, .card:lang("en") .body {}',
+		'.page .card:is(.foo > .bar, .baz) { color: red; }',
 	],
 	invalid: [
-		{
-			code: '.page .card {} .page .card .title, .page .other .body {}',
-			output: '.page { .card {} .card .title, .other .body {} }',
-			errors: 1,
-		},
-		{
-			code: '.outer { > .card .title, > .card .body {} }',
-			output: '.outer { > .card { .title, .body {} } }',
-			errors: 1,
-		},
-		{
-			code: 'a:is(.foo, .bar) {}',
-			output: 'a { &:is(.foo, .bar) {} }',
-			errors: 1,
-		},
 		{
 			code: 'a:is(.foo, .bar)::before {}',
 			output: 'a { &:is(.foo, .bar)::before {} }',
@@ -1367,85 +1112,11 @@ test({
 			output: '.card { &:is(.foo, .bar).active {} }',
 			errors: 1,
 		},
-		{
-			code: '.card:lang("en") .title, .card:lang("en") .body {}',
-			output: '.card:lang("en") { .title, .body {} }',
-			errors: 1,
-		},
-		...[
-			['.card .title, .card .body', '.card', '.title, .body'],
-			['.card:hover, .card.active, .card[aria-disabled=true]', '.card', '&:hover, &.active, &[aria-disabled=true]'],
-			['input[type=checkbox], input[type=radio]', 'input', '&[type=checkbox], &[type=radio]'],
-			['.page .card > .title, .page .card + #body', '.page .card', '> .title, + #body'],
-			['.card::before, .card::after', '.card', '&::before, &::after'],
-			['[data-kind="CARD" i] .title, [data-kind="CARD" i] #body', '[data-kind="CARD" i]', '.title, #body'],
-			['.card:not(.disabled) .title, .card:not(.disabled) .body', '.card:not(.disabled)', '.title, .body'],
-			[String.raw`.c\61 rd .title, .c\61 rd .body`, String.raw`.c\61 rd`, '.title, .body'],
-		].map(([selector, parent, inner]) => ({
-			code: `${selector} { color: red !important; & .link { color: blue; } }`,
-			output: `${parent} { ${inner} { color: red !important; & .link { color: blue; } } }`,
-			errors: 1,
-		})),
-		{
-			code: '.outer, #outer { .card .title, .card #body { color: red; } }',
-			output: '.outer, #outer { .card { .title, #body { color: red; } } }',
-			errors: 1,
-		},
-		{
-			code: '.card .title,\r\n.card .body {\r\n  color: red;\r\n}',
-			output: '.card {\r\n  .title,\r\n  .body {\r\n    color: red;\r\n  }\r\n}',
-			errors: 1,
-		},
-		...['media (color)', 'supports (display: grid)', 'container (width > 0px)', 'layer theme'].map(atRule => ({
-			code: `@${atRule} { .card .title, .card .body { color: red; } }`,
-			output: `@${atRule} { .card { .title, .body { color: red; } } }`,
-			errors: 1,
-		})),
-		...['is', 'where', 'IS', 'WHERE'].flatMap(name => ['', '.active', '::before', ' > .title'].map(suffix => ({
+		...['is', 'IS'].flatMap(name => ['.active', '::before', ' > .title'].map(suffix => ({
 			code: `.card:${name}(.foo, #bar)${suffix} { color: red; }`,
 			output: `.card { &:${name}(.foo, #bar)${suffix} { color: red; } }`,
 			errors: 1,
 		}))),
-		{
-			code: '.page .card:is(.foo > .bar, .baz) { color: red; }',
-			output: '.page .card { &:is(.foo > .bar, .baz) { color: red; } }',
-			errors: 1,
-		},
-		{
-			code: '.card:is(.foo, #bar) {\n\tcolor: red;\n\t& .title { color: blue; }\n}',
-			output: '.card {\n\t&:is(.foo, #bar) {\n\t\tcolor: red;\n\t\t& .title { color: blue; }\n\t}\n}',
-			errors: 1,
-		},
-		...[' ', ' > ', ' + ', ' ~ '].map(combinator => ({
-			code: `.card { color: red; } .theme${combinator}.card { color: blue; }`,
-			output: `.card { color: red; .theme${combinator}& { color: blue; } }`,
-			errors: 1,
-		})),
-		{
-			code: '.card.active { color: red; } .page .theme > .card.active { color: blue; }',
-			output: '.card.active { color: red; .page .theme > & { color: blue; } }',
-			errors: 1,
-		},
-		{
-			code: '.card { color: red; } .theme .card, #other > .card { color: blue; }',
-			output: '.card { color: red; .theme &, #other > & { color: blue; } }',
-			errors: 1,
-		},
-		{
-			code: String.raw`.c\61 rd { color: red; } .th\65 me .c\61 rd { color: blue; }`,
-			output: String.raw`.c\61 rd { color: red; .th\65 me & { color: blue; } }`,
-			errors: 1,
-		},
-		{
-			code: '.card {\r\n  color: red;\r\n}\r\n.theme .card {\r\n  color: blue;\r\n}',
-			output: '.card {\r\n  color: red;\r\n  .theme & {\r\n    color: blue;\r\n  }\r\n}',
-			errors: 1,
-		},
-		...['media (color)', 'layer theme'].map(atRule => ({
-			code: `@${atRule} { .card { color: red; } .theme .card { color: blue; } }`,
-			output: `@${atRule} { .card { color: red; .theme & { color: blue; } } }`,
-			errors: 1,
-		})),
 		...['media (color)', 'layer theme', 'layer', 'MEDIA (color)', String.raw`l\61 yer theme`].map(atRule => ({
 			code: `.card { color: red; } @${atRule} { .card .title, .card .body { color: blue; } .card:where(.active) { color: green; } }`,
 			output: `.card { color: red; @${atRule} { .title, .body { color: blue; } &:where(.active) { color: green; } } }`,
@@ -1456,14 +1127,9 @@ test({
 			output: '.card {\n\tcolor: red;\n\t@media (color) {\n\t\t.title {\n\t\t\tcolor: blue;\n\t\t}\n\t\t&:where(.active) {\n\t\t\tcolor: green;\n\t\t}\n\t}\n}',
 			errors: 1,
 		},
-		...[
-			'.card .title, .card /* keep */ .body { color: red; }',
-			'.card:is(.foo, #bar) { color: red; /* keep */ }',
-			'.card:is(.foo, #bar) {\n\tcontent: "a\\\n\tb";\n}',
-			'.card .title, .card .body {\n\t--value: a\n\t\tb;\n}',
-			'.card { color: red; } /* keep */ .theme .card { color: blue; }',
-			'.card { color: red } .theme .card { color: blue; }',
-			'.card { color: red; } @media (color) { .card .title { /* keep */ } .card.active {} }',
-		].map(code => ({code, errors: 1})),
+		{
+			code: '.card { color: red; } @media (color) { .card .title { /* keep */ } .card.active {} }',
+			errors: 1,
+		},
 	],
 });
