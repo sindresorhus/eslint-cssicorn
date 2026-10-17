@@ -133,9 +133,48 @@ Following `@media` and `@layer` blocks can contain rules extending the existing 
 }
 ```
 
+## Options
+
+### `checkSharedPrefixes`
+
+Type: `boolean`\
+Default: `false`
+
+Group two or more adjacent, single-selector rules under a shared parent. The selectors must share the same complete leading compound containing a class, followed by a descendant combinator. For example, `.card.active .title` and `.card.active .body` share the complete `.card.active` compound.
+
+```js
+{
+	'cssicorn/prefer-nesting': ['error', {checkSharedPrefixes: true}],
+}
+```
+
+With this option enabled:
+
+```css
+/* ❌ */
+.card .title {
+	color: red;
+}
+.card .body {
+	color: blue;
+}
+
+/* ✅ */
+.card {
+	.title {
+		color: red;
+	}
+	.body {
+		color: blue;
+	}
+}
+```
+
+This option does not group selector lists, factor partial compounds such as `.card.active` and `.card.disabled`, or discover parents across conditional blocks. Comments and unsafe formatting can still prevent autofixes.
+
 ## Intentionally ignored
 
-The rule does not infer new parents from sibling rules or selector lists, reorder compound selectors to find a parent, or introduce nesting solely to retain `:is()` or `:where()`:
+By default, the rule does not infer new parents from sibling rules. It never infers parents from selector lists, reorders compound selectors to find a parent, or introduces nesting solely to retain `:is()` or `:where()`:
 
 ```css
 /* ✅ */

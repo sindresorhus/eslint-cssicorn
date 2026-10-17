@@ -610,14 +610,14 @@ const getRelatedRule = (parents, rule, context, canNestStyleRules = true) => {
 	return blockText === undefined ? undefined : {rule, inner, blockText};
 };
 
-const getMergedReplacement = (parentRule, relatedRules, context) => {
+const getMergedReplacement = (parentRule, relatedRules, context, sharedParentText) => {
 	const {sourceCode} = context;
 	const range = [sourceCode.getRange(parentRule)[0], sourceCode.getRange(relatedRules.at(-1).rule)[1]];
 	if (hasCommentInRange(context, range)) {
 		return;
 	}
 
-	const lastChild = parentRule.block.children.at(-1);
+	const lastChild = sharedParentText === undefined ? parentRule.block.children.at(-1) : undefined;
 	if (lastChild && !lastChild.block) {
 		if (lastChild.type !== 'Declaration') {
 			return;
@@ -632,7 +632,7 @@ const getMergedReplacement = (parentRule, relatedRules, context) => {
 	const parentText = sourceCode.getText(parentRule);
 	const isMultiline = /[\n\f\r]/v.test(parentText);
 	const parentFormatting = isMultiline ? getIndentation(parentRule, sourceCode) : undefined;
-	const replacementParts = [parentText.slice(0, -1)];
+	const replacementParts = [sharedParentText === undefined ? parentText.slice(0, -1) : `${sharedParentText} {`];
 	for (const relatedRule of relatedRules) {
 		const {rule} = relatedRule;
 		const childIsMultiline = /[\n\f\r]/v.test(sourceCode.getText(rule));
@@ -678,11 +678,49 @@ const getRelatedRules = (children, startIndex, parents, context) => {
 	return relatedRules;
 };
 
+const getSharedPrefixCandidate = (children, startIndex, selectors, context) => {
+	if (selectors.length !== 1) {
+		return;
+	}
+
+	const {sourceCode} = context;
+	const [selector] = selectors;
+	const boundary = selector.children.findIndex(node => node.type === 'Combinator');
+	if (!isDescendantCombinator(selector.children[boundary])) {
+		return;
+	}
+
+	const parent = {type: 'Selector', children: selector.children.slice(0, boundary)};
+	if (parent.children.every(node => node.type !== 'ClassSelector') || !canUseRelatedParents([parent])) {
+		return;
+	}
+
+	const relatedRules = [];
+	for (let index = startIndex; index < children.length; index++) {
+		const rule = children[index];
+		const ruleSelectors = getSelectors(rule);
+		if (rule.type !== 'Rule' || ruleSelectors?.length !== 1 || !isDescendantCombinator(ruleSelectors[0].children[boundary])) {
+			break;
+		}
+
+		const innerText = getPrefixedSelectorText(parent, ruleSelectors[0], sourceCode);
+		const inner = innerText === undefined ? undefined : getParsableNestedSelectorText(innerText);
+		if (inner === undefined) {
+			break;
+		}
+
+		relatedRules.push({rule, inner});
+	}
+
+	return relatedRules.length < 2 ? undefined : {parentText: getNodesText(parent.children, sourceCode), relatedRules};
+};
+
 /**
 @param {CssicornContext} context
 */
 const create = context => {
 	const {sourceCode} = context;
+	const [{checkSharedPrefixes}] = context.options;
 	if (sourceCode.ast.children.some(node => node.type === 'Atrule' && normalizeCssIdentifier(node.name) === 'namespace')) {
 		return;
 	}
@@ -691,7 +729,7 @@ const create = context => {
 	context.on(['StyleSheet', 'Block'], function * (container) {
 		for (let index = 0; index < container.children.length - 1; index++) {
 			const parentRule = container.children[index];
-			// Discovery starts at an existing parent rule; the matcher validates every moved child of following grouping blocks.
+			// Discovery starts at a style rule; the matcher validates every moved child of following grouping blocks.
 			const selectors = getSelectors(parentRule);
 			if (
 				!selectors?.length
@@ -703,7 +741,15 @@ const create = context => {
 				continue;
 			}
 
-			const relatedRules = getRelatedRules(container.children, index + 1, selectors, context);
+			let relatedRules = getRelatedRules(container.children, index + 1, selectors, context);
+			let sharedParentText;
+			if (relatedRules.length === 0 && checkSharedPrefixes) {
+				const candidate = getSharedPrefixCandidate(container.children, index, selectors, context);
+				if (candidate) {
+					({relatedRules, parentText: sharedParentText} = candidate);
+				}
+			}
+
 			if (relatedRules.length === 0) {
 				continue;
 			}
@@ -717,7 +763,7 @@ const create = context => {
 			}
 
 			const reportedRule = relatedRules[0].rule;
-			const replacement = getMergedReplacement(parentRule, relatedRules, context);
+			const replacement = getMergedReplacement(parentRule, relatedRules, context, sharedParentText);
 			yield {
 				node: reportedRule.prelude ?? reportedRule,
 				messageId: MESSAGE_ID_RELATED_RULES,
@@ -726,7 +772,7 @@ const create = context => {
 				*/
 				fix: replacement === undefined ? undefined : fixer => fixer.replaceTextRange([sourceCode.getRange(parentRule)[0], sourceCode.getRange(relatedRules.at(-1).rule)[1]], replacement),
 			};
-			index += relatedRules.length;
+			index += relatedRules.length - Number(sharedParentText !== undefined);
 		}
 	});
 
@@ -772,7 +818,17 @@ const config = {
 			recommended: true,
 		},
 		fixable: 'code',
-		schema: [],
+		schema: [{
+			type: 'object',
+			properties: {
+				checkSharedPrefixes: {
+					type: 'boolean',
+					description: 'Check adjacent descendant rules with the same complete leading compound containing a class.',
+				},
+			},
+			additionalProperties: false,
+		}],
+		defaultOptions: [{checkSharedPrefixes: false}],
 		messages,
 		languages: ['css/css'],
 	},
