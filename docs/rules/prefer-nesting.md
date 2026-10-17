@@ -146,6 +146,6 @@ Mixed `:is()` arguments and their resulting nesting parents can trigger [`no-nes
 
 Standalone conversions require one outer selector and at least two `:is()` arguments. Attached groups need a following suffix. Complex arguments are supported only for leading groups when expansion preserves ancestor matching. Parent rules inside preceding conditional blocks are not discovered or hoisted.
 
-Skips ambiguous grouped matches, nested selectors that the parser cannot read, opaque parent arguments, `@scope`, and files with `@namespace`. Related parent matching skips ancestor references inside `:host()` or `:host-context()`. Comments, missing semicolons, or unsafe formatting can prevent fixes.
+Skips ambiguous grouped matches, opaque parent arguments, `@scope`, and files with `@namespace`. Related parent matching skips ancestor references inside `:host()` or `:host-context()`. Parser limitations, comments, missing semicolons, or unsafe formatting can prevent fixes.
 
 Autofixes target HTML and SVG elements. Other XML namespaces are unsupported.

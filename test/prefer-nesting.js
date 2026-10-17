@@ -889,11 +889,11 @@ test({
 		'a :is(.foo > .bar, .baz).active {}',
 	],
 	invalid: [
-		...['is'].flatMap(name => ['.active', '::before', ' b', ' > b', ' + b', ' ~ b'].map(suffix => ({
-			code: `a :${name}(.foo, #bar)${suffix} { color: red; }`,
-			output: `a { :${name}(.foo, #bar)${suffix} { color: red; } }`,
+		...['.active', '::before', ' b', ' > b', ' + b', ' ~ b'].map(suffix => ({
+			code: `a :is(.foo, #bar)${suffix} { color: red; }`,
+			output: `a { :is(.foo, #bar)${suffix} { color: red; } }`,
 			errors: 1,
-		}))),
+		})),
 		...['>', '+', '~'].map(combinator => ({
 			code: `a ${combinator} :is(.foo, .bar).active { color: red; }`,
 			output: `a { ${combinator} :is(.foo, .bar).active { color: red; } }`,

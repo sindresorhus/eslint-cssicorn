@@ -131,11 +131,11 @@ nodeTest('relative groups reach stable output with other nesting rules', () => {
 			'no-unscoped-nesting-selector',
 		].map(name => [`cssicorn/${name}`, 'error'])),
 	};
-	for (const {code, output, settledOutput = output} of cases) {
+	for (const {code, output} of cases) {
 		const result = linter.verifyAndFix(code, config, {filename: 'test.css'});
-		assert.equal(result.output, settledOutput, code);
+		assert.equal(result.output, output, code);
 		assert.deepEqual(result.messages, [], code);
-		assert.deepEqual(linter.verifyAndFix(result.output, config, {filename: 'test.css'}), {fixed: false, output: settledOutput, messages: []}, code);
+		assert.deepEqual(linter.verifyAndFix(result.output, config, {filename: 'test.css'}), {fixed: false, output, messages: []}, code);
 	}
 
 	const result = linter.verifyAndFix('.card > :is(.foo, #bar).active { color: red; }', config, {filename: 'test.css'});

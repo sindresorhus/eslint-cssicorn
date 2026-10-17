@@ -75,6 +75,6 @@ nodeTest('extended related fixes reparse and converge with the nesting rules', (
 		assert.equal(repeated.fixed, false, code);
 		assert.deepEqual(repeated.messages, [], code);
 		// Existing parents keep their declarations before the merged nested rules.
-		assert.equal(linter.verifyAndFix(output, config, {filename: 'test.css'}).output, result.output, code);
+		assert.equal(result.output, output, code);
 	}
 });

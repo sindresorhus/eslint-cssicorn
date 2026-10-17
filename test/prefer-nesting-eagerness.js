@@ -60,6 +60,18 @@ nodeTest('structural is conversions converge without expanding retained wrappers
 			code: '.outer { &:is(:focus, :hover) svg { fill: red; } }',
 			output: '.outer { &:focus, &:hover { svg { fill: red; } } }',
 		},
+		{
+			code: ':is(.card, .panel) .title { color: red; } .card .body, .panel .body { color: blue; }',
+			output: '.card, .panel { .title { color: red; } .body { color: blue; } }',
+		},
+		{
+			code: '.card :is(.title, .body) { color: red; } .card .footer { color: blue; }',
+			output: '.card { .title, .body { color: red; } .footer { color: blue; } }',
+		},
+		{
+			code: '.card :is(.a, :unknown) :is(.b, .c) { color: red; }',
+			output: '.card :is(.a, :unknown) { .b, .c { color: red; } }',
+		},
 	]) {
 		assert.deepEqual(linter.verifyAndFix(code, config, {filename: 'test.css'}), {fixed: true, output, messages: []});
 		assert.deepEqual(linter.verifyAndFix(output, config, {filename: 'test.css'}), {fixed: false, output, messages: []});

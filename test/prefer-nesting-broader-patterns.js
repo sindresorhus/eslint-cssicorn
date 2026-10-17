@@ -198,6 +198,6 @@ nodeTest('broader nesting fixes converge with the nesting rules', () => {
 		const result = linter.verifyAndFix(code, config, {filename: 'test.css'});
 		assert.deepEqual(result.messages, [], code);
 		assert.equal(linter.verifyAndFix(result.output, config, {filename: 'test.css'}).fixed, false, code);
-		assert.equal(result.output, linter.verifyAndFix(output, config, {filename: 'test.css'}).output, code);
+		assert.equal(result.output, output, code);
 	}
 });

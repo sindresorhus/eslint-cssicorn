@@ -29,7 +29,7 @@ import {
 const MESSAGE_ID = 'prefer-nesting';
 const MESSAGE_ID_RELATED_RULES = 'prefer-nesting/related-rules';
 const messages = {
-	[MESSAGE_ID]: 'Prefer CSS nesting over `:{{name}}()`.',
+	[MESSAGE_ID]: 'Prefer CSS nesting over `:is()`.',
 	[MESSAGE_ID_RELATED_RULES]: 'Prefer CSS nesting for related rules.',
 };
 
@@ -723,7 +723,6 @@ const create = context => {
 		return {
 			node: candidate.node,
 			messageId: MESSAGE_ID,
-			data: {name: normalizeCssIdentifier(candidate.node.name)},
 			/**
 			@param {Parameters<CssicornRuleFixer>[0]} fixer
 			*/
