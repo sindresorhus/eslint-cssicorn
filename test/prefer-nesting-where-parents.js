@@ -10,6 +10,7 @@ const cases = [
 	{
 		code: '.outer, #missing { .a:where(#1&, .open), .b:where(&.active) {} .a:where(#1&, .open) .title, .b:where(&.active) .title { color: red; } }',
 		output: '.outer, #missing { .a:where(#1&, .open), .b:where(&.active) { .title { color: red; } } }',
+		messageIds: ['no-nesting-with-mixed-specificity'],
 	},
 	{
 		code: '.outer { .a:where(&), .b:where(&.active) {} .a:where(&) .title, .b:where(&.active) .title { color: red; } }',
@@ -22,6 +23,7 @@ const cases = [
 	{
 		code: '.outer, #missing { &.a:where(&), &.b:where(&.active) {} &.a:where(&)::before, &.b:where(&.active)::before { content: "test"; } }',
 		output: '.outer, #missing { &.a:where(&), &.b:where(&.active) { &::before { content: "test"; } } }',
+		messageIds: ['no-nesting-with-mixed-specificity'],
 	},
 	{
 		code: '.outer { &&.a:where(&), &&.b:where(&.active) {} &&.a:where(&) .title, &&.b:where(&.active) .title { color: red; } }',
@@ -86,15 +88,10 @@ nodeTest('zero-specificity parent references preserve stable fixes with the nest
 			'no-unscoped-nesting-selector',
 		].map(name => [`cssicorn/${name}`, 'error'])),
 	};
-	for (const {code, output} of cases) {
+	for (const {code, output, messageIds = []} of cases) {
 		const result = linter.verifyAndFix(code, config, {filename: 'test.css'});
 		assert.equal(result.output, output, code);
-		const originalMessages = linter.verify(code, config, {filename: 'test.css'});
-		const originalRuleIds = new Set(originalMessages.map(message => message.ruleId));
-		assert.deepEqual(result.messages.filter(message => message.fatal || !originalRuleIds.has(message.ruleId)), [], code);
-		for (const ruleId of originalRuleIds) {
-			assert.ok(result.messages.filter(message => message.ruleId === ruleId).length <= originalMessages.filter(message => message.ruleId === ruleId).length, code);
-		}
+		assert.deepEqual(result.messages.map(message => message.messageId), messageIds, code);
 
 		assert.deepEqual(linter.verifyAndFix(output, config, {filename: 'test.css'}), {fixed: false, output, messages: result.messages}, code);
 	}

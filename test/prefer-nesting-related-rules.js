@@ -19,6 +19,14 @@ const extendedRelatedRuleCases = [
 		code: '.card { color: red; } .card .title, .card { color: blue; }',
 		output: '.card { color: red; .title, & { color: blue; } }',
 	},
+	...['layer theme\u00A0', 'media screen\u00A0'].map(atRule => ({
+		code: `.card { color: red; } @${atRule} { .card { color: blue; } }`,
+		output: `.card { color: red; @${atRule} { color: blue; } }`,
+	})),
+	...['\u00A0', '\u00A0 .title'].map(selector => ({
+		code: `.card {} @media (color) { .card ${selector} { color: red; } @layer theme { .card { color: blue; } } }`,
+		output: `.card { @media (color) { ${selector} { color: red; } @layer theme { color: blue; } } }`,
+	})),
 ];
 
 test({

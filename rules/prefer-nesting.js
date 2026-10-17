@@ -17,6 +17,7 @@ import {
 	isParsedAsNestedRule,
 	normalizeCssIdentifier,
 	transparentGroupingAtRules,
+	trimCssWhitespace,
 	trimCssWhitespaceEnd,
 } from './utils/index.js';
 
@@ -316,7 +317,7 @@ const getConditionalBlock = (rule, nestedRules, context, indentationStep) => {
 		}
 
 		const [start, end] = sourceCode.getRange(nestedRule.rule);
-		block += sourceCode.text.slice(previousEnd, start) + content.trim();
+		block += sourceCode.text.slice(previousEnd, start) + trimCssWhitespace(content);
 		previousEnd = end;
 	}
 
@@ -558,7 +559,7 @@ const getRelatedRule = (parents, rule, context, canNestStyleRules = true) => {
 	const childRule = rule.block.children.at(0);
 	const selectors = rule.block.children.length === 1 ? getSelectors(childRule) : undefined;
 	canNestStyleRules &&= ['media', 'layer'].includes(name);
-	const inner = sourceCode.text.slice(sourceCode.getRange(rule)[0], sourceCode.getRange(rule.block)[0]).trimEnd();
+	const inner = trimCssWhitespaceEnd(sourceCode.text.slice(sourceCode.getRange(rule)[0], sourceCode.getRange(rule.block)[0]));
 	if (selectors && getParentText(selectors, sourceCode) === getParentText(parents, sourceCode)) {
 		// Nested @container, @supports, and @starting-style blocks must remain declaration-only for the parser.
 		if (!canNestStyleRules && childRule.block.children.some(node => node.type !== 'Declaration')) {
