@@ -9,13 +9,13 @@
 <!-- end auto-generated rule header -->
 <!-- Do not manually modify this header. Run: `npm run fix:eslint-docs` -->
 
-The [Media Queries Level 4 range syntax](https://www.w3.org/TR/mediaqueries-4/#mq-range-context) makes comparisons easier to read by placing the media feature and its value in mathematical order. It is [supported in modern browsers](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_media_queries/Using_media_queries#creating_complex_media_queries) and avoids the legacy `min-` and `max-` prefixes.
+This rule reports standardized range media features with a `min-` or `max-` prefix, and prefers the [Media Queries Level 4 range syntax](https://www.w3.org/TR/mediaqueries-4/#mq-range-context), which is easier to read because it puts the feature and its value in mathematical order. It is [supported in modern browsers](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_media_queries/Using_media_queries#creating_complex_media_queries).
 
-This rule checks standardized range media features in `@media` rules. It only supports CSS parsed with `@eslint/css`; preprocessors such as SCSS and other contexts such as `@container`, `@import`, and `@custom-media` are not checked.
+The autofix converts a single bound, and a suggestion combines a lower and an upper bound.
 
 ## Examples
 
-Single bounds are automatically fixed without changing their meaning:
+Single bounds are fixed without changing their meaning:
 
 ```css
 /* ❌ */
@@ -33,7 +33,7 @@ Single bounds are automatically fixed without changing their meaning:
 @media (width <= 999px) {}
 ```
 
-Directly adjacent lower and upper bounds for the same feature are combined into one editor suggestion. They are not changed by `--fix`:
+Directly adjacent lower and upper bounds for the same feature are combined by a suggestion, not by `--fix`:
 
 ```css
 /* ❌ */
@@ -53,4 +53,10 @@ When the maximum is a nonnegative safe integer written in decimal notation with 
 @media (500px <= width < 1000px) {}
 ```
 
-The integer-pixel suggestion intentionally expands the range to include fractional values between `999px` and `1000px`. Because that can change behavior, it is only offered as a suggestion. Other values use an exact inclusive range.
+This intentionally includes fractional values between `999px` and `1000px`, which is why it is only a suggestion. Other values use an exact inclusive range.
+
+## Limitations
+
+Only `@media` rules are checked, not media queries in other contexts, such as `@container`, `@import`, and `@custom-media`.
+
+Features that contain comments are reported without a fix or suggestion.

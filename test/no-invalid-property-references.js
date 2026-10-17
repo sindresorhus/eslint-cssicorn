@@ -208,7 +208,7 @@ nodeTest('property catalogs are isolated between files', async () => {
 	const [standardResult] = await eslint.lintText(code, {filePath: 'standard.css'});
 	assert.equal(standardResult.messages.length, 1);
 	assert.equal(standardResult.messages[0].ruleId, 'cssicorn/no-invalid-property-references');
-	assert.equal(standardResult.messages[0].message, 'Unknown property reference \'future-property\' in \'transition\'.');
+	assert.equal(standardResult.messages[0].message, 'Unknown property reference `future-property` in `transition`.');
 });
 
 test({

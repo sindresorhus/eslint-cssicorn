@@ -9,32 +9,13 @@
 <!-- end auto-generated rule header -->
 <!-- Do not manually modify this header. Run: `npm run fix:eslint-docs` -->
 
-Suggest configured custom properties for matching literal values. Uses suggestions because replacements can affect theme, inheritance, or registration.
+This rule reports literal values that match a configured custom property, and suggests the custom property instead.
 
-## Options
-
-### `customProperties`
-
-Type: `object`\
-Default: `{}`
-
-Map decoded, case-sensitive custom-property names to literal CSS values. An empty catalog produces no reports.
-
-```js
-'cssicorn/prefer-existing-custom-properties': [
-	'warn',
-	{
-		customProperties: {
-			'--brand-color': '#6750a4',
-			'--space-small': '8px',
-		},
-	},
-],
-```
-
-Tokens must exist and be appropriate where used; the rule does not discover definitions or analyze the cascade. Empty or malformed values cause configuration errors; unsupported values are skipped.
+There is no autofix because a replacement can affect theme, inheritance, or registration, but a suggestion is provided.
 
 ## Examples
+
+These examples use the configuration in [Options](#options).
 
 ```css
 /* ❌ */
@@ -48,8 +29,39 @@ a {
 }
 ```
 
-## Matching and limitations
+## Options
 
-- Prefers whole-value matches over literal components. Skips ambiguous or commented matches.
-- Recognizes simple hex/RGB equivalents and milliseconds/seconds. Other values match structurally; calculations are not evaluated.
-- Ignores custom-property declarations, substitution/random/element-reference functions, strings, URLs, and color-function components.
+### customProperties
+
+Type: `object`\
+Default: `{}`
+
+A map of custom property names to literal CSS values. The names are decoded and case-sensitive. With an empty map, the rule reports nothing.
+
+```js
+{
+	customProperties: {
+		'--brand-color': '#6750a4',
+		'--space-small': '8px',
+	},
+}
+```
+
+The rule does not discover the definitions or analyze the cascade, so the custom properties must exist and fit where they are used. An empty or malformed value causes a configuration error, and unsupported values are skipped.
+
+## Value matching
+
+- A match of the whole value is preferred over matches of its components.
+- A match that contains a comment, or a value that more than one configured custom property has, is not reported.
+- Simple hex and RGB equivalents match, and so do equal times in milliseconds and seconds. Other values match structurally, without evaluating calculations.
+
+## Limitations
+
+The rule ignores:
+
+- Custom property declarations.
+- Substitution functions, such as `var()`.
+- `random()`.
+- Element reference functions, such as `element()`.
+- Strings and URLs.
+- Components of color functions.

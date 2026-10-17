@@ -15,8 +15,8 @@ import {
 const MESSAGE_ID_UNKNOWN = 'no-invalid-property-references/unknown';
 const MESSAGE_ID_FORBIDDEN = 'no-invalid-property-references/forbidden';
 const messages = {
-	[MESSAGE_ID_UNKNOWN]: 'Unknown property reference \'{{name}}\' in \'{{property}}\'.',
-	[MESSAGE_ID_FORBIDDEN]: 'Property reference \'{{name}}\' is not allowed in \'{{property}}\'.',
+	[MESSAGE_ID_UNKNOWN]: 'Unknown property reference `{{name}}` in `{{property}}`.',
+	[MESSAGE_ID_FORBIDDEN]: 'Property reference `{{name}}` is not allowed in `{{property}}`.',
 };
 
 const exemptIdentifiersByProperty = new Map([

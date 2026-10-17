@@ -1000,6 +1000,243 @@ Output:
 
 `;
 
+exports[`invalid(53): @keyframes fade {\n\tfrom {\n\t\tcolor: red;\n\t\tanimation-duration: 2s;\n\t}\n} 1`] = `
+
+  1 | @keyframes fade {
+  2 | 	from {
+  3 | 		color: red;
+  4 | 		animation-duration: 2s;
+  5 | 	}
+  6 | }
+
+`;
+
+exports[`invalid(53): @keyframes fade {\n\tfrom {\n\t\tcolor: red;\n\t\tanimation-duration: 2s;\n\t}\n} 2`] = `
+
+Message:
+  1 | @keyframes fade {
+  2 | 	from {
+  3 | 		color: red;
+> 4 | 		animation-duration: 2s;
+    | 		^^^^^^^^^^^^^^^^^^^^^^ \`animation-duration\` has no effect inside keyframes. Set it on the animated element instead.
+  5 | 	}
+  6 | }
+
+Output:
+  1 | @keyframes fade {
+  2 | 	from {
+  3 | 		color: red;
+  4 | 	}
+  5 | }
+
+`;
+
+exports[`invalid(54): @keyframes fade {\n  from {\n    animation-duration: 2s;  \n    color: red;\n  }\n} 1`] = `
+
+  1 | @keyframes fade {
+  2 |   from {
+  3 |     animation-duration: 2s;  
+  4 |     color: red;
+  5 |   }
+  6 | }
+
+`;
+
+exports[`invalid(54): @keyframes fade {\n  from {\n    animation-duration: 2s;  \n    color: red;\n  }\n} 2`] = `
+
+Message:
+  1 | @keyframes fade {
+  2 |   from {
+> 3 |     animation-duration: 2s;  
+    |     ^^^^^^^^^^^^^^^^^^^^^^ \`animation-duration\` has no effect inside keyframes. Set it on the animated element instead.
+  4 |     color: red;
+  5 |   }
+  6 | }
+
+Output:
+  1 | @keyframes fade {
+  2 |   from {
+  3 |     color: red;
+  4 |   }
+  5 | }
+
+`;
+
+exports[`invalid(55): @keyframes fade {\r\n\tfrom {\r\n\t\tanimation-duration: 2s;\r\n\t\tcolor: red;\r\n\t}\r\n} 1`] = `
+
+  1 | @keyframes fade {
+  2 | 	from {
+  3 | 		animation-duration: 2s;
+  4 | 		color: red;
+  5 | 	}
+  6 | }
+
+`;
+
+exports[`invalid(55): @keyframes fade {\r\n\tfrom {\r\n\t\tanimation-duration: 2s;\r\n\t\tcolor: red;\r\n\t}\r\n} 2`] = `
+
+Message:
+  1 | @keyframes fade {
+  2 | 	from {
+> 3 | 		animation-duration: 2s;
+    | 		^^^^^^^^^^^^^^^^^^^^^^ \`animation-duration\` has no effect inside keyframes. Set it on the animated element instead.
+  4 | 		color: red;
+  5 | 	}
+  6 | }
+
+Output:
+  1 | @keyframes fade {
+  2 | 	from {
+  3 | 		color: red;
+  4 | 	}
+  5 | }
+
+`;
+
+exports[`invalid(56): @keyframes fade {\n\tfrom {\n\t\tcolor: red;\n\t\tanimation-duration: 2s\n\t}\n} 1`] = `
+
+  1 | @keyframes fade {
+  2 | 	from {
+  3 | 		color: red;
+  4 | 		animation-duration: 2s
+  5 | 	}
+  6 | }
+
+`;
+
+exports[`invalid(56): @keyframes fade {\n\tfrom {\n\t\tcolor: red;\n\t\tanimation-duration: 2s\n\t}\n} 2`] = `
+
+Message:
+  1 | @keyframes fade {
+  2 | 	from {
+  3 | 		color: red;
+> 4 | 		animation-duration: 2s
+    | 		^^^^^^^^^^^^^^^^^^^^^^
+> 5 | 	}
+    | ^ \`animation-duration\` has no effect inside keyframes. Set it on the animated element instead.
+  6 | }
+
+Output:
+  1 | @keyframes fade {
+  2 | 	from {
+  3 | 		color: red;
+  4 | 	}
+  5 | }
+
+`;
+
+exports[`invalid(57): @keyframes fade {\n\tfrom {\n\t\tanimation-duration: 2s;\n\t\tanimation-delay: 1s;\n\t}\n} 1`] = `
+
+  1 | @keyframes fade {
+  2 | 	from {
+  3 | 		animation-duration: 2s;
+  4 | 		animation-delay: 1s;
+  5 | 	}
+  6 | }
+
+`;
+
+exports[`invalid(57): @keyframes fade {\n\tfrom {\n\t\tanimation-duration: 2s;\n\t\tanimation-delay: 1s;\n\t}\n} 2`] = `
+
+Message:
+  1 | @keyframes fade {
+  2 | 	from {
+> 3 | 		animation-duration: 2s;
+    | 		^^^^^^^^^^^^^^^^^^^^^^ \`animation-duration\` has no effect inside keyframes. Set it on the animated element instead.
+  4 | 		animation-delay: 1s;
+  5 | 	}
+  6 | }
+
+Output:
+  1 | @keyframes fade {
+  2 | 	from {
+  3 | 		animation-delay: 1s;
+  4 | 	}
+  5 | }
+
+`;
+
+exports[`invalid(57): @keyframes fade {\n\tfrom {\n\t\tanimation-duration: 2s;\n\t\tanimation-delay: 1s;\n\t}\n} 3`] = `
+
+Message:
+  1 | @keyframes fade {
+  2 | 	from {
+  3 | 		animation-duration: 2s;
+> 4 | 		animation-delay: 1s;
+    | 		^^^^^^^^^^^^^^^^^^^ \`animation-delay\` has no effect inside keyframes. Set it on the animated element instead.
+  5 | 	}
+  6 | }
+
+Output:
+  1 | @keyframes fade {
+  2 | 	from {
+  3 | 		animation-duration: 2s;
+  4 | 	}
+  5 | }
+
+`;
+
+exports[`invalid(58): @keyframes fade {\n\tfrom {\n\t\tcolor: red; animation-duration: 2s;\n\t\topacity: 1;\n\t}\n} 1`] = `
+
+  1 | @keyframes fade {
+  2 | 	from {
+  3 | 		color: red; animation-duration: 2s;
+  4 | 		opacity: 1;
+  5 | 	}
+  6 | }
+
+`;
+
+exports[`invalid(58): @keyframes fade {\n\tfrom {\n\t\tcolor: red; animation-duration: 2s;\n\t\topacity: 1;\n\t}\n} 2`] = `
+
+Message:
+  1 | @keyframes fade {
+  2 | 	from {
+> 3 | 		color: red; animation-duration: 2s;
+    | 		            ^^^^^^^^^^^^^^^^^^^^^^ \`animation-duration\` has no effect inside keyframes. Set it on the animated element instead.
+  4 | 		opacity: 1;
+  5 | 	}
+  6 | }
+
+Output:
+  1 | @keyframes fade {
+  2 | 	from {
+  3 | 		color: red; 
+  4 | 		opacity: 1;
+  5 | 	}
+  6 | }
+
+`;
+
+exports[`invalid(59): @keyframes fade {\n\tfrom {\n\t\tanimation-duration: 2s; color: red;\n\t}\n} 1`] = `
+
+  1 | @keyframes fade {
+  2 | 	from {
+  3 | 		animation-duration: 2s; color: red;
+  4 | 	}
+  5 | }
+
+`;
+
+exports[`invalid(59): @keyframes fade {\n\tfrom {\n\t\tanimation-duration: 2s; color: red;\n\t}\n} 2`] = `
+
+Message:
+  1 | @keyframes fade {
+  2 | 	from {
+> 3 | 		animation-duration: 2s; color: red;
+    | 		^^^^^^^^^^^^^^^^^^^^^^ \`animation-duration\` has no effect inside keyframes. Set it on the animated element instead.
+  4 | 	}
+  5 | }
+
+Output:
+  1 | @keyframes fade {
+  2 | 	from {
+  3 | 		 color: red;
+  4 | 	}
+  5 | }
+
+`;
+
 exports[`invalid(6): @keyframes fade { from { animation-iteration-count: infinite; } } 1`] = `
 
   1 | @keyframes fade { from { animation-iteration-count: infinite; } }
@@ -1014,6 +1251,70 @@ Message:
 
 Output:
   1 | @keyframes fade { from {  } }
+
+`;
+
+exports[`invalid(60): @keyframes fade {\n\tfrom {\n\t\tanimation-duration: 2s; /* note */\n\t\tcolor: red;\n\t}\n} 1`] = `
+
+  1 | @keyframes fade {
+  2 | 	from {
+  3 | 		animation-duration: 2s; /* note */
+  4 | 		color: red;
+  5 | 	}
+  6 | }
+
+`;
+
+exports[`invalid(60): @keyframes fade {\n\tfrom {\n\t\tanimation-duration: 2s; /* note */\n\t\tcolor: red;\n\t}\n} 2`] = `
+
+Message:
+  1 | @keyframes fade {
+  2 | 	from {
+> 3 | 		animation-duration: 2s; /* note */
+    | 		^^^^^^^^^^^^^^^^^^^^^^ \`animation-duration\` has no effect inside keyframes. Set it on the animated element instead.
+  4 | 		color: red;
+  5 | 	}
+  6 | }
+
+Output:
+  1 | @keyframes fade {
+  2 | 	from {
+  3 | 		 /* note */
+  4 | 		color: red;
+  5 | 	}
+  6 | }
+
+`;
+
+exports[`invalid(61): @keyframes fade {\n\tfrom {\n\t\t/* note */ animation-duration: 2s;\n\t\tcolor: red;\n\t}\n} 1`] = `
+
+  1 | @keyframes fade {
+  2 | 	from {
+  3 | 		/* note */ animation-duration: 2s;
+  4 | 		color: red;
+  5 | 	}
+  6 | }
+
+`;
+
+exports[`invalid(61): @keyframes fade {\n\tfrom {\n\t\t/* note */ animation-duration: 2s;\n\t\tcolor: red;\n\t}\n} 2`] = `
+
+Message:
+  1 | @keyframes fade {
+  2 | 	from {
+> 3 | 		/* note */ animation-duration: 2s;
+    | 		           ^^^^^^^^^^^^^^^^^^^^^^ \`animation-duration\` has no effect inside keyframes. Set it on the animated element instead.
+  4 | 		color: red;
+  5 | 	}
+  6 | }
+
+Output:
+  1 | @keyframes fade {
+  2 | 	from {
+  3 | 		/* note */ 
+  4 | 		color: red;
+  5 | 	}
+  6 | }
 
 `;
 

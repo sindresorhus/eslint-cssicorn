@@ -2107,6 +2107,56 @@ Output:
 
 `;
 
+exports[`invalid(208): ::selection {\n\tcolor: red;\n\tpadding: 1rem;\n} 1`] = `
+
+  1 | ::selection {
+  2 | 	color: red;
+  3 | 	padding: 1rem;
+  4 | }
+
+`;
+
+exports[`invalid(208): ::selection {\n\tcolor: red;\n\tpadding: 1rem;\n} 2`] = `
+
+Message:
+  1 | ::selection {
+  2 | 	color: red;
+> 3 | 	padding: 1rem;
+    | 	^^^^^^^^^^^^^ \`padding\` has no effect on the targets selected by ::selection.
+  4 | }
+
+Output:
+  1 | ::selection {
+  2 | 	color: red;
+  3 | }
+
+`;
+
+exports[`invalid(209): ::selection {\n  padding: 1rem;  \n  color: red;\n} 1`] = `
+
+  1 | ::selection {
+  2 |   padding: 1rem;  
+  3 |   color: red;
+  4 | }
+
+`;
+
+exports[`invalid(209): ::selection {\n  padding: 1rem;  \n  color: red;\n} 2`] = `
+
+Message:
+  1 | ::selection {
+> 2 |   padding: 1rem;  
+    |   ^^^^^^^^^^^^^ \`padding\` has no effect on the targets selected by ::selection.
+  3 |   color: red;
+  4 | }
+
+Output:
+  1 | ::selection {
+  2 |   color: red;
+  3 | }
+
+`;
+
 exports[`invalid(21): ::selection { inset-block: 1px; } 1`] = `
 
   1 | ::selection { inset-block: 1px; }
@@ -2121,6 +2171,204 @@ Message:
 
 Output:
   1 | ::selection {  }
+
+`;
+
+exports[`invalid(210): ::selection {\r\n\tpadding: 1rem;\r\n\tcolor: red;\r\n} 1`] = `
+
+  1 | ::selection {
+  2 | 	padding: 1rem;
+  3 | 	color: red;
+  4 | }
+
+`;
+
+exports[`invalid(210): ::selection {\r\n\tpadding: 1rem;\r\n\tcolor: red;\r\n} 2`] = `
+
+Message:
+  1 | ::selection {
+> 2 | 	padding: 1rem;
+    | 	^^^^^^^^^^^^^ \`padding\` has no effect on the targets selected by ::selection.
+  3 | 	color: red;
+  4 | }
+
+Output:
+  1 | ::selection {
+  2 | 	color: red;
+  3 | }
+
+`;
+
+exports[`invalid(211): ::selection {\n\tcolor: red;\n\tpadding: 1rem\n} 1`] = `
+
+  1 | ::selection {
+  2 | 	color: red;
+  3 | 	padding: 1rem
+  4 | }
+
+`;
+
+exports[`invalid(211): ::selection {\n\tcolor: red;\n\tpadding: 1rem\n} 2`] = `
+
+Message:
+  1 | ::selection {
+  2 | 	color: red;
+> 3 | 	padding: 1rem
+    | 	^^^^^^^^^^^^^
+> 4 | }
+    | ^ \`padding\` has no effect on the targets selected by ::selection.
+
+Output:
+  1 | ::selection {
+  2 | 	color: red;
+  3 | }
+
+`;
+
+exports[`invalid(212): ::selection {\n\tcolor: red;\n\tpadding: 1rem;\n\tmargin: 1rem;\n} 1`] = `
+
+  1 | ::selection {
+  2 | 	color: red;
+  3 | 	padding: 1rem;
+  4 | 	margin: 1rem;
+  5 | }
+
+`;
+
+exports[`invalid(212): ::selection {\n\tcolor: red;\n\tpadding: 1rem;\n\tmargin: 1rem;\n} 2`] = `
+
+Message:
+  1 | ::selection {
+  2 | 	color: red;
+> 3 | 	padding: 1rem;
+    | 	^^^^^^^^^^^^^ \`padding\` has no effect on the targets selected by ::selection.
+  4 | 	margin: 1rem;
+  5 | }
+
+Output:
+  1 | ::selection {
+  2 | 	color: red;
+  3 | 	margin: 1rem;
+  4 | }
+
+`;
+
+exports[`invalid(212): ::selection {\n\tcolor: red;\n\tpadding: 1rem;\n\tmargin: 1rem;\n} 3`] = `
+
+Message:
+  1 | ::selection {
+  2 | 	color: red;
+  3 | 	padding: 1rem;
+> 4 | 	margin: 1rem;
+    | 	^^^^^^^^^^^^ \`margin\` has no effect on the targets selected by ::selection.
+  5 | }
+
+Output:
+  1 | ::selection {
+  2 | 	color: red;
+  3 | 	padding: 1rem;
+  4 | }
+
+`;
+
+exports[`invalid(213): ::selection {\n\tcolor: red; padding: 1rem;\n\tbackground: blue;\n} 1`] = `
+
+  1 | ::selection {
+  2 | 	color: red; padding: 1rem;
+  3 | 	background: blue;
+  4 | }
+
+`;
+
+exports[`invalid(213): ::selection {\n\tcolor: red; padding: 1rem;\n\tbackground: blue;\n} 2`] = `
+
+Message:
+  1 | ::selection {
+> 2 | 	color: red; padding: 1rem;
+    | 	            ^^^^^^^^^^^^^ \`padding\` has no effect on the targets selected by ::selection.
+  3 | 	background: blue;
+  4 | }
+
+Output:
+  1 | ::selection {
+  2 | 	color: red; 
+  3 | 	background: blue;
+  4 | }
+
+`;
+
+exports[`invalid(214): ::selection {\n\tpadding: 1rem; color: red;\n} 1`] = `
+
+  1 | ::selection {
+  2 | 	padding: 1rem; color: red;
+  3 | }
+
+`;
+
+exports[`invalid(214): ::selection {\n\tpadding: 1rem; color: red;\n} 2`] = `
+
+Message:
+  1 | ::selection {
+> 2 | 	padding: 1rem; color: red;
+    | 	^^^^^^^^^^^^^ \`padding\` has no effect on the targets selected by ::selection.
+  3 | }
+
+Output:
+  1 | ::selection {
+  2 | 	 color: red;
+  3 | }
+
+`;
+
+exports[`invalid(215): ::selection {\n\tpadding: 1rem; /* note */\n\tcolor: red;\n} 1`] = `
+
+  1 | ::selection {
+  2 | 	padding: 1rem; /* note */
+  3 | 	color: red;
+  4 | }
+
+`;
+
+exports[`invalid(215): ::selection {\n\tpadding: 1rem; /* note */\n\tcolor: red;\n} 2`] = `
+
+Message:
+  1 | ::selection {
+> 2 | 	padding: 1rem; /* note */
+    | 	^^^^^^^^^^^^^ \`padding\` has no effect on the targets selected by ::selection.
+  3 | 	color: red;
+  4 | }
+
+Output:
+  1 | ::selection {
+  2 | 	 /* note */
+  3 | 	color: red;
+  4 | }
+
+`;
+
+exports[`invalid(216): ::selection {\n\t/* note */ padding: 1rem;\n\tcolor: red;\n} 1`] = `
+
+  1 | ::selection {
+  2 | 	/* note */ padding: 1rem;
+  3 | 	color: red;
+  4 | }
+
+`;
+
+exports[`invalid(216): ::selection {\n\t/* note */ padding: 1rem;\n\tcolor: red;\n} 2`] = `
+
+Message:
+  1 | ::selection {
+> 2 | 	/* note */ padding: 1rem;
+    | 	           ^^^^^^^^^^^^^ \`padding\` has no effect on the targets selected by ::selection.
+  3 | 	color: red;
+  4 | }
+
+Output:
+  1 | ::selection {
+  2 | 	/* note */ 
+  3 | 	color: red;
+  4 | }
 
 `;
 

@@ -220,6 +220,17 @@ test.snapshot({
 		pair('border-color: white; border-end-end-radius: 4px;', 'border-color: black;'),
 		// Setup and base rule inside the same `@layer`.
 		'@layer theme { :root { color-scheme: light dark; } a { color: white; } @media (prefers-color-scheme: dark) { a { color: black; } } }',
+		// The removed media block takes its lines and the blank line before it
+		'.card {\n\tcolor-scheme: light dark;\n\tborder: 1px solid white;\n\n\t@media (prefers-color-scheme: dark) {\n\t\tborder: 1px solid black;\n\t}\n}\n',
+		'.card {\n  color-scheme: light dark;\n  border: 1px solid white;\n\n  @media (prefers-color-scheme: dark) {\n    border: 1px solid black;\n  }\n}\n',
+		'.card {\r\n\tcolor-scheme: light dark;\r\n\tborder: 1px solid white;\r\n\r\n\t@media (prefers-color-scheme: dark) {\r\n\t\tborder: 1px solid black;\r\n\t}\r\n}\r\n',
+		':root {\n\tcolor-scheme: light dark;\n}\n\n.card {\n\tcolor: white;\n}\n\n@media (prefers-color-scheme: dark) {\n\t.card {\n\t\tcolor: black;\n\t}\n}\n\n.next {\n\tcolor: red;\n}\n',
+		// A comment before the media block is kept
+		':root {\n\tcolor-scheme: light dark;\n}\n\n.card {\n\tcolor: white;\n}\n\n/* Dark */\n@media (prefers-color-scheme: dark) {\n\t.card {\n\t\tcolor: black;\n\t}\n}\n',
+		// A commented media block keeps the comment and drops the rule
+		':root {\n\tcolor-scheme: light dark;\n}\n\n.card {\n\tcolor: white;\n}\n\n@media (prefers-color-scheme: dark) {\n\t/* Dark */\n\t.card {\n\t\tcolor: black;\n\t}\n}\n',
+		// A paired declaration among others is removed with its line
+		'.card {\n\tcolor-scheme: light dark;\n\tcolor: white;\n\n\t@media (prefers-color-scheme: dark) {\n\t\tcolor: black;\n\t\tpadding: 0;\n\t}\n}\n',
 	],
 });
 
@@ -272,7 +283,7 @@ nodeTest('suggestions preserve CRLF, indentation, and comments outside paired de
 	const [message] = linter.verify(code, configuration({'cssicorn/prefer-light-dark': 'error'}), {filename: 'test.css'});
 	const [{fix}] = message.suggestions;
 	const output = code.slice(0, fix.range[0]) + fix.text + code.slice(fix.range[1]);
-	assert.equal(output, code.replace('color: white;', 'color: light-dark(white, black);').replace('color: black;', ''));
+	assert.equal(output, code.replace('color: white;', 'color: light-dark(white, black);').replace('    color: black;\r\n', ''));
 });
 
 nodeTest('recommended and all enable the rule, unopinionated excludes it', () => {
@@ -292,6 +303,6 @@ nodeTest('applying suggestions one at a time removes the emptied nested media bl
 		code = code.slice(0, fix.range[0]) + fix.text + code.slice(fix.range[1]);
 	}
 
-	assert.equal(code, 'a { color-scheme: light dark; color: light-dark(white, black); background: light-dark(red, blue); margin: 0;  }');
+	assert.equal(code, 'a { color-scheme: light dark; color: light-dark(white, black); background: light-dark(red, blue); margin: 0; }');
 	assert.deepEqual(linter.verify(code, config, {filename: 'test.css'}), []);
 });

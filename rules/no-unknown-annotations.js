@@ -1,6 +1,7 @@
 import {tokenize, tokenTypes} from '@eslint/css-tree';
 import {
 	hasCommentInRange,
+	isImportantDeclaration,
 	toLocation,
 } from './utils/index.js';
 
@@ -53,24 +54,27 @@ const create = context => {
 
 		const identifierEnd = declarationStart + identifierEndInDeclaration;
 		const annotationStart = declarationStart + annotationStartInDeclaration;
-		const hasCommentInAnnotation = hasCommentInRange(context, [annotationStart, identifierEnd]);
-
-		return {
+		const problem = {
 			node: declaration,
 			loc: toLocation([annotationStart, identifierEnd], context),
 			messageId: MESSAGE_ID_ERROR,
-			suggest: hasCommentInAnnotation
-				? []
-				: [
-					{
-						messageId: MESSAGE_ID_SUGGESTION,
-						/**
-					@param {ESLint.Rule.RuleFixer} fixer
-					*/
-						fix: fixer => fixer.replaceTextRange([annotationStart, identifierEnd], '!important'),
-					},
-				],
 		};
+
+		if (hasCommentInRange(context, [annotationStart, identifierEnd])) {
+			return problem;
+		}
+
+		/**
+		@param {ESLint.Rule.RuleFixer} fixer
+		*/
+		const fix = fixer => fixer.replaceTextRange([annotationStart, identifierEnd], '!important');
+
+		// A different spelling of `!important`, like `!IMPORTANT` or `! important`, already applies, so only the spelling changes. Fixing a typo would make a dropped declaration apply.
+		if (isImportantDeclaration(declaration)) {
+			return {...problem, fix};
+		}
+
+		return {...problem, suggest: [{messageId: MESSAGE_ID_SUGGESTION, fix}]};
 	});
 };
 
@@ -85,6 +89,7 @@ const config = {
 			description: 'Disallow unknown and noncanonical CSS annotations.',
 			recommended: 'unopinionated',
 		},
+		fixable: 'code',
 		hasSuggestions: true,
 		schema: [],
 		messages,

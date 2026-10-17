@@ -21,8 +21,8 @@ import {
 const MESSAGE_ID = 'no-clamped-values';
 const MESSAGE_ID_FLOOR = 'no-clamped-values/device-pixel';
 const messages = {
-	[MESSAGE_ID]: '\'{{target}}\' evaluates to {{value}}, which the browser clamps to {{bound}}.{{hint}}',
-	[MESSAGE_ID_FLOOR]: '\'{{target}}\' evaluates to {{value}}, which the browser floors to one device pixel.',
+	[MESSAGE_ID]: '`{{target}}` evaluates to {{value}}, which the browser clamps to {{bound}}.{{hint}}',
+	[MESSAGE_ID_FLOOR]: '`{{target}}` evaluates to {{value}}, which the browser floors to one device pixel.',
 };
 
 const opacityProperties = new Set(['opacity', 'fill-opacity', 'stroke-opacity', 'stop-opacity', 'flood-opacity', 'shape-image-threshold']);

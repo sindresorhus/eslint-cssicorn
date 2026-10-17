@@ -9,17 +9,14 @@
 <!-- end auto-generated rule header -->
 <!-- Do not manually modify this header. Run: `npm run fix:eslint-docs` -->
 
-[The `light-dark()` function](https://drafts.csswg.org/css-color-5/#light-dark) keeps related theme colors together and can remove duplicated declarations and selectors.
+This rule reports a color declaration that a `prefers-color-scheme` media query overrides, and suggests combining both colors with [the `light-dark()` function](https://drafts.csswg.org/css-color-5/#light-dark), which keeps related theme colors together and can remove duplicated declarations and selectors.
 
-Suggestions require review: `light-dark()` uses the element's color scheme, which can differ from the user's preference queried by `prefers-color-scheme`. Check your theme behavior and browser support before applying them.
-
-Use [`css/use-baseline`](https://github.com/eslint/css/blob/main/docs/rules/use-baseline.md) to check CSS browser support against your chosen Baseline target.
+There is no autofix because `light-dark()` uses the element's color scheme, which can differ from the user's preference that `prefers-color-scheme` queries, but a suggestion is provided.
 
 ## Examples
 
-An ordinary style rule immediately followed by a media override with the same serialized selector list:
-
 ```css
+/* Setup */
 :root {
 	color-scheme: light dark;
 }
@@ -41,7 +38,7 @@ An ordinary style rule immediately followed by a media override with the same se
 }
 ```
 
-A direct nested media override at the end of a style rule, including a color component in a shorthand:
+A nested media override at the end of a style rule, and a color in a shorthand, are also supported:
 
 ```css
 /* ❌ */
@@ -61,9 +58,10 @@ A direct nested media override at the end of a style rule, including a color com
 }
 ```
 
-Color-valued custom properties are also supported:
+So are custom properties with a color value:
 
 ```css
+/* Setup */
 :root {
 	color-scheme: light dark;
 }
@@ -84,20 +82,29 @@ Color-valued custom properties are also supported:
 ```
 
 > [!IMPORTANT]
-> An unregistered custom property's `light-dark()` resolves using the consuming element's color scheme. This can change inherited colors on descendants with a different scheme, or behavior when consumed as a non-color value.
-
-Custom-property registrations are not checked. For example, `<custom-ident>` accepts `red` and `blue`, but not `light-dark(red, blue)`.
+> An unregistered custom property's `light-dark()` resolves with the consuming element's color scheme, which can change inherited colors on descendants with a different scheme, or behavior in a non-color value.
 
 ## Supported patterns
 
-Matches the adjacent and final nested forms above, using only `(prefers-color-scheme: light)` or `(prefers-color-scheme: dark)`. Adjacent selectors must serialize identically, with one rule in the media block. Participating blocks cannot contain other nested rules.
+Only the two forms above are matched, with the media query `(prefers-color-scheme: light)` or `(prefers-color-scheme: dark)`:
 
-Requires literal `color-scheme: light dark` in the base rule or an unconditional rule in this file whose selectors are all bare `:root` or `html`, including inside `@layer`. Either order and optional `only` are accepted.
+- In the adjacent form, the media override must immediately follow the style rule, both selector lists must serialize the same way, and the media block must contain only one rule.
+- In the nested form, the media query must be the last item in the style rule.
+- The blocks in a pair cannot contain other nested rules.
 
-Values may differ only in top-level literal colors, with matching `!important`. Custom properties must contain a single literal color.
+A literal `color-scheme: light dark` is required in the base rule, or in an unconditional rule in the same file, also inside `@layer`, whose selectors are all bare `:root` or `html`. The keywords can be in either order, and `only` is accepted.
+
+The two values can differ only in top-level literal colors, and must have the same `!important`. A custom property must contain a single literal color.
 
 ## Limitations
 
-The setup check does not guarantee the cascade. Unsupported or conflicting patterns are skipped, and color equivalence is best effort. Comments in paired declarations prevent suggestions; commented wrappers are preserved.
+The setup check does not guarantee the cascade, and color equivalence is best effort. Unsupported or conflicting patterns are skipped.
 
-[`no-redundant-functions`](./no-redundant-functions.md) simplifies existing calls; this rule introduces them through suggestions.
+A comment in a paired declaration prevents the suggestion. If the wrapper of the override contains a comment, the suggestion keeps the wrapper and its comment.
+
+Custom property registrations are not checked. For example, `<custom-ident>` accepts `red` and `blue`, but not `light-dark(red, blue)`.
+
+## Related rules
+
+- [`no-redundant-functions`](./no-redundant-functions.md) simplifies existing `light-dark()` calls, while this rule introduces them through suggestions.
+- [`css/use-baseline`](https://github.com/eslint/css/blob/main/docs/rules/use-baseline.md) checks CSS browser support against your chosen Baseline target.

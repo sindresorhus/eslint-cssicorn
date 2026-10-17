@@ -9,15 +9,14 @@
 <!-- end auto-generated rule header -->
 <!-- Do not manually modify this header. Run: `npm run fix:eslint-docs` -->
 
-Suggest deriving alpha variants from an existing full-color custom property instead of assembling them from its channel representation. This lets consumers keep using the same token if its color representation changes. See [Chrome's relative color guidance](https://developer.chrome.com/blog/css-relative-color-syntax).
+This rule reports alpha variants assembled from the channels of a color custom property, and suggests deriving them from the full color custom property with relative color syntax, so that they keep working if its color representation changes. See [Chrome's relative color guidance](https://developer.chrome.com/blog/css-relative-color-syntax).
 
-This rule provides suggestions because changing token dependencies can affect inheritance, overrides, registration, and browser compatibility.
+There is no autofix because changing the dependencies between custom properties can affect inheritance, overrides, registration, and browser compatibility, but a suggestion is provided.
 
 ## Examples
 
-A direct RGB relationship in an unconditional root rule:
-
 ```css
+/* Setup */
 :root {
 	--brand: rgb(var(--brand-channels));
 }
@@ -33,44 +32,61 @@ A direct RGB relationship in an unconditional root rule:
 }
 ```
 
-HSL relationships and custom-property variants are also supported:
+HSL relationships and custom property variants are also supported:
 
 ```css
+/* Setup */
 :root {
 	--brand: hsl(var(--brand-channels));
-	/* ❌ */
+}
+
+/* ❌ */
+.button {
 	--translucent-brand: hsl(var(--brand-channels) / 50%);
-	/* ✅ */
+}
+
+/* ✅ */
+.button {
 	--translucent-brand: hsl(from var(--brand) h s l / 50%);
 }
 ```
 
-Component definitions qualify within their own declaration block and its nested grouping rules, such as `@media` and `@supports`:
+A definition in a component applies in its own block and its nested grouping rules, such as `@media` and `@supports`:
 
 ```css
+/* ❌ */
 .card {
 	--accent: rgb(var(--accent-channels));
-	/* ❌ */
 	border-color: rgb(var(--accent-channels) / calc(var(--opacity) * .5));
-	/* ✅ */
+}
+
+/* ✅ */
+.card {
+	--accent: rgb(var(--accent-channels));
 	border-color: rgb(from var(--accent) r g b / calc(var(--opacity) * .5));
 }
 ```
 
-## Matching
+## Supported patterns
 
-- Requires `rgb(var(--channels))` or `hsl(var(--channels))`, including `rgba()`/`hsla()` aliases, with no fallback or extra components. Alpha must be omitted, `1`, or `100%`.
-- Unconditional rules containing only bare `:root`/`html` selectors qualify file-wide, including inside `@layer`. Other definitions qualify in their block and nested grouping rules, stopping at nested selectors.
-- Uses the nearest block with a matching relationship, or roots if none. Ambiguous matches are skipped. Equivalent definitions are allowed; conflicting or unsupported definitions anywhere in the file disqualify a token.
-- Supports comma/slash alpha variants in ordinary and custom-property values, including gradients and shadows. Preserves all text after the separator and uses the matching RGB/HSL family.
-- Definitions may follow consumers. Token names are decoded and case-sensitive.
+- The full color custom property must be `rgb(var(--channels))` or `hsl(var(--channels))`, or the `rgba()` or `hsla()` alias, with no fallback, no extra components, and an alpha that is omitted, `1`, or `100%`.
+- A definition in an unconditional rule whose selectors are all bare `:root` or `html`, also inside `@layer`, applies to the whole file. Other definitions do not apply in nested style rules or outside their block.
+- The nearest block with a matching definition is used, or else the root definitions. Ambiguous matches are skipped. Equivalent definitions are allowed, but a conflicting or unsupported definition anywhere in the file disqualifies the custom property.
+- Alpha variants can use a comma or a slash, in ordinary and custom property values, including gradients and shadows. The suggestion keeps all text after the separator, and uses the matching RGB or HSL function.
+- Definitions can come after their uses. Custom property names are decoded and case-sensitive.
 
 ## Limitations
 
-Only explicit, same-file relationships are discovered. Cascade equivalence is not checked: overriding channels in a descendant can leave an inherited full-color token unchanged. Review suggestions for [custom-property inheritance](https://www.w3.org/TR/css-variables-1/#defining-variables).
+The rule finds only explicit relationships in the same file, and does not check the cascade: overriding the channels in a descendant can leave an inherited full color custom property unchanged. Review the suggestions for [custom property inheritance](https://www.w3.org/TR/css-variables-1/#defining-variables).
 
-Conditional definitions do not qualify outside their block.
+The rule ignores:
 
-Skips existing relative colors (including `alpha(from …)`), self-references, substitution fallbacks, strings, URLs, at-rule preludes, descriptor blocks, and CSS Modules interop declarations. Comments in the function prefix through the alpha separator prevent a suggestion.
+- Existing relative colors, including `alpha(from …)`.
+- Self-references.
+- Substitution fallbacks.
+- Strings and URLs.
+- At-rule preludes and descriptor blocks.
+- CSS Modules interop declarations.
+- Colors with a comment between the start of the function and the alpha separator.
 
-`color-mix()` itself is not rewritten: mixing with transparent scales alpha rather than replacing it. Channel-based colors inside a mix can still receive suggestions.
+`color-mix()` itself is not rewritten, because mixing with `transparent` scales the alpha instead of replacing it, but channel-based colors inside a mix can still get suggestions.

@@ -9,7 +9,9 @@
 <!-- end auto-generated rule header -->
 <!-- Do not manually modify this header. Run: `npm run fix:eslint-docs` -->
 
-Catch ineffective styling of pseudo-elements and visited links.
+This rule reports properties that have no effect on pseudo-elements and visited links.
+
+The autofix removes the declaration. It is skipped when the declaration contains a comment.
 
 ## Examples
 
@@ -54,24 +56,30 @@ a:visited {
 
 ## Checks
 
-Checks a finite list of common ineffective properties on:
+The rule checks a list of common ineffective properties on:
 
 - [Highlights](https://www.w3.org/TR/css-pseudo-4/#highlight-styling): `::selection`, `::target-text`, `::spelling-error`, `::grammar-error`, `::search-text`, and `::highlight()`.
 - [`::marker`](https://www.w3.org/TR/css-lists-3/#marker-properties), [`::cue`](https://www.w3.org/TR/webvtt1/#the-cue-pseudo-element), and [`::cue-region`](https://www.w3.org/TR/webvtt1/#the-cue-region-pseudo-element), including their functional forms where applicable.
 - [`:visited`](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Selectors/:visited).
 
-For [`::first-line`](https://www.w3.org/TR/css-pseudo-4/#first-line-styling) and [`::placeholder`](https://www.w3.org/TR/css-pseudo-4/#placeholder-pseudo), checks only `writing-mode`, `direction`, and `text-orientation`.
+For [`::first-line`](https://www.w3.org/TR/css-pseudo-4/#first-line-styling) and [`::placeholder`](https://www.w3.org/TR/css-pseudo-4/#placeholder-pseudo), the rule only checks `writing-mode`, `direction`, and `text-orientation`.
 
-Ignores custom properties, vendor-prefixed properties, unlisted properties, and `all`. Preserves partially effective shorthands, such as `background` on highlights and visited links, and `border` on visited links.
+Partially effective shorthands, such as `background` on highlights and visited links, and `border` on visited links, are not reported.
 
-## Scope and fixes
+The rule checks the final target of each selector, also when a nested rule has an explicit target, and only reports a declaration when every selector in the list makes it ineffective. An unknown selector or preprocessor syntax in any selector prevents the report.
 
-Reports only when every selector branch makes the declaration ineffective; unknown or preprocessing branches suppress reports. Checks final targets, including explicit nested targets. Visited inference supports parsed `:is()` and `:where()` with only visited branches, and final `&` with only visited parents, including inside these functions.
+`:visited` is also detected in parsed `:is()` and `:where()` when all their selectors are visited, and in a final `&` when all the parent selectors are visited, also inside these functions.
 
-Declarations inherit selectors through `@media`, `@supports`, `@container`, `@layer`, and `@starting-style` only. Autofixes remove declarations unless they contain comments. Values, the cascade, and target browsers are not evaluated. Visited checks follow current browser privacy restrictions, which [may relax](https://drafts.csswg.org/selectors-4/#visited-privacy).
+Declarations in `@media`, `@supports`, `@container`, `@layer`, and `@starting-style` blocks use the selector of the enclosing style rule. Other at-rules are not traversed.
+
+## Limitations
+
+- Custom properties, vendor-prefixed properties, unlisted properties, and `all` are ignored.
+- Values, the cascade, and target browsers are not evaluated.
+- The `:visited` checks follow the current browser privacy restrictions, which [may relax](https://drafts.csswg.org/selectors-4/#visited-privacy) in the future.
 
 ## Related rules
 
 - [`no-ineffective-properties`](./no-ineffective-properties.md) checks declarations disabled by others in the same block.
 - [`css/no-invalid-properties`](https://github.com/eslint/css/blob/main/docs/rules/no-invalid-properties.md) validates property names and values.
-- Stylelint's [`rule-selector-property-disallowed-list`](https://stylelint.io/user-guide/rules/rule-selector-property-disallowed-list/) provides configurable selector/property restrictions.
+- Stylelint's [`rule-selector-property-disallowed-list`](https://stylelint.io/user-guide/rules/rule-selector-property-disallowed-list/) restricts configurable combinations of selectors and properties.

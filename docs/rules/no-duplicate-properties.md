@@ -9,26 +9,24 @@
 <!-- end auto-generated rule header -->
 <!-- Do not manually modify this header. Run: `npm run fix:eslint-docs` -->
 
-Duplicate properties in the same CSS declaration block can override one another or hide editing mistakes.
+This rule reports duplicate properties in the same CSS declaration block. They can override one another or hide editing mistakes.
 
-This rule checks both ordinary and custom properties. Ordinary property names are compared ASCII case-insensitively, while custom property names are case-sensitive. CSS escapes are decoded before comparison.
+It checks ordinary and custom properties, and decodes CSS escapes before comparison. Ordinary property names are ASCII case-insensitive, and custom property names are case-sensitive.
 
-A duplicate that directly follows a declaration of the same property with a different value is allowed (except for custom properties), since this is the common way to write fallbacks for browsers that do not support the later value. Chains of fallbacks are also allowed. Comments between the declarations do not matter.
+A duplicate that directly follows a declaration of the same property with a different value is allowed (except for custom properties), because this is the common way to write fallbacks for browsers that do not support the later value. Chains of fallbacks, and comments between the declarations, are also allowed.
 
 These duplicates are still reported:
 
 - A duplicate with the same value as the declaration directly before it. Insignificant whitespace is ignored, but values are compared case-sensitively, so `color: red; color: RED;` counts as a fallback.
 - A duplicate with another declaration, nested rule, or at-rule between it and the earlier declaration.
 - A duplicate where only one of the two declarations has `!important`.
-- A duplicate custom property, even with a different value. Custom properties accept any value, so browsers never drop one, and the earlier declaration cannot act as a fallback.
+- A duplicate custom property, even with a different value. Custom properties accept any value, so the earlier declaration cannot act as a fallback.
 
 Declarations in keyframes and descriptor blocks such as `@font-face` and `@property` are also checked.
 
-Shorthand and longhand properties are not duplicates. Use [`unicorn/no-shorthand-property-overrides`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/main/docs/rules/no-shorthand-property-overrides.md) to check those relationships.
+Shorthand and longhand properties are not duplicates. Use [`unicorn/no-shorthand-property-overrides`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/main/docs/rules/no-shorthand-property-overrides.md) for those.
 
-The rule only runs on CSS parsed through `css/css`, including configured custom syntax. It does not inspect JavaScript object properties or JSX props.
-
-The editor suggestion removes the later declaration. It is omitted when removal would also remove a comment or change the scope of an `eslint-disable-next-line` directive.
+There is no autofix because the rule cannot know which declaration is intended, but a suggestion is provided. It removes the later declaration, and is omitted when removal would also remove a comment or change the scope of an `eslint-disable-next-line` directive.
 
 ## Examples
 
@@ -36,6 +34,11 @@ The editor suggestion removes the later declaration. It is omitted when removal 
 /* ❌ */
 .button {
 	color: red;
+	color: red;
+}
+
+/* ✅ */
+.button {
 	color: red;
 }
 ```
@@ -47,7 +50,15 @@ The editor suggestion removes the later declaration. It is omitted when removal 
 	margin: 0;
 	--theme-color: blue;
 }
+
+/* ✅ */
+.component {
+	--theme-color: red;
+	margin: 0;
+}
 ```
+
+Custom property names are case-sensitive:
 
 ```css
 /* ✅ */
@@ -57,6 +68,8 @@ The editor suggestion removes the later declaration. It is omitted when removal 
 }
 ```
 
+A fallback must directly precede the declaration that it falls back from. Here, the suggestion would remove `position: sticky`, so move the fallback by hand instead:
+
 ```css
 /* ❌ */
 .header {
@@ -64,9 +77,7 @@ The editor suggestion removes the later declaration. It is omitted when removal 
 	top: 0;
 	position: sticky;
 }
-```
 
-```css
 /* ✅ */
 .header {
 	position: -webkit-sticky;
@@ -75,4 +86,4 @@ The editor suggestion removes the later declaration. It is omitted when removal 
 }
 ```
 
-If other duplicate declarations are intentional, use an ESLint disable comment for that declaration.
+For other intentional duplicates, use a disable comment.

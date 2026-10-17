@@ -11,22 +11,24 @@
 
 <!-- Supported properties and exclusions are intentionally explicit rather than inferred from every CSS grammar. -->
 
-Enforces these authoring orders for interchangeable value components:
+This rule enforces this order for interchangeable value components:
 
 - `border` and its physical and logical side or axis shorthands: width, style, color.
 - `outline` and `column-rule`: width, style, color.
 - `flex-flow`: direction, wrap.
 - `box-shadow`: inset, lengths, color.
 - `text-shadow`: lengths, color.
-- `columns`: width, count; preserves any `/ height` suffix.
+- `columns`: width, count. A `/ height` suffix stays in place.
 - `text-decoration`: lines, thickness, style, color.
 - `text-emphasis`: style, color.
 - `text-wrap`: mode, style.
 - `white-space`: collapse, wrapping, trimming.
 
-Checks shadow layers independently, preserving length order, layer order, and keyword order within each component. Single-keyword values remain unchanged.
+Each shadow layer is checked on its own, and the order of lengths, layers, and keywords within a component is kept. Values with a single keyword are not changed.
 
-Supports casing, CSS escapes, vendor prefixes, recognized math and color functions (including `random()`), and substitutions inside them, such as `rgb(var(--channels))`. Fixes preserve original spelling and whitespace, adding spaces where needed to separate tokens.
+It supports any casing, CSS escapes, vendor prefixes, and recognized math and color functions (including `random()`), also with substitutions inside them, such as `rgb(var(--channels))`.
+
+The autofix keeps the original spelling and whitespace, and adds spaces where tokens need to be separated.
 
 ## Examples
 
@@ -68,7 +70,10 @@ a {
 
 ## Limitations
 
-- Checks component structure without resolving substitutions; it may report declarations browsers reject. White space trimming may require `languageOptions.customSyntax`.
-- Ignores custom properties and CSS Modules interop declarations. Skips groups with substitutions outside known color or math functions, or reordering that would exchange components containing substitutions or random functions.
-- Reports without fixing when a component that must move contains comments. Comments between components and inside unchanged components are preserved.
-- For `columns`, unitless zero is ignored; use `0px` for zero width. Ambiguous math component roles may go unreported.
+- Substitutions are not resolved, so the rule can report declarations that browsers reject.
+- The whitespace trimming component of `white-space` can require `languageOptions.customSyntax`.
+- Custom properties and CSS Modules interop declarations are ignored.
+- A value or shadow layer is ignored when it has substitutions outside known color or math functions, or when the reorder would exchange components that contain substitutions or random functions.
+- There is no autofix when a component that must move contains a comment, because the fix would move the comment. Comments between components and inside unchanged components are kept.
+- For `columns`, unitless zero is ignored, so use `0px` for a zero width.
+- Math functions with an ambiguous component role can go unreported.

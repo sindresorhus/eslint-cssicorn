@@ -8,7 +8,7 @@ exports[`invalid(1): a { transition: width 200ms ease; } 2`] = `
 
 Message:
 > 1 | a { transition: width 200ms ease; }
-    |                 ^^^^^ Avoid animating 'width', which can affect layout.
+    |                 ^^^^^ Avoid animating \`width\`, which can affect layout.
 
 `;
 
@@ -22,7 +22,7 @@ exports[`invalid(10): a { transition-property: width, opacity, height, width; } 
 
 Message:
 > 1 | a { transition-property: width, opacity, height, width; }
-    |                          ^^^^^ Avoid animating 'width', which can affect layout.
+    |                          ^^^^^ Avoid animating \`width\`, which can affect layout.
 
 `;
 
@@ -30,7 +30,7 @@ exports[`invalid(10): a { transition-property: width, opacity, height, width; } 
 
 Message:
 > 1 | a { transition-property: width, opacity, height, width; }
-    |                                          ^^^^^^ Avoid animating 'height', which can affect layout.
+    |                                          ^^^^^^ Avoid animating \`height\`, which can affect layout.
 
 `;
 
@@ -38,7 +38,7 @@ exports[`invalid(10): a { transition-property: width, opacity, height, width; } 
 
 Message:
 > 1 | a { transition-property: width, opacity, height, width; }
-    |                                                  ^^^^^ Avoid animating 'width', which can affect layout.
+    |                                                  ^^^^^ Avoid animating \`width\`, which can affect layout.
 
 `;
 
@@ -52,7 +52,7 @@ exports[`invalid(11): a { transition: width var(--duration); } 2`] = `
 
 Message:
 > 1 | a { transition: width var(--duration); }
-    |                 ^^^^^ Avoid animating 'width', which can affect layout.
+    |                 ^^^^^ Avoid animating \`width\`, which can affect layout.
 
 `;
 
@@ -66,7 +66,7 @@ exports[`invalid(12): a { transition: var(--transition), height 1s; transition-p
 
 Message:
 > 1 | a { transition: var(--transition), height 1s; transition-property: var(--property), padding; }
-    |                                    ^^^^^^ Avoid animating 'height', which can affect layout.
+    |                                    ^^^^^^ Avoid animating \`height\`, which can affect layout.
 
 `;
 
@@ -74,7 +74,7 @@ exports[`invalid(12): a { transition: var(--transition), height 1s; transition-p
 
 Message:
 > 1 | a { transition: var(--transition), height 1s; transition-property: var(--property), padding; }
-    |                                                                                     ^^^^^^^ Avoid animating 'padding', which can affect layout.
+    |                                                                                     ^^^^^^^ Avoid animating \`padding\`, which can affect layout.
 
 `;
 
@@ -88,7 +88,7 @@ exports[`invalid(13): a { transition: width calc(1s + var(--delay)); } 2`] = `
 
 Message:
 > 1 | a { transition: width calc(1s + var(--delay)); }
-    |                 ^^^^^ Avoid animating 'width', which can affect layout.
+    |                 ^^^^^ Avoid animating \`width\`, which can affect layout.
 
 `;
 
@@ -102,7 +102,7 @@ exports[`invalid(14): a { transition: width 0s; } 2`] = `
 
 Message:
 > 1 | a { transition: width 0s; }
-    |                 ^^^^^ Avoid animating 'width', which can affect layout.
+    |                 ^^^^^ Avoid animating \`width\`, which can affect layout.
 
 `;
 
@@ -116,7 +116,7 @@ exports[`invalid(15): a { transition-property: width; transition-duration: 0s; }
 
 Message:
 > 1 | a { transition-property: width; transition-duration: 0s; }
-    |                          ^^^^^ Avoid animating 'width', which can affect layout.
+    |                          ^^^^^ Avoid animating \`width\`, which can affect layout.
 
 `;
 
@@ -130,7 +130,7 @@ exports[`invalid(16): a { transition: width 1s; transition-property: opacity; } 
 
 Message:
 > 1 | a { transition: width 1s; transition-property: opacity; }
-    |                 ^^^^^ Avoid animating 'width', which can affect layout.
+    |                 ^^^^^ Avoid animating \`width\`, which can affect layout.
 
 `;
 
@@ -144,7 +144,7 @@ exports[`invalid(17): a { TRANSITION: WIDTH 200MS; TRANSITION-PROPERTY: MARGIN-I
 
 Message:
 > 1 | a { TRANSITION: WIDTH 200MS; TRANSITION-PROPERTY: MARGIN-INLINE; }
-    |                 ^^^^^ Avoid animating 'width', which can affect layout.
+    |                 ^^^^^ Avoid animating \`width\`, which can affect layout.
 
 `;
 
@@ -152,7 +152,7 @@ exports[`invalid(17): a { TRANSITION: WIDTH 200MS; TRANSITION-PROPERTY: MARGIN-I
 
 Message:
 > 1 | a { TRANSITION: WIDTH 200MS; TRANSITION-PROPERTY: MARGIN-INLINE; }
-    |                                                   ^^^^^^^^^^^^^ Avoid animating 'margin-inline', which can affect layout.
+    |                                                   ^^^^^^^^^^^^^ Avoid animating \`margin-inline\`, which can affect layout.
 
 `;
 
@@ -166,7 +166,7 @@ exports[`invalid(18): a { tr\\61 nsition: \\77 idth 200ms; transition\\2d proper
 
 Message:
 > 1 | a { tr\\61 nsition: \\77 idth 200ms; transition\\2d property: p\\61 dding; }
-    |                    ^^^^^^^^ Avoid animating 'width', which can affect layout.
+    |                    ^^^^^^^^ Avoid animating \`width\`, which can affect layout.
 
 `;
 
@@ -174,7 +174,7 @@ exports[`invalid(18): a { tr\\61 nsition: \\77 idth 200ms; transition\\2d proper
 
 Message:
 > 1 | a { tr\\61 nsition: \\77 idth 200ms; transition\\2d property: p\\61 dding; }
-    |                                                            ^^^^^^^^^^ Avoid animating 'padding', which can affect layout.
+    |                                                            ^^^^^^^^^^ Avoid animating \`padding\`, which can affect layout.
 
 `;
 
@@ -188,7 +188,7 @@ exports[`invalid(19): a { transition-property: \\000068 eight; } 2`] = `
 
 Message:
 > 1 | a { transition-property: \\000068 eight; }
-    |                          ^^^^^^^^^^^^^ Avoid animating 'height', which can affect layout.
+    |                          ^^^^^^^^^^^^^ Avoid animating \`height\`, which can affect layout.
 
 `;
 
@@ -202,7 +202,7 @@ exports[`invalid(2): a { transition: margin 1s steps(2, start); } 2`] = `
 
 Message:
 > 1 | a { transition: margin 1s steps(2, start); }
-    |                 ^^^^^^ Avoid animating 'margin', which can affect layout.
+    |                 ^^^^^^ Avoid animating \`margin\`, which can affect layout.
 
 `;
 
@@ -216,7 +216,7 @@ exports[`invalid(20): a { -webkit-transition: width 1s; -moz-transition-property
 
 Message:
 > 1 | a { -webkit-transition: width 1s; -moz-transition-property: height; -o-transition: padding 1s; }
-    |                         ^^^^^ Avoid animating 'width', which can affect layout.
+    |                         ^^^^^ Avoid animating \`width\`, which can affect layout.
 
 `;
 
@@ -224,7 +224,7 @@ exports[`invalid(20): a { -webkit-transition: width 1s; -moz-transition-property
 
 Message:
 > 1 | a { -webkit-transition: width 1s; -moz-transition-property: height; -o-transition: padding 1s; }
-    |                                                             ^^^^^^ Avoid animating 'height', which can affect layout.
+    |                                                             ^^^^^^ Avoid animating \`height\`, which can affect layout.
 
 `;
 
@@ -232,7 +232,7 @@ exports[`invalid(20): a { -webkit-transition: width 1s; -moz-transition-property
 
 Message:
 > 1 | a { -webkit-transition: width 1s; -moz-transition-property: height; -o-transition: padding 1s; }
-    |                                                                                    ^^^^^^^ Avoid animating 'padding', which can affect layout.
+    |                                                                                    ^^^^^^^ Avoid animating \`padding\`, which can affect layout.
 
 `;
 
@@ -246,7 +246,7 @@ exports[`invalid(21): a { -w\\65 bkit-transition: width 1s; } 2`] = `
 
 Message:
 > 1 | a { -w\\65 bkit-transition: width 1s; }
-    |                            ^^^^^ Avoid animating 'width', which can affect layout.
+    |                            ^^^^^ Avoid animating \`width\`, which can affect layout.
 
 `;
 
@@ -260,7 +260,7 @@ exports[`invalid(22): a { transition: /* before */ width/**/ 1s /* after */ !imp
 
 Message:
 > 1 | a { transition: /* before */ width/**/ 1s /* after */ !important; }
-    |                              ^^^^^ Avoid animating 'width', which can affect layout.
+    |                              ^^^^^ Avoid animating \`width\`, which can affect layout.
 
 `;
 
@@ -274,7 +274,7 @@ exports[`invalid(23): a { transition-property: margin-inline; & > b { transition
 
 Message:
 > 1 | a { transition-property: margin-inline; & > b { transition: height 1s; } }
-    |                          ^^^^^^^^^^^^^ Avoid animating 'margin-inline', which can affect layout.
+    |                          ^^^^^^^^^^^^^ Avoid animating \`margin-inline\`, which can affect layout.
 
 `;
 
@@ -282,7 +282,7 @@ exports[`invalid(23): a { transition-property: margin-inline; & > b { transition
 
 Message:
 > 1 | a { transition-property: margin-inline; & > b { transition: height 1s; } }
-    |                                                             ^^^^^^ Avoid animating 'height', which can affect layout.
+    |                                                             ^^^^^^ Avoid animating \`height\`, which can affect layout.
 
 `;
 
@@ -296,7 +296,7 @@ exports[`invalid(24): @media print { a { transition: width 1s; } } 2`] = `
 
 Message:
 > 1 | @media print { a { transition: width 1s; } }
-    |                                ^^^^^ Avoid animating 'width', which can affect layout.
+    |                                ^^^^^ Avoid animating \`width\`, which can affect layout.
 
 `;
 
@@ -310,7 +310,7 @@ exports[`invalid(25): @supports (transition: width 1s) { a { transition: height 
 
 Message:
 > 1 | @supports (transition: width 1s) { a { transition: height 1s; } }
-    |                                                    ^^^^^^ Avoid animating 'height', which can affect layout.
+    |                                                    ^^^^^^ Avoid animating \`height\`, which can affect layout.
 
 `;
 
@@ -324,7 +324,7 @@ exports[`invalid(26): @container (width > 1px) { a { transition-property: paddin
 
 Message:
 > 1 | @container (width > 1px) { a { transition-property: padding; } }
-    |                                                     ^^^^^^^ Avoid animating 'padding', which can affect layout.
+    |                                                     ^^^^^^^ Avoid animating \`padding\`, which can affect layout.
 
 `;
 
@@ -338,7 +338,7 @@ exports[`invalid(27): @layer components { a { transition: width 1s; } } 2`] = `
 
 Message:
 > 1 | @layer components { a { transition: width 1s; } }
-    |                                     ^^^^^ Avoid animating 'width', which can affect layout.
+    |                                     ^^^^^ Avoid animating \`width\`, which can affect layout.
 
 `;
 
@@ -352,7 +352,7 @@ exports[`invalid(28): @scope (.card) { a { transition-property: height; } } 2`] 
 
 Message:
 > 1 | @scope (.card) { a { transition-property: height; } }
-    |                                           ^^^^^^ Avoid animating 'height', which can affect layout.
+    |                                           ^^^^^^ Avoid animating \`height\`, which can affect layout.
 
 `;
 
@@ -366,7 +366,7 @@ exports[`invalid(29): a { @media print { transition: width 1s; } } 2`] = `
 
 Message:
 > 1 | a { @media print { transition: width 1s; } }
-    |                                ^^^^^ Avoid animating 'width', which can affect layout.
+    |                                ^^^^^ Avoid animating \`width\`, which can affect layout.
 
 `;
 
@@ -380,7 +380,7 @@ exports[`invalid(3): a { transition: 1s width; transition-property: --width, wid
 
 Message:
 > 1 | a { transition: 1s width; transition-property: --width, width; }
-    |                    ^^^^^ Avoid animating 'width', which can affect layout.
+    |                    ^^^^^ Avoid animating \`width\`, which can affect layout.
 
 `;
 
@@ -388,7 +388,7 @@ exports[`invalid(3): a { transition: 1s width; transition-property: --width, wid
 
 Message:
 > 1 | a { transition: 1s width; transition-property: --width, width; }
-    |                                                         ^^^^^ Avoid animating 'width', which can affect layout.
+    |                                                         ^^^^^ Avoid animating \`width\`, which can affect layout.
 
 `;
 
@@ -402,7 +402,7 @@ exports[`invalid(30): a { @supports (display: grid) { transition-property: gap; 
 
 Message:
 > 1 | a { @supports (display: grid) { transition-property: gap; } }
-    |                                                      ^^^ Avoid animating 'gap', which can affect layout.
+    |                                                      ^^^ Avoid animating \`gap\`, which can affect layout.
 
 `;
 
@@ -416,7 +416,7 @@ exports[`invalid(31): a { @container (width > 1px) { transition: padding 1s; } }
 
 Message:
 > 1 | a { @container (width > 1px) { transition: padding 1s; } }
-    |                                            ^^^^^^^ Avoid animating 'padding', which can affect layout.
+    |                                            ^^^^^^^ Avoid animating \`padding\`, which can affect layout.
 
 `;
 
@@ -430,7 +430,7 @@ exports[`invalid(32): a { @starting-style { transition-property: width; } } 2`] 
 
 Message:
 > 1 | a { @starting-style { transition-property: width; } }
-    |                                            ^^^^^ Avoid animating 'width', which can affect layout.
+    |                                            ^^^^^ Avoid animating \`width\`, which can affect layout.
 
 `;
 
@@ -444,7 +444,7 @@ exports[`invalid(33): @starting-style { a { transition: height 1s; } } 2`] = `
 
 Message:
 > 1 | @starting-style { a { transition: height 1s; } }
-    |                                   ^^^^^^ Avoid animating 'height', which can affect layout.
+    |                                   ^^^^^^ Avoid animating \`height\`, which can affect layout.
 
 `;
 
@@ -458,7 +458,7 @@ exports[`invalid(34): @keyframes resize { from { width: 0; } to { width: 100px; 
 
 Message:
 > 1 | @keyframes resize { from { width: 0; } to { width: 100px; } }
-    |                            ^^^^^^^^ Avoid animating 'width', which can affect layout.
+    |                            ^^^^^^^^ Avoid animating \`width\`, which can affect layout.
 
 `;
 
@@ -466,7 +466,7 @@ exports[`invalid(34): @keyframes resize { from { width: 0; } to { width: 100px; 
 
 Message:
 > 1 | @keyframes resize { from { width: 0; } to { width: 100px; } }
-    |                                             ^^^^^^^^^^^^ Avoid animating 'width', which can affect layout.
+    |                                             ^^^^^^^^^^^^ Avoid animating \`width\`, which can affect layout.
 
 `;
 
@@ -480,7 +480,7 @@ exports[`invalid(35): @keyframes resize { 0%, 50% { margin: 1rem; } 100% { paddi
 
 Message:
 > 1 | @keyframes resize { 0%, 50% { margin: 1rem; } 100% { padding: 2rem; } }
-    |                               ^^^^^^^^^^^^ Avoid animating 'margin', which can affect layout.
+    |                               ^^^^^^^^^^^^ Avoid animating \`margin\`, which can affect layout.
 
 `;
 
@@ -488,7 +488,7 @@ exports[`invalid(35): @keyframes resize { 0%, 50% { margin: 1rem; } 100% { paddi
 
 Message:
 > 1 | @keyframes resize { 0%, 50% { margin: 1rem; } 100% { padding: 2rem; } }
-    |                                                      ^^^^^^^^^^^^^ Avoid animating 'padding', which can affect layout.
+    |                                                      ^^^^^^^^^^^^^ Avoid animating \`padding\`, which can affect layout.
 
 `;
 
@@ -502,7 +502,7 @@ exports[`invalid(36): @keyframes resize { entry 100% { height: 10px; } } 2`] = `
 
 Message:
 > 1 | @keyframes resize { entry 100% { height: 10px; } }
-    |                                  ^^^^^^^^^^^^ Avoid animating 'height', which can affect layout.
+    |                                  ^^^^^^^^^^^^ Avoid animating \`height\`, which can affect layout.
 
 `;
 
@@ -516,7 +516,7 @@ exports[`invalid(37): @keyframes unused { from { width: 100px; } to { width: 100
 
 Message:
 > 1 | @keyframes unused { from { width: 100px; } to { width: 100px; } }
-    |                            ^^^^^^^^^^^^ Avoid animating 'width', which can affect layout.
+    |                            ^^^^^^^^^^^^ Avoid animating \`width\`, which can affect layout.
 
 `;
 
@@ -524,7 +524,7 @@ exports[`invalid(37): @keyframes unused { from { width: 100px; } to { width: 100
 
 Message:
 > 1 | @keyframes unused { from { width: 100px; } to { width: 100px; } }
-    |                                                 ^^^^^^^^^^^^ Avoid animating 'width', which can affect layout.
+    |                                                 ^^^^^^^^^^^^ Avoid animating \`width\`, which can affect layout.
 
 `;
 
@@ -538,7 +538,7 @@ exports[`invalid(38): @keyframes resize { to { height: var(--height); } } 2`] = 
 
 Message:
 > 1 | @keyframes resize { to { height: var(--height); } }
-    |                          ^^^^^^^^^^^^^^^^^^^^^ Avoid animating 'height', which can affect layout.
+    |                          ^^^^^^^^^^^^^^^^^^^^^ Avoid animating \`height\`, which can affect layout.
 
 `;
 
@@ -552,7 +552,7 @@ exports[`invalid(39): @keyframes resize { to { width: 100px !important; height: 
 
 Message:
 > 1 | @keyframes resize { to { width: 100px !important; height: 100px; } }
-    |                                                   ^^^^^^^^^^^^^ Avoid animating 'height', which can affect layout.
+    |                                                   ^^^^^^^^^^^^^ Avoid animating \`height\`, which can affect layout.
 
 `;
 
@@ -566,7 +566,7 @@ exports[`invalid(4): @-webkit-keyframes resize { to { WIDTH: 1px; } } 2`] = `
 
 Message:
 > 1 | @-webkit-keyframes resize { to { WIDTH: 1px; } }
-    |                                  ^^^^^^^^^^ Avoid animating 'width', which can affect layout.
+    |                                  ^^^^^^^^^^ Avoid animating \`width\`, which can affect layout.
 
 `;
 
@@ -580,7 +580,7 @@ exports[`invalid(40): @keyframes resize { to { border: red; font: 1rem serif; } 
 
 Message:
 > 1 | @keyframes resize { to { border: red; font: 1rem serif; } }
-    |                          ^^^^^^^^^^^ Avoid animating 'border', which can affect layout.
+    |                          ^^^^^^^^^^^ Avoid animating \`border\`, which can affect layout.
 
 `;
 
@@ -588,7 +588,7 @@ exports[`invalid(40): @keyframes resize { to { border: red; font: 1rem serif; } 
 
 Message:
 > 1 | @keyframes resize { to { border: red; font: 1rem serif; } }
-    |                                       ^^^^^^^^^^^^^^^^ Avoid animating 'font', which can affect layout.
+    |                                       ^^^^^^^^^^^^^^^^ Avoid animating \`font\`, which can affect layout.
 
 `;
 
@@ -602,7 +602,7 @@ exports[`invalid(41): @KEYFRAMES resize { TO { INLINE-SIZE: 100px; } } 2`] = `
 
 Message:
 > 1 | @KEYFRAMES resize { TO { INLINE-SIZE: 100px; } }
-    |                          ^^^^^^^^^^^^^^^^^^ Avoid animating 'inline-size', which can affect layout.
+    |                          ^^^^^^^^^^^^^^^^^^ Avoid animating \`inline-size\`, which can affect layout.
 
 `;
 
@@ -616,7 +616,7 @@ exports[`invalid(42): @\\6b eyframes resize { to { p\\61 dding: 1rem; } } 2`] = 
 
 Message:
 > 1 | @\\6b eyframes resize { to { p\\61 dding: 1rem; } }
-    |                             ^^^^^^^^^^^^^^^^ Avoid animating 'padding', which can affect layout.
+    |                             ^^^^^^^^^^^^^^^^ Avoid animating \`padding\`, which can affect layout.
 
 `;
 
@@ -630,7 +630,7 @@ exports[`invalid(43): @-webkit-keyframes resize { to { height: 100px; } } 2`] = 
 
 Message:
 > 1 | @-webkit-keyframes resize { to { height: 100px; } }
-    |                                  ^^^^^^^^^^^^^ Avoid animating 'height', which can affect layout.
+    |                                  ^^^^^^^^^^^^^ Avoid animating \`height\`, which can affect layout.
 
 `;
 
@@ -644,7 +644,7 @@ exports[`invalid(44): @-moz-keyframes resize { to { width: 100px; } } 2`] = `
 
 Message:
 > 1 | @-moz-keyframes resize { to { width: 100px; } }
-    |                               ^^^^^^^^^^^^ Avoid animating 'width', which can affect layout.
+    |                               ^^^^^^^^^^^^ Avoid animating \`width\`, which can affect layout.
 
 `;
 
@@ -658,7 +658,7 @@ exports[`invalid(45): @-o-keyframes resize { to { margin: 1rem; } } 2`] = `
 
 Message:
 > 1 | @-o-keyframes resize { to { margin: 1rem; } }
-    |                             ^^^^^^^^^^^^ Avoid animating 'margin', which can affect layout.
+    |                             ^^^^^^^^^^^^ Avoid animating \`margin\`, which can affect layout.
 
 `;
 
@@ -672,7 +672,7 @@ exports[`invalid(46): @keyframes \"resize\" { to { height: 100px; } } 2`] = `
 
 Message:
 > 1 | @keyframes "resize" { to { height: 100px; } }
-    |                            ^^^^^^^^^^^^^ Avoid animating 'height', which can affect layout.
+    |                            ^^^^^^^^^^^^^ Avoid animating \`height\`, which can affect layout.
 
 `;
 
@@ -686,7 +686,7 @@ exports[`invalid(47): @media print { @supports (display: grid) { @keyframes resi
 
 Message:
 > 1 | @media print { @supports (display: grid) { @keyframes resize { to { grid-template-rows: 1fr; } } } }
-    |                                                                     ^^^^^^^^^^^^^^^^^^^^^^^ Avoid animating 'grid-template-rows', which can affect layout.
+    |                                                                     ^^^^^^^^^^^^^^^^^^^^^^^ Avoid animating \`grid-template-rows\`, which can affect layout.
 
 `;
 
@@ -700,7 +700,7 @@ exports[`invalid(48): @keyframes resize { to { /* before */ width/**/: 100px /* 
 
 Message:
 > 1 | @keyframes resize { to { /* before */ width/**/: 100px /* after */; } }
-    |                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Avoid animating 'width', which can affect layout.
+    |                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Avoid animating \`width\`, which can affect layout.
 
 `;
 
@@ -714,7 +714,7 @@ exports[`invalid(49): :export, .card { transition-property: width; } 2`] = `
 
 Message:
 > 1 | :export, .card { transition-property: width; }
-    |                                       ^^^^^ Avoid animating 'width', which can affect layout.
+    |                                       ^^^^^ Avoid animating \`width\`, which can affect layout.
 
 `;
 
@@ -728,7 +728,7 @@ exports[`invalid(5): @keyframes resize { to { border: 1px solid; } } 2`] = `
 
 Message:
 > 1 | @keyframes resize { to { border: 1px solid; } }
-    |                          ^^^^^^^^^^^^^^^^^ Avoid animating 'border', which can affect layout.
+    |                          ^^^^^^^^^^^^^^^^^ Avoid animating \`border\`, which can affect layout.
 
 `;
 
@@ -742,7 +742,7 @@ exports[`invalid(50): a { transition: width 1s allow-discrete, opacity 1s; } 2`]
 
 Message:
 > 1 | a { transition: width 1s allow-discrete, opacity 1s; }
-    |                 ^^^^^ Avoid animating 'width', which can affect layout.
+    |                 ^^^^^ Avoid animating \`width\`, which can affect layout.
 
 `;
 
@@ -756,7 +756,7 @@ exports[`invalid(51): a { transition: linear(0, 0.5 25%, 1) 1s width; } 2`] = `
 
 Message:
 > 1 | a { transition: linear(0, 0.5 25%, 1) 1s width; }
-    |                                          ^^^^^ Avoid animating 'width', which can affect layout.
+    |                                          ^^^^^ Avoid animating \`width\`, which can affect layout.
 
 `;
 
@@ -770,7 +770,7 @@ exports[`invalid(52): a { -WEBKIT-TR\\41 NSITION-PROPERTY: \\57 IDTH, --height, 
 
 Message:
 > 1 | a { -WEBKIT-TR\\41 NSITION-PROPERTY: \\57 IDTH, --height, var(--name, height); }
-    |                                     ^^^^^^^^ Avoid animating 'width', which can affect layout.
+    |                                     ^^^^^^^^ Avoid animating \`width\`, which can affect layout.
 
 `;
 
@@ -784,7 +784,7 @@ exports[`invalid(53): @keyframes example { to { flex: 1; } } 2`] = `
 
 Message:
 > 1 | @keyframes example { to { flex: 1; } }
-    |                           ^^^^^^^ Avoid animating 'flex', which can affect layout.
+    |                           ^^^^^^^ Avoid animating \`flex\`, which can affect layout.
 
 `;
 
@@ -798,7 +798,7 @@ exports[`invalid(54): @keyframes example { to { width: 1px !important; width: 1p
 
 Message:
 > 1 | @keyframes example { to { width: 1px !important; width: 1px; } }
-    |                                                  ^^^^^^^^^^ Avoid animating 'width', which can affect layout.
+    |                                                  ^^^^^^^^^^ Avoid animating \`width\`, which can affect layout.
 
 `;
 
@@ -812,7 +812,7 @@ exports[`invalid(6): a { transition: 200ms width ease; } 2`] = `
 
 Message:
 > 1 | a { transition: 200ms width ease; }
-    |                       ^^^^^ Avoid animating 'width', which can affect layout.
+    |                       ^^^^^ Avoid animating \`width\`, which can affect layout.
 
 `;
 
@@ -826,7 +826,7 @@ exports[`invalid(7): a { transition: ease 200ms width; } 2`] = `
 
 Message:
 > 1 | a { transition: ease 200ms width; }
-    |                            ^^^^^ Avoid animating 'width', which can affect layout.
+    |                            ^^^^^ Avoid animating \`width\`, which can affect layout.
 
 `;
 
@@ -840,7 +840,7 @@ exports[`invalid(8): a { transition: 200ms cubic-bezier(0, 0, 1, 1) width -100ms
 
 Message:
 > 1 | a { transition: 200ms cubic-bezier(0, 0, 1, 1) width -100ms; }
-    |                                                ^^^^^ Avoid animating 'width', which can affect layout.
+    |                                                ^^^^^ Avoid animating \`width\`, which can affect layout.
 
 `;
 
@@ -854,7 +854,7 @@ exports[`invalid(9): a { transition: opacity 1s, height 200ms, margin-inline 1s;
 
 Message:
 > 1 | a { transition: opacity 1s, height 200ms, margin-inline 1s; }
-    |                             ^^^^^^ Avoid animating 'height', which can affect layout.
+    |                             ^^^^^^ Avoid animating \`height\`, which can affect layout.
 
 `;
 
@@ -862,6 +862,6 @@ exports[`invalid(9): a { transition: opacity 1s, height 200ms, margin-inline 1s;
 
 Message:
 > 1 | a { transition: opacity 1s, height 200ms, margin-inline 1s; }
-    |                                           ^^^^^^^^^^^^^ Avoid animating 'margin-inline', which can affect layout.
+    |                                           ^^^^^^^^^^^^^ Avoid animating \`margin-inline\`, which can affect layout.
 
 `;

@@ -9,13 +9,26 @@
 <!-- end auto-generated rule header -->
 <!-- Do not manually modify this header. Run: `npm run fix:eslint-docs` -->
 
-Duplicate selector blocks often come from merges, copying, or incomplete refactors. They split related declarations across a stylesheet, and later declarations can unexpectedly override earlier ones.
+This rule reports duplicate selectors within a selector list, and duplicate selector lists in the same at-rule and nesting context. Duplicates often come from merges, copying, or incomplete refactors, and split related declarations so that later ones can unexpectedly override earlier ones.
 
-This rule reports duplicate selectors within a selector list and duplicate selector lists in the same at-rule and nesting context. Insignificant selector whitespace and comments are ignored when comparing selectors. The legacy single-colon pseudo-elements `:before`, `:after`, `:first-line`, and `:first-letter` are treated as the same as their double-colon forms.
+Insignificant whitespace and comments are ignored when comparing selectors, and the legacy single-colon pseudo-elements `:before`, `:after`, `:first-line`, and `:first-letter` equal their double-colon forms.
 
-Keyframe selectors are ignored. Use [`css/no-duplicate-keyframe-selectors`](https://github.com/eslint/css/blob/main/docs/rules/no-duplicate-keyframe-selectors.md) to check them.
+The autofix removes a repeated selector within one selector list, for example `.button, .button` becomes `.button`. It is skipped when a comment is next to the repeated selector. There is no autofix for duplicate selector lists in separate rules, because the right way to merge their declarations depends on intent.
 
 ## Examples
+
+```css
+/* ❌ */
+.button,
+.button {
+	padding: 8px;
+}
+
+/* ✅ */
+.button {
+	padding: 8px;
+}
+```
 
 ```css
 /* ❌ */
@@ -26,17 +39,14 @@ Keyframe selectors are ignored. Use [`css/no-duplicate-keyframe-selectors`](http
 .card {
 	color: blue;
 }
-```
 
-```css
-/* ❌ */
-.button,
-.button {
-	padding: 8px;
+/* ✅ */
+.card {
+	color: blue;
 }
 ```
 
-Selectors in matching conditional contexts are compared even when the conditional blocks are separate:
+Matching conditional contexts are compared even in separate blocks:
 
 ```css
 /* ❌ */
@@ -46,6 +56,13 @@ Selectors in matching conditional contexts are compared even when the conditiona
 	}
 }
 
+@media (width > 40rem) {
+	.card {
+		color: blue;
+	}
+}
+
+/* ✅ */
 @media (width > 40rem) {
 	.card {
 		color: blue;
@@ -70,7 +87,11 @@ Selectors in different contexts are allowed:
 }
 ```
 
-The rule compares complete selector lists in their original order. It does not report partially overlapping lists, reordered lists, or selectors that become equivalent only after resolving CSS nesting.
+## Limitations
+
+Only complete selector lists in their original order are compared.
+
+Partially overlapping lists are not reported:
 
 ```css
 /* ✅ */
@@ -78,14 +99,22 @@ The rule compares complete selector lists in their original order. It does not r
 .featured {}
 
 .card {}
+```
 
+Reordered lists are not reported:
+
+```css
 /* ✅ */
 .card,
 .featured {}
 
 .featured,
 .card {}
+```
 
+Selectors that are only equivalent after resolving nesting are not reported:
+
+```css
 /* ✅ */
 .parent .child {}
 
@@ -93,3 +122,5 @@ The rule compares complete selector lists in their original order. It does not r
 	& .child {}
 }
 ```
+
+Keyframe selectors are ignored. Use [`css/no-duplicate-keyframe-selectors`](https://github.com/eslint/css/blob/main/docs/rules/no-duplicate-keyframe-selectors.md) to check them.

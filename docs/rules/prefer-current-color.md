@@ -9,9 +9,9 @@
 <!-- end auto-generated rule header -->
 <!-- Do not manually modify this header. Run: `npm run fix:eslint-docs` -->
 
-Suggest [`currentcolor`](https://www.w3.org/TR/css-color-4/#currentcolor-color) when a declaration repeats the same block's foreground color. Unlike [`prefer-existing-custom-properties`](./prefer-existing-custom-properties.md), which follows a configured token, this follows the element's `color`.
+This rule reports a color that repeats the foreground `color` of the same block, and suggests [`currentcolor`](https://www.w3.org/TR/css-color-4/#currentcolor-color) instead.
 
-Uses suggestions because linking colors can change state, theme, and inheritance behavior. Inherited paint such as `fill` can follow descendants' foregrounds. Review suggestions when colors should change independently.
+There is no autofix because linking colors can change state, theme, and inheritance behavior, but a suggestion is provided. For example, inherited paint such as `fill` can follow the foreground colors of descendants, so review the suggestion when colors should change independently.
 
 ## Examples
 
@@ -29,7 +29,7 @@ a {
 }
 ```
 
-Checks all grammar-recognized color positions, including backgrounds, gradients, shadows, SVG paint fallbacks, color mixing, and relative-color origins.
+Every color position that the property grammar recognizes is checked, including backgrounds, gradients, shadows, SVG paint fallbacks, color mixing, and relative color origins.
 
 ```css
 /* ❌ */
@@ -45,12 +45,22 @@ Checks all grammar-recognized color positions, including backgrounds, gradients,
 }
 ```
 
-## Matching and limitations
+## Color matching
 
-- Compares direct declarations in each style block independently. Among `color` and `all`, `!important` takes priority, then source order. The winner must set `color` to one static named, hex, or absolute functional color.
-- Matches equivalent named, hex, and RGB colors across representations without approximate comparisons. Other colors match structurally, allowing case, whitespace, some equivalent numeric spellings, and function aliases.
-- Never replaces `color` or custom-property values. Skips keyframes, descriptors, CSS Modules interop blocks, winning resets, system colors, dynamic foregrounds, and foregrounds with missing components (`none`).
-- Skips target declarations whose complete grammar cannot be matched, including values containing `var()` or unknown syntax.
-- Preserves comments. A comment inside a matched color prevents the suggestion, but not the report.
+- Each style block is compared independently, using only its direct declarations. Among `color` and `all` declarations, the last one with the highest importance wins. The winner must set `color` to one static named, hex, or absolute functional color.
+- Named, hex, and RGB colors match exactly across representations. Other colors match structurally, allowing differences in case, whitespace, some equivalent numeric spellings, and function aliases.
+- A comment inside a matched color prevents the suggestion, but not the report. Other comments are kept.
 
-Does not infer inherited foregrounds, inspect other blocks, resolve custom properties, or model browser-specific fallback support.
+## Limitations
+
+The rule:
+
+- Never replaces `color` or custom property values.
+- Ignores keyframes, descriptors, and CSS Modules interop blocks.
+- Ignores a block when the foreground is a system color or has missing components (`none`).
+- Ignores declarations whose complete grammar it cannot match, including values with `var()` or unknown syntax.
+- Does not infer inherited foregrounds, inspect other blocks, resolve custom properties, or model browser-specific fallback support.
+
+## Related rules
+
+- [`prefer-existing-custom-properties`](./prefer-existing-custom-properties.md) suggests a configured custom property for a matching value, while this rule follows the element's `color`.

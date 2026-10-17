@@ -9,9 +9,11 @@
 
 This rule requires declarations to come before nested rules within the same CSS block.
 
-Within style rules and nested group rules, modern browsers preserve source order by wrapping later declarations in an implicit [nested declarations rule](https://www.w3.org/TR/css-nesting-1/#nested-declarations-rule), represented in the CSSOM by [`CSSNestedDeclarations`](https://www.w3.org/TR/css-nesting-1/#cssnesteddeclarations). Older implementations of CSS nesting may instead hoist or skip those declarations, producing different results.
+In style rules and nested group rules, modern browsers keep source order by wrapping later declarations in an implicit [nested declarations rule](https://drafts.csswg.org/css-nesting-1/#nested-declarations-rule) ([`CSSNestedDeclarations`](https://drafts.csswg.org/css-nesting-1/#cssnesteddeclarations) in the CSSOM). Older implementations of CSS nesting may instead hoist or skip those declarations.
 
-The CSS specification recommends placing declarations before nested rules because the implicit rule is not visible in the source and makes the cascade harder to follow.
+The CSS specification recommends declarations first, because the implicit rule is not visible in the source and makes the cascade harder to follow.
+
+There is no autofix because moving a declaration can change cascade order, while wrapping it in a nested style rule can change which elements it matches.
 
 ## Examples
 
@@ -59,6 +61,4 @@ Block at-rules also count as nested rules:
 
 The same ordering applies to [`@page`](https://www.w3.org/TR/css-page-3/#margin-at-rules) blocks, where page-margin at-rules should follow declarations because legacy clients may not handle later declarations correctly.
 
-Wrapping declarations in an explicit `&` rule is not a general replacement. The nesting selector can change specificity for selector lists and cannot represent pseudo-elements. The [`no-redundant-nested-style-rules`](./no-redundant-nested-style-rules.md) rule may also flatten wrappers that do not change the selector. When both rules are enabled, place ordinary declarations before nested rules.
-
-This rule has no fixer because moving a declaration can change cascade order, while wrapping it in a nested style rule can change which elements it matches.
+Wrapping declarations in an explicit `&` rule is not a general replacement, because the nesting selector can change specificity for selector lists and cannot represent pseudo-elements. The [`no-redundant-nested-style-rules`](./no-redundant-nested-style-rules.md) rule may also flatten wrappers that do not change the selector.

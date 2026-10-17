@@ -17,7 +17,7 @@ import {
 
 const MESSAGE_ID = 'no-layout-animations';
 const messages = {
-	[MESSAGE_ID]: 'Avoid animating \'{{property}}\', which can affect layout.',
+	[MESSAGE_ID]: 'Avoid animating `{{property}}`, which can affect layout.',
 };
 
 const layoutProperties = new Set([

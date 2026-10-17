@@ -7,13 +7,14 @@
 <!-- end auto-generated rule header -->
 <!-- Do not manually modify this header. Run: `npm run fix:eslint-docs` -->
 
-Some supports conditions accept a value without establishing support for the functions it contains. This can make a progressive-enhancement guard admit browsers that do not support the intended feature.
+Some supports conditions accept a value without establishing support for the functions in it, so a progressive-enhancement guard can admit browsers that lack the intended feature.
 
-Custom-property tests check whether the value is accepted as tokens. They do not check whether functions in the value are supported. This remains true when the custom property has a typed `@property` registration, as required by the [CSS Properties and Values API specification](https://www.w3.org/TR/css-properties-values-api-1/#conditional-rules).
+- A custom-property test only checks that the value is accepted as tokens, also when the custom property has a typed `@property` registration, as the [CSS Properties and Values API specification](https://www.w3.org/TR/css-properties-values-api-1/#conditional-rules) requires.
+- For ordinary properties, substitutions such as `var()`, `env()`, and `attr()` defer value validation, so surrounding functions and functions in their fallbacks are not tested. Similarly, `first-valid()` can succeed through another alternative.
 
-For ordinary properties, substitutions such as `var()`, `env()`, and `attr()` defer value validation. A condition containing them does not establish support for surrounding functions or functions in their fallbacks. Similarly, `first-valid()` can succeed through another alternative without establishing support for each function in its arguments.
+This rule reports these conditions in `@supports`, `@import supports()`, and direct declarations in `@supports-condition` blocks. It reports at most once per declaration condition, for the first affected function.
 
-This rule reports these conditions in `@supports`, `@import supports()`, and direct declarations in `@supports-condition` blocks. It reports at most once per declaration condition, identifying the first affected function.
+There is no autofix because choosing a replacement property or value requires the author's intent.
 
 ## Examples
 
@@ -25,6 +26,8 @@ This rule reports these conditions in `@supports`, `@import supports()`, and dir
 @supports (color: oklch(60% 0.2 20)) {}
 ```
 
+To test both substitution support and a value function, use separate declaration conditions joined with `and`.
+
 ```css
 /* ❌ */
 @supports (color: oklch(var(--lightness) 0.2 20)) {}
@@ -32,8 +35,6 @@ This rule reports these conditions in `@supports`, `@import supports()`, and dir
 /* ✅ */
 @supports (color: var(--brand)) and (color: oklch(60% 0.2 20)) {}
 ```
-
-To test both substitution support and a value function, use separate declaration conditions joined with `and`.
 
 ```css
 /* ❌ */
@@ -67,28 +68,30 @@ The draft [`@supports-condition` syntax](https://drafts.csswg.org/css-conditiona
 
 ## Deliberate support probes
 
-Use a simple value when testing custom-property or substitution support itself. These probes are allowed:
+To test custom-property or substitution support itself, use a simple value:
 
 ```css
+/* ✅ */
 @supports (--probe: red) {}
 @supports (color: var(--probe)) {}
 @supports (color: var(--probe, red)) {}
 @supports (width: env(safe-area-inset-left, 0px)) {}
 ```
 
-A function-bearing custom-property probe can be intentional. The rule still reports it because it cannot infer the intended feature. This is why the rule is enabled in `recommended` but not `unopinionated`.
+A custom-property probe with a function in its value can be intentional, but the rule cannot infer the intended feature and reports it. This is why the rule is in `recommended` but not `unopinionated`.
 
-## Detection limits
+## Limitations
 
-Detection is conservative and uses the parser's existing catalogue of known value functions. The catalogue is not exhaustive; for example, `repeat()` and `shape()` are currently not recognized.
+The rule only reports value functions that the CSS parser knows. For example, `repeat()` and `shape()` are not recognized.
 
-Keywords, units, unknown functions and their contents, strings, comments, and URLs are ignored. For example, `(--probe: 1cqi)` is allowed even though it does not test support for the `cqi` unit.
+Keywords, units, unknown functions and their contents, strings, comments, and URLs are ignored. For example, `(--probe: 1cqi)` is allowed but does not test the `cqi` unit.
 
-Queries inside `if()`, including `supports()` queries, are outside this rule's scope. Typed `attr()` argument syntax is also ignored:
+Queries inside `if()`, including `supports()` queries, and typed `attr()` argument syntax are ignored:
 
 ```css
+/* ✅ */
 @supports (--probe: attr(data-width type(<length>))) {}
 @supports (--probe: if(supports(color: oklch(60% 0.2 20)): red; else: blue)) {}
 ```
 
-The rule does not resolve variables, inspect guarded declarations, or infer browser compatibility. It provides no fixes or suggestions because choosing a replacement property or value requires the author's intent.
+The rule does not resolve variables, inspect guarded declarations, or infer browser compatibility.

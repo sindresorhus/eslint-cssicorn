@@ -7,7 +7,7 @@
 <!-- end auto-generated rule header -->
 <!-- Do not manually modify this header. Run: `npm run fix:eslint-docs` -->
 
-Use this opt-in rule for manually scoped component CSS. Every selector branch needs one of these boundaries:
+This opt-in rule, for manually scoped component CSS, reports selector branches without one of these component boundaries:
 
 - A direct class or ID anywhere in the selector.
 - `:host`, `:host()`, or `:host-context()`.
@@ -17,11 +17,11 @@ Use this opt-in rule for manually scoped component CSS. Every selector branch ne
 - An enclosing [`@scope`](https://www.w3.org/TR/css-cascade-6/#scoped-styles), even without an explicit root.
 - A positive explicit or implicit nesting reference to a parent whose every branch is scoped.
 
-Classes and IDs inside `:not()` or `:has()` do not count; an outer anchor still does, as in `.card:is(button, a)`. Bare `:scope`, attributes, `*`, and element selectors do not count.
+Classes and IDs inside `:not()` or `:has()` do not count, but an outer anchor does, as in `.card:is(button, a)`. Bare `:scope`, attributes, `*`, and element selectors do not count.
+
+There is no autofix because the intended boundary is unknown.
 
 ## Examples
-
-Each comma-separated branch needs a boundary:
 
 ```css
 /* ❌ */
@@ -31,8 +31,6 @@ Each comma-separated branch needs a boundary:
 .card, .card button {}
 ```
 
-Every alternative must be scoped:
-
 ```css
 /* ❌ */
 :is(.card, button) {}
@@ -41,8 +39,6 @@ Every alternative must be scoped:
 :is(.card, #panel) button {}
 ```
 
-`:not()` and `:has()` cannot supply a boundary:
-
 ```css
 /* ❌ */
 button:has(.card) {}
@@ -50,8 +46,6 @@ button:has(.card) {}
 /* ✅ */
 .card button:has(.icon) {}
 ```
-
-Native scope permits element selectors:
 
 ```css
 /* ❌ */
@@ -62,8 +56,6 @@ button {}
 	button {}
 }
 ```
-
-Implicit nesting inherits the parent's boundary:
 
 ```css
 /* ❌ */
@@ -77,7 +69,7 @@ body {
 }
 ```
 
-Under [native nesting semantics](https://drafts.csswg.org/css-nesting/#nesting), explicit `&` suppresses implicit parent anchoring unless a selector starts with a combinator. Thus `.card { :not(&) {} }` fails, while `.card { > :not(&) {} }` passes.
+Under [native nesting semantics](https://drafts.csswg.org/css-nesting-1/#nesting), an explicit `&` suppresses implicit parent anchoring unless the selector starts with a combinator, so `.card { :not(&) {} }` fails, while `.card { > :not(&) {} }` passes.
 
 ```css
 /* ❌ */
@@ -91,8 +83,6 @@ Under [native nesting semantics](https://drafts.csswg.org/css-nesting/#nesting),
 }
 ```
 
-Every `of` alternative needs a boundary:
-
 ```css
 /* ❌ */
 :nth-child(2n of .card, button) {}
@@ -100,8 +90,6 @@ Every `of` alternative needs a boundary:
 /* ✅ */
 :nth-child(2n of .card, #panel) {}
 ```
-
-Slotted arguments can supply a boundary:
 
 ```css
 /* ❌ */
@@ -113,14 +101,12 @@ Slotted arguments can supply a boundary:
 
 ## Usage
 
-Exempt global and reset files. Leave the rule disabled for styles already scoped by [Vue](https://vuejs.org/api/sfc-css-features.html#scoped-css), [Svelte](https://svelte.dev/docs/svelte/scoped-styles), or [Astro](https://docs.astro.build/en/guides/styling/#scoped-styles).
+Exempt global and reset files, and styles already scoped by [Vue](https://vuejs.org/api/sfc-css-features.html#scoped-css), [Svelte](https://svelte.dev/docs/svelte/scoped-styles), or [Astro](https://docs.astro.build/en/guides/styling/#scoped-styles).
 
-Disable `prefer-nesting` because its autofix can introduce unanchored wrappers: `body :is(.card, .other) { color: red; }` becomes `body { .card, .other { color: red; } }`, whose `body` branch fails this rule.
+Disable [`prefer-nesting`](./prefer-nesting.md), because its autofix can introduce unanchored wrappers: `body :is(.card, .other) { color: red; }` becomes `body { .card, .other { color: red; } }`, whose `body` branch fails this rule.
 
 ## Limitations
 
 A boundary does not guarantee containment: `.card + button` and `@scope (:root)` pass. External scoping (frameworks, compilers, imports, or runtime Shadow DOM), custom at-rules, unlisted pseudo-functions, and double negation are not inferred.
 
-Keyframes and unparsed CSS are skipped. The parser rejects style rules directly inside `@container`, `@scope`, `@starting-style`, or `@supports` blocks nested in a style rule; declaration-only blocks work.
-
-No autofix is provided because the intended boundary is unknown.
+Keyframes and unparsed CSS are skipped. The parser rejects style rules directly inside `@container`, `@scope`, `@starting-style`, or `@supports` blocks that are nested in a style rule, but such blocks with only declarations work.

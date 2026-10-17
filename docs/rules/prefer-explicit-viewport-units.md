@@ -9,17 +9,13 @@
 <!-- end auto-generated rule header -->
 <!-- Do not manually modify this header. Run: `npm run fix:eslint-docs` -->
 
-`vh` and `vw` use the large viewport. On mobile, browser controls can therefore obscure content in a `100vh` layout. This rule makes the intended behavior explicit: dynamic, small, or large viewport units.
+`vh` and `vw` use the large viewport, so on mobile, browser controls can obscure content in a `100vh` layout. This rule reports `100vh` and `100vw` in sizing properties, also inside math functions such as `calc()` and `clamp()`, to make the intended viewport explicit. Legacy fallback declarations are also reported, so disable the report when browsers without the configured unit need a fallback.
 
-This rule checks `100vh` and `100vw` in explicit physical and logical sizing properties, including math functions such as `calc()` and `clamp()`. It ignores custom properties, positioning properties, flex/grid shorthands, and viewport units in media and feature queries. Declarations in CSS Modules `:export` and `:import()` blocks are ignored, because JavaScript reads them as exact strings.
+There is no autofix because the new unit can size the element differently on mobile, but a suggestion is provided. Choose a unit based on the intended design:
 
-It also reports legacy fallback declarations. Disable the specific report when a fallback is required for browsers that do not support the configured unit.
-
-Choose a unit based on the intended design:
-
-- `dvh` / `dvw` fills the visible viewport, but can resize while scrolling.
-- `svh` / `svw` keeps content clear of browser controls, but can leave unused space.
-- `lvh` / `lvw` fills the largest viewport, but content can be obscured by browser controls.
+- `dvh` and `dvw` fill the visible viewport, but can resize while scrolling.
+- `svh` and `svw` keep content clear of browser controls, but can leave unused space.
+- `lvh` and `lvw` fill the largest viewport, but browser controls can obscure content.
 
 ## Examples
 
@@ -45,7 +41,9 @@ Default: `'dvh'`
 Set the preferred viewport-height unit. The matching viewport-width unit is selected automatically.
 
 ```js
-// eslint cssicorn/prefer-explicit-viewport-units: ["error", {unit: "svh"}]
+{
+	unit: 'svh',
+}
 ```
 
 ```css
@@ -61,3 +59,7 @@ Set the preferred viewport-height unit. The matching viewport-width unit is sele
 	width: 100svw;
 }
 ```
+
+## Limitations
+
+Only the value `100`, not other values such as `50vh`, is checked, and only in `width`, `height`, `inline-size`, `block-size`, and their `min-` and `max-` forms. Declarations in CSS Modules `:export` and `:import()` blocks are ignored, because JavaScript reads them as exact strings.

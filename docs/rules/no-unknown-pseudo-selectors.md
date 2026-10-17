@@ -9,6 +9,8 @@
 
 Typos in pseudo-classes and pseudo-elements silently create selectors that never match. This rule checks their names and kinds against current CSS specifications, including Editor's Drafts, using [`@webref/css`](https://www.npmjs.com/package/@webref/css) with missing definitions added.
 
+There is no autofix because the intended name is unknown.
+
 ## Examples
 
 ```css
@@ -23,7 +25,7 @@ Typos in pseudo-classes and pseudo-elements silently create selectors that never
 
 Pseudo-class and pseudo-element names are distinct, so `::hover` and `:backdrop` are unknown even though `:hover` and `::backdrop` are standard.
 
-Vendor-prefixed pseudo-selectors, such as `::-webkit-scrollbar` and `:-moz-focusring`, are ignored because they are not part of the specifications.
+Vendor-prefixed pseudo-selectors are ignored, because they are not part of the specifications:
 
 ```css
 /* ✅ */
@@ -39,10 +41,6 @@ The unprefixed WebKit scrollbar pseudo-classes, like `:horizontal` and `:decreme
 ::-webkit-scrollbar-thumb:not(:window-inactive) {}
 ```
 
-This is a simplification. Browsers only accept these pseudo-classes after `::-webkit-scrollbar*` and `::-webkit-resizer`, and only inside `:is()`, `:where()`, and `:not()`, so selectors that browsers drop, like `::-webkit-slider-thumb:horizontal`, are not reported. `::selection:window-inactive` is reported, although Chrome and Safari support it. Add `':window-inactive'` to `allow` if you use it.
-
-The rule does not validate context or arguments. Nested pseudo-selectors are checked only when `@eslint/css` parses the arguments as selectors.
-
 ## Options
 
 ### allow
@@ -50,11 +48,10 @@ The rule does not validate context or arguments. Nested pseudo-selectors are che
 Type: `string[]`\
 Default: `[]`
 
-List nonstandard selectors to allow. Each entry must include one or two leading colons to identify its kind. Matching is ASCII case-insensitive and covers both functional and non-functional forms.
+Nonstandard selectors to allow. Each entry must include one or two leading colons to identify its kind. Matching is ASCII case-insensitive and covers both functional and non-functional forms. Give the bare name without parentheses, like `'::theme-part'`, not `'::theme-part()'`.
 
 These are allowed automatically:
 
-- Vendor-prefixed selectors, such as `::-webkit-scrollbar`.
 - [CSS custom selectors](https://drafts.csswg.org/css-extensions/#custom-selectors) starting with `--`, such as `:--heading`.
 - Selectors that common build tools remove: CSS Modules (`:global`, `:local`, `:export`, `:import`), Vue (`:deep`, `:slotted`, `:global`, `::v-deep`, `::v-slotted`, `::v-global`), Svelte (`:global`), and Angular (`::ng-deep`).
 
@@ -66,3 +63,9 @@ These are allowed automatically:
 	],
 }
 ```
+
+## Limitations
+
+The WebKit scrollbar pseudo-classes are allowed after any vendor-prefixed pseudo-element, but browsers only accept them after `::-webkit-scrollbar*` and `::-webkit-resizer`, and only inside `:is()`, `:where()`, and `:not()`. So selectors that browsers drop, like `::-webkit-slider-thumb:horizontal`, are not reported. `::selection:window-inactive` is reported, although Chrome and Safari support it, so add `':window-inactive'` to `allow` if you use it.
+
+The rule does not validate context or arguments. Nested pseudo-selectors are checked only when `@eslint/css` parses the arguments as selectors.

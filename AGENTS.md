@@ -62,6 +62,8 @@ export default config;
 
 Options are accessed via `context.options[0]`. Use `meta.defaultOptions` for defaults (no manual merging).
 
+In messages, put names and values in backticks, not quotes.
+
 ### `recommended` config level
 
 `meta.docs.recommended` picks the preset that enables the rule. `'unopinionated'` does NOT mean "too opinionated" — it means the opposite:
@@ -76,7 +78,7 @@ Options are accessed via `context.options[0]`. Use `meta.defaultOptions` for def
 | `true` | off | on | on |
 | `false` (or omitted) | off | off | on |
 
-Every rule should be in `recommended` unless it cannot work well in normal projects. If unsure which level fits, share your recommendation and ask.
+Every rule should be in `recommended` unless it cannot work well in normal projects. If unsure which level fits, share your recommendation and ask. The doc of a `false` rule says why it is off.
 
 The preset configs apply to `**/*.css` files, set `language: 'css/css'`, and add the `@eslint/css` plugin.
 
@@ -127,6 +129,15 @@ On rebase, `rules/index.js` and the `readme.md` rules table almost always confli
 Use JavaScript syntax for configuration examples, not JSON-style quoted keys and strings, unless the example is specifically JSON.
 
 For rule documentation examples, prefer one failing (`/* ❌ */`) example followed by one corresponding passing (`/* ✅ */`) example in each `css` code block whenever possible. Use separate blocks for distinct cases instead of grouping all failing and passing examples together.
+
+Rule doc sections, in order: intro (what the rule reports and why, and whether it fixes), `## Examples`, `## Options` (one `### optionName` heading per option, without backticks), rule-specific sections, `## Limitations`, and `## Related rules` (a list of links).
+
+- Option examples show only the options object. In config examples (not `/* eslint … */` comments), put each array and object item on its own line, even a single item.
+- Below each option heading, write ``Type: `…`\`` and ``Default: `…` `` on two lines.
+- Mark every passing block with `/* ✅ */`. When the ❌ has a fix or suggestion, the ✅ shows its exact output.
+- Lint the examples: every ❌ must be reported and every ✅ must pass.
+- Without an autofix, write “There is no autofix because …”, and add “, but a suggestion is provided” if there is one.
+- Write full sentences, and “and” or “or” instead of slashes. Do not state what is true for every rule, such as that CSS in JavaScript is not linted.
 
 ## Testing
 
@@ -184,6 +195,7 @@ When writing fix functions:
 3. **Generator fixes** - Use `* fix(fixer) { yield ... }` for multi-step fixes.
 4. **Suggestions** - Use `suggest` array with `messageId` and `fix` when autofix could change behavior. Set `hasSuggestions: true` in meta.
 5. **Indentation and line endings** - ESLint inserts fix text verbatim and does not re-indent it. Never hardcode `\t` or `\n` when building new lines. Reuse the line ending and indentation that the file already has. Test fixes with space-indented and CRLF input, not only tabs and LF.
+6. **Removals** - When a fix removes a whole declaration or block, remove its line too (for declarations, use `getDeclarationRemovalRange`).
 
 ## Performance
 

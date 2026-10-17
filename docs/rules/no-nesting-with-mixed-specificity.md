@@ -7,9 +7,13 @@
 <!-- end auto-generated rule header -->
 <!-- Do not manually modify this header. Run: `npm run fix:eslint-docs` -->
 
-CSS gives the nesting selector (`&`) the specificity of the most specific selector in its parent selector list, matching the behavior of `:is()`. Mixing selector specificities can therefore make a nested rule more specific than one of its matching parent branches suggests.
+This rule reports nested rules under a parent selector list with mixed specificity.
+
+CSS gives the nesting selector (`&`) the specificity of the most specific selector in its parent selector list, like `:is()`, so a nested rule can be more specific than its matching parent branch suggests.
 
 The rule also checks `:is()`, `:not()`, `:has()`, and the `of` lists in `:nth-child()` and `:nth-last-child()`, which use the same [specificity rules](https://www.w3.org/TR/selectors-4/#specificity-rules). Ordinary selector lists without nesting are allowed.
+
+There is no autofix because changing selectors can alter matching or the cascade. Disable the rule for intentional mixed specificity. Splitting `:not()` or `:has()` is not a general solution.
 
 ## Examples
 
@@ -36,7 +40,7 @@ Split the parent rule:
 }
 ```
 
-Selector lists whose entries have equal specificity are allowed:
+Selector lists whose entries have equal specificity are allowed, so making the parent selectors equally specific also fixes it:
 
 ```css
 /* ✅ */
@@ -46,11 +50,9 @@ Selector lists whose entries have equal specificity are allowed:
 }
 ```
 
-Equalizing the parent selectors' specificity is therefore another possible remediation.
-
 ## Selector-list pseudo-classes
 
-Diagnostics show each argument's specificity, not the whole selector's, as `IDs-classes-types`. Classes include attributes and pseudo-classes; types include pseudo-elements.
+Diagnostics show each argument's specificity, not the whole selector's, as `IDs-classes-types`. Classes include attributes and pseudo-classes, and types include pseudo-elements.
 
 In `.button:is(:hover, #featured)`, `#featured` sets the function's specificity even when only `:hover` matches:
 
@@ -66,7 +68,7 @@ In `.button:is(:hover, #featured)`, `#featured` sets the function's specificity 
 }
 ```
 
-The arguments have specificity `0-1-0` and `1-0-0`; the whole selector has `1-1-0`.
+The arguments have specificity `0-1-0` and `1-0-0`, and the whole selector has `1-1-0`.
 
 For `:not()`, the strongest excluded selector contributes specificity even though none of the arguments match:
 
@@ -109,8 +111,6 @@ Wrapping a function in `:where()` preserves matching and gives it zero specifici
 ```
 
 But `:is(:where(#featured), .button)` still mixes `0-0-0` and `0-1-0`.
-
-This rule has no fixer because changing selectors can alter matching or the cascade. Disable it for intentional mixed specificity; splitting `:not()` or `:has()` is not a general solution.
 
 ## Limitations
 

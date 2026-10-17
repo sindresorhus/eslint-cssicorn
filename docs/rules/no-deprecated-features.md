@@ -11,29 +11,60 @@
 
 This rule disallows deprecated [properties](https://stylelint.io/user-guide/rules/property-no-deprecated/), [property value keywords](https://stylelint.io/user-guide/rules/declaration-property-value-keyword-no-deprecated/), [at-rules](https://stylelint.io/user-guide/rules/at-rule-no-deprecated/), [media types](https://stylelint.io/user-guide/rules/media-type-no-deprecated/), and [selectors](https://stylelint.io/user-guide/rules/selector-no-deprecated/), mirroring Stylelint 17.14.1. Selectors include type selectors, pseudo-classes, and pseudo-elements.
 
-- Declarations inside `@supports` are checked.
-- Declarations in CSS Modules `:export` and `:import()` blocks are ignored, because JavaScript reads them as exact strings.
-- Media feature names, function names, units, JavaScript style APIs, CSS-in-JS, and preprocessor syntax are ignored. Within functions, deprecated system colors are checked only inside recognized color functions.
-- SVG type selector names are case-sensitive. `-webkit-box-orient: vertical` is allowed for line clamping.
+Declarations inside `@supports` are checked. SVG type selector names are matched case-sensitively. `-webkit-box-orient: vertical` is allowed, because line clamping needs it.
 
-Safe aliases are automatically fixed: `word-wrap`, legacy grid gap and page break properties, and `overflow: overlay`. `:matches()` and `text-orientation: sideways-right` get a suggestion instead, because only Safari supports `:matches()` and only Safari does not support `sideways-right`, so replacing them changes the styles in some browsers. Other declaration-local replacements are suggested only when the result parses. Migrations without a local equivalent, such as `::content` to `::slotted`, are not suggested. A deprecated property is neither fixed nor suggested when the same block already declares its replacement, such as `word-wrap` next to `overflow-wrap`, since that would create a duplicate declaration.
+Deprecated features are handled in three ways:
+
+- Safe aliases are autofixed: `word-wrap`, the legacy grid gap and page break properties, and `overflow: overlay`.
+- `:matches()`, `text-orientation: sideways-right`, and other replacements within a declaration get a suggestion, which for a declaration is only given when the result parses. `:matches()` and `sideways-right` are not autofixed, because only Safari supports `:matches()` and only Safari does not support `sideways-right`, so replacing them changes the styles in some browsers.
+- Features without a local equivalent, such as `::content` (migrate it to `::slotted()`), are only reported.
+
+A deprecated property is neither fixed nor suggested when the same block already declares its replacement, such as `word-wrap` next to `overflow-wrap`, because that would duplicate it.
 
 ## Examples
 
 ```css
 /* ❌ */
+.title {
+	word-wrap: break-word;
+	overflow: overlay;
+}
+
+/* ✅ */
+.title {
+	overflow-wrap: break-word;
+	overflow: auto;
+}
+```
+
+The suggestion for `:matches()` replaces it with `:is()`:
+
+```css
+/* ❌ */
+a:matches(.featured) {
+	color: red;
+}
+
+/* ✅ */
+a:is(.featured) {
+	color: red;
+}
+```
+
+Features without a local equivalent must be replaced by hand:
+
+```css
+/* ❌ */
 @media tv {
-	acronym:matches(.featured) {
-		word-wrap: break-word;
-		overflow: overlay;
+	acronym {
+		color: red;
 	}
 }
 
 /* ✅ */
 @media screen {
-	abbr:is(.featured) {
-		overflow-wrap: break-word;
-		overflow: auto;
+	abbr {
+		color: red;
 	}
 }
 ```
@@ -45,24 +76,27 @@ Safe aliases are automatically fixed: `word-wrap`, legacy grid gap and page brea
 Type: `string[]`\
 Default: `[]`
 
-Allow exact canonical identifiers. Regular expressions are not supported.
+Deprecated features to allow, written exactly as the error message shows them. Regular expressions are not supported.
 
-```js
-'cssicorn/no-deprecated-features': [
-	'error',
-	{
-		allow: [
-			'word-wrap',
-			'@viewport',
-		],
-	},
-],
-```
-
-Formats:
+The formats are:
 
 - Property: `word-wrap`
 - Property and value: `word-break: break-word`
 - At-rule: `@viewport`
 - Selector: `acronym`, `:matches`, or `::content`
 - Media type: `@media tv`
+
+```js
+{
+	allow: [
+		'word-wrap',
+		'@viewport',
+	],
+}
+```
+
+## Limitations
+
+- Declarations in CSS Modules `:export` and `:import()` blocks are ignored, because JavaScript reads them as exact strings.
+- Media feature names, function names, units, and preprocessor syntax are ignored.
+- Within functions, deprecated system colors are only checked inside recognized color functions.

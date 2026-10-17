@@ -11,7 +11,7 @@ Message:
     |                                                                                                   ^^^^^^^^^^^^ Prefer \`light-dark()\` for the paired colors in \`color\`.
 
 Suggestion 1/1: Combine the colors with \`light-dark()\` and remove the override declaration.:
-  1 | :root { color-scheme: light dark; } a { color: light-dark(white, black); } 
+  1 | :root { color-scheme: light dark; } a { color: light-dark(white, black); }
 
 `;
 
@@ -28,7 +28,7 @@ Message:
     |                                                                                                  ^^^^^^^^^^^^ Prefer \`light-dark()\` for the paired colors in \`color\`.
 
 Suggestion 1/1: Combine the colors with \`light-dark()\` and remove the override declaration.:
-  1 | :root { color-scheme: light dark; } a { color: light-dark(white, black); } 
+  1 | :root { color-scheme: light dark; } a { color: light-dark(white, black); }
 
 `;
 
@@ -45,7 +45,7 @@ Message:
     |                                                                                                             ^^^^^^^^^^^ Prefer \`light-dark()\` for the paired colors in \`color\`.
 
 Suggestion 1/1: Combine the colors with \`light-dark()\` and remove the override declaration.:
-  1 | :root { color-scheme: light dark; } a { color: light-dark(r\\67 b(255 0 0), blue); } 
+  1 | :root { color-scheme: light dark; } a { color: light-dark(r\\67 b(255 0 0), blue); }
 
 `;
 
@@ -79,7 +79,7 @@ Message:
     |                                                                                                            ^^^^^^^^^^^^ Prefer \`light-dark()\` for the paired colors in \`color\`.
 
 Suggestion 1/1: Combine the colors with \`light-dark()\` and remove the override declaration.:
-  1 | HTML { COLOR-SCHEME: LIGHT DARK ONLY; } a,b { color: light-dark(white, black); } 
+  1 | HTML { COLOR-SCHEME: LIGHT DARK ONLY; } a,b { color: light-dark(white, black); }
 
 `;
 
@@ -96,7 +96,7 @@ Message:
     |                                                                                                                  ^^^^^^^^^^^^ Prefer \`light-dark()\` for the paired colors in \`color\`.
 
 Suggestion 1/1: Combine the colors with \`light-dark()\` and remove the override declaration.:
-  1 | :r\\6f ot { c\\6f lor-scheme: l\\69 ght dark; } a { color: light-dark(white, black); } 
+  1 | :r\\6f ot { c\\6f lor-scheme: l\\69 ght dark; } a { color: light-dark(white, black); }
 
 `;
 
@@ -125,8 +125,7 @@ Message:
 Suggestion 1/1: Combine the colors with \`light-dark()\` and remove the override declaration.:
   1 | :root { color-scheme: light dark; } a {
   2 | 	color: light-dark(white, black);
-  3 | 	
-  4 | }
+  3 | }
 
 `;
 
@@ -143,7 +142,7 @@ Message:
     |                                                                                                                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Prefer \`light-dark()\` for the paired colors in \`border-color\`.
 
 Suggestion 1/1: Combine the colors with \`light-dark()\` and remove the override declaration.:
-  1 | :root { color-scheme: light dark; } a { border-color: light-dark(white, black) red light-dark(blue, green) light-dark(yellow, purple); } 
+  1 | :root { color-scheme: light dark; } a { border-color: light-dark(white, black) red light-dark(blue, green) light-dark(yellow, purple); }
 
 `;
 
@@ -160,7 +159,7 @@ Message:
     |                                                                                                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Prefer \`light-dark()\` for the paired colors in \`background\`.
 
 Suggestion 1/1: Combine the colors with \`light-dark()\` and remove the override declaration.:
-  1 | :root { color-scheme: light dark; } a { background: url(foo.png) center/cover light-dark(white, black); } 
+  1 | :root { color-scheme: light dark; } a { background: url(foo.png) center/cover light-dark(white, black); }
 
 `;
 
@@ -177,7 +176,7 @@ Message:
     |                                                                                                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Prefer \`light-dark()\` for the paired colors in \`box-shadow\`.
 
 Suggestion 1/1: Combine the colors with \`light-dark()\` and remove the override declaration.:
-  1 | :root { color-scheme: light dark; } a { box-shadow: 0 1px light-dark(white, black), 0 2px light-dark(red, blue); } 
+  1 | :root { color-scheme: light dark; } a { box-shadow: 0 1px light-dark(white, black), 0 2px light-dark(red, blue); }
 
 `;
 
@@ -194,7 +193,7 @@ Message:
     |                                                                                                              ^^^^^^^^^^^^^^^^^^^^^^^ Prefer \`light-dark()\` for the paired colors in \`color\`.
 
 Suggestion 1/1: Combine the colors with \`light-dark()\` and remove the override declaration.:
-  1 | :root { color-scheme: light dark; } a { COLOR: light-dark(WHITE, BLACK) !important; } 
+  1 | :root { color-scheme: light dark; } a { COLOR: light-dark(WHITE, BLACK) !important; }
 
 `;
 
@@ -211,7 +210,7 @@ Message:
     |                                                                                                       ^^^^^^^^^^^^^^ Prefer \`light-dark()\` for the paired colors in \`color\`.
 
 Suggestion 1/1: Combine the colors with \`light-dark()\` and remove the override declaration.:
-  1 | :root { color-scheme: light dark; } a { c\\6f lor: light-dark(r\\65 d, b\\6c ue); } 
+  1 | :root { color-scheme: light dark; } a { c\\6f lor: light-dark(r\\65 d, b\\6c ue); }
 
 `;
 
@@ -228,7 +227,7 @@ Message:
     |                                                                                                    ^^^^^^^^^^^^ Prefer \`light-dark()\` for the paired colors in \`color\`.
 
 Suggestion 1/1: Combine the colors with \`light-dark()\` and remove the override declaration.:
-  1 | :root { color-scheme: light dark; } a { color: light-dark(white, black); } 
+  1 | :root { color-scheme: light dark; } a { color: light-dark(white, black); }
 
 `;
 
@@ -262,7 +261,7 @@ Message:
     |                                                                                                               ^^^^^^^^^^^^^^^^^^^^^^^ Prefer \`light-dark()\` for the paired colors in \`color\`.
 
 Suggestion 1/1: Combine the colors with \`light-dark()\` and remove the override declaration.:
-  1 | :root { color-scheme: light dark; } a { color: light-dark(RGB(255 0 0 / .5), rgb(0 0 0 / 50%)); } 
+  1 | :root { color-scheme: light dark; } a { color: light-dark(RGB(255 0 0 / .5), rgb(0 0 0 / 50%)); }
 
 `;
 
@@ -279,7 +278,7 @@ Message:
     |                                                                                                        ^^^^^^^^^^^^^^^^^^^^^^^ Prefer \`light-dark()\` for the paired colors in \`color\`.
 
 Suggestion 1/1: Combine the colors with \`light-dark()\` and remove the override declaration.:
-  1 | :root { color-scheme: light dark; } a { color: light-dark(rgb(1 0 0), rgb(1.00001 0 0)); } 
+  1 | :root { color-scheme: light dark; } a { color: light-dark(rgb(1 0 0), rgb(1.00001 0 0)); }
 
 `;
 
@@ -296,7 +295,7 @@ Message:
     |                                                                                                                ^^^^^^^^^^^^ Prefer \`light-dark()\` for the paired colors in \`color\`.
 
 Suggestion 1/1: Combine the colors with \`light-dark()\` and remove the override declaration.:
-  1 | :root { color-scheme: light dark; } a { color: light-dark(hsl(20deg 30% 40%), black); } 
+  1 | :root { color-scheme: light dark; } a { color: light-dark(hsl(20deg 30% 40%), black); }
 
 `;
 
@@ -313,7 +312,7 @@ Message:
     |                                                                                                             ^^^^^^^^^^^^ Prefer \`light-dark()\` for the paired colors in \`color\`.
 
 Suggestion 1/1: Combine the colors with \`light-dark()\` and remove the override declaration.:
-  1 | :root { color-scheme: light dark; } a { color: light-dark(hwb(20 30% 40%), black); } 
+  1 | :root { color-scheme: light dark; } a { color: light-dark(hwb(20 30% 40%), black); }
 
 `;
 
@@ -330,7 +329,7 @@ Message:
     |                                                                                                            ^^^^^^^^^^^^ Prefer \`light-dark()\` for the paired colors in \`color\`.
 
 Suggestion 1/1: Combine the colors with \`light-dark()\` and remove the override declaration.:
-  1 | :root { color-scheme: light dark; } a { color: light-dark(lab(30% 20 40), black); } 
+  1 | :root { color-scheme: light dark; } a { color: light-dark(lab(30% 20 40), black); }
 
 `;
 
@@ -347,7 +346,7 @@ Message:
     |                                                                                                            ^^^^^^^^^^^^ Prefer \`light-dark()\` for the paired colors in \`color\`.
 
 Suggestion 1/1: Combine the colors with \`light-dark()\` and remove the override declaration.:
-  1 | :root { color-scheme: light dark; } a { color: light-dark(lch(30% 20 40), black); } 
+  1 | :root { color-scheme: light dark; } a { color: light-dark(lch(30% 20 40), black); }
 
 `;
 
@@ -364,7 +363,7 @@ Message:
     |                                                                                                              ^^^^^^^^^^^^ Prefer \`light-dark()\` for the paired colors in \`color\`.
 
 Suggestion 1/1: Combine the colors with \`light-dark()\` and remove the override declaration.:
-  1 | :root { color-scheme: light dark; } a { color: light-dark(oklab(30% .2 .4), black); } 
+  1 | :root { color-scheme: light dark; } a { color: light-dark(oklab(30% .2 .4), black); }
 
 `;
 
@@ -381,7 +380,7 @@ Message:
     |                                                                                                              ^^^^^^^^^^^^ Prefer \`light-dark()\` for the paired colors in \`color\`.
 
 Suggestion 1/1: Combine the colors with \`light-dark()\` and remove the override declaration.:
-  1 | :root { color-scheme: light dark; } a { color: light-dark(oklch(30% .2 40), black); } 
+  1 | :root { color-scheme: light dark; } a { color: light-dark(oklch(30% .2 40), black); }
 
 `;
 
@@ -398,7 +397,7 @@ Message:
     |                                                                                                                     ^^^^^^^^^^^^ Prefer \`light-dark()\` for the paired colors in \`color\`.
 
 Suggestion 1/1: Combine the colors with \`light-dark()\` and remove the override declaration.:
-  1 | :root { color-scheme: light dark; } a { color: light-dark(color(display-p3 1 0 0), black); } 
+  1 | :root { color-scheme: light dark; } a { color: light-dark(color(display-p3 1 0 0), black); }
 
 `;
 
@@ -415,7 +414,7 @@ Message:
     |                                                                                                                          ^^^^^^^^^^^^ Prefer \`light-dark()\` for the paired colors in \`color\`.
 
 Suggestion 1/1: Combine the colors with \`light-dark()\` and remove the override declaration.:
-  1 | :root { color-scheme: light dark; } @media (width > 1px) { a { color: light-dark(white, black); }  }
+  1 | :root { color-scheme: light dark; } @media (width > 1px) { a { color: light-dark(white, black); } }
 
 `;
 
@@ -449,7 +448,7 @@ Message:
     |                                                                                   ^^^^^^^^^^^^ Prefer \`light-dark()\` for the paired colors in \`color\`.
 
 Suggestion 1/1: Combine the colors with \`light-dark()\` and remove the override declaration.:
-  1 | a { color-scheme: light dark; color: light-dark(white, black);  }
+  1 | a { color-scheme: light dark; color: light-dark(white, black); }
 
 `;
 
@@ -466,7 +465,7 @@ Message:
     |                                                                                                                               ^^^^^^^^^^^^ Prefer \`light-dark()\` for the paired colors in \`color\`.
 
 Suggestion 1/1: Combine the colors with \`light-dark()\` and remove the override declaration.:
-  1 | :root { color-scheme: light dark; } @supports (display: grid) { a { color: light-dark(white, black); }  }
+  1 | :root { color-scheme: light dark; } @supports (display: grid) { a { color: light-dark(white, black); } }
 
 `;
 
@@ -483,7 +482,7 @@ Message:
     |                                                                                                                              ^^^^^^^^^^^^ Prefer \`light-dark()\` for the paired colors in \`color\`.
 
 Suggestion 1/1: Combine the colors with \`light-dark()\` and remove the override declaration.:
-  1 | :root { color-scheme: light dark; } @container (width > 1px) { a { color: light-dark(white, black); }  }
+  1 | :root { color-scheme: light dark; } @container (width > 1px) { a { color: light-dark(white, black); } }
 
 `;
 
@@ -500,7 +499,7 @@ Message:
     |                                                                                                                  ^^^^^^^^^^^^ Prefer \`light-dark()\` for the paired colors in \`color\`.
 
 Suggestion 1/1: Combine the colors with \`light-dark()\` and remove the override declaration.:
-  1 | :root { color-scheme: light dark; } @layer theme { a { color: light-dark(white, black); }  }
+  1 | :root { color-scheme: light dark; } @layer theme { a { color: light-dark(white, black); } }
 
 `;
 
@@ -517,7 +516,7 @@ Message:
     |                                                                                                                    ^^^^^^^^^^^^ Prefer \`light-dark()\` for the paired colors in \`color\`.
 
 Suggestion 1/1: Combine the colors with \`light-dark()\` and remove the override declaration.:
-  1 | :root { color-scheme: light dark; } @scope (.card) { a { color: light-dark(white, black); }  }
+  1 | :root { color-scheme: light dark; } @scope (.card) { a { color: light-dark(white, black); } }
 
 `;
 
@@ -534,7 +533,7 @@ Message:
     |                                                                                                                  ^^^^^^^^^^^^ Prefer \`light-dark()\` for the paired colors in \`color\`.
 
 Suggestion 1/1: Combine the colors with \`light-dark()\` and remove the override declaration.:
-  1 | @layer theme { html { color-scheme: dark light only; } } a { color: light-dark(white, black);  }
+  1 | @layer theme { html { color-scheme: dark light only; } } a { color: light-dark(white, black); }
 
 `;
 
@@ -551,7 +550,7 @@ Message:
     |                                                         ^^^^^^^^^^^^ Prefer \`light-dark()\` for the paired colors in \`color\`.
 
 Suggestion 1/1: Combine the colors with \`light-dark()\` and remove the override declaration.:
-  1 | a { color: light-dark(white, black);  } :root { color-scheme: light dark; } 
+  1 | a { color: light-dark(white, black); } :root { color-scheme: light dark; } 
 
 `;
 
@@ -568,7 +567,7 @@ Message:
     |                                                                                                             ^^^^^^^^^^^^ Prefer \`light-dark()\` for the paired colors in \`color\`.
 
 Suggestion 1/1: Combine the colors with \`light-dark()\` and remove the override declaration.:
-  1 | :root { color-scheme: light dark; } .parent { a { color: light-dark(white, black); }  }
+  1 | :root { color-scheme: light dark; } .parent { a { color: light-dark(white, black); } }
 
 `;
 
@@ -613,7 +612,7 @@ Message:
     |                                                                                                              ^^^^^^^^^^^^ Prefer \`light-dark()\` for the paired colors in \`color\`.
 
 Suggestion 1/1: Combine the colors with \`light-dark()\` and remove the override declaration.:
-  1 | :root { color-scheme: light dark; } a { color: light-dark(white, black); } @media (prefers-color-scheme: dark) { /* keep */  }
+  1 | :root { color-scheme: light dark; } a { color: light-dark(white, black); } @media (prefers-color-scheme: dark) { /* keep */ }
 
 `;
 
@@ -630,7 +629,7 @@ Message:
     |                                                                                                               ^^^^^^^^^^^^^^^^^^^^^^^^ Prefer \`light-dark()\` for the paired colors in \`outline\`.
 
 Suggestion 1/1: Combine the colors with \`light-dark()\` and remove the override declaration.:
-  1 | :root { color-scheme: light dark; } a { outline: light-dark(white, black) solid 1px; } 
+  1 | :root { color-scheme: light dark; } a { outline: light-dark(white, black) solid 1px; }
 
 `;
 
@@ -647,7 +646,7 @@ Message:
     |                                                                                                    ^^^^^^^^^^^^^^^^^^^^^^^ Prefer \`light-dark()\` for the paired colors in \`border\`.
 
 Suggestion 1/1: Combine the colors with \`light-dark()\` and remove the override declaration.:
-  1 | a { color-scheme: only dark light; border: 1px solid light-dark(white, black);  }
+  1 | a { color-scheme: only dark light; border: 1px solid light-dark(white, black); }
 
 `;
 
@@ -699,10 +698,9 @@ Suggestion 1/1: Combine the colors with \`light-dark()\` and remove the override
   2 | a {
   3 |   border: 1px solid light-dark(white, black);
   4 |   @media (prefers-color-scheme: dark) {
-  5 |     
-  6 |     padding: 0;
-  7 |   }
-  8 | }
+  5 |     padding: 0;
+  6 |   }
+  7 | }
 
 `;
 
@@ -719,7 +717,7 @@ Message:
     |                                                                                                  ^^^^^^^^^^^^^ Prefer \`light-dark()\` for the paired colors in \`color\`.
 
 Suggestion 1/1: Combine the colors with \`light-dark()\` and remove the override declaration.:
-  1 | :root { color-scheme: light dark; } a { color: light-dark(white, black) } 
+  1 | :root { color-scheme: light dark; } a { color: light-dark(white, black) }
 
 `;
 
@@ -736,7 +734,7 @@ Message:
     |                                                                                                   ^^^^^^^^^^^^^^^^^^^^^^ Prefer \`light-dark()\` for the paired colors in \`color\`.
 
 Suggestion 1/1: Combine the colors with \`light-dark()\` and remove the override declaration.:
-  1 | :root { color-scheme: light dark; } a { color: light-dark(#0008, rgb(0 0 0 / .5)); } 
+  1 | :root { color-scheme: light dark; } a { color: light-dark(#0008, rgb(0 0 0 / .5)); }
 
 `;
 
@@ -753,7 +751,7 @@ Message:
     |                                                                                                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Prefer \`light-dark()\` for the paired colors in \`box-shadow\`.
 
 Suggestion 1/1: Combine the colors with \`light-dark()\` and remove the override declaration.:
-  1 | :root { color-scheme: light dark; } a { box-shadow: 0 1px light-dark(red, blue), 0 2px currentColor; } 
+  1 | :root { color-scheme: light dark; } a { box-shadow: 0 1px light-dark(red, blue), 0 2px currentColor; }
 
 `;
 
@@ -770,7 +768,7 @@ Message:
     |                                                                                                                ^^^^^^^^^^^^^^^^^^^^ Prefer \`light-dark()\` for the paired colors in \`--color\`.
 
 Suggestion 1/1: Combine the colors with \`light-dark()\` and remove the override declaration.:
-  1 | :root { color-scheme: light dark; } a { --color: light-dark(rgb(255 0 0 / 0), transparent); } 
+  1 | :root { color-scheme: light dark; } a { --color: light-dark(rgb(255 0 0 / 0), transparent); }
 
 `;
 
@@ -787,7 +785,7 @@ Message:
     |                                                                                                                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Prefer \`light-dark()\` for the paired colors in \`background\`.
 
 Suggestion 1/1: Combine the colors with \`light-dark()\` and remove the override declaration.:
-  1 | :root { color-scheme: light dark; } a { background: linear-gradient(RED,  BLUE) center / cover light-dark(white, black); } 
+  1 | :root { color-scheme: light dark; } a { background: linear-gradient(RED,  BLUE) center / cover light-dark(white, black); }
 
 `;
 
@@ -804,7 +802,7 @@ Message:
     |                                                                                                             ^^^^^^^^^^^^^^^^^^^ Prefer \`light-dark()\` for the paired colors in \`--color\`.
 
 Suggestion 1/1: Combine the colors with \`light-dark()\` and remove the override declaration.:
-  1 | :root { color-scheme: light dark; } a { --color: light-dark(rgb(none 0 0), rgb(0 0 0)); } 
+  1 | :root { color-scheme: light dark; } a { --color: light-dark(rgb(none 0 0), rgb(0 0 0)); }
 
 `;
 
@@ -821,7 +819,7 @@ Message:
     |                                                                                                              ^^^^^^^^^^^^^^^^^^^^^^^ Prefer \`light-dark()\` for the paired colors in \`fill\`.
 
 Suggestion 1/1: Combine the colors with \`light-dark()\` and remove the override declaration.:
-  1 | :root { color-scheme: light dark; } a { fill: url(#paint) light-dark(white, black); } 
+  1 | :root { color-scheme: light dark; } a { fill: url(#paint) light-dark(white, black); }
 
 `;
 
@@ -838,7 +836,7 @@ Message:
     |                                                                                                  ^^^^^^^^^^^^ Prefer \`light-dark()\` for the paired colors in \`color\`.
 
 Suggestion 1/1: Combine the colors with \`light-dark()\` and remove the override declaration.:
-  1 | :root,html { color-scheme: light dark; } a { color: light-dark(white, black);  }
+  1 | :root,html { color-scheme: light dark; } a { color: light-dark(white, black); }
 
 `;
 
@@ -855,7 +853,7 @@ Message:
     |                                                                                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Prefer \`light-dark()\` for the paired colors in \`background\`.
 
 Suggestion 1/1: Combine the colors with \`light-dark()\` and remove the override declaration.:
-  1 | :root { color-scheme: light dark; } a { background: url("white") light-dark(white, black); } 
+  1 | :root { color-scheme: light dark; } a { background: url("white") light-dark(white, black); }
 
 `;
 
@@ -889,7 +887,7 @@ Message:
     |                                                                                                           ^^^^^^^^^^^^ Prefer \`light-dark()\` for the paired colors in \`color\`.
 
 Suggestion 1/1: Combine the colors with \`light-dark()\` and remove the override declaration.:
-  1 | :root { color-scheme: light dark; } .card { color: light-dark(white, black); } 
+  1 | :root { color-scheme: light dark; } .card { color: light-dark(white, black); }
 
 `;
 
@@ -906,7 +904,7 @@ Message:
     |                                                                                                                                      ^^^^^^^^^^^^^^^^^^^^^^^ Prefer \`light-dark()\` for the paired colors in \`border\`.
 
 Suggestion 1/1: Combine the colors with \`light-dark()\` and remove the override declaration.:
-  1 | :root { color-scheme: light dark; } .card { color-scheme: light dark; border: 1px solid light-dark(white, black);  }
+  1 | :root { color-scheme: light dark; } .card { color-scheme: light dark; border: 1px solid light-dark(white, black); }
 
 `;
 
@@ -923,7 +921,7 @@ Message:
     |                                                                                                                               ^^^^^^^^^^^^^^^^ Prefer \`light-dark()\` for the paired colors in \`--surface\`.
 
 Suggestion 1/1: Combine the colors with \`light-dark()\` and remove the override declaration.:
-  1 | :root { color-scheme: light dark; } .card { color-scheme: light dark; --surface: light-dark(white, black);  }
+  1 | :root { color-scheme: light dark; } .card { color-scheme: light dark; --surface: light-dark(white, black); }
 
 `;
 
@@ -940,7 +938,7 @@ Message:
     |                                                                                                       ^^^^^^^^^^^^^^^^ Prefer \`light-dark()\` for the paired colors in \`--surface\`.
 
 Suggestion 1/1: Combine the colors with \`light-dark()\` and remove the override declaration.:
-  1 | :root { color-scheme: light dark; } a { --surface: light-dark(white, black); } 
+  1 | :root { color-scheme: light dark; } a { --surface: light-dark(white, black); }
 
 `;
 
@@ -957,7 +955,7 @@ Message:
     |                                                                                                  ^^^^^^^^^^^^ Prefer \`light-dark()\` for the paired colors in \`color\`.
 
 Suggestion 1/1: Combine the colors with \`light-dark()\` and remove the override declaration.:
-  1 | html { color-scheme: light dark; } a { color: light-dark(white, black); } 
+  1 | html { color-scheme: light dark; } a { color: light-dark(white, black); }
 
 `;
 
@@ -974,7 +972,7 @@ Message:
     |                                                                                                 ^^^^^^^^^^^^ Prefer \`light-dark()\` for the paired colors in \`color\`.
 
 Suggestion 1/1: Combine the colors with \`light-dark()\` and remove the override declaration.:
-  1 | html { color-scheme: only light dark; } a { color: light-dark(white, black);  }
+  1 | html { color-scheme: only light dark; } a { color: light-dark(white, black); }
 
 `;
 
@@ -991,7 +989,7 @@ Message:
     |                                                                                                                   ^^^^^^^^^^^^ Prefer \`light-dark()\` for the paired colors in \`color\`.
 
 Suggestion 1/1: Combine the colors with \`light-dark()\` and remove the override declaration.:
-  1 | @layer base { :root { color-scheme: light dark; } } a { color: light-dark(white, black); } 
+  1 | @layer base { :root { color-scheme: light dark; } } a { color: light-dark(white, black); }
 
 `;
 
@@ -1008,7 +1006,7 @@ Message:
     |                                                                                   ^^^^^^^^^^^^ Prefer \`light-dark()\` for the paired colors in \`color\`.
 
 Suggestion 1/1: Combine the colors with \`light-dark()\` and remove the override declaration.:
-  1 | a { color-scheme: dark light; color: light-dark(white, black);  }
+  1 | a { color-scheme: dark light; color: light-dark(white, black); }
 
 `;
 
@@ -1025,7 +1023,7 @@ Message:
     |                                                                                                 ^^^^^^^^^^^^ Prefer \`light-dark()\` for the paired colors in \`color\`.
 
 Suggestion 1/1: Combine the colors with \`light-dark()\` and remove the override declaration.:
-  1 | :root { color-scheme: light dark; } a { color: light-dark(red, black); }  b { color: white; } @media (prefers-color-scheme: light) { b { color: blue; } }
+  1 | :root { color-scheme: light dark; } a { color: light-dark(red, black); } b { color: white; } @media (prefers-color-scheme: light) { b { color: blue; } }
 
 `;
 
@@ -1036,7 +1034,7 @@ Message:
     |                                                                                                                                                                                  ^^^^^^^^^^^ Prefer \`light-dark()\` for the paired colors in \`color\`.
 
 Suggestion 1/1: Combine the colors with \`light-dark()\` and remove the override declaration.:
-  1 | :root { color-scheme: light dark; } a { color: red; } @media (prefers-color-scheme: dark) { a { color: black; } } b { color: light-dark(blue, white); } 
+  1 | :root { color-scheme: light dark; } a { color: red; } @media (prefers-color-scheme: dark) { a { color: black; } } b { color: light-dark(blue, white); }
 
 `;
 
@@ -1053,7 +1051,7 @@ Message:
     |                                                                                                  ^^^^^^^^^^^ Prefer \`light-dark()\` for the paired colors in \`color\`.
 
 Suggestion 1/1: Combine the colors with \`light-dark()\` and remove the override declaration.:
-  1 | :root { color-scheme: light dark; } a { color: light-dark(#FFF, #000); } 
+  1 | :root { color-scheme: light dark; } a { color: light-dark(#FFF, #000); }
 
 `;
 
@@ -1070,7 +1068,7 @@ Message:
     |                                                                                                                  ^^^^^^^^^^^^ Prefer \`light-dark()\` for the paired colors in \`color\`.
 
 Suggestion 1/1: Combine the colors with \`light-dark()\` and remove the override declaration.:
-  1 | :root { color-scheme: light dark; } @media print { a { color: light-dark(white, black); }  }
+  1 | :root { color-scheme: light dark; } @media print { a { color: light-dark(white, black); } }
 
 `;
 
@@ -1087,7 +1085,7 @@ Message:
     |                                                                                                     ^^^^^^^^^^^^^^ Prefer \`light-dark()\` for the paired colors in \`--Color\`.
 
 Suggestion 1/1: Combine the colors with \`light-dark()\` and remove the override declaration.:
-  1 | :root { color-scheme: light dark; } a { --Color: light-dark(white, black); } 
+  1 | :root { color-scheme: light dark; } a { --Color: light-dark(white, black); }
 
 `;
 
@@ -1104,7 +1102,7 @@ Message:
     |                                                                                                   ^^^^^^^^^^^^ Prefer \`light-dark()\` for the paired colors in \`color\`.
 
 Suggestion 1/1: Combine the colors with \`light-dark()\` and remove the override declaration.:
-  1 | :root { color-scheme: light dark; } a { color: light-dark(WHITE, black); } 
+  1 | :root { color-scheme: light dark; } a { color: light-dark(WHITE, black); }
 
 `;
 
@@ -1121,7 +1119,7 @@ Message:
     |                                                                                                 ^^^^^^^^^^^ Prefer \`light-dark()\` for the paired colors in \`color\`.
 
 Suggestion 1/1: Combine the colors with \`light-dark()\` and remove the override declaration.:
-  1 | :root { color-scheme: light dark; } a { color: light-dark(Red, #00f); } 
+  1 | :root { color-scheme: light dark; } a { color: light-dark(Red, #00f); }
 
 `;
 
@@ -1138,7 +1136,7 @@ Message:
     |                                                                                                                 ^^^^^^^^^^^^ Prefer \`light-dark()\` for the paired colors in \`color\`.
 
 Suggestion 1/1: Combine the colors with \`light-dark()\` and remove the override declaration.:
-  1 | :root { color-scheme: light dark; } .c\\61 rd { color: light-dark(white, black); } 
+  1 | :root { color-scheme: light dark; } .c\\61 rd { color: light-dark(white, black); }
 
 `;
 
@@ -1169,7 +1167,7 @@ Message:
     |                                                                                                              ^^^^^^^^^^^^^^^^^^^^^^^ Prefer \`light-dark()\` for the paired colors in \`color\`.
 
 Suggestion 1/1: Combine the colors with \`light-dark()\` and remove the override declaration.:
-  1 | :root { color-scheme: light dark; } a { color: light-dark(white, black) !important; } 
+  1 | :root { color-scheme: light dark; } a { color: light-dark(white, black) !important; }
 
 `;
 
@@ -1214,7 +1212,7 @@ Message:
     |                                                                                                            ^^^^^^^^^^^^ Prefer \`light-dark()\` for the paired colors in \`color\`.
 
 Suggestion 1/1: Combine the colors with \`light-dark()\` and remove the override declaration.:
-  1 | @supports (color: red) { a { color-scheme: light dark; color: light-dark(white, black);  } }
+  1 | @supports (color: red) { a { color-scheme: light dark; color: light-dark(white, black); } }
 
 `;
 
@@ -1231,7 +1229,7 @@ Message:
     |                                                                                                              ^^^^^^^^^^^^ Prefer \`light-dark()\` for the paired colors in \`color\`.
 
 Suggestion 1/1: Combine the colors with \`light-dark()\` and remove the override declaration.:
-  1 | @container (width > 1px) { a { color-scheme: light dark; color: light-dark(white, black);  } }
+  1 | @container (width > 1px) { a { color-scheme: light dark; color: light-dark(white, black); } }
 
 `;
 
@@ -1248,7 +1246,7 @@ Message:
     |                                                                                                          ^^^^^^^^^^^^ Prefer \`light-dark()\` for the paired colors in \`color\`.
 
 Suggestion 1/1: Combine the colors with \`light-dark()\` and remove the override declaration.:
-  1 | @media (width > 1px) { a { color-scheme: light dark; color: light-dark(white, black);  } }
+  1 | @media (width > 1px) { a { color-scheme: light dark; color: light-dark(white, black); } }
 
 `;
 
@@ -1265,7 +1263,7 @@ Message:
     |                                                                                                              ^^^^^^^^^^^^^^^^^^^^^^^ Prefer \`light-dark()\` for the paired colors in \`border\`.
 
 Suggestion 1/1: Combine the colors with \`light-dark()\` and remove the override declaration.:
-  1 | :root { color-scheme: light dark; } a { border: 1px solid light-dark(white, black); } 
+  1 | :root { color-scheme: light dark; } a { border: 1px solid light-dark(white, black); }
 
 `;
 
@@ -1282,7 +1280,7 @@ Message:
     |                                                                                                        ^^^^^^^^^^^^^^ Prefer \`light-dark()\` for the paired colors in \`--Color\`.
 
 Suggestion 1/1: Combine the colors with \`light-dark()\` and remove the override declaration.:
-  1 | :root { color-scheme: light dark; } a { \\2d -Color: light-dark(white, black); } 
+  1 | :root { color-scheme: light dark; } a { \\2d -Color: light-dark(white, black); }
 
 `;
 
@@ -1299,7 +1297,7 @@ Message:
     |                                                                                                               ^^^^^^^^^^^^^^^^^^^^^^^^ Prefer \`light-dark()\` for the paired colors in \`text-shadow\`.
 
 Suggestion 1/1: Combine the colors with \`light-dark()\` and remove the override declaration.:
-  1 | :root { color-scheme: light dark; } a { text-shadow: 0 1px light-dark(white, black); } 
+  1 | :root { color-scheme: light dark; } a { text-shadow: 0 1px light-dark(white, black); }
 
 `;
 
@@ -1333,7 +1331,7 @@ Message:
     |                                                                                                                                        ^^^^^^^^^^^^ Prefer \`light-dark()\` for the paired colors in \`color\`.
 
 Suggestion 1/1: Combine the colors with \`light-dark()\` and remove the override declaration.:
-  1 | :root { color-scheme: light dark; } a { -webkit-font-smoothing: antialiased; color: light-dark(white, black); } 
+  1 | :root { color-scheme: light dark; } a { -webkit-font-smoothing: antialiased; color: light-dark(white, black); }
 
 `;
 
@@ -1367,7 +1365,7 @@ Message:
     |                                                                                                                                  ^^^^^^^^^^^^ Prefer \`light-dark()\` for the paired colors in \`color\`.
 
 Suggestion 1/1: Combine the colors with \`light-dark()\` and remove the override declaration.:
-  1 | :root { color-scheme: light dark; } a { -WEBKIT-FONT-SMOOTHING: antialiased; color: light-dark(white, black);  }
+  1 | :root { color-scheme: light dark; } a { -WEBKIT-FONT-SMOOTHING: antialiased; color: light-dark(white, black); }
 
 `;
 
@@ -1384,7 +1382,7 @@ Message:
     |                                                                                                                                 ^^^^^^^^^^^^ Prefer \`light-dark()\` for the paired colors in \`color\`.
 
 Suggestion 1/1: Combine the colors with \`light-dark()\` and remove the override declaration.:
-  1 | :root { color-scheme: light dark; } a { -webkit-text-fill-color: red; color: light-dark(white, black); } 
+  1 | :root { color-scheme: light dark; } a { -webkit-text-fill-color: red; color: light-dark(white, black); }
 
 `;
 
@@ -1401,7 +1399,7 @@ Message:
     |                                                                                                                                      ^^^^^^^^^^^^^^^^^^^ Prefer \`light-dark()\` for the paired colors in \`border-color\`.
 
 Suggestion 1/1: Combine the colors with \`light-dark()\` and remove the override declaration.:
-  1 | :root { color-scheme: light dark; } a { border-color: light-dark(white, black); border-end-end-radius: 4px; } 
+  1 | :root { color-scheme: light dark; } a { border-color: light-dark(white, black); border-end-end-radius: 4px; }
 
 `;
 
@@ -1418,7 +1416,81 @@ Message:
     |                                                                                                                  ^^^^^^^^^^^^ Prefer \`light-dark()\` for the paired colors in \`color\`.
 
 Suggestion 1/1: Combine the colors with \`light-dark()\` and remove the override declaration.:
-  1 | @layer theme { :root { color-scheme: light dark; } a { color: light-dark(white, black); }  }
+  1 | @layer theme { :root { color-scheme: light dark; } a { color: light-dark(white, black); } }
+
+`;
+
+exports[`invalid(78): .card {\n\tcolor-scheme: light dark;\n\tborder: 1px solid white;\n\n\t@media (prefers-color-scheme: dark) {\n\t\tborder: 1px solid black;\n\t}\n}\n 1`] = `
+
+  1 | .card {
+  2 | 	color-scheme: light dark;
+  3 | 	border: 1px solid white;
+  4 |
+  5 | 	@media (prefers-color-scheme: dark) {
+  6 | 		border: 1px solid black;
+  7 | 	}
+  8 | }
+  9 |
+
+`;
+
+exports[`invalid(78): .card {\n\tcolor-scheme: light dark;\n\tborder: 1px solid white;\n\n\t@media (prefers-color-scheme: dark) {\n\t\tborder: 1px solid black;\n\t}\n}\n 2`] = `
+
+Message:
+  1 | .card {
+  2 | 	color-scheme: light dark;
+  3 | 	border: 1px solid white;
+  4 |
+  5 | 	@media (prefers-color-scheme: dark) {
+> 6 | 		border: 1px solid black;
+    | 		^^^^^^^^^^^^^^^^^^^^^^^ Prefer \`light-dark()\` for the paired colors in \`border\`.
+  7 | 	}
+  8 | }
+  9 |
+
+Suggestion 1/1: Combine the colors with \`light-dark()\` and remove the override declaration.:
+  1 | .card {
+  2 | 	color-scheme: light dark;
+  3 | 	border: 1px solid light-dark(white, black);
+  4 | }
+  5 |
+
+`;
+
+exports[`invalid(79): .card {\n  color-scheme: light dark;\n  border: 1px solid white;\n\n  @media (prefers-color-scheme: dark) {\n    border: 1px solid black;\n  }\n}\n 1`] = `
+
+  1 | .card {
+  2 |   color-scheme: light dark;
+  3 |   border: 1px solid white;
+  4 |
+  5 |   @media (prefers-color-scheme: dark) {
+  6 |     border: 1px solid black;
+  7 |   }
+  8 | }
+  9 |
+
+`;
+
+exports[`invalid(79): .card {\n  color-scheme: light dark;\n  border: 1px solid white;\n\n  @media (prefers-color-scheme: dark) {\n    border: 1px solid black;\n  }\n}\n 2`] = `
+
+Message:
+  1 | .card {
+  2 |   color-scheme: light dark;
+  3 |   border: 1px solid white;
+  4 |
+  5 |   @media (prefers-color-scheme: dark) {
+> 6 |     border: 1px solid black;
+    |     ^^^^^^^^^^^^^^^^^^^^^^^ Prefer \`light-dark()\` for the paired colors in \`border\`.
+  7 |   }
+  8 | }
+  9 |
+
+Suggestion 1/1: Combine the colors with \`light-dark()\` and remove the override declaration.:
+  1 | .card {
+  2 |   color-scheme: light dark;
+  3 |   border: 1px solid light-dark(white, black);
+  4 | }
+  5 |
 
 `;
 
@@ -1450,6 +1522,258 @@ Suggestion 1/1: Combine the colors with \`light-dark()\` and remove the override
 
 `;
 
+exports[`invalid(80): .card {\r\n\tcolor-scheme: light dark;\r\n\tborder: 1px solid white;\r\n\r\n\t@media (prefers-color-scheme: dark) {\r\n\t\tborder: 1px solid black;\r\n\t}\r\n}\r\n 1`] = `
+
+  1 | .card {
+  2 | 	color-scheme: light dark;
+  3 | 	border: 1px solid white;
+  4 |
+  5 | 	@media (prefers-color-scheme: dark) {
+  6 | 		border: 1px solid black;
+  7 | 	}
+  8 | }
+  9 |
+
+`;
+
+exports[`invalid(80): .card {\r\n\tcolor-scheme: light dark;\r\n\tborder: 1px solid white;\r\n\r\n\t@media (prefers-color-scheme: dark) {\r\n\t\tborder: 1px solid black;\r\n\t}\r\n}\r\n 2`] = `
+
+Message:
+  1 | .card {
+  2 | 	color-scheme: light dark;
+  3 | 	border: 1px solid white;
+  4 |
+  5 | 	@media (prefers-color-scheme: dark) {
+> 6 | 		border: 1px solid black;
+    | 		^^^^^^^^^^^^^^^^^^^^^^^ Prefer \`light-dark()\` for the paired colors in \`border\`.
+  7 | 	}
+  8 | }
+  9 |
+
+Suggestion 1/1: Combine the colors with \`light-dark()\` and remove the override declaration.:
+  1 | .card {
+  2 | 	color-scheme: light dark;
+  3 | 	border: 1px solid light-dark(white, black);
+  4 | }
+  5 |
+
+`;
+
+exports[`invalid(81): :root {\n\tcolor-scheme: light dark;\n}\n\n.card {\n\tcolor: white;\n}\n\n@media (prefers-color-scheme: dark) {\n\t.card {\n\t\tcolor: black;\n\t}\n}\n\n.next {\n\tcolor: red;\n}\n 1`] = `
+
+   1 | :root {
+   2 | 	color-scheme: light dark;
+   3 | }
+   4 |
+   5 | .card {
+   6 | 	color: white;
+   7 | }
+   8 |
+   9 | @media (prefers-color-scheme: dark) {
+  10 | 	.card {
+  11 | 		color: black;
+  12 | 	}
+  13 | }
+  14 |
+  15 | .next {
+  16 | 	color: red;
+  17 | }
+  18 |
+
+`;
+
+exports[`invalid(81): :root {\n\tcolor-scheme: light dark;\n}\n\n.card {\n\tcolor: white;\n}\n\n@media (prefers-color-scheme: dark) {\n\t.card {\n\t\tcolor: black;\n\t}\n}\n\n.next {\n\tcolor: red;\n}\n 2`] = `
+
+Message:
+   1 | :root {
+   2 | 	color-scheme: light dark;
+   3 | }
+   4 |
+   5 | .card {
+   6 | 	color: white;
+   7 | }
+   8 |
+   9 | @media (prefers-color-scheme: dark) {
+  10 | 	.card {
+> 11 | 		color: black;
+     | 		^^^^^^^^^^^^ Prefer \`light-dark()\` for the paired colors in \`color\`.
+  12 | 	}
+  13 | }
+  14 |
+  15 | .next {
+  16 | 	color: red;
+  17 | }
+  18 |
+
+Suggestion 1/1: Combine the colors with \`light-dark()\` and remove the override declaration.:
+   1 | :root {
+   2 | 	color-scheme: light dark;
+   3 | }
+   4 |
+   5 | .card {
+   6 | 	color: light-dark(white, black);
+   7 | }
+   8 |
+   9 | .next {
+  10 | 	color: red;
+  11 | }
+  12 |
+
+`;
+
+exports[`invalid(82): :root {\n\tcolor-scheme: light dark;\n}\n\n.card {\n\tcolor: white;\n}\n\n/* Dark */\n@media (prefers-color-scheme: dark) {\n\t.card {\n\t\tcolor: black;\n\t}\n}\n 1`] = `
+
+   1 | :root {
+   2 | 	color-scheme: light dark;
+   3 | }
+   4 |
+   5 | .card {
+   6 | 	color: white;
+   7 | }
+   8 |
+   9 | /* Dark */
+  10 | @media (prefers-color-scheme: dark) {
+  11 | 	.card {
+  12 | 		color: black;
+  13 | 	}
+  14 | }
+  15 |
+
+`;
+
+exports[`invalid(82): :root {\n\tcolor-scheme: light dark;\n}\n\n.card {\n\tcolor: white;\n}\n\n/* Dark */\n@media (prefers-color-scheme: dark) {\n\t.card {\n\t\tcolor: black;\n\t}\n}\n 2`] = `
+
+Message:
+   1 | :root {
+   2 | 	color-scheme: light dark;
+   3 | }
+   4 |
+   5 | .card {
+   6 | 	color: white;
+   7 | }
+   8 |
+   9 | /* Dark */
+  10 | @media (prefers-color-scheme: dark) {
+  11 | 	.card {
+> 12 | 		color: black;
+     | 		^^^^^^^^^^^^ Prefer \`light-dark()\` for the paired colors in \`color\`.
+  13 | 	}
+  14 | }
+  15 |
+
+Suggestion 1/1: Combine the colors with \`light-dark()\` and remove the override declaration.:
+   1 | :root {
+   2 | 	color-scheme: light dark;
+   3 | }
+   4 |
+   5 | .card {
+   6 | 	color: light-dark(white, black);
+   7 | }
+   8 |
+   9 | /* Dark */
+  10 |
+
+`;
+
+exports[`invalid(83): :root {\n\tcolor-scheme: light dark;\n}\n\n.card {\n\tcolor: white;\n}\n\n@media (prefers-color-scheme: dark) {\n\t/* Dark */\n\t.card {\n\t\tcolor: black;\n\t}\n}\n 1`] = `
+
+   1 | :root {
+   2 | 	color-scheme: light dark;
+   3 | }
+   4 |
+   5 | .card {
+   6 | 	color: white;
+   7 | }
+   8 |
+   9 | @media (prefers-color-scheme: dark) {
+  10 | 	/* Dark */
+  11 | 	.card {
+  12 | 		color: black;
+  13 | 	}
+  14 | }
+  15 |
+
+`;
+
+exports[`invalid(83): :root {\n\tcolor-scheme: light dark;\n}\n\n.card {\n\tcolor: white;\n}\n\n@media (prefers-color-scheme: dark) {\n\t/* Dark */\n\t.card {\n\t\tcolor: black;\n\t}\n}\n 2`] = `
+
+Message:
+   1 | :root {
+   2 | 	color-scheme: light dark;
+   3 | }
+   4 |
+   5 | .card {
+   6 | 	color: white;
+   7 | }
+   8 |
+   9 | @media (prefers-color-scheme: dark) {
+  10 | 	/* Dark */
+  11 | 	.card {
+> 12 | 		color: black;
+     | 		^^^^^^^^^^^^ Prefer \`light-dark()\` for the paired colors in \`color\`.
+  13 | 	}
+  14 | }
+  15 |
+
+Suggestion 1/1: Combine the colors with \`light-dark()\` and remove the override declaration.:
+   1 | :root {
+   2 | 	color-scheme: light dark;
+   3 | }
+   4 |
+   5 | .card {
+   6 | 	color: light-dark(white, black);
+   7 | }
+   8 |
+   9 | @media (prefers-color-scheme: dark) {
+  10 | 	/* Dark */
+  11 | }
+  12 |
+
+`;
+
+exports[`invalid(84): .card {\n\tcolor-scheme: light dark;\n\tcolor: white;\n\n\t@media (prefers-color-scheme: dark) {\n\t\tcolor: black;\n\t\tpadding: 0;\n\t}\n}\n 1`] = `
+
+   1 | .card {
+   2 | 	color-scheme: light dark;
+   3 | 	color: white;
+   4 |
+   5 | 	@media (prefers-color-scheme: dark) {
+   6 | 		color: black;
+   7 | 		padding: 0;
+   8 | 	}
+   9 | }
+  10 |
+
+`;
+
+exports[`invalid(84): .card {\n\tcolor-scheme: light dark;\n\tcolor: white;\n\n\t@media (prefers-color-scheme: dark) {\n\t\tcolor: black;\n\t\tpadding: 0;\n\t}\n}\n 2`] = `
+
+Message:
+   1 | .card {
+   2 | 	color-scheme: light dark;
+   3 | 	color: white;
+   4 |
+   5 | 	@media (prefers-color-scheme: dark) {
+>  6 | 		color: black;
+     | 		^^^^^^^^^^^^ Prefer \`light-dark()\` for the paired colors in \`color\`.
+   7 | 		padding: 0;
+   8 | 	}
+   9 | }
+  10 |
+
+Suggestion 1/1: Combine the colors with \`light-dark()\` and remove the override declaration.:
+  1 | .card {
+  2 | 	color-scheme: light dark;
+  3 | 	color: light-dark(white, black);
+  4 |
+  5 | 	@media (prefers-color-scheme: dark) {
+  6 | 		padding: 0;
+  7 | 	}
+  8 | }
+  9 |
+
+`;
+
 exports[`invalid(9): :root { color-scheme: light dark; } a { border-color: white #f00; } @media (prefers-color-scheme: dark) { a { border-color: black red; } } 1`] = `
 
   1 | :root { color-scheme: light dark; } a { border-color: white #f00; } @media (prefers-color-scheme: dark) { a { border-color: black red; } }
@@ -1463,6 +1787,6 @@ Message:
     |                                                                                                               ^^^^^^^^^^^^^^^^^^^^^^^ Prefer \`light-dark()\` for the paired colors in \`border-color\`.
 
 Suggestion 1/1: Combine the colors with \`light-dark()\` and remove the override declaration.:
-  1 | :root { color-scheme: light dark; } a { border-color: light-dark(white, black) #f00; } 
+  1 | :root { color-scheme: light dark; } a { border-color: light-dark(white, black) #f00; }
 
 `;

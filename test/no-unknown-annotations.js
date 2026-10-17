@@ -70,5 +70,12 @@ test.snapshot({
 		String.raw`a { -\2d priority: red !imprtant; }`,
 		String.raw`a { --\2d priority: red !imprtant; }`,
 		'a { --priority: red !IMPORTANT; }',
+		// Line breaks between `!` and `important`
+		'a {\n\tcolor: red !\n\t\timportant;\n}',
+		'a {\r\n  color: red !\r\n    IMPORTANT;\r\n}',
+		'a { color: red ! IMPORTANT }',
+		String.raw`a { color: red !\IMPORTANT; }`,
+		'a { color: red !ie; }',
+		'a { color: red !importantt; }',
 	],
 });

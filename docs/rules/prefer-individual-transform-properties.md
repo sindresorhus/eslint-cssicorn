@@ -9,11 +9,11 @@
 <!-- end auto-generated rule header -->
 <!-- Do not manually modify this header. Run: `npm run fix:eslint-docs` -->
 
-Prefer individual `translate`, `rotate`, and `scale` properties so states can change one component without repeating a whole `transform` list. This rule offers suggestions because conversion can change behavior. Review related styles, transitions, animations, and scripts before applying them.
+This rule reports `transform` declarations that can use the individual `translate`, `rotate`, and `scale` properties, so that a state can change one component without repeating the whole `transform` list. See [CSS individual transform properties](https://web.dev/articles/css-individual-transform-properties) and the [CSS Transforms Level 2 specification](https://drafts.csswg.org/css-transforms-2/#individual-transforms).
+
+There is no autofix because the conversion can change behavior, but a suggestion is provided. Review related styles, transitions, animations, and scripts before you apply it.
 
 ## Examples
-
-After converting both declarations, remove the repeated hover translation so the hover state only changes scale.
 
 ```css
 /* ❌ */
@@ -30,10 +30,13 @@ After converting both declarations, remove the repeated hover translation so the
 	translate: 0 -2px;
 
 	&:hover {
+		translate: 0 -2px;
 		scale: 1.05;
 	}
 }
 ```
+
+After you apply both suggestions, you can remove the repeated `translate` from the hover state.
 
 ```css
 /* ❌ */
@@ -51,10 +54,16 @@ After converting both declarations, remove the repeated hover translation so the
 
 ## Checked declarations
 
-The rule checks single functions and lists with at most one translation, one rotation, and one scale, in that order, including 3D forms.
+The rule checks single transform functions, including the 3D forms, and lists with at most one translation, one rotation, and one scale, in that order.
 
-It ignores other transform types, repeated or reordered operations, values containing substitutions (such as `var()`) or `random()`, and blocks with fallback transforms, individual transform properties, or motion paths. Keyframes, vendor-prefixed declarations, and CSS Modules `:export`/`:import()` blocks are also ignored.
+## Limitations
 
-Declarations containing comments are reported without suggestions.
+The rule ignores:
 
-See [CSS individual transform properties](https://web.dev/articles/css-individual-transform-properties) and the [CSS Transforms Level 2 specification](https://drafts.csswg.org/css-transforms-2/#individual-transforms).
+- Other transform functions.
+- Values that contain substitution functions, such as `var()`, or `random()`.
+- Declarations in blocks that also have fallback transforms, individual transform properties, or motion paths.
+- Declarations in keyframes, and in CSS Modules `:export` and `:import()` blocks.
+- Vendor-prefixed declarations.
+
+Declarations that contain comments are reported without suggestions.

@@ -9,7 +9,7 @@
 <!-- end auto-generated rule header -->
 <!-- Do not manually modify this header. Run: `npm run fix:eslint-docs` -->
 
-This rule removes `:is()` around a single selector when doing so preserves matching and specificity.
+This rule reports `:is()` around a single selector when removing it keeps the same matching and specificity, and the autofix removes it.
 
 ## Examples
 
@@ -29,7 +29,7 @@ a.active {}
 .foo:has(.bar) {}
 ```
 
-Complex arguments are only unwrapped when `:is()` is the entire selector of a style rule outside nested rules and `@scope`. Grouping at-rules such as `@media` are supported.
+A complex argument is unwrapped only when `:is()` is the entire selector of a style rule outside nested rules and `@scope`, but grouping at-rules such as `@media` are allowed.
 
 ```css
 /* ❌ */
@@ -39,19 +39,28 @@ Complex arguments are only unwrapped when `:is()` is the entire selector of a st
 .foo > .bar {}
 ```
 
-## Limitations
-
-Only style-rule selectors are checked. At-rule preludes and stylesheets containing `@namespace` are ignored. `:where()` is never removed.
-
-Wrappers are kept for multiple, invalid, or unknown arguments; pseudo-elements; `&`; namespace-qualified selectors; attribute modifiers; page-only pseudo-classes; and type selectors that would require reordering. Functional arguments must be selectors or nth formulas without `of`; wrappers containing `:has()`, `:lang()`, or `:dir()` are also kept.
-
-Wrappers containing comments are reported without a fix. Escapes are preserved, with a terminating space added when needed.
-
 ## Browser support
 
-Fixes assume your target browsers support the inner selector. Removing a forgiving `:is()` wrapper around an unsupported selector can invalidate a surrounding selector list. Disable the rule for intentional browser fallbacks:
+The fix assumes that your target browsers support the inner selector, because removing a forgiving `:is()` around an unsupported selector can invalidate the surrounding selector list. Disable the rule for intentional fallbacks:
 
 ```css
-/* eslint-disable-next-line cssicorn/no-useless-is */
+/* ✅ */
+/* eslint-disable-next-line cssicorn/no-useless-is -- Keep the forgiving selector list for browsers without `:focus-visible`. */
 .fallback, :is(:focus-visible) {}
 ```
+
+## Limitations
+
+Only style-rule selectors are checked, and stylesheets with `@namespace` are ignored. `:where()` is never removed.
+
+The wrapper is kept when the argument contains:
+
+- Multiple, invalid, or unknown selectors.
+- Pseudo-elements, `&`, or namespace-qualified selectors.
+- Attribute selectors with modifiers, such as `[type="a" i]`.
+- Page-only pseudo-classes, such as `:first`.
+- A type selector that would need to move to the start of the compound selector.
+- `:has()`.
+- A functional pseudo-class whose argument is not a selector or an nth formula without `of`, such as `:lang()` or `:dir()`.
+
+Wrappers containing comments are reported without a fix. Escapes are preserved, with a terminating space added when needed.

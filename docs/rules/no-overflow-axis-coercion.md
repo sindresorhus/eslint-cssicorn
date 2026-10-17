@@ -7,11 +7,11 @@
 <!-- end auto-generated rule header -->
 <!-- Do not manually modify this header. Run: `npm run fix:eslint-docs` -->
 
-When one overflow axis is `visible` and the other is `hidden`, `auto`, or `scroll`, the browser computes `visible` to `auto`. The legacy `overlay` alias of `auto` has the same effect.
+When one overflow axis is `visible` and the other is `hidden`, `auto`, `scroll`, or `overlay` (a legacy alias of `auto`), the browser computes `visible` to `auto`. For example, `overflow-x: hidden; overflow-y: visible` computes to `overflow-x: hidden; overflow-y: auto`, which can clip content, enable scrolling, and change sticky descendants' nearest scrollport.
 
-For example, `overflow-x: hidden; overflow-y: visible` computes to `overflow-x: hidden; overflow-y: auto`. This can clip content, enable scrolling, and change sticky descendants' nearest scrollport.
+The rule reports the affected `visible` value and both resulting axis values, in `overflow`, `overflow-x` with `overflow-y`, and `overflow-block` with `overflow-inline`.
 
-The rule reports the affected `visible` value and both resulting axis values. It checks `overflow`, `overflow-x`/`overflow-y`, and `overflow-block`/`overflow-inline`.
+There is no autofix because the intended behavior is ambiguous.
 
 ## Examples
 
@@ -31,7 +31,7 @@ Make scrolling explicit when it is intended:
 }
 ```
 
-The same interaction applies to the two-value shorthand:
+The same applies to the two-value shorthand:
 
 ```css
 /* ❌ */
@@ -45,7 +45,7 @@ The same interaction applies to the two-value shorthand:
 }
 ```
 
-Use `clip` with `visible` when you intend to clip one axis while letting content overflow the other:
+To clip one axis and let content overflow the other, use `clip`:
 
 ```css
 /* ❌ */
@@ -59,11 +59,9 @@ Use `clip` with `visible` when you intend to clip one axis while letting content
 }
 ```
 
-Unlike `hidden`, `clip` forbids programmatic scrolling and does not establish a formatting context. If you also need a formatting context, consider `display: flow-root`.
+Unlike `hidden`, `clip` forbids programmatic scrolling and does not establish a formatting context (use `display: flow-root` if you need one). With `clip` on one axis and `visible` on the other, `border-radius` does not round the overflow clipping edge.
 
-With `clip` on one axis and `visible` on the other, `border-radius` does not round the overflow clipping edge.
-
-Logical overflow axes are supported too:
+Logical axes are also checked:
 
 ```css
 /* ❌ */
@@ -81,8 +79,6 @@ Logical overflow axes are supported too:
 
 ## Limitations
 
-- Requires known values for both axes in one style block; respects declaration order, `!important`, and shorthand overrides.
-- Skips mixed physical/logical axes, substitutions such as `var()`, and cascade resolution across blocks.
-- Ignores `clip` paired with scrollable values because browser behavior is changing.
-
-No fixes or suggestions are offered because the intended behavior is ambiguous.
+- The rule needs known values for both axes in one style block, and respects declaration order, `!important`, and shorthand overrides.
+- It ignores a physical axis paired with a logical axis, substitutions such as `var()`, and the cascade across blocks.
+- It ignores `clip` paired with a scrollable value. [CSS Overflow](https://drafts.csswg.org/css-overflow-3/#overflow-control) used to compute such a `clip` to `hidden`, but [now allows](https://github.com/w3c/csswg-drafts/issues/12289) clipping one axis while scrolling the other. Browsers can still follow the old behavior.

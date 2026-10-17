@@ -6,6 +6,7 @@ import {getVendorPrefix, shorthandToAffectedProperties} from './shared/css-short
 import {areEqualValues} from './shared/css-shorthand-values.js';
 import {
 	decodeCssIdentifier,
+	getDeclarationRemovalRange,
 	groupingAtRules,
 	hasCommentInRange,
 	isBareRootRule,
@@ -294,9 +295,27 @@ function getColorReplacements({base, override, property, mode}, context) {
 }
 
 /**
+Get the range of a removed block together with the whitespace before it, so that its lines and the blank line before it disappear. A comment before the block stays.
+
+@param {AtrulePlain | RulePlain} node
+@param {CssicornContext} context
+@returns {[number, number]}
+*/
+function getBlockRemovalRange(node, context) {
+	const {sourceCode} = context;
+	let [start, end] = sourceCode.getRange(node);
+	while (start > 0 && ' \t\n\f\r'.includes(sourceCode.text[start - 1])) {
+		start--;
+	}
+
+	return [start, end];
+}
+
+/**
 @param {DeclarationPlain} override
 @param {AtrulePlain} media
 @param {CssicornContext} context
+@returns {[number, number]}
 */
 function getRemovalRange(override, media, context) {
 	const {sourceCode} = context;
@@ -304,20 +323,16 @@ function getRemovalRange(override, media, context) {
 	if (block.children.length === 1) {
 		const wrapper = sourceCode.getParent(block);
 		if (!hasCommentInRange(context, sourceCode.getRange(media))) {
-			return sourceCode.getRange(media);
+			return getBlockRemovalRange(media, context);
 		}
 
 		if (wrapper?.type === 'Rule' && !hasCommentInRange(context, sourceCode.getRange(wrapper))) {
-			return sourceCode.getRange(wrapper);
+			return getBlockRemovalRange(wrapper, context);
 		}
 	}
 
-	const range = sourceCode.getRange(override);
-	if (sourceCode.text[range[1]] === ';') {
-		range[1]++;
-	}
-
-	return range;
+	// The paired declarations have no comments, so there is always a range.
+	return /** @type {[number, number]} */ (getDeclarationRemovalRange(override, context));
 }
 
 /**

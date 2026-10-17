@@ -31,7 +31,9 @@ import {defineConfig} from 'eslint/config';
 
 export default defineConfig([
 	{
-		files: ['**/*.css'],
+		files: [
+			'**/*.css',
+		],
 		plugins: {
 			css,
 			cssicorn,
@@ -56,8 +58,12 @@ import cssicorn from 'eslint-cssicorn';
 
 export default [
 	{
-		files: ['**/*.md'],
-		plugins: {markdown},
+		files: [
+			'**/*.md',
+		],
+		plugins: {
+			markdown,
+		},
 		language: 'markdown/commonmark',
 		processor: 'markdown/markdown',
 	},
@@ -110,7 +116,7 @@ export default [
 | [no-redundant-shorthand-values](docs/rules/no-redundant-shorthand-values.md)                   | Disallow redundant values in CSS shorthand properties.                                                       | ✅    | 🔧 |    |
 | [no-self-referencing-custom-properties](docs/rules/no-self-referencing-custom-properties.md)   | Disallow cyclic dependencies in CSS custom properties.                                                       | ✅ ☑️ |    |    |
 | [no-unknown-animations](docs/rules/no-unknown-animations.md)                                   | Disallow unknown animations.                                                                                 |      |    |    |
-| [no-unknown-annotations](docs/rules/no-unknown-annotations.md)                                 | Disallow unknown and noncanonical CSS annotations.                                                           | ✅ ☑️ |    | 💡 |
+| [no-unknown-annotations](docs/rules/no-unknown-annotations.md)                                 | Disallow unknown and noncanonical CSS annotations.                                                           | ✅ ☑️ | 🔧 | 💡 |
 | [no-unknown-pseudo-selectors](docs/rules/no-unknown-pseudo-selectors.md)                       | Disallow unknown pseudo-class and pseudo-element selectors.                                                  | ✅ ☑️ |    |    |
 | [no-unknown-type-selectors](docs/rules/no-unknown-type-selectors.md)                           | Disallow unknown type selectors.                                                                             | ✅ ☑️ |    |    |
 | [no-unscoped-nesting-selector](docs/rules/no-unscoped-nesting-selector.md)                     | Disallow unscoped CSS nesting selectors.                                                                     | ✅ ☑️ |    |    |
@@ -153,7 +159,9 @@ export default defineConfig([
 	// …
 	cssicorn.configs.recommended,
 	{
-		files: ['**/*.css'],
+		files: [
+			'**/*.css',
+		],
 		rules: {
 			'cssicorn/no-unknown-animations': 'error',
 		},
@@ -187,7 +195,9 @@ export default defineConfig([
 	// …
 	cssicorn.configs.all,
 	{
-		files: ['**/*.css'],
+		files: [
+			'**/*.css',
+		],
 		rules: {
 			'cssicorn/prefer-short-hex-color': 'off',
 		},

@@ -9,13 +9,15 @@
 <!-- end auto-generated rule header -->
 <!-- Do not manually modify this header. Run: `npm run fix:eslint-docs` -->
 
-CSS treats property names, at-rule names, units, standard function names, pseudo-class and pseudo-element names, media and container size feature names, known value keywords, and hexadecimal color digits as ASCII case-insensitive. This rule enforces lowercase for all of them with a single convention.
+This rule enforces lowercase for property names, at-rule names, units, standard function names, pseudo-class and pseudo-element names, media and container size feature names, known value keywords, and hexadecimal color digits, which CSS treats as ASCII case-insensitive.
 
-The transform functions that the CSS specifications write in camelCase (`translateX()`, `translateY()`, `translateZ()`, `scaleX()`, `scaleY()`, `scaleZ()`, `rotateX()`, `rotateY()`, `rotateZ()`, `skewX()`, and `skewY()`) must use that casing instead. For example, `TRANSLATEY(0)` and `translatey(0)` are fixed to `translateY(0)`.
+Transform functions that the CSS specifications write in camelCase (`translateX()`, `translateY()`, `translateZ()`, `scaleX()`, `scaleY()`, `scaleZ()`, `rotateX()`, `rotateY()`, `rotateZ()`, `skewX()`, and `skewY()`) must use that casing, so `TRANSLATEY(0)` and `translatey(0)` are fixed to `translateY(0)`.
 
 The rule uses the CSS grammar to distinguish value keywords from case-sensitive custom identifiers such as animation names, font families, grid names, and counters.
 
-When a declaration contains a substitution such as `var()`, `env()`, `attr()`, or a custom function, the rule leaves its value identifiers unchanged because the substitution can determine whether an identifier is a keyword or a case-sensitive name. Units, function names, and hexadecimal colors outside the substitution are still checked.
+When a declaration contains a substitution such as `var()`, `env()`, `attr()`, or a custom function, its value identifiers are not changed, because the substitution can decide whether an identifier is a keyword or a case-sensitive name. Units, function names, and hexadecimal colors outside the substitution are still checked.
+
+The rule autofixes the casing.
 
 ## Examples
 
@@ -27,9 +29,7 @@ When a declaration contains a substitution such as `var()`, `env()`, `attr()`, o
 		border: 1PX SOLID #ABCDEF;
 	}
 }
-```
 
-```css
 /* ✅ */
 @media (min-width: 40rem) {
 	button:hover::before {
@@ -44,26 +44,40 @@ When a declaration contains a substitution such as `var()`, `env()`, `attr()`, o
 a {
 	transform: TRANSLATEY(0) translatex(0);
 }
-```
 
-```css
 /* ✅ */
 a {
 	transform: translateY(0) translateX(0);
 }
 ```
 
-## Ignored syntax
+## Limitations
 
-The rule does not change property names that are not known CSS properties or descriptors, because they can be author-defined. This also means that it does not lowercase a standard property that the CSS grammar does not know yet. The same applies to function names, because non-standard functions, like `myFunc()` from a PostCSS plugin, can be case-sensitive.
+Property names that are not known CSS properties or descriptors are not changed, because they can be author-defined. This includes standard properties that the CSS grammar does not know yet. The same goes for unknown function names, because non-standard functions, like `myFunc()` from a PostCSS plugin, can be case-sensitive.
 
 Declarations in CSS Modules `:export` and `:import()` blocks are ignored, because JavaScript reads them as exact strings.
 
 Font family names keep their casing, including the non-standard system font names `-apple-system` and `BlinkMacSystemFont`. Generic font families like `sans-serif` and CSS-wide keywords like `inherit` are still lowercased.
 
-The rule does not change custom property names or values (including `@property` initial values), custom functions or at-rules and their contents, other author-defined names beginning with `--`, font feature value names, type selectors, classes, IDs, attribute data, environment variable data, paint worklet arguments, strings, URL payloads, or user data in selector arguments. It also leaves `!important` and encoding strings to their dedicated rules.
+The rule does not change these:
 
-The `@charset` encoding signature is left unchanged because its exact initial byte sequence determines whether the browser recognizes it.
+- Custom property names and values, including `@property` initial values
+- Custom functions and custom at-rules, and their contents
+- Other author-defined names that begin with `--`
+- Font feature value names
+- Type selectors
+- Classes
+- IDs
+- Attribute data
+- Environment variable data
+- Paint worklet arguments
+- Strings
+- URL payloads
+- User data in selector arguments
+
+The rule does not change `@charset`, because the browser recognizes it only by its exact initial byte sequence. To enforce the casing of its encoding name, use [`unicorn/text-encoding-identifier-case`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/main/docs/rules/text-encoding-identifier-case.md).
+
+The rule does not check `!important`. Use [`no-unknown-annotations`](./no-unknown-annotations.md) to report and fix `!IMPORTANT`.
 
 ```css
 /* ✅ */

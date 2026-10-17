@@ -115,6 +115,17 @@ test.snapshot({
 		'@keyframes fade { to { animation-timing-function: ease-in; } 0% {} }',
 		// A control on the first block and easing on the single terminal block
 		'@keyframes fade { 0% { animation-duration: 2s; } 100% { animation-timing-function: ease; } }',
+		// A declaration on its own line is removed with its line
+		'@keyframes fade {\n\tfrom {\n\t\tcolor: red;\n\t\tanimation-duration: 2s;\n\t}\n}',
+		'@keyframes fade {\n  from {\n    animation-duration: 2s;  \n    color: red;\n  }\n}',
+		'@keyframes fade {\r\n\tfrom {\r\n\t\tanimation-duration: 2s;\r\n\t\tcolor: red;\r\n\t}\r\n}',
+		'@keyframes fade {\n\tfrom {\n\t\tcolor: red;\n\t\tanimation-duration: 2s\n\t}\n}',
+		'@keyframes fade {\n\tfrom {\n\t\tanimation-duration: 2s;\n\t\tanimation-delay: 1s;\n\t}\n}',
+		// A declaration that shares its line keeps the line
+		'@keyframes fade {\n\tfrom {\n\t\tcolor: red; animation-duration: 2s;\n\t\topacity: 1;\n\t}\n}',
+		'@keyframes fade {\n\tfrom {\n\t\tanimation-duration: 2s; color: red;\n\t}\n}',
+		'@keyframes fade {\n\tfrom {\n\t\tanimation-duration: 2s; /* note */\n\t\tcolor: red;\n\t}\n}',
+		'@keyframes fade {\n\tfrom {\n\t\t/* note */ animation-duration: 2s;\n\t\tcolor: red;\n\t}\n}',
 	],
 });
 
@@ -185,7 +196,7 @@ test({
 		},
 		{
 			code: '@keyframes fade {\r\n  to {\r\n    animation-duration: 2s;\r\n    opacity: 1;\r\n  }\r\n}',
-			output: '@keyframes fade {\r\n  to {\r\n    \r\n    opacity: 1;\r\n  }\r\n}',
+			output: '@keyframes fade {\r\n  to {\r\n    opacity: 1;\r\n  }\r\n}',
 			errors: 1,
 		},
 		{

@@ -9,11 +9,11 @@
 <!-- end auto-generated rule header -->
 <!-- Do not manually modify this header. Run: `npm run fix:eslint-docs` -->
 
-Checks later `@layer` statements against the initial sibling order. Existing layers cannot be reordered. See [CSS layer ordering](https://drafts.csswg.org/css-cascade-5/#layer-order).
+This rule reports `@layer` statements that list layers in a different order than the initial order. A layer gets its place in the [layer order](https://drafts.csswg.org/css-cascade-5/#layer-order) where its name first appears, so a later statement cannot reorder existing layers, and a different order is misleading.
 
-Subsets and repetitions are allowed; only each sibling's first occurrence counts, including dotted names. Blocks and named imports may appear in any order.
+The first `@layer` statement in a scope sets its initial order, also with one name, but only when it comes before all other layer declarations and imports in that scope. Later statements do not add names to it. Scopes without an initial order are not checked.
 
-The initial statement must precede other layer declarations or imports in its scope and may be nested only in `@layer` blocks. Single-name statements count; later statements never extend the contract. Scopes without a contract are unchecked.
+A later statement can list some of the layers and repeat a layer. Only the first occurrence of each layer in a statement counts, also in a dotted name.
 
 ## Examples
 
@@ -43,18 +43,29 @@ Nested layers have their own order. Dotted names and reopened blocks share the s
 }
 ```
 
-Blocks may appear in any order:
+`@layer` blocks and named layer imports can appear in any order:
 
 ```css
+/* ✅ */
 @layer reset, base, theme;
 
 @layer theme {}
 @layer reset {}
 ```
 
-An earlier conditional declaration also prevents a contract:
+A layer block before the first statement prevents an initial order:
 
 ```css
+/* ✅ */
+@layer theme {}
+@layer base, theme;
+@layer theme, base;
+```
+
+So does an earlier declaration inside a conditional at-rule:
+
+```css
+/* ✅ */
 @media screen {
 	@layer theme;
 }
@@ -66,21 +77,16 @@ An earlier conditional declaration also prevents a contract:
 
 ## Options
 
-### `checkUndeclaredLayers`
+### checkUndeclaredLayers
 
 Type: `boolean`\
 Default: `false`
 
-Check statements, named blocks, and named imports for names absent from their scope's contract. This catches typos that silently create new layers.
+When `true`, the rule also reports names in statements, named blocks, and named imports that are not in the initial order of their scope, to catch typos that silently create new layers.
 
 ```js
 {
-	'cssicorn/consistent-layer-order': [
-		'error',
-		{
-			checkUndeclaredLayers: true,
-		},
-	],
+	checkUndeclaredLayers: true,
 }
 ```
 
@@ -94,23 +100,21 @@ Check statements, named blocks, and named imports for names absent from their sc
 @layer theme {}
 ```
 
-Child names are unrestricted without a child contract: `@layer theme;` permits `@layer theme.components {}`. Names are case-sensitive; equivalent escapes match.
+Child layers are only checked when their own scope has an initial order, so `@layer theme;` allows `@layer theme.components {}`. Layer names are case-sensitive, and names with equivalent escapes match.
 
 ## Autofix
 
-Fixes require an earlier contract for every name segment and no comments in the statement. Spelling and formatting are preserved; undeclared names are never fixed.
+The autofix keeps the spelling and formatting of each name. It is skipped when the statement contains a comment, or a name with a part that is not in an earlier initial order.
+
+There is no autofix for names reported by `checkUndeclaredLayers`, because the intended name is unknown.
 
 ## Limitations
 
-- Checks only the current file; imported contents are not resolved.
-- Grouping rules other than `@layer` cannot establish contracts; their statements are still checked.
-- Anonymous blocks have independent scopes and are never undeclared-name errors.
-- Ignores unparsed syntax, including some escaped at-rule and import-function spellings.
+- Imported files are not read.
+- A statement nested in something other than an `@layer` block, such as `@media`, cannot set the initial order, but it is still checked.
+- Each anonymous `@layer {}` block has its own scope, and it is never reported as undeclared.
+- Syntax that is not parsed is ignored, such as some escaped spellings of at-rule names and of the `layer()` import function.
 
-Use [`css/use-layers`](https://github.com/eslint/css/blob/main/docs/rules/use-layers.md) to require layers or a naming pattern.
+## Related rules
 
-```css
-/* No initial statement: this scope is unchecked. */
-@layer theme {}
-@layer base {}
-```
+- [`css/use-layers`](https://github.com/eslint/css/blob/main/docs/rules/use-layers.md) requires layers, or a naming pattern for them.

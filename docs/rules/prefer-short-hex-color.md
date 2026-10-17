@@ -9,9 +9,7 @@
 <!-- end auto-generated rule header -->
 <!-- Do not manually modify this header. Run: `npm run fix:eslint-docs` -->
 
-Hexadecimal colors can use three or four digits when each adjacent pair in a six or eight digit value represents the same digit, regardless of letter case. This rule shortens those values without changing their color.
-
-It checks hash tokens in declaration values, including custom properties and unknown value syntax. It leaves selectors, strings, comments, URLs, and element references (`element()` and `-moz-element()`) unchanged. The fix preserves the case of the retained digits; use [`lowercase`](./lowercase.md) to enforce lowercase. Declarations in CSS Modules `:export` and `:import()` blocks are ignored, because JavaScript reads them as exact strings.
+A six or eight digit hex color can use three or four digits when each digit pair, like `aa` in `#aabbcc`, repeats one digit, regardless of letter case. This rule reports these colors in declaration values, including custom properties and unknown value syntax, and the autofix shortens them without changing the color, keeping the case of the retained digits.
 
 ## Examples
 
@@ -21,12 +19,18 @@ a {
 	color: #ffffff;
 	background-color: #aabbccdd;
 }
-```
 
-```css
 /* ✅ */
 a {
 	color: #fff;
 	background-color: #abcd;
 }
 ```
+
+## Limitations
+
+Selectors, strings, comments, URLs, and element references (`element()` and `-moz-element()`) are left unchanged. Declarations in CSS Modules `:export` and `:import()` blocks are ignored, because JavaScript reads them as exact strings.
+
+## Related rules
+
+- [`lowercase`](./lowercase.md) can enforce lowercase hex colors.

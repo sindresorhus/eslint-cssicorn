@@ -7,7 +7,9 @@
 <!-- end auto-generated rule header -->
 <!-- Do not manually modify this header. Run: `npm run fix:eslint-docs` -->
 
-Reports state and responsive declarations blocked by `!important` or layer priority, regardless of specificity or source order. Each diagnostic identifies the blocker's line and reason. No autofix, since the intended correction varies. See the [cascade sorting order](https://www.w3.org/TR/css-cascade-5/#cascade-sort).
+This rule reports state and responsive declarations that `!important` or layer priority blocks, regardless of specificity or source order (see the [cascade sorting order](https://www.w3.org/TR/css-cascade-5/#cascade-sort)). The error message shows the line of the blocking declaration and the reason.
+
+There is no autofix because the intended correction varies.
 
 ## Examples
 
@@ -77,7 +79,7 @@ For `!important`, layered declarations beat unlayered declarations:
 }
 ```
 
-Responsive declarations and native nesting:
+Responsive declarations in native nesting are also checked:
 
 ```css
 /* ❌ */
@@ -99,27 +101,33 @@ Responsive declarations and native nesting:
 
 ## Supported relationships
 
-Compares the same property or a [known name alias](../../rules/shared/css-property-name-aliases.js) when an override:
+The rule compares declarations of the same property or a known alias, such as `word-wrap` and `overflow-wrap`, or `-webkit-transform` and `transform`. An override is only compared with a base declaration when one of these is true:
 
-- Adds classes, attributes, or pseudo-classes while retaining every base condition and unchanged ancestors: `.button.primary` → `.disabled.primary.button:hover`. Condition order is irrelevant; duplicates alone do not count.
-- Adds `@media`, `@supports`, `@container`, or `@starting-style` conditions, retaining base conditions exactly, or changes layered/unlayered context. Conditional nesting order is irrelevant.
+- The override adds classes, attributes, or pseudo-classes, and keeps every condition of the base selector and its ancestors unchanged, such as `.disabled.primary.button:hover` with `.button.primary`. The order of the conditions does not matter, but a repeated condition does not count as added.
+- The override adds `@media`, `@supports`, `@container`, or `@starting-style` conditions and keeps the base conditions exactly, or it is in a different layered or unlayered context. The nesting order of the conditions does not matter.
 
-Native nesting supports leading `&` and implicit nesting, except combinations of multiple parent and child branches. Every selector branch must be blocked.
+Native nesting is supported with a leading `&` and with implicit nesting, except when both the parent and the nested selector lists have more than one selector. An override is only reported when every selector in its list is blocked.
 
-Matching terminal `::before`/`::after` is supported; refinements require explicit originating-element selectors. Nested style rules under pseudo-element parents are skipped.
+A matching `::before` or `::after` at the end of both selectors is supported. The base selector must name its originating element, so `.button:hover::before` is compared with `.button::before`, but not with `::before` or `*::before`.
 
-Ordinary selectors work within a `@scope`, from outer to nested scopes, and from global rules into scopes. Separate scope blocks, scope-root selectors, direct `@scope` declarations, and scopes inside style rules are skipped.
+Ordinary selectors are compared within one `@scope`, from an outer scope into nested scopes, and from global rules into scopes.
 
-`@starting-style` cannot block ordinary declarations. Style rules inside nested `@starting-style` are unsupported by the parser.
+`@starting-style` cannot block ordinary declarations.
 
 ## Limitations
 
-Checks this file only; intentional browser fallbacks may need local suppression.
+Intentional browser fallbacks can need a disable comment.
 
-- Does not resolve imports, layer ordering, shorthand/longhand or `all` interactions, other aliases, computed values, or custom property registration.
-- Attribute syntax (except value quoting/escapes) and pseudo-class arguments must generate identical text.
-- Skips other pseudo-elements, namespaced types, escaped wildcards, shadow-tree selectors, unparsed arguments, and unlisted at-rules.
-- Ordinary blockers must match the property grammar. Values containing substitutions such as `var()` cannot block overrides.
-- `revert`, `revert-layer`, and `revert-rule` suppress blockers of equal or lower importance for that property and known shorthand components throughout the file. `all` excludes custom properties, `direction`, and `unicode-bidi`. Substituted rollbacks are unresolved.
+- The rule does not resolve imports, the order of layers, interactions between shorthand and longhand properties or with `all`, other aliases, computed values, or custom property registration.
+- Attribute selectors and pseudo-class arguments must generate identical text, except that quoting and escapes in attribute values do not matter.
+- Other pseudo-elements, namespaced types, escaped wildcards, shadow-tree selectors, unparsed arguments, unlisted at-rules, and nested style rules under a pseudo-element parent are skipped.
+- Separate `@scope` blocks, scope-root selectors, declarations directly in `@scope`, and `@scope` inside style rules are skipped.
+- The parser does not support style rules inside a nested `@starting-style`.
+- A blocking declaration cannot contain substitutions such as `var()`, and, except for a custom property, it must match the property grammar.
+- A `revert`, `revert-layer`, or `revert-rule` value anywhere in the file stops the rule from reporting blockers of equal or lower importance for that property and its known shorthand components. For `all`, this applies to every property except custom properties, `direction`, and `unicode-bidi`. Rollback keywords inside substitutions are not resolved.
 
-Related: [`no-descending-specificity`](./no-descending-specificity.md) checks selector ordering, [`no-ineffective-properties`](./no-ineffective-properties.md) checks incompatible properties, and [`consistent-layer-order`](./consistent-layer-order.md) checks layer statements.
+## Related rules
+
+- [`no-descending-specificity`](./no-descending-specificity.md) checks selector ordering.
+- [`no-ineffective-properties`](./no-ineffective-properties.md) checks incompatible properties.
+- [`consistent-layer-order`](./consistent-layer-order.md) checks layer statements.

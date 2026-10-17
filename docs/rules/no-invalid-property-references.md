@@ -7,9 +7,11 @@
 <!-- end auto-generated rule header -->
 <!-- Do not manually modify this header. Run: `npm run fix:eslint-docs` -->
 
-Property names used as values can contain typos that browsers silently ignore. This rule validates literal property references in `transition`, `transition-property`, and `will-change` against the property catalog provided by `@eslint/css`.
+Property names used as values can contain typos that browsers silently ignore. This rule validates literal property references in `transition`, `transition-property`, and `will-change` against the property catalog of `@eslint/css`.
 
-It complements [`css/no-invalid-properties`](https://github.com/eslint/css/blob/main/docs/rules/no-invalid-properties.md) and Stylelint's [`property-no-unknown`](https://stylelint.io/user-guide/rules/property-no-unknown/) and [`declaration-property-value-no-unknown`](https://stylelint.io/user-guide/rules/declaration-property-value-no-unknown/): those rules validate declaration names or value grammar, but unknown property references are grammatically valid identifiers.
+It complements [`css/no-invalid-properties`](https://github.com/eslint/css/blob/main/docs/rules/no-invalid-properties.md) and Stylelint's [`property-no-unknown`](https://stylelint.io/user-guide/rules/property-no-unknown/) and [`declaration-property-value-no-unknown`](https://stylelint.io/user-guide/rules/declaration-property-value-no-unknown/): those rules validate declaration names or value grammar, and an unknown property reference is a grammatically valid identifier.
+
+There is no autofix because correcting a reference requires knowing the author's intent.
 
 ## Examples
 
@@ -57,27 +59,19 @@ a { transition-property: inherit; }
 
 ## Recognized keywords
 
-The following identifiers are exempt from property-name validation in their respective declarations:
+These identifiers are exempt from property-name validation:
 
 - `transition`: `all`, `none`, `ease`, `ease-in`, `ease-out`, `ease-in-out`, `linear`, `step-start`, `step-end`, `normal`, `allow-discrete`.
 - `transition-property`: `all`, `none`.
 - `will-change`: `auto`, `scroll-position`, `contents`.
 
-Standard property names are matched ASCII case-insensitively, including escaped spellings. Shorthand names and known properties that cannot be animated are allowed; the rule does not assess whether a transition or optimization will take effect.
+The `transition` keywords are exempt even when repeated, like `transition: ease ease 1s`.
 
-## Limitations
-
-- Ignores custom (`--progress`) and vendor-prefixed references (`-webkit-transform`). Vendor-prefixed declarations are checked.
-- Checks only top-level identifiers. Function arguments, strings, URLs, and build-tool values are not resolved.
-- Skips support queries, descriptor blocks known to the lexer, CSS Modules `:export`/`:import()` declarations, and unparsed values.
-- Leaves value grammar to `css/no-invalid-properties`.
-- Always exempts transition shorthand keywords, including repeated ones like `transition: ease ease 1s`.
-
-No autofix or suggestions: correcting a reference requires knowing the author's intent.
+Property names are matched ASCII case-insensitively, also when escaped. Shorthands and known non-animatable properties are allowed, because the rule does not check whether a transition or optimization takes effect.
 
 ## Additional properties
 
-To recognize an experimental or nonstandard property, add it through [`languageOptions.customSyntax`](https://github.com/eslint/css#configuring-custom-syntax) rather than configuring a separate rule-specific allowlist:
+To recognize an experimental or nonstandard property, add it through [`languageOptions.customSyntax`](https://github.com/eslint/css#configuring-custom-syntax) instead of a rule option:
 
 ```js
 {
@@ -90,3 +84,9 @@ To recognize an experimental or nonstandard property, add it through [`languageO
 	},
 }
 ```
+
+## Limitations
+
+- Custom references (`--progress`) and vendor-prefixed references (`-webkit-transform`) are ignored. Vendor-prefixed declarations, such as `-webkit-transition`, are checked.
+- Only top-level identifiers are checked. Function arguments, strings, URLs, and build-tool values are not resolved.
+- Declarations in support queries, descriptor blocks known to the lexer, CSS Modules `:export` and `:import()` blocks, and unparsed values are ignored.

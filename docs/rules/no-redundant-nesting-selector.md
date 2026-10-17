@@ -9,7 +9,7 @@
 <!-- end auto-generated rule header -->
 <!-- Do not manually modify this header. Run: `npm run fix:eslint-docs` -->
 
-Remove a leading `&` before `>`, `+`, or `~`, or before a descendant selector containing no other nesting references. Comments and remaining selector text are preserved. This rule has no options.
+This rule reports a leading `&` before `>`, `+`, or `~`, or before a descendant selector with no other nesting references. It is not needed, because a nested selector without `&` is already relative to the parent. The autofix removes it, preserving comments and the remaining selector text.
 
 ## Examples
 
@@ -84,12 +84,12 @@ A leading descendant `&` is also necessary when the selector contains another ne
 
 ## Limitations
 
-Targets modern native CSS. It follows parsed nesting through `@media`, `@supports`, `@container`, and `@layer`, skipping `@scope` and unknown at-rule boundaries.
+The rule targets native CSS nesting, and follows it through `@media`, `@supports`, `@container`, and `@layer`. It does not check a rule when `@scope` or another at-rule is between it and its parent style rule, as in `a { @unknown { & .child {} } }`.
 
-Skips raw parser content and descendant selectors starting with `--`. It also keeps `&` when the bundled parser would not read the fixed selector list as a nested rule, like `& span::before`, `& |span`, and `&+span`, because the fixed file would fail to parse. After `& span:before` becomes `span:before`, [`prefer-modern-syntax`](./prefer-modern-syntax.md) adds the `&` back with its fix to `& span::before`.
+The rule ignores unparsed (raw) selector text and descendant selectors that start with `--`. It also keeps `&` when the bundled parser would not read the fixed selector list as a nested rule, like `& span::before`, `& |span`, and `&+span`. After `& span:before` becomes `span:before`, [`prefer-modern-syntax`](./prefer-modern-syntax.md) adds the `&` back with its fix to `& span::before`.
 
 ## Related rules
 
-- [`prefer-nesting`](./prefer-nesting.md) creates nesting; this rule can simplify its output.
+- [`prefer-nesting`](./prefer-nesting.md) creates nesting, and this rule can simplify its output.
 - [`no-redundant-nested-style-rules`](./no-redundant-nested-style-rules.md) removes redundant `&` blocks.
 - [`no-unscoped-nesting-selector`](./no-unscoped-nesting-selector.md) checks whether a nesting selector has a scoping context.

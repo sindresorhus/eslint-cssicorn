@@ -38,7 +38,7 @@ test('Markdown configuration reports clamped CSS values at their original locati
 	})), [
 		{
 			ruleId: 'cssicorn/no-clamped-values',
-			message: '\'grayscale() amount\' evaluates to 50, which the browser clamps to 1. Did you mean a percentage?',
+			message: '`grayscale() amount` evaluates to 50, which the browser clamps to 1. Did you mean a percentage?',
 			line: 11,
 			column: 19,
 			endLine: 11,

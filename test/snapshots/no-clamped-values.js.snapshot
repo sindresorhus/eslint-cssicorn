@@ -8,7 +8,7 @@ exports[`invalid(1): a { animation-duration: calc(-1MS); } 2`] = `
 
 Message:
 > 1 | a { animation-duration: calc(-1MS); }
-    |                         ^^^^^^^^^^ 'animation-duration' evaluates to -0.001s, which the browser clamps to 0s.
+    |                         ^^^^^^^^^^ \`animation-duration\` evaluates to -0.001s, which the browser clamps to 0s.
 
 `;
 
@@ -22,7 +22,7 @@ exports[`invalid(1): a { border-image: url(a) 110% fill / 200% / 2; mask-border:
 
 Message:
 > 1 | a { border-image: url(a) 110% fill / 200% / 2; mask-border: url(a) 110% fill / 200% / 2; }
-    |                          ^^^^ 'border-image-slice' evaluates to 110%, which the browser clamps to 100%.
+    |                          ^^^^ \`border-image-slice\` evaluates to 110%, which the browser clamps to 100%.
 
 `;
 
@@ -30,7 +30,7 @@ exports[`invalid(1): a { border-image: url(a) 110% fill / 200% / 2; mask-border:
 
 Message:
 > 1 | a { border-image: url(a) 110% fill / 200% / 2; mask-border: url(a) 110% fill / 200% / 2; }
-    |                                                                    ^^^^ 'mask-border-slice' evaluates to 110%, which the browser clamps to 100%.
+    |                                                                    ^^^^ \`mask-border-slice\` evaluates to 110%, which the browser clamps to 100%.
 
 `;
 
@@ -44,7 +44,7 @@ exports[`invalid(1): a { filter: blur(calc(-1px)); } 2`] = `
 
 Message:
 > 1 | a { filter: blur(calc(-1px)); }
-    |                  ^^^^^^^^^^ 'blur()' evaluates to -1px, which the browser clamps to 0px.
+    |                  ^^^^^^^^^^ \`blur()\` evaluates to -1px, which the browser clamps to 0px.
 
 `;
 
@@ -58,7 +58,7 @@ exports[`invalid(1): a { font-style: oblique calc(120deg); } 2`] = `
 
 Message:
 > 1 | a { font-style: oblique calc(120deg); }
-    |                         ^^^^^^^^^^^^ 'font-style' evaluates to 120deg, which the browser clamps to 90deg.
+    |                         ^^^^^^^^^^^^ \`font-style\` evaluates to 120deg, which the browser clamps to 90deg.
 
 `;
 
@@ -72,7 +72,7 @@ exports[`invalid(1): a { opacity: -1; } 2`] = `
 
 Message:
 > 1 | a { opacity: -1; }
-    |              ^^ 'opacity' evaluates to -1, which the browser clamps to 0.
+    |              ^^ \`opacity\` evaluates to -1, which the browser clamps to 0.
 
 `;
 
@@ -86,7 +86,7 @@ exports[`invalid(10): a { FONT-STYLE: OBLIQUE CALC(120DEG) !important; } 2`] = `
 
 Message:
 > 1 | a { FONT-STYLE: OBLIQUE CALC(120DEG) !important; }
-    |                         ^^^^^^^^^^^^ 'font-style' evaluates to 120deg, which the browser clamps to 90deg.
+    |                         ^^^^^^^^^^^^ \`font-style\` evaluates to 120deg, which the browser clamps to 90deg.
 
 `;
 
@@ -100,7 +100,7 @@ exports[`invalid(10): a { fill-opacity: 50; } 2`] = `
 
 Message:
 > 1 | a { fill-opacity: 50; }
-    |                   ^^ 'fill-opacity' evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
+    |                   ^^ \`fill-opacity\` evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
 
 `;
 
@@ -114,7 +114,7 @@ exports[`invalid(10): a { filter: bl\\75 r(calc(-1px)); } 2`] = `
 
 Message:
 > 1 | a { filter: bl\\75 r(calc(-1px)); }
-    |                     ^^^^^^^^^^ 'blur()' evaluates to -1px, which the browser clamps to 0px.
+    |                     ^^^^^^^^^^ \`blur()\` evaluates to -1px, which the browser clamps to 0px.
 
 `;
 
@@ -128,7 +128,7 @@ exports[`invalid(100): a { color: alpha(from red / 50); } 2`] = `
 
 Message:
 > 1 | a { color: alpha(from red / 50); }
-    |                             ^^ 'alpha() alpha' evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
+    |                             ^^ \`alpha() alpha\` evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
 
 `;
 
@@ -142,7 +142,7 @@ exports[`invalid(101): a { color: hsl(0 -1% 50%); } 2`] = `
 
 Message:
 > 1 | a { color: hsl(0 -1% 50%); }
-    |                  ^^^ 'hsl() saturation' evaluates to -1%, which the browser clamps to 0%.
+    |                  ^^^ \`hsl() saturation\` evaluates to -1%, which the browser clamps to 0%.
 
 `;
 
@@ -156,7 +156,7 @@ exports[`invalid(102): a { color: lab(150 0 0); } 2`] = `
 
 Message:
 > 1 | a { color: lab(150 0 0); }
-    |                ^^^ 'lab() lightness' evaluates to 150, which the browser clamps to 100.
+    |                ^^^ \`lab() lightness\` evaluates to 150, which the browser clamps to 100.
 
 `;
 
@@ -170,7 +170,7 @@ exports[`invalid(103): a { color: lab(calc(110%) 0 0); } 2`] = `
 
 Message:
 > 1 | a { color: lab(calc(110%) 0 0); }
-    |                ^^^^^^^^^^ 'lab() lightness' evaluates to 110, which the browser clamps to 100.
+    |                ^^^^^^^^^^ \`lab() lightness\` evaluates to 110, which the browser clamps to 100.
 
 `;
 
@@ -184,7 +184,7 @@ exports[`invalid(104): a { color: rgb(calc(107%) calc(-7%) 0); } 2`] = `
 
 Message:
 > 1 | a { color: rgb(calc(107%) calc(-7%) 0); }
-    |                ^^^^^^^^^^ 'rgb() red' evaluates to 272.85, which the browser clamps to 255.
+    |                ^^^^^^^^^^ \`rgb() red\` evaluates to 272.85, which the browser clamps to 255.
 
 `;
 
@@ -192,7 +192,7 @@ exports[`invalid(104): a { color: rgb(calc(107%) calc(-7%) 0); } 3`] = `
 
 Message:
 > 1 | a { color: rgb(calc(107%) calc(-7%) 0); }
-    |                           ^^^^^^^^^ 'rgb() green' evaluates to -17.85, which the browser clamps to 0.
+    |                           ^^^^^^^^^ \`rgb() green\` evaluates to -17.85, which the browser clamps to 0.
 
 `;
 
@@ -206,7 +206,7 @@ exports[`invalid(105): a { color: rgb(calc(-19.98%) 0 0); } 2`] = `
 
 Message:
 > 1 | a { color: rgb(calc(-19.98%) 0 0); }
-    |                ^^^^^^^^^^^^^ 'rgb() red' evaluates to -50.949, which the browser clamps to 0.
+    |                ^^^^^^^^^^^^^ \`rgb() red\` evaluates to -50.949, which the browser clamps to 0.
 
 `;
 
@@ -220,7 +220,7 @@ exports[`invalid(106): a { color: lch(-1% 0 0); } 2`] = `
 
 Message:
 > 1 | a { color: lch(-1% 0 0); }
-    |                ^^^ 'lch() lightness' evaluates to -1%, which the browser clamps to 0%.
+    |                ^^^ \`lch() lightness\` evaluates to -1%, which the browser clamps to 0%.
 
 `;
 
@@ -234,7 +234,7 @@ exports[`invalid(107): a { color: lch(50 -1 0); } 2`] = `
 
 Message:
 > 1 | a { color: lch(50 -1 0); }
-    |                   ^^ 'lch() chroma' evaluates to -1, which the browser clamps to 0.
+    |                   ^^ \`lch() chroma\` evaluates to -1, which the browser clamps to 0.
 
 `;
 
@@ -248,7 +248,7 @@ exports[`invalid(108): a { color: oklab(2 0 0); } 2`] = `
 
 Message:
 > 1 | a { color: oklab(2 0 0); }
-    |                  ^ 'oklab() lightness' evaluates to 2, which the browser clamps to 1.
+    |                  ^ \`oklab() lightness\` evaluates to 2, which the browser clamps to 1.
 
 `;
 
@@ -262,7 +262,7 @@ exports[`invalid(109): a { color: oklch(101% 0 0); } 2`] = `
 
 Message:
 > 1 | a { color: oklch(101% 0 0); }
-    |                  ^^^^ 'oklch() lightness' evaluates to 101%, which the browser clamps to 100%.
+    |                  ^^^^ \`oklch() lightness\` evaluates to 101%, which the browser clamps to 100%.
 
 `;
 
@@ -276,7 +276,7 @@ exports[`invalid(11): @media (width > 1px) { a { &:hover { filter: blur(calc(-1p
 
 Message:
 > 1 | @media (width > 1px) { a { &:hover { filter: blur(calc(-1px)); } } }
-    |                                                   ^^^^^^^^^^ 'blur()' evaluates to -1px, which the browser clamps to 0px.
+    |                                                   ^^^^^^^^^^ \`blur()\` evaluates to -1px, which the browser clamps to 0px.
 
 `;
 
@@ -290,7 +290,7 @@ exports[`invalid(11): a { fill-opacity: -1%; } 2`] = `
 
 Message:
 > 1 | a { fill-opacity: -1%; }
-    |                   ^^^ 'fill-opacity' evaluates to -1%, which the browser clamps to 0%.
+    |                   ^^^ \`fill-opacity\` evaluates to -1%, which the browser clamps to 0%.
 
 `;
 
@@ -304,7 +304,7 @@ exports[`invalid(11): a { font-style: oblique calc(/* keep */ 120deg); } 2`] = `
 
 Message:
 > 1 | a { font-style: oblique calc(/* keep */ 120deg); }
-    |                         ^^^^^^^^^^^^^^^^^^^^^^^ 'font-style' evaluates to 120deg, which the browser clamps to 90deg.
+    |                         ^^^^^^^^^^^^^^^^^^^^^^^ \`font-style\` evaluates to 120deg, which the browser clamps to 90deg.
 
 `;
 
@@ -318,7 +318,7 @@ exports[`invalid(110): a { color: oklch(.5 -1 0); } 2`] = `
 
 Message:
 > 1 | a { color: oklch(.5 -1 0); }
-    |                     ^^ 'oklch() chroma' evaluates to -1, which the browser clamps to 0.
+    |                     ^^ \`oklch() chroma\` evaluates to -1, which the browser clamps to 0.
 
 `;
 
@@ -332,7 +332,7 @@ exports[`invalid(111): a { color: device-cmyk(2 0 0 0 / 50); } 2`] = `
 
 Message:
 > 1 | a { color: device-cmyk(2 0 0 0 / 50); }
-    |                        ^ 'device-cmyk() channel 1' evaluates to 2, which the browser clamps to 1.
+    |                        ^ \`device-cmyk() channel 1\` evaluates to 2, which the browser clamps to 1.
 
 `;
 
@@ -340,7 +340,7 @@ exports[`invalid(111): a { color: device-cmyk(2 0 0 0 / 50); } 3`] = `
 
 Message:
 > 1 | a { color: device-cmyk(2 0 0 0 / 50); }
-    |                                  ^^ 'device-cmyk() alpha' evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
+    |                                  ^^ \`device-cmyk() alpha\` evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
 
 `;
 
@@ -354,7 +354,7 @@ exports[`invalid(112): a { color: color(--profile 2 0 0 / 50); } 2`] = `
 
 Message:
 > 1 | a { color: color(--profile 2 0 0 / 50); }
-    |                            ^ 'color() channel 1' evaluates to 2, which the browser clamps to 1.
+    |                            ^ \`color() channel 1\` evaluates to 2, which the browser clamps to 1.
 
 `;
 
@@ -362,7 +362,7 @@ exports[`invalid(112): a { color: color(--profile 2 0 0 / 50); } 3`] = `
 
 Message:
 > 1 | a { color: color(--profile 2 0 0 / 50); }
-    |                                    ^^ 'color() alpha' evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
+    |                                    ^^ \`color() alpha\` evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
 
 `;
 
@@ -376,7 +376,7 @@ exports[`invalid(113): a { color: color(display-p3 2 -1 3 / 50); } 2`] = `
 
 Message:
 > 1 | a { color: color(display-p3 2 -1 3 / 50); }
-    |                                      ^^ 'color() alpha' evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
+    |                                      ^^ \`color() alpha\` evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
 
 `;
 
@@ -390,7 +390,7 @@ exports[`invalid(114): a { background: linear-gradient(rgb(300 0 0), light-dark(
 
 Message:
 > 1 | a { background: linear-gradient(rgb(300 0 0), light-dark(red, rgb(0 0 0 / 50))); }
-    |                                     ^^^ 'rgb() red' evaluates to 300, which the browser clamps to 255.
+    |                                     ^^^ \`rgb() red\` evaluates to 300, which the browser clamps to 255.
 
 `;
 
@@ -398,7 +398,7 @@ exports[`invalid(114): a { background: linear-gradient(rgb(300 0 0), light-dark(
 
 Message:
 > 1 | a { background: linear-gradient(rgb(300 0 0), light-dark(red, rgb(0 0 0 / 50))); }
-    |                                                                           ^^ 'rgb() alpha' evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
+    |                                                                           ^^ \`rgb() alpha\` evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
 
 `;
 
@@ -412,7 +412,7 @@ exports[`invalid(115): a { color: color-mix(in srgb, rgb(300 0 0), blue); } 2`] 
 
 Message:
 > 1 | a { color: color-mix(in srgb, rgb(300 0 0), blue); }
-    |                                   ^^^ 'rgb() red' evaluates to 300, which the browser clamps to 255.
+    |                                   ^^^ \`rgb() red\` evaluates to 300, which the browser clamps to 255.
 
 `;
 
@@ -426,7 +426,7 @@ exports[`invalid(116): a { color: rgb(calc(200 + 200) 0 0 / calc(25 + 25)); } 2`
 
 Message:
 > 1 | a { color: rgb(calc(200 + 200) 0 0 / calc(25 + 25)); }
-    |                ^^^^^^^^^^^^^^^ 'rgb() red' evaluates to 400, which the browser clamps to 255.
+    |                ^^^^^^^^^^^^^^^ \`rgb() red\` evaluates to 400, which the browser clamps to 255.
 
 `;
 
@@ -434,7 +434,7 @@ exports[`invalid(116): a { color: rgb(calc(200 + 200) 0 0 / calc(25 + 25)); } 3`
 
 Message:
 > 1 | a { color: rgb(calc(200 + 200) 0 0 / calc(25 + 25)); }
-    |                                      ^^^^^^^^^^^^^ 'rgb() alpha' evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
+    |                                      ^^^^^^^^^^^^^ \`rgb() alpha\` evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
 
 `;
 
@@ -448,7 +448,7 @@ exports[`invalid(117): a { color: rgb(calc(10% / 20%) 0 0 / calc(30% / 10%)); } 
 
 Message:
 > 1 | a { color: rgb(calc(10% / 20%) 0 0 / calc(30% / 10%)); }
-    |                                      ^^^^^^^^^^^^^^^ 'rgb() alpha' evaluates to 3, which the browser clamps to 1.
+    |                                      ^^^^^^^^^^^^^^^ \`rgb() alpha\` evaluates to 3, which the browser clamps to 1.
 
 `;
 
@@ -462,7 +462,7 @@ exports[`invalid(118): a { perspective: .5px; } 2`] = `
 
 Message:
 > 1 | a { perspective: .5px; }
-    |                  ^^^^ 'perspective' evaluates to 0.5px, which the browser clamps to 1px.
+    |                  ^^^^ \`perspective\` evaluates to 0.5px, which the browser clamps to 1px.
 
 `;
 
@@ -476,7 +476,7 @@ exports[`invalid(119): a { perspective: 0; } 2`] = `
 
 Message:
 > 1 | a { perspective: 0; }
-    |                  ^ 'perspective' evaluates to 0px, which the browser clamps to 1px.
+    |                  ^ \`perspective\` evaluates to 0px, which the browser clamps to 1px.
 
 `;
 
@@ -490,7 +490,7 @@ exports[`invalid(12): @supports (font-style: oblique) { a { &:hover { font-style
 
 Message:
 > 1 | @supports (font-style: oblique) { a { &:hover { font-style: oblique calc(120deg); } } }
-    |                                                                     ^^^^^^^^^^^^ 'font-style' evaluates to 120deg, which the browser clamps to 90deg.
+    |                                                                     ^^^^^^^^^^^^ \`font-style\` evaluates to 120deg, which the browser clamps to 90deg.
 
 `;
 
@@ -504,7 +504,7 @@ exports[`invalid(12): a { fill-opacity: 101%; } 2`] = `
 
 Message:
 > 1 | a { fill-opacity: 101%; }
-    |                   ^^^^ 'fill-opacity' evaluates to 101%, which the browser clamps to 100%.
+    |                   ^^^^ \`fill-opacity\` evaluates to 101%, which the browser clamps to 100%.
 
 `;
 
@@ -518,7 +518,7 @@ exports[`invalid(120): a { perspective: 0em; } 2`] = `
 
 Message:
 > 1 | a { perspective: 0em; }
-    |                  ^^^ 'perspective' evaluates to 0px, which the browser clamps to 1px.
+    |                  ^^^ \`perspective\` evaluates to 0px, which the browser clamps to 1px.
 
 `;
 
@@ -532,7 +532,7 @@ exports[`invalid(121): a { perspective: calc(0px); transform: perspective(calc(0
 
 Message:
 > 1 | a { perspective: calc(0px); transform: perspective(calc(0px)); text-decoration-thickness: calc(0px); }
-    |                  ^^^^^^^^^ 'perspective' evaluates to 0px, which the browser clamps to 1px.
+    |                  ^^^^^^^^^ \`perspective\` evaluates to 0px, which the browser clamps to 1px.
 
 `;
 
@@ -540,7 +540,7 @@ exports[`invalid(121): a { perspective: calc(0px); transform: perspective(calc(0
 
 Message:
 > 1 | a { perspective: calc(0px); transform: perspective(calc(0px)); text-decoration-thickness: calc(0px); }
-    |                                                    ^^^^^^^^^ 'perspective()' evaluates to 0px, which the browser clamps to 1px.
+    |                                                    ^^^^^^^^^ \`perspective()\` evaluates to 0px, which the browser clamps to 1px.
 
 `;
 
@@ -548,7 +548,7 @@ exports[`invalid(121): a { perspective: calc(0px); transform: perspective(calc(0
 
 Message:
 > 1 | a { perspective: calc(0px); transform: perspective(calc(0px)); text-decoration-thickness: calc(0px); }
-    |                                                                                           ^^^^^^^^^ 'text-decoration-thickness' evaluates to 0px, which the browser floors to one device pixel.
+    |                                                                                           ^^^^^^^^^ \`text-decoration-thickness\` evaluates to 0px, which the browser floors to one device pixel.
 
 `;
 
@@ -562,7 +562,7 @@ exports[`invalid(122): a { transform: perspective(.005in); } 2`] = `
 
 Message:
 > 1 | a { transform: perspective(.005in); }
-    |                            ^^^^^^ 'perspective()' evaluates to 0.48px, which the browser clamps to 1px.
+    |                            ^^^^^^ \`perspective()\` evaluates to 0.48px, which the browser clamps to 1px.
 
 `;
 
@@ -576,7 +576,7 @@ exports[`invalid(123): a { perspective: calc(-1px); } 2`] = `
 
 Message:
 > 1 | a { perspective: calc(-1px); }
-    |                  ^^^^^^^^^^ 'perspective' evaluates to -1px, which the browser clamps to 1px.
+    |                  ^^^^^^^^^^ \`perspective\` evaluates to -1px, which the browser clamps to 1px.
 
 `;
 
@@ -590,7 +590,7 @@ exports[`invalid(124): a { transform: perspective(calc(.25px + .25px)); } 2`] = 
 
 Message:
 > 1 | a { transform: perspective(calc(.25px + .25px)); }
-    |                            ^^^^^^^^^^^^^^^^^^^ 'perspective()' evaluates to 0.5px, which the browser clamps to 1px.
+    |                            ^^^^^^^^^^^^^^^^^^^ \`perspective()\` evaluates to 0.5px, which the browser clamps to 1px.
 
 `;
 
@@ -604,7 +604,7 @@ exports[`invalid(125): a { border-image-slice: 110%; } 2`] = `
 
 Message:
 > 1 | a { border-image-slice: 110%; }
-    |                         ^^^^ 'border-image-slice' evaluates to 110%, which the browser clamps to 100%.
+    |                         ^^^^ \`border-image-slice\` evaluates to 110%, which the browser clamps to 100%.
 
 `;
 
@@ -618,7 +618,7 @@ exports[`invalid(126): a { mask-border-slice: 110%; } 2`] = `
 
 Message:
 > 1 | a { mask-border-slice: 110%; }
-    |                        ^^^^ 'mask-border-slice' evaluates to 110%, which the browser clamps to 100%.
+    |                        ^^^^ \`mask-border-slice\` evaluates to 110%, which the browser clamps to 100%.
 
 `;
 
@@ -632,7 +632,7 @@ exports[`invalid(127): a { border-image: url(a) 110% / 200%; } 2`] = `
 
 Message:
 > 1 | a { border-image: url(a) 110% / 200%; }
-    |                          ^^^^ 'border-image-slice' evaluates to 110%, which the browser clamps to 100%.
+    |                          ^^^^ \`border-image-slice\` evaluates to 110%, which the browser clamps to 100%.
 
 `;
 
@@ -646,7 +646,7 @@ exports[`invalid(128): a { mask-border: url(a) 110% / 200%; } 2`] = `
 
 Message:
 > 1 | a { mask-border: url(a) 110% / 200%; }
-    |                         ^^^^ 'mask-border-slice' evaluates to 110%, which the browser clamps to 100%.
+    |                         ^^^^ \`mask-border-slice\` evaluates to 110%, which the browser clamps to 100%.
 
 `;
 
@@ -660,7 +660,7 @@ exports[`invalid(129): a { border-image-slice: calc(50% + 60%); } 2`] = `
 
 Message:
 > 1 | a { border-image-slice: calc(50% + 60%); }
-    |                         ^^^^^^^^^^^^^^^ 'border-image-slice' evaluates to 110%, which the browser clamps to 100%.
+    |                         ^^^^^^^^^^^^^^^ \`border-image-slice\` evaluates to 110%, which the browser clamps to 100%.
 
 `;
 
@@ -674,7 +674,7 @@ exports[`invalid(13): a { fill-opacity: calc(25 + 25); } 2`] = `
 
 Message:
 > 1 | a { fill-opacity: calc(25 + 25); }
-    |                   ^^^^^^^^^^^^^ 'fill-opacity' evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
+    |                   ^^^^^^^^^^^^^ \`fill-opacity\` evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
 
 `;
 
@@ -688,7 +688,7 @@ exports[`invalid(13): a { opacity: min(infinity, 2); } 2`] = `
 
 Message:
 > 1 | a { opacity: min(infinity, 2); }
-    |              ^^^^^^^^^^^^^^^^ 'opacity' evaluates to 2, which the browser clamps to 1. Did you mean a percentage?
+    |              ^^^^^^^^^^^^^^^^ \`opacity\` evaluates to 2, which the browser clamps to 1. Did you mean a percentage?
 
 `;
 
@@ -702,7 +702,7 @@ exports[`invalid(130): a { border-image-slice: calc(-1); mask-border-slice: calc
 
 Message:
 > 1 | a { border-image-slice: calc(-1); mask-border-slice: calc(-1); }
-    |                         ^^^^^^^^ 'border-image-slice' evaluates to -1, which the browser clamps to 0.
+    |                         ^^^^^^^^ \`border-image-slice\` evaluates to -1, which the browser clamps to 0.
 
 `;
 
@@ -710,7 +710,7 @@ exports[`invalid(130): a { border-image-slice: calc(-1); mask-border-slice: calc
 
 Message:
 > 1 | a { border-image-slice: calc(-1); mask-border-slice: calc(-1); }
-    |                                                      ^^^^^^^^ 'mask-border-slice' evaluates to -1, which the browser clamps to 0.
+    |                                                      ^^^^^^^^ \`mask-border-slice\` evaluates to -1, which the browser clamps to 0.
 
 `;
 
@@ -724,7 +724,7 @@ exports[`invalid(131): a { border-image: url(a) calc(-1) / 1; mask-border: url(a
 
 Message:
 > 1 | a { border-image: url(a) calc(-1) / 1; mask-border: url(a) calc(-1) / 1; }
-    |                          ^^^^^^^^ 'border-image-slice' evaluates to -1, which the browser clamps to 0.
+    |                          ^^^^^^^^ \`border-image-slice\` evaluates to -1, which the browser clamps to 0.
 
 `;
 
@@ -732,7 +732,7 @@ exports[`invalid(131): a { border-image: url(a) calc(-1) / 1; mask-border: url(a
 
 Message:
 > 1 | a { border-image: url(a) calc(-1) / 1; mask-border: url(a) calc(-1) / 1; }
-    |                                                            ^^^^^^^^ 'mask-border-slice' evaluates to -1, which the browser clamps to 0.
+    |                                                            ^^^^^^^^ \`mask-border-slice\` evaluates to -1, which the browser clamps to 0.
 
 `;
 
@@ -746,7 +746,7 @@ exports[`invalid(132): a { perspective: calc(-1em); transform: perspective(calc(
 
 Message:
 > 1 | a { perspective: calc(-1em); transform: perspective(calc(-1em)); }
-    |                  ^^^^^^^^^^ 'perspective' evaluates to -1em, which the browser clamps to 0em.
+    |                  ^^^^^^^^^^ \`perspective\` evaluates to -1em, which the browser clamps to 0em.
 
 `;
 
@@ -754,7 +754,7 @@ exports[`invalid(132): a { perspective: calc(-1em); transform: perspective(calc(
 
 Message:
 > 1 | a { perspective: calc(-1em); transform: perspective(calc(-1em)); }
-    |                                                     ^^^^^^^^^^ 'perspective()' evaluates to -1em, which the browser clamps to 0em.
+    |                                                     ^^^^^^^^^^ \`perspective()\` evaluates to -1em, which the browser clamps to 0em.
 
 `;
 
@@ -768,7 +768,7 @@ exports[`invalid(133): a { text-decoration-thickness: 0; } 2`] = `
 
 Message:
 > 1 | a { text-decoration-thickness: 0; }
-    |                                ^ 'text-decoration-thickness' evaluates to 0, which the browser floors to one device pixel.
+    |                                ^ \`text-decoration-thickness\` evaluates to 0, which the browser floors to one device pixel.
 
 `;
 
@@ -782,7 +782,7 @@ exports[`invalid(134): a { text-decoration-thickness: -1px; } 2`] = `
 
 Message:
 > 1 | a { text-decoration-thickness: -1px; }
-    |                                ^^^^ 'text-decoration-thickness' evaluates to -1px, which the browser floors to one device pixel.
+    |                                ^^^^ \`text-decoration-thickness\` evaluates to -1px, which the browser floors to one device pixel.
 
 `;
 
@@ -796,7 +796,7 @@ exports[`invalid(135): a { text-decoration: underline -1%; } 2`] = `
 
 Message:
 > 1 | a { text-decoration: underline -1%; }
-    |                                ^^^ 'text-decoration-thickness' evaluates to -1%, which the browser floors to one device pixel.
+    |                                ^^^ \`text-decoration-thickness\` evaluates to -1%, which the browser floors to one device pixel.
 
 `;
 
@@ -810,7 +810,7 @@ exports[`invalid(136): a { text-decoration-thickness: calc(1px - 2px); } 2`] = `
 
 Message:
 > 1 | a { text-decoration-thickness: calc(1px - 2px); }
-    |                                ^^^^^^^^^^^^^^^ 'text-decoration-thickness' evaluates to -1px, which the browser floors to one device pixel.
+    |                                ^^^^^^^^^^^^^^^ \`text-decoration-thickness\` evaluates to -1px, which the browser floors to one device pixel.
 
 `;
 
@@ -824,7 +824,7 @@ exports[`invalid(137): a { width: calc(-1px); } 2`] = `
 
 Message:
 > 1 | a { width: calc(-1px); }
-    |            ^^^^^^^^^^ 'width' evaluates to -1px, which the browser clamps to 0px.
+    |            ^^^^^^^^^^ \`width\` evaluates to -1px, which the browser clamps to 0px.
 
 `;
 
@@ -838,7 +838,7 @@ exports[`invalid(138): a { width: calc(calc(-1px * 1px) / 1px); } 2`] = `
 
 Message:
 > 1 | a { width: calc(calc(-1px * 1px) / 1px); }
-    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ 'width' evaluates to -1px, which the browser clamps to 0px.
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`width\` evaluates to -1px, which the browser clamps to 0px.
 
 `;
 
@@ -852,7 +852,7 @@ exports[`invalid(139): a { width: calc(-.00000001px); opacity: calc(-.00000001);
 
 Message:
 > 1 | a { width: calc(-.00000001px); opacity: calc(-.00000001); }
-    |            ^^^^^^^^^^^^^^^^^^ 'width' evaluates to -1e-8px, which the browser clamps to 0px.
+    |            ^^^^^^^^^^^^^^^^^^ \`width\` evaluates to -1e-8px, which the browser clamps to 0px.
 
 `;
 
@@ -860,7 +860,7 @@ exports[`invalid(139): a { width: calc(-.00000001px); opacity: calc(-.00000001);
 
 Message:
 > 1 | a { width: calc(-.00000001px); opacity: calc(-.00000001); }
-    |                                         ^^^^^^^^^^^^^^^^ 'opacity' evaluates to -1e-8, which the browser clamps to 0.
+    |                                         ^^^^^^^^^^^^^^^^ \`opacity\` evaluates to -1e-8, which the browser clamps to 0.
 
 `;
 
@@ -874,7 +874,7 @@ exports[`invalid(14): a { fill-opacity: min(110%, 120%); } 2`] = `
 
 Message:
 > 1 | a { fill-opacity: min(110%, 120%); }
-    |                   ^^^^^^^^^^^^^^^ 'fill-opacity' evaluates to 1.1, which the browser clamps to 1.
+    |                   ^^^^^^^^^^^^^^^ \`fill-opacity\` evaluates to 1.1, which the browser clamps to 1.
 
 `;
 
@@ -888,7 +888,7 @@ exports[`invalid(140): a { opacity: calc(sin(1e-15deg) / 1e-18); } 2`] = `
 
 Message:
 > 1 | a { opacity: calc(sin(1e-15deg) / 1e-18); }
-    |              ^^^^^^^^^^^^^^^^^^^^^^^^^^^ 'opacity' evaluates to 17.4532925199433, which the browser clamps to 1. Did you mean a percentage?
+    |              ^^^^^^^^^^^^^^^^^^^^^^^^^^^ \`opacity\` evaluates to 17.4532925199433, which the browser clamps to 1. Did you mean a percentage?
 
 `;
 
@@ -902,7 +902,7 @@ exports[`invalid(141): a { opacity: -.000000000001; color: rgb(0 0 0 / 1.0000000
 
 Message:
 > 1 | a { opacity: -.000000000001; color: rgb(0 0 0 / 1.000000000001); }
-    |              ^^^^^^^^^^^^^^ 'opacity' evaluates to -1e-12, which the browser clamps to 0.
+    |              ^^^^^^^^^^^^^^ \`opacity\` evaluates to -1e-12, which the browser clamps to 0.
 
 `;
 
@@ -910,7 +910,7 @@ exports[`invalid(141): a { opacity: -.000000000001; color: rgb(0 0 0 / 1.0000000
 
 Message:
 > 1 | a { opacity: -.000000000001; color: rgb(0 0 0 / 1.000000000001); }
-    |                                                 ^^^^^^^^^^^^^^ 'rgb() alpha' evaluates to 1.000000000001, which the browser clamps to 1. Did you mean a percentage?
+    |                                                 ^^^^^^^^^^^^^^ \`rgb() alpha\` evaluates to 1.000000000001, which the browser clamps to 1. Did you mean a percentage?
 
 `;
 
@@ -924,7 +924,7 @@ exports[`invalid(142): a { width: calc(-10%); } 2`] = `
 
 Message:
 > 1 | a { width: calc(-10%); }
-    |            ^^^^^^^^^^ 'width' evaluates to -10%, which the browser clamps to 0%.
+    |            ^^^^^^^^^^ \`width\` evaluates to -10%, which the browser clamps to 0%.
 
 `;
 
@@ -938,7 +938,7 @@ exports[`invalid(143): a { padding: calc(1px - 2px); } 2`] = `
 
 Message:
 > 1 | a { padding: calc(1px - 2px); }
-    |              ^^^^^^^^^^^^^^^ 'padding' evaluates to -1px, which the browser clamps to 0px.
+    |              ^^^^^^^^^^^^^^^ \`padding\` evaluates to -1px, which the browser clamps to 0px.
 
 `;
 
@@ -952,7 +952,7 @@ exports[`invalid(144): a { padding: 1px calc(-1px); } 2`] = `
 
 Message:
 > 1 | a { padding: 1px calc(-1px); }
-    |                  ^^^^^^^^^^ 'padding' evaluates to -1px, which the browser clamps to 0px.
+    |                  ^^^^^^^^^^ \`padding\` evaluates to -1px, which the browser clamps to 0px.
 
 `;
 
@@ -966,7 +966,7 @@ exports[`invalid(145): a { block-size: calc(-1px); max-inline-size: calc(-1px); 
 
 Message:
 > 1 | a { block-size: calc(-1px); max-inline-size: calc(-1px); padding-inline-start: calc(-1px); }
-    |                 ^^^^^^^^^^ 'block-size' evaluates to -1px, which the browser clamps to 0px.
+    |                 ^^^^^^^^^^ \`block-size\` evaluates to -1px, which the browser clamps to 0px.
 
 `;
 
@@ -974,7 +974,7 @@ exports[`invalid(145): a { block-size: calc(-1px); max-inline-size: calc(-1px); 
 
 Message:
 > 1 | a { block-size: calc(-1px); max-inline-size: calc(-1px); padding-inline-start: calc(-1px); }
-    |                                              ^^^^^^^^^^ 'max-inline-size' evaluates to -1px, which the browser clamps to 0px.
+    |                                              ^^^^^^^^^^ \`max-inline-size\` evaluates to -1px, which the browser clamps to 0px.
 
 `;
 
@@ -982,7 +982,7 @@ exports[`invalid(145): a { block-size: calc(-1px); max-inline-size: calc(-1px); 
 
 Message:
 > 1 | a { block-size: calc(-1px); max-inline-size: calc(-1px); padding-inline-start: calc(-1px); }
-    |                                                                                ^^^^^^^^^^ 'padding-inline-start' evaluates to -1px, which the browser clamps to 0px.
+    |                                                                                ^^^^^^^^^^ \`padding-inline-start\` evaluates to -1px, which the browser clamps to 0px.
 
 `;
 
@@ -996,7 +996,7 @@ exports[`invalid(146): a { PADDING-BLOCK: CALC(-1PX) !important; } 2`] = `
 
 Message:
 > 1 | a { PADDING-BLOCK: CALC(-1PX) !important; }
-    |                    ^^^^^^^^^^ 'padding-block' evaluates to -1px, which the browser clamps to 0px.
+    |                    ^^^^^^^^^^ \`padding-block\` evaluates to -1px, which the browser clamps to 0px.
 
 `;
 
@@ -1010,7 +1010,7 @@ exports[`invalid(147): a { font: calc(-1px)/1 serif; animation: fade calc(-1s); 
 
 Message:
 > 1 | a { font: calc(-1px)/1 serif; animation: fade calc(-1s); columns: calc(0) 10px; }
-    |           ^^^^^^^^^^ 'font-size' evaluates to -1px, which the browser clamps to 0px.
+    |           ^^^^^^^^^^ \`font-size\` evaluates to -1px, which the browser clamps to 0px.
 
 `;
 
@@ -1018,7 +1018,7 @@ exports[`invalid(147): a { font: calc(-1px)/1 serif; animation: fade calc(-1s); 
 
 Message:
 > 1 | a { font: calc(-1px)/1 serif; animation: fade calc(-1s); columns: calc(0) 10px; }
-    |                                               ^^^^^^^^^ 'animation-duration' evaluates to -1s, which the browser clamps to 0s.
+    |                                               ^^^^^^^^^ \`animation-duration\` evaluates to -1s, which the browser clamps to 0s.
 
 `;
 
@@ -1026,7 +1026,7 @@ exports[`invalid(147): a { font: calc(-1px)/1 serif; animation: fade calc(-1s); 
 
 Message:
 > 1 | a { font: calc(-1px)/1 serif; animation: fade calc(-1s); columns: calc(0) 10px; }
-    |                                                                   ^^^^^^^ 'column-count' evaluates to 0, which the browser clamps to 1.
+    |                                                                   ^^^^^^^ \`column-count\` evaluates to 0, which the browser clamps to 1.
 
 `;
 
@@ -1040,7 +1040,7 @@ exports[`invalid(148): a { columns: calc(-1px); column-rule: none; } b { columns
 
 Message:
 > 1 | a { columns: calc(-1px); column-rule: none; } b { columns: 1px / calc(-1px); } c { flex: 1 1 calc(-1px); }
-    |              ^^^^^^^^^^ 'column-width' evaluates to -1px, which the browser clamps to 0px.
+    |              ^^^^^^^^^^ \`column-width\` evaluates to -1px, which the browser clamps to 0px.
 
 `;
 
@@ -1048,7 +1048,7 @@ exports[`invalid(148): a { columns: calc(-1px); column-rule: none; } b { columns
 
 Message:
 > 1 | a { columns: calc(-1px); column-rule: none; } b { columns: 1px / calc(-1px); } c { flex: 1 1 calc(-1px); }
-    |                                                                  ^^^^^^^^^^ 'column-height' evaluates to -1px, which the browser clamps to 0px.
+    |                                                                  ^^^^^^^^^^ \`column-height\` evaluates to -1px, which the browser clamps to 0px.
 
 `;
 
@@ -1056,7 +1056,7 @@ exports[`invalid(148): a { columns: calc(-1px); column-rule: none; } b { columns
 
 Message:
 > 1 | a { columns: calc(-1px); column-rule: none; } b { columns: 1px / calc(-1px); } c { flex: 1 1 calc(-1px); }
-    |                                                                                              ^^^^^^^^^^ 'flex' evaluates to -1px, which the browser clamps to 0px.
+    |                                                                                              ^^^^^^^^^^ \`flex\` evaluates to -1px, which the browser clamps to 0px.
 
 `;
 
@@ -1070,7 +1070,7 @@ exports[`invalid(149): a { border-image: url(a) 50% / calc(-1px); } 2`] = `
 
 Message:
 > 1 | a { border-image: url(a) 50% / calc(-1px); }
-    |                                ^^^^^^^^^^ 'border-image-width' evaluates to -1px, which the browser clamps to 0px.
+    |                                ^^^^^^^^^^ \`border-image-width\` evaluates to -1px, which the browser clamps to 0px.
 
 `;
 
@@ -1084,7 +1084,7 @@ exports[`invalid(15): a { stroke-opacity: -1; } 2`] = `
 
 Message:
 > 1 | a { stroke-opacity: -1; }
-    |                     ^^ 'stroke-opacity' evaluates to -1, which the browser clamps to 0.
+    |                     ^^ \`stroke-opacity\` evaluates to -1, which the browser clamps to 0.
 
 `;
 
@@ -1098,7 +1098,7 @@ exports[`invalid(150): a { font-weight: calc(1200); } 2`] = `
 
 Message:
 > 1 | a { font-weight: calc(1200); }
-    |                  ^^^^^^^^^^ 'font-weight' evaluates to 1200, which the browser clamps to 1000.
+    |                  ^^^^^^^^^^ \`font-weight\` evaluates to 1200, which the browser clamps to 1000.
 
 `;
 
@@ -1112,7 +1112,7 @@ exports[`invalid(151): a { animation-duration: calc(-1s); } 2`] = `
 
 Message:
 > 1 | a { animation-duration: calc(-1s); }
-    |                         ^^^^^^^^^ 'animation-duration' evaluates to -1s, which the browser clamps to 0s.
+    |                         ^^^^^^^^^ \`animation-duration\` evaluates to -1s, which the browser clamps to 0s.
 
 `;
 
@@ -1126,7 +1126,7 @@ exports[`invalid(152): a { column-count: calc(.4); orphans: calc(.4); widows: ca
 
 Message:
 > 1 | a { column-count: calc(.4); orphans: calc(.4); widows: calc(.4); }
-    |                   ^^^^^^^^ 'column-count' evaluates to 0, which the browser clamps to 1.
+    |                   ^^^^^^^^ \`column-count\` evaluates to 0, which the browser clamps to 1.
 
 `;
 
@@ -1134,7 +1134,7 @@ exports[`invalid(152): a { column-count: calc(.4); orphans: calc(.4); widows: ca
 
 Message:
 > 1 | a { column-count: calc(.4); orphans: calc(.4); widows: calc(.4); }
-    |                                      ^^^^^^^^ 'orphans' evaluates to 0, which the browser clamps to 1.
+    |                                      ^^^^^^^^ \`orphans\` evaluates to 0, which the browser clamps to 1.
 
 `;
 
@@ -1142,7 +1142,7 @@ exports[`invalid(152): a { column-count: calc(.4); orphans: calc(.4); widows: ca
 
 Message:
 > 1 | a { column-count: calc(.4); orphans: calc(.4); widows: calc(.4); }
-    |                                                        ^^^^^^^^ 'widows' evaluates to 0, which the browser clamps to 1.
+    |                                                        ^^^^^^^^ \`widows\` evaluates to 0, which the browser clamps to 1.
 
 `;
 
@@ -1156,7 +1156,7 @@ exports[`invalid(153): @font-face { font-family: test; src: url(a); font-weight:
 
 Message:
 > 1 | @font-face { font-family: test; src: url(a); font-weight: calc(1200); }
-    |                                                           ^^^^^^^^^^ 'font-weight' evaluates to 1200, which the browser clamps to 1000.
+    |                                                           ^^^^^^^^^^ \`font-weight\` evaluates to 1200, which the browser clamps to 1000.
 
 `;
 
@@ -1170,7 +1170,7 @@ exports[`invalid(154): @position-try --test { width: calc(-1px); } 2`] = `
 
 Message:
 > 1 | @position-try --test { width: calc(-1px); }
-    |                               ^^^^^^^^^^ 'width' evaluates to -1px, which the browser clamps to 0px.
+    |                               ^^^^^^^^^^ \`width\` evaluates to -1px, which the browser clamps to 0px.
 
 `;
 
@@ -1184,7 +1184,7 @@ exports[`invalid(155): a { OPACITY: 50 !important; color: RGB(0 0 0 / 50); filte
 
 Message:
 > 1 | a { OPACITY: 50 !important; color: RGB(0 0 0 / 50); filter: GRAYSCALE(50); }
-    |              ^^ 'opacity' evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
+    |              ^^ \`opacity\` evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
 
 `;
 
@@ -1192,7 +1192,7 @@ exports[`invalid(155): a { OPACITY: 50 !important; color: RGB(0 0 0 / 50); filte
 
 Message:
 > 1 | a { OPACITY: 50 !important; color: RGB(0 0 0 / 50); filter: GRAYSCALE(50); }
-    |                                                ^^ 'rgb() alpha' evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
+    |                                                ^^ \`rgb() alpha\` evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
 
 `;
 
@@ -1200,7 +1200,7 @@ exports[`invalid(155): a { OPACITY: 50 !important; color: RGB(0 0 0 / 50); filte
 
 Message:
 > 1 | a { OPACITY: 50 !important; color: RGB(0 0 0 / 50); filter: GRAYSCALE(50); }
-    |                                                                       ^^ 'grayscale() amount' evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
+    |                                                                       ^^ \`grayscale() amount\` evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
 
 `;
 
@@ -1214,7 +1214,7 @@ exports[`invalid(156): a { WIDTH: CALC(-1px); opacity: MAX(2, 1); } 2`] = `
 
 Message:
 > 1 | a { WIDTH: CALC(-1px); opacity: MAX(2, 1); }
-    |            ^^^^^^^^^^ 'width' evaluates to -1px, which the browser clamps to 0px.
+    |            ^^^^^^^^^^ \`width\` evaluates to -1px, which the browser clamps to 0px.
 
 `;
 
@@ -1222,7 +1222,7 @@ exports[`invalid(156): a { WIDTH: CALC(-1px); opacity: MAX(2, 1); } 3`] = `
 
 Message:
 > 1 | a { WIDTH: CALC(-1px); opacity: MAX(2, 1); }
-    |                                 ^^^^^^^^^ 'opacity' evaluates to 2, which the browser clamps to 1. Did you mean a percentage?
+    |                                 ^^^^^^^^^ \`opacity\` evaluates to 2, which the browser clamps to 1. Did you mean a percentage?
 
 `;
 
@@ -1236,7 +1236,7 @@ exports[`invalid(157): a { filter: \\67 rayscale(50); color: r\\67 b(0 0 0 / 50)
 
 Message:
 > 1 | a { filter: \\67 rayscale(50); color: r\\67 b(0 0 0 / 50); }
-    |                          ^^ 'grayscale() amount' evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
+    |                          ^^ \`grayscale() amount\` evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
 
 `;
 
@@ -1244,7 +1244,7 @@ exports[`invalid(157): a { filter: \\67 rayscale(50); color: r\\67 b(0 0 0 / 50)
 
 Message:
 > 1 | a { filter: \\67 rayscale(50); color: r\\67 b(0 0 0 / 50); }
-    |                                                     ^^ 'rgb() alpha' evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
+    |                                                     ^^ \`rgb() alpha\` evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
 
 `;
 
@@ -1258,7 +1258,7 @@ exports[`invalid(158): a { opacity: /* keep */ 50; color: rgb(0 0 0 / /* keep */
 
 Message:
 > 1 | a { opacity: /* keep */ 50; color: rgb(0 0 0 / /* keep */ 50); }
-    |                         ^^ 'opacity' evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
+    |                         ^^ \`opacity\` evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
 
 `;
 
@@ -1266,7 +1266,7 @@ exports[`invalid(158): a { opacity: /* keep */ 50; color: rgb(0 0 0 / /* keep */
 
 Message:
 > 1 | a { opacity: /* keep */ 50; color: rgb(0 0 0 / /* keep */ 50); }
-    |                                                           ^^ 'rgb() alpha' evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
+    |                                                           ^^ \`rgb() alpha\` evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
 
 `;
 
@@ -1280,7 +1280,7 @@ exports[`invalid(159): @media (width > 1px) { @supports (display: grid) { a { op
 
 Message:
 > 1 | @media (width > 1px) { @supports (display: grid) { a { opacity: 50; } } }
-    |                                                                 ^^ 'opacity' evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
+    |                                                                 ^^ \`opacity\` evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
 
 `;
 
@@ -1294,7 +1294,7 @@ exports[`invalid(16): a { stroke-opacity: 2; } 2`] = `
 
 Message:
 > 1 | a { stroke-opacity: 2; }
-    |                     ^ 'stroke-opacity' evaluates to 2, which the browser clamps to 1. Did you mean a percentage?
+    |                     ^ \`stroke-opacity\` evaluates to 2, which the browser clamps to 1. Did you mean a percentage?
 
 `;
 
@@ -1308,7 +1308,7 @@ exports[`invalid(160): @container (width > 1px) { @layer theme { @scope (.a) { .
 
 Message:
 > 1 | @container (width > 1px) { @layer theme { @scope (.a) { .b { opacity: 50; } } } }
-    |                                                                       ^^ 'opacity' evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
+    |                                                                       ^^ \`opacity\` evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
 
 `;
 
@@ -1322,7 +1322,7 @@ exports[`invalid(161): a { & .b { opacity: 50; } } @keyframes fade { to { filter
 
 Message:
 > 1 | a { & .b { opacity: 50; } } @keyframes fade { to { filter: grayscale(50); } }
-    |                     ^^ 'opacity' evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
+    |                     ^^ \`opacity\` evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
 
 `;
 
@@ -1330,7 +1330,7 @@ exports[`invalid(161): a { & .b { opacity: 50; } } @keyframes fade { to { filter
 
 Message:
 > 1 | a { & .b { opacity: 50; } } @keyframes fade { to { filter: grayscale(50); } }
-    |                                                                      ^^ 'grayscale() amount' evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
+    |                                                                      ^^ \`grayscale() amount\` evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
 
 `;
 
@@ -1344,7 +1344,7 @@ exports[`invalid(162): a { color: rgba(0, 0, 0, 150%); } 2`] = `
 
 Message:
 > 1 | a { color: rgba(0, 0, 0, 150%); }
-    |                          ^^^^ 'rgba() alpha' evaluates to 150%, which the browser clamps to 100%.
+    |                          ^^^^ \`rgba() alpha\` evaluates to 150%, which the browser clamps to 100%.
 
 `;
 
@@ -1358,7 +1358,7 @@ exports[`invalid(163): a { text-decoration-thickness: 0%; } 2`] = `
 
 Message:
 > 1 | a { text-decoration-thickness: 0%; }
-    |                                ^^ 'text-decoration-thickness' evaluates to 0%, which the browser floors to one device pixel.
+    |                                ^^ \`text-decoration-thickness\` evaluates to 0%, which the browser floors to one device pixel.
 
 `;
 
@@ -1372,7 +1372,7 @@ exports[`invalid(164): a { -webkit-filter: grayscale(50); } 2`] = `
 
 Message:
 > 1 | a { -webkit-filter: grayscale(50); }
-    |                               ^^ 'grayscale() amount' evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
+    |                               ^^ \`grayscale() amount\` evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
 
 `;
 
@@ -1386,7 +1386,7 @@ exports[`invalid(17): a { stroke-opacity: 50; } 2`] = `
 
 Message:
 > 1 | a { stroke-opacity: 50; }
-    |                     ^^ 'stroke-opacity' evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
+    |                     ^^ \`stroke-opacity\` evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
 
 `;
 
@@ -1400,7 +1400,7 @@ exports[`invalid(18): a { stroke-opacity: -1%; } 2`] = `
 
 Message:
 > 1 | a { stroke-opacity: -1%; }
-    |                     ^^^ 'stroke-opacity' evaluates to -1%, which the browser clamps to 0%.
+    |                     ^^^ \`stroke-opacity\` evaluates to -1%, which the browser clamps to 0%.
 
 `;
 
@@ -1414,7 +1414,7 @@ exports[`invalid(19): a { stroke-opacity: 101%; } 2`] = `
 
 Message:
 > 1 | a { stroke-opacity: 101%; }
-    |                     ^^^^ 'stroke-opacity' evaluates to 101%, which the browser clamps to 100%.
+    |                     ^^^^ \`stroke-opacity\` evaluates to 101%, which the browser clamps to 100%.
 
 `;
 
@@ -1428,7 +1428,7 @@ exports[`invalid(2): a { backdrop-filter: blur(calc(-1px)); } 2`] = `
 
 Message:
 > 1 | a { backdrop-filter: blur(calc(-1px)); }
-    |                           ^^^^^^^^^^ 'blur()' evaluates to -1px, which the browser clamps to 0px.
+    |                           ^^^^^^^^^^ \`blur()\` evaluates to -1px, which the browser clamps to 0px.
 
 `;
 
@@ -1442,7 +1442,7 @@ exports[`invalid(2): a { color: rgb(from rgb(300 0 0 / 50) r g b / .5); } 2`] = 
 
 Message:
 > 1 | a { color: rgb(from rgb(300 0 0 / 50) r g b / .5); }
-    |                         ^^^ 'rgb() red' evaluates to 300, which the browser clamps to 255.
+    |                         ^^^ \`rgb() red\` evaluates to 300, which the browser clamps to 255.
 
 `;
 
@@ -1450,7 +1450,7 @@ exports[`invalid(2): a { color: rgb(from rgb(300 0 0 / 50) r g b / .5); } 3`] = 
 
 Message:
 > 1 | a { color: rgb(from rgb(300 0 0 / 50) r g b / .5); }
-    |                                   ^^ 'rgb() alpha' evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
+    |                                   ^^ \`rgb() alpha\` evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
 
 `;
 
@@ -1464,7 +1464,7 @@ exports[`invalid(2): a { font-style: oblique calc(-120deg); } 2`] = `
 
 Message:
 > 1 | a { font-style: oblique calc(-120deg); }
-    |                         ^^^^^^^^^^^^^ 'font-style' evaluates to -120deg, which the browser clamps to -90deg.
+    |                         ^^^^^^^^^^^^^ \`font-style\` evaluates to -120deg, which the browser clamps to -90deg.
 
 `;
 
@@ -1478,7 +1478,7 @@ exports[`invalid(2): a { opacity: 2; } 2`] = `
 
 Message:
 > 1 | a { opacity: 2; }
-    |              ^ 'opacity' evaluates to 2, which the browser clamps to 1. Did you mean a percentage?
+    |              ^ \`opacity\` evaluates to 2, which the browser clamps to 1. Did you mean a percentage?
 
 `;
 
@@ -1492,7 +1492,7 @@ exports[`invalid(2): a { perspective: 1Q; } 2`] = `
 
 Message:
 > 1 | a { perspective: 1Q; }
-    |                  ^^ 'perspective' evaluates to 0.94488188976378px, which the browser clamps to 1px.
+    |                  ^^ \`perspective\` evaluates to 0.94488188976378px, which the browser clamps to 1px.
 
 `;
 
@@ -1506,7 +1506,7 @@ exports[`invalid(20): a { stroke-opacity: calc(25 + 25); } 2`] = `
 
 Message:
 > 1 | a { stroke-opacity: calc(25 + 25); }
-    |                     ^^^^^^^^^^^^^ 'stroke-opacity' evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
+    |                     ^^^^^^^^^^^^^ \`stroke-opacity\` evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
 
 `;
 
@@ -1520,7 +1520,7 @@ exports[`invalid(21): a { stroke-opacity: min(110%, 120%); } 2`] = `
 
 Message:
 > 1 | a { stroke-opacity: min(110%, 120%); }
-    |                     ^^^^^^^^^^^^^^^ 'stroke-opacity' evaluates to 1.1, which the browser clamps to 1.
+    |                     ^^^^^^^^^^^^^^^ \`stroke-opacity\` evaluates to 1.1, which the browser clamps to 1.
 
 `;
 
@@ -1534,7 +1534,7 @@ exports[`invalid(22): a { stop-opacity: -1; } 2`] = `
 
 Message:
 > 1 | a { stop-opacity: -1; }
-    |                   ^^ 'stop-opacity' evaluates to -1, which the browser clamps to 0.
+    |                   ^^ \`stop-opacity\` evaluates to -1, which the browser clamps to 0.
 
 `;
 
@@ -1548,7 +1548,7 @@ exports[`invalid(23): a { stop-opacity: 2; } 2`] = `
 
 Message:
 > 1 | a { stop-opacity: 2; }
-    |                   ^ 'stop-opacity' evaluates to 2, which the browser clamps to 1. Did you mean a percentage?
+    |                   ^ \`stop-opacity\` evaluates to 2, which the browser clamps to 1. Did you mean a percentage?
 
 `;
 
@@ -1562,7 +1562,7 @@ exports[`invalid(24): a { stop-opacity: 50; } 2`] = `
 
 Message:
 > 1 | a { stop-opacity: 50; }
-    |                   ^^ 'stop-opacity' evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
+    |                   ^^ \`stop-opacity\` evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
 
 `;
 
@@ -1576,7 +1576,7 @@ exports[`invalid(25): a { stop-opacity: -1%; } 2`] = `
 
 Message:
 > 1 | a { stop-opacity: -1%; }
-    |                   ^^^ 'stop-opacity' evaluates to -1%, which the browser clamps to 0%.
+    |                   ^^^ \`stop-opacity\` evaluates to -1%, which the browser clamps to 0%.
 
 `;
 
@@ -1590,7 +1590,7 @@ exports[`invalid(26): a { stop-opacity: 101%; } 2`] = `
 
 Message:
 > 1 | a { stop-opacity: 101%; }
-    |                   ^^^^ 'stop-opacity' evaluates to 101%, which the browser clamps to 100%.
+    |                   ^^^^ \`stop-opacity\` evaluates to 101%, which the browser clamps to 100%.
 
 `;
 
@@ -1604,7 +1604,7 @@ exports[`invalid(27): a { stop-opacity: calc(25 + 25); } 2`] = `
 
 Message:
 > 1 | a { stop-opacity: calc(25 + 25); }
-    |                   ^^^^^^^^^^^^^ 'stop-opacity' evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
+    |                   ^^^^^^^^^^^^^ \`stop-opacity\` evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
 
 `;
 
@@ -1618,7 +1618,7 @@ exports[`invalid(28): a { stop-opacity: min(110%, 120%); } 2`] = `
 
 Message:
 > 1 | a { stop-opacity: min(110%, 120%); }
-    |                   ^^^^^^^^^^^^^^^ 'stop-opacity' evaluates to 1.1, which the browser clamps to 1.
+    |                   ^^^^^^^^^^^^^^^ \`stop-opacity\` evaluates to 1.1, which the browser clamps to 1.
 
 `;
 
@@ -1632,7 +1632,7 @@ exports[`invalid(29): a { flood-opacity: -1; } 2`] = `
 
 Message:
 > 1 | a { flood-opacity: -1; }
-    |                    ^^ 'flood-opacity' evaluates to -1, which the browser clamps to 0.
+    |                    ^^ \`flood-opacity\` evaluates to -1, which the browser clamps to 0.
 
 `;
 
@@ -1646,7 +1646,7 @@ exports[`invalid(3): a { -webkit-backdrop-filter: blur(calc(-1px)); } 2`] = `
 
 Message:
 > 1 | a { -webkit-backdrop-filter: blur(calc(-1px)); }
-    |                                   ^^^^^^^^^^ 'blur()' evaluates to -1px, which the browser clamps to 0px.
+    |                                   ^^^^^^^^^^ \`blur()\` evaluates to -1px, which the browser clamps to 0px.
 
 `;
 
@@ -1660,7 +1660,7 @@ exports[`invalid(3): a { font-style: oblique calc(6 * 20deg); } 2`] = `
 
 Message:
 > 1 | a { font-style: oblique calc(6 * 20deg); }
-    |                         ^^^^^^^^^^^^^^^ 'font-style' evaluates to 120deg, which the browser clamps to 90deg.
+    |                         ^^^^^^^^^^^^^^^ \`font-style\` evaluates to 120deg, which the browser clamps to 90deg.
 
 `;
 
@@ -1674,7 +1674,7 @@ exports[`invalid(3): a { opacity: 50; } 2`] = `
 
 Message:
 > 1 | a { opacity: 50; }
-    |              ^^ 'opacity' evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
+    |              ^^ \`opacity\` evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
 
 `;
 
@@ -1688,7 +1688,7 @@ exports[`invalid(3): a { opacity: 5e1; color: rgb(1e3 0 0); } 2`] = `
 
 Message:
 > 1 | a { opacity: 5e1; color: rgb(1e3 0 0); }
-    |              ^^^ 'opacity' evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
+    |              ^^^ \`opacity\` evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
 
 `;
 
@@ -1696,7 +1696,7 @@ exports[`invalid(3): a { opacity: 5e1; color: rgb(1e3 0 0); } 3`] = `
 
 Message:
 > 1 | a { opacity: 5e1; color: rgb(1e3 0 0); }
-    |                              ^^^ 'rgb() red' evaluates to 1000, which the browser clamps to 255.
+    |                              ^^^ \`rgb() red\` evaluates to 1000, which the browser clamps to 255.
 
 `;
 
@@ -1710,7 +1710,7 @@ exports[`invalid(30): a { flood-opacity: 2; } 2`] = `
 
 Message:
 > 1 | a { flood-opacity: 2; }
-    |                    ^ 'flood-opacity' evaluates to 2, which the browser clamps to 1. Did you mean a percentage?
+    |                    ^ \`flood-opacity\` evaluates to 2, which the browser clamps to 1. Did you mean a percentage?
 
 `;
 
@@ -1724,7 +1724,7 @@ exports[`invalid(31): a { flood-opacity: 50; } 2`] = `
 
 Message:
 > 1 | a { flood-opacity: 50; }
-    |                    ^^ 'flood-opacity' evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
+    |                    ^^ \`flood-opacity\` evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
 
 `;
 
@@ -1738,7 +1738,7 @@ exports[`invalid(32): a { flood-opacity: -1%; } 2`] = `
 
 Message:
 > 1 | a { flood-opacity: -1%; }
-    |                    ^^^ 'flood-opacity' evaluates to -1%, which the browser clamps to 0%.
+    |                    ^^^ \`flood-opacity\` evaluates to -1%, which the browser clamps to 0%.
 
 `;
 
@@ -1752,7 +1752,7 @@ exports[`invalid(33): a { flood-opacity: 101%; } 2`] = `
 
 Message:
 > 1 | a { flood-opacity: 101%; }
-    |                    ^^^^ 'flood-opacity' evaluates to 101%, which the browser clamps to 100%.
+    |                    ^^^^ \`flood-opacity\` evaluates to 101%, which the browser clamps to 100%.
 
 `;
 
@@ -1766,7 +1766,7 @@ exports[`invalid(34): a { flood-opacity: calc(25 + 25); } 2`] = `
 
 Message:
 > 1 | a { flood-opacity: calc(25 + 25); }
-    |                    ^^^^^^^^^^^^^ 'flood-opacity' evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
+    |                    ^^^^^^^^^^^^^ \`flood-opacity\` evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
 
 `;
 
@@ -1780,7 +1780,7 @@ exports[`invalid(35): a { flood-opacity: min(110%, 120%); } 2`] = `
 
 Message:
 > 1 | a { flood-opacity: min(110%, 120%); }
-    |                    ^^^^^^^^^^^^^^^ 'flood-opacity' evaluates to 1.1, which the browser clamps to 1.
+    |                    ^^^^^^^^^^^^^^^ \`flood-opacity\` evaluates to 1.1, which the browser clamps to 1.
 
 `;
 
@@ -1794,7 +1794,7 @@ exports[`invalid(36): a { shape-image-threshold: -1; } 2`] = `
 
 Message:
 > 1 | a { shape-image-threshold: -1; }
-    |                            ^^ 'shape-image-threshold' evaluates to -1, which the browser clamps to 0.
+    |                            ^^ \`shape-image-threshold\` evaluates to -1, which the browser clamps to 0.
 
 `;
 
@@ -1808,7 +1808,7 @@ exports[`invalid(37): a { shape-image-threshold: 2; } 2`] = `
 
 Message:
 > 1 | a { shape-image-threshold: 2; }
-    |                            ^ 'shape-image-threshold' evaluates to 2, which the browser clamps to 1. Did you mean a percentage?
+    |                            ^ \`shape-image-threshold\` evaluates to 2, which the browser clamps to 1. Did you mean a percentage?
 
 `;
 
@@ -1822,7 +1822,7 @@ exports[`invalid(38): a { shape-image-threshold: 50; } 2`] = `
 
 Message:
 > 1 | a { shape-image-threshold: 50; }
-    |                            ^^ 'shape-image-threshold' evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
+    |                            ^^ \`shape-image-threshold\` evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
 
 `;
 
@@ -1836,7 +1836,7 @@ exports[`invalid(39): a { shape-image-threshold: -1%; } 2`] = `
 
 Message:
 > 1 | a { shape-image-threshold: -1%; }
-    |                            ^^^ 'shape-image-threshold' evaluates to -1%, which the browser clamps to 0%.
+    |                            ^^^ \`shape-image-threshold\` evaluates to -1%, which the browser clamps to 0%.
 
 `;
 
@@ -1850,7 +1850,7 @@ exports[`invalid(4): @position-try --test { min-width: calc(-1px); } 2`] = `
 
 Message:
 > 1 | @position-try --test { min-width: calc(-1px); }
-    |                                   ^^^^^^^^^^ 'min-width' evaluates to -1px, which the browser clamps to 0px.
+    |                                   ^^^^^^^^^^ \`min-width\` evaluates to -1px, which the browser clamps to 0px.
 
 `;
 
@@ -1864,7 +1864,7 @@ exports[`invalid(4): a { filter: blur(min(-1px, -2px)); } 2`] = `
 
 Message:
 > 1 | a { filter: blur(min(-1px, -2px)); }
-    |                  ^^^^^^^^^^^^^^^ 'blur()' evaluates to -2px, which the browser clamps to 0px.
+    |                  ^^^^^^^^^^^^^^^ \`blur()\` evaluates to -2px, which the browser clamps to 0px.
 
 `;
 
@@ -1878,7 +1878,7 @@ exports[`invalid(4): a { font-style: oblique calc(.5turn); } 2`] = `
 
 Message:
 > 1 | a { font-style: oblique calc(.5turn); }
-    |                         ^^^^^^^^^^^^ 'font-style' evaluates to 180deg, which the browser clamps to 90deg.
+    |                         ^^^^^^^^^^^^ \`font-style\` evaluates to 180deg, which the browser clamps to 90deg.
 
 `;
 
@@ -1892,7 +1892,7 @@ exports[`invalid(4): a { opacity: -1%; } 2`] = `
 
 Message:
 > 1 | a { opacity: -1%; }
-    |              ^^^ 'opacity' evaluates to -1%, which the browser clamps to 0%.
+    |              ^^^ \`opacity\` evaluates to -1%, which the browser clamps to 0%.
 
 `;
 
@@ -1906,7 +1906,7 @@ exports[`invalid(40): a { shape-image-threshold: 101%; } 2`] = `
 
 Message:
 > 1 | a { shape-image-threshold: 101%; }
-    |                            ^^^^ 'shape-image-threshold' evaluates to 101%, which the browser clamps to 100%.
+    |                            ^^^^ \`shape-image-threshold\` evaluates to 101%, which the browser clamps to 100%.
 
 `;
 
@@ -1920,7 +1920,7 @@ exports[`invalid(41): a { shape-image-threshold: calc(25 + 25); } 2`] = `
 
 Message:
 > 1 | a { shape-image-threshold: calc(25 + 25); }
-    |                            ^^^^^^^^^^^^^ 'shape-image-threshold' evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
+    |                            ^^^^^^^^^^^^^ \`shape-image-threshold\` evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
 
 `;
 
@@ -1934,7 +1934,7 @@ exports[`invalid(42): a { shape-image-threshold: min(110%, 120%); } 2`] = `
 
 Message:
 > 1 | a { shape-image-threshold: min(110%, 120%); }
-    |                            ^^^^^^^^^^^^^^^ 'shape-image-threshold' evaluates to 1.1, which the browser clamps to 1.
+    |                            ^^^^^^^^^^^^^^^ \`shape-image-threshold\` evaluates to 1.1, which the browser clamps to 1.
 
 `;
 
@@ -1948,7 +1948,7 @@ exports[`invalid(43): a { filter: grayscale(50); } 2`] = `
 
 Message:
 > 1 | a { filter: grayscale(50); }
-    |                       ^^ 'grayscale() amount' evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
+    |                       ^^ \`grayscale() amount\` evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
 
 `;
 
@@ -1962,7 +1962,7 @@ exports[`invalid(44): a { filter: grayscale(150%); } 2`] = `
 
 Message:
 > 1 | a { filter: grayscale(150%); }
-    |                       ^^^^ 'grayscale() amount' evaluates to 150%, which the browser clamps to 100%.
+    |                       ^^^^ \`grayscale() amount\` evaluates to 150%, which the browser clamps to 100%.
 
 `;
 
@@ -1976,7 +1976,7 @@ exports[`invalid(45): a { filter: grayscale(calc(-1)); } 2`] = `
 
 Message:
 > 1 | a { filter: grayscale(calc(-1)); }
-    |                       ^^^^^^^^ 'grayscale() amount' evaluates to -1, which the browser clamps to 0.
+    |                       ^^^^^^^^ \`grayscale() amount\` evaluates to -1, which the browser clamps to 0.
 
 `;
 
@@ -1990,7 +1990,7 @@ exports[`invalid(46): a { filter: grayscale(calc(25 + 25)); } 2`] = `
 
 Message:
 > 1 | a { filter: grayscale(calc(25 + 25)); }
-    |                       ^^^^^^^^^^^^^ 'grayscale() amount' evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
+    |                       ^^^^^^^^^^^^^ \`grayscale() amount\` evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
 
 `;
 
@@ -2004,7 +2004,7 @@ exports[`invalid(47): a { backdrop-filter: grayscale(50); } 2`] = `
 
 Message:
 > 1 | a { backdrop-filter: grayscale(50); }
-    |                                ^^ 'grayscale() amount' evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
+    |                                ^^ \`grayscale() amount\` evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
 
 `;
 
@@ -2018,7 +2018,7 @@ exports[`invalid(48): a { backdrop-filter: grayscale(150%); } 2`] = `
 
 Message:
 > 1 | a { backdrop-filter: grayscale(150%); }
-    |                                ^^^^ 'grayscale() amount' evaluates to 150%, which the browser clamps to 100%.
+    |                                ^^^^ \`grayscale() amount\` evaluates to 150%, which the browser clamps to 100%.
 
 `;
 
@@ -2032,7 +2032,7 @@ exports[`invalid(49): a { backdrop-filter: grayscale(calc(-1)); } 2`] = `
 
 Message:
 > 1 | a { backdrop-filter: grayscale(calc(-1)); }
-    |                                ^^^^^^^^ 'grayscale() amount' evaluates to -1, which the browser clamps to 0.
+    |                                ^^^^^^^^ \`grayscale() amount\` evaluates to -1, which the browser clamps to 0.
 
 `;
 
@@ -2046,7 +2046,7 @@ exports[`invalid(5): a { animation-timing-function: cubic-bezier(calc(2), 0, 1, 
 
 Message:
 > 1 | a { animation-timing-function: cubic-bezier(calc(2), 0, 1, 1); }
-    |                                             ^^^^^^^ 'animation-timing-function' evaluates to 2, which the browser clamps to 1.
+    |                                             ^^^^^^^ \`animation-timing-function\` evaluates to 2, which the browser clamps to 1.
 
 `;
 
@@ -2060,7 +2060,7 @@ exports[`invalid(5): a { filter: blur(calc(-1em)); } 2`] = `
 
 Message:
 > 1 | a { filter: blur(calc(-1em)); }
-    |                  ^^^^^^^^^^ 'blur()' evaluates to -1em, which the browser clamps to 0em.
+    |                  ^^^^^^^^^^ \`blur()\` evaluates to -1em, which the browser clamps to 0em.
 
 `;
 
@@ -2074,7 +2074,7 @@ exports[`invalid(5): a { font-style: oblique calc(-200grad); } 2`] = `
 
 Message:
 > 1 | a { font-style: oblique calc(-200grad); }
-    |                         ^^^^^^^^^^^^^^ 'font-style' evaluates to -180deg, which the browser clamps to -90deg.
+    |                         ^^^^^^^^^^^^^^ \`font-style\` evaluates to -180deg, which the browser clamps to -90deg.
 
 `;
 
@@ -2088,7 +2088,7 @@ exports[`invalid(5): a { opacity: 101%; } 2`] = `
 
 Message:
 > 1 | a { opacity: 101%; }
-    |              ^^^^ 'opacity' evaluates to 101%, which the browser clamps to 100%.
+    |              ^^^^ \`opacity\` evaluates to 101%, which the browser clamps to 100%.
 
 `;
 
@@ -2102,7 +2102,7 @@ exports[`invalid(50): a { backdrop-filter: grayscale(calc(25 + 25)); } 2`] = `
 
 Message:
 > 1 | a { backdrop-filter: grayscale(calc(25 + 25)); }
-    |                                ^^^^^^^^^^^^^ 'grayscale() amount' evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
+    |                                ^^^^^^^^^^^^^ \`grayscale() amount\` evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
 
 `;
 
@@ -2116,7 +2116,7 @@ exports[`invalid(51): a { -webkit-backdrop-filter: grayscale(50); } 2`] = `
 
 Message:
 > 1 | a { -webkit-backdrop-filter: grayscale(50); }
-    |                                        ^^ 'grayscale() amount' evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
+    |                                        ^^ \`grayscale() amount\` evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
 
 `;
 
@@ -2130,7 +2130,7 @@ exports[`invalid(52): a { -webkit-backdrop-filter: grayscale(150%); } 2`] = `
 
 Message:
 > 1 | a { -webkit-backdrop-filter: grayscale(150%); }
-    |                                        ^^^^ 'grayscale() amount' evaluates to 150%, which the browser clamps to 100%.
+    |                                        ^^^^ \`grayscale() amount\` evaluates to 150%, which the browser clamps to 100%.
 
 `;
 
@@ -2144,7 +2144,7 @@ exports[`invalid(53): a { -webkit-backdrop-filter: grayscale(calc(-1)); } 2`] = 
 
 Message:
 > 1 | a { -webkit-backdrop-filter: grayscale(calc(-1)); }
-    |                                        ^^^^^^^^ 'grayscale() amount' evaluates to -1, which the browser clamps to 0.
+    |                                        ^^^^^^^^ \`grayscale() amount\` evaluates to -1, which the browser clamps to 0.
 
 `;
 
@@ -2158,7 +2158,7 @@ exports[`invalid(54): a { -webkit-backdrop-filter: grayscale(calc(25 + 25)); } 2
 
 Message:
 > 1 | a { -webkit-backdrop-filter: grayscale(calc(25 + 25)); }
-    |                                        ^^^^^^^^^^^^^ 'grayscale() amount' evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
+    |                                        ^^^^^^^^^^^^^ \`grayscale() amount\` evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
 
 `;
 
@@ -2172,7 +2172,7 @@ exports[`invalid(55): a { filter: invert(50); } 2`] = `
 
 Message:
 > 1 | a { filter: invert(50); }
-    |                    ^^ 'invert() amount' evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
+    |                    ^^ \`invert() amount\` evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
 
 `;
 
@@ -2186,7 +2186,7 @@ exports[`invalid(56): a { filter: invert(150%); } 2`] = `
 
 Message:
 > 1 | a { filter: invert(150%); }
-    |                    ^^^^ 'invert() amount' evaluates to 150%, which the browser clamps to 100%.
+    |                    ^^^^ \`invert() amount\` evaluates to 150%, which the browser clamps to 100%.
 
 `;
 
@@ -2200,7 +2200,7 @@ exports[`invalid(57): a { filter: invert(calc(-1)); } 2`] = `
 
 Message:
 > 1 | a { filter: invert(calc(-1)); }
-    |                    ^^^^^^^^ 'invert() amount' evaluates to -1, which the browser clamps to 0.
+    |                    ^^^^^^^^ \`invert() amount\` evaluates to -1, which the browser clamps to 0.
 
 `;
 
@@ -2214,7 +2214,7 @@ exports[`invalid(58): a { filter: invert(calc(25 + 25)); } 2`] = `
 
 Message:
 > 1 | a { filter: invert(calc(25 + 25)); }
-    |                    ^^^^^^^^^^^^^ 'invert() amount' evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
+    |                    ^^^^^^^^^^^^^ \`invert() amount\` evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
 
 `;
 
@@ -2228,7 +2228,7 @@ exports[`invalid(59): a { backdrop-filter: invert(50); } 2`] = `
 
 Message:
 > 1 | a { backdrop-filter: invert(50); }
-    |                             ^^ 'invert() amount' evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
+    |                             ^^ \`invert() amount\` evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
 
 `;
 
@@ -2242,7 +2242,7 @@ exports[`invalid(6): a { filter: blur(calc(-1px * 1px / 1px)); } 2`] = `
 
 Message:
 > 1 | a { filter: blur(calc(-1px * 1px / 1px)); }
-    |                  ^^^^^^^^^^^^^^^^^^^^^^ 'blur()' evaluates to -1px, which the browser clamps to 0px.
+    |                  ^^^^^^^^^^^^^^^^^^^^^^ \`blur()\` evaluates to -1px, which the browser clamps to 0px.
 
 `;
 
@@ -2256,7 +2256,7 @@ exports[`invalid(6): a { font-style: oblique min(150deg, 120deg); } 2`] = `
 
 Message:
 > 1 | a { font-style: oblique min(150deg, 120deg); }
-    |                         ^^^^^^^^^^^^^^^^^^^ 'font-style' evaluates to 120deg, which the browser clamps to 90deg.
+    |                         ^^^^^^^^^^^^^^^^^^^ \`font-style\` evaluates to 120deg, which the browser clamps to 90deg.
 
 `;
 
@@ -2270,7 +2270,7 @@ exports[`invalid(6): a { grid-template-columns: repeat(calc(0), 1fr); } 2`] = `
 
 Message:
 > 1 | a { grid-template-columns: repeat(calc(0), 1fr); }
-    |                                   ^^^^^^^ 'grid-template-columns' evaluates to 0, which the browser clamps to 1.
+    |                                   ^^^^^^^ \`grid-template-columns\` evaluates to 0, which the browser clamps to 1.
 
 `;
 
@@ -2284,7 +2284,7 @@ exports[`invalid(6): a { opacity: calc(25 + 25); } 2`] = `
 
 Message:
 > 1 | a { opacity: calc(25 + 25); }
-    |              ^^^^^^^^^^^^^ 'opacity' evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
+    |              ^^^^^^^^^^^^^ \`opacity\` evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
 
 `;
 
@@ -2298,7 +2298,7 @@ exports[`invalid(60): a { backdrop-filter: invert(150%); } 2`] = `
 
 Message:
 > 1 | a { backdrop-filter: invert(150%); }
-    |                             ^^^^ 'invert() amount' evaluates to 150%, which the browser clamps to 100%.
+    |                             ^^^^ \`invert() amount\` evaluates to 150%, which the browser clamps to 100%.
 
 `;
 
@@ -2312,7 +2312,7 @@ exports[`invalid(61): a { backdrop-filter: invert(calc(-1)); } 2`] = `
 
 Message:
 > 1 | a { backdrop-filter: invert(calc(-1)); }
-    |                             ^^^^^^^^ 'invert() amount' evaluates to -1, which the browser clamps to 0.
+    |                             ^^^^^^^^ \`invert() amount\` evaluates to -1, which the browser clamps to 0.
 
 `;
 
@@ -2326,7 +2326,7 @@ exports[`invalid(62): a { backdrop-filter: invert(calc(25 + 25)); } 2`] = `
 
 Message:
 > 1 | a { backdrop-filter: invert(calc(25 + 25)); }
-    |                             ^^^^^^^^^^^^^ 'invert() amount' evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
+    |                             ^^^^^^^^^^^^^ \`invert() amount\` evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
 
 `;
 
@@ -2340,7 +2340,7 @@ exports[`invalid(63): a { -webkit-backdrop-filter: invert(50); } 2`] = `
 
 Message:
 > 1 | a { -webkit-backdrop-filter: invert(50); }
-    |                                     ^^ 'invert() amount' evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
+    |                                     ^^ \`invert() amount\` evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
 
 `;
 
@@ -2354,7 +2354,7 @@ exports[`invalid(64): a { -webkit-backdrop-filter: invert(150%); } 2`] = `
 
 Message:
 > 1 | a { -webkit-backdrop-filter: invert(150%); }
-    |                                     ^^^^ 'invert() amount' evaluates to 150%, which the browser clamps to 100%.
+    |                                     ^^^^ \`invert() amount\` evaluates to 150%, which the browser clamps to 100%.
 
 `;
 
@@ -2368,7 +2368,7 @@ exports[`invalid(65): a { -webkit-backdrop-filter: invert(calc(-1)); } 2`] = `
 
 Message:
 > 1 | a { -webkit-backdrop-filter: invert(calc(-1)); }
-    |                                     ^^^^^^^^ 'invert() amount' evaluates to -1, which the browser clamps to 0.
+    |                                     ^^^^^^^^ \`invert() amount\` evaluates to -1, which the browser clamps to 0.
 
 `;
 
@@ -2382,7 +2382,7 @@ exports[`invalid(66): a { -webkit-backdrop-filter: invert(calc(25 + 25)); } 2`] 
 
 Message:
 > 1 | a { -webkit-backdrop-filter: invert(calc(25 + 25)); }
-    |                                     ^^^^^^^^^^^^^ 'invert() amount' evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
+    |                                     ^^^^^^^^^^^^^ \`invert() amount\` evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
 
 `;
 
@@ -2396,7 +2396,7 @@ exports[`invalid(67): a { filter: opacity(50); } 2`] = `
 
 Message:
 > 1 | a { filter: opacity(50); }
-    |                     ^^ 'opacity() amount' evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
+    |                     ^^ \`opacity() amount\` evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
 
 `;
 
@@ -2410,7 +2410,7 @@ exports[`invalid(68): a { filter: opacity(150%); } 2`] = `
 
 Message:
 > 1 | a { filter: opacity(150%); }
-    |                     ^^^^ 'opacity() amount' evaluates to 150%, which the browser clamps to 100%.
+    |                     ^^^^ \`opacity() amount\` evaluates to 150%, which the browser clamps to 100%.
 
 `;
 
@@ -2424,7 +2424,7 @@ exports[`invalid(69): a { filter: opacity(calc(-1)); } 2`] = `
 
 Message:
 > 1 | a { filter: opacity(calc(-1)); }
-    |                     ^^^^^^^^ 'opacity() amount' evaluates to -1, which the browser clamps to 0.
+    |                     ^^^^^^^^ \`opacity() amount\` evaluates to -1, which the browser clamps to 0.
 
 `;
 
@@ -2438,7 +2438,7 @@ exports[`invalid(7): @font-face { font-style: oblique calc(-120deg) calc(120deg)
 
 Message:
 > 1 | @font-face { font-style: oblique calc(-120deg) calc(120deg); }
-    |                                  ^^^^^^^^^^^^^ 'font-style' evaluates to -120deg, which the browser clamps to -90deg.
+    |                                  ^^^^^^^^^^^^^ \`font-style\` evaluates to -120deg, which the browser clamps to -90deg.
 
 `;
 
@@ -2446,7 +2446,7 @@ exports[`invalid(7): @font-face { font-style: oblique calc(-120deg) calc(120deg)
 
 Message:
 > 1 | @font-face { font-style: oblique calc(-120deg) calc(120deg); }
-    |                                                ^^^^^^^^^^^^ 'font-style' evaluates to 120deg, which the browser clamps to 90deg.
+    |                                                ^^^^^^^^^^^^ \`font-style\` evaluates to 120deg, which the browser clamps to 90deg.
 
 `;
 
@@ -2460,7 +2460,7 @@ exports[`invalid(7): a { FILTER: BLUR(CALC(-1PX)) !important; } 2`] = `
 
 Message:
 > 1 | a { FILTER: BLUR(CALC(-1PX)) !important; }
-    |                  ^^^^^^^^^^ 'blur()' evaluates to -1px, which the browser clamps to 0px.
+    |                  ^^^^^^^^^^ \`blur()\` evaluates to -1px, which the browser clamps to 0px.
 
 `;
 
@@ -2474,7 +2474,7 @@ exports[`invalid(7): a { filter: url(#a) grayscale(50); } 2`] = `
 
 Message:
 > 1 | a { filter: url(#a) grayscale(50); }
-    |                               ^^ 'grayscale() amount' evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
+    |                               ^^ \`grayscale() amount\` evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
 
 `;
 
@@ -2488,7 +2488,7 @@ exports[`invalid(7): a { opacity: min(110%, 120%); } 2`] = `
 
 Message:
 > 1 | a { opacity: min(110%, 120%); }
-    |              ^^^^^^^^^^^^^^^ 'opacity' evaluates to 1.1, which the browser clamps to 1.
+    |              ^^^^^^^^^^^^^^^ \`opacity\` evaluates to 1.1, which the browser clamps to 1.
 
 `;
 
@@ -2502,7 +2502,7 @@ exports[`invalid(70): a { filter: opacity(calc(25 + 25)); } 2`] = `
 
 Message:
 > 1 | a { filter: opacity(calc(25 + 25)); }
-    |                     ^^^^^^^^^^^^^ 'opacity() amount' evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
+    |                     ^^^^^^^^^^^^^ \`opacity() amount\` evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
 
 `;
 
@@ -2516,7 +2516,7 @@ exports[`invalid(71): a { backdrop-filter: opacity(50); } 2`] = `
 
 Message:
 > 1 | a { backdrop-filter: opacity(50); }
-    |                              ^^ 'opacity() amount' evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
+    |                              ^^ \`opacity() amount\` evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
 
 `;
 
@@ -2530,7 +2530,7 @@ exports[`invalid(72): a { backdrop-filter: opacity(150%); } 2`] = `
 
 Message:
 > 1 | a { backdrop-filter: opacity(150%); }
-    |                              ^^^^ 'opacity() amount' evaluates to 150%, which the browser clamps to 100%.
+    |                              ^^^^ \`opacity() amount\` evaluates to 150%, which the browser clamps to 100%.
 
 `;
 
@@ -2544,7 +2544,7 @@ exports[`invalid(73): a { backdrop-filter: opacity(calc(-1)); } 2`] = `
 
 Message:
 > 1 | a { backdrop-filter: opacity(calc(-1)); }
-    |                              ^^^^^^^^ 'opacity() amount' evaluates to -1, which the browser clamps to 0.
+    |                              ^^^^^^^^ \`opacity() amount\` evaluates to -1, which the browser clamps to 0.
 
 `;
 
@@ -2558,7 +2558,7 @@ exports[`invalid(74): a { backdrop-filter: opacity(calc(25 + 25)); } 2`] = `
 
 Message:
 > 1 | a { backdrop-filter: opacity(calc(25 + 25)); }
-    |                              ^^^^^^^^^^^^^ 'opacity() amount' evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
+    |                              ^^^^^^^^^^^^^ \`opacity() amount\` evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
 
 `;
 
@@ -2572,7 +2572,7 @@ exports[`invalid(75): a { -webkit-backdrop-filter: opacity(50); } 2`] = `
 
 Message:
 > 1 | a { -webkit-backdrop-filter: opacity(50); }
-    |                                      ^^ 'opacity() amount' evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
+    |                                      ^^ \`opacity() amount\` evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
 
 `;
 
@@ -2586,7 +2586,7 @@ exports[`invalid(76): a { -webkit-backdrop-filter: opacity(150%); } 2`] = `
 
 Message:
 > 1 | a { -webkit-backdrop-filter: opacity(150%); }
-    |                                      ^^^^ 'opacity() amount' evaluates to 150%, which the browser clamps to 100%.
+    |                                      ^^^^ \`opacity() amount\` evaluates to 150%, which the browser clamps to 100%.
 
 `;
 
@@ -2600,7 +2600,7 @@ exports[`invalid(77): a { -webkit-backdrop-filter: opacity(calc(-1)); } 2`] = `
 
 Message:
 > 1 | a { -webkit-backdrop-filter: opacity(calc(-1)); }
-    |                                      ^^^^^^^^ 'opacity() amount' evaluates to -1, which the browser clamps to 0.
+    |                                      ^^^^^^^^ \`opacity() amount\` evaluates to -1, which the browser clamps to 0.
 
 `;
 
@@ -2614,7 +2614,7 @@ exports[`invalid(78): a { -webkit-backdrop-filter: opacity(calc(25 + 25)); } 2`]
 
 Message:
 > 1 | a { -webkit-backdrop-filter: opacity(calc(25 + 25)); }
-    |                                      ^^^^^^^^^^^^^ 'opacity() amount' evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
+    |                                      ^^^^^^^^^^^^^ \`opacity() amount\` evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
 
 `;
 
@@ -2628,7 +2628,7 @@ exports[`invalid(79): a { filter: sepia(50); } 2`] = `
 
 Message:
 > 1 | a { filter: sepia(50); }
-    |                   ^^ 'sepia() amount' evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
+    |                   ^^ \`sepia() amount\` evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
 
 `;
 
@@ -2642,7 +2642,7 @@ exports[`invalid(8): @font-face { font-style: oblique calc(120deg) calc(-120deg)
 
 Message:
 > 1 | @font-face { font-style: oblique calc(120deg) calc(-120deg); }
-    |                                  ^^^^^^^^^^^^ 'font-style' evaluates to 120deg, which the browser clamps to 90deg.
+    |                                  ^^^^^^^^^^^^ \`font-style\` evaluates to 120deg, which the browser clamps to 90deg.
 
 `;
 
@@ -2650,7 +2650,7 @@ exports[`invalid(8): @font-face { font-style: oblique calc(120deg) calc(-120deg)
 
 Message:
 > 1 | @font-face { font-style: oblique calc(120deg) calc(-120deg); }
-    |                                               ^^^^^^^^^^^^^ 'font-style' evaluates to -120deg, which the browser clamps to -90deg.
+    |                                               ^^^^^^^^^^^^^ \`font-style\` evaluates to -120deg, which the browser clamps to -90deg.
 
 `;
 
@@ -2664,7 +2664,7 @@ exports[`invalid(8): a { color: color-mix(in srgb, rgb(0 0 0 / 50) calc(150%), b
 
 Message:
 > 1 | a { color: color-mix(in srgb, rgb(0 0 0 / 50) calc(150%), blue); }
-    |                                           ^^ 'rgb() alpha' evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
+    |                                           ^^ \`rgb() alpha\` evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
 
 `;
 
@@ -2672,7 +2672,7 @@ exports[`invalid(8): a { color: color-mix(in srgb, rgb(0 0 0 / 50) calc(150%), b
 
 Message:
 > 1 | a { color: color-mix(in srgb, rgb(0 0 0 / 50) calc(150%), blue); }
-    |                                               ^^^^^^^^^^ 'color' evaluates to 150%, which the browser clamps to 100%.
+    |                                               ^^^^^^^^^^ \`color\` evaluates to 150%, which the browser clamps to 100%.
 
 `;
 
@@ -2686,7 +2686,7 @@ exports[`invalid(8): a { fill-opacity: -1; } 2`] = `
 
 Message:
 > 1 | a { fill-opacity: -1; }
-    |                   ^^ 'fill-opacity' evaluates to -1, which the browser clamps to 0.
+    |                   ^^ \`fill-opacity\` evaluates to -1, which the browser clamps to 0.
 
 `;
 
@@ -2700,7 +2700,7 @@ exports[`invalid(8): a { filter: blur(calc(/* radius */ -1px)); } 2`] = `
 
 Message:
 > 1 | a { filter: blur(calc(/* radius */ -1px)); }
-    |                  ^^^^^^^^^^^^^^^^^^^^^^^ 'blur()' evaluates to -1px, which the browser clamps to 0px.
+    |                  ^^^^^^^^^^^^^^^^^^^^^^^ \`blur()\` evaluates to -1px, which the browser clamps to 0px.
 
 `;
 
@@ -2714,7 +2714,7 @@ exports[`invalid(80): a { filter: sepia(150%); } 2`] = `
 
 Message:
 > 1 | a { filter: sepia(150%); }
-    |                   ^^^^ 'sepia() amount' evaluates to 150%, which the browser clamps to 100%.
+    |                   ^^^^ \`sepia() amount\` evaluates to 150%, which the browser clamps to 100%.
 
 `;
 
@@ -2728,7 +2728,7 @@ exports[`invalid(81): a { filter: sepia(calc(-1)); } 2`] = `
 
 Message:
 > 1 | a { filter: sepia(calc(-1)); }
-    |                   ^^^^^^^^ 'sepia() amount' evaluates to -1, which the browser clamps to 0.
+    |                   ^^^^^^^^ \`sepia() amount\` evaluates to -1, which the browser clamps to 0.
 
 `;
 
@@ -2742,7 +2742,7 @@ exports[`invalid(82): a { filter: sepia(calc(25 + 25)); } 2`] = `
 
 Message:
 > 1 | a { filter: sepia(calc(25 + 25)); }
-    |                   ^^^^^^^^^^^^^ 'sepia() amount' evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
+    |                   ^^^^^^^^^^^^^ \`sepia() amount\` evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
 
 `;
 
@@ -2756,7 +2756,7 @@ exports[`invalid(83): a { backdrop-filter: sepia(50); } 2`] = `
 
 Message:
 > 1 | a { backdrop-filter: sepia(50); }
-    |                            ^^ 'sepia() amount' evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
+    |                            ^^ \`sepia() amount\` evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
 
 `;
 
@@ -2770,7 +2770,7 @@ exports[`invalid(84): a { backdrop-filter: sepia(150%); } 2`] = `
 
 Message:
 > 1 | a { backdrop-filter: sepia(150%); }
-    |                            ^^^^ 'sepia() amount' evaluates to 150%, which the browser clamps to 100%.
+    |                            ^^^^ \`sepia() amount\` evaluates to 150%, which the browser clamps to 100%.
 
 `;
 
@@ -2784,7 +2784,7 @@ exports[`invalid(85): a { backdrop-filter: sepia(calc(-1)); } 2`] = `
 
 Message:
 > 1 | a { backdrop-filter: sepia(calc(-1)); }
-    |                            ^^^^^^^^ 'sepia() amount' evaluates to -1, which the browser clamps to 0.
+    |                            ^^^^^^^^ \`sepia() amount\` evaluates to -1, which the browser clamps to 0.
 
 `;
 
@@ -2798,7 +2798,7 @@ exports[`invalid(86): a { backdrop-filter: sepia(calc(25 + 25)); } 2`] = `
 
 Message:
 > 1 | a { backdrop-filter: sepia(calc(25 + 25)); }
-    |                            ^^^^^^^^^^^^^ 'sepia() amount' evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
+    |                            ^^^^^^^^^^^^^ \`sepia() amount\` evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
 
 `;
 
@@ -2812,7 +2812,7 @@ exports[`invalid(87): a { -webkit-backdrop-filter: sepia(50); } 2`] = `
 
 Message:
 > 1 | a { -webkit-backdrop-filter: sepia(50); }
-    |                                    ^^ 'sepia() amount' evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
+    |                                    ^^ \`sepia() amount\` evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
 
 `;
 
@@ -2826,7 +2826,7 @@ exports[`invalid(88): a { -webkit-backdrop-filter: sepia(150%); } 2`] = `
 
 Message:
 > 1 | a { -webkit-backdrop-filter: sepia(150%); }
-    |                                    ^^^^ 'sepia() amount' evaluates to 150%, which the browser clamps to 100%.
+    |                                    ^^^^ \`sepia() amount\` evaluates to 150%, which the browser clamps to 100%.
 
 `;
 
@@ -2840,7 +2840,7 @@ exports[`invalid(89): a { -webkit-backdrop-filter: sepia(calc(-1)); } 2`] = `
 
 Message:
 > 1 | a { -webkit-backdrop-filter: sepia(calc(-1)); }
-    |                                    ^^^^^^^^ 'sepia() amount' evaluates to -1, which the browser clamps to 0.
+    |                                    ^^^^^^^^ \`sepia() amount\` evaluates to -1, which the browser clamps to 0.
 
 `;
 
@@ -2854,7 +2854,7 @@ exports[`invalid(9): @font-face { font-style: oblique 60deg calc(120deg); } 2`] 
 
 Message:
 > 1 | @font-face { font-style: oblique 60deg calc(120deg); }
-    |                                        ^^^^^^^^^^^^ 'font-style' evaluates to 120deg, which the browser clamps to 90deg.
+    |                                        ^^^^^^^^^^^^ \`font-style\` evaluates to 120deg, which the browser clamps to 90deg.
 
 `;
 
@@ -2868,7 +2868,7 @@ exports[`invalid(9): a { color: hsl(0 -1 50); } 2`] = `
 
 Message:
 > 1 | a { color: hsl(0 -1 50); }
-    |                  ^^ 'hsl() saturation' evaluates to -1, which the browser clamps to 0.
+    |                  ^^ \`hsl() saturation\` evaluates to -1, which the browser clamps to 0.
 
 `;
 
@@ -2882,7 +2882,7 @@ exports[`invalid(9): a { fill-opacity: 2; } 2`] = `
 
 Message:
 > 1 | a { fill-opacity: 2; }
-    |                   ^ 'fill-opacity' evaluates to 2, which the browser clamps to 1. Did you mean a percentage?
+    |                   ^ \`fill-opacity\` evaluates to 2, which the browser clamps to 1. Did you mean a percentage?
 
 `;
 
@@ -2896,7 +2896,7 @@ exports[`invalid(9): a { filter: blur(calc(-1px)) grayscale(50); } 2`] = `
 
 Message:
 > 1 | a { filter: blur(calc(-1px)) grayscale(50); }
-    |                  ^^^^^^^^^^ 'blur()' evaluates to -1px, which the browser clamps to 0px.
+    |                  ^^^^^^^^^^ \`blur()\` evaluates to -1px, which the browser clamps to 0px.
 
 `;
 
@@ -2904,7 +2904,7 @@ exports[`invalid(9): a { filter: blur(calc(-1px)) grayscale(50); } 3`] = `
 
 Message:
 > 1 | a { filter: blur(calc(-1px)) grayscale(50); }
-    |                                        ^^ 'grayscale() amount' evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
+    |                                        ^^ \`grayscale() amount\` evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
 
 `;
 
@@ -2918,7 +2918,7 @@ exports[`invalid(90): a { -webkit-backdrop-filter: sepia(calc(25 + 25)); } 2`] =
 
 Message:
 > 1 | a { -webkit-backdrop-filter: sepia(calc(25 + 25)); }
-    |                                    ^^^^^^^^^^^^^ 'sepia() amount' evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
+    |                                    ^^^^^^^^^^^^^ \`sepia() amount\` evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
 
 `;
 
@@ -2932,7 +2932,7 @@ exports[`invalid(91): a { filter: brightness(calc(-1)) contrast(calc(-1)) satura
 
 Message:
 > 1 | a { filter: brightness(calc(-1)) contrast(calc(-1)) saturate(calc(-1)); }
-    |                        ^^^^^^^^ 'brightness() amount' evaluates to -1, which the browser clamps to 0.
+    |                        ^^^^^^^^ \`brightness() amount\` evaluates to -1, which the browser clamps to 0.
 
 `;
 
@@ -2940,7 +2940,7 @@ exports[`invalid(91): a { filter: brightness(calc(-1)) contrast(calc(-1)) satura
 
 Message:
 > 1 | a { filter: brightness(calc(-1)) contrast(calc(-1)) saturate(calc(-1)); }
-    |                                           ^^^^^^^^ 'contrast() amount' evaluates to -1, which the browser clamps to 0.
+    |                                           ^^^^^^^^ \`contrast() amount\` evaluates to -1, which the browser clamps to 0.
 
 `;
 
@@ -2948,7 +2948,7 @@ exports[`invalid(91): a { filter: brightness(calc(-1)) contrast(calc(-1)) satura
 
 Message:
 > 1 | a { filter: brightness(calc(-1)) contrast(calc(-1)) saturate(calc(-1)); }
-    |                                                              ^^^^^^^^ 'saturate() amount' evaluates to -1, which the browser clamps to 0.
+    |                                                              ^^^^^^^^ \`saturate() amount\` evaluates to -1, which the browser clamps to 0.
 
 `;
 
@@ -2962,7 +2962,7 @@ exports[`invalid(92): a { color: rgb(300 0 0); } 2`] = `
 
 Message:
 > 1 | a { color: rgb(300 0 0); }
-    |                ^^^ 'rgb() red' evaluates to 300, which the browser clamps to 255.
+    |                ^^^ \`rgb() red\` evaluates to 300, which the browser clamps to 255.
 
 `;
 
@@ -2976,7 +2976,7 @@ exports[`invalid(93): a { color: rgb(-1 0 0); } 2`] = `
 
 Message:
 > 1 | a { color: rgb(-1 0 0); }
-    |                ^^ 'rgb() red' evaluates to -1, which the browser clamps to 0.
+    |                ^^ \`rgb() red\` evaluates to -1, which the browser clamps to 0.
 
 `;
 
@@ -2990,7 +2990,7 @@ exports[`invalid(94): a { color: rgb(101% 0% 0%); } 2`] = `
 
 Message:
 > 1 | a { color: rgb(101% 0% 0%); }
-    |                ^^^^ 'rgb() red' evaluates to 101%, which the browser clamps to 100%.
+    |                ^^^^ \`rgb() red\` evaluates to 101%, which the browser clamps to 100%.
 
 `;
 
@@ -3004,7 +3004,7 @@ exports[`invalid(95): a { color: rgb(0 0 0 / 50); } 2`] = `
 
 Message:
 > 1 | a { color: rgb(0 0 0 / 50); }
-    |                        ^^ 'rgb() alpha' evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
+    |                        ^^ \`rgb() alpha\` evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
 
 `;
 
@@ -3018,7 +3018,7 @@ exports[`invalid(96): a { color: rgba(0, 0, 0, 50); } 2`] = `
 
 Message:
 > 1 | a { color: rgba(0, 0, 0, 50); }
-    |                          ^^ 'rgba() alpha' evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
+    |                          ^^ \`rgba() alpha\` evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
 
 `;
 
@@ -3032,7 +3032,7 @@ exports[`invalid(97): a { color: hsla(0, 50%, 50%, -1); } 2`] = `
 
 Message:
 > 1 | a { color: hsla(0, 50%, 50%, -1); }
-    |                              ^^ 'hsla() alpha' evaluates to -1, which the browser clamps to 0.
+    |                              ^^ \`hsla() alpha\` evaluates to -1, which the browser clamps to 0.
 
 `;
 
@@ -3046,7 +3046,7 @@ exports[`invalid(98): a { color: rgb(var(--channels) / 50); } 2`] = `
 
 Message:
 > 1 | a { color: rgb(var(--channels) / 50); }
-    |                                  ^^ 'rgb() alpha' evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
+    |                                  ^^ \`rgb() alpha\` evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
 
 `;
 
@@ -3060,6 +3060,6 @@ exports[`invalid(99): a { color: rgb(from red r g b / 50); } 2`] = `
 
 Message:
 > 1 | a { color: rgb(from red r g b / 50); }
-    |                                 ^^ 'rgb() alpha' evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
+    |                                 ^^ \`rgb() alpha\` evaluates to 50, which the browser clamps to 1. Did you mean a percentage?
 
 `;

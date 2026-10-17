@@ -1717,6 +1717,7 @@ const config = {
 			recommended: true,
 		},
 		fixable: 'code',
+		schema: [],
 		messages,
 		languages: ['css/css'],
 	},

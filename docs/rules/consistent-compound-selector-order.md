@@ -9,7 +9,7 @@
 <!-- end auto-generated rule header -->
 <!-- Do not manually modify this header. Run: `npm run fix:eslint-docs` -->
 
-Orders each compound selector as follows:
+This rule reports compound selectors whose components are not in this order:
 
 1. Type or universal selector (`button`, `*`, `svg|a`)
 2. Nesting selectors (`&`)
@@ -18,13 +18,11 @@ Orders each compound selector as follows:
 5. Attribute selectors (`[disabled]`)
 6. Pseudo-classes (`:hover`, `:not(...)`)
 
-Components of the same kind keep their order. Supports nesting, at-rules, and parsed functional pseudo arguments. Unparsed arguments, including `::cue()` and escaped `:is()`, are ignored.
+Components of the same kind keep their order. The rule also checks nested rules, at-rules, and the parsed arguments of functional pseudo-classes and pseudo-elements, such as `:is()` and `::slotted()`.
 
-Ordering stops at the first pseudo-element, including legacy forms such as `:before`.
+Components from the first pseudo-element on, including legacy forms such as `:before`, are not checked.
 
-Fixes preserve spelling and formatting; comments in the affected range prevent fixing.
-
-Compounds containing CSS Modules' `:local` or `:global`, unsupported nodes, or misplaced type selectors are ignored.
+The autofix keeps the spelling and formatting of each component. It is skipped when a comment is between the components that it reorders, because the fix would remove the comment.
 
 ## Examples
 
@@ -63,3 +61,8 @@ Compounds containing CSS Modules' `:local` or `:global`, unsupported nodes, or m
 /* ✅ */
 #save.button::before:hover {}
 ```
+
+## Limitations
+
+- Compound selectors that contain the CSS Modules pseudo-classes `:local` or `:global`, an unsupported component, or a type selector that is not first are ignored.
+- Arguments that are not parsed are ignored, such as those of `::cue()` and of an escaped `:is()`.

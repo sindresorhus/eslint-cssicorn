@@ -7,12 +7,12 @@
 <!-- end auto-generated rule header -->
 <!-- Do not manually modify this header. Run: `npm run fix:eslint-docs` -->
 
-Require mandatory descriptors in CSS [`@property`](https://www.w3.org/TR/css-properties-values-api-1/#at-property-rule) registrations. Browsers ignore registrations missing these descriptors.
+This rule reports CSS [`@property`](https://www.w3.org/TR/css-properties-values-api-1/#at-property-rule) registrations that are missing a mandatory descriptor, because browsers ignore them:
 
 - `syntax` and `inherits` are always required.
-- `initial-value` is required unless the syntax string is `"*"`, optionally surrounded by ASCII whitespace.
+- `initial-value` is required unless the syntax string is `"*"`, optionally surrounded by ASCII whitespace. It is checked only when `syntax` is a single string.
 
-The rule checks `initial-value` only when `syntax` is a single string.
+There is no autofix because descriptor values require author intent.
 
 ## Examples
 
@@ -29,7 +29,11 @@ The rule checks `initial-value` only when `syntax` is a single string.
 	inherits: false;
 	initial-value: rebeccapurple;
 }
+```
 
+`initial-value` is optional for the universal syntax:
+
+```css
 /* ✅ */
 @property --brand {
 	syntax: "*";
@@ -37,10 +41,12 @@ The rule checks `initial-value` only when `syntax` is a single string.
 }
 ```
 
-This rule checks presence only; empty values count. Values, computational independence, `!important`, property names, and placement are not validated.
+## Limitations
 
-Use [`css/no-invalid-at-rules`](https://github.com/eslint/css/blob/main/docs/rules/no-invalid-at-rules.md) to check at-rule names, preludes, and descriptor value grammar.
+The rule checks only that the descriptors are present, and empty values count. It does not validate values, computational independence, `!important`, property names, or placement.
 
-At-rule and descriptor names are case-insensitive; CSS escapes are decoded. Only direct declarations count. The last duplicate wins; browser recovery from invalid values is not modeled.
+At-rule and descriptor names are case-insensitive, and CSS escapes are decoded. Only direct declarations count, and the last of duplicated descriptors wins. The rule does not model how browsers recover from invalid values.
 
-No fixes or suggestions are provided because descriptor values require author intent.
+## Related rules
+
+- [`css/no-invalid-at-rules`](https://github.com/eslint/css/blob/main/docs/rules/no-invalid-at-rules.md) checks at-rule names, preludes, and descriptor value grammar.

@@ -9,9 +9,7 @@
 <!-- end auto-generated rule header -->
 <!-- Do not manually modify this header. Run: `npm run fix:eslint-docs` -->
 
-This rule reports longhands that can be combined into one shorthand. It pairs with [`unicorn/no-shorthand-property-overrides`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/main/docs/rules/no-shorthand-property-overrides.md), which catches shorthands that override earlier longhands.
-
-Declarations in CSS Modules `:export` and `:import()` blocks are ignored, because JavaScript reads them as exact strings.
+This rule reports longhands that can be combined into one shorthand, and the autofix replaces them with it.
 
 ## Examples
 
@@ -30,42 +28,54 @@ div {
 }
 ```
 
-The rule skips invalid values, duplicate longhands, mixed `!important` declarations, and values containing `var()`, `random()`, or similar functions. It also skips some ambiguous or inconsistently supported animation, font, column, and list-style values.
+If the same block declares the shorthand earlier with the same `!important` flag, the fix replaces that declaration too:
 
-`transition` longhands are only combined when `transition-behavior` is `normal`, which the shorthand leaves out, because browsers without `transition-behavior` support drop a `transition` declaration that contains a behavior keyword.
+```css
+/* ❌ */
+div {
+	gap: 0;
+	row-gap: 1px;
+	column-gap: 2px;
+}
 
-`text-decoration` longhands are only combined when the style, color, and thickness are initial (`solid`, `currentcolor`, and `auto`), which the shorthand leaves out, because Safari before 26.2 drops a `text-decoration` declaration with a style, color, or thickness.
+/* ✅ */
+div {
+	gap: 1px 2px;
+}
+```
 
-Comma-separated values can repeat across shorthand layers, but lists longer than the primary list are skipped. If a shorthand would also reset another property, such as `border-image`, the rule only reports when it can verify that reset is safe.
-
-Autofix requires contiguous declarations with no comments in the replaced text. Otherwise, the rule reports without fixing. If the same block declares the shorthand earlier with the same `!important` flag, the fix replaces that declaration too, so `gap: 0; row-gap: 1px; column-gap: 2px;` becomes `gap: 1px 2px;`. This also removes an earlier shorthand that was meant as a fallback for browsers that do not support the longhand values, like `overflow: hidden` before `overflow-x: clip; overflow-y: clip;`. Disable the rule for that declaration if you need the fallback. It preserves explicit `background-blend-mode` declarations to account for browser differences.
-
-Nested rules and vendor-prefixed declarations split groups. Descriptor blocks such as `@font-face` and vendor-prefixed groups are ignored.
+When the fix merges `background` longhands, it keeps an explicit `background-blend-mode` declaration, because some browsers do not reset it with `background`.
 
 ## Options
 
-### `ignoreShorthands`
+### ignoreShorthands
 
-Type: `string[]`
-
+Type: `string[]`\
 Default: `[]`
 
-The exact shorthand names to ignore.
+The shorthands to ignore. Only supported shorthands are accepted, as listed in [`rules/shared/css-shorthand-properties.js`](../../rules/shared/css-shorthand-properties.js).
 
 ```js
-export default [
-	{
-		rules: {
-			'cssicorn/no-redundant-longhand-properties': [
-				'error',
-				{
-					ignoreShorthands: [
-						'transition',
-						'font',
-					],
-				},
-			],
-		},
-	},
-];
+{
+	ignoreShorthands: [
+		'transition',
+		'font',
+	],
+}
 ```
+
+## Limitations
+
+- The autofix requires contiguous declarations with no comments in the replaced text, or the rule reports without fixing.
+- The fix also removes an earlier shorthand that was meant as a fallback for browsers that do not support the longhand values, like `overflow: hidden` before `overflow-x: clip; overflow-y: clip;`. To keep the fallback, disable the rule for that declaration.
+- The rule ignores invalid values, duplicate longhands, mixed `!important` declarations, values containing `var()`, `random()`, or similar functions, and some ambiguous or inconsistently supported animation, font, column, and list-style values.
+- `transition` longhands are only combined when `transition-behavior` is `normal`, which the shorthand leaves out. Browsers without `transition-behavior` support drop a `transition` declaration that contains a behavior keyword.
+- `text-decoration` longhands are only combined when the style, color, and thickness are initial (`solid`, `currentcolor`, and `auto`), which the shorthand leaves out. Safari before 26.2 drops a `text-decoration` declaration with a style, color, or thickness.
+- Comma-separated values can repeat across shorthand layers, but lists longer than the primary list are ignored.
+- If a shorthand would also reset another property, such as `border-image`, the rule only reports when it can verify that the reset is safe.
+- Nested rules and vendor-prefixed declarations split groups. Descriptor blocks such as `@font-face` and vendor-prefixed groups are ignored.
+- Declarations in CSS Modules `:export` and `:import()` blocks are ignored, because JavaScript reads them as exact strings.
+
+## Related rules
+
+- [`unicorn/no-shorthand-property-overrides`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/main/docs/rules/no-shorthand-property-overrides.md) reports shorthands that override earlier longhands.

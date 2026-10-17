@@ -7,9 +7,14 @@
 <!-- end auto-generated rule header -->
 <!-- Do not manually modify this header. Run: `npm run fix:eslint-docs` -->
 
-This rule recommends native [`aspect-ratio`](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/aspect-ratio) for boxes with literal zero `height` and positive percentage `padding-top` or `padding-bottom`, including constant `calc()` values. It reports once per style block and also recognizes `padding` shorthands with positive percentage top or bottom padding. Shorthand components may be nonnegative literal lengths or percentages, including unitless zero, or supported nonnegative percentage calculations. Zero height may be unitless or a valid length; percentage and calculated heights are ignored.
+This rule reports the zero-height padding workaround for fixed-ratio boxes, and recommends native [`aspect-ratio`](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/aspect-ratio) instead. It reports once per style block that has both of these:
 
-No autofix or editor suggestions are provided: percentage padding uses the containing block's inline size, while `aspect-ratio` sizes the element's own box. Remove the zero height and ratio padding, leaving at least one dimension automatic (`height: auto` if needed). Review content, positioning, box sizing, and markup; the examples are not guaranteed equivalent. See [the browser comparison](https://web.dev/articles/aspect-ratio).
+- A `height` of unitless zero or a zero length. Percentage and calculated heights are ignored.
+- A positive percentage `padding-top`, `padding-bottom`, or top or bottom component of `padding`. A constant `calc()` value also counts. The other `padding` components must be nonnegative literal lengths or percentages, unitless zero, or supported nonnegative percentage calculations.
+
+There is no autofix because percentage padding uses the containing block's inline size, while `aspect-ratio` sizes the element's own box.
+
+To migrate, replace the zero height and the ratio padding with `aspect-ratio`, and leave at least one dimension automatic (`height: auto` if needed). The examples are not guaranteed to be equivalent, so review content, positioning, box sizing, and markup. See [the browser comparison](https://web.dev/articles/aspect-ratio).
 
 ## Examples
 
@@ -17,7 +22,6 @@ No autofix or editor suggestions are provided: percentage padding uses the conta
 /* ❌ */
 .video {
 	height: 0;
-	padding: 0;
 	padding-bottom: 56.25%;
 }
 
@@ -55,21 +59,18 @@ No autofix or editor suggestions are provided: percentage padding uses the conta
 
 ## Calculations
 
-Constant `calc()` expressions must produce a finite, nonnegative percentage, with a positive vertical percentage required to report. Numbers, percentages, `+`, `-`, `*`, `/`, parentheses, nested `calc()`, and negative intermediate values are supported. Lengths, named constants, substitutions (`var()` or `env()`), other functions, invalid arithmetic, and division by zero are ignored.
+A constant `calc()` must produce a finite, nonnegative percentage. It can use numbers, percentages, `+`, `-`, `*`, `/`, parentheses, nested `calc()`, and negative intermediate values. Lengths, named constants, substitutions (`var()` or `env()`), other functions, invalid arithmetic, and division by zero are ignored.
 
-## Detection boundaries
+## Limitations
 
-The rule intentionally ignores:
+The rule ignores:
 
-- Padding-only patterns, or height and padding declared in separate blocks.
+- Padding-only patterns, or height and padding in separate blocks.
 - Blocks containing `aspect-ratio`, `all`, or logical padding.
 - Duplicate `height`, `padding`, `padding-top`, or `padding-bottom` declarations.
 - Shorthands mixed with vertical longhands, except a literal zero reset before all vertical longhands with matching `!important` usage.
-- Shorthands with negative or unsupported components.
 - Keyframes, descriptor blocks, and CSS Modules `:export` and `:import()` blocks.
-- Any enclosing `@supports` condition testing `aspect-ratio`, regardless of polarity.
-
-Explicit feature-query fallbacks are left alone:
+- Blocks inside any `@supports` condition that tests `aspect-ratio`, regardless of polarity.
 
 ```css
 /* ✅ */

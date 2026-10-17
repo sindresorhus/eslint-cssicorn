@@ -9,7 +9,11 @@
 <!-- end auto-generated rule header -->
 <!-- Do not manually modify this header. Run: `npm run fix:eslint-docs` -->
 
-This rule enforces consistent property ordering within declaration groups. By default, it uses [Concentric CSS](https://github.com/brandon-rhodes/Concentric-CSS), which orders properties from layout and positioning through the box model to typography.
+This rule enforces a consistent property order within declaration groups. The default is [Concentric CSS](https://github.com/brandon-rhodes/Concentric-CSS), which goes from layout and positioning through the box model to typography.
+
+The rule autofixes the order when this cannot change the cascade, and otherwise provides a suggestion. See [Autofixes and suggestions](#autofixes-and-suggestions).
+
+This rule is not in the recommended configs, because property order is a team preference.
 
 ## Examples
 
@@ -27,20 +31,36 @@ a {
 }
 ```
 
+Moving `margin` before `margin-left` changes which value wins for the left margin, so the rule provides a suggestion instead of an autofix:
+
+```css
+/* ❌ */
+a {
+	margin-left: 2px;
+	margin: 1px;
+}
+
+/* ✅ */
+a {
+	margin: 1px;
+	margin-left: 2px;
+}
+```
+
 ## Options
 
-### `order`
+### order
 
 Type: `'concentric-css' | 'alphabetical' | string[]`\
 Default: `'concentric-css'`
 
-#### `'concentric-css'`
+#### concentric-css
 
-Use the Concentric CSS property order, as shown above. The preset uses a [fixed property list](https://github.com/Siilwyn/css-declaration-sorter/blob/v7.4.0/src/orders/concentric-css.mjs).
+Use the Concentric CSS order from a [fixed property list](https://github.com/Siilwyn/css-declaration-sorter/blob/v7.4.0/src/orders/concentric-css.mjs).
 
-The modern `font-width` property shares the position of its legacy alias, `font-stretch`. Their relative order is preserved in this mode. Other properties absent from the list, such as `interpolate-size`, remain in place and separate declaration groups. Alphabetical and custom ordering can include other supported properties.
+`font-width` shares the position of its legacy alias `font-stretch`, so their relative order is kept. Properties that are not in the list, such as `interpolate-size`, stay in place and separate declaration groups. Alphabetical and custom ordering can include other supported properties.
 
-#### `'alphabetical'`
+#### alphabetical
 
 Order properties alphabetically, comparing normalized CSS property names.
 
@@ -66,7 +86,7 @@ a {
 
 #### Custom order
 
-Provide a nonempty array of unique property names. Listed properties come first in the specified order; other supported properties follow in their original relative order. Property names are matched case-insensitively; when differently written names normalize to the same property, the first occurrence determines its position.
+Provide a nonempty array of unique property names, matched case-insensitively. Listed properties come first, in the given order, and other supported properties follow in their original relative order. When differently written names normalize to the same property, the first occurrence determines its position.
 
 ```js
 {
@@ -77,38 +97,43 @@ Provide a nonempty array of unique property names. Listed properties come first 
 }
 ```
 
-You only need to list properties you want first. A custom order does not enable sorting unsupported properties.
-
-## Autofixes and suggestions
-
-The rule autofixes a group only when the changed declaration pairs do not affect overlapping properties. It preserves the relative order of repeated declarations, including value fallbacks.
-
-Reordering shorthands, aliases, or logical and physical properties can change the cascade. These cases receive a suggestion instead of an autofix. Moving `all` across another declaration also requires a suggestion. Review these suggestions before applying them; disable the rule when the original order is intentional.
-
 ```css
-/* ❌: Suggestion only, because reordering changes the margin override. */
+/* ❌ */
 a {
-	margin-left: 2px;
-	margin: 1px;
+	color: red;
+	position: absolute;
+	display: flex;
 }
 
 /* ✅ */
 a {
-	margin: 1px;
-	margin-left: 2px;
+	display: flex;
+	position: absolute;
+	color: red;
 }
 ```
 
-The safety check is conservative. Properties in the same logical-property group, such as `width` and `height`, can receive suggestions even when their physical declarations are independent.
+A custom order does not enable sorting of unsupported properties.
+
+## Autofixes and suggestions
+
+The rule autofixes a group only when the reordered declaration pairs do not affect overlapping properties. Reordering shorthands, aliases, or logical and physical properties, or moving `all` across another declaration, can change the cascade, so these get a suggestion. Review suggestions before you apply them, and disable the rule when the original order is intentional.
+
+The safety check is conservative: properties in the same logical-property group, such as `width` and `height`, can get suggestions even when their physical declarations are independent.
+
+Fixes and suggestions keep the relative order of repeated declarations (including value fallbacks), the formatting, and the semicolons.
 
 ## Declaration groups
 
-Comments, blank lines, nested constructs, custom properties, and unsupported properties separate groups. Concentric ordering also treats unlisted properties as boundaries. Declarations containing comments, or followed by a comment on the same line, stay in place. Unsupported properties include most vendor-prefixed properties and some legacy aliases.
+Comments, blank lines, nested constructs, custom properties, and unsupported properties (most vendor-prefixed properties and some legacy aliases) separate groups. Declarations that contain a comment, or that are followed by a comment on the same line, stay in place.
 
-The rule applies to style rules, keyframes, nested grouping at-rules, `@position-try`, `@page`, and its direct page-margin boxes. Other descriptor blocks and CSS Modules interop blocks are excluded.
-
-Formatting and semicolons are preserved. Blocks containing target lines of `eslint-disable-line` or `eslint-disable-next-line` are skipped to preserve suppression targets.
+The rule applies to style rules, keyframes, nested grouping at-rules, `@position-try`, `@page`, and the direct page-margin boxes of `@page`.
 
 ## Tailwind CSS
 
-Supports `@utility` definitions and `@variant` blocks inside style rules or utilities with the [Tailwind parser extension](https://github.com/eslint/css#configuring-tailwind-syntax). `@apply` separates groups; other Tailwind at-rule blocks are skipped.
+With the [Tailwind parser extension](https://github.com/eslint/css#configuring-tailwind-syntax), the rule supports `@utility` definitions, and `@variant` blocks inside style rules or utilities. `@apply` separates groups. Other Tailwind at-rule blocks are skipped.
+
+## Limitations
+
+- Descriptor blocks other than `@position-try`, `@page`, and page-margin boxes, and CSS Modules interop blocks, are not checked.
+- Blocks that contain the target line of an `eslint-disable-line` or `eslint-disable-next-line` comment are skipped, so that the comment keeps its target.

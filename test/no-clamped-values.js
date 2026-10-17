@@ -194,7 +194,7 @@ nodeTest('descriptor diagnostics identify the declaration', () => {
 		rules: {'cssicorn/no-clamped-values': 'error'},
 	}, {filename: 'test.css'});
 	assert.equal(messages.length, 1);
-	assert.equal(messages[0].message, '\'font-weight\' evaluates to 1200, which the browser clamps to 1000.');
+	assert.equal(messages[0].message, '`font-weight` evaluates to 1200, which the browser clamps to 1000.');
 });
 
 nodeTest('percent signs in comments do not hide calculated bounds', () => {
@@ -205,8 +205,8 @@ nodeTest('percent signs in comments do not hide calculated bounds', () => {
 		rules: {'cssicorn/no-clamped-values': 'error'},
 	}, {filename: 'test.css'});
 	assert.deepEqual(messages.map(message => message.message), [
-		'\'font-weight\' evaluates to 1200, which the browser clamps to 1000.',
-		'\'column-count\' evaluates to 0, which the browser clamps to 1.',
+		'`font-weight` evaluates to 1200, which the browser clamps to 1000.',
+		'`column-count` evaluates to 0, which the browser clamps to 1.',
 	]);
 });
 
@@ -220,17 +220,17 @@ nodeTest('calculations use the receiving component\'s intrinsic percentage basis
 	};
 	for (const [declaration, expected] of [
 		['color: rgb(min(100%, 150%) 0 0)', []],
-		['color: rgb(min(125%, 150%) 0 0)', ['\'rgb() red\' evaluates to 318.75, which the browser clamps to 255.']],
+		['color: rgb(min(125%, 150%) 0 0)', ['`rgb() red` evaluates to 318.75, which the browser clamps to 255.']],
 		['color: rgb(hypot(60%, 80%) 0 0)', []],
-		['color: rgb(hypot(90%, 120%) 0 0)', ['\'rgb() red\' evaluates to 382.5, which the browser clamps to 255.']],
+		['color: rgb(hypot(90%, 120%) 0 0)', ['`rgb() red` evaluates to 382.5, which the browser clamps to 255.']],
 		['color: lab(min(100%, 150%) 0 0)', []],
-		['color: lab(min(125%, 150%) 0 0)', ['\'lab() lightness\' evaluates to 125, which the browser clamps to 100.']],
+		['color: lab(min(125%, 150%) 0 0)', ['`lab() lightness` evaluates to 125, which the browser clamps to 100.']],
 		['color: oklab(min(100%, 150%) 0 0)', []],
-		['color: oklab(min(125%, 150%) 0 0)', ['\'oklab() lightness\' evaluates to 1.25, which the browser clamps to 1.']],
-		['color: lch(50 rem(-25%, 100%) 0)', ['\'lch() chroma\' evaluates to -37.5, which the browser clamps to 0.']],
-		['color: oklch(.5 rem(-25%, 100%) 0)', ['\'oklch() chroma\' evaluates to -0.1, which the browser clamps to 0.']],
+		['color: oklab(min(125%, 150%) 0 0)', ['`oklab() lightness` evaluates to 1.25, which the browser clamps to 1.']],
+		['color: lch(50 rem(-25%, 100%) 0)', ['`lch() chroma` evaluates to -37.5, which the browser clamps to 0.']],
+		['color: oklch(.5 rem(-25%, 100%) 0)', ['`oklch() chroma` evaluates to -0.1, which the browser clamps to 0.']],
 		['filter: grayscale(round(up, 90%, 20%))', []],
-		['filter: grayscale(round(up, 125%, 50%))', ['\'grayscale() amount\' evaluates to 1.5, which the browser clamps to 1.']],
+		['filter: grayscale(round(up, 125%, 50%))', ['`grayscale() amount` evaluates to 1.5, which the browser clamps to 1.']],
 		['filter: brightness(hypot(90%, 120%))', []],
 		['color: color(display-p3 min(125%, 150%) 0 0)', []],
 	]) {
@@ -288,7 +288,7 @@ for (const [directive, code] of [
 			plugins: {css, cssicorn: plugin},
 			rules: {'cssicorn/no-clamped-values': 'error'},
 		}, {filename: 'test.css'});
-		assert.deepEqual(messages.map(message => message.message), ['\'opacity\' evaluates to 2, which the browser clamps to 1. Did you mean a percentage?']);
+		assert.deepEqual(messages.map(message => message.message), ['`opacity` evaluates to 2, which the browser clamps to 1. Did you mean a percentage?']);
 	});
 }
 

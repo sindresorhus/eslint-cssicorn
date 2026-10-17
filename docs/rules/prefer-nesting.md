@@ -9,11 +9,11 @@
 <!-- end auto-generated rule header -->
 <!-- Do not manually modify this header. Run: `npm run fix:eslint-docs` -->
 
-Prefer native CSS nesting for repeated parent selectors, conditional overrides, and structural `:is()` and `:where()` groups.
+This rule reports selectors that can use native CSS nesting: repeated parent selectors, conditional overrides, and structural `:is()` and `:where()` groups. The autofix rewrites them as nested rules.
 
 ## Examples
 
-Nest shared literal prefixes in selector lists and adjacent rules, including adjacent lists. Grouped parents require equal specificity and every parent/suffix combination:
+The rule nests shared literal prefixes in selector lists and adjacent rules, including adjacent selector lists. When it groups several parents, such as `.card` and `.panel`, the list must contain every combination of a parent and a suffix:
 
 ```css
 /* ❌ */
@@ -29,7 +29,7 @@ Nest shared literal prefixes in selector lists and adjacent rules, including adj
 }
 ```
 
-Nest related rules through `@media` and `@layer` chains, including sibling groups and shared prefixes without a preceding parent rule. The parent can appear in a later conditional block; declaration order is preserved. Paths through `@supports`, `@container`, or `@starting-style` require the exact parent and declarations only:
+Related rules are nested through chains of `@media` and `@layer` rules, including sibling groups and shared prefixes without a preceding parent rule. The parent can also be in a later conditional block, and declaration order is kept. Through `@supports`, `@container`, or `@starting-style`, only declaration-only rules with the exact parent selector are moved:
 
 ```css
 /* ❌ */
@@ -53,7 +53,7 @@ Nest related rules through `@media` and `@layer` chains, including sibling group
 }
 ```
 
-Nest `:is()` and `:where()` groups, including groups followed by suffixes or further selectors:
+`:is()` and `:where()` groups are nested, also when suffixes or further selectors follow them:
 
 ```css
 /* ❌ */
@@ -69,34 +69,48 @@ a {
 }
 ```
 
-Factor shared compound suffixes and contextual overrides. Nested contextual overrides need an existing `&` in the parent when the prefix contains a combinator:
+Shared compound suffixes, such as `:hover`, are factored out, and so are contextual overrides, which add context before the parent selector:
 
 ```css
 /* ❌ */
-.card { color: red; }
-.card:hover, .theme .card.active { color: blue; }
+.card {
+	color: red;
+}
+.card:hover, .theme .card.active {
+	color: blue;
+}
 
 /* ✅ */
 .card {
 	color: red;
-	&:hover, .theme &.active { color: blue; }
+	&:hover, .theme &.active {
+		color: blue;
+	}
 }
 ```
+
+No contextual override is written when the parent selector contains a combinator, such as `.x .card`. When the parent rule is itself nested and the context contains a combinator, the parent selector must already contain `&`, such as `&.card`.
 
 Shared prefixes can begin with `>`, `+`, or `~`:
 
 ```css
 /* ❌ */
 .card {
-	> .item { color: red; }
-	> .item:hover { color: blue; }
+	> .item {
+		color: red;
+	}
+	> .item:hover {
+		color: blue;
+	}
 }
 
 /* ✅ */
 .card {
 	> .item {
 		color: red;
-		&:hover { color: blue; }
+		&:hover {
+			color: blue;
+		}
 	}
 }
 ```
@@ -119,22 +133,25 @@ Attached `:is()` groups use `&` at each nesting level:
 }
 ```
 
-Groups support type selectors, common pseudo-classes, attributes, and the `>`, `+`, and `~` combinators. Existing `&` references keep their original ancestor context.
+Groups can contain type selectors, common pseudo-classes, attribute selectors, and the `>`, `+`, and `~` combinators. An existing `&` keeps its original ancestor context.
 
 ## Specificity
 
-Trailing `:is()` is unwrapped only when its arguments have equal specificity and unwrapping preserves [forgiving selector-list behavior](https://drafts.csswg.org/selectors/#forgiving-selector). Complex trailing arguments and uncertain selectors stay wrapped.
-
-`:where()` stays wrapped. Related grouped parents require equal specificity, including inherited specificity. Functional `&` references in grouped parents are supported only inside top-level `:where()` functions.
-
-Inside nested rules, groups stay wrapped when expansion could change ancestor matching. Exact declaration-only conditional overrides preserve mixed parent specificity and pseudo-elements without adding `&`.
-
-Leading and attached `:is()` groups preserve maximum specificity. Mixed `:is()` arguments and their resulting nesting parents can trigger [`no-nesting-with-mixed-specificity`](./no-nesting-with-mixed-specificity.md); disable that rule when mixed specificity is intentional.
+- A trailing `:is()` is unwrapped only when all its arguments have the same specificity and unwrapping keeps the [forgiving selector list behavior](https://drafts.csswg.org/selectors/#forgiving-selector). Complex or uncertain arguments stay wrapped.
+- `:where()` always stays wrapped.
+- Grouped parents must have the same specificity, including what they inherit through `&`. In grouped parents, `&` inside a pseudo-class function is supported only inside a top-level `:where()`.
+- Inside nested rules, a group stays wrapped when expanding it could change which ancestors match.
+- A conditional override that repeats the exact parent selector and contains only declarations is nested without `&`, which keeps mixed parent specificity and pseudo-elements.
+- Leading and attached `:is()` groups keep the maximum specificity of their arguments. With mixed specificity, the resulting parents can trigger [`no-nesting-with-mixed-specificity`](./no-nesting-with-mixed-specificity.md), so disable that rule when it is intentional.
 
 ## Limitations
 
-Inferred groups use the first compound as parent, including a leading combinator. Conditional discovery follows first-child paths; every moved child must relate to the parent. `:is()` and `:where()` conversions require one outer selector and at least two arguments. Attached groups need a following suffix to be unwrapped.
-
-Skips ambiguous grouped matches, nested selectors that the parser cannot read, opaque parent arguments, `@scope`, and files with `@namespace`. Suffix and contextual factoring skip selectors beginning with a combinator. Related parent factoring skips ancestor references inside `:host()` or `:host-context()`. Comments, missing semicolons, or unsafe formatting can prevent fixes.
-
-Autofixes target HTML and SVG elements. Other XML namespaces are unsupported.
+- A group inferred without a parent rule uses the first compound selector as the parent, including a leading combinator.
+- In conditional blocks, the rule follows only the first child of each block, and every moved child must be related to the parent.
+- `:is()` and `:where()` are converted only in a single-selector list, and only when they have at least two arguments.
+- An attached group, such as `.card:is(.foo, #bar)`, is unwrapped only when a suffix follows it.
+- The rule skips ambiguous grouped matches, unparsable nested selectors and parent arguments, `@scope`, and files with `@namespace`.
+- Suffix and contextual factoring skip selectors that begin with a combinator.
+- Factoring related parents skips `&` inside `:host()` or `:host-context()`.
+- Comments, missing semicolons, or unsafe formatting can prevent fixes.
+- Autofixes target HTML and SVG elements, not other XML namespaces.

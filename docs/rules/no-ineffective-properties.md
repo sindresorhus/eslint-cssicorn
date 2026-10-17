@@ -7,7 +7,9 @@
 <!-- end auto-generated rule header -->
 <!-- Do not manually modify this header. Run: `npm run fix:eslint-docs` -->
 
-Catch ineffective declarations in the same block and omitted shorthand components that default to `none`.
+This rule reports declarations that have no effect because of another declaration in the same block, and shorthands that omit a component that defaults to `none`.
+
+There is no autofix because the rule cannot know whether the ineffective declaration or the declaration that disables it is wrong.
 
 ## Examples
 
@@ -81,13 +83,13 @@ a {
 
 The rule reports:
 
-- `flex-direction`, `flex-wrap`, `flex-flow`, grid templates/auto-placement, and `table-layout` with an incompatible visible `display` mode.
+- `flex-direction`, `flex-wrap`, `flex-flow`, grid templates and auto-placement, and `table-layout` with an incompatible visible `display` mode.
 - `columns`, `column-count`, `column-width`, and `column-fill` with flex or grid display.
-- `align-content` on a flex container with explicit `nowrap` in `flex-wrap` or `flex-flow`; consider `align-items` or wrapping.
+- `align-content` on a flex container with explicit `nowrap` in `flex-wrap` or `flex-flow`. Use `align-items` or wrapping instead.
 - Physical and logical insets with `position: static`.
-- Non-`none` floats, clearance, and `column-span: all` with `position: absolute` or `fixed`.
-- Ellipsis in `text-overflow` with flex/grid display or `overflow: visible` (including `visible visible`).
-- `border-spacing` and padding on tables with `border-collapse: collapse`.
+- Floats other than `none`, clearance, and `column-span: all` with `position: absolute` or `fixed`.
+- Ellipsis in `text-overflow` with flex or grid display, or with `overflow: visible` (including `visible visible`).
+- `border-spacing` and padding with `border-collapse: collapse` on `display: table` or `inline-table`.
 - `perspective-origin` with `perspective: none`.
 - `offset-distance`, `offset-rotate`, and `offset-anchor` with `offset-path: none`.
 - `shape-image-threshold` with `shape-outside: none`.
@@ -95,22 +97,61 @@ The rule reports:
 - Related image controls, such as position, size, repeat, slice, and compositing, when `background-image`, `border-image-source`, or `mask-image` is `none`.
 - Related animation or transition controls with `animation-name: none` or `transition-property: none`.
 - Related timeline axis and inset controls with `scroll-timeline-name: none` or `view-timeline-name: none`.
-- Omitted styles in border shorthands, `outline`, `column-rule`, and `text-emphasis`; omitted lines in `text-decoration`; omitted names in wholly nameless `animation` lists.
+- Omitted styles in border shorthands, `outline`, `column-rule`, and `text-emphasis`, omitted lines in `text-decoration`, and omitted names in `animation` lists where no item has a name.
 
-Ellipsis needs a block container with clipped inline overflow; `white-space: nowrap` and dimensions are not required. Strings and `fade` values are not checked.
+Ellipsis needs a block container with clipped inline overflow. `white-space: nowrap` and dimensions are not required.
 
-`border-spacing` is inherited and can still affect descendant tables with separate borders. Disable the rule when intentionally supplying inherited spacing.
+## Intentional declarations
 
-## Scope
+`border-spacing` is inherited and can still affect descendant tables with separate borders, so disable the rule when you intentionally supply inherited spacing.
 
-Only unambiguous declarations in the same style block are checked, including nested rules and conditional blocks. Except for the shorthand defaults above, checks require explicit controls. Missing or unsupported controls, repeated controls (including shorthands and prefixed aliases), CSS-wide values, substitutions, and `random()` are skipped. Display checks ignore `none` and `contents`.
+For a declaration that prepares for another state, use a disable comment:
 
-Disabled effects require a single `none` in the controlling longhand; visible overflow requires the `overflow` shorthand. Blocks containing `all`, keyframes, descriptors, and CSS Modules interop blocks are excluded.
+```css
+/* ✅ */
+.menu {
+	position: static;
+	/* eslint-disable-next-line cssicorn/no-ineffective-properties -- The open state sets an absolute position. */
+	inset-inline-start: 0;
+}
 
-Shorthand checks require a grammar match. Explicit styles or lines (including `none`) and literal zero border, outline, or column-rule widths pass. Expressions are not evaluated; numeric ranges are not validated. Animation checks skip named values, unquoted `none` or `auto`, and matched timelines; nameless easing-only and zero-duration values still report.
+.menu.open {
+	position: absolute;
+}
+```
 
-Another corresponding shorthand or style, line, or name longhand in the same block suppresses the check, regardless of value, order, or `!important`. Borders also accept controls for any physical or logical side, `border-image`, and `border-image-source`; `column-rule` also accepts `rule` and `rule-style`. Prefixed counterparts suppress reports but are not checked. Width, color, thickness, radius, and border-image sizing alone do not suppress reports.
+## Limitations
 
-Other selectors, states, stylesheets, parent layout, and browser adjustments are not inferred. For intentional preparation for another state, use `/* eslint-disable-next-line cssicorn/no-ineffective-properties */`. There are no fixes or suggestions. Use `css/no-invalid-properties` to validate CSS.
+General:
 
-Animation controls inside keyframes and final-keyframe easing are covered by [`no-ineffective-keyframe-declarations`](./no-ineffective-keyframe-declarations.md).
+- Only unambiguous declarations in the same style block are checked, including the blocks of nested rules and conditional at-rules.
+- Other selectors, states, stylesheets, parent layout, and browser adjustments are not inferred.
+- Blocks that contain `all`, keyframes, descriptor blocks, and CSS Modules interop blocks are not checked.
+- Except for the shorthand defaults, each check needs an explicit controlling declaration, and is skipped when the control is unsupported or repeated (also through a shorthand or a prefixed alias), or when the control or the affected declaration uses a CSS-wide value, a substitution, or `random()`.
+
+Display, disabled effects, and overflow:
+
+- Display checks ignore `display: none` and `display: contents`.
+- A disabled effect needs a single `none` value in the controlling longhand.
+- Visible overflow is only detected from the `overflow` shorthand.
+- For `text-overflow`, strings and `fade` values are not checked.
+
+Shorthand defaults:
+
+- A shorthand is only checked when it matches the grammar.
+- Explicit styles or lines, including `none`, and literal zero widths for `border`, `outline`, and `column-rule` are not reported.
+- Expressions are not evaluated, and numeric ranges are not validated.
+- Another corresponding shorthand, or a style, line, or name longhand, in the same block turns off the check, regardless of its value, order, or `!important`. For borders, this also includes the controls for any physical or logical side, `border-image`, and `border-image-source`. For `column-rule`, it also includes `rule` and `rule-style`.
+- Width, color, thickness, radius, and border-image sizing alone do not turn off the check.
+- Prefixed counterparts turn off the check, but are not checked.
+
+Animations:
+
+- Animation checks skip named values, unquoted `none` or `auto`, and matched timelines.
+- A nameless value with only easing, such as `animation: ease`, and a nameless value with zero duration, such as `animation: 0s`, are still reported.
+
+## Related rules
+
+- [`css/no-invalid-properties`](https://github.com/eslint/css/blob/main/docs/rules/no-invalid-properties.md) validates property names and values.
+- [`no-ineffective-keyframe-declarations`](./no-ineffective-keyframe-declarations.md) reports animation controls inside keyframes and easing on the final keyframe.
+- [`no-ineffective-selector-properties`](./no-ineffective-selector-properties.md) reports properties that have no effect on pseudo-elements and visited links.

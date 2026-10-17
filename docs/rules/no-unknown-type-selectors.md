@@ -7,7 +7,15 @@
 <!-- end auto-generated rule header -->
 <!-- Do not manually modify this header. Run: `npm run fix:eslint-docs` -->
 
-This rule checks type selectors against known HTML and SVG element names, including obsolete elements and elements that browsers ship before they are in the HTML standard, like `geolocation`, and MathML Core and legacy MathML presentation element names. MathML Content Markup names, such as `card` and `list`, are not known, because browsers do not render them. The rule catches likely typos and a missing `.` before a class name; it does not check the document's markup or whether an element exists.
+This rule reports type selectors that are not known element names, which catches likely typos and a missing `.` before a class name. It does not check the document's markup or whether an element exists.
+
+The known names are:
+
+- HTML element names, including obsolete elements and elements that browsers ship before they are in the HTML standard, like `geolocation`.
+- SVG element names.
+- MathML Core and legacy MathML presentation element names. MathML Content Markup names, such as `card` and `list`, are not known, because browsers do not render them.
+
+There is no autofix because the intended element name is unknown.
 
 HTML names are ASCII case-insensitive. SVG and MathML names are case-sensitive, including the `svg` and `math` root elements.
 
@@ -41,9 +49,7 @@ Valid custom element names, such as `my-widget`, are allowed by default. Custom 
 
 Browser hacks such as `_:-ms-fullscreen, :root .x {}` are reported (`_`). Add `_` to `allow` to permit them.
 
-The rule checks parsed selector arguments and framework forms such as Vue's `:deep()` and `:slotted()`. Opaque arguments, including `::cue()` and `::cue-region()`, are not checked. Keyframe selectors and named `@page` selectors are ignored.
-
-To lint `<style>` blocks in Vue files, configure a processor that extracts CSS.
+The rule checks parsed selector arguments and framework forms such as Vue's `:deep()` and `:slotted()`.
 
 ## Options
 
@@ -57,7 +63,9 @@ Report custom element names unless they match an entry in `allow`. This does not
 ```js
 {
 	checkCustomElements: true,
-	allow: ['my-widget'],
+	allow: [
+		'my-widget',
+	],
 }
 ```
 
@@ -66,18 +74,25 @@ Report custom element names unless they match an entry in `allow`. This does not
 Type: `(string | RegExp)[]`\
 Default: `[]`
 
-Additional local element names to allow. Namespace prefixes are ignored when matching. Strings match exactly and case-sensitively. Regular expressions match using their own flags; use anchors when you want to match the whole name. CSS escapes are decoded before matching.
-
-Use actual regular expressions. Strings such as `'/^app-/'` are literal names, not patterns.
+Additional local element names to allow. Namespace prefixes are ignored, and CSS escapes are decoded before matching. Strings match exactly and case-sensitively, and strings such as `'/^app-/'` are literal names, not patterns. Regular expressions match using their own flags, so use anchors to match the whole name.
 
 ```js
 {
-	allow: ['widget', /^app-/, /^legacy$/i],
+	checkCustomElements: true,
+	allow: [
+		'widget',
+		/^app-/,
+		/^legacy$/i,
+	],
 }
 ```
 
-With this configuration, `widget`, `app|widget`, and `APP|app-button` are allowed.
+With this configuration, `widget`, `app|widget`, and `APP|app-button` are allowed, and `my-button` is reported.
 
-When using ESLint's `--cache`, run ESLint once without `--cache` after changing a regular expression's pattern or flags in `allow`. ESLint's cache does not distinguish regular expressions in rule options.
+When using ESLint's `--cache`, run ESLint once without it after changing a regular expression's pattern or flags in `allow`, because the cache does not distinguish regular expressions in rule options.
 
-For stylesheets targeting arbitrary XML vocabularies or nonstandard markup, add their element names to `allow` or disable the rule. Namespace prefixes do not determine which element catalog is used.
+## Limitations
+
+- Opaque arguments, including `::cue()` and `::cue-region()`, are not checked.
+- Keyframe selectors and named `@page` selectors are ignored.
+- Namespace prefixes do not determine which element catalog is used. For stylesheets targeting arbitrary XML vocabularies or nonstandard markup, add their element names to `allow` or disable the rule.

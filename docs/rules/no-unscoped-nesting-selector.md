@@ -7,9 +7,11 @@
 <!-- end auto-generated rule header -->
 <!-- Do not manually modify this header. Run: `npm run fix:eslint-docs` -->
 
-The [CSS nesting selector](https://drafts.csswg.org/css-nesting/#nest-selector) (`&`) is valid at the top level, but often indicates misplaced or malformed nested CSS.
+The [CSS nesting selector](https://drafts.csswg.org/css-nesting-1/#nest-selector) (`&`) is valid at the top level, but often indicates misplaced or malformed nested CSS.
 
-This rule reports `&` without an ancestor style rule, `@scope` block, or scoping-root at-rule. By default, the Tailwind CSS v4 at-rules `@utility` and `@custom-variant` are scoping roots. It cannot be autofixed safely.
+This rule reports `&` without an ancestor style rule, `@scope` block, or [scoping-root at-rule](#scopingrootatrules).
+
+There is no autofix because the intended parent selector is unknown.
 
 In an `@scope` prelude, `&` in the start uses the outer context, while `&` in the limit uses the new scope.
 
@@ -36,11 +38,12 @@ In an `@scope` prelude, `&` in the start uses the outer context, while `&` in th
 Type: `string[]`\
 Default: `['utility', 'custom-variant']`
 
-At-rules that provide a scoping root. Names omit `@` and are matched ASCII case-insensitively. The scope continues through grouping at-rules such as `@media`, but stops at `@keyframes`.
+At-rules in this list provide a scoping root. Names omit `@` and are matched ASCII case-insensitively. The scope continues through grouping at-rules such as `@media`, but stops at `@keyframes`.
 
-The default supports the [Tailwind CSS](https://tailwindcss.com/docs/adding-custom-styles) `@utility` and `@custom-variant` directives:
+The default supports the [Tailwind CSS v4](https://tailwindcss.com/docs/adding-custom-styles) `@utility` and `@custom-variant` directives:
 
 ```css
+/* ✅ */
 @utility scrollbar-hidden {
 	&::-webkit-scrollbar {
 		display: none;
@@ -54,7 +57,7 @@ The default supports the [Tailwind CSS](https://tailwindcss.com/docs/adding-cust
 }
 ```
 
-Setting this option replaces the default list. Include the default names to keep them:
+Setting this option replaces the default list, so include the default names to keep them:
 
 ```js
 {

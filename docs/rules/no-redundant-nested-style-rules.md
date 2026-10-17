@@ -9,13 +9,7 @@
 <!-- end auto-generated rule header -->
 <!-- Do not manually modify this header. Run: `npm run fix:eslint-docs` -->
 
-A nested `&` block by itself adds visual nesting without making the selector's intent clearer. Removing the extra block makes the stylesheet easier to read.
-
-The rule only reports cases that can be safely flattened. The parent style rule must have one selector and must not select a pseudo-element. These restrictions avoid changing [CSS nesting specificity](https://www.w3.org/TR/css-nesting-1/#nest-selector) or applying declarations to pseudo-elements that `&` cannot represent. An intervening `@scope` or another at-rule with different or unknown nesting semantics is also ignored because the `&` may have a different meaning.
-
-`@container`, `@layer`, `@media`, and `@supports` may appear between the parent style rule and the redundant `&` block.
-
-The autofix is omitted when reindenting could change significant source text, such as escaped line continuations, multiline comments, or multiline custom-property values.
+This rule reports a nested style rule whose selector is only `&`, which adds nesting without making the selector's intent clearer. The autofix moves its contents into the enclosing block.
 
 ## Examples
 
@@ -54,9 +48,18 @@ The autofix is omitted when reindenting could change significant source text, su
 Selectors that modify the parent selector are allowed:
 
 ```css
+/* ✅ */
 .button {
 	&:hover {
 		color: red;
 	}
 }
 ```
+
+## Limitations
+
+The rule only reports cases that can be safely flattened: the parent style rule must have one selector and must not select a pseudo-element. Otherwise, flattening could change [CSS nesting specificity](https://drafts.csswg.org/css-nesting-1/#nest-selector) or apply declarations to pseudo-elements that `&` cannot represent.
+
+`@container`, `@layer`, `@media`, and `@supports` may appear between the parent style rule and the redundant `&` block. An intervening `@scope` or other at-rule is ignored, because `&` can have a different meaning there.
+
+The autofix is omitted when reindenting could change significant source text, such as escaped line continuations, multiline comments, or multiline custom-property values.

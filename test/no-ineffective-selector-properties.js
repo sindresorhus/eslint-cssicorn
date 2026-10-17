@@ -173,6 +173,17 @@ test.snapshot({
 		'a:visited[href] { font-weight: bold; }',
 		'li::marker:hover { margin: 1rem; }',
 		'::selection { padding: 1rem; @media print { margin: 1rem; } }',
+		// A declaration on its own line is removed with its line
+		'::selection {\n\tcolor: red;\n\tpadding: 1rem;\n}',
+		'::selection {\n  padding: 1rem;  \n  color: red;\n}',
+		'::selection {\r\n\tpadding: 1rem;\r\n\tcolor: red;\r\n}',
+		'::selection {\n\tcolor: red;\n\tpadding: 1rem\n}',
+		'::selection {\n\tcolor: red;\n\tpadding: 1rem;\n\tmargin: 1rem;\n}',
+		// A declaration that shares its line keeps the line
+		'::selection {\n\tcolor: red; padding: 1rem;\n\tbackground: blue;\n}',
+		'::selection {\n\tpadding: 1rem; color: red;\n}',
+		'::selection {\n\tpadding: 1rem; /* note */\n\tcolor: red;\n}',
+		'::selection {\n\t/* note */ padding: 1rem;\n\tcolor: red;\n}',
 	],
 });
 
@@ -303,12 +314,12 @@ test({
 		},
 		{
 			code: '::selection {\n  padding: 1rem;\n  color: red;\n}',
-			output: '::selection {\n  \n  color: red;\n}',
+			output: '::selection {\n  color: red;\n}',
 			errors: 1,
 		},
 		{
 			code: '::selection {\r\n  padding: 1rem;\r\n  color: red;\r\n}',
-			output: '::selection {\r\n  \r\n  color: red;\r\n}',
+			output: '::selection {\r\n  color: red;\r\n}',
 			errors: 1,
 		},
 		{
@@ -382,7 +393,7 @@ test({
 		},
 		{
 			code: 'a:visited {\r\n  &:hover {\r\n    font-weight: bold;\r\n    color: purple;\r\n  }\r\n}',
-			output: 'a:visited {\r\n  &:hover {\r\n    \r\n    color: purple;\r\n  }\r\n}',
+			output: 'a:visited {\r\n  &:hover {\r\n    color: purple;\r\n  }\r\n}',
 			errors: 1,
 		},
 		...['p::first-line', 'p:first-line', 'input::placeholder'].flatMap(selector => ['writing-mode: vertical-rl', 'direction: rtl', 'text-orientation: upright'].map(declaration => ({
@@ -534,7 +545,7 @@ test({
 		},
 		{
 			code: 'video::cue {\r\n  padding: 1rem;\r\n  color: yellow;\r\n}',
-			output: 'video::cue {\r\n  \r\n  color: yellow;\r\n}',
+			output: 'video::cue {\r\n  color: yellow;\r\n}',
 			errors: 1,
 		},
 	],
@@ -583,7 +594,7 @@ test({
 		},
 		{
 			code: 'video::cue-region {\r\n  padding: 1rem;\r\n  color: yellow;\r\n}',
-			output: 'video::cue-region {\r\n  \r\n  color: yellow;\r\n}',
+			output: 'video::cue-region {\r\n  color: yellow;\r\n}',
 			errors: 1,
 		},
 	],
