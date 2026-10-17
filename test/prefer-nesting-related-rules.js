@@ -27,6 +27,36 @@ const extendedRelatedRuleCases = [
 		code: `.card {} @media (color) { .card ${selector} { color: red; } @layer theme { .card { color: blue; } } }`,
 		output: `.card { @media (color) { ${selector} { color: red; } @layer theme { color: blue; } } }`,
 	})),
+	{
+		code: [
+			'.card {',
+			'  color: red;',
+			'}',
+			'@media screen\u00A0 {',
+			'  .card \u00A0 .title {',
+			'    color: blue;',
+			'  }',
+			'  @layer theme\u00A0 {',
+			'    .card {',
+			'      color: green;',
+			'    }',
+			'  }',
+			'}',
+		].join('\r\n'),
+		output: [
+			'.card {',
+			'  color: red;',
+			'  @media screen\u00A0 {',
+			'    \u00A0 .title {',
+			'      color: blue;',
+			'    }',
+			'    @layer theme\u00A0 {',
+			'      color: green;',
+			'    }',
+			'  }',
+			'}',
+		].join('\r\n'),
+	},
 ];
 
 test({
