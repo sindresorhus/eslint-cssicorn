@@ -10,26 +10,20 @@ const cases = [
 	{
 		code: '.outer, #missing { .a:where(#1&, .open), .b:where(&.active) {} .a:where(#1&, .open) .title, .b:where(&.active) .title { color: red; } }',
 		output: '.outer, #missing { .a:where(#1&, .open), .b:where(&.active) { .title { color: red; } } }',
+		messageIds: ['no-nesting-with-mixed-specificity'],
 	},
 	{
 		code: '.outer { .a:where(&), .b:where(&.active) {} .a:where(&) .title, .b:where(&.active) .title { color: red; } }',
 		output: '.outer { .a:where(&), .b:where(&.active) { .title { color: red; } } }',
 	},
 	{
-		code: '.outer, #missing { .a:where(&) .title, .b:where(&.active) .title { color: red; &::before { content: "test"; } } }',
-		output: '.outer, #missing { .a:where(&), .b:where(&.active) { .title { color: red; &::before { content: "test"; } } } }',
-	},
-	{
 		code: '.outer { #a:where(&), #b:where(&.active) {} #b:where(&.active):hover, #a:where(&):hover { color: red; } }',
 		output: '.outer { #a:where(&), #b:where(&.active) { &:hover { color: red; } } }',
 	},
-	...[' ', ' > ', ' + ', ' ~ '].map(combinator => ({
-		code: `.outer, #missing { .a:where(&), .b:where(&.active) {} .theme${combinator}.a:where(&) .title, .theme${combinator}.b:where(&.active) .title { color: red; } }`,
-		output: `.outer, #missing { .a:where(&), .b:where(&.active) { .theme${combinator}& .title { color: red; } } }`,
-	})),
 	{
 		code: '.outer, #missing { &.a:where(&), &.b:where(&.active) {} &.a:where(&)::before, &.b:where(&.active)::before { content: "test"; } }',
 		output: '.outer, #missing { &.a:where(&), &.b:where(&.active) { &::before { content: "test"; } } }',
+		messageIds: ['no-nesting-with-mixed-specificity'],
 	},
 	{
 		code: '.outer { &&.a:where(&), &&.b:where(&.active) {} &&.a:where(&) .title, &&.b:where(&.active) .title { color: red; } }',
@@ -42,10 +36,6 @@ const cases = [
 	{
 		code: '.outer { .a:where(&&), .b:where(&.active):where(&) {} .a:where(&&) .title, .b:where(&.active):where(&) .title { color: red; } }',
 		output: '.outer { .a:where(&&), .b:where(&.active):where(&) { .title { color: red; } } }',
-	},
-	{
-		code: '.outer { @media (color) { .a:where(&) .title, .b:where(&.active) .title { color: red; } } @layer theme { .a:where(&) .body, .b:where(&.active) .body { color: blue; } } }',
-		output: '.outer { .a:where(&), .b:where(&.active) { @media (color) { .title { color: red; } } @layer theme { .body { color: blue; } } } }',
 	},
 	{
 		code: '.outer { .a:WHERE(&), .b:WHERE(&.active) {} .a:WHERE(&) .title, .b:WHERE(&.active) .title { COLOR: RED !important; } }',
@@ -63,6 +53,9 @@ const cases = [
 
 test({
 	valid: [
+		'.outer, #missing { .a:where(&) .title, .b:where(&.active) .title { color: red; &::before { content: "test"; } } }',
+		'.outer, #missing { .a:where(&), .b:where(&.active) {} .theme .a:where(&) .title, .theme .b:where(&.active) .title { color: red; } }',
+		'.outer { @media (color) { .a:where(&) .title, .b:where(&.active) .title { color: red; } } @layer theme { .a:where(&) .body, .b:where(&.active) .body { color: blue; } } }',
 		'.outer, #missing { .a:where(&), .b {} .a:where(&) .title, .b .title { color: red; } }',
 		'.outer { .a:where(&), &.b:where(&.active) {} .a:where(&) .title, &.b:where(&.active) .title { color: red; } }',
 		'.outer { &.a:where(&), &&.b:where(&.active) {} &.a:where(&) .title, &&.b:where(&.active) .title { color: red; } }',
@@ -95,15 +88,10 @@ nodeTest('zero-specificity parent references preserve stable fixes with the nest
 			'no-unscoped-nesting-selector',
 		].map(name => [`cssicorn/${name}`, 'error'])),
 	};
-	for (const {code, output} of cases) {
+	for (const {code, output, messageIds = []} of cases) {
 		const result = linter.verifyAndFix(code, config, {filename: 'test.css'});
 		assert.equal(result.output, output, code);
-		const originalMessages = linter.verify(code, config, {filename: 'test.css'});
-		const originalRuleIds = new Set(originalMessages.map(message => message.ruleId));
-		assert.deepEqual(result.messages.filter(message => message.fatal || !originalRuleIds.has(message.ruleId)), [], code);
-		for (const ruleId of originalRuleIds) {
-			assert.ok(result.messages.filter(message => message.ruleId === ruleId).length <= originalMessages.filter(message => message.ruleId === ruleId).length, code);
-		}
+		assert.deepEqual(result.messages.map(message => message.messageId), messageIds, code);
 
 		assert.deepEqual(linter.verifyAndFix(output, config, {filename: 'test.css'}), {fixed: false, output, messages: result.messages}, code);
 	}

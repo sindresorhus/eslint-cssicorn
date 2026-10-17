@@ -71,27 +71,21 @@ const cases = [
 
 test({
 	valid: [
-		'.outer { :is(.a:where(:unknown(&)), .b:where(&)).active { color: red; } }',
-		'@namespace url("https://example.com"); .outer { :is(.a:where(&), .b:where(&)).active { color: red; } }',
-		'@scope (.page) { .outer { :is(.a:where(&), .b:where(&)).active { color: red; } } }',
-	],
-	invalid: [
-		{
-			code: '.outer { &:is(.a:where(&), .b) &.active { color: red; } }',
-			output: '.outer { &:is(.a:where(&), .b) & { &.active { color: red; } } }',
-			errors: [{messageId: 'prefer-nesting'}],
-		},
-		...cases.map(({code, output}) => ({code, output, errors: [{messageId: 'prefer-nesting'}]})),
+		'.outer { &:is(.a:where(&), .b) &.active { color: red; } }',
 		...[
 			':is(.a:where(&), .b)',
 			':is(.a:where(&) > .title, .b > .title)',
 			':is(.a:where(&), .b:not(&))',
 			':where(.a:where(&), .b:where(&))',
-		].map(selector => ({
-			code: `.outer { ${selector}.active { color: red; } }`,
-			output: `.outer { ${selector} { &.active { color: red; } } }`,
-			errors: [{messageId: 'prefer-nesting'}],
-		})),
+		].map(selector => `.outer { ${selector}.active { color: red; } }`),
+		'.outer { :is(.a:where(:unknown(&)), .b:where(&)).active { color: red; } }',
+		'@namespace url("https://example.com"); .outer { :is(.a:where(&), .b:where(&)).active { color: red; } }',
+		'@scope (.page) { .outer { :is(.a:where(&), .b:where(&)).active { color: red; } } }',
+	],
+	invalid: [
+
+		...cases.map(({code, output}) => ({code, output, errors: [{messageId: 'prefer-nesting'}]})),
+
 		{code: '.outer { :is(.a:where(&), .b:where(&)).active { color: red; /* keep */ } }', errors: [{messageId: 'prefer-nesting'}]},
 	],
 });

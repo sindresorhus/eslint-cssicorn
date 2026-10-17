@@ -1,6 +1,6 @@
 # prefer-nesting
 
-📝 Prefer CSS nesting for related rules and selector groups.
+📝 Prefer CSS nesting for structural `:is()` groups and rules extending an existing parent.
 
 💼🚫 This rule is enabled in the ✅ `recommended` [config](https://github.com/sindresorhus/eslint-cssicorn#recommended-config). This rule is _disabled_ in the ☑️ `unopinionated` [config](https://github.com/sindresorhus/eslint-cssicorn#recommended-config).
 
@@ -9,27 +9,107 @@
 <!-- end auto-generated rule header -->
 <!-- Do not manually modify this header. Run: `npm run fix:eslint-docs` -->
 
-This rule reports selectors that can use native CSS nesting: repeated parent selectors, conditional overrides, and structural `:is()` and `:where()` groups. The autofix rewrites them as nested rules.
+Prefer native CSS nesting for structural `:is()` groups and adjacent rules that extend an existing parent selector.
 
 ## Examples
 
-The rule nests shared literal prefixes in selector lists and adjacent rules, including adjacent selector lists. When it groups several parents, such as `.card` and `.panel`, the list must contain every combination of a parent and a suffix:
+Replace structural `:is()` groups when nesting safely provides the same grouping:
 
 ```css
 /* ❌ */
-.card .title, .panel .title, .card .body, .panel .body {
+:is(.card, .panel) .title {
 	color: red;
 }
 
 /* ✅ */
 .card, .panel {
-	.title, .body {
+	.title {
 		color: red;
 	}
 }
 ```
 
-Related rules are nested through chains of `@media` and `@layer` rules, including sibling groups and shared prefixes without a preceding parent rule. The parent can also be in a later conditional block, and declaration order is kept. Through `@supports`, `@container`, or `@starting-style`, only declaration-only rules with the exact parent selector are moved:
+Trailing `:is()` groups after descendant, child (`>`), or sibling (`+`, `~`) combinators require equal argument specificity. The original combinator is kept on every branch:
+
+```css
+/* ❌ */
+a > :is(.foo, .bar) {
+	color: red;
+}
+
+/* ✅ */
+a {
+	> .foo, > .bar {
+		color: red;
+	}
+}
+```
+
+Attached groups with a following suffix can be expanded across multiple autofix passes:
+
+```css
+/* ❌ */
+.card:is(.foo, #bar)::before {
+	content: "test";
+}
+
+/* ✅ */
+.card {
+	&.foo, &#bar {
+		&::before {
+			content: "test";
+		}
+	}
+}
+```
+
+Merge an uninterrupted run of following rules into an existing parent:
+
+```css
+/* ❌ */
+a {
+	color: red;
+}
+a.under {
+	color: blue;
+}
+a.upper {
+	color: green;
+}
+
+/* ✅ */
+a {
+	color: red;
+	&.under {
+		color: blue;
+	}
+	&.upper {
+		color: green;
+	}
+}
+```
+
+Following rules can also add a context before existing parent selectors. Contextual merges require compound parent selectors outside any ancestor style rule. Grouped parents must have equal specificity and every parent must have the same set of overrides:
+
+```css
+/* ❌ */
+.button, .link {
+	color: black;
+}
+[data-theme=dark] .button, [data-theme=dark] .link {
+	color: white;
+}
+
+/* ✅ */
+.button, .link {
+	color: black;
+	[data-theme=dark] & {
+		color: white;
+	}
+}
+```
+
+Following `@media` and `@layer` blocks can contain rules extending the existing parent. A parser limitation restricts paths through `@supports`, `@container`, or `@starting-style` to exact parent selectors and declaration-only overrides, although [native CSS permits nested style rules in these blocks](https://drafts.csswg.org/css-nesting/#conditionals):
 
 ```css
 /* ❌ */
@@ -53,105 +133,97 @@ Related rules are nested through chains of `@media` and `@layer` rules, includin
 }
 ```
 
-`:is()` and `:where()` groups are nested, also when suffixes or further selectors follow them:
+## Options
 
-```css
-/* ❌ */
-a :is(.foo, .bar) {
-	color: red;
-}
+### `checkSharedPrefixes`
 
-/* ✅ */
-a {
-	.foo, .bar {
-		color: red;
-	}
+Type: `boolean`\
+Default: `false`
+
+Group two or more adjacent, single-selector rules under a shared parent. The selectors must share the same complete leading compound containing a class, followed by a child (`>`) or descendant combinator. For example, `.card.active .title` and `.card.active .body` share the complete `.card.active` compound.
+
+```js
+{
+	'cssicorn/prefer-nesting': ['error', {checkSharedPrefixes: true}],
 }
 ```
 
-Shared compound suffixes, such as `:hover`, are factored out, and so are contextual overrides, which add context before the parent selector:
+With this option enabled:
 
 ```css
 /* ❌ */
-.card {
+.card .title {
 	color: red;
 }
-.card:hover, .theme .card.active {
+.card .body {
 	color: blue;
 }
 
 /* ✅ */
 .card {
+	.title {
+		color: red;
+	}
+	.body {
+		color: blue;
+	}
+}
+```
+
+Child and descendant combinators can be mixed within a group:
+
+```css
+/* ❌ */
+.card > .title {
 	color: red;
-	&:hover, .theme &.active {
+}
+.card .body {
+	color: blue;
+}
+
+/* ✅ */
+.card {
+	> .title {
+		color: red;
+	}
+	.body {
 		color: blue;
 	}
 }
 ```
 
-No contextual override is written when the parent selector contains a combinator, such as `.x .card`. When the parent rule is itself nested and the context contains a combinator, the parent selector must already contain `&`, such as `&.card`.
+This option does not group selector lists or sibling relationships (`+` or `~`). It does not factor partial compounds such as `.card.active` and `.card.disabled` or discover parents across conditional blocks. Comments and unsafe formatting can still prevent autofixes.
 
-Shared prefixes can begin with `>`, `+`, or `~`:
+## Intentionally ignored
 
-```css
-/* ❌ */
-.card {
-	> .item {
-		color: red;
-	}
-	> .item:hover {
-		color: blue;
-	}
-}
-
-/* ✅ */
-.card {
-	> .item {
-		color: red;
-		&:hover {
-			color: blue;
-		}
-	}
-}
-```
-
-Attached `:is()` groups use `&` at each nesting level:
+By default, the rule does not infer new parents from sibling rules. It never infers parents from selector lists, reorders compound selectors to find a parent, or introduces nesting solely to retain `:is()` or `:where()`:
 
 ```css
-/* ❌ */
-.card:is(.foo, #bar)::before {
-	content: "test";
-}
-
 /* ✅ */
-.card {
-	&.foo, &#bar {
-		&::before {
-			content: "test";
-		}
-	}
-}
+a.under { color: red; }
+a.upper { color: blue; }
+
+.under a, .upper a { color: red; }
+
+a:is(.under, .upper) { color: red; }
+.card :is(.title, #title) { color: red; }
+.card :where(.title, .subtitle) { color: red; }
 ```
 
-Groups can contain type selectors, common pseudo-classes, attribute selectors, and the `>`, `+`, and `~` combinators. An existing `&` keeps its original ancestor context.
+Existing-parent merges may retain `:is()` and `:where()` because they combine related rules instead of merely wrapping a standalone selector.
 
-## Specificity
+## Specificity and safety
 
-- A trailing `:is()` is unwrapped only when all its arguments have the same specificity and unwrapping keeps the [forgiving selector list behavior](https://drafts.csswg.org/selectors/#forgiving-selector). Complex or uncertain arguments stay wrapped.
-- `:where()` always stays wrapped.
-- Grouped parents must have the same specificity, including what they inherit through `&`. In grouped parents, `&` inside a pseudo-class function is supported only inside a top-level `:where()`.
-- Inside nested rules, a group stays wrapped when expanding it could change which ancestors match.
-- A conditional override that repeats the exact parent selector and contains only declarations is nested without `&`, which keeps mixed parent specificity and pseudo-elements.
-- Leading and attached `:is()` groups keep the maximum specificity of their arguments. With mixed specificity, the resulting parents can trigger [`no-nesting-with-mixed-specificity`](./no-nesting-with-mixed-specificity.md), so disable that rule when it is intentional.
+Leading and attached `:is()` groups preserve the arguments' maximum specificity. Trailing groups after a combinator are expanded only when their arguments have equal specificity. Conversions must preserve [forgiving selector-list behavior](https://drafts.csswg.org/selectors/#forgiving-selector) and ancestor matching; uncertain groups are left unchanged.
+
+Related grouped parents require equal specificity, including inherited specificity, and every parent/suffix combination. Functional `&` references in grouped parents are supported only inside top-level `:where()` functions. Exact declaration-only conditional overrides preserve mixed parent specificity and pseudo-elements without adding `&`. Moved content is appended in its original order.
+
+Mixed `:is()` arguments and their resulting nesting parents can trigger [`no-nesting-with-mixed-specificity`](./no-nesting-with-mixed-specificity.md); disable that rule when mixed specificity is intentional.
 
 ## Limitations
 
-- A group inferred without a parent rule uses the first compound selector as the parent, including a leading combinator.
-- In conditional blocks, the rule follows only the first child of each block, and every moved child must be related to the parent.
-- `:is()` and `:where()` are converted only in a single-selector list, and only when they have at least two arguments.
-- An attached group, such as `.card:is(.foo, #bar)`, is unwrapped only when a suffix follows it.
-- The rule skips ambiguous grouped matches, unparsable nested selectors and parent arguments, `@scope`, and files with `@namespace`.
-- Suffix and contextual factoring skip selectors that begin with a combinator.
-- Factoring related parents skips `&` inside `:host()` or `:host-context()`.
-- Comments, missing semicolons, or unsafe formatting can prevent fixes.
-- Autofixes target HTML and SVG elements, not other XML namespaces.
+Standalone conversions require one outer selector and at least two `:is()` arguments. Attached groups need a following suffix. Complex arguments are supported only for leading groups when expansion preserves ancestor matching. Parent rules inside preceding conditional blocks are not discovered or hoisted.
+
+Skips ambiguous grouped matches, opaque parent arguments, `@scope`, and files with `@namespace`. Related parent matching skips ancestor references inside `:host()` or `:host-context()`. Parser limitations, comments, missing semicolons, or unsafe formatting can prevent fixes.
+
+Autofixes target HTML and SVG elements. Other XML namespaces are unsupported.

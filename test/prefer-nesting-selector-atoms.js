@@ -114,6 +114,12 @@ const retainedSelectors = [
 
 test({
 	valid: [
+		'.card :is(:is(.foo, #1), #bar) { color: red; }',
+		'.outer { :is(:where(&.foo, .bar), #bar).active { color: red; } }',
+		'.card { &:is(|button, .foo)::before { content: "test"; } }',
+		'.outer { :is(:not(&.foo), .bar).active { color: red; } }',
+		'.outer { :is(:nth-child(2n of &.foo), .bar).active { color: red; } }',
+		...retainedSelectors.map(selector => `:is(${selector}, #bar).active { color: red; }`),
 		'@namespace ns url("https://example.com"); :is(*|button, #bar).active { color: red; }',
 		'.outer { :is(:where(.foo, :future(&.bar)), #bar).active { color: red; } }',
 	],
@@ -123,21 +129,7 @@ test({
 			output: '.card { :where(.foo, #1), * { color: red; } }',
 			errors: [{messageId: 'prefer-nesting'}],
 		},
-		{
-			code: '.card :is(:is(.foo, #1), #bar) { color: red; }',
-			output: '.card { :is(:is(.foo, #1), #bar) { color: red; } }',
-			errors: [{messageId: 'prefer-nesting'}],
-		},
-		{
-			code: '.outer { :is(:where(&.foo, .bar), #bar).active { color: red; } }',
-			output: '.outer { :is(:where(&.foo, .bar), #bar) { &.active { color: red; } } }',
-			errors: [{messageId: 'prefer-nesting'}],
-		},
-		{
-			code: '.card { &:is(|button, .foo)::before { content: "test"; } }',
-			output: '.card { &:is(|button, .foo) { &::before { content: "test"; } } }',
-			errors: [{messageId: 'prefer-nesting'}],
-		},
+
 		{
 			code: ':is(&.foo, .bar).active { color: red; }',
 			output: '&.foo, .bar { &.active { color: red; } }',
@@ -148,31 +140,19 @@ test({
 			output: '.context > &.foo, .bar { &.active { color: red; } }',
 			errors: [{messageId: 'prefer-nesting'}],
 		},
-		{
-			code: '.outer { :is(:not(&.foo), .bar).active { color: red; } }',
-			output: '.outer { :is(:not(&.foo), .bar) { &.active { color: red; } } }',
-			errors: [{messageId: 'prefer-nesting'}],
-		},
+
 		...selectors.map(selector => ({
 			code: `:is(${selector}, #bar).active { color: red; }`,
 			output: `${selector}, #bar { &.active { color: red; } }`,
 			errors: [{messageId: 'prefer-nesting'}],
 		})),
-		...retainedSelectors.map(selector => ({
-			code: `:is(${selector}, #bar).active { color: red; }`,
-			output: `:is(${selector}, #bar) { &.active { color: red; } }`,
-			errors: [{messageId: 'prefer-nesting'}],
-		})),
+
 		{
 			code: '.card { &:is(*|button.primary, :not(.disabled))::before { content: "test"; } }',
 			output: '.card { *|button&.primary, &:not(.disabled) { &::before { content: "test"; } } }',
 			errors: [{messageId: 'prefer-nesting'}],
 		},
-		{
-			code: '.outer { :is(:nth-child(2n of &.foo), .bar).active { color: red; } }',
-			output: '.outer { :is(:nth-child(2n of &.foo), .bar) { &.active { color: red; } } }',
-			errors: [{messageId: 'prefer-nesting'}],
-		},
+
 		{
 			code: '.card { &:is(:nth-child(odd), :lang(en))::before { content: "test"; } }',
 			output: '.card { &:nth-child(odd), &:lang(en) { &::before { content: "test"; } } }',

@@ -327,3 +327,54 @@ test('unknown type selectors in Markdown CSS fences use original document locati
 		range: [4, 1, 4, 6],
 	}]);
 });
+
+test('nesting autofixes in Markdown CSS fences preserve surrounding prose and converge', async () => {
+	const eslint = new ESLint({
+		overrideConfigFile: true,
+		fix: true,
+		baseConfig: [
+			{
+				files: ['**/*.md'],
+				plugins: {markdown},
+				language: 'markdown/commonmark',
+				processor: 'markdown/markdown',
+			},
+			{
+				...eslintCssicorn.configs.recommended,
+				rules: {'cssicorn/prefer-nesting': 'error'},
+			},
+		],
+	});
+	const code = [
+		'# Example',
+		'',
+		'Keep this prose.',
+		'',
+		'```css',
+		'.card:is(.foo, #bar)::before { content: "test"; }',
+		'.card .footer { color: blue; }',
+		'```',
+		'',
+		'Keep this ending.',
+		'',
+	].join('\n');
+	const output = [
+		'# Example',
+		'',
+		'Keep this prose.',
+		'',
+		'```css',
+		'.card { &.foo, &#bar { &::before { content: "test"; } } .footer { color: blue; } }',
+		'```',
+		'',
+		'Keep this ending.',
+		'',
+	].join('\n');
+	const [result] = await eslint.lintText(code, {filePath: 'example.md'});
+	assert.deepEqual(result.messages, []);
+	assert.equal(result.output, output);
+
+	const [repeated] = await eslint.lintText(output, {filePath: 'example.md'});
+	assert.deepEqual(repeated.messages, []);
+	assert.equal(repeated.output, undefined);
+});

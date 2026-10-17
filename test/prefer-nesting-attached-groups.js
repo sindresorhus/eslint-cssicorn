@@ -14,14 +14,6 @@ const cases = [
 		output: '.card { &.foo, &#bar { &::before { content: "test"; } } }',
 	},
 	{
-		code: '.card { &:is(.foo, #bar) & .title { color: red; } }',
-		output: '.card { &:is(.foo, #bar) & { .title { color: red; } } }',
-	},
-	{
-		code: '.card { &:is(.context > .foo, #bar) & .title { color: red; } }',
-		output: '.card { &:is(.context > .foo, #bar) & { .title { color: red; } } }',
-	},
-	{
 		code: '.card { &:is(.foo, .bar).active { color: red; } }',
 		output: '.card { &.foo, &.bar { &.active { color: red; } } }',
 	},
@@ -97,34 +89,17 @@ const cases = [
 		code: '.card { &:IS(.context > .foo, #bar).active { COLOR: RED !important; } }',
 		output: '.card { .context > &.foo, &#bar { &.active { COLOR: RED !important; } } }',
 	},
-	...['.foo > :unknown', '.foo > [data-kind="CARD" s]'].map(argument => ({
-		code: `.card { &:is(${argument}, #bar).active { color: red; } }`,
-		output: `.card { &:is(${argument}, #bar) { &.active { color: red; } } }`,
-	})),
-	{
-		code: '.card { &:where(.context > .foo, #bar).active { color: red; } }',
-		output: '.card { &:where(.context > .foo, #bar) { &.active { color: red; } } }',
-	},
 	...['\n', '\r\n'].map(lineBreak => ({
 		code: ['.card {', '  &:is(.context > .foo, #bar)::before {', '    content: "test";', '  }', '}'].join(lineBreak),
 		output: ['.card {', '  .context > &.foo, &#bar {', '    &::before {', '      content: "test";', '    }', '  }', '}'].join(lineBreak),
 	})),
 	{
-		code: '.card { &:is(.foo, :unknown)::before { content: "test"; } }',
-		output: '.card { &:is(.foo, :unknown) { &::before { content: "test"; } } }',
-	},
-	{
 		code: '.card { &:is(.foo, [data-kind="CARD" i])::before { content: "test"; } }',
 		output: '.card { &.foo, &[data-kind="CARD" i] { &::before { content: "test"; } } }',
 	},
 	{
-		code: '.card { &:where(.foo, #bar)::before { content: "test"; } }',
-		output: '.card { &:where(.foo, #bar) { &::before { content: "test"; } } }',
-	},
-	{
 		code: '.card { &:is(&.foo, &#bar)::before { content: "test"; } }',
 		output: '.card { &&.foo, &&#bar { &::before { content: "test"; } } }',
-		settledOutput: '.card { && { &.foo, &#bar { &::before { content: "test"; } } } }',
 	},
 	...[' ', ' > ', ' + ', ' ~ '].map(combinator => ({
 		code: `.card { &:is(&${combinator}.foo, .context > &#bar).active { color: red; } }`,
@@ -149,7 +124,6 @@ const cases = [
 	{
 		code: '@media (color) { .card { @layer theme { &:IS(&.foo, &#bar).active { COLOR: RED !important; } } } }',
 		output: '@media (color) { .card { @layer theme { &&.foo, &&#bar { &.active { COLOR: RED !important; } } } } }',
-		settledOutput: '@media (color) { .card { @layer theme { && { &.foo, &#bar { &.active { COLOR: RED !important; } } } } } }',
 	},
 	...['\n', '\r\n'].map(lineBreak => ({
 		code: ['.card {', '  &:is(& > .foo, &#bar)::before {', '    content: "test";', '  }', '}'].join(lineBreak),
@@ -182,10 +156,6 @@ const cases = [
 	{
 		code: '.card { :is(&.foo, &#bar)::before { content: "test"; } }',
 		output: '.card { &.foo, &#bar { &::before { content: "test"; } } }',
-	},
-	{
-		code: '.card { :is(&.foo, .bar)::before { content: "test"; } }',
-		output: '.card { :is(&.foo, .bar) { &::before { content: "test"; } } }',
 	},
 	{
 		code: '.card { :is(&&.foo, &#bar)::before { content: "test"; } }',
@@ -226,6 +196,12 @@ const cases = [
 
 test({
 	valid: [
+		'.card { &:is(.foo, #bar) & .title { color: red; } }',
+		'.card { &:is(.context > .foo, #bar) & .title { color: red; } }',
+		'.card { &:where(.context > .foo, #bar).active { color: red; } }',
+		'.card { &:is(.foo, :unknown)::before { content: "test"; } }',
+		'.card { &:where(.foo, #bar)::before { content: "test"; } }',
+		'.card { :is(&.foo, .bar)::before { content: "test"; } }',
 		'.card { &:is(.foo, #bar) { color: red; } }',
 		'.card { &:where(.foo, #bar) { color: red; } }',
 		'.card { &:is(.foo, #bar):not(&) { color: red; } }',
