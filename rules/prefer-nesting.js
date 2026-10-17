@@ -265,11 +265,13 @@ const getCandidate = (selector, rule, context) => {
 	if (groupIndex === children.length - 1) {
 		// Unlike :is(), a nested selector list gives each branch its own specificity.
 		const specificities = argumentsList.children.map(argument => getRuleSelectorSpecificity(argument, [0, 0, 0]));
-		if (!isDescendant || specificities.some(specificity => compareSpecificity(specificity, specificities[0]) !== 0)) {
+		if (!hasCombinator || ![' ', '>', '+', '~'].includes(children[parentEnd].name) || specificities.some(specificity => compareSpecificity(specificity, specificities[0]) !== 0)) {
 			return;
 		}
 
-		inner = getNodesText(argumentsList.children, sourceCode);
+		inner = isDescendant
+			? getNodesText(argumentsList.children, sourceCode)
+			: argumentsList.children.map(argument => `${children[parentEnd].name} ${getNodesText(argument.children, sourceCode)}`).join(', ');
 	}
 
 	return {
@@ -483,7 +485,8 @@ const getGroupedSelectorText = (parents, rule, context) => {
 	const groups = parents.map(() => new Set());
 	const innerSelectors = new Set();
 	for (const selector of rule.prelude.children) {
-		const matches = parents.map(parent => getPrefixedSelectorText(parent, selector, context.sourceCode));
+		const matches = parents.map(parent => getPrefixedSelectorText(parent, selector, context.sourceCode)
+			?? getContextualSelectorText(parent, selector, rule, context));
 		const matchingIndices = matches.flatMap((match, index) => match === undefined ? [] : [index]);
 		if (matchingIndices.length !== 1) {
 			return;

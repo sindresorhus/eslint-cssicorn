@@ -21,7 +21,6 @@ test({
 		'.card:hover { color: blue; } @media (color) { .card { color: red; } }',
 		'a:is(.under, .upper) { color: red; }',
 		'.card :is(.title, #title) { color: red; }',
-		'.card > :is(.title, .body) { color: red; }',
 		'.card :is(.context .title, .body) .icon { color: red; }',
 		':is(.card, :unknown) .title { color: red; }',
 		':where(.card, .panel) .title { color: red; }',

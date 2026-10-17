@@ -37,8 +37,6 @@ test({
 	valid: [
 		'.card { color: red; } .theme .active.card:hover { color: blue; }',
 		'.card {} .theme .active.card:hover, .other > .card .title { color: blue; }',
-		'.a, .b { color: red; } .theme .a:hover, .theme .b:hover { color: blue; }',
-		':where(.a), :where(.b) {} .theme :where(.b) .title, .theme :where(.a) .title { color: blue; }',
 		'.outer { .card {} .theme .active.card:hover {} }',
 		'.outer { .card {} .theme .card .title {} }',
 		'.outer { .a, .b {} .theme .a:hover, .other .b:focus {} }',

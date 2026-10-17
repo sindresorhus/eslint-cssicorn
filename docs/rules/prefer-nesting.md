@@ -29,17 +29,17 @@ Replace structural `:is()` groups when nesting safely provides the same grouping
 }
 ```
 
-Trailing descendant groups require equal argument specificity:
+Trailing `:is()` groups after descendant, child (`>`), or sibling (`+`, `~`) combinators require equal argument specificity. The original combinator is kept on every branch:
 
 ```css
 /* ❌ */
-a :is(.foo, .bar) {
+a > :is(.foo, .bar) {
 	color: red;
 }
 
 /* ✅ */
 a {
-	.foo, .bar {
+	> .foo, > .bar {
 		color: red;
 	}
 }
@@ -89,19 +89,19 @@ a {
 }
 ```
 
-Following rules can also add a context before the existing parent selector. Contextual merges require a single compound parent selector outside any ancestor style rule:
+Following rules can also add a context before existing parent selectors. Contextual merges require compound parent selectors outside any ancestor style rule. Grouped parents must have equal specificity and every parent must have the same set of overrides:
 
 ```css
 /* ❌ */
-.button {
+.button, .link {
 	color: black;
 }
-[data-theme=dark] .button {
+[data-theme=dark] .button, [data-theme=dark] .link {
 	color: white;
 }
 
 /* ✅ */
-.button {
+.button, .link {
 	color: black;
 	[data-theme=dark] & {
 		color: white;
@@ -214,7 +214,7 @@ Existing-parent merges may retain `:is()` and `:where()` because they combine re
 
 ## Specificity and safety
 
-Leading and attached `:is()` groups preserve the arguments' maximum specificity. Trailing descendant groups are expanded only when their arguments have equal specificity. Conversions must preserve [forgiving selector-list behavior](https://drafts.csswg.org/selectors/#forgiving-selector) and ancestor matching; uncertain groups are left unchanged.
+Leading and attached `:is()` groups preserve the arguments' maximum specificity. Trailing groups after a combinator are expanded only when their arguments have equal specificity. Conversions must preserve [forgiving selector-list behavior](https://drafts.csswg.org/selectors/#forgiving-selector) and ancestor matching; uncertain groups are left unchanged.
 
 Related grouped parents require equal specificity, including inherited specificity, and every parent/suffix combination. Functional `&` references in grouped parents are supported only inside top-level `:where()` functions. Exact declaration-only conditional overrides preserve mixed parent specificity and pseudo-elements without adding `&`. Moved content is appended in its original order.
 

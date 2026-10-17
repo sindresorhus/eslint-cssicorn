@@ -528,9 +528,6 @@ test.snapshot({
 
 test({
 	valid: [
-		'a > :is(.foo, .bar) { color: red; }',
-		'a + :is(.foo, .bar) { color: red; }',
-		'a ~ :is(.foo, .bar) { color: red; }',
 		':is(.foo, :blank) ~ a { color: red; }',
 		'a :is(.foo, #bar) { color: red; }',
 		'a :is(.foo, button) { color: red; }',
