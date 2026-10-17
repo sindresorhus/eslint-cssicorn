@@ -13,6 +13,18 @@ const cases = [
 		output: '.card { .title { color: red; } .body { color: blue; } }',
 	},
 	{
+		code: '.card > .title { color: red; } .card > #body { color: blue; }',
+		output: '.card { > .title { color: red; } > #body { color: blue; } }',
+	},
+	...[[' ', ' > '], [' > ', ' ']].map(([firstCombinator, secondCombinator]) => ({
+		code: `.card${firstCombinator}.title { color: red; } .card${secondCombinator}.body { color: blue; }`,
+		output: `.card { ${firstCombinator.trimStart()}.title { color: red; } ${secondCombinator.trimStart()}.body { color: blue; } }`,
+	})),
+	{
+		code: '.card>span::before { content: "test"; } .card>button:hover { color: red; }',
+		output: '.card { >span::before { content: "test"; } >button:hover { color: red; } }',
+	},
+	{
 		code: '.card .title { color: red; } .card .body { color: blue; } .card .footer { color: green; }',
 		output: '.card { .title { color: red; } .body { color: blue; } .footer { color: green; } }',
 	},
@@ -54,8 +66,24 @@ const cases = [
 		output: '.outer { &.card { .title { color: red; } .body { color: blue; } } }',
 	},
 	{
+		code: '.outer { &.card > .title { color: red; } &.card .body { color: blue; } }',
+		output: '.outer { &.card { > .title { color: red; } .body { color: blue; } } }',
+	},
+	{
+		code: '.card:where(#special, .active) .title { color: red; } .card:where(#special, .active) .body { color: blue; }',
+		output: '.card:where(#special, .active) { .title { color: red; } .body { color: blue; } }',
+	},
+	{
+		code: '.outer { .card:has(> &) .title { color: red; } .card:has(> &) .body { color: blue; } }',
+		output: '.outer { .card:has(> &) { .title { color: red; } .body { color: blue; } } }',
+	},
+	{
 		code: '.outer, #outer { .card .title { color: red; } .card .body { color: blue; } }',
 		output: '.outer, #outer { .card { .title { color: red; } .body { color: blue; } } }',
+	},
+	{
+		code: '.outer, #outer { .card > .title { color: red; } .card .body { color: blue; } }',
+		output: '.outer, #outer { .card { > .title { color: red; } .body { color: blue; } } }',
 	},
 	{
 		code: '@media (color) { @layer theme { .card .title { color: red; } .card .body { color: blue; } } }',
@@ -89,6 +117,8 @@ test({
 		{code: cases[0].code},
 		{code: cases[0].code, options: [{}]},
 		{code: cases[0].code, options: [{checkSharedPrefixes: false}]},
+		{code: cases[1].code},
+		{code: cases[1].code, options: [{checkSharedPrefixes: false}]},
 		...[
 			'a .title { color: red; } a .body { color: blue; }',
 			'#card .title { color: red; } #card .body { color: blue; }',
@@ -98,8 +128,11 @@ test({
 			'.card .title, .card .body { color: red; }',
 			'.card .title, .card .body { color: red; } .card .footer { color: blue; }',
 			'.card .title { color: red; } .card .body, .card .footer { color: blue; }',
-			'.card > .title { color: red; } .card > .body { color: blue; }',
-			'.card .title { color: red; } .card > .body { color: blue; }',
+			'.card + .title { color: red; } .card ~ .body { color: blue; }',
+			'.card > .title { color: red; } .card + .body { color: blue; }',
+			'.card ~ .title { color: red; } .card .body { color: blue; }',
+			'.card.active > .title { color: red; } .card.disabled > .body { color: blue; }',
+			'.card > .title, .card > .body { color: red; } .card > .footer { color: blue; }',
 			'.card .title { color: red; } .other { color: green; } .card .body { color: blue; }',
 			'.card .title { color: red; } @media (color) { .card .body { color: blue; } }',
 			'@media (color) { .card .title { color: red; } } .card .body { color: blue; }',
@@ -109,6 +142,7 @@ test({
 			'.card:scope .title { color: red; } .card:scope .body { color: blue; }',
 			'.card:visited .title { color: red; } .card:visited .body { color: blue; }',
 			'.outer { .card & .title { color: red; } .card & .body { color: blue; } }',
+			'.outer { .card > & .title { color: red; } .card > & .body { color: blue; } }',
 			'.outer { > .card .title { color: red; } > .card .body { color: blue; } }',
 			'@scope (.outer) { .card .title { color: red; } .card .body { color: blue; } }',
 			'@namespace url("https://example.com"); .card .title { color: red; } .card .body { color: blue; }',
@@ -129,6 +163,7 @@ test({
 		})),
 		...[
 			'.card .title { /* keep */ color: red; } .card .body { color: blue; }',
+			'.card > .title { /* keep */ color: red; } .card > .body { color: blue; }',
 			'.card .title { color: red; } /* keep */ .card .body { color: blue; }',
 			'.card .title {\n  color: red;\n}\n.card .body {\n\tcolor: blue;\n}',
 			'.card .title {\n  --paint: red\n    blue;\n}\n.card .body {\n  color: red;\n}',

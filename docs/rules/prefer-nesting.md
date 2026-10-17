@@ -140,7 +140,7 @@ Following `@media` and `@layer` blocks can contain rules extending the existing 
 Type: `boolean`\
 Default: `false`
 
-Group two or more adjacent, single-selector rules under a shared parent. The selectors must share the same complete leading compound containing a class, followed by a descendant combinator. For example, `.card.active .title` and `.card.active .body` share the complete `.card.active` compound.
+Group two or more adjacent, single-selector rules under a shared parent. The selectors must share the same complete leading compound containing a class, followed by a child (`>`) or descendant combinator. For example, `.card.active .title` and `.card.active .body` share the complete `.card.active` compound.
 
 ```js
 {
@@ -170,7 +170,29 @@ With this option enabled:
 }
 ```
 
-This option does not group selector lists, factor partial compounds such as `.card.active` and `.card.disabled`, or discover parents across conditional blocks. Comments and unsafe formatting can still prevent autofixes.
+Child and descendant combinators can be mixed within a group:
+
+```css
+/* ❌ */
+.card > .title {
+	color: red;
+}
+.card .body {
+	color: blue;
+}
+
+/* ✅ */
+.card {
+	> .title {
+		color: red;
+	}
+	.body {
+		color: blue;
+	}
+}
+```
+
+This option does not group selector lists or sibling relationships (`+` or `~`). It does not factor partial compounds such as `.card.active` and `.card.disabled` or discover parents across conditional blocks. Comments and unsafe formatting can still prevent autofixes.
 
 ## Intentionally ignored
 

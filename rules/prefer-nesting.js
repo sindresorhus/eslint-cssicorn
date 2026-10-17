@@ -678,6 +678,8 @@ const getRelatedRules = (children, startIndex, parents, context) => {
 	return relatedRules;
 };
 
+const isDescendantOrChildCombinator = node => node?.type === 'Combinator' && [' ', '>'].includes(node.name);
+
 const getSharedPrefixCandidate = (children, startIndex, selectors, context) => {
 	if (selectors.length !== 1) {
 		return;
@@ -686,7 +688,7 @@ const getSharedPrefixCandidate = (children, startIndex, selectors, context) => {
 	const {sourceCode} = context;
 	const [selector] = selectors;
 	const boundary = selector.children.findIndex(node => node.type === 'Combinator');
-	if (!isDescendantCombinator(selector.children[boundary])) {
+	if (!isDescendantOrChildCombinator(selector.children[boundary])) {
 		return;
 	}
 
@@ -699,7 +701,7 @@ const getSharedPrefixCandidate = (children, startIndex, selectors, context) => {
 	for (let index = startIndex; index < children.length; index++) {
 		const rule = children[index];
 		const ruleSelectors = getSelectors(rule);
-		if (rule.type !== 'Rule' || ruleSelectors?.length !== 1 || !isDescendantCombinator(ruleSelectors[0].children[boundary])) {
+		if (rule.type !== 'Rule' || ruleSelectors?.length !== 1 || !isDescendantOrChildCombinator(ruleSelectors[0].children[boundary])) {
 			break;
 		}
 
@@ -823,7 +825,7 @@ const config = {
 			properties: {
 				checkSharedPrefixes: {
 					type: 'boolean',
-					description: 'Check adjacent descendant rules with the same complete leading compound containing a class.',
+					description: 'Check adjacent child or descendant rules with the same complete leading compound containing a class.',
 				},
 			},
 			additionalProperties: false,
