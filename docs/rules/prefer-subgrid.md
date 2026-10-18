@@ -9,9 +9,9 @@
 <!-- end auto-generated rule header -->
 <!-- Do not manually modify this header. Run: `npm run fix:eslint-docs` -->
 
-This rule reports full-span nested grids that repeat their parent's track definition, and suggests sharing those tracks with [`subgrid`](https://www.w3.org/TR/css-grid-2/#subgrids). This expresses the layout relationship without maintaining two sizing definitions.
+Reports full-span nested grids that repeat parent track definitions and suggests [`subgrid`](https://www.w3.org/TR/css-grid-2/#subgrids) to share those tracks.
 
-There is no autofix because subgrid changes layout behavior, but a suggestion is provided. Review the rendered layout after accepting it: grandchildren participate in parent track sizing, and subgridded axes cannot create implicit tracks. In each shared axis, default (`normal`) gaps match the parent, and the subgrid stretches, ignoring its specified size and alignment constraints. See [the browser examples](https://web.dev/articles/css-subgrid).
+There is no autofix because subgrid changes layout, but a suggestion is provided. Review the rendered result: grandchildren affect parent sizing; shared axes use the parent's gaps by default, cannot create implicit tracks, and stretch regardless of size or alignment constraints. See [browser examples](https://web.dev/articles/css-subgrid).
 
 ## Examples
 
@@ -41,7 +41,7 @@ There is no autofix because subgrid changes layout behavior, but a suggestion is
 }
 ```
 
-Native nesting is supported with `> .child` or `& > .child`:
+Native nesting supports `> .child` and `& > .child`:
 
 ```css
 /* ❌ */
@@ -71,35 +71,23 @@ Native nesting is supported with `> .child` or `& > .child`:
 
 ## Recognition
 
-Both blocks must explicitly declare a grid display: `grid`, `inline-grid`, `block grid`, or `inline grid`. The reversed two-keyword forms `grid block` and `grid inline` are also supported. Columns and rows are checked independently, with one report per matching child axis.
+Checks columns and rows independently when both blocks declare a grid display and matching templates, and the child spans `1 / -1` using the axis shorthand or start and end longhands.
 
-The child must span `1 / -1` through `grid-column` or `grid-row`, or the corresponding start and end longhands. Other numeric placements, named placements, and `span` values are ignored.
+Supports single, unique direct-child selectors in the same block, in either source order, and immediately nested `> child` or `& > child` rules. Shared `@media`, `@supports`, `@container`, `@layer`, and `@scope` wrappers are supported.
 
-Templates must match structurally, ignoring formatting, comments, and keyword, function, and unit casing. Named lines retain their case sensitivity. Fixed `repeat()`, `minmax()`, `fit-content()`, and arithmetic math functions such as `calc()`, `min()`, `max()`, and `clamp()` are supported. Calculations and repetitions are not evaluated or expanded, and different numeric spellings are not equated.
+Template comparison ignores formatting, comments, and keyword, function, and unit casing; line names remain case-sensitive. Fixed `repeat()`, `minmax()`, `fit-content()`, and arithmetic math functions are supported without evaluating or expanding them.
 
-Flat rules must have single selectors in the same containing block. Removing the final `>` and child compound from the child's selector must produce the parent's exact serialized selector. Parent and child rules may appear in either order. Immediately nested direct-child rules are also checked. Pseudo-element targets and duplicate selectors are ignored.
-
-The suggestion replaces only the repeated child template with `subgrid`, retaining placement, gaps, and `!important`. Identical named lines are inherited from the parent. If replacement would remove comments, the rule reports without a suggestion.
+Suggestions replace only the child template and are omitted if they would remove comments.
 
 ## Limitations
 
-The rule ignores:
+No cascade or markup analysis, selector-list matching, or combining declarations across blocks. Templates must match structurally, including numeric spellings.
 
-- Descendant and sibling relationships, selector lists, and relationships requiring nesting-selector resolution.
-- Declarations split across blocks, separate conditional wrappers, and external stylesheets. It does not reconstruct the cascade or inspect markup.
-- Templates using substitutions such as `var()`, random values, auto-repeat, CSS-wide keywords, `none`, existing `subgrid`, masonry, or invalid values.
-- Templates with other functions, such as `container-progress()`, `anchor-size()`, or `calc-size()`, even when nested inside a supported function.
-- Pairs with local `all`, `grid`, `grid-template`, `grid-template-areas`, or `writing-mode` declarations.
-- Duplicate controlling declarations, mixed placement shorthands and longhands, and child `grid-area` declarations.
-- Child blocks declaring `position`, `contain`, `content-visibility`, `container`, or `container-type`, regardless of value. These properties are not evaluated, and some values prevent subgrid. Parent blocks may still declare them.
-- Keyframes, descriptor blocks, CSS Modules interop blocks, and unsupported at-rules.
-- Blocks inside any `@supports` condition explicitly testing `subgrid`, regardless of polarity.
+The rule skips:
 
-Pairs inside the same `@media`, `@supports`, `@container`, `@layer`, or `@scope` wrapper are supported. Declarations inside a wrapper nested between the parent and child are not combined with the outer declarations.
+- Substitutions such as `var()`, random values, invalid templates, auto-repeat, CSS-wide keywords, `none`, `subgrid`, masonry, and unsupported functions.
+- Ambiguous declarations, `all`, `grid`, `grid-template`, `grid-template-areas`, and local `writing-mode`.
+- Child blocks declaring `grid-area`, `position`, `contain`, `content-visibility`, `container`, or `container-type`.
+- Pseudo-elements, CSS Modules interop, unsupported at-rules, and blocks in `@supports` queries testing `subgrid`, including negated queries.
 
-Identical templates can intentionally define independent grids. Use an ESLint disable comment for these layouts or compatibility fallbacks that the rule cannot recognize. Styles elsewhere, including writing modes, can affect whether the suggestion is appropriate.
-
-## Related rules
-
-- [`prefer-existing-custom-properties`](./prefer-existing-custom-properties.md) shares configured authored values rather than actual grid tracks.
-- [`css/no-invalid-properties`](https://github.com/eslint/css/blob/main/docs/rules/no-invalid-properties.md) validates property names and values.
+Use an ESLint disable comment for intentional independent grids or fallbacks. External styles can affect the suggestion.
