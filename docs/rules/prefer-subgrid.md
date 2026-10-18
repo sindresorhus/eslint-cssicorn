@@ -11,7 +11,7 @@
 
 This rule reports full-span nested grids that repeat their parent's track definition, and suggests sharing those tracks with [`subgrid`](https://www.w3.org/TR/css-grid-2/#subgrids). This expresses the layout relationship without maintaining two sizing definitions.
 
-There is no autofix because subgrid changes layout behavior, but a suggestion is provided. Review the rendered layout after accepting it: grandchildren participate in parent track sizing, gaps behave differently, and subgridded axes cannot create implicit tracks. Dimensions and alignment can also behave differently. See [the browser examples](https://web.dev/articles/css-subgrid).
+There is no autofix because subgrid changes layout behavior, but a suggestion is provided. Review the rendered layout after accepting it: grandchildren participate in parent track sizing, and subgridded axes cannot create implicit tracks. In each shared axis, default (`normal`) gaps match the parent, and the subgrid stretches, ignoring its specified size and alignment constraints. See [the browser examples](https://web.dev/articles/css-subgrid).
 
 ## Examples
 

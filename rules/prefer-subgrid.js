@@ -1,3 +1,5 @@
+// @ts-check
+
 import {find, generate} from '@eslint/css-tree';
 import cssMathFunctions from './shared/css-math-functions.js';
 import {canBeRepresentedByNestingSelector} from './shared/css-selector-specificity.js';
@@ -11,8 +13,14 @@ import {
 } from './utils/index.js';
 
 /**
+@import {BlockPlain, CssNodePlain, DeclarationPlain, FunctionNodePlain, Identifier, RulePlain, SelectorPlain, StyleSheetPlain} from '@eslint/css-tree';
 @import {CssicornContext} from './rule/cssicorn-context.js';
 @import {CssicornRule} from './rule/to-eslint-rule.js';
+*/
+
+/**
+@typedef {Map<string, DeclarationPlain | undefined>} Declarations
+@typedef {Map<string, {rule: RulePlain, selector: SelectorPlain} | undefined>} RulesBySelector
 */
 
 const MESSAGE_ID = 'prefer-subgrid';
@@ -34,13 +42,16 @@ const childBlockers = ['position', 'contain', 'content-visibility', 'container',
 
 /**
 Get a single supported selector, excluding pseudo-element targets and interop selectors.
+
+@param {RulePlain} rule
 */
 function getSelector(rule) {
 	if (rule.prelude?.type !== 'SelectorList' || rule.prelude.children.length !== 1) {
 		return;
 	}
 
-	const [selector] = rule.prelude.children;
+	// SelectorListPlain.children currently uses the broader CssNodePlain[] type.
+	const [selector] = /** @type {SelectorPlain[]} */ (rule.prelude.children);
 	if (!canBeRepresentedByNestingSelector(selector) || find(selector, node => node.type === 'Raw')) {
 		return;
 	}
@@ -50,6 +61,9 @@ function getSelector(rule) {
 
 /**
 Check a shared structural scope without interpreting conditional expressions.
+
+@param {StyleSheetPlain | BlockPlain} node
+@param {CssicornContext} context
 */
 function isSupportedContext(node, context) {
 	for (const ancestor of context.sourceCode.getAncestors(node)) {
@@ -77,8 +91,13 @@ function isSupportedContext(node, context) {
 
 /**
 Collect local declarations, leaving duplicate properties unusable instead of resolving the cascade.
+
+@param {RulePlain} rule
 */
 function getDeclarations(rule) {
+	/**
+	@type {Declarations}
+	*/
 	const declarations = new Map();
 	for (const declaration of rule.block.children) {
 		if (declaration.type !== 'Declaration') {
@@ -98,12 +117,14 @@ function getDeclarations(rule) {
 		return;
 	}
 
-	const displayValue = display.value.children.map(node => normalizeCssIdentifier(node.name)).join(' ');
+	const displayValue = /** @type {Identifier[]} */ (display.value.children).map(node => normalizeCssIdentifier(node.name)).join(' ');
 	return gridDisplays.has(displayValue) ? declarations : undefined;
 }
 
 /**
 Get a local placement value, ignoring formatting and comments.
+
+@param {DeclarationPlain | undefined} declaration
 */
 function getPlacementValue(declaration) {
 	return declaration?.value.type === 'Value' ? generate(declaration.value) : undefined;
@@ -111,6 +132,9 @@ function getPlacementValue(declaration) {
 
 /**
 Check only explicit full-span placement, without counting or resolving track definitions.
+
+@param {Declarations} declarations
+@param {'column' | 'row'} axis
 */
 function hasFullSpan(declarations, axis) {
 	if (declarations.has('grid-area')) {
@@ -134,6 +158,10 @@ function hasFullSpan(declarations, axis) {
 
 /**
 Normalize case-insensitive template tokens while preserving case-sensitive line names and numeric spellings.
+
+@template {CssNodePlain} Node
+@param {Node} node
+@returns {Node}
 */
 function normalizeTemplate(node) {
 	if (node.type === 'Brackets') {
@@ -147,7 +175,7 @@ function normalizeTemplate(node) {
 		result = {...node, unit: normalizeCssIdentifier(node.unit)};
 	}
 
-	if (node.children) {
+	if ('children' in node && node.children) {
 		result = {...result, children: node.children.map(child => normalizeTemplate(child))};
 	}
 
@@ -156,6 +184,9 @@ function normalizeTemplate(node) {
 
 /**
 Get a validated structural template key without expanding repetitions or evaluating values.
+
+@param {DeclarationPlain | undefined} declaration
+@param {CssicornContext} context
 */
 function getTemplateKey(declaration, context) {
 	if (!declaration || declaration.value.type !== 'Value' || getCssWideKeyword(declaration) || hasSubstitutionOrRandomFunction(declaration.value)) {
@@ -165,13 +196,14 @@ function getTemplateKey(declaration, context) {
 	const value = normalizeTemplate(declaration.value);
 	if (find(value, node => node.type === 'Function' && (
 		!templateFunctions.has(node.name)
-		|| (node.name === 'repeat' && node.children.at(0)?.type === 'Identifier')
+		|| (node.name === 'repeat' && /** @type {FunctionNodePlain} */ (node).children.at(0)?.type === 'Identifier')
 	))) {
 		return;
 	}
 
 	const text = generate(value);
-	if (['none', 'subgrid', 'masonry'].includes(text) || value.children.at(0)?.name === 'subgrid') {
+	const [firstChild] = value.children;
+	if (['none', 'subgrid', 'masonry'].includes(text) || (firstChild?.type === 'Identifier' && firstChild.name === 'subgrid')) {
 		return;
 	}
 
@@ -180,10 +212,16 @@ function getTemplateKey(declaration, context) {
 
 /**
 Find an exact sibling parent or the immediate owner of a native nested child selector.
+
+@param {SelectorPlain} selector
+@param {StyleSheetPlain | BlockPlain} block
+@param {RulesBySelector} rulesBySelector
+@param {CssicornContext} context
 */
 function getParentRule(selector, block, rulesBySelector, context) {
 	const separator = selector.children.findLastIndex(node => node.type === 'Combinator');
-	if (selector.children[separator]?.name !== '>') {
+	const combinator = selector.children[separator];
+	if (combinator?.type !== 'Combinator' || combinator.name !== '>') {
 		return;
 	}
 
@@ -209,8 +247,17 @@ function getParentRule(selector, block, rulesBySelector, context) {
 @param {CssicornContext} context
 */
 const create = context => {
+	/**
+	@type {WeakMap<RulePlain, Declarations | undefined>}
+	*/
 	const declarationsByRule = new WeakMap();
+	/**
+	@type {WeakMap<DeclarationPlain, string | undefined>}
+	*/
 	const templateKeys = new WeakMap();
+	/**
+	@param {RulePlain} rule
+	*/
 	const getLocalDeclarations = rule => {
 		if (!declarationsByRule.has(rule)) {
 			declarationsByRule.set(rule, getDeclarations(rule));
@@ -219,6 +266,9 @@ const create = context => {
 		return declarationsByRule.get(rule);
 	};
 
+	/**
+	@param {DeclarationPlain | undefined} declaration
+	*/
 	const getKey = declaration => {
 		if (!declaration) {
 			return;
@@ -237,6 +287,9 @@ const create = context => {
 			return;
 		}
 
+		/**
+		@type {RulesBySelector}
+		*/
 		const rulesBySelector = new Map();
 		for (const rule of rules) {
 			const selector = getSelector(rule);
@@ -263,10 +316,10 @@ const create = context => {
 				continue;
 			}
 
-			for (const axis of ['column', 'row']) {
+			for (const axis of /** @type {const} */ (['column', 'row'])) {
 				const property = `grid-template-${axis}s`;
 				const declaration = childDeclarations.get(property);
-				if (!declaration || !hasFullSpan(childDeclarations, axis)) {
+				if (!declaration || declaration.value.type !== 'Value' || !hasFullSpan(childDeclarations, axis)) {
 					continue;
 				}
 

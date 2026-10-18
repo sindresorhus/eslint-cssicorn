@@ -39,6 +39,7 @@ test.snapshot({
 		`.parent { ${columns} & > :is(&) { ${childColumns} } }`,
 		`.parent { ${columns} @media (width > 1px) { > .child { ${childColumns} } } }`,
 		`${getPair()} .parent { color: red; }`,
+		`${getPair()} .parent { ${columns} } .parent { ${columns} }`,
 		`@media (width > 1px) { .parent { ${columns} } } @media (width > 1px) { .parent > .child { ${childColumns} } }`,
 		`.parent { ${columns} } @layer other { .parent > .child { ${childColumns} } }`,
 		...['none', 'flex', 'contents', 'var(--display)'].map(display => getPair(columns.replace('display: grid', () => `display: ${display}`))),
