@@ -49,8 +49,7 @@ Query expressions do not establish fallbacks for styles:
 
 ### customProperties
 
-Type: `string[]`
-
+Type: `string[]`\
 Default: `[]`
 
 Exact shared custom-property names to check. Names are case-sensitive, and escaped references are decoded before matching.
@@ -66,18 +65,10 @@ Exact shared custom-property names to check. Names are case-sensitive, and escap
 
 ## Comparison
 
-- Compare the complete fallback after the first comma, including lists and functions. Empty fallbacks participate; references without fallbacks are ignored.
-- Ignore comments, whitespace, string quote styles, and equivalent identifier or string escapes. Preserve token boundaries and case-sensitive contents. Ordinary function names and dimension units are case-insensitive; unquoted URLs retain their source spelling.
-- Recognize safe integer-valued numeric spellings such as `01px` and `+1.0px`. Preserve integer-token distinctions (`1` versus `1.0`) and signed zeros.
-- Recognize common color equivalents and case-insensitive keywords only when both fallbacks are complete declaration values and their consuming grammars prove the comparison is valid. Custom identifiers remain case-sensitive. Partial values, custom-property declarations, and unknown grammars retain token comparison. Color comparison does not round away alpha differences.
-- Ignore fallbacks containing substitutions such as `var()`, `env()`, `attr()`, conditional or custom functions, or `random()`. Eligible nested `var()` references are checked independently.
-- Ignore query expressions in `@supports`, `@import` conditions, and container style queries. Declarations inside their style blocks are still checked.
+- Compare complete, explicit fallbacks, including empty ones. Ignore whitespace, comments, quote styles, and equivalent identifier or string escapes.
+- Normalize ordinary function and unit casing and safe integer spellings, preserving token boundaries, case-sensitive contents, `1` versus `1.0`, and signed zero. Color and keyword equivalence requires complete declaration values whose meanings are proven by property grammars.
+- Skip query expressions and fallbacks containing substitutions or randomness. Check eligible nested `var()` references and declarations inside query blocks.
 
 ## Limitations
 
 The rule does not compare separate CSS files or extracted blocks, resolve custom-property declarations or `@property` registrations, evaluate functions such as `calc()`, or convert units. Matching fallbacks do not guarantee identical computed styles, since values such as `1em` depend on context.
-
-## Related rules
-
-- [prefer-existing-custom-properties](prefer-existing-custom-properties.md)
-- [no-self-referencing-custom-properties](no-self-referencing-custom-properties.md)
