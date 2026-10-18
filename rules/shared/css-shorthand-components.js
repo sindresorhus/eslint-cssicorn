@@ -35,6 +35,7 @@ Additional components used only for comparison, without extending the shared sho
 */
 const additionalShorthandComponents = new Map([
 	['caret', ['caret-color', 'caret-animation', 'caret-shape']],
+	['contain-intrinsic-size', ['contain-intrinsic-width', 'contain-intrinsic-height']],
 	['container', ['container-name', 'container-type']],
 	['corner-block-end-shape', ['corner-end-start-shape', 'corner-end-end-shape']],
 	['corner-block-start-shape', ['corner-start-start-shape', 'corner-start-end-shape']],
@@ -45,7 +46,12 @@ const additionalShorthandComponents = new Map([
 	['corner-right-shape', ['corner-top-right-shape', 'corner-bottom-right-shape']],
 	['corner-shape', ['corner-top-left-shape', 'corner-top-right-shape', 'corner-bottom-right-shape', 'corner-bottom-left-shape']],
 	['corner-top-shape', ['corner-top-left-shape', 'corner-top-right-shape']],
+	['cue', ['cue-before', 'cue-after']],
+	['interest-delay', ['interest-delay-start', 'interest-delay-end']],
 	['offset', ['offset-position', 'offset-path', 'offset-distance', 'offset-rotate', 'offset-anchor']],
+	['pause', ['pause-before', 'pause-after']],
+	['position-try', ['position-try-order', 'position-try-fallbacks']],
+	['rest', ['rest-before', 'rest-after']],
 	['scroll-timeline', ['scroll-timeline-name', 'scroll-timeline-axis']],
 	['text-box', ['text-box-trim', 'text-box-edge']],
 	['text-wrap', ['text-wrap-mode', 'text-wrap-style']],
@@ -130,7 +136,7 @@ export const supportedShorthands = new Set([
 const getComponentNames = property => additionalShorthandComponents.get(property) ?? /** @type {{components: string[]}} */ (shorthandProperties.get(property)).components;
 
 const layeredShorthands = new Set(['background', 'animation', 'animation-range', 'transition', 'scroll-timeline', 'view-timeline']);
-const placeShorthands = new Set(['place-content', 'place-items', 'place-self']);
+const copyingPairShorthands = new Set(['place-content', 'place-items', 'place-self', 'cue', 'pause', 'rest']);
 const gridPlacementShorthands = new Set(['grid-row', 'grid-column', 'grid-area']);
 const fontComponents = ['font-style', 'font-variant-caps', 'font-weight', 'font-width', 'font-size', 'line-height', 'font-family'];
 const componentTypes = new Map([
@@ -200,6 +206,17 @@ const getPositionalComponents = (property, nodes, getSlot) => {
 	const values = nodes.map(node => getSlot([node]));
 	const expanded = fourSideShorthands.has(property) || property === 'corner-shape' ? expandFourSides(values) : [values[0], values[1] ?? values[0]];
 	return new Map(names.map((name, index) => [name, expanded[index]]));
+};
+
+/**
+@param {CssNodePlain[]} nodes
+@param {GetSlot} getSlot
+*/
+const getIntrinsicSizeComponents = (nodes, getSlot) => {
+	const firstEnd = nodes[0].type === 'Identifier' && normalizeCssIdentifier(nodes[0].name) === 'auto' ? 2 : 1;
+	const width = getSlot(nodes.slice(0, firstEnd));
+	const height = nodes.length > firstEnd ? getSlot(nodes.slice(firstEnd)) : width;
+	return new Map([['contain-intrinsic-width', width], ['contain-intrinsic-height', height]]);
 };
 
 /**
@@ -313,7 +330,7 @@ const getNamedComponentSlots = (property, components, {visualBoxes, noneNodes, g
 	}
 
 	const result = new Map([...components].map(([name, nodes]) => [name, nodes.length > 0 ? getSlot(nodes) : undefined]));
-	if (placeShorthands.has(property)) {
+	if (copyingPairShorthands.has(property)) {
 		const [first, second] = components.keys();
 		if (!result.get(second)) {
 			const firstSlot = /** @type {ShorthandSlot} */ (result.get(first));
@@ -346,12 +363,14 @@ const getNamedComponents = (property, nodes, {canonicalNodes, match, getSlot}) =
 				continue;
 			}
 
-			if (property === 'font' && node.value === ',') {
+			if (node.value !== ',') {
+				return;
+			}
+
+			if (property === 'font') {
 				/** @type {CssNodePlain[]} */ (components.get('font-family')).push(node);
 				continue;
 			}
-
-			return;
 		}
 
 		const keyword = node.type === 'Identifier' ? normalizeCssIdentifier(node.name) : undefined;
@@ -391,8 +410,12 @@ const getNamedComponents = (property, nodes, {canonicalNodes, match, getSlot}) =
 @param {ComponentOptions} options
 */
 const getGroupComponents = (property, nodes, options) => {
-	if (fourSideShorthands.has(property) || pairShorthands.has(property) || property.startsWith('corner-')) {
+	if (fourSideShorthands.has(property) || pairShorthands.has(property) || property === 'interest-delay' || property.startsWith('corner-')) {
 		return getPositionalComponents(property, nodes, options.getSlot);
+	}
+
+	if (property === 'contain-intrinsic-size') {
+		return getIntrinsicSizeComponents(nodes, options.getSlot);
 	}
 
 	if (property === 'border-radius') {

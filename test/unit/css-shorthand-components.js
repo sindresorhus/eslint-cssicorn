@@ -11,7 +11,7 @@ const getChange = (property, first, second) => getChangedShorthandComponent(getC
 const getSlotText = slot => slot.text ?? slot.nodes.map(node => generate(node)).join(' ');
 
 test('supports the practical shorthand catalog', () => {
-	assert.equal(supportedShorthands.size, 80);
+	assert.equal(supportedShorthands.size, 86);
 	const excluded = shorthandProperties.keys().filter(property => !supportedShorthands.has(property)).toArray();
 	assert.deepEqual(excluded, ['font-variant', 'grid-gap', 'mask']);
 	for (const property of supportedShorthands) {
@@ -193,4 +193,21 @@ test('expands copied corner shapes before comparing', () => {
 	assert.equal(getChange('corner-shape', 'round', 'round round round bevel')?.property, 'corner-bottom-left-shape');
 	assert.equal(getChange('corner-inline-start-shape', 'round', 'round bevel')?.property, 'corner-end-start-shape');
 	assert.equal(getChange('corner-shape', 'round round round bevel', 'round round round superellipse(2)')?.property, 'corner-bottom-left-shape');
+});
+
+test('copies grouped intrinsic sizes without separating auto from its value', () => {
+	for (const value of ['100px', 'auto 100px', 'none', 'auto none', 'auto calc(100px + 20px)']) {
+		const components = getComponents('contain-intrinsic-size', value);
+		const width = components.get('contain-intrinsic-width')[0];
+		assert.equal(components.get('contain-intrinsic-height')[0], width);
+	}
+
+	assert.equal(getChange('contain-intrinsic-size', 'auto 100px 200px', 'auto 100px auto 200px')?.property, 'contain-intrinsic-height');
+});
+
+test('keeps position fallback lists together as a scalar component', () => {
+	const change = getChange('position-try', 'most-width flip-block', 'most-width flip-inline, --first');
+	assert.equal(change?.property, 'position-try-fallbacks');
+	assert.equal(change.slots.length, 1);
+	assert.equal(getSlotText(change.slots[0]), 'flip-inline , --first');
 });

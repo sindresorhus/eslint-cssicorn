@@ -108,7 +108,9 @@ Background components are checked without changing the other layers:
 - `grid-row`, `grid-column`, `grid-area`, and explicit track forms of `grid` and `grid-template`.
 - `list-style`, `mask-border`, `outline`, `text-decoration`, and `text-emphasis`.
 - `font`, `font-synthesis`, `background`, `animation`, `animation-range`, and `transition`.
-- `text-wrap`, `white-space`, `text-box`, `caret`, `container`, and `offset`.
+- `text-wrap`, `white-space`, `text-box`, `caret`, `container`, `offset`, and `position-try`.
+- `contain-intrinsic-size` and `interest-delay`.
+- The speech shorthands `cue`, `pause`, and `rest`.
 - `scroll-timeline` and `view-timeline`.
 - `corner-shape` and its physical and logical side variants.
 
@@ -126,7 +128,7 @@ Conditional and layer boundaries are not crossed. Rules inside the same `@media`
 
 Rules with unsupported selectors and declarations that affect supported shorthands interrupt comparisons with earlier bases. A later supported base can start a new comparison.
 
-Only one component may differ. The replacement must come from the override's explicit values or the shorthand's defined copying and dependent default rules. Independently omitted components are not filled with initial values. The defined `font-synthesis` keyword mappings are expanded to `auto` and `none` longhand values. Comma-separated shorthands must have the same number of items. Other components are compared structurally without evaluating calculations or converting equivalent colors and units. Recognized keywords are ASCII case-insensitive; custom names remain case-sensitive.
+Only one component may differ. The replacement must come from the override's explicit values or the shorthand's defined copying and dependent default rules. Independently omitted components are not filled with initial values. The defined `font-synthesis` keyword mappings are expanded to `auto` and `none` longhand values. The rule requires equal item counts for `background`, `animation`, `animation-range`, `transition`, `scroll-timeline`, and `view-timeline`. A `position-try` fallback list is treated as one component. Other components are compared structurally without evaluating calculations or converting equivalent colors and units. Recognized keywords are ASCII case-insensitive; custom names remain case-sensitive.
 
 ## Limitations
 
