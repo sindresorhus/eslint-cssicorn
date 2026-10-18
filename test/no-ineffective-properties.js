@@ -91,29 +91,6 @@ test({
 		...['none', 'inherit', 'var(--span)'].map(value => `a { display: flex; > .item { column-span: ${value}; } }`),
 		'a { display: grid; > .item { position: var(--position); column-span: all; } }',
 		'a { display: flex; > .item { display: contents; column-span: all; } }',
-	],
-	invalid: [
-		...['flex', 'grid'].map(display => ({
-			code: `a { display: ${display}; > .item { column-span: all; } }`,
-			errors: [{messageId: `no-ineffective-properties/${display}-item`, data: {property: 'column-span'}}],
-		})),
-		{
-			code: 'a { display: block; columns: 2; > .container { display: flex; > .heading { column-span: all; } } }',
-			errors: [{messageId: 'no-ineffective-properties/flex-item'}],
-		},
-		{
-			code: 'a { DISPLAY: INLINE-GRID; > .item { columns: 2; COLUMN-SPAN: /* span */ ALL !important; } }',
-			errors: [{messageId: 'no-ineffective-properties/grid-item'}],
-		},
-		{
-			code: 'a { display: flex; > .item { position: absolute; column-span: all; } }',
-			errors: [{messageId: 'no-ineffective-properties/column-span'}],
-		},
-	],
-});
-
-test({
-	valid: [
 		'a { display: block; > .item { justify-self: center; place-self: center; float: right; clear: both; vertical-align: middle; } }',
 		'a { display: block; > .item { display: flex; flex-direction: column; justify-content: center; align-items: center; } }',
 		'a { display: block; > .item { position: absolute; grid-column: 2; align-self: center; justify-self: center; } }',
@@ -132,6 +109,22 @@ test({
 		...['table', 'inline-table', 'ruby', 'contents', 'none', 'var(--display)'].map(display => `a { display: ${display}; > .item { flex: 1; align-self: center; } }`),
 	],
 	invalid: [
+		...['flex', 'grid'].map(display => ({
+			code: `a { display: ${display}; > .item { column-span: all; } }`,
+			errors: [{messageId: `no-ineffective-properties/${display}-item`, data: {property: 'column-span'}}],
+		})),
+		{
+			code: 'a { display: block; columns: 2; > .container { display: flex; > .heading { column-span: all; } } }',
+			errors: [{messageId: 'no-ineffective-properties/flex-item'}],
+		},
+		{
+			code: 'a { DISPLAY: INLINE-GRID; > .item { columns: 2; COLUMN-SPAN: /* span */ ALL !important; } }',
+			errors: [{messageId: 'no-ineffective-properties/grid-item'}],
+		},
+		{
+			code: 'a { display: flex; > .item { position: absolute; column-span: all; } }',
+			errors: [{messageId: 'no-ineffective-properties/column-span'}],
+		},
 		...flowItemProperties.map(([property, value]) => ({
 			code: `a { display: block; > .item { ${property}: ${value}; } }`,
 			errors: [{messageId: 'no-ineffective-properties/flow-item', data: {property}}],
