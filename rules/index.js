@@ -51,6 +51,7 @@ export {default as 'prefer-modern-syntax'} from './prefer-modern-syntax.js';
 export {default as 'prefer-nesting'} from './prefer-nesting.js';
 export {default as 'prefer-relative-colors'} from './prefer-relative-colors.js';
 export {default as 'prefer-short-hex-color'} from './prefer-short-hex-color.js';
+export {default as 'prefer-subgrid'} from './prefer-subgrid.js';
 export {default as 'require-prefers-reduced-motion'} from './require-prefers-reduced-motion.js';
 export {default as 'require-property-descriptors'} from './require-property-descriptors.js';
 export {default as 'require-selector-scope'} from './require-selector-scope.js';
