@@ -53,6 +53,7 @@ test.snapshot({
 		].map(declaration => stylesheet(`${animations} ${declaration}`)),
 		stylesheet('animation: spin 1s, bounce 1s; animation-composition: add !important; animation-composition: replace;'),
 		stylesheet(`${animations} animation-duration: var(--duration) !important; animation-duration: 1s;`),
+		stylesheet(`${animations} animation-duration: potato;`),
 		stylesheet(`${animations} -webkit-animation-duration: 0s;`),
 		stylesheet('animation: spin 1s, bounce 1s !important; animation: spin 0s, bounce 0s !important; animation-composition: replace;'),
 		stylesheet(animations, keyframes.replace('bounce', 'Bounce')),
@@ -72,6 +73,7 @@ test.snapshot({
 		].map(declaration => stylesheet(animations, keyframes.replace('rotate(0deg);', () => `rotate(0deg); ${declaration}`))),
 		...['var(--transform)', 'env(transform)', 'inherit', 'initial', 'unset', 'revert', 'revert-layer'].map(value => stylesheet(animations, keyframes.replace('rotate(360deg)', () => value))),
 		stylesheet(animations, keyframes.replace('rotate(0deg);', 'rotate(0deg); transform: var(--transform);')),
+		stylesheet(animations, keyframes.replace('rotate(360deg);', 'rotate(360deg); transform: rotate(45deg 90deg);')),
 		stylesheet(animations, keyframes.replace('rotate(360deg);', 'rotate(360deg) !important;')),
 		stylesheet(animations, [
 			'@keyframes spin { from, to { --transform: 1; unknown: 1; animation-duration: 1s; } }',
