@@ -53,7 +53,7 @@ The rule checks these properties, including their vendor-prefixed forms:
 - `transition`, `transition-property`, and `transition-duration`
 - `scroll-behavior`, when the value is not `auto`, including unresolved values such as `var()`
 
-Transitions and animations are reported unless they affect only `color`, `opacity`, or known properties that end in `-color` or `-opacity`. For example, `transition: all 300ms` and transitions of unknown properties are reported. An animation is reported unless every `@keyframes` rule with its name in the same file changes only these properties (and `animation-timing-function`).
+Transitions and animations are reported unless they affect only `color`, `opacity`, or known properties that end in `-color` or `-opacity`. For example, `transition: all 300ms` and transitions of unknown properties are reported. An animation is reported unless every `@keyframes` rule with its name in the same file changes only these properties (and `animation-timing-function`). Declarations with `!important` in keyframes are ignored, as browsers ignore them.
 
 The rule does not report:
 

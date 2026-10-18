@@ -43,6 +43,9 @@ test.snapshot({
 		'@keyframes fade { to { opacity: 1; } } a { animation: fade 1s, none 2s; }',
 		'@keyframes fade { to { opacity: 1; } } @media (hover) { @keyframes fade { to { color: red; } } } a { animation-name: fade; }',
 		'@keyframes empty {} a { animation-name: empty; }',
+		'@keyframes fade { to { opacity: 1; transform: scale(2) !important; } } a { animation: fade 1s; }',
+		'@keyframes ignored { to { transform: scale(2) !important; --offset: 10px !important; } } a { animation-name: ignored; }',
+		String.raw`@-webkit-keyframes fade { to { opacity: 1; transform: scale(2) !impor\74 ant; } } a { animation: fade 1s; }`,
 		'@keyframes --fade { to { opacity: 1; } } a { animation-name: --fade; }',
 		'@keyframes "none" { to { color: red; } } a { animation-name: "none"; }',
 		String.raw`@keyframes f\61 de { to { opacity: 1; } } a { anim\61 tion: fade 1s; }`,
@@ -206,4 +209,18 @@ nodeTest('nested media conditions guarantee a preference on every branch', () =>
 
 		assert.equal(problems.length, guarded ? 0 : 1, query);
 	}
+});
+
+test({
+	valid: [],
+	invalid: [
+		{
+			code: '@keyframes move { from { transform: translateX(1px); } to { transform: translateX(10px) !important; } } a { animation: move 1s; }',
+			errors: [{messageId: 'require-prefers-reduced-motion', data: {property: 'animation'}, suggestions: 0}],
+		},
+		{
+			code: '@keyframes move { to { transform: translateX(1px); transform: translateX(10px) !important; } } a { animation-name: move; }',
+			errors: [{messageId: 'require-prefers-reduced-motion', data: {property: 'animation-name'}, suggestions: 0}],
+		},
+	],
 });

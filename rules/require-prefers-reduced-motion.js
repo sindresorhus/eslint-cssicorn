@@ -13,6 +13,7 @@ import {
 	getSingleValueIdentifier,
 	isCssModulesInteropDeclaration,
 	isCssWideKeyword,
+	isImportantDeclaration,
 	isKeyframesAtRule,
 	normalizeCssIdentifier,
 } from './utils/index.js';
@@ -101,6 +102,11 @@ function hasOnlyNonMotionKeyframes(block, lexer) {
 		&& keyframe.block.children.every(declaration => {
 			if (declaration.type !== 'Declaration') {
 				return false;
+			}
+
+			// Browsers ignore important declarations inside keyframes.
+			if (isImportantDeclaration(declaration)) {
+				return true;
 			}
 
 			const property = normalizeCssIdentifier(declaration.property);
