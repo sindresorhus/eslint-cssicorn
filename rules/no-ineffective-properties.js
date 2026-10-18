@@ -34,6 +34,7 @@ const MESSAGE_ID_ABSOLUTE_POSITION = 'no-ineffective-properties/absolute-positio
 const MESSAGE_ID_POSITION_TRY_ORDER = 'no-ineffective-properties/position-try-order';
 const MESSAGE_ID_OVERFLOW = 'no-ineffective-properties/overflow';
 const MESSAGE_ID_MULTICOL = 'no-ineffective-properties/multicol';
+const MESSAGE_ID_MULTICOL_GAP = 'no-ineffective-properties/multicol-gap';
 const MESSAGE_ID_FLOAT = 'no-ineffective-properties/float';
 const MESSAGE_ID_TEXT_OVERFLOW_DISPLAY = 'no-ineffective-properties/text-overflow-display';
 const MESSAGE_ID_TABLE_SPACING = 'no-ineffective-properties/table-spacing';
@@ -45,6 +46,7 @@ const MESSAGE_ID_CLEAR = 'no-ineffective-properties/clear';
 const MESSAGE_ID_PERSPECTIVE = 'no-ineffective-properties/perspective';
 const MESSAGE_ID_COLUMN_SPAN = 'no-ineffective-properties/column-span';
 const MESSAGE_ID_MOTION = 'no-ineffective-properties/motion';
+const MESSAGE_ID_OFFSET_POSITION = 'no-ineffective-properties/offset-position';
 const MESSAGE_ID_SHAPE_IMAGE_THRESHOLD = 'no-ineffective-properties/shape-image-threshold';
 const MESSAGE_ID_NON_IMAGE_SHAPE = 'no-ineffective-properties/non-image-shape';
 const MESSAGE_ID_DECORATION = 'no-ineffective-properties/decoration';
@@ -81,6 +83,7 @@ const messages = {
 	[MESSAGE_ID_POSITION_TRY_ORDER]: '`position-try-order` has no effect with `position-try-fallbacks: none`. Add fallback positions to order them.',
 	[MESSAGE_ID_OVERFLOW]: '`text-overflow: {{value}}` has no effect with `overflow: visible`. Ellipsis requires clipped inline overflow.',
 	[MESSAGE_ID_MULTICOL]: '`{{property}}` has no effect with `display: {{display}}`. Multicol properties require a block container.',
+	[MESSAGE_ID_MULTICOL_GAP]: '`{{property}}` has no effect between column rows with `column-wrap: nowrap`. Enable column wrapping to use this gap.',
 	[MESSAGE_ID_FLOAT]: '`float: {{value}}` has no effect with `position: {{position}}`. Absolutely positioned elements cannot float.',
 	[MESSAGE_ID_TEXT_OVERFLOW_DISPLAY]: '`text-overflow: {{value}}` has no effect with `display: {{display}}`. Apply it to a block container holding the text.',
 	[MESSAGE_ID_TABLE_SPACING]: '`border-spacing` has no effect on this table with `border-collapse: collapse`. Use `border-collapse: separate` for spacing between cells.',
@@ -92,12 +95,13 @@ const messages = {
 	[MESSAGE_ID_PERSPECTIVE]: '`perspective-origin` has no effect with `perspective: none`. Set a perspective distance to use this origin.',
 	[MESSAGE_ID_COLUMN_SPAN]: '`column-span: all` has no effect with `position: {{position}}`. Only in-flow elements can span columns.',
 	[MESSAGE_ID_MOTION]: '`{{property}}` has no effect with `offset-path: none`. Set an offset path to use this property.',
+	[MESSAGE_ID_OFFSET_POSITION]: '`offset-position` has no effect when `offset-path` is a coordinate box. The box determines the path position.',
 	[MESSAGE_ID_SHAPE_IMAGE_THRESHOLD]: '`shape-image-threshold` has no effect with `shape-outside: none`. It defines the alpha threshold for an image-based shape.',
 	[MESSAGE_ID_NON_IMAGE_SHAPE]: '`shape-image-threshold` has no effect with a basic shape or shape box. It defines the alpha threshold for an image-based shape.',
 	[MESSAGE_ID_DECORATION]: '`{{property}}` has no effect with `text-decoration-line: none`. Enable a text decoration line on this element.',
 	[MESSAGE_ID_ERROR_DECORATION]: '`{{property}}` has no effect on `spelling-error` or `grammar-error` decorations. Their appearance is controlled by the browser.',
 	[MESSAGE_ID_OUTLINE]: '`{{property}}` has no effect with `outline-style: none`. Enable an outline style to use it.',
-	[MESSAGE_ID_COLUMN_RULE_COLOR]: '`column-rule-color` has no effect with `column-rule-style: none`. Enable a column rule style to use it.',
+	[MESSAGE_ID_COLUMN_RULE_COLOR]: '`column-rule-color` has no effect with a `none` or `hidden` column rule style. Enable a visible column rule style to use it.',
 	[MESSAGE_ID_SCROLL_SNAP_STOP]: '`scroll-snap-stop: always` has no effect when `scroll-snap-align` disables snapping on both axes. Define a snap position to use it.',
 	[MESSAGE_ID_BACKGROUND_IMAGE]: '`{{property}}` has no effect with `background-image: none`. Set a background image to use this property.',
 	[MESSAGE_ID_BORDER_IMAGE]: '`{{property}}` has no effect with `border-image-source: none`. Set a border image to use this property.',
@@ -158,6 +162,12 @@ const inactivePropertyGroups = [
 	{properties: ['position-try-order'], controllingProperties: ['position-try-fallbacks', 'position-try'], messageId: MESSAGE_ID_POSITION_TRY_ORDER},
 	{properties: ['perspective-origin'], controllingProperties: ['perspective', '-webkit-perspective'], messageId: MESSAGE_ID_PERSPECTIVE},
 	{properties: ['offset-distance', 'offset-rotate', 'offset-anchor'], controllingProperties: ['offset-path', 'offset'], messageId: MESSAGE_ID_MOTION},
+	{
+		properties: ['offset-position'],
+		controllingProperties: ['offset-path', 'offset'],
+		values: ['border-box', 'padding-box', 'content-box', 'fill-box', 'stroke-box', 'view-box'],
+		messageId: MESSAGE_ID_OFFSET_POSITION,
+	},
 	{properties: ['shape-image-threshold'], controllingProperties: ['shape-outside', '-webkit-shape-outside'], messageId: MESSAGE_ID_SHAPE_IMAGE_THRESHOLD},
 	{
 		properties: decorationProperties,
@@ -178,6 +188,7 @@ const inactivePropertyGroups = [
 	{
 		properties: ['column-rule-color'],
 		controllingProperties: ['column-rule-style', 'column-rule', 'rule', 'rule-style', '-webkit-column-rule-style', '-webkit-column-rule', '-moz-column-rule-style', '-moz-column-rule'],
+		values: ['none', 'hidden'],
 		messageId: MESSAGE_ID_COLUMN_RULE_COLOR,
 	},
 	{
@@ -741,14 +752,14 @@ const getDeclarationProblem = (node, property, controls, itemLayout) => {
 };
 
 /**
-Get the properties disabled by an explicit table layout or single-line flex layout.
+Get the properties disabled by explicit layout and wrapping controls.
 
 @param {Map<string, {node: DeclarationPlain, property: string}[]>} declarationsByProperty
 @param {CSSSourceCode} sourceCode
-@param {{isTable: boolean, hasNowrap: boolean}} layout
+@param {{isTable: boolean, hasNowrap: boolean, layout: 'flex' | 'grid' | 'flow' | undefined}} controls
 @returns {Map<string, string>}
 */
-const getInactiveLayoutProperties = (declarationsByProperty, sourceCode, {isTable, hasNowrap}) => {
+const getInactiveLayoutProperties = (declarationsByProperty, sourceCode, {isTable, hasNowrap, layout}) => {
 	const inactiveProperties = new Map();
 
 	if (isTable) {
@@ -767,6 +778,15 @@ const getInactiveLayoutProperties = (declarationsByProperty, sourceCode, {isTabl
 			inactiveProperties.set(property, MESSAGE_ID_FLEX_GAP);
 			inactiveProperties.set(`grid-${property}`, MESSAGE_ID_FLEX_GAP);
 		}
+	}
+
+	if (
+		layout === 'flow'
+		&& declarationsByProperty.has('column-wrap')
+		&& getControllingValue(declarationsByProperty, ['column-wrap', 'columns', '-webkit-columns', '-moz-columns'], sourceCode) === 'nowrap'
+	) {
+		inactiveProperties.set('row-gap', MESSAGE_ID_MULTICOL_GAP);
+		inactiveProperties.set('grid-row-gap', MESSAGE_ID_MULTICOL_GAP);
 	}
 
 	return inactiveProperties;
@@ -795,7 +815,7 @@ const getBlockControls = (declarationsByProperty, sourceCode) => {
 	/**
 	@type {Map<string, string>}
 	*/
-	const inactiveProperties = getInactiveLayoutProperties(declarationsByProperty, sourceCode, {isTable, hasNowrap});
+	const inactiveProperties = getInactiveLayoutProperties(declarationsByProperty, sourceCode, {isTable, hasNowrap, layout});
 	for (const {properties, controllingProperties, values = ['none'], messageId} of inactivePropertyGroups) {
 		if (!declarationsByProperty.has(controllingProperties[0]) || !values.includes(getControllingValue(declarationsByProperty, controllingProperties, sourceCode))) {
 			continue;

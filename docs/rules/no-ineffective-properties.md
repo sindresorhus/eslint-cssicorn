@@ -117,7 +117,7 @@ a {
 /* ❌ */
 .article {
 	columns: 2;
-	column-rule-style: none;
+	column-rule-style: hidden;
 	column-rule-color: red;
 }
 
@@ -255,6 +255,7 @@ The rule reports:
 - `justify-content` on table boxes. Table cells and captions can still use it with multicolumn layout.
 - `gap`, `row-gap`, and `column-gap`, including their `grid-*` aliases, on table boxes. Use `border-spacing` for spacing between cells.
 - Cross-axis gaps on explicitly single-line flex containers with a known direction: `row-gap` for rows and `column-gap` for columns. Main-axis gaps and the `gap` shorthand are allowed.
+- `row-gap` and `grid-row-gap` with explicit ordinary flow display and `column-wrap: nowrap`. Column gaps and the `gap` shorthand are allowed.
 - Physical and logical insets with `position: static`.
 - `position-area`, `position-try`, `position-try-fallbacks`, `position-try-order`, and `position-visibility` with explicit `position: static`, `relative`, or `sticky`. These controls require absolute or fixed positioning.
 - `position-try-order` with explicit `position-try-fallbacks: none`, because there are no alternative positions to order.
@@ -265,10 +266,11 @@ The rule reports:
 - `border-spacing` and padding with `border-collapse: collapse` on `display: table` or `inline-table`.
 - `perspective-origin` with `perspective: none`.
 - `offset-distance`, `offset-rotate`, and `offset-anchor` with `offset-path: none`.
+- `offset-position` when `offset-path` is a single coordinate-box keyword, such as `border-box` or `padding-box`. Functions and combined path values are allowed.
 - `shape-image-threshold` with `shape-outside: none`, a basic shape such as `circle()` or `polygon()`, or a shape box such as `margin-box`. Thresholds only affect image-based shapes, including gradients.
 - `text-decoration-color`, `text-decoration-style`, `text-decoration-thickness`, and `text-decoration-inset` with `text-decoration-line: none`, `spelling-error`, or `grammar-error`. Error decorations use browser-defined styling.
 - `outline-color`, `outline-width`, and `outline-offset` with `outline-style: none`.
-- `column-rule-color` with `column-rule-style: none`. Column rule width is allowed because it can affect crossing gap decorations.
+- `column-rule-color` with `column-rule-style: none` or `hidden`. Column rule width is allowed because it can affect crossing gap decorations.
 - Related image controls, such as position, size, repeat, slice, and compositing, when `background-image`, `border-image-source`, or `mask-image` is `none`.
 - `background-position-inline`, `background-position-block`, `background-repeat-x`, `background-repeat-y`, `background-repeat-block`, and `background-repeat-inline` with `background-image: none`.
 - `mask-border-mode`, `mask-border-slice`, `mask-border-width`, `mask-border-outset`, and `mask-border-repeat` with `mask-border-source: none`.
@@ -519,6 +521,28 @@ The gap check requires explicit direction and wrapping controls. An explicit `fl
 }
 ```
 
+`column-wrap: nowrap` creates overflow columns in the inline direction, so `row-gap` cannot separate column rows. The check requires explicit ordinary flow display:
+
+```css
+/* ❌ */
+.article {
+	display: block;
+	column-count: 2;
+	column-height: 20rem;
+	column-wrap: nowrap;
+	row-gap: 1rem;
+}
+
+/* ✅ */
+.article {
+	display: block;
+	column-count: 2;
+	column-height: 20rem;
+	column-wrap: wrap;
+	row-gap: 1rem;
+}
+```
+
 `column-span: all` cannot make a flex or grid item span columns. Flex and grid containers establish their own formatting contexts, so their items cannot span an outer multicolumn container. A flex or grid container can itself span columns when it participates in ordinary flow layout.
 
 Floated children of an ordinary flow container cannot use `justify-self`, `place-self`, `vertical-align`, or `column-span: all`. The parent layout must be explicit because flex and grid items ignore `float`, so their alignment can still apply:
@@ -691,6 +715,26 @@ The browser controls the appearance of `spelling-error` and `grammar-error` deco
 
 Inherited underline and skip controls are allowed because they can affect decorations on descendants. Properties such as `color`, `fill`, and `stroke` can still style the text itself.
 
+## Motion paths
+
+A coordinate-box path already defines its position, so `offset-position` cannot move it. A ray can use `offset-position` to choose its starting position:
+
+```css
+/* ❌ */
+.marker {
+	offset-path: border-box;
+	offset-position: right bottom;
+}
+
+/* ✅ */
+.marker {
+	offset-path: ray(45deg);
+	offset-position: right bottom;
+}
+```
+
+Only a single explicit coordinate-box keyword is checked. The check skips path functions, combined values such as `ray(45deg) border-box`, and competing `offset` shorthands.
+
 ## Intentional declarations
 
 `border-spacing` is inherited and can still affect descendant tables with separate borders, so disable the rule when you intentionally supply inherited spacing.
@@ -722,7 +766,8 @@ General:
 Display, disabled effects, and overflow:
 
 - Display checks ignore `display: none` and `display: contents`.
-- A disabled effect needs a single `none` value in the controlling longhand, except that text decoration controls also check `spelling-error` and `grammar-error`, and `shape-image-threshold` also checks basic shapes and shape boxes.
+- A disabled effect needs a single `none` value in the controlling longhand, except that text decoration controls also check `spelling-error` and `grammar-error`, column rule colors also check `hidden`, `offset-position` checks coordinate-box keywords, and `shape-image-threshold` also checks basic shapes and shape boxes.
+- The multicolumn row gap check skips competing `columns` shorthands because they reset `column-wrap`.
 - The background image checks also treat the draft `background-tbd` image-layer shorthand as a competing controller.
 - The scroll snap check also accepts `scroll-snap-align: none none`. Explicit `scroll-snap-stop: normal` and all-`normal` background blending lists are allowed as resets.
 - Basic shapes and shape boxes must match the CSS grammar. The installed grammar does not currently recognize a single percentage radius such as `circle(50%)`, so that form is skipped.

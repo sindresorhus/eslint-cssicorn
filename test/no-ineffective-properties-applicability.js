@@ -21,6 +21,90 @@ const animationDelayProperties = ['animation-delay-start', 'animation-delay-end'
 
 test({
 	valid: [
+		...['none', 'ray(45deg)', 'circle()', 'url("path.svg#route")', 'ray(45deg) padding-box'].map(path => `a { offset-path: ${path}; offset-position: right bottom; }`),
+		'a { offset-position: right bottom; }',
+		'a { offset-path: padding-box; offset-path: ray(45deg); offset-position: right bottom; }',
+		'a { offset-path: border-box; offset: ray(45deg); offset-position: right bottom; }',
+		'a { offset: border-box; offset-position: right bottom; }',
+		'a { offset-path: var(--path); offset-position: right bottom; }',
+		'a { offset-path: content-box; offset-position: inherit; }',
+		'a { offset-path: border-box; offset-position: var(--position); }',
+		'a { all: unset; offset-path: border-box; offset-position: right bottom; }',
+		'@keyframes move { to { offset-path: padding-box; offset-position: right bottom; } }',
+		':export { offset-path: border-box; offset-position: right bottom; }',
+	],
+	invalid: [
+		...['border-box', 'padding-box', 'content-box', 'fill-box', 'stroke-box', 'view-box'].map(path => ({
+			code: `a { offset-path: ${path}; offset-position: right bottom; }`,
+			errors: [{messageId: 'no-ineffective-properties/offset-position'}],
+		})),
+		{
+			code: '@supports (offset-path: border-box) { a { OFFSET-PATH: /* box */ BORDER-BOX; OFFSET-POSITION: 20% 30% !important; } }',
+			errors: [{messageId: 'no-ineffective-properties/offset-position'}],
+		},
+	],
+});
+
+test({
+	valid: [
+		...['wrap', 'auto', 'inherit', 'var(--wrap)'].map(wrap => `a { display: block; column-wrap: ${wrap}; row-gap: 1rem; }`),
+		'a { column-wrap: nowrap; row-gap: 1rem; }',
+		'a { display: block; column-count: 2; column-wrap: nowrap; column-gap: 1rem; gap: 1rem; }',
+		'a { display: block; column-wrap: nowrap; column-wrap: wrap; row-gap: 1rem; }',
+		...['columns', '-webkit-columns', '-moz-columns'].map(property => `a { display: block; ${property}: 2; column-wrap: nowrap; row-gap: 1rem; }`),
+		...['none', 'contents', 'var(--display)'].map(display => `a { display: ${display}; column-wrap: nowrap; row-gap: 1rem; }`),
+		'a { display: block; display: grid; column-wrap: nowrap; row-gap: 1rem; }',
+		'a { display: block; column-wrap: nowrap; row-gap: var(--gap); grid-row-gap: inherit; }',
+		'a { all: unset; display: block; column-wrap: nowrap; row-gap: 1rem; }',
+		'@keyframes layout { to { display: block; column-wrap: nowrap; row-gap: 1rem; } }',
+		':export { display: block; column-wrap: nowrap; row-gap: 1rem; }',
+	],
+	invalid: [
+		...['flex', 'grid', 'inline-flex', 'inline-grid'].map(display => ({
+			code: `a { display: ${display}; column-wrap: nowrap; row-gap: 1rem; }`,
+			errors: [{messageId: 'no-ineffective-properties/multicol', data: {property: 'column-wrap', display}}],
+		})),
+		...['block', 'inline-block', 'flow-root', 'block flow', 'inline flow-root', 'list-item'].map(display => ({
+			code: `a { display: ${display}; column-count: 2; column-height: 20rem; column-wrap: nowrap; row-gap: 1rem; }`,
+			errors: [{messageId: 'no-ineffective-properties/multicol-gap'}],
+		})),
+		{
+			code: 'a { display: block; column-wrap: nowrap; grid-row-gap: 1rem; > h2 { column-span: all; } }',
+			errors: [{messageId: 'no-ineffective-properties/multicol-gap', data: {property: 'grid-row-gap'}}],
+		},
+		{
+			code: 'a { @media print { DISPLAY: BLOCK; COLUMN-WRAP: /* rows */ NOWRAP; ROW-GAP: 1rem !important; } }',
+			errors: [{messageId: 'no-ineffective-properties/multicol-gap'}],
+		},
+		{
+			code: 'a { display: grid; > .item { display: block; column-wrap: nowrap; row-gap: 1rem; } }',
+			errors: [{messageId: 'no-ineffective-properties/multicol-gap'}],
+		},
+	],
+});
+
+test({
+	valid: [
+		'a { column-rule-style: solid; column-rule-color: red; }',
+		'a { column-rule-style: hidden; column-rule-width: 3px; }',
+		'a { column-rule-style: hidden; column-rule-style: solid; column-rule-color: red; }',
+		'a { column-rule-style: hidden; column-rule: 3px solid; column-rule-color: red; }',
+		'a { column-rule-style: hidden; column-rule-color: inherit; }',
+	],
+	invalid: [
+		{
+			code: 'a { column-rule-style: hidden; column-rule-color: red; }',
+			errors: [{messageId: 'no-ineffective-properties/column-rule-color'}],
+		},
+		{
+			code: '@supports (column-count: 2) { a { COLUMN-RULE-STYLE: /* invisible */ HIDDEN; COLUMN-RULE-COLOR: RED !important; } }',
+			errors: [{messageId: 'no-ineffective-properties/column-rule-color'}],
+		},
+	],
+});
+
+test({
+	valid: [
 		...backgroundRepeatProperties.map(property => `a { background-image: url("image.svg"); ${property}: no-repeat; }`),
 		...backgroundRepeatProperties.map(property => `a { ${property}: no-repeat; }`),
 		...['background-position-inline', 'background-position-block'].map(property => `a { background-image: url("image.svg"); ${property}: 20%; }`),
