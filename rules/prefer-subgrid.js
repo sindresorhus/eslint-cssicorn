@@ -1,4 +1,5 @@
 import {find, generate} from '@eslint/css-tree';
+import cssMathFunctions from './shared/css-math-functions.js';
 import {canBeRepresentedByNestingSelector} from './shared/css-selector-specificity.js';
 import {
 	getCanonicalLexerNode,
@@ -6,7 +7,6 @@ import {
 	getNodesRange,
 	hasCommentInRange,
 	hasSubstitutionOrRandomFunction,
-	isCssModulesInteropDeclaration,
 	normalizeCssIdentifier,
 } from './utils/index.js';
 
@@ -24,12 +24,13 @@ const messages = {
 
 const groupingRules = new Set(['media', 'supports', 'container', 'layer', 'scope']);
 const resetProperties = new Set(['all', 'grid', 'grid-template', 'grid-template-areas', 'writing-mode']);
-const gridDisplays = new Set(['grid', 'inline-grid', 'block grid', 'inline grid']);
-const childBlockers = new Map([
-	['position', new Set(['absolute', 'fixed'])],
-	['contain', new Set(['layout', 'paint', 'content', 'strict'])],
-	['content-visibility', new Set(['auto', 'hidden'])],
-]);
+const gridDisplays = new Set(['grid', 'inline-grid', 'block grid', 'inline grid', 'grid block', 'grid inline']);
+const templateFunctions = new Set(['repeat', 'minmax', 'fit-content', ...cssMathFunctions]);
+
+/**
+Exclude local child positioning and containment controls instead of interpreting their values.
+*/
+const childBlockers = ['position', 'contain', 'content-visibility', 'container', 'container-type'];
 
 /**
 Get a single supported selector, excluding pseudo-element targets and interop selectors.
@@ -77,7 +78,7 @@ function isSupportedContext(node, context) {
 /**
 Collect local declarations, leaving duplicate properties unusable instead of resolving the cascade.
 */
-function getDeclarations(rule, context) {
+function getDeclarations(rule) {
 	const declarations = new Map();
 	for (const declaration of rule.block.children) {
 		if (declaration.type !== 'Declaration') {
@@ -85,7 +86,7 @@ function getDeclarations(rule, context) {
 		}
 
 		const property = normalizeCssIdentifier(declaration.property);
-		if (resetProperties.has(property) || isCssModulesInteropDeclaration(declaration, context)) {
+		if (resetProperties.has(property)) {
 			return;
 		}
 
@@ -99,28 +100,6 @@ function getDeclarations(rule, context) {
 
 	const displayValue = display.value.children.map(node => normalizeCssIdentifier(node.name)).join(' ');
 	return gridDisplays.has(displayValue) ? declarations : undefined;
-}
-
-/**
-Check local child properties that prevent subgrid from participating in its parent grid.
-*/
-function hasChildBlocker(declarations) {
-	for (const [property, keywords] of childBlockers) {
-		if (!declarations.has(property)) {
-			continue;
-		}
-
-		const declaration = declarations.get(property);
-		if (!declaration || declaration.value.type !== 'Value' || getCssWideKeyword(declaration) || hasSubstitutionOrRandomFunction(declaration.value)) {
-			return true;
-		}
-
-		if (find(declaration.value, node => node.type === 'Identifier' && keywords.has(normalizeCssIdentifier(node.name)))) {
-			return true;
-		}
-	}
-
-	return false;
 }
 
 /**
@@ -180,7 +159,10 @@ function getTemplateKey(declaration, context) {
 	}
 
 	const value = normalizeTemplate(getCanonicalLexerNode(declaration.value));
-	if (find(value, node => node.type === 'Function' && node.name === 'repeat' && node.children.at(0)?.type === 'Identifier')) {
+	if (find(value, node => node.type === 'Function' && (
+		!templateFunctions.has(node.name)
+		|| (node.name === 'repeat' && node.children.at(0)?.type === 'Identifier')
+	))) {
 		return;
 	}
 
@@ -227,7 +209,7 @@ const create = context => {
 	const templateKeys = new WeakMap();
 	const getLocalDeclarations = rule => {
 		if (!declarationsByRule.has(rule)) {
-			declarationsByRule.set(rule, getDeclarations(rule, context));
+			declarationsByRule.set(rule, getDeclarations(rule));
 		}
 
 		return declarationsByRule.get(rule);
@@ -273,7 +255,7 @@ const create = context => {
 
 			const parentDeclarations = getLocalDeclarations(parent);
 			const childDeclarations = getLocalDeclarations(rule);
-			if (!parentDeclarations || !childDeclarations || hasChildBlocker(childDeclarations)) {
+			if (!parentDeclarations || !childDeclarations || childBlockers.some(property => childDeclarations.has(property))) {
 				continue;
 			}
 

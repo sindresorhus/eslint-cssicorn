@@ -71,11 +71,11 @@ Native nesting is supported with `> .child` or `& > .child`:
 
 ## Recognition
 
-Both blocks must explicitly declare a grid display: `grid`, `inline-grid`, `block grid`, or `inline grid`. Columns and rows are checked independently, with one report per matching child axis.
+Both blocks must explicitly declare a grid display: `grid`, `inline-grid`, `block grid`, or `inline grid`. The reversed two-keyword forms `grid block` and `grid inline` are also supported. Columns and rows are checked independently, with one report per matching child axis.
 
 The child must span `1 / -1` through `grid-column` or `grid-row`, or the corresponding start and end longhands. Other numeric placements, named placements, and `span` values are ignored.
 
-Templates must match structurally, ignoring formatting, comments, and keyword, function, and unit casing. Named lines retain their case sensitivity. Fixed `repeat()`, `minmax()`, `fit-content()`, and identical calculations are supported. Calculations and repetitions are not evaluated or expanded, and different numeric spellings are not equated.
+Templates must match structurally, ignoring formatting, comments, and keyword, function, and unit casing. Named lines retain their case sensitivity. Fixed `repeat()`, `minmax()`, `fit-content()`, and arithmetic math functions such as `calc()`, `min()`, `max()`, and `clamp()` are supported. Calculations and repetitions are not evaluated or expanded, and different numeric spellings are not equated.
 
 Flat rules must have single selectors in the same containing block. Removing the final `>` and child compound from the child's selector must produce the parent's exact serialized selector. Parent and child rules may appear in either order. Immediately nested direct-child rules are also checked. Pseudo-element targets and duplicate selectors are ignored.
 
@@ -88,9 +88,10 @@ The rule ignores:
 - Descendant and sibling relationships, selector lists, and relationships requiring nesting-selector resolution.
 - Declarations split across blocks, separate conditional wrappers, and external stylesheets. It does not reconstruct the cascade or inspect markup.
 - Templates using substitutions such as `var()`, random values, auto-repeat, CSS-wide keywords, `none`, existing `subgrid`, masonry, or invalid values.
+- Templates with other functions, such as `container-progress()`, `anchor-size()`, or `calc-size()`, even when nested inside a supported function.
 - Pairs with local `all`, `grid`, `grid-template`, `grid-template-areas`, or `writing-mode` declarations.
 - Duplicate controlling declarations, mixed placement shorthands and longhands, and child `grid-area` declarations.
-- Children with local absolute or fixed positioning, layout or paint containment, `contain: content` or `strict`, or `content-visibility: auto` or `hidden`. Unresolved or repeated declarations of these controls are also ignored.
+- Child blocks declaring `position`, `contain`, `content-visibility`, `container`, or `container-type`, regardless of value. These properties are not evaluated, and some values prevent subgrid. Parent blocks may still declare them.
 - Keyframes, descriptor blocks, CSS Modules interop blocks, and unsupported at-rules.
 - Blocks inside any `@supports` condition explicitly testing `subgrid`, regardless of polarity.
 

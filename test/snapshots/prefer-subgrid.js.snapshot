@@ -66,13 +66,81 @@ Suggestion 1/1: Replace this track definition with \`subgrid\`.:
 
 `;
 
-exports[`invalid(13): .parent { display: grid; grid-template-columns: [start] 20ch [middle] 1fr [end]; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: [start] 20ch [middle] 1fr [end]; } 1`] = `
+exports[`invalid(13): .parent { display: grid block; grid-template-columns: 20ch 1fr; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: 20ch 1fr; } 1`] = `
+
+  1 | .parent { display: grid block; grid-template-columns: 20ch 1fr; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: 20ch 1fr; }
+
+`;
+
+exports[`invalid(13): .parent { display: grid block; grid-template-columns: 20ch 1fr; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: 20ch 1fr; } 2`] = `
+
+Message:
+> 1 | .parent { display: grid block; grid-template-columns: 20ch 1fr; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: 20ch 1fr; }
+    |                                                                                                                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Consider using \`subgrid\` for \`grid-template-columns\` to share the parent grid’s tracks.
+
+Suggestion 1/1: Replace this track definition with \`subgrid\`.:
+  1 | .parent { display: grid block; grid-template-columns: 20ch 1fr; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: subgrid; }
+
+`;
+
+exports[`invalid(14): .parent { display: grid; grid-template-columns: 20ch 1fr; } .parent > .child { display: grid block; grid-column: 1 / -1; grid-template-columns: 20ch 1fr; } 1`] = `
+
+  1 | .parent { display: grid; grid-template-columns: 20ch 1fr; } .parent > .child { display: grid block; grid-column: 1 / -1; grid-template-columns: 20ch 1fr; }
+
+`;
+
+exports[`invalid(14): .parent { display: grid; grid-template-columns: 20ch 1fr; } .parent > .child { display: grid block; grid-column: 1 / -1; grid-template-columns: 20ch 1fr; } 2`] = `
+
+Message:
+> 1 | .parent { display: grid; grid-template-columns: 20ch 1fr; } .parent > .child { display: grid block; grid-column: 1 / -1; grid-template-columns: 20ch 1fr; }
+    |                                                                                                                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Consider using \`subgrid\` for \`grid-template-columns\` to share the parent grid’s tracks.
+
+Suggestion 1/1: Replace this track definition with \`subgrid\`.:
+  1 | .parent { display: grid; grid-template-columns: 20ch 1fr; } .parent > .child { display: grid block; grid-column: 1 / -1; grid-template-columns: subgrid; }
+
+`;
+
+exports[`invalid(15): .parent { display: grid inline; grid-template-columns: 20ch 1fr; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: 20ch 1fr; } 1`] = `
+
+  1 | .parent { display: grid inline; grid-template-columns: 20ch 1fr; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: 20ch 1fr; }
+
+`;
+
+exports[`invalid(15): .parent { display: grid inline; grid-template-columns: 20ch 1fr; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: 20ch 1fr; } 2`] = `
+
+Message:
+> 1 | .parent { display: grid inline; grid-template-columns: 20ch 1fr; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: 20ch 1fr; }
+    |                                                                                                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Consider using \`subgrid\` for \`grid-template-columns\` to share the parent grid’s tracks.
+
+Suggestion 1/1: Replace this track definition with \`subgrid\`.:
+  1 | .parent { display: grid inline; grid-template-columns: 20ch 1fr; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: subgrid; }
+
+`;
+
+exports[`invalid(16): .parent { display: grid; grid-template-columns: 20ch 1fr; } .parent > .child { display: grid inline; grid-column: 1 / -1; grid-template-columns: 20ch 1fr; } 1`] = `
+
+  1 | .parent { display: grid; grid-template-columns: 20ch 1fr; } .parent > .child { display: grid inline; grid-column: 1 / -1; grid-template-columns: 20ch 1fr; }
+
+`;
+
+exports[`invalid(16): .parent { display: grid; grid-template-columns: 20ch 1fr; } .parent > .child { display: grid inline; grid-column: 1 / -1; grid-template-columns: 20ch 1fr; } 2`] = `
+
+Message:
+> 1 | .parent { display: grid; grid-template-columns: 20ch 1fr; } .parent > .child { display: grid inline; grid-column: 1 / -1; grid-template-columns: 20ch 1fr; }
+    |                                                                                                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Consider using \`subgrid\` for \`grid-template-columns\` to share the parent grid’s tracks.
+
+Suggestion 1/1: Replace this track definition with \`subgrid\`.:
+  1 | .parent { display: grid; grid-template-columns: 20ch 1fr; } .parent > .child { display: grid inline; grid-column: 1 / -1; grid-template-columns: subgrid; }
+
+`;
+
+exports[`invalid(17): .parent { display: grid; grid-template-columns: [start] 20ch [middle] 1fr [end]; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: [start] 20ch [middle] 1fr [end]; } 1`] = `
 
   1 | .parent { display: grid; grid-template-columns: [start] 20ch [middle] 1fr [end]; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: [start] 20ch [middle] 1fr [end]; }
 
 `;
 
-exports[`invalid(13): .parent { display: grid; grid-template-columns: [start] 20ch [middle] 1fr [end]; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: [start] 20ch [middle] 1fr [end]; } 2`] = `
+exports[`invalid(17): .parent { display: grid; grid-template-columns: [start] 20ch [middle] 1fr [end]; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: [start] 20ch [middle] 1fr [end]; } 2`] = `
 
 Message:
 > 1 | .parent { display: grid; grid-template-columns: [start] 20ch [middle] 1fr [end]; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: [start] 20ch [middle] 1fr [end]; }
@@ -83,13 +151,13 @@ Suggestion 1/1: Replace this track definition with \`subgrid\`.:
 
 `;
 
-exports[`invalid(14): .parent { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: repeat(3, minmax(0, 1fr)); } 1`] = `
+exports[`invalid(18): .parent { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: repeat(3, minmax(0, 1fr)); } 1`] = `
 
   1 | .parent { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: repeat(3, minmax(0, 1fr)); }
 
 `;
 
-exports[`invalid(14): .parent { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: repeat(3, minmax(0, 1fr)); } 2`] = `
+exports[`invalid(18): .parent { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: repeat(3, minmax(0, 1fr)); } 2`] = `
 
 Message:
 > 1 | .parent { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: repeat(3, minmax(0, 1fr)); }
@@ -100,13 +168,13 @@ Suggestion 1/1: Replace this track definition with \`subgrid\`.:
 
 `;
 
-exports[`invalid(15): .parent { display: grid; grid-template-columns: fit-content(30ch) 2fr; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: fit-content(30ch) 2fr; } 1`] = `
+exports[`invalid(19): .parent { display: grid; grid-template-columns: fit-content(30ch) 2fr; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: fit-content(30ch) 2fr; } 1`] = `
 
   1 | .parent { display: grid; grid-template-columns: fit-content(30ch) 2fr; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: fit-content(30ch) 2fr; }
 
 `;
 
-exports[`invalid(15): .parent { display: grid; grid-template-columns: fit-content(30ch) 2fr; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: fit-content(30ch) 2fr; } 2`] = `
+exports[`invalid(19): .parent { display: grid; grid-template-columns: fit-content(30ch) 2fr; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: fit-content(30ch) 2fr; } 2`] = `
 
 Message:
 > 1 | .parent { display: grid; grid-template-columns: fit-content(30ch) 2fr; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: fit-content(30ch) 2fr; }
@@ -114,74 +182,6 @@ Message:
 
 Suggestion 1/1: Replace this track definition with \`subgrid\`.:
   1 | .parent { display: grid; grid-template-columns: fit-content(30ch) 2fr; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: subgrid; }
-
-`;
-
-exports[`invalid(16): .parent { display: grid; grid-template-columns: calc(10px + 2rem) 1fr; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: calc(10px + 2rem) 1fr; } 1`] = `
-
-  1 | .parent { display: grid; grid-template-columns: calc(10px + 2rem) 1fr; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: calc(10px + 2rem) 1fr; }
-
-`;
-
-exports[`invalid(16): .parent { display: grid; grid-template-columns: calc(10px + 2rem) 1fr; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: calc(10px + 2rem) 1fr; } 2`] = `
-
-Message:
-> 1 | .parent { display: grid; grid-template-columns: calc(10px + 2rem) 1fr; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: calc(10px + 2rem) 1fr; }
-    |                                                                                                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Consider using \`subgrid\` for \`grid-template-columns\` to share the parent grid’s tracks.
-
-Suggestion 1/1: Replace this track definition with \`subgrid\`.:
-  1 | .parent { display: grid; grid-template-columns: calc(10px + 2rem) 1fr; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: subgrid; }
-
-`;
-
-exports[`invalid(17): .parent { display: grid; grid-template-columns: 1fr; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: 1fr; } 1`] = `
-
-  1 | .parent { display: grid; grid-template-columns: 1fr; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: 1fr; }
-
-`;
-
-exports[`invalid(17): .parent { display: grid; grid-template-columns: 1fr; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: 1fr; } 2`] = `
-
-Message:
-> 1 | .parent { display: grid; grid-template-columns: 1fr; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: 1fr; }
-    |                                                                                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^ Consider using \`subgrid\` for \`grid-template-columns\` to share the parent grid’s tracks.
-
-Suggestion 1/1: Replace this track definition with \`subgrid\`.:
-  1 | .parent { display: grid; grid-template-columns: 1fr; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: subgrid; }
-
-`;
-
-exports[`invalid(18): .parent { DISPLAY: GRID; GRID-TEMPLATE-COLUMNS: MINMAX(0, 1FR) 20CH; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: minmax(0, 1fr) 20ch; } 1`] = `
-
-  1 | .parent { DISPLAY: GRID; GRID-TEMPLATE-COLUMNS: MINMAX(0, 1FR) 20CH; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: minmax(0, 1fr) 20ch; }
-
-`;
-
-exports[`invalid(18): .parent { DISPLAY: GRID; GRID-TEMPLATE-COLUMNS: MINMAX(0, 1FR) 20CH; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: minmax(0, 1fr) 20ch; } 2`] = `
-
-Message:
-> 1 | .parent { DISPLAY: GRID; GRID-TEMPLATE-COLUMNS: MINMAX(0, 1FR) 20CH; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: minmax(0, 1fr) 20ch; }
-    |                                                                                                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Consider using \`subgrid\` for \`grid-template-columns\` to share the parent grid’s tracks.
-
-Suggestion 1/1: Replace this track definition with \`subgrid\`.:
-  1 | .parent { DISPLAY: GRID; GRID-TEMPLATE-COLUMNS: MINMAX(0, 1FR) 20CH; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: subgrid; }
-
-`;
-
-exports[`invalid(19): .parent { display: grid; grid-template-columns: [\\73 tart] 20ch 1fr; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: [start] 20ch 1fr; } 1`] = `
-
-  1 | .parent { display: grid; grid-template-columns: [\\73 tart] 20ch 1fr; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: [start] 20ch 1fr; }
-
-`;
-
-exports[`invalid(19): .parent { display: grid; grid-template-columns: [\\73 tart] 20ch 1fr; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: [start] 20ch 1fr; } 2`] = `
-
-Message:
-> 1 | .parent { display: grid; grid-template-columns: [\\73 tart] 20ch 1fr; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: [start] 20ch 1fr; }
-    |                                                                                                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Consider using \`subgrid\` for \`grid-template-columns\` to share the parent grid’s tracks.
-
-Suggestion 1/1: Replace this track definition with \`subgrid\`.:
-  1 | .parent { display: grid; grid-template-columns: [\\73 tart] 20ch 1fr; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: subgrid; }
 
 `;
 
@@ -202,30 +202,115 @@ Suggestion 1/1: Replace this track definition with \`subgrid\`.:
 
 `;
 
-exports[`invalid(20): .parent { display: grid; grid-template-columns: 20ch 1fr; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: 20ch 1fr; position: relative; contain: size; content-visibility: visible; } 1`] = `
+exports[`invalid(20): .parent { display: grid; grid-template-columns: calc(10px + 2rem) 1fr; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: calc(10px + 2rem) 1fr; } 1`] = `
 
-  1 | .parent { display: grid; grid-template-columns: 20ch 1fr; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: 20ch 1fr; position: relative; contain: size; content-visibility: visible; }
+  1 | .parent { display: grid; grid-template-columns: calc(10px + 2rem) 1fr; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: calc(10px + 2rem) 1fr; }
 
 `;
 
-exports[`invalid(20): .parent { display: grid; grid-template-columns: 20ch 1fr; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: 20ch 1fr; position: relative; contain: size; content-visibility: visible; } 2`] = `
+exports[`invalid(20): .parent { display: grid; grid-template-columns: calc(10px + 2rem) 1fr; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: calc(10px + 2rem) 1fr; } 2`] = `
 
 Message:
-> 1 | .parent { display: grid; grid-template-columns: 20ch 1fr; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: 20ch 1fr; position: relative; contain: size; content-visibility: visible; }
-    |                                                                                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Consider using \`subgrid\` for \`grid-template-columns\` to share the parent grid’s tracks.
+> 1 | .parent { display: grid; grid-template-columns: calc(10px + 2rem) 1fr; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: calc(10px + 2rem) 1fr; }
+    |                                                                                                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Consider using \`subgrid\` for \`grid-template-columns\` to share the parent grid’s tracks.
 
 Suggestion 1/1: Replace this track definition with \`subgrid\`.:
-  1 | .parent { display: grid; grid-template-columns: 20ch 1fr; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: subgrid; position: relative; contain: size; content-visibility: visible; }
+  1 | .parent { display: grid; grid-template-columns: calc(10px + 2rem) 1fr; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: subgrid; }
 
 `;
 
-exports[`invalid(21): .parent { display: grid; grid-template-columns: 20ch 1fr; position: absolute; contain: layout; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: 20ch 1fr; } 1`] = `
+exports[`invalid(21): .parent { display: grid; grid-template-columns: min(20ch, 30rem) max(0px, 1rem); } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: min(20ch, 30rem) max(0px, 1rem); } 1`] = `
+
+  1 | .parent { display: grid; grid-template-columns: min(20ch, 30rem) max(0px, 1rem); } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: min(20ch, 30rem) max(0px, 1rem); }
+
+`;
+
+exports[`invalid(21): .parent { display: grid; grid-template-columns: min(20ch, 30rem) max(0px, 1rem); } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: min(20ch, 30rem) max(0px, 1rem); } 2`] = `
+
+Message:
+> 1 | .parent { display: grid; grid-template-columns: min(20ch, 30rem) max(0px, 1rem); } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: min(20ch, 30rem) max(0px, 1rem); }
+    |                                                                                                                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Consider using \`subgrid\` for \`grid-template-columns\` to share the parent grid’s tracks.
+
+Suggestion 1/1: Replace this track definition with \`subgrid\`.:
+  1 | .parent { display: grid; grid-template-columns: min(20ch, 30rem) max(0px, 1rem); } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: subgrid; }
+
+`;
+
+exports[`invalid(22): .parent { display: grid; grid-template-columns: repeat(2, [Start] minmax(0, 1fr)); } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: repeat(2, [Start] minmax(0, 1fr)); } 1`] = `
+
+  1 | .parent { display: grid; grid-template-columns: repeat(2, [Start] minmax(0, 1fr)); } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: repeat(2, [Start] minmax(0, 1fr)); }
+
+`;
+
+exports[`invalid(22): .parent { display: grid; grid-template-columns: repeat(2, [Start] minmax(0, 1fr)); } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: repeat(2, [Start] minmax(0, 1fr)); } 2`] = `
+
+Message:
+> 1 | .parent { display: grid; grid-template-columns: repeat(2, [Start] minmax(0, 1fr)); } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: repeat(2, [Start] minmax(0, 1fr)); }
+    |                                                                                                                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Consider using \`subgrid\` for \`grid-template-columns\` to share the parent grid’s tracks.
+
+Suggestion 1/1: Replace this track definition with \`subgrid\`.:
+  1 | .parent { display: grid; grid-template-columns: repeat(2, [Start] minmax(0, 1fr)); } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: subgrid; }
+
+`;
+
+exports[`invalid(23): .parent { display: grid; grid-template-columns: 1fr; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: 1fr; } 1`] = `
+
+  1 | .parent { display: grid; grid-template-columns: 1fr; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: 1fr; }
+
+`;
+
+exports[`invalid(23): .parent { display: grid; grid-template-columns: 1fr; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: 1fr; } 2`] = `
+
+Message:
+> 1 | .parent { display: grid; grid-template-columns: 1fr; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: 1fr; }
+    |                                                                                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^ Consider using \`subgrid\` for \`grid-template-columns\` to share the parent grid’s tracks.
+
+Suggestion 1/1: Replace this track definition with \`subgrid\`.:
+  1 | .parent { display: grid; grid-template-columns: 1fr; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: subgrid; }
+
+`;
+
+exports[`invalid(24): .parent { DISPLAY: GRID; GRID-TEMPLATE-COLUMNS: MINMAX(0, 1FR) 20CH; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: minmax(0, 1fr) 20ch; } 1`] = `
+
+  1 | .parent { DISPLAY: GRID; GRID-TEMPLATE-COLUMNS: MINMAX(0, 1FR) 20CH; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: minmax(0, 1fr) 20ch; }
+
+`;
+
+exports[`invalid(24): .parent { DISPLAY: GRID; GRID-TEMPLATE-COLUMNS: MINMAX(0, 1FR) 20CH; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: minmax(0, 1fr) 20ch; } 2`] = `
+
+Message:
+> 1 | .parent { DISPLAY: GRID; GRID-TEMPLATE-COLUMNS: MINMAX(0, 1FR) 20CH; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: minmax(0, 1fr) 20ch; }
+    |                                                                                                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Consider using \`subgrid\` for \`grid-template-columns\` to share the parent grid’s tracks.
+
+Suggestion 1/1: Replace this track definition with \`subgrid\`.:
+  1 | .parent { DISPLAY: GRID; GRID-TEMPLATE-COLUMNS: MINMAX(0, 1FR) 20CH; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: subgrid; }
+
+`;
+
+exports[`invalid(25): .parent { display: grid; grid-template-columns: [\\73 tart] 20ch 1fr; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: [start] 20ch 1fr; } 1`] = `
+
+  1 | .parent { display: grid; grid-template-columns: [\\73 tart] 20ch 1fr; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: [start] 20ch 1fr; }
+
+`;
+
+exports[`invalid(25): .parent { display: grid; grid-template-columns: [\\73 tart] 20ch 1fr; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: [start] 20ch 1fr; } 2`] = `
+
+Message:
+> 1 | .parent { display: grid; grid-template-columns: [\\73 tart] 20ch 1fr; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: [start] 20ch 1fr; }
+    |                                                                                                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Consider using \`subgrid\` for \`grid-template-columns\` to share the parent grid’s tracks.
+
+Suggestion 1/1: Replace this track definition with \`subgrid\`.:
+  1 | .parent { display: grid; grid-template-columns: [\\73 tart] 20ch 1fr; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: subgrid; }
+
+`;
+
+exports[`invalid(26): .parent { display: grid; grid-template-columns: 20ch 1fr; position: absolute; contain: layout; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: 20ch 1fr; } 1`] = `
 
   1 | .parent { display: grid; grid-template-columns: 20ch 1fr; position: absolute; contain: layout; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: 20ch 1fr; }
 
 `;
 
-exports[`invalid(21): .parent { display: grid; grid-template-columns: 20ch 1fr; position: absolute; contain: layout; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: 20ch 1fr; } 2`] = `
+exports[`invalid(26): .parent { display: grid; grid-template-columns: 20ch 1fr; position: absolute; contain: layout; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: 20ch 1fr; } 2`] = `
 
 Message:
 > 1 | .parent { display: grid; grid-template-columns: 20ch 1fr; position: absolute; contain: layout; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: 20ch 1fr; }
@@ -236,13 +321,13 @@ Suggestion 1/1: Replace this track definition with \`subgrid\`.:
 
 `;
 
-exports[`invalid(22): .parent { display: grid; grid-template-columns: 20ch 1fr; column-gap: 1rem; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: 20ch 1fr; column-gap: 2rem; width: 10rem; padding: 1rem; } 1`] = `
+exports[`invalid(27): .parent { display: grid; grid-template-columns: 20ch 1fr; column-gap: 1rem; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: 20ch 1fr; column-gap: 2rem; width: 10rem; padding: 1rem; } 1`] = `
 
   1 | .parent { display: grid; grid-template-columns: 20ch 1fr; column-gap: 1rem; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: 20ch 1fr; column-gap: 2rem; width: 10rem; padding: 1rem; }
 
 `;
 
-exports[`invalid(22): .parent { display: grid; grid-template-columns: 20ch 1fr; column-gap: 1rem; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: 20ch 1fr; column-gap: 2rem; width: 10rem; padding: 1rem; } 2`] = `
+exports[`invalid(27): .parent { display: grid; grid-template-columns: 20ch 1fr; column-gap: 1rem; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: 20ch 1fr; column-gap: 2rem; width: 10rem; padding: 1rem; } 2`] = `
 
 Message:
 > 1 | .parent { display: grid; grid-template-columns: 20ch 1fr; column-gap: 1rem; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: 20ch 1fr; column-gap: 2rem; width: 10rem; padding: 1rem; }
@@ -253,13 +338,13 @@ Suggestion 1/1: Replace this track definition with \`subgrid\`.:
 
 `;
 
-exports[`invalid(23): .parent { display: grid; grid-template-columns: 20ch 1fr; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: 20ch 1fr !important; } 1`] = `
+exports[`invalid(28): .parent { display: grid; grid-template-columns: 20ch 1fr; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: 20ch 1fr !important; } 1`] = `
 
   1 | .parent { display: grid; grid-template-columns: 20ch 1fr; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: 20ch 1fr !important; }
 
 `;
 
-exports[`invalid(23): .parent { display: grid; grid-template-columns: 20ch 1fr; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: 20ch 1fr !important; } 2`] = `
+exports[`invalid(28): .parent { display: grid; grid-template-columns: 20ch 1fr; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: 20ch 1fr !important; } 2`] = `
 
 Message:
 > 1 | .parent { display: grid; grid-template-columns: 20ch 1fr; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: 20ch 1fr !important; }
@@ -270,13 +355,13 @@ Suggestion 1/1: Replace this track definition with \`subgrid\`.:
 
 `;
 
-exports[`invalid(24): .parent { display: grid; grid-template-columns: 20ch /* parent */ 1fr; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: 20ch 1fr; } 1`] = `
+exports[`invalid(29): .parent { display: grid; grid-template-columns: 20ch /* parent */ 1fr; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: 20ch 1fr; } 1`] = `
 
   1 | .parent { display: grid; grid-template-columns: 20ch /* parent */ 1fr; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: 20ch 1fr; }
 
 `;
 
-exports[`invalid(24): .parent { display: grid; grid-template-columns: 20ch /* parent */ 1fr; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: 20ch 1fr; } 2`] = `
+exports[`invalid(29): .parent { display: grid; grid-template-columns: 20ch /* parent */ 1fr; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: 20ch 1fr; } 2`] = `
 
 Message:
 > 1 | .parent { display: grid; grid-template-columns: 20ch /* parent */ 1fr; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: 20ch 1fr; }
@@ -284,88 +369,6 @@ Message:
 
 Suggestion 1/1: Replace this track definition with \`subgrid\`.:
   1 | .parent { display: grid; grid-template-columns: 20ch /* parent */ 1fr; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: subgrid; }
-
-`;
-
-exports[`invalid(25): .parent { display: grid; grid-template-columns: 20ch 1fr; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: 20ch /* keep */ 1fr; } 1`] = `
-
-  1 | .parent { display: grid; grid-template-columns: 20ch 1fr; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: 20ch /* keep */ 1fr; }
-
-`;
-
-exports[`invalid(25): .parent { display: grid; grid-template-columns: 20ch 1fr; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: 20ch /* keep */ 1fr; } 2`] = `
-
-Message:
-> 1 | .parent { display: grid; grid-template-columns: 20ch 1fr; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: 20ch /* keep */ 1fr; }
-    |                                                                                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Consider using \`subgrid\` for \`grid-template-columns\` to share the parent grid’s tracks.
-
-`;
-
-exports[`invalid(26): @media (width > 1px) { .parent { display: grid; grid-template-columns: 20ch 1fr; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: 20ch 1fr; } } 1`] = `
-
-  1 | @media (width > 1px) { .parent { display: grid; grid-template-columns: 20ch 1fr; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: 20ch 1fr; } }
-
-`;
-
-exports[`invalid(26): @media (width > 1px) { .parent { display: grid; grid-template-columns: 20ch 1fr; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: 20ch 1fr; } } 2`] = `
-
-Message:
-> 1 | @media (width > 1px) { .parent { display: grid; grid-template-columns: 20ch 1fr; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: 20ch 1fr; } }
-    |                                                                                                                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Consider using \`subgrid\` for \`grid-template-columns\` to share the parent grid’s tracks.
-
-Suggestion 1/1: Replace this track definition with \`subgrid\`.:
-  1 | @media (width > 1px) { .parent { display: grid; grid-template-columns: 20ch 1fr; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: subgrid; } }
-
-`;
-
-exports[`invalid(27): @supports (display: grid) { .parent { display: grid; grid-template-columns: 20ch 1fr; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: 20ch 1fr; } } 1`] = `
-
-  1 | @supports (display: grid) { .parent { display: grid; grid-template-columns: 20ch 1fr; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: 20ch 1fr; } }
-
-`;
-
-exports[`invalid(27): @supports (display: grid) { .parent { display: grid; grid-template-columns: 20ch 1fr; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: 20ch 1fr; } } 2`] = `
-
-Message:
-> 1 | @supports (display: grid) { .parent { display: grid; grid-template-columns: 20ch 1fr; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: 20ch 1fr; } }
-    |                                                                                                                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Consider using \`subgrid\` for \`grid-template-columns\` to share the parent grid’s tracks.
-
-Suggestion 1/1: Replace this track definition with \`subgrid\`.:
-  1 | @supports (display: grid) { .parent { display: grid; grid-template-columns: 20ch 1fr; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: subgrid; } }
-
-`;
-
-exports[`invalid(28): @container (width > 1px) { .parent { display: grid; grid-template-columns: 20ch 1fr; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: 20ch 1fr; } } 1`] = `
-
-  1 | @container (width > 1px) { .parent { display: grid; grid-template-columns: 20ch 1fr; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: 20ch 1fr; } }
-
-`;
-
-exports[`invalid(28): @container (width > 1px) { .parent { display: grid; grid-template-columns: 20ch 1fr; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: 20ch 1fr; } } 2`] = `
-
-Message:
-> 1 | @container (width > 1px) { .parent { display: grid; grid-template-columns: 20ch 1fr; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: 20ch 1fr; } }
-    |                                                                                                                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Consider using \`subgrid\` for \`grid-template-columns\` to share the parent grid’s tracks.
-
-Suggestion 1/1: Replace this track definition with \`subgrid\`.:
-  1 | @container (width > 1px) { .parent { display: grid; grid-template-columns: 20ch 1fr; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: subgrid; } }
-
-`;
-
-exports[`invalid(29): @layer example { .parent { display: grid; grid-template-columns: 20ch 1fr; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: 20ch 1fr; } } 1`] = `
-
-  1 | @layer example { .parent { display: grid; grid-template-columns: 20ch 1fr; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: 20ch 1fr; } }
-
-`;
-
-exports[`invalid(29): @layer example { .parent { display: grid; grid-template-columns: 20ch 1fr; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: 20ch 1fr; } } 2`] = `
-
-Message:
-> 1 | @layer example { .parent { display: grid; grid-template-columns: 20ch 1fr; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: 20ch 1fr; } }
-    |                                                                                                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Consider using \`subgrid\` for \`grid-template-columns\` to share the parent grid’s tracks.
-
-Suggestion 1/1: Replace this track definition with \`subgrid\`.:
-  1 | @layer example { .parent { display: grid; grid-template-columns: 20ch 1fr; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: subgrid; } }
 
 `;
 
@@ -386,13 +389,95 @@ Suggestion 1/1: Replace this track definition with \`subgrid\`.:
 
 `;
 
-exports[`invalid(30): @scope (.example) { .parent { display: grid; grid-template-columns: 20ch 1fr; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: 20ch 1fr; } } 1`] = `
+exports[`invalid(30): .parent { display: grid; grid-template-columns: 20ch 1fr; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: 20ch /* keep */ 1fr; } 1`] = `
+
+  1 | .parent { display: grid; grid-template-columns: 20ch 1fr; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: 20ch /* keep */ 1fr; }
+
+`;
+
+exports[`invalid(30): .parent { display: grid; grid-template-columns: 20ch 1fr; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: 20ch /* keep */ 1fr; } 2`] = `
+
+Message:
+> 1 | .parent { display: grid; grid-template-columns: 20ch 1fr; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: 20ch /* keep */ 1fr; }
+    |                                                                                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Consider using \`subgrid\` for \`grid-template-columns\` to share the parent grid’s tracks.
+
+`;
+
+exports[`invalid(31): @media (width > 1px) { .parent { display: grid; grid-template-columns: 20ch 1fr; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: 20ch 1fr; } } 1`] = `
+
+  1 | @media (width > 1px) { .parent { display: grid; grid-template-columns: 20ch 1fr; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: 20ch 1fr; } }
+
+`;
+
+exports[`invalid(31): @media (width > 1px) { .parent { display: grid; grid-template-columns: 20ch 1fr; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: 20ch 1fr; } } 2`] = `
+
+Message:
+> 1 | @media (width > 1px) { .parent { display: grid; grid-template-columns: 20ch 1fr; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: 20ch 1fr; } }
+    |                                                                                                                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Consider using \`subgrid\` for \`grid-template-columns\` to share the parent grid’s tracks.
+
+Suggestion 1/1: Replace this track definition with \`subgrid\`.:
+  1 | @media (width > 1px) { .parent { display: grid; grid-template-columns: 20ch 1fr; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: subgrid; } }
+
+`;
+
+exports[`invalid(32): @supports (display: grid) { .parent { display: grid; grid-template-columns: 20ch 1fr; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: 20ch 1fr; } } 1`] = `
+
+  1 | @supports (display: grid) { .parent { display: grid; grid-template-columns: 20ch 1fr; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: 20ch 1fr; } }
+
+`;
+
+exports[`invalid(32): @supports (display: grid) { .parent { display: grid; grid-template-columns: 20ch 1fr; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: 20ch 1fr; } } 2`] = `
+
+Message:
+> 1 | @supports (display: grid) { .parent { display: grid; grid-template-columns: 20ch 1fr; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: 20ch 1fr; } }
+    |                                                                                                                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Consider using \`subgrid\` for \`grid-template-columns\` to share the parent grid’s tracks.
+
+Suggestion 1/1: Replace this track definition with \`subgrid\`.:
+  1 | @supports (display: grid) { .parent { display: grid; grid-template-columns: 20ch 1fr; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: subgrid; } }
+
+`;
+
+exports[`invalid(33): @container (width > 1px) { .parent { display: grid; grid-template-columns: 20ch 1fr; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: 20ch 1fr; } } 1`] = `
+
+  1 | @container (width > 1px) { .parent { display: grid; grid-template-columns: 20ch 1fr; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: 20ch 1fr; } }
+
+`;
+
+exports[`invalid(33): @container (width > 1px) { .parent { display: grid; grid-template-columns: 20ch 1fr; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: 20ch 1fr; } } 2`] = `
+
+Message:
+> 1 | @container (width > 1px) { .parent { display: grid; grid-template-columns: 20ch 1fr; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: 20ch 1fr; } }
+    |                                                                                                                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Consider using \`subgrid\` for \`grid-template-columns\` to share the parent grid’s tracks.
+
+Suggestion 1/1: Replace this track definition with \`subgrid\`.:
+  1 | @container (width > 1px) { .parent { display: grid; grid-template-columns: 20ch 1fr; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: subgrid; } }
+
+`;
+
+exports[`invalid(34): @layer example { .parent { display: grid; grid-template-columns: 20ch 1fr; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: 20ch 1fr; } } 1`] = `
+
+  1 | @layer example { .parent { display: grid; grid-template-columns: 20ch 1fr; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: 20ch 1fr; } }
+
+`;
+
+exports[`invalid(34): @layer example { .parent { display: grid; grid-template-columns: 20ch 1fr; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: 20ch 1fr; } } 2`] = `
+
+Message:
+> 1 | @layer example { .parent { display: grid; grid-template-columns: 20ch 1fr; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: 20ch 1fr; } }
+    |                                                                                                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Consider using \`subgrid\` for \`grid-template-columns\` to share the parent grid’s tracks.
+
+Suggestion 1/1: Replace this track definition with \`subgrid\`.:
+  1 | @layer example { .parent { display: grid; grid-template-columns: 20ch 1fr; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: subgrid; } }
+
+`;
+
+exports[`invalid(35): @scope (.example) { .parent { display: grid; grid-template-columns: 20ch 1fr; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: 20ch 1fr; } } 1`] = `
 
   1 | @scope (.example) { .parent { display: grid; grid-template-columns: 20ch 1fr; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: 20ch 1fr; } }
 
 `;
 
-exports[`invalid(30): @scope (.example) { .parent { display: grid; grid-template-columns: 20ch 1fr; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: 20ch 1fr; } } 2`] = `
+exports[`invalid(35): @scope (.example) { .parent { display: grid; grid-template-columns: 20ch 1fr; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: 20ch 1fr; } } 2`] = `
 
 Message:
 > 1 | @scope (.example) { .parent { display: grid; grid-template-columns: 20ch 1fr; } .parent > .child { display: grid; grid-column: 1 / -1; grid-template-columns: 20ch 1fr; } }
@@ -403,7 +488,7 @@ Suggestion 1/1: Replace this track definition with \`subgrid\`.:
 
 `;
 
-exports[`invalid(31): .parent {\r\n  display: grid;\r\n  grid-template-columns: 20ch 1fr;\r\n}\r\n.parent > .child {\r\n  display: grid;\r\n  grid-column: 1 / -1;\r\n  grid-template-columns: 20ch 1fr;\r\n} 1`] = `
+exports[`invalid(36): .parent {\r\n  display: grid;\r\n  grid-template-columns: 20ch 1fr;\r\n}\r\n.parent > .child {\r\n  display: grid;\r\n  grid-column: 1 / -1;\r\n  grid-template-columns: 20ch 1fr;\r\n} 1`] = `
 
   1 | .parent {
   2 |   display: grid;
@@ -417,7 +502,7 @@ exports[`invalid(31): .parent {\r\n  display: grid;\r\n  grid-template-columns: 
 
 `;
 
-exports[`invalid(31): .parent {\r\n  display: grid;\r\n  grid-template-columns: 20ch 1fr;\r\n}\r\n.parent > .child {\r\n  display: grid;\r\n  grid-column: 1 / -1;\r\n  grid-template-columns: 20ch 1fr;\r\n} 2`] = `
+exports[`invalid(36): .parent {\r\n  display: grid;\r\n  grid-template-columns: 20ch 1fr;\r\n}\r\n.parent > .child {\r\n  display: grid;\r\n  grid-column: 1 / -1;\r\n  grid-template-columns: 20ch 1fr;\r\n} 2`] = `
 
 Message:
   1 | .parent {

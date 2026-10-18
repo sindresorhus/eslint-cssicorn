@@ -74,6 +74,16 @@ test.snapshot({
 			'content-visibility: auto;',
 			'content-visibility: hidden;',
 		].map(declaration => getPair(columns, `${childColumns} ${declaration}`)),
+		...[
+			'position: relative;',
+			'contain: size;',
+			'content-visibility: visible;',
+			'container-type: inline-size;',
+			'container-type: size;',
+			'container: card / inline-size;',
+			'container-type: normal;',
+			'container: none;',
+		].map(declaration => getPair(columns, `${childColumns} ${declaration}`)),
 		...['position: absolute;', 'contain: layout;', 'content-visibility: hidden;'].map(declaration => {
 			const [property] = declaration.split(':', 1);
 			return getPair(`${columns} ${declaration}`, `${childColumns} ${property}: inherit;`);
@@ -81,6 +91,12 @@ test.snapshot({
 		getPair(columns, childColumns.replace('grid-column: 1 / -1;', 'grid-column-start: 1;')),
 		getPair(columns, childColumns.replace('grid-column: 1 / -1;', 'grid-column-start: 1; grid-column-end: -1; grid-column-end: -1;')),
 		getPair('display: grid; grid-template-columns: [Start] 20ch 1fr;', 'display: grid; grid-column: 1 / -1; grid-template-columns: [start] 20ch 1fr;'),
+		getPair('display: grid; grid-template-columns: repeat(2, [Start] minmax(0, 1fr));', 'display: grid; grid-column: 1 / -1; grid-template-columns: repeat(2, [start] minmax(0, 1fr));'),
+		getPair(
+			'display: grid; grid-template-columns: calc(container-progress(width of Main, 10px, 100px) * 10px) 1fr;',
+			'display: grid; grid-column: 1 / -1; grid-template-columns: calc(container-progress(width of main, 10px, 100px) * 10px) 1fr;',
+		),
+		getPair('display: grid; grid-template-columns: calc(unknown(10px)) 1fr;', 'display: grid; grid-column: 1 / -1; grid-template-columns: calc(unknown(10px)) 1fr;'),
 		getPair(columns, childColumns.replace('1fr', '1.0fr')),
 		...[
 			'(grid-template-columns: subgrid)',
@@ -90,6 +106,7 @@ test.snapshot({
 		`@font-face { ${columns} } .parent > .child { ${childColumns} }`,
 		`@keyframes example { from { ${columns} } to { ${childColumns} } }`,
 		`:export { ${columns} > .child { ${childColumns} } }`,
+		`:import("tokens.css") { ${columns} > .child { ${childColumns} } }`,
 	],
 	invalid: [
 		getPair(),
@@ -101,16 +118,21 @@ test.snapshot({
 		getPair(`${columns} grid-template-rows: 100px 1fr;`, `${childColumns} grid-row: 1 / -1; grid-template-rows: 100px 1fr;`),
 		getPair(columns, childColumns.replace('grid-column: 1 / -1;', 'grid-column-start: 1; grid-column-end: -1;')),
 		...['inline-grid', 'block grid', 'inline grid'].map(display => getPair().replaceAll('display: grid', () => `display: ${display}`)),
+		...['grid block', 'grid inline'].flatMap(display => [
+			getPair(columns.replace('display: grid', () => `display: ${display}`)),
+			getPair(columns, childColumns.replace('display: grid', () => `display: ${display}`)),
+		]),
 		...[
 			'[start] 20ch [middle] 1fr [end]',
 			'repeat(3, minmax(0, 1fr))',
 			'fit-content(30ch) 2fr',
 			'calc(10px + 2rem) 1fr',
+			'min(20ch, 30rem) max(0px, 1rem)',
+			'repeat(2, [Start] minmax(0, 1fr))',
 			'1fr',
 		].map(value => getPair(`display: grid; grid-template-columns: ${value};`, `display: grid; grid-column: 1 / -1; grid-template-columns: ${value};`)),
 		getPair('DISPLAY: GRID; GRID-TEMPLATE-COLUMNS: MINMAX(0, 1FR) 20CH;', 'display: grid; grid-column: 1 / -1; grid-template-columns: minmax(0, 1fr) 20ch;'),
 		getPair(String.raw`display: grid; grid-template-columns: [\73 tart] 20ch 1fr;`, 'display: grid; grid-column: 1 / -1; grid-template-columns: [start] 20ch 1fr;'),
-		getPair(columns, `${childColumns} position: relative; contain: size; content-visibility: visible;`),
 		getPair(`${columns} position: absolute; contain: layout;`),
 		getPair(`${columns} column-gap: 1rem;`, `${childColumns} column-gap: 2rem; width: 10rem; padding: 1rem;`),
 		getPair(columns, childColumns.replace('1fr;', '1fr !important;')),
@@ -121,7 +143,7 @@ test.snapshot({
 	],
 });
 
-nodeTest('suggestions only replace the template value and leave no further report', () => {
+nodeTest('suggestions preserve surrounding comments and resolve each reported axis', () => {
 	const linter = new Linter();
 	const config = {
 		files: ['**/*.css'],
@@ -129,12 +151,38 @@ nodeTest('suggestions only replace the template value and leave no further repor
 		language: 'css/css',
 		rules: {'cssicorn/prefer-subgrid': 'error'},
 	};
-	const code = getPair(columns, childColumns.replace('1fr;', '1fr !important;'));
-	const [message] = linter.verify(code, config, {filename: 'test.css'});
-	assert.equal(message.messageId, 'prefer-subgrid');
-	assert.equal(message.fix, undefined);
-	const [{fix}] = message.suggestions;
-	const output = code.slice(0, fix.range[0]) + fix.text + code.slice(fix.range[1]);
-	assert.equal(output, getPair(columns, childColumns.replace('20ch 1fr;', 'subgrid !important;')));
-	assert.deepEqual(linter.verify(output, config, {filename: 'test.css'}), []);
+	const cases = [
+		...[
+			['20ch 1fr !important', 'subgrid !important'],
+			['/* before */ 20ch 1fr', '/* before */ subgrid'],
+			['20ch 1fr /* after */', 'subgrid /* after */'],
+			['20ch 1fr /* after */ !important', 'subgrid /* after */ !important'],
+		].map(([value, replacement]) => ({
+			code: getPair(columns, childColumns.replace('20ch 1fr', () => value)),
+			expected: getPair(columns, childColumns.replace('20ch 1fr', () => replacement)),
+			errors: 1,
+		})),
+		{
+			code: getPair(`${columns} grid-template-rows: 100px 1fr;`, `${childColumns} grid-row: 1 / -1; grid-template-rows: 100px 1fr;`),
+			expected: getPair(`${columns} grid-template-rows: 100px 1fr;`, 'display: grid; grid-column: 1 / -1; grid-template-columns: subgrid; grid-row: 1 / -1; grid-template-rows: subgrid;'),
+			errors: 2,
+		},
+	];
+	for (const {code, expected, errors} of cases) {
+		const messages = linter.verify(code, config, {filename: 'test.css'});
+		assert.equal(messages.length, errors);
+		const fixes = messages.map(message => {
+			assert.equal(message.messageId, 'prefer-subgrid');
+			assert.equal(message.fix, undefined);
+			assert.equal(message.suggestions.length, 1);
+			return message.suggestions[0].fix;
+		});
+		let output = code;
+		for (const fix of fixes.toSorted((first, second) => second.range[0] - first.range[0])) {
+			output = output.slice(0, fix.range[0]) + fix.text + output.slice(fix.range[1]);
+		}
+
+		assert.equal(output, expected);
+		assert.deepEqual(linter.verify(output, config, {filename: 'test.css'}), []);
+	}
 });
