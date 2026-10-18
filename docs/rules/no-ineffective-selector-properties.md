@@ -64,6 +64,8 @@ The rule checks a list of common ineffective properties on:
 
 For [`::first-line`](https://www.w3.org/TR/css-pseudo-4/#first-line-styling) and [`::placeholder`](https://www.w3.org/TR/css-pseudo-4/#placeholder-pseudo), the rule only checks `writing-mode`, `direction`, and `text-orientation`.
 
+For `::cue()` arguments containing `:past` or `:future`, the rule also checks font properties, `line-height`, `white-space` and its longhands, `text-combine-upright`, and `ruby-position`, which WebVTT excludes from time-dependent cue styling.
+
 Partially effective shorthands, such as `background` on highlights and visited links, and `border` on visited links, are not reported.
 
 The rule checks the final target of each selector, also when a nested rule has an explicit target, and only reports a declaration when every selector in the list makes it ineffective. An unknown selector or preprocessor syntax in any selector prevents the report.

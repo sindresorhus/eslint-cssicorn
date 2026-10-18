@@ -2,6 +2,65 @@ import {getTester} from './utils/test.js';
 
 const {test} = getTester(import.meta);
 
+test({
+	valid: [
+		'video::cue(.past) { font-size: 2em; white-space: pre; }',
+		'video::cue(v[voice=":past"]) { font-size: 2em; }',
+		'video::cue(.caption /* :future */) { font-size: 2em; }',
+		'video::cue(:past), video::cue(.caption) { font-size: 2em; }',
+		'video::cue-region(#past) { font-size: 2em; white-space: pre; }',
+	],
+	invalid: [
+		{
+			code: 'video::cue(:past) { font-size: 2em; color: yellow; }',
+			output: 'video::cue(:past) {  color: yellow; }',
+			errors: [{messageId: 'no-ineffective-selector-properties', data: {property: 'font-size', selectors: '::cue'}}],
+		},
+		{
+			code: 'video::cue(:future) { white-space: pre; color: cyan; }',
+			output: 'video::cue(:future) {  color: cyan; }',
+			errors: [{messageId: 'no-ineffective-selector-properties', data: {property: 'white-space', selectors: '::cue'}}],
+		},
+		...[
+			'font: bold 1rem/2 serif',
+			'font-family: serif',
+			'font-weight: bold',
+			'line-height: 2',
+			'white-space-collapse: preserve',
+			'text-combine-upright: all',
+			'ruby-position: under',
+		].map(declaration => ({
+			code: `video::cue(.caption:past) { ${declaration}; color: yellow; }`,
+			output: 'video::cue(.caption:past) {  color: yellow; }',
+			errors: [{messageId: 'no-ineffective-selector-properties', data: {property: declaration.split(':', 1)[0], selectors: '::cue'}}],
+		})),
+		...[
+			'video::cue(:not(:past))',
+			'video::cue(:is(:future, .caption))',
+			'video::cue(:past), video::cue(:future)',
+			'VIDEO::CUE(:FUTURE)',
+		].map(selector => ({
+			code: `${selector} { font-size: 2em; color: yellow; }`,
+			output: `${selector} {  color: yellow; }`,
+			errors: 1,
+		})),
+		{
+			code: '.video { &::cue(:past) { @media (width > 1px) { font-size: 2em; color: yellow; } } }',
+			output: '.video { &::cue(:past) { @media (width > 1px) {  color: yellow; } } }',
+			errors: 1,
+		},
+		{
+			code: 'video::cue(:future) { font-size: /* retain */ 2em; }',
+			errors: 1,
+		},
+		{
+			code: 'video::cue(:past) {\r\n  font-size: 2em !important;\r\n  color: yellow;\r\n}',
+			output: 'video::cue(:past) {\r\n  color: yellow;\r\n}',
+			errors: 1,
+		},
+	],
+});
+
 const sharedDeclarations = [
 	'margin: 1rem',
 	'margin-right: 0.5rem',
@@ -481,7 +540,8 @@ test({
 
 test({
 	valid: [
-		...['video::cue', 'video::cue(.important)', 'video::cue(:past)', 'video::cue(:future)'].map(selector => `${selector} { opacity: 0.5; font: bold 1rem/2 serif; white-space: pre; }`),
+		...['video::cue', 'video::cue(.important)'].map(selector => `${selector} { opacity: 0.5; font: bold 1rem/2 serif; white-space: pre; }`),
+		...['video::cue(:past)', 'video::cue(:future)'].map(selector => `${selector} { opacity: 0.5; color: yellow; background: blue; text-shadow: 1px 1px black; }`),
 		'video::cue { background: url(image.png) yellow; background-image: url(image.png); background-position: center; background-size: cover; }',
 		'video::cue { background-position-x: 1px; background-position-y: 1px; background-repeat: repeat; background-origin: content-box; background-clip: padding-box; background-attachment: fixed; }',
 		'video::cue(b) { visibility: visible; outline: 1px solid red; text-decoration: underline red; text-shadow: 1px 1px red; ruby-position: under; text-combine-upright: all; }',

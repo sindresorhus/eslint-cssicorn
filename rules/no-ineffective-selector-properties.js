@@ -1,5 +1,6 @@
 // @ts-check
 
+import {find} from '@eslint/css-tree';
 import sizeProperties from './shared/css-size-properties.js';
 import {shorthandToAffectedProperties} from './shared/css-shorthand-properties.js';
 import {
@@ -8,7 +9,12 @@ import {
 	isPseudoElementNode,
 	isStandardPseudoSelector,
 } from './shared/css-selector-specificity.js';
-import {getDeclarationRemovalRange, normalizeCssIdentifier, transparentGroupingAtRules} from './utils/index.js';
+import {
+	getDeclarationRemovalRange,
+	normalizeCssIdentifier,
+	parse,
+	transparentGroupingAtRules,
+} from './utils/index.js';
 
 /**
 @import {BlockPlain, RulePlain, SelectorPlain, PseudoElementSelectorPlain, PseudoClassSelectorPlain} from '@eslint/css-tree';
@@ -97,9 +103,31 @@ for (const property of ['opacity', ...getPropertyNames(['background']), 'backgro
 	cueProperties.delete(property);
 }
 
+const temporalCueProperties = new Set([...cueProperties, ...fontProperties, ...getPropertyNames(['white-space']), 'text-combine-upright', 'ruby-position']);
+
 // Browsers may apply other properties to first-line and placeholder text, but these are explicitly excluded.
 const firstLineProperties = new Set(['writing-mode', 'direction', 'text-orientation']);
 const highlightSelectors = new Set(['selection', 'target-text', 'spelling-error', 'grammar-error', 'search-text', 'highlight']);
+
+/**
+Check whether a cue selector contains a time-dependent pseudo-class, for which WebVTT excludes typography properties.
+
+@param {PseudoElementSelectorPlain | PseudoClassSelectorPlain} node
+@returns {boolean}
+*/
+const hasTemporalCueSelector = node => {
+	const argument = node.children?.[0];
+	if (argument?.type !== 'Raw') {
+		return false;
+	}
+
+	try {
+		const selector = parse(argument.value, {context: 'selector'});
+		return Boolean(find(selector, child => child.type === 'PseudoClassSelector' && child.children === null && ['past', 'future'].includes(normalizeCssIdentifier(child.name))));
+	} catch {
+		return false;
+	}
+};
 
 /**
 Check whether a pseudo-class requires its target to be a visited link.
@@ -154,7 +182,7 @@ const getSelectorRestriction = (selector, parentIsVisited = false) => {
 		}
 
 		if (name === 'cue' || name === 'cue-region') {
-			return {selector: `::${name}`, properties: cueProperties};
+			return {selector: `::${name}`, properties: name === 'cue' && hasTemporalCueSelector(pseudoElement) ? temporalCueProperties : cueProperties};
 		}
 
 		if (name === 'first-line' || name === 'placeholder') {
