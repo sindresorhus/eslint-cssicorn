@@ -174,6 +174,22 @@ a {
 ```css
 /* ❌ */
 .card {
+	view-transition-name: none;
+	view-transition-group: contain;
+}
+
+/* ✅ */
+.card {
+	view-transition-name: card;
+	view-transition-group: contain;
+}
+```
+
+`view-transition-group` only groups elements that participate independently in the transition. `view-transition-scope` is allowed with `view-transition-name: none` because it can still limit the discoverability of names on descendants.
+
+```css
+/* ❌ */
+.card {
 	animation-name: none;
 	animation-delay-start: 1s;
 	animation-delay-end: 500ms;
@@ -274,7 +290,7 @@ The rule reports:
 - Related image controls, such as position, size, repeat, slice, and compositing, when `background-image`, `border-image-source`, or `mask-image` is `none`.
 - `background-position-inline`, `background-position-block`, `background-repeat-x`, `background-repeat-y`, `background-repeat-block`, and `background-repeat-inline` with `background-image: none`.
 - `mask-border-mode`, `mask-border-slice`, `mask-border-width`, `mask-border-outset`, and `mask-border-repeat` with `mask-border-source: none`.
-- `view-transition-class` with `view-transition-name: none`.
+- `view-transition-class` and `view-transition-group` with `view-transition-name: none`.
 - Non-`normal` background blending with `background-image: none`.
 - `scroll-snap-stop: always` with `scroll-snap-align: none` or `none none`. Mixed values such as `none start` are allowed because they still define a snap position on one axis.
 - Related animation controls, including `animation-delay-start`, `animation-delay-end`, `animation-range-center`, and `animation-trigger`, with `animation-name: none`, and transition controls with `transition-property: none`.

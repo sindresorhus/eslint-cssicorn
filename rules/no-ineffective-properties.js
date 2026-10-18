@@ -113,7 +113,7 @@ const messages = {
 	[MESSAGE_ID_VIEW_TIMELINE]: '`{{property}}` has no effect with `view-timeline-name: none`. Name a view timeline to use this property.',
 	[MESSAGE_ID_TIMELINE_TRIGGER]: '`{{property}}` has no effect with `timeline-trigger-name: none`. Name a timeline trigger to use this property.',
 	[MESSAGE_ID_TIMELINE_TRIGGER_SOURCE]: '`{{property}}` has no effect with `timeline-trigger-source: none`. Set a timeline source to use this range.',
-	[MESSAGE_ID_VIEW_TRANSITION]: '`view-transition-class` has no effect with `view-transition-name: none`. Assign a transition name to use this class.',
+	[MESSAGE_ID_VIEW_TRANSITION]: '`{{property}}` has no effect with `view-transition-name: none`. Assign a transition name to use this property.',
 	[MESSAGE_ID_OMITTED_SHORTHAND_COMPONENT]: '`{{property}}` omits {{component}}, which defaults to `none`.',
 };
 
@@ -264,7 +264,7 @@ const inactivePropertyGroups = [
 		controllingProperties: ['timeline-trigger-name', 'timeline-trigger'],
 		messageId: MESSAGE_ID_TIMELINE_TRIGGER,
 	},
-	{properties: ['view-transition-class'], controllingProperties: ['view-transition-name'], messageId: MESSAGE_ID_VIEW_TRANSITION},
+	{properties: ['view-transition-class', 'view-transition-group'], controllingProperties: ['view-transition-name'], messageId: MESSAGE_ID_VIEW_TRANSITION},
 ];
 const floatValues = new Set(['left', 'right', 'inline-start', 'inline-end']);
 const clearValues = new Set([...floatValues, 'both']);

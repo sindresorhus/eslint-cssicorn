@@ -802,6 +802,35 @@ test({
 
 test({
 	valid: [
+		'a { view-transition-group: contain; }',
+		...['card', 'match-element', 'auto'].map(name => `a { view-transition-name: ${name}; view-transition-group: contain; }`),
+		'a { view-transition-name: none; view-transition-name: card; view-transition-group: nearest; }',
+		...['inherit', 'var(--name)', 'none none'].map(name => `a { view-transition-name: ${name}; view-transition-group: contain; }`),
+		...['inherit', 'var(--group)'].map(value => `a { view-transition-name: none; view-transition-group: ${value}; }`),
+		'a { view-transition-name: none; view-transition-scope: all; }',
+		'a { all: unset; view-transition-name: none; view-transition-group: contain; }',
+		'a { view-transition-name: none; > .item { view-transition-name: card; view-transition-group: nearest; } }',
+		'@keyframes transition { to { view-transition-name: none; view-transition-group: contain; } }',
+		':export { view-transition-name: none; view-transition-group: contain; }',
+	],
+	invalid: [
+		...['normal', 'contain', 'nearest', 'card'].map(value => ({
+			code: `a { view-transition-name: none; view-transition-group: ${value}; }`,
+			errors: [{messageId: 'no-ineffective-properties/view-transition', data: {property: 'view-transition-group'}}],
+		})),
+		{
+			code: 'a { @supports (view-transition-group: contain) { VIEW-TRANSITION-NAME: /* disabled */ NONE; VIEW-TRANSITION-GROUP: CONTAIN !important; } }',
+			errors: [{messageId: 'no-ineffective-properties/view-transition', data: {property: 'view-transition-group'}}],
+		},
+		{
+			code: 'a { view-transition-name: none; view-transition-group: contain; > .item { view-transition-name: card; view-transition-group: nearest; } }',
+			errors: [{messageId: 'no-ineffective-properties/view-transition', data: {property: 'view-transition-group'}}],
+		},
+	],
+});
+
+test({
+	valid: [
 		'a { view-transition-class: card; }',
 		...['card', 'match-element', 'auto'].map(name => `a { view-transition-name: ${name}; view-transition-class: card; }`),
 		'a { view-transition-name: none; view-transition-name: card; view-transition-class: card; }',
