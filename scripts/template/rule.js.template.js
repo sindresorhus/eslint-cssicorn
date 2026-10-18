@@ -79,7 +79,7 @@ const createConfig = data => outdent`
 		meta: {
 			type: '${data.type}',
 			docs: {
-				description: '${data.description}',
+				description: ${JSON.stringify(data.description)},
 				recommended: 'unopinionated',
 			},
 			${data.fixableType ? `fixable: '${data.fixableType}',` : ''}
