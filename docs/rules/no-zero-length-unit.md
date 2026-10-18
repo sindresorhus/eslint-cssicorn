@@ -9,7 +9,7 @@
 <!-- end auto-generated rule header -->
 <!-- Do not manually modify this header. Run: `npm run fix:eslint-docs` -->
 
-A zero length usually does not need a unit. This rule reports zero lengths with a unit, such as `0px` or `0rem`, in declarations and in media and container queries when it can validate their context. The autofix changes them to `0`.
+A zero length usually does not need a unit. This rule reports zero lengths with a unit, such as `0px` or `0rem`, in declarations and in media and container queries when it can validate their context. The autofix removes the unit and adds a space when needed to keep adjacent lengths separate.
 
 ## Examples
 

@@ -2,6 +2,41 @@ import {getTester} from './utils/test.js';
 
 const {test} = getTester(import.meta);
 
+test({
+	valid: [],
+	invalid: [
+		{
+			code: 'a{margin:0px.5em}',
+			output: 'a{margin:0 .5em}',
+			errors: [{messageId: 'no-zero-length-unit'}],
+		},
+		{
+			code: 'a{box-shadow:0px.5em red}',
+			output: 'a{box-shadow:0 .5em red}',
+			errors: [{messageId: 'no-zero-length-unit'}],
+		},
+		...[
+			['+0PX.5em', '+0 .5em'],
+			['-00rem.5em', '-00 .5em'],
+			['0.0px.5em', '0.0 .5em'],
+			['.0px.5em', '.0 .5em'],
+			['0e3px.5em', '0e3 .5em'],
+			['0px/* keep */.5em', '0/* keep */.5em'],
+			['0px .5em', '0 .5em'],
+			['0px+.5em', '0+.5em'],
+		].map(([value, output]) => ({
+			code: `a{margin:${value}}`,
+			output: `a{margin:${output}}`,
+			errors: [{messageId: 'no-zero-length-unit'}],
+		})),
+		{
+			code: 'a{margin:0px.0em.5em}',
+			output: 'a{margin:0 .0 .5em}',
+			errors: [{messageId: 'no-zero-length-unit'}, {messageId: 'no-zero-length-unit'}],
+		},
+	],
+});
+
 test.snapshot({
 	valid: [
 		'a { margin: 0; width: 2px; height: 1e-999px; }',

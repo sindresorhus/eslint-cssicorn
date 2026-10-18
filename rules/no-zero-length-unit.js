@@ -118,7 +118,8 @@ const create = context => {
 			node,
 			loc: toLocation(unitRange, context),
 			messageId: MESSAGE_ID,
-			fix: fixer => fixer.removeRange(unitRange),
+			// Keep adjacent numbers separate, as in `0px.5em`.
+			fix: fixer => fixer.replaceTextRange(unitRange, /^\.\d/v.test(sourceCode.text.slice(end, end + 2)) ? ' ' : ''),
 		};
 	});
 };
