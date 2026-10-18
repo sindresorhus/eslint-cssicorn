@@ -125,7 +125,7 @@ const flexSizingProperties = new Set(['flex', 'flex-basis', 'flex-grow', 'flex-s
 const breakProperties = new Set(['break-before', 'break-after', 'break-inside', 'page-break-before', 'page-break-after', 'page-break-inside']);
 const flowItemProperties = new Set([...flexSizingProperties, ...gridPlacementProperties, 'order', 'align-self']);
 const shapeProperties = new Set(['shape-outside', 'shape-margin', 'shape-image-threshold']);
-const itemProperties = new Set([...flexItemProperties, ...flowItemProperties, ...shapeProperties, 'place-self', 'float', 'clear', 'column-span', 'z-index']);
+const itemProperties = new Set([...flexItemProperties, ...flowItemProperties, ...shapeProperties, 'place-self', 'float', 'clear', 'column-span', 'z-index', 'vertical-align']);
 const inlineDisplayKeywords = new Set(['inline', 'inline-block', 'inline-flex', 'inline-grid', 'inline-table']);
 const flowDisplayKeywords = new Set(['block', 'inline', 'flow', 'flow-root', 'list-item']);
 const blockDisplayKeywords = new Set(['block', 'flow', 'flow-root', 'flex', 'grid', 'table', 'list-item', 'table-caption']);
@@ -319,7 +319,6 @@ const targetProperties = new Set([
 	...inactivePropertyGroups.flatMap(({properties}) => properties),
 	'align-content',
 	'justify-content',
-	'vertical-align',
 	'scroll-snap-stop',
 	'text-overflow',
 	'border-spacing',
@@ -547,9 +546,10 @@ Get the problem for a container property given the explicit layout controls in i
 @param {DeclarationPlain} node
 @param {string} property
 @param {ReturnType<typeof getBlockControls>} controls
+@param {'flex' | 'grid' | 'flow' | undefined} itemLayout
 */
-const getContainerProblem = (node, property, {display, hasVisibleDisplay, isFlex, isGrid, isTable, hasCollapsedTable}) => {
-	if (property === 'vertical-align' && hasVisibleDisplay && display.split(' ').every(keyword => blockDisplayKeywords.has(keyword))) {
+const getContainerProblem = (node, property, {display, hasVisibleDisplay, isFlex, isGrid, isTable, hasCollapsedTable}, itemLayout) => {
+	if (property === 'vertical-align' && hasVisibleDisplay && !['flex', 'grid'].includes(itemLayout) && display.split(' ').every(keyword => blockDisplayKeywords.has(keyword))) {
 		return {node, messageId: MESSAGE_ID_VERTICAL_ALIGN, data: {display}};
 	}
 
@@ -716,7 +716,7 @@ const getDeclarationProblem = (node, property, controls, itemLayout) => {
 		return itemProblem;
 	}
 
-	const containerProblem = getContainerProblem(node, property, controls);
+	const containerProblem = getContainerProblem(node, property, controls, itemLayout);
 	if (containerProblem) {
 		return containerProblem;
 	}

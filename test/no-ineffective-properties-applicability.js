@@ -21,6 +21,25 @@ const animationDelayProperties = ['animation-delay-start', 'animation-delay-end'
 
 test({
 	valid: [
+		...['flex', 'grid'].flatMap(parentDisplay => ['block', 'flow-root', 'flex', 'grid', 'table']
+			.map(display => `a { display: ${parentDisplay}; align-items: baseline; > .item { display: ${display}; vertical-align: middle; } }`)),
+		'a { display: flex; & > .item { display: block; position: relative; vertical-align: top; } }',
+		'@supports (display: grid) { a { DISPLAY: GRID; > .item { DISPLAY: BLOCK; VERTICAL-ALIGN: /* baseline */ MIDDLE !important; } } }',
+	],
+	invalid: [
+		{
+			code: 'a { display: block; > .item { display: block; vertical-align: middle; } }',
+			errors: [{messageId: 'no-ineffective-properties/vertical-align'}],
+		},
+		...['absolute', 'fixed'].map(position => ({
+			code: `a { display: flex; > .item { display: block; position: ${position}; vertical-align: middle; } }`,
+			errors: [{messageId: 'no-ineffective-properties/vertical-align'}],
+		})),
+	],
+});
+
+test({
+	valid: [
 		...['none', 'ray(45deg)', 'circle()', 'url("path.svg#route")', 'ray(45deg) padding-box'].map(path => `a { offset-path: ${path}; offset-position: right bottom; }`),
 		'a { offset-position: right bottom; }',
 		'a { offset-path: padding-box; offset-path: ray(45deg); offset-position: right bottom; }',

@@ -256,7 +256,7 @@ a {
 The rule reports:
 
 - `flex-direction`, `flex-wrap`, `flex-flow`, `flex-line-count`, grid templates and auto-placement, and `table-layout` with an incompatible visible `display` mode.
-- `vertical-align` with an explicitly block-level `display`, such as `block`, `flow-root`, `flex`, `grid`, or `table-caption`. Inline-level modes, including `inline-flex` and `inline-grid`, and table cells are allowed.
+- `vertical-align` with an explicitly block-level `display`, such as `block`, `flow-root`, `flex`, `grid`, or `table-caption`. Inline-level modes, including `inline-flex` and `inline-grid`, table cells, and known flex and grid items are allowed.
 - `justify-self`, `grid-area`, `grid-row`, `grid-column`, `grid-row-start`, `grid-row-end`, `grid-column-start`, and `grid-column-end` on a known ordinary flex item selected by a nested child selector.
 - `flex`, `flex-basis`, `flex-grow`, and `flex-shrink` on a known ordinary grid item selected by a nested child selector.
 - Floats other than `none`, clearance, and `column-span: all` on known ordinary flex or grid items selected by a nested child selector.
@@ -303,7 +303,7 @@ Ellipsis needs a block container with clipped inline overflow. `white-space: now
 
 ## Layout applicability
 
-`vertical-align` aligns inline-level boxes or table cells. A flex or grid container can still be an inline-level box:
+`vertical-align` aligns inline-level boxes or table cells. Its `alignment-baseline` component can also affect flex and grid items, so the rule allows those items when their parent layout is explicit. A flex or grid container can still be an inline-level box:
 
 ```css
 /* ❌ */
