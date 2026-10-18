@@ -1,5 +1,6 @@
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
+import {getParenthesizedRange} from './utils/index.js';
 
 const messageIdError = path.basename(fileURLToPath(import.meta.url), '.js');
 const suggestionMemberAccess = 'suggestion/member-access';
@@ -17,7 +18,11 @@ const fix = (context, variable, functionNode, type) => ({
 				continue;
 			}
 
-			yield fixer.replaceText(reference.identifier, 'context.sourceCode');
+			const {identifier} = reference;
+			const replacement = identifier.parent.type === 'Property' && identifier.parent.shorthand
+				? `${identifier.name}: context.sourceCode`
+				: 'context.sourceCode';
+			yield fixer.replaceText(identifier, replacement);
 		}
 	},
 	* [suggestionDestructuringInBody](fixer) {
@@ -37,19 +42,22 @@ const fix = (context, variable, functionNode, type) => ({
 			return;
 		}
 
-		yield fixer.insertTextBefore(
-			functionBody,
+		const range = getParenthesizedRange(functionBody, context);
+		yield fixer.insertTextBeforeRange(
+			range,
 			'{\n\tconst {sourceCode} = context;\n\treturn ',
 		);
 
-		yield fixer.insertTextAfter(
-			functionBody,
-			'}',
+		yield fixer.insertTextAfterRange(
+			range,
+			';\n}',
 		);
 	},
 	* [suggestionDestructuringInParameter](fixer) {
 		for (const identifier of variable.identifiers) {
-			yield fixer.replaceText(identifier, '{sourceCode}');
+			const needsParentheses = functionNode.type === 'ArrowFunctionExpression'
+				&& context.sourceCode.getTokenAfter(identifier).value === '=>';
+			yield fixer.replaceText(identifier, needsParentheses ? '({sourceCode})' : '{sourceCode}');
 		}
 	},
 })[type];
