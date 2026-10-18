@@ -11,7 +11,7 @@ const getChange = (property, first, second) => getChangedShorthandComponent(getC
 const getSlotText = slot => slot.text ?? slot.nodes.map(node => generate(node)).join(' ');
 
 test('supports the practical shorthand catalog', () => {
-	assert.equal(supportedShorthands.size, 88);
+	assert.equal(supportedShorthands.size, 89);
 	const excluded = shorthandProperties.keys().filter(property => !supportedShorthands.has(property)).toArray();
 	assert.deepEqual(excluded, ['grid-gap']);
 	for (const property of supportedShorthands) {
@@ -226,4 +226,13 @@ test('skips mask tokens that match multiple component grammars', () => {
 
 	assert.equal(getChange('mask', 'url(a) alpha', 'url(a) luminance')?.property, 'mask-mode');
 	assert.equal(getChange('mask', 'none', 'url(a)')?.property, 'mask-image');
+});
+
+test('decomposes explicit horizontal and vertical background positions', () => {
+	assert.equal(getChange('background-position', '10px 20%', '10px 30%')?.property, 'background-position-y');
+	assert.equal(getChange('background-position', 'left top', 'right top')?.property, 'background-position-x');
+	assert.equal(getChange('background-position', '10px 20%, center bottom', '10px 30%, center top')?.slots.length, 2);
+	for (const value of ['left', 'top left', 'center left', 'right 10px bottom', 'right 10px bottom 20px']) {
+		assert.equal(getComponents('background-position', value), undefined, value);
+	}
 });

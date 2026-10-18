@@ -34,6 +34,7 @@ Additional components used only for comparison, without extending the shared sho
 @type {Map<string, string[]>}
 */
 const additionalShorthandComponents = new Map([
+	['background-position', ['background-position-x', 'background-position-y']],
 	['caret', ['caret-color', 'caret-animation', 'caret-shape']],
 	['contain-intrinsic-size', ['contain-intrinsic-width', 'contain-intrinsic-height']],
 	['container', ['container-name', 'container-type']],
@@ -137,7 +138,7 @@ export const supportedShorthands = new Set([
 */
 const getComponentNames = property => additionalShorthandComponents.get(property) ?? /** @type {{components: string[]}} */ (shorthandProperties.get(property)).components;
 
-const layeredShorthands = new Set(['background', 'mask', 'animation', 'animation-range', 'transition', 'scroll-timeline', 'view-timeline']);
+const layeredShorthands = new Set(['background', 'background-position', 'mask', 'animation', 'animation-range', 'transition', 'scroll-timeline', 'view-timeline']);
 const copyingPairShorthands = new Set(['place-content', 'place-items', 'place-self', 'cue', 'pause', 'rest']);
 const gridPlacementShorthands = new Set(['grid-row', 'grid-column', 'grid-area']);
 const fontComponents = ['font-style', 'font-variant-caps', 'font-weight', 'font-width', 'font-size', 'line-height', 'font-family'];
@@ -219,6 +220,20 @@ const getIntrinsicSizeComponents = (nodes, getSlot) => {
 	const width = getSlot(nodes.slice(0, firstEnd));
 	const height = nodes.length > firstEnd ? getSlot(nodes.slice(firstEnd)) : width;
 	return new Map([['contain-intrinsic-width', width], ['contain-intrinsic-height', height]]);
+};
+
+/**
+@param {CssNodePlain[]} nodes
+@param {ComponentOptions} options
+*/
+const getBackgroundPositionComponents = (nodes, {canonicalNodes, lexer, getSlot}) => {
+	// Require explicit horizontal and vertical values, avoiding axis inference and edge offsets.
+	const names = getComponentNames('background-position');
+	if (nodes.length !== 2 || names.some((name, index) => !lexer.matchProperty(name, canonicalNodes[index]).matched)) {
+		return;
+	}
+
+	return getPositionalComponents('background-position', nodes, getSlot);
 };
 
 /**
@@ -419,6 +434,10 @@ const getNamedComponents = (property, nodes, options) => {
 @param {ComponentOptions} options
 */
 const getGroupComponents = (property, nodes, options) => {
+	if (property === 'background-position') {
+		return getBackgroundPositionComponents(nodes, options);
+	}
+
 	if (fourSideShorthands.has(property) || pairShorthands.has(property) || property === 'interest-delay' || property.startsWith('corner-')) {
 		return getPositionalComponents(property, nodes, options.getSlot);
 	}

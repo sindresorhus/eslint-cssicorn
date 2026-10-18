@@ -107,7 +107,7 @@ Background components are checked without changing the other layers:
 - `columns`, `column-rule`, `flex`, and `flex-flow`.
 - `grid-row`, `grid-column`, `grid-area`, and explicit track forms of `grid` and `grid-template`.
 - `list-style`, `mask`, `mask-border`, `outline`, `text-decoration`, and `text-emphasis`.
-- `font`, `font-synthesis`, `font-variant`, `background`, `animation`, `animation-range`, and `transition`.
+- `font`, `font-synthesis`, `font-variant`, `background`, `background-position`, `animation`, `animation-range`, and `transition`.
 - `text-wrap`, `white-space`, `text-box`, `caret`, `container`, `offset`, and `position-try`.
 - `contain-intrinsic-size` and `interest-delay`.
 - The speech shorthands `cue`, `pause`, and `rest`.
@@ -128,13 +128,14 @@ Conditional and layer boundaries are not crossed. Rules inside the same `@media`
 
 Rules with unsupported selectors and declarations that affect supported shorthands interrupt comparisons with earlier bases. A later supported base can start a new comparison.
 
-Only one component may differ. The replacement must come from the override's explicit values or the shorthand's defined copying and dependent default rules. Independently omitted components are not filled with initial values. The defined `font-synthesis` keyword mappings are expanded to `auto` and `none` longhand values. The rule requires equal item counts for `background`, `mask`, `animation`, `animation-range`, `transition`, `scroll-timeline`, and `view-timeline`. A `position-try` fallback list is treated as one component. Other components are compared structurally without evaluating calculations or converting equivalent colors and units. Recognized keywords are ASCII case-insensitive; custom names remain case-sensitive.
+Only one component may differ. The replacement must come from the override's explicit values or the shorthand's defined copying and dependent default rules. Independently omitted components are not filled with initial values. The defined `font-synthesis` keyword mappings are expanded to `auto` and `none` longhand values. The rule requires equal item counts for `background`, `background-position`, `mask`, `animation`, `animation-range`, `transition`, `scroll-timeline`, and `view-timeline`. A `position-try` fallback list is treated as one component. Other components are compared structurally without evaluating calculations or converting equivalent colors and units. Recognized keywords are ASCII case-insensitive; custom names remain case-sensitive.
 
 ## Limitations
 
 - This rule does not calculate the winning cascade or inspect imports and other stylesheets. Repeating a shorthand can intentionally reset another matching style.
 - Ambiguous bases, conflicting declarations of an affected property, `all`, mismatched `!important`, pseudo-elements, vendor-prefixed declarations, and unsupported selector relationships are skipped.
 - The legacy `grid-gap` alias is not supported.
+- Every `background-position` layer must have exactly two values in horizontal and vertical order, such as `left top` or `10px 20%`. Single values, reversed keywords, and three-value or four-value edge offsets are skipped.
 - Ambiguous component assignments are skipped. This includes `font-variant: normal` and `mask` values containing geometry boxes or lengths and percentages that could specify either position or size.
 - `grid` and `grid-template` values containing template-area strings or `auto-flow` are skipped. Every `animation-range` item must explicitly specify both its start and end.
 - Legacy `white-space` keywords (`normal`, `pre`, `pre-wrap`, and `pre-line`) and `text-box: normal` are skipped.
