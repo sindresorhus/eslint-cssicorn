@@ -46,12 +46,14 @@ a {
 a {
 	background-image: none;
 	background-size: cover;
+	background-blend-mode: multiply;
 }
 
 /* ✅ */
 a {
 	background-image: url("background.svg");
 	background-size: cover;
+	background-blend-mode: multiply;
 }
 ```
 
@@ -109,6 +111,36 @@ a {
 }
 ```
 
+```css
+/* ❌ */
+.article {
+	columns: 2;
+	column-rule-style: none;
+	column-rule-color: red;
+}
+
+/* ✅ */
+.article {
+	columns: 2;
+	column-rule-style: solid;
+	column-rule-color: red;
+}
+```
+
+```css
+/* ❌ */
+.slide {
+	scroll-snap-align: none;
+	scroll-snap-stop: always;
+}
+
+/* ✅ */
+.slide {
+	scroll-snap-align: start;
+	scroll-snap-stop: always;
+}
+```
+
 ## Checks
 
 The rule reports:
@@ -120,7 +152,7 @@ The rule reports:
 - Floats other than `none`, clearance, and `column-span: all` on known ordinary flex or grid items selected by a nested child selector.
 - Flex sizing, grid placement, `order`, and `align-self` on known children of an ordinary flow container, such as `display: block`, `flow-root`, or `inline-block`, selected by a nested child selector.
 - `z-index` other than `auto` with explicit `position: static` on known children of an ordinary flow container selected by a nested child selector. Static flex and grid items are allowed.
-- `justify-self`, `place-self`, and `column-span: all` on floated children of a known ordinary flow container selected by a nested child selector.
+- `justify-self`, `place-self`, `vertical-align`, and `column-span: all` on floated children of a known ordinary flow container selected by a nested child selector.
 - `columns`, `column-count`, `column-width`, and `column-fill` with flex or grid display.
 - `align-content` on a flex container with `nowrap` in `flex-wrap` or `flex-flow`, including the implicit `nowrap` in direction-only shorthands such as `flex-flow: column`. Use `align-items` or wrapping instead.
 - Physical and logical insets with `position: static`.
@@ -133,7 +165,10 @@ The rule reports:
 - `shape-image-threshold` with `shape-outside: none`, a basic shape such as `circle()` or `polygon()`, or a shape box such as `margin-box`. Thresholds only affect image-based shapes, including gradients.
 - `text-decoration-color`, `text-decoration-style`, and `text-decoration-thickness` with `text-decoration-line: none`.
 - `outline-color`, `outline-width`, and `outline-offset` with `outline-style: none`.
+- `column-rule-color` with `column-rule-style: none`. Column rule width is allowed because it can affect crossing gap decorations.
 - Related image controls, such as position, size, repeat, slice, and compositing, when `background-image`, `border-image-source`, or `mask-image` is `none`.
+- Non-`normal` background blending with `background-image: none`.
+- `scroll-snap-stop: always` with `scroll-snap-align: none` or `none none`. Mixed values such as `none start` are allowed because they still define a snap position on one axis.
 - Related animation or transition controls with `animation-name: none` or `transition-property: none`.
 - Related timeline axis and inset controls with `scroll-timeline-name: none` or `view-timeline-name: none`.
 - Omitted styles in border shorthands, `outline`, `column-rule`, and `text-emphasis`, omitted lines in `text-decoration`, and omitted names in `animation` lists where no item has a name.
@@ -228,7 +263,7 @@ Flex sizing requires a flex parent, even if the item itself has flex display. An
 
 `column-span: all` cannot make a flex or grid item span columns. Flex and grid containers establish their own formatting contexts, so their items cannot span an outer multicolumn container. A flex or grid container can itself span columns when it participates in ordinary flow layout.
 
-Floated children of an ordinary flow container cannot use `justify-self`, `place-self`, or `column-span: all`. The parent layout must be explicit because flex and grid items ignore `float`, so their alignment can still apply:
+Floated children of an ordinary flow container cannot use `justify-self`, `place-self`, `vertical-align`, or `column-span: all`. The parent layout must be explicit because flex and grid items ignore `float`, so their alignment can still apply:
 
 ```css
 /* ❌ */
@@ -238,6 +273,7 @@ Floated children of an ordinary flow container cannot use `justify-self`, `place
 	> .item {
 		float: left;
 		justify-self: center;
+		vertical-align: middle;
 	}
 }
 
@@ -248,6 +284,7 @@ Floated children of an ordinary flow container cannot use `justify-self`, `place
 	> .item {
 		float: none;
 		justify-self: center;
+		vertical-align: middle;
 	}
 }
 ```
@@ -334,6 +371,7 @@ Display, disabled effects, and overflow:
 
 - Display checks ignore `display: none` and `display: contents`.
 - A disabled effect needs a single `none` value in the controlling longhand, except that `shape-image-threshold` also checks basic shapes and shape boxes.
+- The scroll snap check also accepts `scroll-snap-align: none none`. Explicit `scroll-snap-stop: normal` and all-`normal` background blending lists are allowed as resets.
 - Basic shapes and shape boxes must match the CSS grammar. The installed grammar does not currently recognize a single percentage radius such as `circle(50%)`, so that form is skipped.
 - Visible overflow is only detected from the `overflow` shorthand.
 - For `text-overflow`, strings and `fade` values are not checked.

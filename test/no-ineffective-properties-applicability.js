@@ -3,7 +3,7 @@ import {getTester} from './utils/test.js';
 const {test} = getTester(import.meta, 'no-ineffective-properties');
 
 const outlineProperties = [['outline-color', 'red'], ['outline-width', '2px'], ['outline-offset', '3px']];
-const floatedItemProperties = [['justify-self', 'center'], ['place-self', 'center'], ['column-span', 'all']];
+const floatedItemProperties = [['justify-self', 'center'], ['place-self', 'center'], ['column-span', 'all'], ['vertical-align', 'middle']];
 
 test({
 	valid: [
@@ -39,6 +39,11 @@ test({
 test({
 	valid: [
 		'a { float: left; justify-self: center; place-self: center; column-span: all; }',
+		'a { float: left; vertical-align: middle; }',
+		...['inline-flex', 'inline-grid'].map(display => `a { display: block; > .item { display: ${display}; float: none; vertical-align: middle; } }`),
+		'a { display: block; > .item { float: left; float: none; vertical-align: middle; } }',
+		'a { display: block; > .item { position: var(--position); float: left; vertical-align: middle; } }',
+		'a { display: block; > .item { display: contents; float: left; vertical-align: middle; } }',
 		...['none', 'inherit', 'var(--float)'].map(value => `a { display: block; > .item { float: ${value}; justify-self: center; place-self: center; column-span: all; } }`),
 		'a { display: block; > .item { float: left; float: none; justify-self: center; } }',
 		'a { display: block; > .item { float: left; column-span: none; } }',
@@ -68,7 +73,15 @@ test({
 		},
 		{
 			code: 'a { display: block; > .item { justify-self: center; place-self: center; float: right; clear: both; vertical-align: middle; } }',
-			errors: [{messageId: 'no-ineffective-properties/floated-item'}, {messageId: 'no-ineffective-properties/floated-item'}],
+			errors: Array.from({length: 3}, () => ({messageId: 'no-ineffective-properties/floated-item'})),
+		},
+		...['flex', 'grid'].map(display => ({
+			code: `a { display: ${display}; > .item { display: inline-grid; float: left; vertical-align: middle; } }`,
+			errors: [{messageId: `no-ineffective-properties/${display}-item`, data: {property: 'float'}}],
+		})),
+		{
+			code: '@media (width > 1px) { a { display: flow-root; & > .item { display: inline-flex; FLOAT: LEFT; VERTICAL-ALIGN: /* baseline */ MIDDLE !important; } } }',
+			errors: [{messageId: 'no-ineffective-properties/floated-item', data: {property: 'vertical-align'}}],
 		},
 		{
 			code: 'a { display: grid; > .item { float: left; justify-self: center; place-self: center; } }',
@@ -81,6 +94,104 @@ test({
 		{
 			code: 'a { display: block; > .item { position: absolute; float: left; justify-self: center; place-self: center; column-span: all; } }',
 			errors: [{messageId: 'no-ineffective-properties/float'}, {messageId: 'no-ineffective-properties/column-span'}],
+		},
+	],
+});
+
+test({
+	valid: [
+		'a { column-rule-color: red; }',
+		'a { column-rule-style: solid; column-rule-color: red; }',
+		'a { column-rule-style: none; column-rule-width: 3px; }',
+		...[
+			'column-rule: 2px solid blue',
+			'column-rule-style: solid',
+			'rule: 2px solid blue',
+			'rule-style: solid',
+			'-webkit-column-rule: 2px solid blue',
+			'-webkit-column-rule-style: solid',
+			'-moz-column-rule: 2px solid blue',
+			'-moz-column-rule-style: solid',
+		].map(control => `a { column-rule-style: none; ${control}; column-rule-color: red; }`),
+		...['inherit', 'var(--style)', 'none solid'].map(style => `a { column-rule-style: ${style}; column-rule-color: red; }`),
+		...['inherit', 'var(--color)'].map(color => `a { column-rule-style: none; column-rule-color: ${color}; }`),
+		'a { all: unset; column-rule-style: none; column-rule-color: red; }',
+		'a { column-rule-style: none; > .item { column-rule-color: red; } }',
+		'@keyframes rules { to { column-rule-style: none; column-rule-color: red; } }',
+		':export { column-rule-style: none; column-rule-color: red; }',
+	],
+	invalid: [
+		{
+			code: 'a { columns: 2; column-rule-style: none; column-rule-color: red; }',
+			errors: [{messageId: 'no-ineffective-properties/column-rule-color', data: {property: 'column-rule-color'}}],
+		},
+		{
+			code: 'a { COLUMN-RULE-STYLE: /* disabled */ NONE !important; COLUMN-RULE-COLOR: rgb(1 2 3); }',
+			errors: [{messageId: 'no-ineffective-properties/column-rule-color'}],
+		},
+		{
+			code: 'a { @supports (columns: 2) { column-rule-style: none; column-rule-color: red; } }',
+			errors: [{messageId: 'no-ineffective-properties/column-rule-color'}],
+		},
+	],
+});
+
+test({
+	valid: [
+		'a { background-blend-mode: multiply; }',
+		'a { background-image: none; background-blend-mode: normal; }',
+		'a { background-image: none; background-blend-mode: NORMAL, /* reset */ normal; }',
+		'a { background-image: none; background-color: red; background-clip: content-box; background-attachment: local; }',
+		...['url("image.png")', 'linear-gradient(red, blue)', 'none, url("image.png")'].map(image => `a { background-image: ${image}; background-blend-mode: multiply; }`),
+		...['background: url("image.png")', 'background-image: url("image.png")'].map(control => `a { background-image: none; ${control}; background-blend-mode: multiply; }`),
+		...['inherit', 'var(--image)'].map(image => `a { background-image: ${image}; background-blend-mode: multiply; }`),
+		...['inherit', 'var(--blend)'].map(blend => `a { background-image: none; background-blend-mode: ${blend}; }`),
+		'a { all: unset; background-image: none; background-blend-mode: multiply; }',
+		'a { background-image: none; > .item { background-blend-mode: multiply; } }',
+	],
+	invalid: [
+		...['multiply', 'screen', 'normal, multiply'].map(value => ({
+			code: `a { background-image: none; background-color: red; background-blend-mode: ${value}; }`,
+			errors: [{messageId: 'no-ineffective-properties/background-image', data: {property: 'background-blend-mode'}}],
+		})),
+		{
+			code: 'a { BACKGROUND-IMAGE: /* disabled */ NONE; BACKGROUND-BLEND-MODE: MULTIPLY !important; }',
+			errors: [{messageId: 'no-ineffective-properties/background-image'}],
+		},
+		{
+			code: '@media (width > 1px) { a { background-image: none; background-blend-mode: multiply; } }',
+			errors: [{messageId: 'no-ineffective-properties/background-image'}],
+		},
+	],
+});
+
+test({
+	valid: [
+		'a { scroll-snap-stop: always; }',
+		'a { scroll-snap-align: none; scroll-snap-stop: normal; }',
+		...['start', 'center', 'none start', 'start none'].map(alignment => `a { scroll-snap-align: ${alignment}; scroll-snap-stop: always; }`),
+		'a { scroll-snap-align: none; scroll-snap-align: start; scroll-snap-stop: always; }',
+		...['inherit', 'var(--align)', 'none none none'].map(alignment => `a { scroll-snap-align: ${alignment}; scroll-snap-stop: always; }`),
+		...['inherit', 'var(--stop)'].map(stop => `a { scroll-snap-align: none; scroll-snap-stop: ${stop}; }`),
+		'a { scroll-snap-align: none; scroll-margin: 20px; scroll-padding: 20px; }',
+		'a { scroll-snap-type: none; scroll-snap-align: start; scroll-snap-stop: always; }',
+		'a { all: unset; scroll-snap-align: none; scroll-snap-stop: always; }',
+		'a { scroll-snap-align: none; > .item { scroll-snap-stop: always; } }',
+		'@keyframes snapping { to { scroll-snap-align: none; scroll-snap-stop: always; } }',
+		':export { scroll-snap-align: none; scroll-snap-stop: always; }',
+	],
+	invalid: [
+		...['none', 'none none'].map(alignment => ({
+			code: `a { scroll-snap-align: ${alignment}; scroll-snap-stop: always; }`,
+			errors: [{messageId: 'no-ineffective-properties/scroll-snap-stop', data: {property: 'scroll-snap-stop'}}],
+		})),
+		{
+			code: 'a { SCROLL-SNAP-ALIGN: /* disabled */ NONE NONE !important; SCROLL-SNAP-STOP: ALWAYS; }',
+			errors: [{messageId: 'no-ineffective-properties/scroll-snap-stop'}],
+		},
+		{
+			code: 'a { @container (width > 1px) { scroll-snap-align: none; scroll-snap-stop: always; } }',
+			errors: [{messageId: 'no-ineffective-properties/scroll-snap-stop'}],
 		},
 	],
 });

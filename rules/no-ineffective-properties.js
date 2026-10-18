@@ -42,6 +42,8 @@ const MESSAGE_ID_SHAPE_IMAGE_THRESHOLD = 'no-ineffective-properties/shape-image-
 const MESSAGE_ID_NON_IMAGE_SHAPE = 'no-ineffective-properties/non-image-shape';
 const MESSAGE_ID_DECORATION = 'no-ineffective-properties/decoration';
 const MESSAGE_ID_OUTLINE = 'no-ineffective-properties/outline';
+const MESSAGE_ID_COLUMN_RULE_COLOR = 'no-ineffective-properties/column-rule-color';
+const MESSAGE_ID_SCROLL_SNAP_STOP = 'no-ineffective-properties/scroll-snap-stop';
 const MESSAGE_ID_BACKGROUND_IMAGE = 'no-ineffective-properties/background-image';
 const MESSAGE_ID_BORDER_IMAGE = 'no-ineffective-properties/border-image';
 const MESSAGE_ID_MASK_IMAGE = 'no-ineffective-properties/mask-image';
@@ -75,6 +77,8 @@ const messages = {
 	[MESSAGE_ID_NON_IMAGE_SHAPE]: '`shape-image-threshold` has no effect with a basic shape or shape box. It defines the alpha threshold for an image-based shape.',
 	[MESSAGE_ID_DECORATION]: '`{{property}}` has no effect with `text-decoration-line: none`. Enable a text decoration line on this element.',
 	[MESSAGE_ID_OUTLINE]: '`{{property}}` has no effect with `outline-style: none`. Enable an outline style to use it.',
+	[MESSAGE_ID_COLUMN_RULE_COLOR]: '`column-rule-color` has no effect with `column-rule-style: none`. Enable a column rule style to use it.',
+	[MESSAGE_ID_SCROLL_SNAP_STOP]: '`scroll-snap-stop: always` has no effect when `scroll-snap-align` disables snapping on both axes. Define a snap position to use it.',
 	[MESSAGE_ID_BACKGROUND_IMAGE]: '`{{property}}` has no effect with `background-image: none`. Set a background image to use this property.',
 	[MESSAGE_ID_BORDER_IMAGE]: '`{{property}}` has no effect with `border-image-source: none`. Set a border image to use this property.',
 	[MESSAGE_ID_MASK_IMAGE]: '`{{property}}` has no effect with `mask-image: none`. Set a mask image to use this property.',
@@ -125,7 +129,12 @@ const inactivePropertyGroups = [
 		messageId: MESSAGE_ID_OUTLINE,
 	},
 	{
-		properties: ['background-position', 'background-position-x', 'background-position-y', 'background-size', 'background-repeat', 'background-origin'],
+		properties: ['column-rule-color'],
+		controllingProperties: ['column-rule-style', 'column-rule', 'rule', 'rule-style', '-webkit-column-rule-style', '-webkit-column-rule', '-moz-column-rule-style', '-moz-column-rule'],
+		messageId: MESSAGE_ID_COLUMN_RULE_COLOR,
+	},
+	{
+		properties: ['background-position', 'background-position-x', 'background-position-y', 'background-size', 'background-repeat', 'background-origin', 'background-blend-mode'],
 		controllingProperties: ['background-image', 'background'],
 		messageId: MESSAGE_ID_BACKGROUND_IMAGE,
 	},
@@ -215,6 +224,7 @@ const targetProperties = new Set([
 	...inactivePropertyGroups.flatMap(({properties}) => properties),
 	'align-content',
 	'vertical-align',
+	'scroll-snap-stop',
 	'text-overflow',
 	'border-spacing',
 	'table-layout',
@@ -381,7 +391,7 @@ const getItemProblem = (node, property, keyword, {layout, float}) => {
 	}
 
 	if (layout === 'flow') {
-		if (floatValues.has(float) && (property === 'justify-self' || property === 'place-self' || (property === 'column-span' && keyword === 'all'))) {
+		if (floatValues.has(float) && (['justify-self', 'place-self', 'vertical-align'].includes(property) || (property === 'column-span' && keyword === 'all'))) {
 			return {node, messageId: MESSAGE_ID_FLOATED_ITEM, data: {property}};
 		}
 
@@ -493,13 +503,24 @@ Get the problem for a property whose effect is explicitly disabled in its block.
 
 @param {DeclarationPlain} node
 @param {string} property
+@param {string | undefined} keyword
 @param {ReturnType<typeof getBlockControls>} controls
 */
-const getInactiveEffectProblem = (node, property, {inactiveProperties}) => {
+const getInactiveEffectProblem = (node, property, keyword, {inactiveProperties}) => {
 	const messageId = inactiveProperties.get(property);
-	if (messageId) {
-		return {node, messageId, data: {property}};
+	if (!messageId || (property === 'scroll-snap-stop' && keyword !== 'always')) {
+		return;
 	}
+
+	if (
+		property === 'background-blend-mode'
+		&& node.value.children.every(child => (child.type === 'Operator' && child.value === ',')
+			|| (child.type === 'Identifier' && normalizeCssIdentifier(child.name) === 'normal'))
+	) {
+		return;
+	}
+
+	return {node, messageId, data: {property}};
 };
 
 /**
@@ -593,7 +614,7 @@ const getDeclarationProblem = (node, property, controls, itemLayout) => {
 		return positionProblem;
 	}
 
-	const inactiveEffectProblem = getInactiveEffectProblem(node, property, controls);
+	const inactiveEffectProblem = getInactiveEffectProblem(node, property, keyword, controls);
 	if (inactiveEffectProblem) {
 		return inactiveEffectProblem;
 	}
@@ -648,6 +669,10 @@ const getBlockControls = (declarationsByProperty, sourceCode) => {
 
 	if (declarationsByProperty.has('shape-image-threshold') && hasNonImageShape(declarationsByProperty, sourceCode)) {
 		inactiveProperties.set('shape-image-threshold', MESSAGE_ID_NON_IMAGE_SHAPE);
+	}
+
+	if (declarationsByProperty.has('scroll-snap-stop') && ['none', 'none none'].includes(getControllingValue(declarationsByProperty, ['scroll-snap-align'], sourceCode))) {
+		inactiveProperties.set('scroll-snap-stop', MESSAGE_ID_SCROLL_SNAP_STOP);
 	}
 
 	return {
