@@ -61,6 +61,8 @@ test({
 		'.button { font: menu; &:hover { font: caption; } }',
 		'.button { outline: 1px auto; &:hover { outline: 2px auto; } }',
 		'.button { background: url(a), url(b); &:hover { background: url(c); } }',
+		'.button { background: url(a) padding-box; &:hover { background: url(a) border-box; } }',
+		'.button { background: url("Image.png") red; &:hover { background: url("image.png") blue; } }',
 		'.button { animation: spin 1s; &:hover { animation: Spin 2s; } }',
 		'.button { font: 16px Arial; &:hover { font: 18px arial; } }',
 		'.button { transition: --Color 1s; &:hover { transition: --color 2s; } }',
@@ -124,11 +126,16 @@ test({
 			['font: 16px "/* Old Face */"', 'font: 16px "/* New Face */"', 'font-family: "/* New Face */"'],
 			['list-style: none inside', 'list-style: none outside', 'list-style-position: outside'],
 			['background: url(a) center/cover no-repeat red', 'background: url(a) center/cover no-repeat blue', 'background-color: blue'],
+			['background: url(a) left 10px top 20px / cover', 'background: url(a) right 10px top 20px / cover', 'background-position: right 10px top 20px'],
+			['background: url(a) center / 20px 30px', 'background: url(a) center / 40px 30px', 'background-size: 40px 30px'],
+			['background: url(a) padding-box border-box', 'background: url(a) content-box border-box', 'background-origin: content-box'],
 			['background: url(a) left top, url(b) right bottom', 'background: url(a) center, url(b) right bottom', 'background-position: center, right bottom'],
 			['animation: spin 1s, Fade 2s', 'animation: spin 3s, Fade 2s', 'animation-duration: 3s, 2s'],
 			['animation: spin 1s,\r\n    Fade 2s', 'animation: spin 3s,\r\n    Fade 2s', 'animation-duration: 3s,\r\n    2s'],
 			['animation: spin 1s', 'animation: Spin 1s', 'animation-name: Spin'],
+			['animation: "spin" 1s', 'animation: "Spin" 1s', 'animation-name: "Spin"'],
 			['transition: opacity 1s ease 2s', 'transition: opacity 3s ease 2s', 'transition-duration: 3s'],
+			['transition: display 1s normal', 'transition: display 1s allow-discrete', 'transition-behavior: allow-discrete'],
 		].map(([first, second, result]) => {
 			const code = `.button { ${first}; &:hover { ${second}; } }`;
 			return {
