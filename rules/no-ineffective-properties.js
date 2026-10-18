@@ -35,6 +35,8 @@ const MESSAGE_ID_FLOAT = 'no-ineffective-properties/float';
 const MESSAGE_ID_TEXT_OVERFLOW_DISPLAY = 'no-ineffective-properties/text-overflow-display';
 const MESSAGE_ID_TABLE_SPACING = 'no-ineffective-properties/table-spacing';
 const MESSAGE_ID_TABLE_PADDING = 'no-ineffective-properties/table-padding';
+const MESSAGE_ID_TABLE_GAP = 'no-ineffective-properties/table-gap';
+const MESSAGE_ID_FLEX_GAP = 'no-ineffective-properties/flex-gap';
 const MESSAGE_ID_CLEAR = 'no-ineffective-properties/clear';
 const MESSAGE_ID_PERSPECTIVE = 'no-ineffective-properties/perspective';
 const MESSAGE_ID_COLUMN_SPAN = 'no-ineffective-properties/column-span';
@@ -70,6 +72,8 @@ const messages = {
 	[MESSAGE_ID_FLOAT]: '`float: {{value}}` has no effect with `position: {{position}}`. Absolutely positioned elements cannot float.',
 	[MESSAGE_ID_TEXT_OVERFLOW_DISPLAY]: '`text-overflow: {{value}}` has no effect with `display: {{display}}`. Apply it to a block container holding the text.',
 	[MESSAGE_ID_TABLE_SPACING]: '`border-spacing` has no effect on this table with `border-collapse: collapse`. Use `border-collapse: separate` for spacing between cells.',
+	[MESSAGE_ID_TABLE_GAP]: '`{{property}}` has no effect on a table box. Use `border-spacing` for spacing between cells.',
+	[MESSAGE_ID_FLEX_GAP]: '`{{property}}` has no effect between flex lines with `nowrap`. Enable wrapping to use this gap.',
 	[MESSAGE_ID_TABLE_PADDING]: '`{{property}}` has no effect on this table with `border-collapse: collapse`. Apply padding to table cells or use separate borders.',
 	[MESSAGE_ID_CLEAR]: '`clear: {{value}}` has no effect with `position: {{position}}`. Absolutely positioned elements do not participate in normal flow.',
 	[MESSAGE_ID_PERSPECTIVE]: '`perspective-origin` has no effect with `perspective: none`. Set a perspective distance to use this origin.',
@@ -116,7 +120,8 @@ const paddingProperties = new Set([
 	'padding-inline-start',
 	'padding-inline-end',
 ]);
-const multicolProperties = new Set(['columns', 'column-count', 'column-width', 'column-fill']);
+const multicolProperties = new Set(['columns', 'column-count', 'column-width', 'column-fill', 'column-height', 'column-wrap']);
+const gapProperties = new Set(['gap', 'row-gap', 'column-gap']);
 // The first controller must be explicit. Other controllers can override or reset it.
 const inactivePropertyGroups = [
 	{properties: ['perspective-origin'], controllingProperties: ['perspective', '-webkit-perspective'], messageId: MESSAGE_ID_PERSPECTIVE},
@@ -225,6 +230,7 @@ const targetProperties = new Set([
 	...anchorPlacementProperties,
 	...paddingProperties,
 	...multicolProperties,
+	...gapProperties,
 	...shorthandProperties,
 	...inactivePropertyGroups.flatMap(({properties}) => properties),
 	'align-content',
@@ -644,6 +650,34 @@ const getDeclarationProblem = (node, property, controls, itemLayout) => {
 };
 
 /**
+Get the gap properties disabled by an explicit table layout or single-line flex layout.
+
+@param {Map<string, {node: DeclarationPlain, property: string}[]>} declarationsByProperty
+@param {CSSSourceCode} sourceCode
+@param {{isTable: boolean, hasNowrap: boolean}} layout
+@returns {Map<string, string>}
+*/
+const getInactiveLayoutGaps = (declarationsByProperty, sourceCode, {isTable, hasNowrap}) => {
+	const inactiveProperties = new Map();
+
+	if (isTable) {
+		for (const property of gapProperties) {
+			inactiveProperties.set(property, MESSAGE_ID_TABLE_GAP);
+		}
+	}
+
+	if (hasNowrap) {
+		const direction = getControllingValue(declarationsByProperty, ['flex-direction', 'flex-flow', '-webkit-flex-direction', '-webkit-flex-flow'], sourceCode);
+		if (direction !== undefined) {
+			const property = direction.split(' ').some(keyword => keyword === 'column' || keyword === 'column-reverse') ? 'column-gap' : 'row-gap';
+			inactiveProperties.set(property, MESSAGE_ID_FLEX_GAP);
+		}
+	}
+
+	return inactiveProperties;
+};
+
+/**
 Get the explicit controlling values for a declaration block.
 
 @param {Map<string, {node: DeclarationPlain, property: string}[]>} declarationsByProperty
@@ -666,7 +700,7 @@ const getBlockControls = (declarationsByProperty, sourceCode) => {
 	/**
 	@type {Map<string, string>}
 	*/
-	const inactiveProperties = new Map();
+	const inactiveProperties = getInactiveLayoutGaps(declarationsByProperty, sourceCode, {isTable, hasNowrap});
 	for (const {properties, controllingProperties, messageId} of inactivePropertyGroups) {
 		if (!declarationsByProperty.has(controllingProperties[0]) || getControllingValue(declarationsByProperty, controllingProperties, sourceCode) !== 'none') {
 			continue;

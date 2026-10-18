@@ -12,7 +12,7 @@ const anchorPlacementProperties = [
 	['position-visibility', 'no-overflow'],
 ];
 const shapeProperties = [['shape-outside', 'circle()'], ['shape-margin', '8px'], ['shape-image-threshold', '0.5']];
-const tableMulticolProperties = [['columns', '12rem 2'], ['column-count', '3'], ['column-width', '12rem'], ['column-fill', 'balance']];
+const tableMulticolProperties = [['columns', '12rem 2'], ['column-count', '3'], ['column-width', '12rem'], ['column-fill', 'balance'], ['column-height', '20rem'], ['column-wrap', 'wrap']];
 
 test({
 	valid: [
@@ -77,6 +77,81 @@ test({
 		{
 			code: 'a { display: flex; > .item { display: table; position: absolute; columns: 2; } }',
 			errors: [{messageId: 'no-ineffective-properties/multicol'}],
+		},
+	],
+});
+
+test({
+	valid: [
+		...['column-height: 20rem', 'column-wrap: wrap'].flatMap(declaration => ['block', 'inline-block', 'table-cell', 'table-caption'].map(display => `a { display: ${display}; ${declaration}; }`)),
+		'a { display: flex; column-height: var(--height); column-wrap: inherit; }',
+	],
+	invalid: [
+		...['column-height: 20rem', 'column-wrap: wrap'].flatMap(declaration => ['flex', 'inline-flex', 'grid', 'inline-grid'].map(display => ({
+			code: `a { display: ${display}; ${declaration}; }`,
+			errors: [{messageId: 'no-ineffective-properties/multicol'}],
+		}))),
+	],
+});
+
+test({
+	valid: [
+		...['gap', 'row-gap', 'column-gap'].flatMap(property => ['grid', 'block', 'table-cell', 'table-caption', 'none', 'contents'].map(display => `a { display: ${display}; ${property}: 1rem; }`)),
+		'a { display: table; display: grid; gap: 1rem; }',
+		'a { display: var(--display); gap: 1rem; }',
+		'a { display: table; gap: var(--gap); row-gap: inherit; column-gap: revert; }',
+		'a { all: unset; display: table; gap: 1rem; }',
+		'a { display: table; > .item { gap: 1rem; } }',
+		'@keyframes layout { to { display: table; gap: 1rem; } }',
+		':export { display: table; gap: 1rem; }',
+	],
+	invalid: [
+		...['gap', 'row-gap', 'column-gap'].flatMap(property => ['table', 'inline-table', 'block table', 'inline table'].map(display => ({
+			code: `a { display: ${display}; ${property}: 1rem; }`,
+			errors: [{messageId: 'no-ineffective-properties/table-gap', data: {property}}],
+		}))),
+		{
+			code: 'a { @media (width > 1px) { DISPLAY: INLINE-TABLE; GAP: /* cells */ 1rem 2rem !important; } }',
+			errors: [{messageId: 'no-ineffective-properties/table-gap', data: {property: 'gap'}}],
+		},
+	],
+});
+
+test({
+	valid: [
+		...['row', 'row-reverse'].map(direction => `a { display: flex; flex-direction: ${direction}; flex-wrap: nowrap; column-gap: 1rem; gap: 2rem; }`),
+		...['column', 'column-reverse'].map(direction => `a { display: flex; flex-direction: ${direction}; flex-wrap: nowrap; row-gap: 1rem; gap: 2rem; }`),
+		...['wrap', 'wrap-reverse'].map(wrapping => `a { display: flex; flex-flow: row ${wrapping}; row-gap: 1rem; }`),
+		'a { display: flex; flex-wrap: nowrap; row-gap: 1rem; column-gap: 2rem; }',
+		'a { display: flex; flex-direction: row; row-gap: 1rem; }',
+		'a { display: flex; flex-flow: row; flex-direction: column; row-gap: 1rem; }',
+		'a { display: flex; flex-flow: column; flex-wrap: wrap; column-gap: 1rem; }',
+		'a { display: flex; flex-direction: row; flex-direction: column; flex-wrap: nowrap; row-gap: 1rem; }',
+		...['-webkit-flex-direction: column', '-webkit-flex-flow: column wrap'].map(declaration => `a { display: flex; flex-direction: row; flex-wrap: nowrap; ${declaration}; row-gap: 1rem; }`),
+		'a { display: flex; flex-direction: row; flex-wrap: nowrap; -webkit-flex-wrap: wrap; row-gap: 1rem; }',
+		...['inherit', 'var(--direction)', 'row column'].map(direction => `a { display: flex; flex-direction: ${direction}; flex-wrap: nowrap; row-gap: 1rem; }`),
+		...['inherit', 'var(--wrap)'].map(wrapping => `a { display: flex; flex-direction: row; flex-wrap: ${wrapping}; row-gap: 1rem; }`),
+		'a { display: flex; flex-flow: row; row-gap: var(--gap); column-gap: 1rem; }',
+		'a { display: flex; flex-flow: column; column-gap: inherit; }',
+		'a { all: unset; display: flex; flex-flow: row; row-gap: 1rem; }',
+		'a { display: flex; flex-flow: row; > .item { row-gap: 1rem; } }',
+	],
+	invalid: [
+		...['row', 'row-reverse', 'column', 'column-reverse'].flatMap(direction => ['flex', 'inline-flex'].map(display => ({
+			code: `a { display: ${display}; flex-direction: ${direction}; flex-wrap: nowrap; ${direction.startsWith('row') ? 'row-gap' : 'column-gap'}: 1rem; }`,
+			errors: [{messageId: 'no-ineffective-properties/flex-gap', data: {property: direction.startsWith('row') ? 'row-gap' : 'column-gap'}}],
+		}))),
+		...['row', 'row-reverse nowrap', 'nowrap', 'nowrap row'].map(flow => ({
+			code: `a { display: flex; flex-flow: ${flow}; row-gap: 1rem; }`,
+			errors: [{messageId: 'no-ineffective-properties/flex-gap', data: {property: 'row-gap'}}],
+		})),
+		...['column', 'nowrap column-reverse'].map(flow => ({
+			code: `a { display: flex; flex-flow: ${flow}; column-gap: 1rem; }`,
+			errors: [{messageId: 'no-ineffective-properties/flex-gap', data: {property: 'column-gap'}}],
+		})),
+		{
+			code: '@supports (display: flex) { a { DISPLAY: FLEX; FLEX-FLOW: COLUMN; COLUMN-GAP: /* lines */ 2rem !important; } }',
+			errors: [{messageId: 'no-ineffective-properties/flex-gap'}],
 		},
 	],
 });

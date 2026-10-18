@@ -154,8 +154,10 @@ The rule reports:
 - Flex sizing, grid placement, `order`, and `align-self` on known children of an ordinary flow container, such as `display: block`, `flow-root`, or `inline-block`, selected by a nested child selector.
 - `z-index` other than `auto` with explicit `position: static` on known children of an ordinary flow container selected by a nested child selector. Static flex and grid items are allowed.
 - `justify-self`, `place-self`, `vertical-align`, and `column-span: all` on floated children of a known ordinary flow container selected by a nested child selector.
-- `columns`, `column-count`, `column-width`, and `column-fill` with flex, grid, or table display. Table cells and captions can still contain columns.
+- `columns`, `column-count`, `column-width`, `column-fill`, `column-height`, and `column-wrap` with flex, grid, or table display. Table cells and captions can still contain columns.
 - `align-content` on a flex container with `nowrap` in `flex-wrap` or `flex-flow`, including the implicit `nowrap` in direction-only shorthands such as `flex-flow: column`. Use `align-items` or wrapping instead.
+- `gap`, `row-gap`, and `column-gap` on table boxes. Use `border-spacing` for spacing between cells.
+- Cross-axis gaps on explicitly single-line flex containers with a known direction: `row-gap` for rows and `column-gap` for columns. Main-axis gaps and the `gap` shorthand are allowed.
 - Physical and logical insets with `position: static`.
 - `position-area`, `position-try`, `position-try-fallbacks`, `position-try-order`, and `position-visibility` with explicit `position: static`, `relative`, or `sticky`. These controls require absolute or fixed positioning.
 - Floats other than `none`, clearance, and `column-span: all` with `position: absolute` or `fixed`.
@@ -296,14 +298,54 @@ Multicolumn layout requires a block container other than a table wrapper. A tabl
 .article {
 	display: table;
 	columns: 2;
+	column-height: 20rem;
+	column-wrap: wrap;
 }
 
 /* ✅ */
 .article {
 	display: block;
 	columns: 2;
+	column-height: 20rem;
+	column-wrap: wrap;
 }
 ```
+
+Table boxes use `border-spacing` instead of gaps between cells:
+
+```css
+/* ❌ */
+.table {
+	display: table;
+	gap: 1rem;
+}
+
+/* ✅ */
+.table {
+	display: table;
+	border-spacing: 1rem;
+}
+```
+
+Cross-axis flex gaps separate flex lines. A container with `nowrap` has only one line, so only its main-axis gap can add spacing:
+
+```css
+/* ❌ */
+.toolbar {
+	display: flex;
+	flex-flow: row nowrap;
+	row-gap: 1rem;
+}
+
+/* ✅ */
+.toolbar {
+	display: flex;
+	flex-flow: row nowrap;
+	column-gap: 1rem;
+}
+```
+
+The gap check requires explicit direction and wrapping controls. An explicit `flex-wrap: nowrap` also needs an explicit `flex-direction`. The `flex-flow` shorthand supplies omitted defaults, so `flex-flow: column` and `flex-flow: nowrap` establish both controls. The `gap` shorthand is allowed because it can still space items along the main axis.
 
 `column-span: all` cannot make a flex or grid item span columns. Flex and grid containers establish their own formatting contexts, so their items cannot span an outer multicolumn container. A flex or grid container can itself span columns when it participates in ordinary flow layout.
 
