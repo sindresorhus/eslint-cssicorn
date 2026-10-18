@@ -373,14 +373,18 @@ Get the problem for a property that cannot affect an ordinary item in its known 
 @param {DeclarationPlain} node
 @param {string} property
 @param {string | undefined} keyword
-@param {'flex' | 'grid' | 'flow' | undefined} layout
+@param {{layout: 'flex' | 'grid' | 'flow' | undefined, float: string | undefined}} item
 */
-const getItemProblem = (node, property, keyword, layout) => {
+const getItemProblem = (node, property, keyword, {layout, float}) => {
 	if (layout === undefined) {
 		return;
 	}
 
 	if (layout === 'flow') {
+		if (floatValues.has(float) && (property === 'justify-self' || property === 'place-self' || (property === 'column-span' && keyword === 'all'))) {
+			return {node, messageId: MESSAGE_ID_FLOATED_ITEM, data: {property}};
+		}
+
 		return flowItemProperties.has(property) ? {node, messageId: MESSAGE_ID_FLOW_ITEM, data: {property}} : undefined;
 	}
 
@@ -569,15 +573,7 @@ const getDeclarationProblem = (node, property, controls, itemLayout) => {
 		return {node, messageId: MESSAGE_ID_Z_INDEX};
 	}
 
-	if (
-		itemLayout === 'flow'
-		&& floatValues.has(controls.float)
-		&& (property === 'justify-self' || property === 'place-self' || (property === 'column-span' && keyword === 'all'))
-	) {
-		return {node, messageId: MESSAGE_ID_FLOATED_ITEM, data: {property}};
-	}
-
-	const itemProblem = getItemProblem(node, property, keyword, itemLayout);
+	const itemProblem = getItemProblem(node, property, keyword, {layout: itemLayout, float: controls.float});
 	if (itemProblem) {
 		return itemProblem;
 	}
