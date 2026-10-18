@@ -135,16 +135,20 @@ function hasFullSpan(declarations, axis) {
 /**
 Normalize case-insensitive template tokens while preserving case-sensitive line names and numeric spellings.
 */
-function normalizeTemplate(node, lineNames = false) {
+function normalizeTemplate(node) {
+	if (node.type === 'Brackets') {
+		return getCanonicalLexerNode(node);
+	}
+
 	let result = node;
-	if (node.type === 'Function' || (node.type === 'Identifier' && !lineNames)) {
+	if (node.type === 'Function' || node.type === 'Identifier') {
 		result = {...node, name: normalizeCssIdentifier(node.name)};
 	} else if (node.type === 'Dimension') {
 		result = {...node, unit: normalizeCssIdentifier(node.unit)};
 	}
 
 	if (node.children) {
-		result = {...result, children: node.children.map(child => normalizeTemplate(child, lineNames || node.type === 'Brackets'))};
+		result = {...result, children: node.children.map(child => normalizeTemplate(child))};
 	}
 
 	return result;
@@ -158,7 +162,7 @@ function getTemplateKey(declaration, context) {
 		return;
 	}
 
-	const value = normalizeTemplate(getCanonicalLexerNode(declaration.value));
+	const value = normalizeTemplate(declaration.value);
 	if (find(value, node => node.type === 'Function' && (
 		!templateFunctions.has(node.name)
 		|| (node.name === 'repeat' && node.children.at(0)?.type === 'Identifier')

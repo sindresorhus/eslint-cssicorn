@@ -140,6 +140,11 @@ test.snapshot({
 		getPair(columns, childColumns.replace('20ch 1fr', '20ch /* keep */ 1fr')),
 		...['media (width > 1px)', 'supports (display: grid)', 'container (width > 1px)', 'layer example', 'scope (.example)'].map(wrapper => `@${wrapper} { ${getPair()} }`),
 		'.parent {\r\n  display: grid;\r\n  grid-template-columns: 20ch 1fr;\r\n}\r\n.parent > .child {\r\n  display: grid;\r\n  grid-column: 1 / -1;\r\n  grid-template-columns: 20ch 1fr;\r\n}',
+		getPair('display: grid; grid-template-columns: AUTO minmax(MIN-CONTENT, MAX-CONTENT);', 'display: grid; grid-column: 1 / -1; grid-template-columns: auto minmax(min-content, max-content);'),
+		getPair(String.raw`display: grid; grid-template-columns: [A\:B] \6d inmax(0, 1\66 r);`, String.raw`display: grid; grid-column: 1 / -1; grid-template-columns: [A\:B] minmax(0, 1fr);`),
+		`.parent { ${columns} > .child { ${childColumns} > .grandchild { ${childColumns} } } }`,
+		`.wrapper { ${getPair()} }`,
+		getPair().replace('.parent > .child', '.parent > .child[data-kind]:not(.disabled)'),
 	],
 });
 
