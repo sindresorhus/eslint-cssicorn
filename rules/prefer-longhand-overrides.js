@@ -287,17 +287,16 @@ const create = context => {
 				continue;
 			}
 
-			const selectors = getSelectors(rule);
-			if (!selectors) {
-				continue;
-			}
-
-			const prefixes = selectors.map(selector => getSelectorPrefixes(selector));
-			if (prefixes.some(selector => !selector)) {
-				continue;
-			}
-
 			const info = getInfo(rule.block);
+			const prefixes = getSelectors(rule)?.map(selector => getSelectorPrefixes(selector));
+			if (!prefixes || prefixes.some(selector => !selector)) {
+				if (info.affecting.size > 0 || info.hasAll) {
+					index.clear();
+				}
+
+				continue;
+			}
+
 			for (const [property, declaration] of info.declarations) {
 				if (getFamilyDeclaration(info, property) === INVALID_BASELINE) {
 					continue;
