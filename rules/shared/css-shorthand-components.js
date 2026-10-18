@@ -19,7 +19,7 @@ import {fourSideShorthands, pairShorthands, shorthandProperties} from './css-sho
 @typedef {{nodes: CssNodePlain[], keys: string[], text?: string}} ShorthandSlot
 @typedef {Map<string, (ShorthandSlot | undefined)[]>} ShorthandComponents
 @typedef {(nodes: CssNodePlain[]) => ShorthandSlot} GetSlot
-@typedef {{getSlot: GetSlot, match: PlainLexerMatchResult, canonicalNodes: CssNodePlain[]}} ComponentOptions
+@typedef {{getSlot: GetSlot, match: PlainLexerMatchResult, canonicalNodes: CssNodePlain[], lexer: Lexer}} ComponentOptions
 */
 
 /**
@@ -94,6 +94,7 @@ export const supportedShorthands = new Set([
 	'flex-flow',
 	'font',
 	'font-synthesis',
+	'font-variant',
 	'gap',
 	'grid',
 	'grid-area',
@@ -107,6 +108,7 @@ export const supportedShorthands = new Set([
 	'margin',
 	'margin-block',
 	'margin-inline',
+	'mask',
 	'mask-border',
 	'outline',
 	'overflow',
@@ -135,7 +137,7 @@ export const supportedShorthands = new Set([
 */
 const getComponentNames = property => additionalShorthandComponents.get(property) ?? /** @type {{components: string[]}} */ (shorthandProperties.get(property)).components;
 
-const layeredShorthands = new Set(['background', 'animation', 'animation-range', 'transition', 'scroll-timeline', 'view-timeline']);
+const layeredShorthands = new Set(['background', 'mask', 'animation', 'animation-range', 'transition', 'scroll-timeline', 'view-timeline']);
 const copyingPairShorthands = new Set(['place-content', 'place-items', 'place-self', 'cue', 'pause', 'rest']);
 const gridPlacementShorthands = new Set(['grid-row', 'grid-column', 'grid-area']);
 const fontComponents = ['font-style', 'font-variant-caps', 'font-weight', 'font-width', 'font-size', 'line-height', 'font-family'];
@@ -275,10 +277,16 @@ const getGridComponents = (property, nodes, {getSlot, match, canonicalNodes}) =>
 /**
 @param {string} property
 @param {CssNodePlain} canonicalNode
-@param {PlainLexerMatchResult} match
 @param {string[]} names
+@param {Pick<ComponentOptions, 'match' | 'lexer'>} options
 */
-const getNamedComponentName = (property, canonicalNode, match, names) => {
+const getNamedComponentName = (property, canonicalNode, names, {match, lexer}) => {
+	if (property === 'font-variant' || property === 'mask') {
+		// Ambiguous values, such as mask geometry boxes, need coupled expansion and are skipped.
+		const matches = names.filter(name => lexer.matchProperty(name, canonicalNode).matched);
+		return matches.length === 1 ? matches[0] : undefined;
+	}
+
 	const trace = match.getTrace(canonicalNode) ?? [];
 	const directComponent = trace.find(part => part.type === 'Property' && names.includes(part.name))?.name;
 	if (directComponent) {
@@ -347,7 +355,8 @@ const getNamedComponentSlots = (property, components, {visualBoxes, noneNodes, g
 @param {CssNodePlain[]} nodes
 @param {ComponentOptions} options
 */
-const getNamedComponents = (property, nodes, {canonicalNodes, match, getSlot}) => {
+const getNamedComponents = (property, nodes, options) => {
+	const {canonicalNodes, match, getSlot} = options;
 	const names = property === 'font' ? fontComponents : getComponentNames(property);
 	/**
 	@type {Map<string, CssNodePlain[]>}
@@ -389,7 +398,7 @@ const getNamedComponents = (property, nodes, {canonicalNodes, match, getSlot}) =
 			continue;
 		}
 
-		let component = getNamedComponentName(property, canonicalNode, match, names);
+		let component = getNamedComponentName(property, canonicalNode, names, options);
 		if (!component && property === 'transition' && match.isType(canonicalNode, 'time')) {
 			component = transitionTimeCount++ === 0 ? 'transition-duration' : 'transition-delay';
 		}
@@ -498,6 +507,7 @@ export const getShorthandComponents = (declaration, {sourceCode}) => {
 		const components = getGroupComponents(property, nodes, {
 			getSlot,
 			match: wholeMatch,
+			lexer: sourceCode.lexer,
 			canonicalNodes: nodes.map(node => /** @type {CssNodePlain} */ (canonicalByNode.get(node))),
 		});
 		if (!components) {

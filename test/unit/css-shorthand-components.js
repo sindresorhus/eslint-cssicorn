@@ -11,9 +11,9 @@ const getChange = (property, first, second) => getChangedShorthandComponent(getC
 const getSlotText = slot => slot.text ?? slot.nodes.map(node => generate(node)).join(' ');
 
 test('supports the practical shorthand catalog', () => {
-	assert.equal(supportedShorthands.size, 86);
+	assert.equal(supportedShorthands.size, 88);
 	const excluded = shorthandProperties.keys().filter(property => !supportedShorthands.has(property)).toArray();
-	assert.deepEqual(excluded, ['font-variant', 'grid-gap', 'mask']);
+	assert.deepEqual(excluded, ['grid-gap']);
 	for (const property of supportedShorthands) {
 		assert.ok(propertyInteractions.has(property), property);
 	}
@@ -210,4 +210,20 @@ test('keeps position fallback lists together as a scalar component', () => {
 	assert.equal(change?.property, 'position-try-fallbacks');
 	assert.equal(change.slots.length, 1);
 	assert.equal(getSlotText(change.slots[0]), 'flip-inline , --first');
+});
+
+test('classifies font variant nodes with unique longhand grammars', () => {
+	assert.equal(getChange('font-variant', 'small-caps lining-nums', 'small-caps oldstyle-nums')?.property, 'font-variant-numeric');
+	assert.equal(getChange('font-variant', 'small-caps stylistic(Heading)', 'small-caps stylistic(heading)')?.property, 'font-variant-alternates');
+	assert.equal(getComponents('font-variant', 'normal'), undefined);
+	assert.equal(getChange('font-variant', 'none', 'common-ligatures')?.property, 'font-variant-ligatures');
+});
+
+test('skips mask tokens that match multiple component grammars', () => {
+	for (const value of ['url(a) padding-box', 'url(a) fill-box stroke-box', 'url(a) border-box no-clip', 'url(a) no-clip border-box', 'url(a) 10px 20px', 'url(a) center / 20px 30px']) {
+		assert.equal(getComponents('mask', value), undefined, value);
+	}
+
+	assert.equal(getChange('mask', 'url(a) alpha', 'url(a) luminance')?.property, 'mask-mode');
+	assert.equal(getChange('mask', 'none', 'url(a)')?.property, 'mask-image');
 });
