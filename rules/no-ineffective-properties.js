@@ -97,7 +97,8 @@ const gridPlacementProperties = new Set(['grid-area', 'grid-row', 'grid-column',
 const flexItemProperties = new Set(['justify-self', ...gridPlacementProperties]);
 const flexSizingProperties = new Set(['flex', 'flex-basis', 'flex-grow', 'flex-shrink']);
 const flowItemProperties = new Set([...flexSizingProperties, ...gridPlacementProperties, 'order', 'align-self']);
-const itemProperties = new Set([...flexItemProperties, ...flowItemProperties, 'place-self', 'float', 'clear', 'column-span', 'z-index']);
+const shapeProperties = new Set(['shape-outside', 'shape-margin', 'shape-image-threshold']);
+const itemProperties = new Set([...flexItemProperties, ...flowItemProperties, ...shapeProperties, 'place-self', 'float', 'clear', 'column-span', 'z-index']);
 const flowDisplayKeywords = new Set(['block', 'inline', 'flow', 'flow-root', 'list-item']);
 const blockDisplayKeywords = new Set(['block', 'flow', 'flow-root', 'flex', 'grid', 'table', 'list-item', 'table-caption']);
 const insetProperties = new Set(['top', 'right', 'bottom', 'left', 'inset', 'inset-block', 'inset-inline', 'inset-block-start', 'inset-block-end', 'inset-inline-start', 'inset-inline-end']);
@@ -405,6 +406,7 @@ const getItemProblem = (node, property, keyword, {layout, float}) => {
 	const ineffectiveProperties = layout === 'flex' ? flexItemProperties : flexSizingProperties;
 	if (
 		ineffectiveProperties.has(property)
+		|| shapeProperties.has(property)
 		|| (property === 'float' && floatValues.has(keyword))
 		|| (property === 'clear' && clearValues.has(keyword))
 		|| (property === 'column-span' && keyword === 'all')
@@ -451,7 +453,7 @@ const getContainerProblem = (node, property, {display, hasVisibleDisplay, isFlex
 		return {node, messageId: MESSAGE_ID_DISPLAY, data: {property, display, layout}};
 	}
 
-	if (multicolProperties.has(property) && (isFlex || isGrid)) {
+	if (multicolProperties.has(property) && [isFlex, isGrid, isTable].includes(true)) {
 		return {node, messageId: MESSAGE_ID_MULTICOL, data: {property, display}};
 	}
 

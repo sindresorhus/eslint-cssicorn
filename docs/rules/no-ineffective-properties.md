@@ -150,10 +150,11 @@ The rule reports:
 - `justify-self`, `grid-area`, `grid-row`, `grid-column`, `grid-row-start`, `grid-row-end`, `grid-column-start`, and `grid-column-end` on a known ordinary flex item selected by a nested child selector.
 - `flex`, `flex-basis`, `flex-grow`, and `flex-shrink` on a known ordinary grid item selected by a nested child selector.
 - Floats other than `none`, clearance, and `column-span: all` on known ordinary flex or grid items selected by a nested child selector.
+- `shape-outside`, `shape-margin`, and `shape-image-threshold` on known ordinary flex or grid items selected by a nested child selector.
 - Flex sizing, grid placement, `order`, and `align-self` on known children of an ordinary flow container, such as `display: block`, `flow-root`, or `inline-block`, selected by a nested child selector.
 - `z-index` other than `auto` with explicit `position: static` on known children of an ordinary flow container selected by a nested child selector. Static flex and grid items are allowed.
 - `justify-self`, `place-self`, `vertical-align`, and `column-span: all` on floated children of a known ordinary flow container selected by a nested child selector.
-- `columns`, `column-count`, `column-width`, and `column-fill` with flex or grid display.
+- `columns`, `column-count`, `column-width`, and `column-fill` with flex, grid, or table display. Table cells and captions can still contain columns.
 - `align-content` on a flex container with `nowrap` in `flex-wrap` or `flex-flow`, including the implicit `nowrap` in direction-only shorthands such as `flex-flow: column`. Use `align-items` or wrapping instead.
 - Physical and logical insets with `position: static`.
 - `position-area`, `position-try`, `position-try-fallbacks`, `position-try-order`, and `position-visibility` with explicit `position: static`, `relative`, or `sticky`. These controls require absolute or fixed positioning.
@@ -259,6 +260,48 @@ Flex sizing requires a flex parent, even if the item itself has flex display. An
 		display: flex;
 		flex: 1;
 	}
+}
+```
+
+Shape controls require a float or an initial-letter box. An ordinary flex or grid item is neither, and adding `float` does not change this because flex and grid items ignore it:
+
+```css
+/* ❌ */
+.container {
+	display: flex;
+
+	> .item {
+		float: left;
+		shape-outside: circle();
+		shape-margin: 8px;
+	}
+}
+
+/* ✅ */
+.container {
+	display: block;
+
+	> .item {
+		float: left;
+		shape-outside: circle();
+		shape-margin: 8px;
+	}
+}
+```
+
+Multicolumn layout requires a block container other than a table wrapper. A table cannot itself be a multicolumn container:
+
+```css
+/* ❌ */
+.article {
+	display: table;
+	columns: 2;
+}
+
+/* ✅ */
+.article {
+	display: block;
+	columns: 2;
 }
 ```
 

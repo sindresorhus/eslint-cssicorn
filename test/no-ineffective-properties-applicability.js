@@ -11,6 +11,75 @@ const anchorPlacementProperties = [
 	['position-try-order', 'most-height'],
 	['position-visibility', 'no-overflow'],
 ];
+const shapeProperties = [['shape-outside', 'circle()'], ['shape-margin', '8px'], ['shape-image-threshold', '0.5']];
+const tableMulticolProperties = [['columns', '12rem 2'], ['column-count', '3'], ['column-width', '12rem'], ['column-fill', 'balance']];
+
+test({
+	valid: [
+		...shapeProperties.map(([property, value]) => `a { ${property}: ${value}; }`),
+		...shapeProperties.map(([property, value]) => `a { display: block; > .item { float: left; ${property}: ${value}; } }`),
+		'a { display: block; > .item { display: flex; float: left; shape-outside: circle(); shape-margin: 8px; } }',
+		'a { display: block; > .item { initial-letter: 2; shape-outside: circle(); shape-margin: 8px; } }',
+		'a { display: flex; > .item::first-letter { initial-letter: 2; shape-outside: circle(); shape-margin: 8px; } }',
+		...['absolute', 'fixed', 'var(--position)'].map(position => `a { display: flex; > .item { position: ${position}; shape-outside: circle(); shape-margin: 8px; } }`),
+		...['none', 'contents', 'var(--display)'].map(display => `a { display: grid; > .item { display: ${display}; shape-margin: 8px; } }`),
+		'a { display: flex; display: block; > .item { shape-margin: 8px; } }',
+		'a { display: var(--layout); > .item { shape-margin: 8px; } }',
+		'a { display: grid; .item { shape-margin: 8px; } }',
+		'a { display: grid; @media (width > 1px) { > .item { shape-margin: 8px; } } }',
+		'a { display: grid; > .item { all: unset; shape-margin: 8px; } }',
+		...shapeProperties.map(([property]) => `a { display: grid; > .item { ${property}: inherit; } }`),
+		...shapeProperties.map(([property]) => `a { display: flex; > .item { ${property}: var(--shape); } }`),
+	],
+	invalid: [
+		...shapeProperties.flatMap(([property, value]) => ['flex', 'grid', 'inline-flex', 'inline-grid'].map(display => ({
+			code: `a { display: ${display}; > .item { ${property}: ${value}; } }`,
+			errors: [{messageId: `no-ineffective-properties/${display.includes('flex') ? 'flex' : 'grid'}-item`, data: {property}}],
+		}))),
+		{
+			code: 'a { display: grid; & > .item { float: left; shape-outside: url("shape.png"); shape-image-threshold: 0.5; } }',
+			errors: Array.from({length: 3}, () => ({messageId: 'no-ineffective-properties/grid-item'})),
+		},
+		{
+			code: 'a { display: grid; > .item { shape-outside: none; shape-margin: 0; shape-image-threshold: 0; } }',
+			errors: Array.from({length: 3}, () => ({messageId: 'no-ineffective-properties/grid-item'})),
+		},
+		{
+			code: '@supports (display: flex) { a { DISPLAY: FLEX; &:hover > .item { SHAPE-MARGIN: /* inset */ 8px !important; } } }',
+			errors: [{messageId: 'no-ineffective-properties/flex-item', data: {property: 'shape-margin'}}],
+		},
+	],
+});
+
+test({
+	valid: [
+		...tableMulticolProperties.map(([property, value]) => `a { display: block; ${property}: ${value}; }`),
+		...tableMulticolProperties.map(([property, value]) => `a { display: table-cell; ${property}: ${value}; }`),
+		'a { display: table-caption; columns: 2; }',
+		...['none', 'contents', 'var(--display)'].map(display => `a { display: ${display}; columns: 2; }`),
+		'a { display: table; display: block; columns: 2; }',
+		...tableMulticolProperties.map(([property]) => `a { display: table; ${property}: inherit; }`),
+		...tableMulticolProperties.map(([property]) => `a { display: inline-table; ${property}: var(--columns); }`),
+		'a { all: unset; display: table; columns: 2; }',
+		'a { display: table; > .item { columns: 2; } }',
+		'@keyframes layout { to { display: table; columns: 2; } }',
+		':export { display: table; columns: 2; }',
+	],
+	invalid: [
+		...tableMulticolProperties.flatMap(([property, value]) => ['table', 'inline-table', 'block table', 'inline table'].map(display => ({
+			code: `a { display: ${display}; ${property}: ${value}; }`,
+			errors: [{messageId: 'no-ineffective-properties/multicol', data: {property, display}}],
+		}))),
+		{
+			code: 'a { @media (width > 1px) { DISPLAY: INLINE-TABLE; COLUMN-COUNT: /* count */ 2 !important; } }',
+			errors: [{messageId: 'no-ineffective-properties/multicol'}],
+		},
+		{
+			code: 'a { display: flex; > .item { display: table; position: absolute; columns: 2; } }',
+			errors: [{messageId: 'no-ineffective-properties/multicol'}],
+		},
+	],
+});
 
 test({
 	valid: [
