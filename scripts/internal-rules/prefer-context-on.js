@@ -29,14 +29,6 @@ function isRuleCreate(functionNode) {
 	);
 }
 
-function * removeProperty(property, context, fixer) {
-	yield fixer.remove(property);
-	const commaToken = context.sourceCode.getTokenAfter(property);
-	if (commaToken.value === ',') {
-		yield fixer.remove(commaToken);
-	}
-}
-
 function printComments(comments) {
 	if (comments.length === 0) {
 		return '';
@@ -56,7 +48,11 @@ function check(context, functionNode, listeners) {
 		messageId,
 	};
 
-	if (listeners.type !== 'ObjectExpression') {
+	// Converting only part of the returned object would leave unsupported listeners in the rule.
+	if (
+		listeners.type !== 'ObjectExpression'
+		|| listeners.properties.some(property => property.type !== 'Property' || property.shorthand || property.computed || property.kind !== 'init')
+	) {
 		context.report(problem);
 		return;
 	}
@@ -73,16 +69,6 @@ function check(context, functionNode, listeners) {
 			yield fixer.insertTextAfterRange(range, '}');
 		}
 
-		const propertiesCanRemove = [];
-		for (const property of listeners.properties) {
-			if (property.shorthand || property.type !== 'Property') {
-				break;
-			}
-
-			propertiesCanRemove.push(property);
-		}
-
-		const shouldKeepObjectExpression = propertiesCanRemove.length !== listeners.properties.length;
 		const commentsInObjectExpression = sourceCode.getCommentsInside(listeners).map(comment => {
 			const [start, end] = sourceCode.getRange(comment);
 			const text = sourceCode.getText(comment);
@@ -94,13 +80,13 @@ function check(context, functionNode, listeners) {
 			};
 		});
 
-		for (const [index, property] of propertiesCanRemove.entries()) {
+		for (const [index, property] of listeners.properties.entries()) {
 			const {key, value, method: isMethod} = property;
 			const selector = key.type === 'Identifier'
 				? `'${key.name}'`
 				: sourceCode.getText(property.key);
 			const listener = `${isMethod ? `function${value.generator ? ' * ' : ''}` : ''}${sourceCode.getText(value)}`;
-			const commentStart = sourceCode.getRange(index === 0 ? sourceCode.getFirstToken(listeners) : propertiesCanRemove[index - 1])[1];
+			const commentStart = sourceCode.getRange(index === 0 ? sourceCode.getFirstToken(listeners) : listeners.properties[index - 1])[1];
 			const commentEnd = sourceCode.getRange(property)[0];
 			const comments = commentsInObjectExpression.filter(({start, end}) => start >= commentStart && end <= commentEnd);
 
@@ -119,15 +105,6 @@ function check(context, functionNode, listeners) {
 				range,
 				`${printComments(commentsBefore)}\tcontext.on(${selector}, ${printComments(commentsForListener)} ${listener});\n\n`,
 			);
-
-			if (shouldKeepObjectExpression) {
-				yield * removeProperty(property, context, fixer);
-			}
-		}
-
-		if (shouldKeepObjectExpression && isArrowFunctionBody) {
-			yield fixer.insertTestBefore(functionNode.body, '\n\treturn ');
-			return;
 		}
 
 		if (listeners.parent === functionNode) {
