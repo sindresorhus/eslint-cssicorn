@@ -57,6 +57,7 @@ const MESSAGE_ID_ANIMATION = 'no-ineffective-properties/animation';
 const MESSAGE_ID_TRANSITION = 'no-ineffective-properties/transition';
 const MESSAGE_ID_SCROLL_TIMELINE = 'no-ineffective-properties/scroll-timeline';
 const MESSAGE_ID_VIEW_TIMELINE = 'no-ineffective-properties/view-timeline';
+const MESSAGE_ID_TIMELINE_TRIGGER = 'no-ineffective-properties/timeline-trigger';
 const MESSAGE_ID_VIEW_TRANSITION = 'no-ineffective-properties/view-transition';
 const MESSAGE_ID_OMITTED_SHORTHAND_COMPONENT = 'no-ineffective-properties/omitted-shorthand-component';
 const messages = {
@@ -99,6 +100,7 @@ const messages = {
 	[MESSAGE_ID_TRANSITION]: '`{{property}}` has no effect with `transition-property: none`. Select at least one property to transition.',
 	[MESSAGE_ID_SCROLL_TIMELINE]: '`{{property}}` has no effect with `scroll-timeline-name: none`. Name a scroll timeline to use this property.',
 	[MESSAGE_ID_VIEW_TIMELINE]: '`{{property}}` has no effect with `view-timeline-name: none`. Name a view timeline to use this property.',
+	[MESSAGE_ID_TIMELINE_TRIGGER]: '`{{property}}` has no effect with `timeline-trigger-name: none`. Name a timeline trigger to use this property.',
 	[MESSAGE_ID_VIEW_TRANSITION]: '`view-transition-class` has no effect with `view-transition-name: none`. Assign a transition name to use this class.',
 	[MESSAGE_ID_OMITTED_SHORTHAND_COMPONENT]: '`{{property}}` omits {{component}}, which defaults to `none`.',
 };
@@ -130,7 +132,7 @@ const paddingProperties = new Set([
 	'padding-inline-end',
 ]);
 const multicolProperties = new Set(['columns', 'column-count', 'column-width', 'column-fill', 'column-height', 'column-wrap']);
-const gapProperties = new Set(['gap', 'row-gap', 'column-gap']);
+const gapProperties = new Set(['gap', 'row-gap', 'column-gap', 'grid-gap', 'grid-row-gap', 'grid-column-gap']);
 // The first controller must be explicit. Other controllers can override or reset it.
 const inactivePropertyGroups = [
 	{properties: ['perspective-origin'], controllingProperties: ['perspective', '-webkit-perspective'], messageId: MESSAGE_ID_PERSPECTIVE},
@@ -197,6 +199,19 @@ const inactivePropertyGroups = [
 	},
 	{properties: ['scroll-timeline-axis'], controllingProperties: ['scroll-timeline-name', 'scroll-timeline'], messageId: MESSAGE_ID_SCROLL_TIMELINE},
 	{properties: ['view-timeline-axis', 'view-timeline-inset'], controllingProperties: ['view-timeline-name', 'view-timeline'], messageId: MESSAGE_ID_VIEW_TIMELINE},
+	{
+		properties: [
+			'timeline-trigger-source',
+			'timeline-trigger-activation-range',
+			'timeline-trigger-activation-range-start',
+			'timeline-trigger-activation-range-end',
+			'timeline-trigger-active-range',
+			'timeline-trigger-active-range-start',
+			'timeline-trigger-active-range-end',
+		],
+		controllingProperties: ['timeline-trigger-name', 'timeline-trigger'],
+		messageId: MESSAGE_ID_TIMELINE_TRIGGER,
+	},
 	{properties: ['view-transition-class'], controllingProperties: ['view-transition-name'], messageId: MESSAGE_ID_VIEW_TRANSITION},
 ];
 const floatValues = new Set(['left', 'right', 'inline-start', 'inline-end']);
@@ -707,6 +722,7 @@ const getInactiveLayoutProperties = (declarationsByProperty, sourceCode, {isTabl
 		if (direction !== undefined) {
 			const property = direction.split(' ').some(keyword => keyword === 'column' || keyword === 'column-reverse') ? 'column-gap' : 'row-gap';
 			inactiveProperties.set(property, MESSAGE_ID_FLEX_GAP);
+			inactiveProperties.set(`grid-${property}`, MESSAGE_ID_FLEX_GAP);
 		}
 	}
 

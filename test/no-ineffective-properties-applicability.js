@@ -685,3 +685,75 @@ test({
 		},
 	],
 });
+
+test({
+	valid: [
+		...['grid-gap', 'grid-row-gap', 'grid-column-gap'].flatMap(property => ['grid', 'table-cell', 'table-caption'].map(display => `a { display: ${display}; ${property}: 1rem; }`)),
+		'a { display: flex; flex-flow: row nowrap; grid-gap: 1rem; grid-column-gap: 2rem; }',
+		'a { display: inline-flex; flex-flow: column nowrap; grid-row-gap: 1rem; }',
+		'a { display: flex; flex-flow: row wrap; grid-row-gap: 1rem; }',
+		'a { display: flex; flex-wrap: nowrap; grid-row-gap: 1rem; }',
+		'a { display: table; grid-gap: inherit; grid-row-gap: var(--gap); }',
+		'a { display: var(--display); grid-gap: 1rem; }',
+		'a { display: table; display: grid; grid-gap: 1rem; }',
+	],
+	invalid: [
+		...['grid-gap', 'grid-row-gap', 'grid-column-gap'].flatMap(property => ['table', 'inline-table', 'block table', 'inline table'].map(display => ({
+			code: `a { display: ${display}; ${property}: 1rem; }`,
+			errors: [{messageId: 'no-ineffective-properties/table-gap', data: {property}}],
+		}))),
+		...['row', 'row-reverse', 'column', 'column-reverse'].map(direction => ({
+			code: `a { display: flex; flex-flow: ${direction} nowrap; grid-${direction.startsWith('row') ? 'row' : 'column'}-gap: 1rem; }`,
+			errors: [{messageId: 'no-ineffective-properties/flex-gap'}],
+		})),
+		{
+			code: '@media (width > 1px) { a { DISPLAY: INLINE-TABLE; GRID-GAP: /* cells */ 1rem 2rem !important; } }',
+			errors: [{messageId: 'no-ineffective-properties/table-gap', data: {property: 'grid-gap'}}],
+		},
+		{
+			code: 'a { display: flex; flex-flow: row; row-gap: 1rem; grid-row-gap: 2rem; }',
+			errors: [{messageId: 'no-ineffective-properties/flex-gap'}, {messageId: 'no-ineffective-properties/flex-gap'}],
+		},
+	],
+});
+
+const timelineTriggerProperties = [
+	['timeline-trigger-source', 'view()'],
+	['timeline-trigger-activation-range', '10% 80%'],
+	['timeline-trigger-activation-range-start', 'entry 10%'],
+	['timeline-trigger-activation-range-end', 'exit 80%'],
+	['timeline-trigger-active-range', '0% 100%'],
+	['timeline-trigger-active-range-start', 'entry 0%'],
+	['timeline-trigger-active-range-end', 'exit 100%'],
+];
+
+test({
+	valid: [
+		...timelineTriggerProperties.map(([property, value]) => `a { ${property}: ${value}; }`),
+		...timelineTriggerProperties.map(([property, value]) => `a { timeline-trigger-name: --reveal; ${property}: ${value}; }`),
+		...['timeline-trigger-name: --reveal', 'timeline-trigger: --reveal view()'].map(control => `a { timeline-trigger-name: none; ${control}; timeline-trigger-source: view(); }`),
+		...['inherit', 'var(--name)', '--first, --second'].map(name => `a { timeline-trigger-name: ${name}; timeline-trigger-source: view(); }`),
+		...timelineTriggerProperties.map(([property]) => `a { timeline-trigger-name: none; ${property}: inherit; }`),
+		...timelineTriggerProperties.map(([property]) => `a { timeline-trigger-name: none; ${property}: var(--value); }`),
+		'a { animation-name: none; timeline-trigger-name: --reveal; timeline-trigger-source: view(); }',
+		'a { timeline-trigger-name: none; trigger-scope: --reveal; }',
+		'a { all: unset; timeline-trigger-name: none; timeline-trigger-source: view(); }',
+		'a { timeline-trigger-name: none; > .item { timeline-trigger-source: view(); } }',
+		'@keyframes reveal { to { timeline-trigger-name: none; timeline-trigger-source: view(); } }',
+		':export { timeline-trigger-name: none; timeline-trigger-source: view(); }',
+	],
+	invalid: [
+		...timelineTriggerProperties.map(([property, value]) => ({
+			code: `a { timeline-trigger-name: none; ${property}: ${value}; }`,
+			errors: [{messageId: 'no-ineffective-properties/timeline-trigger', data: {property}}],
+		})),
+		{
+			code: 'a { @supports (timeline-trigger-source: view()) { TIMELINE-TRIGGER-NAME: /* disabled */ NONE; TIMELINE-TRIGGER-ACTIVATION-RANGE: 10% 80% !important; } }',
+			errors: [{messageId: 'no-ineffective-properties/timeline-trigger'}],
+		},
+		{
+			code: 'a { timeline-trigger-name: none; animation-name: reveal; animation-trigger: --reveal play; timeline-trigger-source: --scroll; }',
+			errors: [{messageId: 'no-ineffective-properties/timeline-trigger'}],
+		},
+	],
+});

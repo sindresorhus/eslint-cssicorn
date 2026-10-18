@@ -197,6 +197,22 @@ a {
 }
 ```
 
+```css
+/* ❌ */
+.card {
+	timeline-trigger-name: none;
+	timeline-trigger-source: view();
+	timeline-trigger-activation-range: entry 10% exit 80%;
+}
+
+/* ✅ */
+.card {
+	timeline-trigger-name: --reveal;
+	timeline-trigger-source: view();
+	timeline-trigger-activation-range: entry 10% exit 80%;
+}
+```
+
 ## Checks
 
 The rule reports:
@@ -214,7 +230,7 @@ The rule reports:
 - `columns`, `column-count`, `column-width`, `column-fill`, `column-height`, and `column-wrap` with flex, grid, or table display. Table cells and captions can still contain columns.
 - `align-content` on a flex container with `nowrap` in `flex-wrap` or `flex-flow`, including the implicit `nowrap` in direction-only shorthands such as `flex-flow: column`. Use `align-items` or wrapping instead.
 - `justify-content` on table boxes. Table cells and captions can still use it with multicolumn layout.
-- `gap`, `row-gap`, and `column-gap` on table boxes. Use `border-spacing` for spacing between cells.
+- `gap`, `row-gap`, and `column-gap`, including their `grid-*` aliases, on table boxes. Use `border-spacing` for spacing between cells.
 - Cross-axis gaps on explicitly single-line flex containers with a known direction: `row-gap` for rows and `column-gap` for columns. Main-axis gaps and the `gap` shorthand are allowed.
 - Physical and logical insets with `position: static`.
 - `position-area`, `position-try`, `position-try-fallbacks`, `position-try-order`, and `position-visibility` with explicit `position: static`, `relative`, or `sticky`. These controls require absolute or fixed positioning.
@@ -235,6 +251,7 @@ The rule reports:
 - `scroll-snap-stop: always` with `scroll-snap-align: none` or `none none`. Mixed values such as `none start` are allowed because they still define a snap position on one axis.
 - Related animation controls, including `animation-trigger`, with `animation-name: none`, and transition controls with `transition-property: none`.
 - Related timeline axis and inset controls with `scroll-timeline-name: none` or `view-timeline-name: none`.
+- `timeline-trigger-source`, `timeline-trigger-activation-range`, and `timeline-trigger-active-range`, including range start and end longhands, with `timeline-trigger-name: none`.
 - Omitted styles in border shorthands, `outline`, `column-rule`, and `text-emphasis`, omitted lines in `text-decoration`, and omitted names in `animation` lists where no item has a name.
 
 Ellipsis needs a block container with clipped inline overflow. `white-space: nowrap` and dimensions are not required.
@@ -400,6 +417,8 @@ Multicolumn layout requires a block container other than a table wrapper. A tabl
 	column-wrap: wrap;
 }
 ```
+
+`grid-gap`, `grid-row-gap`, and `grid-column-gap` are standard aliases for `gap`, `row-gap`, and `column-gap`. The table and single-line flex gap checks also cover these aliases.
 
 Table boxes use `border-spacing` instead of gaps between cells:
 
