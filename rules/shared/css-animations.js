@@ -1,7 +1,12 @@
 // @ts-check
 
 import {ident} from '@eslint/css-tree';
-import {getCanonicalLexerNode, getCommaSeparatedGroups, isKeyframesAtRule} from '../utils/index.js';
+import {
+	getCanonicalLexerNode,
+	getCommaSeparatedGroups,
+	isKeyframesAtRule,
+	normalizeCssIdentifier,
+} from '../utils/index.js';
 
 /**
 @import {AtrulePlain, CssNodePlain, Lexer, LexerMatchResult, ValuePlain} from '@eslint/css-tree';
@@ -149,6 +154,43 @@ const getKeyframesName = (atRule, lexer) => {
 	return name;
 };
 
+/**
+Get a percentage offset from an ordinary keyframe selector, or undefined for unfamiliar selectors and named timeline ranges.
+
+@param {import('@eslint/css-tree').SelectorPlain} selector
+*/
+const getKeyframeOffset = selector => {
+	if (selector.children.length !== 1) {
+		return;
+	}
+
+	const [node] = selector.children;
+	if (node.type === 'Percentage') {
+		const offset = Number(node.value);
+		if (offset >= 0 && offset <= 100) {
+			return offset;
+		}
+	} else if (node.type === 'TypeSelector') {
+		const name = normalizeCssIdentifier(node.name);
+		if (name === 'from') {
+			return 0;
+		}
+
+		if (name === 'to') {
+			return 100;
+		}
+	}
+};
+
+/**
+Get the ordinary offsets in a keyframe rule, retaining undefined for unsupported selectors.
+
+@param {import('@eslint/css-tree').RulePlain} rule
+*/
+const getKeyframeOffsets = rule => rule.prelude?.type === 'SelectorList'
+	? rule.prelude.children.map(selector => selector.type === 'Selector' ? getKeyframeOffset(selector) : undefined)
+	: [undefined];
+
 export {
-	easingFunctions, getAnimationName, getAnimationNameNodes, getGroupAnimationNameNodes, getKeyframesName,
+	easingFunctions, getAnimationName, getAnimationNameNodes, getGroupAnimationNameNodes, getKeyframesName, getKeyframeOffsets,
 };
