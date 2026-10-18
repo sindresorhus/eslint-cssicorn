@@ -29,7 +29,7 @@ test({
 	invalid: [
 		{
 			code: 'a { display: block; > .item { display: block; vertical-align: middle; } }',
-			errors: [{messageId: 'no-ineffective-properties/vertical-align'}],
+			errors: [{message: '`vertical-align` has no effect with `display: block`. Use an inline-level box, table cell, or flex or grid item.'}],
 		},
 		...['absolute', 'fixed'].map(position => ({
 			code: `a { display: flex; > .item { display: block; position: ${position}; vertical-align: middle; } }`,

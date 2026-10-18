@@ -68,7 +68,7 @@ const MESSAGE_ID_VIEW_TRANSITION = 'no-ineffective-properties/view-transition';
 const MESSAGE_ID_OMITTED_SHORTHAND_COMPONENT = 'no-ineffective-properties/omitted-shorthand-component';
 const messages = {
 	[MESSAGE_ID_DISPLAY]: '`{{property}}` has no effect with `display: {{display}}`. It requires a {{layout}} container.',
-	[MESSAGE_ID_VERTICAL_ALIGN]: '`vertical-align` has no effect with `display: {{display}}`. It requires an inline-level box or a table cell.',
+	[MESSAGE_ID_VERTICAL_ALIGN]: '`vertical-align` has no effect with `display: {{display}}`. Use an inline-level box, table cell, or flex or grid item.',
 	[MESSAGE_ID_FLEX_ITEM]: '`{{property}}` has no effect on a flex item.',
 	[MESSAGE_ID_GRID_ITEM]: '`{{property}}` has no effect on a grid item.',
 	[MESSAGE_ID_FLOW_ITEM]: '`{{property}}` has no effect on an ordinary flow item.',
