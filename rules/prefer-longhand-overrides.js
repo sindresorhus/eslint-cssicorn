@@ -51,6 +51,21 @@ for (const property of supportedShorthands) {
 }
 
 /**
+@type {Map<string, Set<string>>}
+*/
+const familiesByProperty = new Map();
+for (const [property, interactions] of propertyInteractions) {
+	const families = new Set();
+	for (const interaction of interactions) {
+		for (const family of familiesByInteraction.get(interaction) ?? []) {
+			families.add(family);
+		}
+	}
+
+	familiesByProperty.set(property, families);
+}
+
+/**
 @param {CssNodePlain[]} nodes
 */
 const getSelectorKey = nodes => JSON.stringify(nodes.map(node => `${node.type}:${generate(node)}`));
@@ -130,14 +145,7 @@ const getBlockDeclarations = (block, context) => {
 			declarations.set(property, declaration);
 		}
 
-		const families = new Set();
-		for (const interaction of propertyInteractions.get(property) ?? propertyInteractions.get(getBasePropertyName(property)) ?? []) {
-			for (const family of familiesByInteraction.get(interaction) ?? []) {
-				families.add(family);
-			}
-		}
-
-		for (const family of families) {
+		for (const family of familiesByProperty.get(property) ?? familiesByProperty.get(getBasePropertyName(property)) ?? []) {
 			affecting.set(family, (affecting.get(family) ?? 0) + 1);
 		}
 	}
