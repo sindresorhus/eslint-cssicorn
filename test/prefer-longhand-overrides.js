@@ -89,6 +89,7 @@ test({
 		...[
 			['animation: fade 1s', 'animation: fade 2s', 'animation-timeline: --scroll'],
 			['font: 16px Arial', 'font: 18px Arial', 'font-feature-settings: "kern"'],
+			['font: condensed 16px Arial', 'font: expanded 16px Arial', 'font-stretch: ultra-condensed'],
 			['margin: 1px 2px 3px 4px', 'margin: 1px 2px 3px 5px', 'margin-inline-start: 8px'],
 		].flatMap(([first, second, conflict]) => [
 			`.button { ${first}; ${conflict}; &:hover { ${second}; } }`,
@@ -267,6 +268,7 @@ test({
 			['flex: 1', 'flex: 1 2', 'flex-shrink: 2'],
 			['font: 16px/1.5 Arial, serif', 'font: bold 16px/1.5 Arial, serif', 'font-weight: bold'],
 			['font: italic 16px Arial', 'font: oblique 15deg 16px Arial', 'font-style: oblique 15deg'],
+			['font: condensed 16px Arial', 'font: expanded 16px Arial', 'font-width: expanded'],
 			['font: 16px Arial, serif', 'font: 16px Inter, sans-serif', 'font-family: Inter, sans-serif'],
 			['font: 16px Old Face', String.raw`font: 16px \46  ace`, String.raw`font-family: \46  ace`],
 			['font: 16px "/* Old Face */"', 'font: 16px "/* New Face */"', 'font-family: "/* New Face */"'],

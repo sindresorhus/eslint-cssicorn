@@ -119,34 +119,21 @@ The suggested component can itself be a shorthand, such as `border-color` or `ba
 
 ## Matching base styles
 
-The rule compares an override with one earlier base declaration of the same shorthand and importance:
+The rule requires one unambiguous earlier declaration of the same shorthand with matching `!important`:
 
-- Separate rules must be siblings in the same containing block. The override selector must preserve the base selector's exact structure and append classes, IDs, attributes, or pseudo-classes to its final compound. For example, `.button:hover` and `.button.active` can override `.button`, but `.primary.button:hover` is not matched with `.button.primary`.
-- A directly nested rule must refine the same element with a leading `&`, such as `&:hover` or `&.active`. Descendant selectors such as `& .icon` are not compared with their parent.
-- Selector lists are supported when every override selector matches the same unique base rule. For example, `.button, .link` can be the base for `.button:hover, .link:hover`. Separate base rules are not combined, even when their values are identical.
+- Sibling rules must preserve the base selector's structure and extend its final element with classes, IDs, attributes, or pseudo-classes, such as `.button` → `.button:hover`.
+- Direct nesting must target the same element, such as `&:hover` or `&.active`.
+- Every branch in a selector list must resolve to the same base declaration.
 
-Conditional and layer boundaries are not crossed. Rules inside the same `@media`, `@supports`, `@container`, `@layer`, or `@scope` block can still be compared.
+Comparisons stay within one containing block, including conditional, layer, and scope blocks. Rules with unsupported selectors and relevant declarations interrupt comparisons with earlier bases.
 
-Rules with unsupported selectors and declarations that affect supported shorthands interrupt comparisons with earlier bases. A later supported base can start a new comparison.
-
-Only one component may differ. The replacement must come from the override's explicit values or the shorthand's defined copying and dependent default rules. Independently omitted components are not filled with initial values. The defined `font-synthesis` keyword mappings are expanded to `auto` and `none` longhand values. The rule requires equal item counts for `background`, `background-position`, `mask`, `animation`, `animation-range`, `transition`, `scroll-timeline`, and `view-timeline`. A `position-try` fallback list is treated as one component. Other components are compared structurally without evaluating calculations or converting equivalent colors and units. Recognized keywords are ASCII case-insensitive; custom names remain case-sensitive.
+Only one component may differ, and its replacement must be explicit or follow the shorthand's copying and default rules. Independently omitted components are not expanded. Layer, animation, transition, and timeline lists require matching item counts. Values are compared structurally; keywords are ASCII case-insensitive, while custom names are case-sensitive.
 
 ## Limitations
 
-- This rule does not calculate the winning cascade or inspect imports and other stylesheets. Repeating a shorthand can intentionally reset another matching style.
-- Ambiguous bases, conflicting declarations of an affected property, `all`, mismatched `!important`, pseudo-elements, and unsupported selector relationships are skipped. Vendor-prefixed shorthands other than `-webkit-text-stroke` are skipped.
-- The legacy `grid-gap` alias is not supported.
-- Every `background-position` layer must have exactly two values in horizontal and vertical order, such as `left top` or `10px 20%`. Single values, reversed keywords, and three-value or four-value edge offsets are skipped.
-- Ambiguous component assignments are skipped. This includes `font-variant: normal` and `mask` values containing geometry boxes or lengths and percentages that could specify either position or size.
-- `grid` and `grid-template` values containing template-area strings or `auto-flow` are skipped. Every `animation-range` item must explicitly specify both its start and end.
-- Legacy `white-space` keywords (`normal`, `pre`, `pre-wrap`, and `pre-line`) and `text-box: normal` are skipped.
-- CSS-wide keywords, substitution functions such as `var()`, `random()`, invalid or unclassified syntax, system fonts, `flex: none`, `outline` values containing `auto`, and timeline syntax in the `animation` shorthand are skipped.
-- Declarations in keyframes, descriptor blocks, and CSS Modules interop blocks are ignored.
-- A comment in the replaced declaration prevents the suggestion. Other comments are kept.
-
-## Related rules
-
-- [`no-ineffective-overrides`](./no-ineffective-overrides.md) reports state and conditional overrides blocked by cascade priority.
-- [`no-redundant-longhand-properties`](./no-redundant-longhand-properties.md) combines longhands in the same block into a shorthand.
-- [`no-redundant-shorthand-values`](./no-redundant-shorthand-values.md) removes repeated values within one shorthand.
-- [`prefer-individual-transform-properties`](./prefer-individual-transform-properties.md) suggests individual transform properties so states can change transform components independently.
+- The rule does not resolve the cascade or inspect other files. Conflicting declarations, `all`, pseudo-elements, and unsupported selectors are skipped.
+- Each `background-position` layer needs two values in horizontal and vertical order, such as `left top`. Each `animation-range` item needs explicit start and end values.
+- Ambiguous component assignments, such as `font-variant: normal` and `mask` geometry boxes, are skipped. Grid template areas and `auto-flow` are also skipped.
+- Unsupported forms include `grid-gap`, vendor-prefixed shorthands other than `-webkit-text-stroke`, system fonts, `flex: none`, `outline` with `auto`, timeline syntax in `animation`, `text-box: normal`, and the `white-space` keywords `normal`, `pre`, `pre-wrap`, and `pre-line`.
+- CSS-wide keywords, substitutions such as `var()`, `random()`, and invalid or unclassified values are skipped.
+- Keyframes, descriptor blocks, and CSS Modules interop blocks are ignored. Comments in a replaced declaration prevent the suggestion.
