@@ -57,26 +57,22 @@ The individual transform properties above can express independent rotation and t
 
 ## Detection
 
-- Only the later animation needs `replace`. Earlier animations may use `replace`, `add`, or `accumulate`.
-- Duration, delay, iteration count, play state, and timeline must be established in the same style block. An `animation` shorthand supplies omitted defaults. Longhand-only declarations must establish every required control locally.
-- Shorter control lists repeat to match `animation-name`, and excess values are ignored. Source order and `!important` determine the effective declarations.
-- Only positive overlap between active intervals after initial application is checked. Literal seconds, milliseconds, finite or fractional iteration counts, `infinite`, and negative delays are supported. Touching intervals do not overlap.
-- Finite constant calculations such as `calc(1s + 250ms)` are supported for durations and delays, and unitless calculations such as `calc(3 / 2)` are supported for iteration counts. Calculated negative durations and iteration counts are clamped to zero.
-- Both definitions must explicitly set the shared property at `0%` and `100%`, including `from`, `to`, and comma-separated selectors. Missing endpoints can use underlying values, so sparse keyframes are skipped.
-- Known property aliases and shorthand longhands are compared. Individual `translate`, `rotate`, and `scale` properties are distinct from `transform`. Logical and physical properties are not mapped to each other.
+- Requires explicit `replace` on the later track. Earlier tracks may use any composition; the `animation` shorthand preserves composition.
+- Names, duration, delay, iteration count, play state, and timeline must resolve in the same style block. The shorthand supplies defaults; control lists repeat or truncate to match `animation-name`. Source order and `!important` apply.
+- Checks positive active overlap after initial application, excluding touching intervals and fill-only overlap.
+- Supports `s`, `ms`, negative delays, fractional or infinite iteration counts, and finite constant calculations. Calculated negative durations and counts become zero.
+- Both definitions must explicitly set the shared property at `0%` and `100%`, including `from`, `to`, and comma-separated selectors.
+- Expands known aliases and supported shorthands. Keeps `transform` separate from individual transform properties, and logical properties separate from physical properties.
 
 See [CSS animation composition](https://www.w3.org/TR/css-animations-2/#animation-composition) and [Web Animations effect composition](https://www.w3.org/TR/web-animations-1/#effect-composition) for the stacking behavior.
 
 ## Limitations
 
-- Definitions must be unique, unprefixed `@keyframes` directly inside the stylesheet. Duplicate names anywhere in the file, including conditional and prefixed definitions, make a name ambiguous. Definitions inside grouping rules, layers, or scopes are skipped.
-- Each style block is analyzed independently. External stylesheets, selector cascade, and animation start times changed by scripts or later style changes are not resolved.
-- Active interval boundaries are rounded to the nearest millisecond. Shorter overlaps may be missed.
-- Default replacement without explicit `animation-composition` is not reported. The `animation` shorthand does not reset an explicit composition.
-- Paused animations, non-document timelines, fill-only overlap, and blocks containing `all`, `animation-delay-start`, `animation-delay-end`, or `animation-trigger` are skipped.
-- Animation declarations inside `@starting-style` are skipped because they only establish transition starting values and do not start animations.
-- Definitions containing non-important keyframe-level `animation-composition` are skipped. Important keyframe declarations are ignored, as they are by browsers.
-- Custom properties, unknown properties, and non-animatable properties are ignored. A candidate property is skipped if a relevant keyframe declaration has a substitution, CSS-wide value, malformed value, or unsupported syntax. Unresolved animation controls and calculations with unsupported units or non-finite results also prevent comparison.
+- Only unique, unprefixed, top-level `@keyframes` are resolved. Duplicate names anywhere, including conditional and prefixed definitions, are ambiguous.
+- External cascade and runtime history are not inferred. Interval boundaries round to the nearest millisecond, so shorter overlaps may be missed.
+- Skips paused tracks, non-document timelines, `@starting-style`, and blocks containing `all`, `animation-delay-start`, `animation-delay-end`, or `animation-trigger`.
+- Ignores `!important` keyframe declarations; otherwise, keyframe-level `animation-composition` skips the definition.
+- Ignores custom, unknown, and non-animatable properties. Skips properties with unresolved keyframe values and comparisons with unresolved controls, including substitutions, CSS-wide values, invalid syntax, or unsupported or non-finite calculations.
 
 ## Related rules
 
