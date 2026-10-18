@@ -21,7 +21,6 @@ import {
 */
 
 const MESSAGE_ID = 'no-useless-is';
-const PAGE_ONLY_PSEUDO_CLASSES = new Set(['first', 'left', 'right', 'recto', 'verso']);
 
 const messages = {
 	[MESSAGE_ID]: 'Remove the unnecessary `:is()` wrapper.',
@@ -48,11 +47,6 @@ const isUnsupportedArgumentNode = node => {
 	}
 
 	const name = normalizeCssIdentifier(node.name);
-	// The standard pseudo-class catalog also includes selectors for pages.
-	if (PAGE_ONLY_PSEUDO_CLASSES.has(name)) {
-		return true;
-	}
-
 	// Unwrapping `:has()` can change shadow-host matching or expose it to an unforgiving argument list.
 	if (name === 'has') {
 		return true;

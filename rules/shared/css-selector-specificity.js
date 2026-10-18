@@ -50,6 +50,9 @@ const LEGACY_PSEUDO_ELEMENTS = new Set([
 	'first-letter',
 	'first-line',
 ]);
+// The standard pseudo-class catalog also includes selectors for pages.
+// `:blank` also selects input elements, so it is not page-only.
+const PAGE_ONLY_PSEUDO_CLASSES = new Set(['first', 'left', 'right', 'recto', 'verso']);
 const FUNCTIONAL_PSEUDO_SELECTORS = new Set(functionalPseudoSelectors);
 const NON_FUNCTIONAL_PSEUDO_SELECTORS = new Set(nonFunctionalPseudoSelectors);
 
@@ -206,7 +209,7 @@ const isPseudoSelectorRepresentable = (node, allowPseudoElements) => {
 	}
 
 	const name = normalizeCssIdentifier(node.name);
-	if (!isStandardPseudoSelector(node)) {
+	if (!isStandardPseudoSelector(node) || PAGE_ONLY_PSEUDO_CLASSES.has(name)) {
 		return false;
 	}
 

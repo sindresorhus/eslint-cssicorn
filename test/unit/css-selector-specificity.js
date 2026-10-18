@@ -59,6 +59,20 @@ test('excludes pseudo-element branches from nesting parents', () => {
 	assert.deepEqual(getRuleSpecificities(parseRule(':is(::before)'), [0, 0, 0]), []);
 });
 
+test('excludes page pseudo-classes from element selector arguments', () => {
+	for (const name of ['first', 'left', 'right', 'recto', 'verso']) {
+		assert.equal(canMatchSelector(parseSelector(`:${name}`)), false);
+		assert.equal(canMatchSelector(parseSelector(`:is(:${name}, div)`)), true);
+		assert.deepEqual(getSelectorSpecificities(`:is(:${name}, div)`), [[0, 0, 1]]);
+		assert.equal(canMatchSelector(parseSelector(`:not(:${name}, div)`)), false);
+	}
+});
+
+test('keeps the input blank pseudo-class representable', () => {
+	assert.equal(canMatchSelector(parseSelector(':blank')), true);
+	assert.deepEqual(getSelectorSpecificities(':blank'), [[0, 1, 0]]);
+});
+
 test('extracts functional selector lists and nth of lists', () => {
 	for (const selector of [':is(.item, #featured)', ':not(.item, #featured)', ':has(> .item, #featured)', ':nth-child(2n of .item, #featured)', ':nth-last-child(odd of .item, #featured)']) {
 		const argument = getSelectorArgument(parseSelector(selector).children.at(0));
