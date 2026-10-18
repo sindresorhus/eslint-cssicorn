@@ -13,7 +13,6 @@ test('property data accounts for aliases, shorthand resets, and logical counterp
 		['font-synthesis', 'font-synthesis-position'],
 		['white-space', 'text-wrap'],
 		['white-space', 'white-space-trim'],
-		['animation', 'animation-composition'],
 		['animation', 'animation-range-start'],
 		['columns', 'column-wrap'],
 		['view-timeline', 'view-timeline-inset'],
@@ -32,7 +31,7 @@ test('property data accounts for aliases, shorthand resets, and logical counterp
 });
 
 test('independent properties have independent footprints', () => {
-	for (const [first, second] of [['display', 'color'], ['margin', 'padding'], ['font', 'background'], ['font', 'font-palette']]) {
+	for (const [first, second] of [['display', 'color'], ['margin', 'padding'], ['font', 'background'], ['font', 'font-palette'], ['animation', 'animation-composition']]) {
 		assert.equal(interactions.get(first).isDisjointFrom(interactions.get(second)), true, `${first} and ${second}`);
 	}
 });

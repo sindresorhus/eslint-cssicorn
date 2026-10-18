@@ -2,7 +2,7 @@ const splitProperties = properties => properties.split(' ');
 
 // Reset-only properties missing from the shorthand definitions below.
 const additionalResetProperties = new Map([
-	['animation', ['animation-composition', 'animation-trigger']],
+	['animation', ['animation-trigger']],
 	['background', ['background-blend-mode']],
 	['columns', ['column-wrap']],
 ]);

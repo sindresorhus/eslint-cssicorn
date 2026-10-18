@@ -686,7 +686,7 @@ Message:
 > 1 | a { animation-composition: add; animation: spin 1s; }
     |                                 ^^^^^^^^^^^^^^^^^^ Expected property \`animation\` before \`animation-composition\`.
 
-Suggestion 1/1: Reorder properties. This may change the cascade.:
+Output:
   1 | a { animation: spin 1s; animation-composition: add; }
 
 `;

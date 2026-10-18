@@ -46,6 +46,8 @@ div {
 
 When the fix merges `background` longhands, it keeps an explicit `background-blend-mode` declaration, because some browsers do not reset it with `background`.
 
+An explicit `animation-composition` declaration is preserved when combining `animation` longhands, because the shorthand does not reset composition.
+
 ## Options
 
 ### ignoreShorthands

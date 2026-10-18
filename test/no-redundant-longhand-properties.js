@@ -554,8 +554,8 @@ testRule({
 		{
 			code: outdent`
 				a {
-					animation-trigger: initial;
 					animation-composition: initial;
+					animation-trigger: initial;
 					animation-range: initial;
 					animation-duration: 1s;
 					animation-timing-function: ease;
@@ -570,6 +570,7 @@ testRule({
 			`,
 			output: outdent`
 				a {
+					animation-composition: initial;
 					animation: 1s ease 0s 1 normal none running fade;
 				}
 			`,
@@ -598,8 +599,8 @@ testRule({
 			errors: 1,
 		},
 		{
-			code: 'a { animation-trigger: initial; animation-composition: initial; animation-range: initial; animation-duration: 1s; animation-timing-function: ease; animation-delay: 0s; animation-iteration-count: 1; animation-direction: normal; animation-fill-mode: none; animation-play-state: running; animation-name: fade, slide; animation-timeline: auto, auto; }',
-			output: 'a { animation: 1s ease 0s 1 normal none running fade, 1s ease 0s 1 normal none running slide; }',
+			code: 'a { animation-composition: initial; animation-trigger: initial; animation-range: initial; animation-duration: 1s; animation-timing-function: ease; animation-delay: 0s; animation-iteration-count: 1; animation-direction: normal; animation-fill-mode: none; animation-play-state: running; animation-name: fade, slide; animation-timeline: auto, auto; }',
+			output: 'a { animation-composition: initial; animation: 1s ease 0s 1 normal none running fade, 1s ease 0s 1 normal none running slide; }',
 			errors: 1,
 		},
 		{
@@ -1194,4 +1195,24 @@ test('rejects unknown ignored shorthands', () => {
 		},
 		{filename: 'test.css'},
 	), {message: /Value "unknown" should be equal to one of the allowed values\./v});
+});
+
+// `animation` does not reset composition, so its declaration must remain effective.
+for (const composition of ['', 'animation-composition: initial; ', 'animation-composition: add; ', 'animation-composition: inherit !important; ']) {
+	testRule({
+		valid: [],
+		invalid: [{
+			code: `a { ${composition}animation-trigger: initial; animation-range: initial; animation-duration: 1s; animation-timing-function: ease; animation-delay: 0s; animation-iteration-count: 1; animation-direction: normal; animation-fill-mode: none; animation-play-state: running; animation-name: fade; animation-timeline: auto; }`,
+			output: `a { ${composition}animation: 1s ease 0s 1 normal none running fade; }`,
+			errors: 1,
+		}],
+	});
+}
+
+testRule({
+	valid: [],
+	invalid: [{
+		code: 'a { animation-trigger: initial; animation-composition: initial; animation-range: initial; animation-duration: 1s; animation-timing-function: ease; animation-delay: 0s; animation-iteration-count: 1; animation-direction: normal; animation-fill-mode: none; animation-play-state: running; animation-name: fade; animation-timeline: auto; }',
+		errors: 1,
+	}],
 });

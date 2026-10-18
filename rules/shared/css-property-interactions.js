@@ -18,7 +18,7 @@ const propertyInteractions = new Map([
 	['all', new Set(['property:all'])],
 	['anchor-name', new Set(['property:anchor-name'])],
 	['anchor-scope', new Set(['property:anchor-scope'])],
-	['animation', new Set(['property:animation', 'property:animation-composition', 'property:animation-delay', 'property:animation-delay-end', 'property:animation-delay-start', 'property:animation-direction', 'property:animation-duration', 'property:animation-fill-mode', 'property:animation-iteration-count', 'property:animation-name', 'property:animation-play-state', 'property:animation-range', 'property:animation-range-end', 'property:animation-range-start', 'property:animation-timeline', 'property:animation-timing-function', 'property:animation-trigger'])],
+	['animation', new Set(['property:animation', 'property:animation-delay', 'property:animation-delay-end', 'property:animation-delay-start', 'property:animation-direction', 'property:animation-duration', 'property:animation-fill-mode', 'property:animation-iteration-count', 'property:animation-name', 'property:animation-play-state', 'property:animation-range', 'property:animation-range-end', 'property:animation-range-start', 'property:animation-timeline', 'property:animation-timing-function', 'property:animation-trigger'])],
 	['animation-composition', new Set(['property:animation-composition'])],
 	['animation-delay', new Set(['property:animation-delay', 'property:animation-delay-end', 'property:animation-delay-start'])],
 	['animation-delay-end', new Set(['property:animation-delay-end'])],
