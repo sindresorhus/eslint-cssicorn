@@ -28,6 +28,7 @@ const MESSAGE_ID_NOWRAP = 'no-ineffective-properties/nowrap';
 const MESSAGE_ID_STATIC = 'no-ineffective-properties/static';
 const MESSAGE_ID_Z_INDEX = 'no-ineffective-properties/z-index';
 const MESSAGE_ID_POSITION = 'no-ineffective-properties/position';
+const MESSAGE_ID_ABSOLUTE_POSITION = 'no-ineffective-properties/absolute-position';
 const MESSAGE_ID_OVERFLOW = 'no-ineffective-properties/overflow';
 const MESSAGE_ID_MULTICOL = 'no-ineffective-properties/multicol';
 const MESSAGE_ID_FLOAT = 'no-ineffective-properties/float';
@@ -63,6 +64,7 @@ const messages = {
 	[MESSAGE_ID_STATIC]: '`{{property}}` has no effect with `position: static`. Insets require a positioned element.',
 	[MESSAGE_ID_Z_INDEX]: '`z-index` has no effect on an ordinary flow item with `position: static`. It requires a positioned element or a flex or grid item.',
 	[MESSAGE_ID_POSITION]: '`{{property}}` has no effect with `position: {{position}}`. It requires an in-flow box.',
+	[MESSAGE_ID_ABSOLUTE_POSITION]: '`{{property}}` has no effect with `position: {{position}}`. It requires absolute or fixed positioning.',
 	[MESSAGE_ID_OVERFLOW]: '`text-overflow: {{value}}` has no effect with `overflow: visible`. Ellipsis requires clipped inline overflow.',
 	[MESSAGE_ID_MULTICOL]: '`{{property}}` has no effect with `display: {{display}}`. Multicol properties require a block container.',
 	[MESSAGE_ID_FLOAT]: '`float: {{value}}` has no effect with `position: {{position}}`. Absolutely positioned elements cannot float.',
@@ -99,6 +101,7 @@ const itemProperties = new Set([...flexItemProperties, ...flowItemProperties, 'p
 const flowDisplayKeywords = new Set(['block', 'inline', 'flow', 'flow-root', 'list-item']);
 const blockDisplayKeywords = new Set(['block', 'flow', 'flow-root', 'flex', 'grid', 'table', 'list-item', 'table-caption']);
 const insetProperties = new Set(['top', 'right', 'bottom', 'left', 'inset', 'inset-block', 'inset-inline', 'inset-block-start', 'inset-block-end', 'inset-inline-start', 'inset-inline-end']);
+const anchorPlacementProperties = new Set(['position-area', 'position-try', 'position-try-fallbacks', 'position-try-order', 'position-visibility']);
 const paddingProperties = new Set([
 	'padding',
 	'padding-top',
@@ -218,6 +221,7 @@ const targetProperties = new Set([
 	...gridProperties,
 	...itemProperties,
 	...insetProperties,
+	...anchorPlacementProperties,
 	...paddingProperties,
 	...multicolProperties,
 	...shorthandProperties,
@@ -471,6 +475,10 @@ Get the problem for a property given the explicit position in its block.
 const getPositionProblem = (node, property, keyword, {position}) => {
 	if (insetProperties.has(property) && position === 'static') {
 		return {node, messageId: MESSAGE_ID_STATIC, data: {property}};
+	}
+
+	if (anchorPlacementProperties.has(property) && ['static', 'relative', 'sticky'].includes(position)) {
+		return {node, messageId: MESSAGE_ID_ABSOLUTE_POSITION, data: {property, position}};
 	}
 
 	if (position !== 'absolute' && position !== 'fixed') {

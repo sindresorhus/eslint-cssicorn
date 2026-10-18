@@ -4,6 +4,51 @@ const {test} = getTester(import.meta, 'no-ineffective-properties');
 
 const outlineProperties = [['outline-color', 'red'], ['outline-width', '2px'], ['outline-offset', '3px']];
 const floatedItemProperties = [['justify-self', 'center'], ['place-self', 'center'], ['column-span', 'all'], ['vertical-align', 'middle']];
+const anchorPlacementProperties = [
+	['position-area', 'top'],
+	['position-try', 'flip-block'],
+	['position-try-fallbacks', '--below'],
+	['position-try-order', 'most-height'],
+	['position-visibility', 'no-overflow'],
+];
+
+test({
+	valid: [
+		...anchorPlacementProperties.map(([property, value]) => `a { ${property}: ${value}; }`),
+		...anchorPlacementProperties.flatMap(([property, value]) => ['absolute', 'fixed'].map(position => `a { position: ${position}; ${property}: ${value}; }`)),
+		...['inherit', 'var(--position)', 'relative sticky'].map(position => `a { position: ${position}; position-area: top; }`),
+		'a { position: relative; position: fixed; position-area: top; }',
+		...anchorPlacementProperties.map(([property]) => `a { position: relative; ${property}: inherit; }`),
+		...anchorPlacementProperties.map(([property]) => `a { position: sticky; ${property}: var(--placement); }`),
+		'a { all: unset; position: relative; position-try: flip-block; }',
+		'a { position: relative; > .item { position-area: top; } }',
+		'a { position: relative; position-anchor: --tooltip; > .item { position: absolute; position-anchor: match-parent; } }',
+		'@keyframes layout { to { position: static; position-area: top; } }',
+		':export { position: relative; position-try: flip-block; }',
+	],
+	invalid: [
+		...anchorPlacementProperties.flatMap(([property, value]) => ['static', 'relative', 'sticky'].map(position => ({
+			code: `a { position: ${position}; ${property}: ${value}; }`,
+			errors: [{messageId: 'no-ineffective-properties/absolute-position', data: {property, position}}],
+		}))),
+		{
+			code: 'a { POSITION: /* layout */ RELATIVE !important; POSITION-AREA: BLOCK-START SPAN-INLINE-END; }',
+			errors: [{messageId: 'no-ineffective-properties/absolute-position', data: {property: 'position-area', position: 'relative'}}],
+		},
+		{
+			code: '@supports (position-area: top) { a { @media (width > 1px) { position: sticky; position-try: most-width --below, flip-block; } } }',
+			errors: [{messageId: 'no-ineffective-properties/absolute-position'}],
+		},
+		{
+			code: 'a { display: flex; > .item { position: relative; position-visibility: anchors-visible; } }',
+			errors: [{messageId: 'no-ineffective-properties/absolute-position'}],
+		},
+		{
+			code: 'a { position: static; position-area: none; position-try-fallbacks: none; position-try-order: normal; position-visibility: always; }',
+			errors: Array.from({length: 4}, () => ({messageId: 'no-ineffective-properties/absolute-position'})),
+		},
+	],
+});
 
 test({
 	valid: [

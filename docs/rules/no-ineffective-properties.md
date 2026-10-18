@@ -156,6 +156,7 @@ The rule reports:
 - `columns`, `column-count`, `column-width`, and `column-fill` with flex or grid display.
 - `align-content` on a flex container with `nowrap` in `flex-wrap` or `flex-flow`, including the implicit `nowrap` in direction-only shorthands such as `flex-flow: column`. Use `align-items` or wrapping instead.
 - Physical and logical insets with `position: static`.
+- `position-area`, `position-try`, `position-try-fallbacks`, `position-try-order`, and `position-visibility` with explicit `position: static`, `relative`, or `sticky`. These controls require absolute or fixed positioning.
 - Floats other than `none`, clearance, and `column-span: all` with `position: absolute` or `fixed`.
 - `flex`, `flex-basis`, `flex-grow`, `flex-shrink`, `order`, and `vertical-align` with `position: absolute` or `fixed`.
 - Ellipsis in `text-overflow` with flex or grid display, or with `overflow: visible` (including `visible visible`).
@@ -314,6 +315,28 @@ Absolute and fixed positioning take a box out of flow. Flex sizing, item orderin
 ```
 
 `justify-self`, `align-self`, and grid placement can affect positioned boxes and are allowed with absolute or fixed positioning.
+
+Anchor placement and position fallback controls require absolute or fixed positioning. Relative and sticky positioning do not enable them:
+
+```css
+/* ❌ */
+.tooltip {
+	position: relative;
+	position-anchor: --button;
+	position-area: top;
+	position-try-fallbacks: flip-block;
+}
+
+/* ✅ */
+.tooltip {
+	position: absolute;
+	position-anchor: --button;
+	position-area: top;
+	position-try-fallbacks: flip-block;
+}
+```
+
+These checks include reset values, just like the static inset checks. An omitted position is not inferred because elements such as popovers can have absolute or fixed positioning supplied by the browser. `position-anchor` is not checked because its value can be used by descendants through `match-parent`.
 
 `z-index` applies to positioned boxes and to flex and grid items. An explicitly static child of an ordinary flow container cannot use it, even when the child itself has grid or flex display:
 
