@@ -88,7 +88,6 @@ The rule reports:
 - `align-content` on a flex container with explicit `nowrap` in `flex-wrap` or `flex-flow`. Use `align-items` or wrapping instead.
 - Physical and logical insets with `position: static`.
 - Floats other than `none`, clearance, and `column-span: all` with `position: absolute` or `fixed`.
-- Ellipsis in `text-overflow` with flex or grid display, or with `overflow: visible` (including `visible visible`).
 - `border-spacing` and padding with `border-collapse: collapse` on `display: table` or `inline-table`.
 - `perspective-origin` with `perspective: none`.
 - `offset-distance`, `offset-rotate`, and `offset-anchor` with `offset-path: none`.
@@ -98,8 +97,6 @@ The rule reports:
 - Related animation or transition controls with `animation-name: none` or `transition-property: none`.
 - Related timeline axis and inset controls with `scroll-timeline-name: none` or `view-timeline-name: none`.
 - Omitted styles in border shorthands, `outline`, `column-rule`, and `text-emphasis`, omitted lines in `text-decoration`, and omitted names in `animation` lists where no item has a name.
-
-Ellipsis needs a block container with clipped inline overflow. `white-space: nowrap` and dimensions are not required.
 
 ## Intentional declarations
 
@@ -129,12 +126,11 @@ General:
 - Blocks that contain `all`, keyframes, descriptor blocks, and CSS Modules interop blocks are not checked.
 - Except for the shorthand defaults, each check needs an explicit controlling declaration, and is skipped when the control is unsupported or repeated (also through a shorthand or a prefixed alias), or when the control or the affected declaration uses a CSS-wide value, a substitution, or `random()`.
 
-Display, disabled effects, and overflow:
+Display and disabled effects:
 
 - Display checks ignore `display: none` and `display: contents`.
 - A disabled effect needs a single `none` value in the controlling longhand.
-- Visible overflow is only detected from the `overflow` shorthand.
-- For `text-overflow`, strings and `fade` values are not checked.
+- Text overflow is not checked because [native text input controls](https://www.w3.org/TR/css-ui-4/#input-text) can show ellipsis regardless of their outer display and overflow.
 
 Shorthand defaults:
 

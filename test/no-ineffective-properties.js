@@ -2,6 +2,16 @@ import {getTester} from './utils/test.js';
 
 const {test} = getTester(import.meta);
 
+test({
+	valid: [
+		'a { display: grid; overflow: visible; overflow: hidden; text-overflow: ellipsis; }',
+		'a { display: flex; overflow: visible; text-overflow: ellipsis; }',
+		'input { display: flex; width: 8rem; text-overflow: ellipsis; }',
+		'.input { display: inline-flex; overflow: visible; text-overflow: ellipsis; }',
+	],
+	invalid: [],
+});
+
 const omittedComponentMessageId = 'no-ineffective-properties/omitted-shorthand-component';
 
 test({
@@ -301,6 +311,21 @@ test.snapshot({
 		'@keyframes motion { to { offset-path: none; offset-distance: 50%; shape-outside: none; shape-image-threshold: 0.5; text-decoration-line: none; text-decoration-color: red; } }',
 		'@font-face { offset-path: none; offset-distance: 50%; text-decoration-line: none; text-decoration-color: red; }',
 		'a { display: flex; border-collapse: collapse; caption-side: bottom; empty-cells: hide; ruby-align: center; }',
+		'a { overflow: visible; text-overflow: ellipsis; }',
+		'a { overflow: visible visible; text-overflow: ellipsis; }',
+		'a { TEXT-OVERFLOW: ELLIPSIS; OVERFLOW: VISIBLE !important; }',
+		String.raw`a { o\76 erflow: \76 isible; text-overflow: \65 llipsis; }`,
+		'a { overflow: visible; text-overflow: ellipsis; writing-mode: vertical-rl; }',
+		...['clip ellipsis', 'ellipsis clip', 'ellipsis ellipsis'].map(value => `a { overflow: visible; text-overflow: ${value}; }`),
+		'a { TEXT-OVERFLOW: CLIP ELLIPSIS !important; OVERFLOW: VISIBLE; }',
+		String.raw`a { overflow: visible; text-overflow: \65 llipsis c\6c ip; }`,
+		'a { overflow: visible visible; text-overflow: clip /* marker */ ellipsis; writing-mode: vertical-rl; }',
+		...['flex', 'grid', 'inline-flex', 'inline grid'].map(display => `a { display: ${display}; overflow: hidden; text-overflow: ellipsis; }`),
+		'a { display: grid; text-overflow: ellipsis clip; }',
+		'a { display: inline flex; text-overflow: ellipsis ellipsis; }',
+		'a { TEXT-OVERFLOW: CLIP ELLIPSIS !important; DISPLAY: GRID; }',
+		String.raw`a { display: \67 rid; text-overflow: \65 llipsis; }`,
+		'a { @supports (display: flex) { display: flex; text-overflow: /* marker */ ellipsis; } }',
 	],
 	invalid: [
 		...flexProperties.map(([property, value]) => `a { display: grid; ${property}: ${value}; }`),
@@ -340,11 +365,6 @@ test.snapshot({
 		'a { POSITION: STATIC; INSET-BLOCK: 20px !important; }',
 		String.raw`a { position: \73 tatic; inset-\69 nline: 20px; }`,
 		'a { position: static; inset: /* retain */ 20px; }',
-		'a { overflow: visible; text-overflow: ellipsis; }',
-		'a { overflow: visible visible; text-overflow: ellipsis; }',
-		'a { TEXT-OVERFLOW: ELLIPSIS; OVERFLOW: VISIBLE !important; }',
-		String.raw`a { o\76 erflow: \76 isible; text-overflow: \65 llipsis; }`,
-		'a { overflow: visible; text-overflow: ellipsis; writing-mode: vertical-rl; }',
 		'a { display: flex; & b { display: grid; flex-direction: column; } }',
 		'a { @media (width > 1px) { display: flex; grid-template-columns: 1fr 1fr; } }',
 		...['media (width > 1px)', 'supports (display: grid)', 'container (width > 1px)', 'layer example', 'scope (.example)'].map(atRule => `@${atRule} { a { position: static; top: 20px; } }`),
@@ -366,16 +386,6 @@ test.snapshot({
 		'a { POSITION: FIXED; FLOAT: INLINE-END !important; }',
 		String.raw`a { position: a\62 solute; \66 loat: \6c eft; }`,
 		'a { @media (width > 1px) { position: fixed; float: /* side */ left; } }',
-		...['clip ellipsis', 'ellipsis clip', 'ellipsis ellipsis'].map(value => `a { overflow: visible; text-overflow: ${value}; }`),
-		'a { TEXT-OVERFLOW: CLIP ELLIPSIS !important; OVERFLOW: VISIBLE; }',
-		String.raw`a { overflow: visible; text-overflow: \65 llipsis c\6c ip; }`,
-		'a { overflow: visible visible; text-overflow: clip /* marker */ ellipsis; writing-mode: vertical-rl; }',
-		...['flex', 'grid', 'inline-flex', 'inline grid'].map(display => `a { display: ${display}; overflow: hidden; text-overflow: ellipsis; }`),
-		'a { display: grid; text-overflow: ellipsis clip; }',
-		'a { display: inline flex; text-overflow: ellipsis ellipsis; }',
-		'a { TEXT-OVERFLOW: CLIP ELLIPSIS !important; DISPLAY: GRID; }',
-		String.raw`a { display: \67 rid; text-overflow: \65 llipsis; }`,
-		'a { @supports (display: flex) { display: flex; text-overflow: /* marker */ ellipsis; } }',
 		...['table', 'inline-table', 'block table', 'inline table', 'table block', 'table inline'].map(display => `a { display: ${display}; border-collapse: collapse; border-spacing: 8px; }`),
 		'a { border-spacing: 8px 12px !important; border-collapse: collapse; display: table; }',
 		'a { DISPLAY: INLINE-TABLE; BORDER-COLLAPSE: COLLAPSE; BORDER-SPACING: 8px; }',
@@ -460,7 +470,6 @@ test({
 			code: 'a { display: none; grid-template-columns: 1fr; position: static; top: 20px; overflow: visible; text-overflow: ellipsis; }',
 			errors: [
 				{messageId: 'no-ineffective-properties/static'},
-				{messageId: 'no-ineffective-properties/overflow'},
 			],
 		},
 		{
@@ -475,16 +484,7 @@ test({
 			code: 'a { display: flex; display: grid; grid-template-columns: 1fr; position: static; top: 20px; overflow: visible; text-overflow: ellipsis; }',
 			errors: [
 				{messageId: 'no-ineffective-properties/static'},
-				{messageId: 'no-ineffective-properties/overflow'},
 			],
-		},
-		{
-			code: 'a { display: flex; overflow: visible; text-overflow: ellipsis; }',
-			errors: [{messageId: 'no-ineffective-properties/text-overflow-display', data: {display: 'flex', value: 'ellipsis'}}],
-		},
-		{
-			code: 'a { display: grid; overflow: visible; overflow: hidden; text-overflow: ellipsis; }',
-			errors: [{messageId: 'no-ineffective-properties/text-overflow-display', data: {display: 'grid', value: 'ellipsis'}}],
 		},
 		{
 			code: 'a { display: table; border-collapse: collapse; border-collapse: separate; border-spacing: 8px; flex-direction: column; }',
@@ -500,7 +500,6 @@ test({
 				{messageId: 'no-ineffective-properties/display'},
 				{messageId: 'no-ineffective-properties/nowrap'},
 				{messageId: 'no-ineffective-properties/static'},
-				{messageId: 'no-ineffective-properties/text-overflow-display'},
 			],
 		},
 	],
