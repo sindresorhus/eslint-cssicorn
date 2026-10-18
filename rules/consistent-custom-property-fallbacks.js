@@ -24,7 +24,8 @@ import {
 
 @typedef {{type: number, start: number, end: number}} Token
 @typedef {{opening: number, closing: number, property: string}} Fallback
-@typedef {{key: string, text: string, property: string, complete: boolean, line: number, column: number, color?: CssNodePlain | false}} Reference
+@typedef {{type: 'color', node: CssNodePlain} | {type: 'keyword', name: string}} ComparisonValue
+@typedef {{key: string, text: string, property: string, complete: boolean, value?: ComparisonValue | false}} Reference
 */
 
 const openingTokens = new Map([
@@ -70,17 +71,17 @@ function getTokenKey(token, text) {
 }
 
 /**
-Get a literal color only when the consuming property's grammar proves its meaning.
+Get a literal color or keyword only when the consuming property's grammar proves its meaning.
 @param {Reference} reference
 @param {CssicornContext} context
-@returns {CssNodePlain | false}
+@returns {ComparisonValue | false}
 */
-function getColor(reference, context) {
-	if (reference.color !== undefined) {
-		return reference.color;
+function getComparisonValue(reference, context) {
+	if (reference.value !== undefined) {
+		return reference.value;
 	}
 
-	reference.color = false;
+	reference.value = false;
 	if (!reference.complete || reference.property.startsWith('--') || !reference.text) {
 		return false;
 	}
@@ -88,17 +89,23 @@ function getColor(reference, context) {
 	try {
 		const value = getCanonicalLexerNode(/** @type {ValuePlain} */ (toPlainObject(parse(reference.text, {context: 'value'}))));
 		const node = value.children.at(0);
-		if (value.children.length !== 1 || !node || !isLiteralColor(node, context)) {
+		if (value.children.length !== 1 || !node) {
 			return false;
 		}
 
 		const match = context.sourceCode.lexer.matchProperty(reference.property, value);
-		if (match.matched && match.isType(/** @type {CssNode} */ (node), 'color')) {
-			reference.color = node;
+		if (!match.matched) {
+			return false;
+		}
+
+		if (match.isType(/** @type {CssNode} */ (node), 'color') && isLiteralColor(node, context)) {
+			reference.value = {type: 'color', node};
+		} else if (node.type === 'Identifier' && match.isKeyword(node) && !match.isType(node, '-non-standard-generic-family')) {
+			reference.value = {type: 'keyword', name: normalizeCssIdentifier(node.name)};
 		}
 	} catch {}
 
-	return reference.color ?? false;
+	return reference.value ?? false;
 }
 
 /**
@@ -117,6 +124,10 @@ const create = context => {
 	const references = new Map();
 	const {sourceCode} = context;
 	context.on('Declaration', function * (declaration) {
+		if (sourceCode.getParent(declaration)?.type !== 'Block') {
+			return;
+		}
+
 		const text = sourceCode.getText(declaration.value);
 		// Escaped function names need tokenization too.
 		if (!text.includes('(')) {
@@ -191,7 +202,6 @@ const create = context => {
 
 		const [offset] = sourceCode.getRange(declaration.value);
 		for (const {opening, closing, property} of fallbacks) {
-			const loc = toLocation([offset + tokens[opening].start, offset + tokens[closing].end], context);
 			/**
 			@type {Reference}
 			*/
@@ -200,8 +210,6 @@ const create = context => {
 				text: text.slice(tokens[opening + 2].end, tokens[closing].start).trim(),
 				property: normalizeCssIdentifier(declaration.property),
 				complete: opening === 0 && closing === tokens.length - 1,
-				line: loc.start.line,
-				column: loc.start.column,
 			};
 			const first = references.get(property);
 			if (!first) {
@@ -213,17 +221,19 @@ const create = context => {
 				continue;
 			}
 
-			const firstColor = getColor(first, context);
-			const color = getColor(reference, context);
-			if (firstColor && color && areEquivalentColors(firstColor, color)) {
+			const firstValue = getComparisonValue(first, context);
+			const value = getComparisonValue(reference, context);
+			if (firstValue && value
+				&& ((firstValue.type === 'color' && value.type === 'color' && areEquivalentColors(firstValue.node, value.node))
+					|| (firstValue.type === 'keyword' && value.type === 'keyword' && firstValue.name === value.name))) {
 				continue;
 			}
 
 			yield {
 				node: declaration,
-				loc,
+				loc: toLocation([offset + tokens[opening].start, offset + tokens[closing].end], context),
 				messageId: 'consistent-custom-property-fallbacks',
-				data: {property, line: first.line, column: first.column},
+				data: {property},
 			};
 		}
 	});
@@ -254,7 +264,7 @@ const config = {
 		}],
 		defaultOptions: [{customProperties: []}],
 		messages: {
-			'consistent-custom-property-fallbacks': 'Fallback for custom property `{{property}}` differs from its first fallback at {{line}}:{{column}}.',
+			'consistent-custom-property-fallbacks': 'Fallback for custom property `{{property}}` differs from its first fallback.',
 		},
 		languages: ['css/css'],
 	},

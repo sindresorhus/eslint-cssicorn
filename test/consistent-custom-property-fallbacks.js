@@ -2,7 +2,9 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import nodeTest from 'node:test';
 import css from '@eslint/css';
-import {Linter} from 'eslint';
+import markdown from '@eslint/markdown';
+import {ESLint, Linter} from 'eslint';
+import plugin from '../index.js';
 import {getTester} from './utils/test.js';
 
 const {test, rule} = getTester(import.meta);
@@ -16,6 +18,15 @@ test.snapshot({
 		...[
 			'a { color: var(--other, red); color: var(--other, blue); }',
 			'a { color: var(--brand, purple); } b { color: var(--brand, purple); }',
+			'@supports (color: var(--brand, red)) { a { color: var(--brand, blue); } }',
+			'@import "theme.css" supports(color: var(--brand, red)); a { color: var(--brand, blue); }',
+			'@container style(--foo: var(--brand, red)) { a { color: var(--brand, blue); } }',
+			'a { color: var(--brand, currentcolor); background-color: var(--brand, currentColor); }',
+			'a { display: var(--shared, BLOCK); display: var(--shared, block); }',
+			'a { color: var(--brand, INHERIT); background-color: var(--brand, inherit); }',
+			'a { color: var(--brand, red); color: var(--brand, #f00); --alias: var(--brand, red); }',
+			'a { color: var(--brand, #f008); background-color: var(--brand, #ff000088); }',
+			String.raw`a { display: var(--shared, b\6c ock); display: var(--shared, BLOCK); }`,
 			'a { color: var(--brand, red); color: var(--Brand, blue); }',
 			'a { color: var(--brand, red); margin: var(--shared, 1px); }',
 			'a { color: var(--brand); color: var(--brand, blue); }',
@@ -59,6 +70,17 @@ test.snapshot({
 			'a { color: var(--brand, var(--brand, red)); color: var(--brand, blue); }',
 			'a { margin: var(--shared, 1px) var(--shared, 2px); }',
 			'a { animation-name: var(--shared, RED); animation-name: var(--shared, red); }',
+			'a { font-family: var(--shared, BlinkMacSystemFont); font-family: var(--shared, blinkmacsystemfont); }',
+			'a { --a: var(--shared, BLOCK); --b: var(--shared, block); }',
+			'a { unknown: var(--shared, BLOCK); unknown: var(--shared, block); }',
+			'a { color: var(--brand, rgb(255 0 0 / .5)); background-color: var(--brand, #ff000080); }',
+			'a { width: var(--shared, 9007199254740992px); width: var(--shared, 9007199254740993px); }',
+			'a { margin: var(--shared, var(--other)) var(--shared, 1px); padding: var(--shared, 2px); }',
+			'@supports (color: var(--brand, red)) { a { color: var(--brand, blue); color: var(--brand, green); } }',
+			'@keyframes pulse { from { color: var(--brand, red); } to { color: var(--brand, blue); } }',
+			'@page { margin: var(--shared, 1px); } @page :left { margin: var(--shared, 2px); }',
+			'@page { @top-left { color: var(--brand, red); } @top-right { color: var(--brand, blue); } }',
+			'a { @media screen { color: var(--brand, red); } color: var(--brand, blue); }',
 			'a { --a: var(--brand, red); --b: var(--brand, #f00); }',
 			'a { border: 1px solid var(--brand, red); color: var(--brand, #f00); }',
 			'a { unknown: var(--brand, red); color: var(--brand, #f00); }',
@@ -88,7 +110,12 @@ test({
 		code: 'a { color: var(--brand, purple); }\nb { color: var(--brand, blue); }',
 		options,
 		errors: [{
-			messageId: 'consistent-custom-property-fallbacks', data: {property: '--brand', line: 1, column: 12}, line: 2, column: 12, endLine: 2, endColumn: 30,
+			messageId: 'consistent-custom-property-fallbacks',
+			data: {property: '--brand'},
+			line: 2,
+			column: 12,
+			endLine: 2,
+			endColumn: 30,
 		}],
 	}],
 });
@@ -129,4 +156,73 @@ nodeTest('documentation examples match their annotations', () => {
 			assert.equal(messages.length, example.groups.annotation === '❌' ? 1 : 0);
 		}
 	}
+});
+
+test.snapshot({
+	valid: [{
+		code: 'a { brand-paint: var(--brand, red); brand-paint: var(--brand, #f00); }',
+		options,
+		languageOptions: {customSyntax: {properties: {'brand-paint': '<color>'}}},
+	}, {
+		code: 'a { custom-display: var(--shared, BLOCK); custom-display: var(--shared, block); }',
+		options,
+		languageOptions: {customSyntax: {properties: {'custom-display': 'block | inline'}}},
+	}],
+	invalid: [configured('a { brand-paint: var(--brand, red); brand-paint: var(--brand, #f00); }'), {
+		code: 'a { custom-name: var(--shared, RED); custom-name: var(--shared, red); }',
+		options,
+		languageOptions: {customSyntax: {properties: {'custom-name': '<custom-ident>'}}},
+	}],
+});
+
+nodeTest('Markdown diagnostics use document locations without block-relative coordinates in the message', async () => {
+	const eslint = new ESLint({
+		overrideConfigFile: true,
+		baseConfig: [{
+			files: ['**/*.md'],
+			plugins: {markdown},
+			language: 'markdown/commonmark',
+			processor: 'markdown/markdown',
+		}, {
+			...plugin.configs.recommended,
+			rules: {'cssicorn/consistent-custom-property-fallbacks': ['error', ...options]},
+		}],
+	});
+	const [result] = await eslint.lintText([
+		'# Example',
+		'',
+		'Prose before the stylesheet.',
+		'',
+		'```css',
+		'a { color: var(--brand, red); }',
+		'b { color: var(--brand, blue); }',
+		'```',
+	].join('\n'), {filePath: 'example.md'});
+	assert.equal(result.messages.length, 1);
+	assert.equal(result.messages[0].message, 'Fallback for custom property `--brand` differs from its first fallback.');
+	assert.equal(result.messages[0].line, 7);
+	assert.equal(result.messages[0].column, 12);
+	assert.equal(result.messages[0].endColumn, 30);
+
+	const [independentBlocks] = await eslint.lintText([
+		'```css',
+		'a { color: var(--brand, red); }',
+		'```',
+		'',
+		'```css',
+		'b { color: var(--brand, blue); }',
+		'```',
+	].join('\n'), {filePath: 'example.md'});
+	assert.deepEqual(independentBlocks.messages, []);
+});
+
+test({
+	valid: [],
+	invalid: [{
+		code: '@supports (color: var(--brand, red)) {\na { color: var(--brand, blue); }\nb { color: var(--brand, green); }\n}',
+		options,
+		errors: [{
+			messageId: 'consistent-custom-property-fallbacks', data: {property: '--brand'}, line: 3, column: 12, endLine: 3, endColumn: 31,
+		}],
+	}],
 });
