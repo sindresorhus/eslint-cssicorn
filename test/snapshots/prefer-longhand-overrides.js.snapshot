@@ -1,0 +1,27 @@
+exports[`invalid(1): .button { border: 1px solid red; &:hover { border: 1px /* retain */ solid blue; } } 1`] = `
+
+  1 | .button { border: 1px solid red; &:hover { border: 1px /* retain */ solid blue; } }
+
+`;
+
+exports[`invalid(1): .button { border: 1px solid red; &:hover { border: 1px /* retain */ solid blue; } } 2`] = `
+
+Message:
+> 1 | .button { border: 1px solid red; &:hover { border: 1px /* retain */ solid blue; } }
+    |                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Prefer overriding \`border-color\` instead of repeating the \`border\` shorthand.
+
+`;
+
+exports[`invalid(2): .button { border: 1px solid red; &:hover { border /* retain */: 1px solid blue; } } 1`] = `
+
+  1 | .button { border: 1px solid red; &:hover { border /* retain */: 1px solid blue; } }
+
+`;
+
+exports[`invalid(2): .button { border: 1px solid red; &:hover { border /* retain */: 1px solid blue; } } 2`] = `
+
+Message:
+> 1 | .button { border: 1px solid red; &:hover { border /* retain */: 1px solid blue; } }
+    |                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Prefer overriding \`border-color\` instead of repeating the \`border\` shorthand.
+
+`;

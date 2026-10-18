@@ -47,6 +47,7 @@ export {default as 'prefer-existing-custom-properties'} from './prefer-existing-
 export {default as 'prefer-explicit-viewport-units'} from './prefer-explicit-viewport-units.js';
 export {default as 'prefer-individual-transform-properties'} from './prefer-individual-transform-properties.js';
 export {default as 'prefer-light-dark'} from './prefer-light-dark.js';
+export {default as 'prefer-longhand-overrides'} from './prefer-longhand-overrides.js';
 export {default as 'prefer-media-feature-range-syntax'} from './prefer-media-feature-range-syntax.js';
 export {default as 'prefer-merged-rules'} from './prefer-merged-rules.js';
 export {default as 'prefer-modern-syntax'} from './prefer-modern-syntax.js';
