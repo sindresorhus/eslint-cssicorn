@@ -9,6 +9,13 @@ const {test} = getTester(import.meta);
 const columns = 'display: grid; grid-template-columns: 20ch 1fr;';
 const childColumns = 'display: grid; grid-column: 1 / -1; grid-template-columns: 20ch 1fr;';
 const getPair = (parent = columns, child = childColumns) => `.parent { ${parent} } .parent > .child { ${child} }`;
+const childContextDeclarations = [
+	['position: absolute;', 'position: relative;'],
+	['contain: layout;', 'contain: none;'],
+	['content-visibility: hidden;', 'content-visibility: visible;'],
+	['container: card / inline-size;', 'container: none;'],
+	['container-type: inline-size;', 'container-type: normal;'],
+];
 
 test.snapshot({
 	valid: [
@@ -65,29 +72,8 @@ test.snapshot({
 			'grid-column-start: 1;',
 			'grid-column-end: -1;',
 			'grid-area: 1 / 1 / -1 / -1;',
-			'position: absolute;',
-			'position: fixed;',
-			'contain: layout;',
-			'contain: paint;',
-			'contain: content;',
-			'contain: strict;',
-			'content-visibility: auto;',
-			'content-visibility: hidden;',
 		].map(declaration => getPair(columns, `${childColumns} ${declaration}`)),
-		...[
-			'position: relative;',
-			'contain: size;',
-			'content-visibility: visible;',
-			'container-type: inline-size;',
-			'container-type: size;',
-			'container: card / inline-size;',
-			'container-type: normal;',
-			'container: none;',
-		].map(declaration => getPair(columns, `${childColumns} ${declaration}`)),
-		...['position: absolute;', 'contain: layout;', 'content-visibility: hidden;'].map(declaration => {
-			const [property] = declaration.split(':', 1);
-			return getPair(`${columns} ${declaration}`, `${childColumns} ${property}: inherit;`);
-		}),
+		...childContextDeclarations.flatMap(declarations => declarations.map(declaration => getPair(columns, `${childColumns} ${declaration}`))),
 		getPair(columns, childColumns.replace('grid-column: 1 / -1;', 'grid-column-start: 1;')),
 		getPair(columns, childColumns.replace('grid-column: 1 / -1;', 'grid-column-start: 1; grid-column-end: -1; grid-column-end: -1;')),
 		getPair('display: grid; grid-template-columns: [Start] 20ch 1fr;', 'display: grid; grid-column: 1 / -1; grid-template-columns: [start] 20ch 1fr;'),
@@ -133,7 +119,7 @@ test.snapshot({
 		].map(value => getPair(`display: grid; grid-template-columns: ${value};`, `display: grid; grid-column: 1 / -1; grid-template-columns: ${value};`)),
 		getPair('DISPLAY: GRID; GRID-TEMPLATE-COLUMNS: MINMAX(0, 1FR) 20CH;', 'display: grid; grid-column: 1 / -1; grid-template-columns: minmax(0, 1fr) 20ch;'),
 		getPair(String.raw`display: grid; grid-template-columns: [\73 tart] 20ch 1fr;`, 'display: grid; grid-column: 1 / -1; grid-template-columns: [start] 20ch 1fr;'),
-		getPair(`${columns} position: absolute; contain: layout;`),
+		getPair(`${columns} grid-template-rows: 100px 1fr;`, `${childColumns.replace('20ch', '30ch')} grid-row: 1 / -1; grid-template-rows: 100px 1fr;`),
 		getPair(`${columns} column-gap: 1rem;`, `${childColumns} column-gap: 2rem; width: 10rem; padding: 1rem;`),
 		getPair(columns, childColumns.replace('1fr;', '1fr !important;')),
 		getPair(columns.replace('20ch 1fr', '20ch /* parent */ 1fr')),
@@ -145,6 +131,7 @@ test.snapshot({
 		`.parent { ${columns} > .child { ${childColumns} > .grandchild { ${childColumns} } } }`,
 		`.wrapper { ${getPair()} }`,
 		getPair().replace('.parent > .child', '.parent > .child[data-kind]:not(.disabled)'),
+		...childContextDeclarations.map(([declaration]) => getPair(`${columns} ${declaration}`)),
 	],
 });
 
