@@ -117,5 +117,6 @@ Explicit animation duration `0s` is retained because omitted duration defaults t
 - Declarations with functions that may not repeat the same value are ignored: `random()` and the substitution functions (`attr()`, `env()`, `first-valid()`, `ident()`, `if()`, `inherit()`, `random-item()`, `var()`, and custom functions such as `--spacing()`).
 - For repeated positional values, other functions are compared without evaluation, and numeric spellings such as `1px` and `1.0px` are kept distinct.
 - Default omission is limited to the component grammars listed above. Declarations with unrecognized component syntax are ignored.
+- Default components in query conditions such as `@supports`, `@import supports()`, and `@container style()` are retained to preserve the syntax being tested.
 - Declarations in CSS Modules `:export` and `:import()` blocks are ignored, because JavaScript reads them as exact strings.
 - The autofix is skipped if it would remove a comment.

@@ -123,13 +123,15 @@ const create = context => {
 		}
 
 		const property = getBasePropertyName(declaration.property);
-		const hasDefaults = normalizeCssIdentifier(declaration.property) === property && hasShorthandDefaults(property);
+		const canOmitDefaults = normalizeCssIdentifier(declaration.property) === property
+			&& hasShorthandDefaults(property)
+			&& sourceCode.getParent(declaration)?.type === 'Block';
 		if (
 			!fourSideShorthands.has(property)
 			&& !twoSideProperties.has(property)
 			&& property !== 'border-radius'
 			&& !placeProperties.has(property)
-			&& !hasDefaults
+			&& !canOmitDefaults
 		) {
 			return;
 		}
@@ -140,7 +142,7 @@ const create = context => {
 
 		const values = value.children;
 		let result;
-		if (hasDefaults) {
+		if (canOmitDefaults) {
 			result = getDefaultShorthandReduction(property, value, context);
 		} else if (property === 'border-radius') {
 			result = getBorderRadiusResult(values, normalizeCssIdentifier(declaration.property) === '-webkit-border-radius', sourceCode);
@@ -157,7 +159,7 @@ const create = context => {
 		// Match the grammar last, as it is slow and most values cannot be simplified.
 		if (
 			!result
-			|| (!hasDefaults && !sourceCode.lexer.matchProperty(property, value).matched)
+			|| (!canOmitDefaults && !sourceCode.lexer.matchProperty(property, value).matched)
 		) {
 			return;
 		}

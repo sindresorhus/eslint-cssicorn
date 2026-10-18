@@ -50,6 +50,11 @@ test({
 		'a { -webkit-animation: 1s ease slide; -moz-border: medium solid currentcolor; }',
 		':export { border: 1px solid currentcolor; font: normal 16px serif; }',
 		':import("theme.css") { flex-flow: row nowrap; }',
+		'@supports (animation: auto ease slide) { a { color: red; } }',
+		'@supports not (font: calc(400) 16px serif) { a { color: red; } }',
+		'@import "theme.css" supports(animation: auto ease slide);',
+		'@import "theme.css" supports((font: normal 16px/normal serif));',
+		'@container style(font: normal 16px/normal serif) { a { color: red; } }',
 	],
 	invalid: [
 		['border: 1px solid currentColor', 'border: 1px solid'],
@@ -154,6 +159,16 @@ test({
 		{
 			code: '.parent { @media (width > 0px) { border: 1px solid currentcolor; } }',
 			output: '.parent { @media (width > 0px) { border: 1px solid; } }',
+			errors: [{messageId: 'no-redundant-shorthand-values'}],
+		},
+		{
+			code: '@supports (animation: auto ease slide) { a { animation: auto ease slide; } }',
+			output: '@supports (animation: auto ease slide) { a { animation: slide; } }',
+			errors: [{messageId: 'no-redundant-shorthand-values'}],
+		},
+		{
+			code: '@keyframes slide { from { border: 1px solid currentcolor; } }',
+			output: '@keyframes slide { from { border: 1px solid; } }',
 			errors: [{messageId: 'no-redundant-shorthand-values'}],
 		},
 	],
