@@ -213,6 +213,22 @@ a {
 }
 ```
 
+```css
+/* ❌ */
+.card {
+	timeline-trigger-name: --reveal;
+	timeline-trigger-source: none;
+	timeline-trigger-active-range: entry 0% exit 100%;
+}
+
+/* ✅ */
+.card {
+	timeline-trigger-name: --reveal;
+	timeline-trigger-source: view();
+	timeline-trigger-active-range: entry 0% exit 100%;
+}
+```
+
 ## Checks
 
 The rule reports:
@@ -235,6 +251,7 @@ The rule reports:
 - Cross-axis gaps on explicitly single-line flex containers with a known direction: `row-gap` for rows and `column-gap` for columns. Main-axis gaps and the `gap` shorthand are allowed.
 - Physical and logical insets with `position: static`.
 - `position-area`, `position-try`, `position-try-fallbacks`, `position-try-order`, and `position-visibility` with explicit `position: static`, `relative`, or `sticky`. These controls require absolute or fixed positioning.
+- `position-try-order` with explicit `position-try-fallbacks: none`, because there are no alternative positions to order.
 - Floats other than `none`, clearance, and `column-span: all` with `position: absolute` or `fixed`.
 - `flex`, `flex-basis`, `flex-grow`, `flex-shrink`, `order`, and `vertical-align` with `position: absolute` or `fixed`.
 - `break-before`, `break-after`, `break-inside`, and their `page-break-*` aliases with `position: absolute` or `fixed`.
@@ -254,6 +271,7 @@ The rule reports:
 - Related animation controls, including `animation-trigger`, with `animation-name: none`, and transition controls with `transition-property: none`.
 - Related timeline axis and inset controls with `scroll-timeline-name: none` or `view-timeline-name: none`.
 - `timeline-trigger-source`, `timeline-trigger-activation-range`, and `timeline-trigger-active-range`, including range start and end longhands, with `timeline-trigger-name: none`.
+- `timeline-trigger-activation-range` and `timeline-trigger-active-range`, including range start and end longhands, with `timeline-trigger-source: none`. The trigger name and scope are allowed because they can still define a named trigger.
 - Omitted styles in border shorthands, `outline`, `column-rule`, and `text-emphasis`, omitted lines in `text-decoration`, and omitted names in `animation` lists where no item has a name.
 
 Ellipsis needs a block container with clipped inline overflow. `white-space: nowrap` and dimensions are not required.
@@ -603,6 +621,24 @@ Anchor placement and position fallback controls require absolute or fixed positi
 ```
 
 These checks include reset values, just like the static inset checks. An omitted position is not inferred because elements such as popovers can have absolute or fixed positioning supplied by the browser. `position-anchor` is not checked because its value can be used by descendants through `match-parent`.
+
+`position-try-order` sorts the available position options. With `position-try-fallbacks: none`, only the base position remains, so the order cannot affect the result:
+
+```css
+/* ❌ */
+.tooltip {
+	position: fixed;
+	position-try-fallbacks: none;
+	position-try-order: most-height;
+}
+
+/* ✅ */
+.tooltip {
+	position: fixed;
+	position-try-fallbacks: flip-block;
+	position-try-order: most-height;
+}
+```
 
 `z-index` applies to positioned boxes and to flex and grid items. An explicitly static child of an ordinary flow container cannot use it, even when the child itself has grid or flex display:
 

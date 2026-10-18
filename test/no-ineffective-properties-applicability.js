@@ -19,6 +19,39 @@ const decorationProperties = [['text-decoration-color', 'blue'], ['text-decorati
 
 test({
 	valid: [
+		'a { position: absolute; position-try-order: most-height; }',
+		'a { position: fixed; position-try-fallbacks: flip-block; position-try-order: most-height; }',
+		'a { position-try-fallbacks: --below, --above; position-try-order: most-width; }',
+		...['inherit', 'var(--fallbacks)', 'none none', 'imaginary'].map(fallbacks => `a { position-try-fallbacks: ${fallbacks}; position-try-order: most-height; }`),
+		'a { position-try-fallbacks: none; position-try-fallbacks: flip-block; position-try-order: most-height; }',
+		'a { position-try-fallbacks: none; position-try: flip-block; position-try-order: most-height; }',
+		'a { position-try: most-height none; }',
+		'a { position-try: none; position-try-order: most-height; }',
+		'a { position-try-fallbacks: none; position-try-order: inherit; }',
+		'a { position-try-fallbacks: none; position-try-order: var(--order); }',
+		'a { position-try-fallbacks: none; > .item { position-try-order: most-height; } }',
+		'a { all: unset; position-try-fallbacks: none; position-try-order: most-height; }',
+		'@keyframes tooltip { to { position-try-fallbacks: none; position-try-order: most-height; } }',
+		':export { position-try-fallbacks: none; position-try-order: most-height; }',
+	],
+	invalid: [
+		...['normal', 'most-width', 'most-height', 'most-block-size', 'most-inline-size'].map(order => ({
+			code: `a { position: absolute; position-try-fallbacks: none; position-try-order: ${order}; }`,
+			errors: [{messageId: 'no-ineffective-properties/position-try-order'}],
+		})),
+		{
+			code: 'a { position-try-fallbacks: none; position-try-order: most-height; }',
+			errors: [{messageId: 'no-ineffective-properties/position-try-order'}],
+		},
+		{
+			code: '@supports (position-area: top) { a { @media (width > 1px) { POSITION: FIXED; POSITION-TRY-FALLBACKS: /* disabled */ NONE; POSITION-TRY-ORDER: MOST-HEIGHT !important; } } }',
+			errors: [{messageId: 'no-ineffective-properties/position-try-order'}],
+		},
+	],
+});
+
+test({
+	valid: [
 		...breakProperties.map(([property, value]) => `a { ${property}: ${value}; }`),
 		...['static', 'relative', 'sticky'].map(position => `a { position: ${position}; break-before: page; break-after: column; break-inside: avoid; }`),
 		'a { position: absolute; position: relative; break-before: page; }',
@@ -792,6 +825,37 @@ const timelineTriggerProperties = [
 	['timeline-trigger-active-range-start', 'entry 0%'],
 	['timeline-trigger-active-range-end', 'exit 100%'],
 ];
+const timelineTriggerRangeProperties = timelineTriggerProperties.slice(1);
+
+test({
+	valid: [
+		...timelineTriggerRangeProperties.map(([property, value]) => `a { timeline-trigger-source: view(); ${property}: ${value}; }`),
+		'a { timeline-trigger-source: none; timeline-trigger-name: --reveal; trigger-scope: --reveal; }',
+		...['inherit', 'var(--source)', 'none, view()'].map(source => `a { timeline-trigger-source: ${source}; timeline-trigger-active-range: 10% 80%; }`),
+		'a { timeline-trigger-source: none; timeline-trigger-source: view(); timeline-trigger-active-range: 10% 80%; }',
+		'a { timeline-trigger-source: none; timeline-trigger: --reveal view(); timeline-trigger-active-range: 10% 80%; }',
+		'a { timeline-trigger: --reveal none; timeline-trigger-active-range: 10% 80%; }',
+		'a { timeline-trigger-source: none; timeline-trigger-active-range: inherit; timeline-trigger-activation-range: var(--range); }',
+		'a { timeline-trigger-source: none; > .item { timeline-trigger-active-range: 10% 80%; } }',
+		'a { all: unset; timeline-trigger-source: none; timeline-trigger-active-range: 10% 80%; }',
+		'@keyframes reveal { to { timeline-trigger-source: none; timeline-trigger-active-range: 10% 80%; } }',
+		':export { timeline-trigger-source: none; timeline-trigger-active-range: 10% 80%; }',
+	],
+	invalid: [
+		...timelineTriggerRangeProperties.map(([property, value]) => ({
+			code: `a { timeline-trigger-name: --reveal; timeline-trigger-source: none; ${property}: ${value}; }`,
+			errors: [{messageId: 'no-ineffective-properties/timeline-trigger-source', data: {property}}],
+		})),
+		{
+			code: 'a { @supports (timeline-trigger-source: view()) { TIMELINE-TRIGGER-SOURCE: /* disabled */ NONE; TIMELINE-TRIGGER-ACTIVE-RANGE: 10% 80% !important; } }',
+			errors: [{messageId: 'no-ineffective-properties/timeline-trigger-source'}],
+		},
+		{
+			code: 'a { timeline-trigger-name: none; timeline-trigger-source: none; timeline-trigger-active-range: 10% 80%; }',
+			errors: [{messageId: 'no-ineffective-properties/timeline-trigger'}, {messageId: 'no-ineffective-properties/timeline-trigger'}],
+		},
+	],
+});
 
 test({
 	valid: [

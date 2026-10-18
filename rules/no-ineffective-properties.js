@@ -31,6 +31,7 @@ const MESSAGE_ID_STATIC = 'no-ineffective-properties/static';
 const MESSAGE_ID_Z_INDEX = 'no-ineffective-properties/z-index';
 const MESSAGE_ID_POSITION = 'no-ineffective-properties/position';
 const MESSAGE_ID_ABSOLUTE_POSITION = 'no-ineffective-properties/absolute-position';
+const MESSAGE_ID_POSITION_TRY_ORDER = 'no-ineffective-properties/position-try-order';
 const MESSAGE_ID_OVERFLOW = 'no-ineffective-properties/overflow';
 const MESSAGE_ID_MULTICOL = 'no-ineffective-properties/multicol';
 const MESSAGE_ID_FLOAT = 'no-ineffective-properties/float';
@@ -60,6 +61,7 @@ const MESSAGE_ID_TRANSITION = 'no-ineffective-properties/transition';
 const MESSAGE_ID_SCROLL_TIMELINE = 'no-ineffective-properties/scroll-timeline';
 const MESSAGE_ID_VIEW_TIMELINE = 'no-ineffective-properties/view-timeline';
 const MESSAGE_ID_TIMELINE_TRIGGER = 'no-ineffective-properties/timeline-trigger';
+const MESSAGE_ID_TIMELINE_TRIGGER_SOURCE = 'no-ineffective-properties/timeline-trigger-source';
 const MESSAGE_ID_VIEW_TRANSITION = 'no-ineffective-properties/view-transition';
 const MESSAGE_ID_OMITTED_SHORTHAND_COMPONENT = 'no-ineffective-properties/omitted-shorthand-component';
 const messages = {
@@ -76,6 +78,7 @@ const messages = {
 	[MESSAGE_ID_Z_INDEX]: '`z-index` has no effect on an ordinary flow item with `position: static`. It requires a positioned element or a flex or grid item.',
 	[MESSAGE_ID_POSITION]: '`{{property}}` has no effect with `position: {{position}}`. It requires an in-flow box.',
 	[MESSAGE_ID_ABSOLUTE_POSITION]: '`{{property}}` has no effect with `position: {{position}}`. It requires absolute or fixed positioning.',
+	[MESSAGE_ID_POSITION_TRY_ORDER]: '`position-try-order` has no effect with `position-try-fallbacks: none`. Add fallback positions to order them.',
 	[MESSAGE_ID_OVERFLOW]: '`text-overflow: {{value}}` has no effect with `overflow: visible`. Ellipsis requires clipped inline overflow.',
 	[MESSAGE_ID_MULTICOL]: '`{{property}}` has no effect with `display: {{display}}`. Multicol properties require a block container.',
 	[MESSAGE_ID_FLOAT]: '`float: {{value}}` has no effect with `position: {{position}}`. Absolutely positioned elements cannot float.',
@@ -105,6 +108,7 @@ const messages = {
 	[MESSAGE_ID_SCROLL_TIMELINE]: '`{{property}}` has no effect with `scroll-timeline-name: none`. Name a scroll timeline to use this property.',
 	[MESSAGE_ID_VIEW_TIMELINE]: '`{{property}}` has no effect with `view-timeline-name: none`. Name a view timeline to use this property.',
 	[MESSAGE_ID_TIMELINE_TRIGGER]: '`{{property}}` has no effect with `timeline-trigger-name: none`. Name a timeline trigger to use this property.',
+	[MESSAGE_ID_TIMELINE_TRIGGER_SOURCE]: '`{{property}}` has no effect with `timeline-trigger-source: none`. Set a timeline source to use this range.',
 	[MESSAGE_ID_VIEW_TRANSITION]: '`view-transition-class` has no effect with `view-transition-name: none`. Assign a transition name to use this class.',
 	[MESSAGE_ID_OMITTED_SHORTHAND_COMPONENT]: '`{{property}}` omits {{component}}, which defaults to `none`.',
 };
@@ -140,8 +144,17 @@ const multicolProperties = new Set(['columns', 'column-count', 'column-width', '
 const gapProperties = new Set(['gap', 'row-gap', 'column-gap', 'grid-gap', 'grid-row-gap', 'grid-column-gap']);
 const decorationProperties = ['text-decoration-color', 'text-decoration-style', 'text-decoration-thickness', 'text-decoration-inset'];
 const decorationControllingProperties = ['text-decoration-line', 'text-decoration', '-webkit-text-decoration-line', '-webkit-text-decoration'];
+const timelineTriggerRangeProperties = [
+	'timeline-trigger-activation-range',
+	'timeline-trigger-activation-range-start',
+	'timeline-trigger-activation-range-end',
+	'timeline-trigger-active-range',
+	'timeline-trigger-active-range-start',
+	'timeline-trigger-active-range-end',
+];
 // The first controller must be explicit. Other controllers can override or reset it.
 const inactivePropertyGroups = [
+	{properties: ['position-try-order'], controllingProperties: ['position-try-fallbacks', 'position-try'], messageId: MESSAGE_ID_POSITION_TRY_ORDER},
 	{properties: ['perspective-origin'], controllingProperties: ['perspective', '-webkit-perspective'], messageId: MESSAGE_ID_PERSPECTIVE},
 	{properties: ['offset-distance', 'offset-rotate', 'offset-anchor'], controllingProperties: ['offset-path', 'offset'], messageId: MESSAGE_ID_MOTION},
 	{properties: ['shape-image-threshold'], controllingProperties: ['shape-outside', '-webkit-shape-outside'], messageId: MESSAGE_ID_SHAPE_IMAGE_THRESHOLD},
@@ -213,15 +226,12 @@ const inactivePropertyGroups = [
 	{properties: ['scroll-timeline-axis'], controllingProperties: ['scroll-timeline-name', 'scroll-timeline'], messageId: MESSAGE_ID_SCROLL_TIMELINE},
 	{properties: ['view-timeline-axis', 'view-timeline-inset'], controllingProperties: ['view-timeline-name', 'view-timeline'], messageId: MESSAGE_ID_VIEW_TIMELINE},
 	{
-		properties: [
-			'timeline-trigger-source',
-			'timeline-trigger-activation-range',
-			'timeline-trigger-activation-range-start',
-			'timeline-trigger-activation-range-end',
-			'timeline-trigger-active-range',
-			'timeline-trigger-active-range-start',
-			'timeline-trigger-active-range-end',
-		],
+		properties: timelineTriggerRangeProperties,
+		controllingProperties: ['timeline-trigger-source', 'timeline-trigger'],
+		messageId: MESSAGE_ID_TIMELINE_TRIGGER_SOURCE,
+	},
+	{
+		properties: ['timeline-trigger-source', ...timelineTriggerRangeProperties],
 		controllingProperties: ['timeline-trigger-name', 'timeline-trigger'],
 		messageId: MESSAGE_ID_TIMELINE_TRIGGER,
 	},
