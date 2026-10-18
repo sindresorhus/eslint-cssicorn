@@ -101,6 +101,10 @@ const profiles = new Map([
 		{name: 'text-decoration-color', initial: 'currentcolor'},
 		{name: 'text-decoration-thickness', initial: 'auto'},
 	]],
+	['text-emphasis', [
+		{name: 'text-emphasis-style', initial: 'none'},
+		{name: 'text-emphasis-color', initial: 'currentcolor'},
+	]],
 	['text-wrap', [
 		{name: 'text-wrap-mode', initial: 'wrap'},
 		{name: 'text-wrap-style', initial: 'auto'},

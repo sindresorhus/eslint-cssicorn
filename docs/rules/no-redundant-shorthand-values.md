@@ -65,11 +65,13 @@ This rule reports repeated values and default components that can be omitted fro
 /* ❌ */
 .heading {
 	text-wrap: wrap balance;
+	text-emphasis: filled circle currentcolor;
 }
 
 /* ✅ */
 .heading {
 	text-wrap: balance;
+	text-emphasis: filled circle;
 }
 ```
 
@@ -111,6 +113,7 @@ The following unprefixed shorthands also support omitting default components:
 | `columns` | Optional `auto` components, including height after `/`. |
 | `list-style` | Type `disc`, position `outside`, and image `none`. |
 | `text-decoration` | Line `none`, style `solid`, color `currentcolor`, and thickness `auto`. |
+| `text-emphasis` | Style `none` and color `currentcolor`. The separate `text-emphasis-position` property is preserved. |
 | `text-wrap` | Mode `wrap` and style `auto`. |
 | `background` | Image `none`, position `0% 0%`, size `auto auto`, repeat `repeat`, attachment `scroll`, origin `padding-box`, clip `border-box`, and color `transparent`. |
 | `animation` | Duration `auto`, easing `ease`, delay `0s`, iteration count `1`, direction `normal`, fill mode `none`, play state `running`, and name `none`. |

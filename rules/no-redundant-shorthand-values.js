@@ -1,3 +1,5 @@
+// @ts-check
+
 import {fourSideShorthands, pairShorthands} from './shared/css-shorthand-properties.js';
 import {areEqualValues, getCondensedValueCount} from './shared/css-shorthand-values.js';
 import {getDefaultShorthandReduction, hasShorthandDefaults} from './shared/css-shorthand-defaults.js';
@@ -8,6 +10,19 @@ import {
 	isCssModulesInteropDeclaration,
 	normalizeCssIdentifier,
 } from './utils/index.js';
+
+/**
+@import {CSSSourceCode} from '@eslint/css';
+@import {CssNodePlain} from '@eslint/css-tree';
+@import {CssicornContext} from './rule/cssicorn-context.js';
+@import {CssicornRule} from './rule/to-eslint-rule.js';
+@import {CssicornRuleFixer} from './rule/to-eslint-rule-fixer.js';
+*/
+
+/**
+@typedef {{replacement: string, removeRange: [number, number]}} ValueReduction
+@typedef {NonNullable<ReturnType<typeof getDefaultShorthandReduction>>} ShorthandReduction
+*/
 
 const MESSAGE_ID = 'no-redundant-shorthand-values';
 const messages = {
@@ -23,8 +38,15 @@ const placeProperties = new Set([
 	'place-self',
 ]);
 
+/**
+@param {CssNodePlain[]} values
+@param {CSSSourceCode} sourceCode
+*/
 const getValuesText = (values, sourceCode) => values.map(node => sourceCode.getText(node)).join(' ');
 
+/**
+@param {CssNodePlain[]} values
+*/
 const getRepeatedPlaceValueCount = values => {
 	if (values.length % 2 !== 0) {
 		return values.length;
@@ -40,6 +62,12 @@ const getRepeatedPlaceValueCount = values => {
 	return halfLength;
 };
 
+/**
+@param {CssNodePlain[]} values
+@param {number} condensedValueCount
+@param {CSSSourceCode} sourceCode
+@returns {ValueReduction | undefined}
+*/
 const getReduction = (values, condensedValueCount, sourceCode) => {
 	if (condensedValueCount === values.length) {
 		return;
@@ -50,11 +78,16 @@ const getReduction = (values, condensedValueCount, sourceCode) => {
 		replacement: getValuesText(retainedValues, sourceCode),
 		removeRange: [
 			sourceCode.getRange(values[condensedValueCount - 1])[1],
-			sourceCode.getRange(values.at(-1))[1],
+			sourceCode.getRange(/** @type {CssNodePlain} */ (values.at(-1)))[1],
 		],
 	};
 };
 
+/**
+@param {CssNodePlain[]} values
+@param {boolean} preserveFourValueEdges
+@param {CSSSourceCode} sourceCode
+*/
 const getSimpleReduction = (values, preserveFourValueEdges, sourceCode) => {
 	if (
 		values.length < 2
@@ -67,6 +100,12 @@ const getSimpleReduction = (values, preserveFourValueEdges, sourceCode) => {
 	return getReduction(values, getCondensedValueCount(values, preserveFourValueEdges), sourceCode);
 };
 
+/**
+@param {CssNodePlain[]} values
+@param {boolean} isWebkitBorderRadius
+@param {CSSSourceCode} sourceCode
+@returns {ShorthandReduction | undefined}
+*/
 const getBorderRadiusResult = (values, isWebkitBorderRadius, sourceCode) => {
 	const slashIndex = values.findIndex(node => node.type === 'Operator' && node.value === '/');
 	if (slashIndex === -1) {
@@ -86,7 +125,7 @@ const getBorderRadiusResult = (values, isWebkitBorderRadius, sourceCode) => {
 	const verticalValues = values.slice(slashIndex + 1);
 	const horizontalReduction = getSimpleReduction(horizontalValues, false, sourceCode);
 	const verticalReduction = getSimpleReduction(verticalValues, false, sourceCode);
-	const reductions = [horizontalReduction, verticalReduction].filter(Boolean);
+	const reductions = /** @type {ValueReduction[]} */ ([horizontalReduction, verticalReduction].filter(Boolean));
 	if (reductions.length === 0) {
 		return;
 	}
@@ -99,6 +138,10 @@ const getBorderRadiusResult = (values, isWebkitBorderRadius, sourceCode) => {
 	};
 };
 
+/**
+@param {CssNodePlain[]} values
+@param {CSSSourceCode} sourceCode
+*/
 const getPlaceReduction = (values, sourceCode) => {
 	if (values.length < 2 || values.some(node => node.type === 'Operator')) {
 		return;
@@ -108,7 +151,7 @@ const getPlaceReduction = (values, sourceCode) => {
 };
 
 /**
-@param {import('eslint').Rule.RuleContext} context
+@param {CssicornContext} context
 */
 const create = context => {
 	const {sourceCode} = context;
@@ -169,6 +212,11 @@ const create = context => {
 			node: value,
 			messageId: MESSAGE_ID,
 			data: {replacement},
+
+			/**
+			@param {Parameters<CssicornRuleFixer>[0]} fixer
+			@param {Parameters<CssicornRuleFixer>[1]} options
+			*/
 			* fix(fixer, {abort}) {
 				if (reductions.some(({removeRange}) => hasCommentInRange(context, removeRange))) {
 					return abort();
@@ -183,7 +231,7 @@ const create = context => {
 };
 
 /**
-@type {import('eslint').Rule.RuleModule}
+@type {CssicornRule}
 */
 const config = {
 	create,
