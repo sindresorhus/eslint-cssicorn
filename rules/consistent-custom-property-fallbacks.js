@@ -15,6 +15,7 @@ import {
 	parse,
 	substitutionFunctions,
 	toLocation,
+	trimCssWhitespace,
 } from './utils/index.js';
 
 /**
@@ -51,6 +52,10 @@ function getTokenKey(token, text) {
 
 	if (type === tokenTypes.String) {
 		return [type, string.decode(value)];
+	}
+
+	if (type === tokenTypes.Url) {
+		return [type, decodeCssIdentifier(trimCssWhitespace(value.slice(4, -1)))];
 	}
 
 	if (type === tokenTypes.Function) {

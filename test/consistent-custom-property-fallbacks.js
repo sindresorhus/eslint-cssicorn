@@ -11,6 +11,38 @@ const {test, rule} = getTester(import.meta);
 const options = [{customProperties: ['--shared', '--brand']}];
 const configured = code => ({code, options});
 
+test({
+	valid: [
+		configured('a { background: var(--shared, url(a.png)); background: var(--shared, URL(a.png)); }'),
+		configured('a { background: var(--shared, url(a.png)); background: var(--shared, url( a.png )); }'),
+		configured(String.raw`a { background: var(--shared, url(a.png)); background: var(--shared, url(a\2e png)); }`),
+		configured('a { background: var(--shared, url(images/a.png)); background: var(--shared, url(\n images/a.png\n )); }'),
+		configured('a { background: var(--shared, url()); background: var(--shared, URL(  )); }'),
+	],
+	invalid: [
+		{
+			...configured(String.raw`a { background: var(--shared, url(a.png)); background: var(--shared, u\72l(a.png)); }`),
+			errors: [{messageId: 'consistent-custom-property-fallbacks'}],
+		},
+		{
+			...configured('a { background: var(--shared, url(A.png)); background: var(--shared, url(a.png)); }'),
+			errors: [{messageId: 'consistent-custom-property-fallbacks'}],
+		},
+		{
+			...configured(String.raw`a { background: var(--shared, url(a\ b.png)); background: var(--shared, url(ab.png)); }`),
+			errors: [{messageId: 'consistent-custom-property-fallbacks'}],
+		},
+		{
+			...configured(String.raw`a { background: var(--shared, url(a.png\ )); background: var(--shared, url(b.png\ )); }`),
+			errors: [{messageId: 'consistent-custom-property-fallbacks'}],
+		},
+		{
+			...configured(String.raw`a { background: var(--shared, url(a.png\ )); background: var(--shared, url(a.png)); }`),
+			errors: [{messageId: 'consistent-custom-property-fallbacks'}],
+		},
+	],
+});
+
 test.snapshot({
 	valid: [
 		'a { color: var(--brand, purple); } b { color: var(--brand, blue); }',
@@ -97,7 +129,6 @@ test.snapshot({
 			'a { --a: var(--shared, foo/**/bar); --b: var(--shared, foobar); }',
 			'a { content: var(--shared, "var(--x)"); content: var(--shared, "var(--y)"); }',
 			'a { background: var(--shared, url("a.png")); background: var(--shared, url("b.png")); }',
-			'a { background: var(--shared, url(a.png)); background: var(--shared, URL(a.png)); }',
 			'a { color: var(--brand, red) !important; } @media screen { b { color: var(--brand, blue); } }',
 			'@supports (display: grid) { a { color: var(--brand, red); } } @container (width > 1px) { b { color: var(--brand, blue); } }',
 			'@layer theme { a { color: var(--brand, red); & b { color: var(--brand, blue); } } }',

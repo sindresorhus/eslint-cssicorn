@@ -67,6 +67,7 @@ Exact shared custom-property names to check. Names are case-sensitive, and escap
 
 - Compare complete, explicit fallbacks, including empty ones. Ignore whitespace, comments, quote styles, and equivalent identifier or string escapes.
 - Normalize ordinary function and unit casing and safe integer spellings, preserving token boundaries, case-sensitive contents, `1` versus `1.0`, and signed zero. Color and keyword equivalence requires complete declaration values whose meanings are proven by property grammars.
+- Unquoted URLs compare their decoded contents, ignoring `url()` casing and surrounding whitespace while preserving the URL's case.
 - Skip query expressions and fallbacks containing substitutions or randomness. Check eligible nested `var()` references and declarations inside query blocks.
 
 ## Limitations
