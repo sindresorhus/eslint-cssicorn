@@ -1,3 +1,4 @@
+import {isPseudoElementNode, isStandardPseudoSelector} from './shared/css-selector-specificity.js';
 import {
 	getBasePropertyName,
 	getCanonicalLexerNode,
@@ -11,17 +12,24 @@ import {
 } from './utils/index.js';
 
 /**
-@import {DeclarationPlain} from '@eslint/css-tree';
+@import {BlockPlain, DeclarationPlain, Raw, ValuePlain} from '@eslint/css-tree';
 @import {CSSSourceCode} from '@eslint/css';
 @import {CssicornContext} from './rule/cssicorn-context.js';
 @import {CssicornRule} from './rule/to-eslint-rule.js';
 */
 
 const MESSAGE_ID_DISPLAY = 'no-ineffective-properties/display';
+const MESSAGE_ID_VERTICAL_ALIGN = 'no-ineffective-properties/vertical-align';
+const MESSAGE_ID_FLEX_ITEM = 'no-ineffective-properties/flex-item';
+const MESSAGE_ID_GRID_ITEM = 'no-ineffective-properties/grid-item';
+const MESSAGE_ID_FLOW_ITEM = 'no-ineffective-properties/flow-item';
 const MESSAGE_ID_NOWRAP = 'no-ineffective-properties/nowrap';
 const MESSAGE_ID_STATIC = 'no-ineffective-properties/static';
+const MESSAGE_ID_POSITION = 'no-ineffective-properties/position';
+const MESSAGE_ID_OVERFLOW = 'no-ineffective-properties/overflow';
 const MESSAGE_ID_MULTICOL = 'no-ineffective-properties/multicol';
 const MESSAGE_ID_FLOAT = 'no-ineffective-properties/float';
+const MESSAGE_ID_TEXT_OVERFLOW_DISPLAY = 'no-ineffective-properties/text-overflow-display';
 const MESSAGE_ID_TABLE_SPACING = 'no-ineffective-properties/table-spacing';
 const MESSAGE_ID_TABLE_PADDING = 'no-ineffective-properties/table-padding';
 const MESSAGE_ID_CLEAR = 'no-ineffective-properties/clear';
@@ -40,10 +48,17 @@ const MESSAGE_ID_VIEW_TIMELINE = 'no-ineffective-properties/view-timeline';
 const MESSAGE_ID_OMITTED_SHORTHAND_COMPONENT = 'no-ineffective-properties/omitted-shorthand-component';
 const messages = {
 	[MESSAGE_ID_DISPLAY]: '`{{property}}` has no effect with `display: {{display}}`. It requires a {{layout}} container.',
+	[MESSAGE_ID_VERTICAL_ALIGN]: '`vertical-align` has no effect with `display: {{display}}`. It requires an inline-level box or a table cell.',
+	[MESSAGE_ID_FLEX_ITEM]: '`{{property}}` has no effect on a flex item.',
+	[MESSAGE_ID_GRID_ITEM]: '`{{property}}` has no effect on a grid item.',
+	[MESSAGE_ID_FLOW_ITEM]: '`{{property}}` has no effect on an ordinary flow item.',
 	[MESSAGE_ID_NOWRAP]: '`align-content` has no effect on a flex container with `nowrap`. Consider `align-items` or enabling wrapping.',
 	[MESSAGE_ID_STATIC]: '`{{property}}` has no effect with `position: static`. Insets require a positioned element.',
+	[MESSAGE_ID_POSITION]: '`{{property}}` has no effect with `position: {{position}}`. It requires an in-flow box.',
+	[MESSAGE_ID_OVERFLOW]: '`text-overflow: {{value}}` has no effect with `overflow: visible`. Ellipsis requires clipped inline overflow.',
 	[MESSAGE_ID_MULTICOL]: '`{{property}}` has no effect with `display: {{display}}`. Multicol properties require a block container.',
 	[MESSAGE_ID_FLOAT]: '`float: {{value}}` has no effect with `position: {{position}}`. Absolutely positioned elements cannot float.',
+	[MESSAGE_ID_TEXT_OVERFLOW_DISPLAY]: '`text-overflow: {{value}}` has no effect with `display: {{display}}`. Apply it to a block container holding the text.',
 	[MESSAGE_ID_TABLE_SPACING]: '`border-spacing` has no effect on this table with `border-collapse: collapse`. Use `border-collapse: separate` for spacing between cells.',
 	[MESSAGE_ID_TABLE_PADDING]: '`{{property}}` has no effect on this table with `border-collapse: collapse`. Apply padding to table cells or use separate borders.',
 	[MESSAGE_ID_CLEAR]: '`clear: {{value}}` has no effect with `position: {{position}}`. Absolutely positioned elements do not participate in normal flow.',
@@ -64,6 +79,13 @@ const messages = {
 
 const flexProperties = new Set(['flex-direction', 'flex-wrap', 'flex-flow']);
 const gridProperties = new Set(['grid', 'grid-template', 'grid-template-columns', 'grid-template-rows', 'grid-template-areas', 'grid-auto-columns', 'grid-auto-rows', 'grid-auto-flow']);
+const gridPlacementProperties = new Set(['grid-area', 'grid-row', 'grid-column', 'grid-row-start', 'grid-row-end', 'grid-column-start', 'grid-column-end']);
+const flexItemProperties = new Set(['justify-self', ...gridPlacementProperties]);
+const flexSizingProperties = new Set(['flex', 'flex-basis', 'flex-grow', 'flex-shrink']);
+const flowItemProperties = new Set([...flexSizingProperties, ...gridPlacementProperties, 'order', 'align-self']);
+const itemProperties = new Set([...flexItemProperties, ...flowItemProperties, 'float', 'clear']);
+const flowDisplayKeywords = new Set(['block', 'inline', 'flow', 'flow-root', 'list-item']);
+const blockDisplayKeywords = new Set(['block', 'flow', 'flow-root', 'flex', 'grid', 'table', 'list-item', 'table-caption']);
 const insetProperties = new Set(['top', 'right', 'bottom', 'left', 'inset', 'inset-block', 'inset-inline', 'inset-block-start', 'inset-block-end', 'inset-inline-start', 'inset-inline-end']);
 const paddingProperties = new Set([
 	'padding',
@@ -169,24 +191,23 @@ const shorthandPropertyGroups = [
 	},
 ];
 const shorthandProperties = new Set(shorthandPropertyGroups.flatMap(({properties}) => properties));
-/**
-Text overflow is intentionally not checked because native form controls can still show ellipsis regardless of the element's display and overflow.
-*/
 const targetProperties = new Set([
 	...flexProperties,
 	...gridProperties,
+	...itemProperties,
 	...insetProperties,
 	...paddingProperties,
 	...multicolProperties,
 	...shorthandProperties,
 	...inactivePropertyGroups.flatMap(({properties}) => properties),
 	'align-content',
-	'float',
-	'clear',
+	'vertical-align',
+	'text-overflow',
 	'border-spacing',
 	'table-layout',
 	'column-span',
 ]);
+const overflowProperties = ['overflow', 'overflow-x', 'overflow-y', 'overflow-inline', 'overflow-block'];
 
 /**
 Get a validated keyword value from a single unprefixed controlling declaration. Multiple declarations in the property or shorthand group may be intentional fallbacks.
@@ -221,6 +242,139 @@ const getControllingValue = (declarationsByProperty, properties, sourceCode) => 
 };
 
 /**
+Check whether a node is a supported element filter in a parent or item compound.
+
+@param {import('@eslint/css-tree').CssNodePlain} node
+@returns {boolean}
+*/
+const isSupportedSelectorFilter = node => ['ClassSelector', 'IdSelector', 'TypeSelector', 'AttributeSelector'].includes(node.type)
+	|| (node.type === 'PseudoClassSelector' && !isPseudoElementNode(node) && isStandardPseudoSelector(node));
+
+/**
+Get the flex, grid, or ordinary flow layout from a validated display value.
+
+@param {string | undefined} display
+@returns {'flex' | 'grid' | 'flow' | undefined}
+*/
+const getDisplayLayout = display => {
+	if (display === undefined) {
+		return;
+	}
+
+	const keywords = display.split(' ');
+	if (display === 'inline-flex' || keywords.includes('flex')) {
+		return 'flex';
+	}
+
+	if (display === 'inline-grid' || keywords.includes('grid')) {
+		return 'grid';
+	}
+
+	if (display === 'inline-block' || keywords.every(keyword => flowDisplayKeywords.has(keyword))) {
+		return 'flow';
+	}
+};
+
+/**
+Get the layout of an explicit parent container for ordinary items. Only nested child selectors are supported; no cascade or descendant layout is inferred.
+
+@param {BlockPlain} block
+@param {Map<string, {node: DeclarationPlain, property: string}[]>} declarationsByProperty
+@param {ReturnType<typeof getBlockControls>} controls
+@param {CSSSourceCode} sourceCode
+@returns {'flex' | 'grid' | 'flow' | undefined}
+*/
+const getItemLayout = (block, declarationsByProperty, {position, hasVisibleDisplay}, sourceCode) => {
+	if (
+		(declarationsByProperty.has('position') && !['static', 'relative', 'sticky'].includes(position))
+		|| (declarationsByProperty.has('display') && !hasVisibleDisplay)
+	) {
+		return;
+	}
+
+	const rule = sourceCode.getParent(block);
+	if (rule?.type !== 'Rule' || rule.prelude?.type !== 'SelectorList' || rule.prelude.children.length === 0) {
+		return;
+	}
+
+	const selectsChildren = rule.prelude.children.every(selector => {
+		if (selector.type !== 'Selector') {
+			return false;
+		}
+
+		const nodes = selector.children;
+		const combinatorIndex = nodes.findIndex(node => node.type === 'Combinator');
+		return nodes[combinatorIndex]?.type === 'Combinator'
+			&& nodes[combinatorIndex].name === '>'
+			&& (combinatorIndex === 0 || (nodes[0]?.type === 'NestingSelector' && nodes.slice(1, combinatorIndex).every(node => isSupportedSelectorFilter(node))))
+			&& nodes.length > combinatorIndex + 1
+			&& nodes.slice(combinatorIndex + 1).every(node => isSupportedSelectorFilter(node));
+	});
+	if (!selectsChildren) {
+		return;
+	}
+
+	const parentBlock = sourceCode.getParent(rule);
+	if (parentBlock?.type !== 'Block') {
+		return;
+	}
+
+	const parentDeclarations = parentBlock.children.filter(node => node.type === 'Declaration').map(node => ({node, property: normalizeCssIdentifier(node.property)}));
+	if (parentDeclarations.some(({property}) => property === 'all')) {
+		return;
+	}
+
+	const display = getControllingValue(Map.groupBy(parentDeclarations, ({property}) => property), ['display'], sourceCode);
+	return getDisplayLayout(display);
+};
+
+/**
+Get the problem for a property that cannot affect an ordinary item in its known parent layout.
+
+@param {DeclarationPlain} node
+@param {string} property
+@param {string | undefined} keyword
+@param {'flex' | 'grid' | 'flow' | undefined} layout
+*/
+const getItemProblem = (node, property, keyword, layout) => {
+	if (layout === undefined) {
+		return;
+	}
+
+	if (layout === 'flow') {
+		return flowItemProperties.has(property) ? {node, messageId: MESSAGE_ID_FLOW_ITEM, data: {property}} : undefined;
+	}
+
+	const ineffectiveProperties = layout === 'flex' ? flexItemProperties : flexSizingProperties;
+	if (
+		ineffectiveProperties.has(property)
+		|| (property === 'float' && floatValues.has(keyword))
+		|| (property === 'clear' && clearValues.has(keyword))
+	) {
+		return {node, messageId: layout === 'flex' ? MESSAGE_ID_FLEX_ITEM : MESSAGE_ID_GRID_ITEM, data: {property}};
+	}
+};
+
+/**
+Get a validated one- or two-keyword text-overflow value that includes ellipsis.
+
+@param {ValuePlain | Raw} value
+@returns {string | undefined}
+*/
+const getEllipsisValue = value => {
+	if (value.type !== 'Value' || value.children.length > 2) {
+		return;
+	}
+
+	const keywords = value.children.map(child => child.type === 'Identifier' ? normalizeCssIdentifier(child.name) : undefined);
+	if (!keywords.includes('ellipsis') || keywords.some(keyword => keyword !== 'clip' && keyword !== 'ellipsis')) {
+		return;
+	}
+
+	return keywords.join(' ');
+};
+
+/**
 Get the problem for a container property given the explicit layout controls in its block.
 
 @param {DeclarationPlain} node
@@ -228,6 +382,10 @@ Get the problem for a container property given the explicit layout controls in i
 @param {ReturnType<typeof getBlockControls>} controls
 */
 const getContainerProblem = (node, property, {display, hasVisibleDisplay, isFlex, isGrid, isTable, hasCollapsedTable}) => {
+	if (property === 'vertical-align' && hasVisibleDisplay && display.split(' ').every(keyword => blockDisplayKeywords.has(keyword))) {
+		return {node, messageId: MESSAGE_ID_VERTICAL_ALIGN, data: {display}};
+	}
+
 	const isFlexProperty = flexProperties.has(property);
 	const isGridProperty = gridProperties.has(property);
 	if (hasVisibleDisplay && ((isFlexProperty && !isFlex) || (isGridProperty && !isGrid) || (property === 'table-layout' && !isTable))) {
@@ -261,7 +419,15 @@ const getPositionProblem = (node, property, keyword, {position}) => {
 		return {node, messageId: MESSAGE_ID_STATIC, data: {property}};
 	}
 
-	if ((position !== 'absolute' && position !== 'fixed') || keyword === undefined) {
+	if (position !== 'absolute' && position !== 'fixed') {
+		return;
+	}
+
+	if (flexSizingProperties.has(property) || property === 'order' || property === 'vertical-align') {
+		return {node, messageId: MESSAGE_ID_POSITION, data: {property, position}};
+	}
+
+	if (keyword === undefined) {
 		return;
 	}
 
@@ -350,12 +516,18 @@ Get the problem for a declaration given the explicit controls in its block.
 @param {DeclarationPlain} node
 @param {string} property
 @param {ReturnType<typeof getBlockControls>} controls
+@param {'flex' | 'grid' | 'flow' | undefined} itemLayout
 */
-const getDeclarationProblem = (node, property, controls) => {
+const getDeclarationProblem = (node, property, controls, itemLayout) => {
 	const identifier = getSingleValueIdentifier(node);
 	const keyword = identifier ? normalizeCssIdentifier(identifier.name) : undefined;
 	if (isCssWideKeyword(keyword)) {
 		return;
+	}
+
+	const itemProblem = getItemProblem(node, property, keyword, itemLayout);
+	if (itemProblem) {
+		return itemProblem;
 	}
 
 	const containerProblem = getContainerProblem(node, property, controls);
@@ -363,7 +535,8 @@ const getDeclarationProblem = (node, property, controls) => {
 		return containerProblem;
 	}
 
-	if (property === 'align-content' && controls.hasExplicitNowrap) {
+	const {display, isFlex, isGrid, hasNowrap, hasVisibleOverflow} = controls;
+	if (property === 'align-content' && hasNowrap) {
 		return {node, messageId: MESSAGE_ID_NOWRAP};
 	}
 
@@ -372,7 +545,23 @@ const getDeclarationProblem = (node, property, controls) => {
 		return positionProblem;
 	}
 
-	return getInactiveEffectProblem(node, property, controls);
+	const inactiveEffectProblem = getInactiveEffectProblem(node, property, controls);
+	if (inactiveEffectProblem) {
+		return inactiveEffectProblem;
+	}
+
+	if (property === 'text-overflow' && (isFlex || isGrid || hasVisibleOverflow)) {
+		const value = getEllipsisValue(node.value);
+		if (!value) {
+			return;
+		}
+
+		if (isFlex || isGrid) {
+			return {node, messageId: MESSAGE_ID_TEXT_OVERFLOW_DISPLAY, data: {value, display}};
+		}
+
+		return {node, messageId: MESSAGE_ID_OVERFLOW, data: {value}};
+	}
 };
 
 /**
@@ -382,15 +571,18 @@ Get the explicit controlling values for a declaration block.
 @param {CSSSourceCode} sourceCode
 */
 const getBlockControls = (declarationsByProperty, sourceCode) => {
-	// Only explicit controls are used, without writing-mode or computed-value inference.
 	const display = getControllingValue(declarationsByProperty, ['display'], sourceCode);
 	const hasVisibleDisplay = display !== undefined && display !== 'none' && display !== 'contents';
-	const isFlex = hasVisibleDisplay && (display === 'inline-flex' || display.split(' ').includes('flex'));
-	const isGrid = hasVisibleDisplay && (display === 'inline-grid' || display.split(' ').includes('grid'));
+	const layout = getDisplayLayout(display);
+	const isFlex = layout === 'flex';
+	const isGrid = layout === 'grid';
 	const isTable = hasVisibleDisplay && (display === 'inline-table' || display.split(' ').includes('table'));
 	const wrapping = isFlex ? getControllingValue(declarationsByProperty, ['flex-wrap', 'flex-flow', '-webkit-flex-wrap', '-webkit-flex-flow'], sourceCode) : undefined;
-	const hasExplicitNowrap = Boolean(wrapping?.split(' ').includes('nowrap'));
+	const hasNowrap = wrapping !== undefined && wrapping.split(' ').every(keyword => !(keyword === 'wrap' || keyword === 'wrap-reverse'));
 	const position = getControllingValue(declarationsByProperty, ['position'], sourceCode);
+	const overflow = getControllingValue(declarationsByProperty, overflowProperties, sourceCode);
+	// Only the shorthand establishes both axes without needing writing-mode or computed-value inference.
+	const hasVisibleOverflow = declarationsByProperty.has('overflow') && (overflow === 'visible' || overflow === 'visible visible');
 	const hasCollapsedTable = isTable && getControllingValue(declarationsByProperty, ['border-collapse'], sourceCode) === 'collapse';
 	/**
 	@type {Map<string, string>}
@@ -413,8 +605,9 @@ const getBlockControls = (declarationsByProperty, sourceCode) => {
 		isGrid,
 		isTable,
 		hasCollapsedTable,
-		hasExplicitNowrap,
+		hasNowrap,
 		position,
+		hasVisibleOverflow,
 		inactiveProperties,
 	};
 };
@@ -438,6 +631,9 @@ const create = context => {
 
 		const declarationsByProperty = Map.groupBy(declarations, ({property}) => property);
 		const controls = getBlockControls(declarationsByProperty, sourceCode);
+		const itemLayout = declarations.some(({property}) => itemProperties.has(property))
+			? getItemLayout(block, declarationsByProperty, controls, sourceCode)
+			: undefined;
 
 		yield * getOmittedShorthandProblems(declarations, sourceCode);
 
@@ -446,7 +642,7 @@ const create = context => {
 				continue;
 			}
 
-			const problem = getDeclarationProblem(node, property, controls);
+			const problem = getDeclarationProblem(node, property, controls, itemLayout);
 			if (problem && !hasSubstitutionOrRandomFunction(node.value)) {
 				yield problem;
 			}

@@ -78,6 +78,329 @@ const paddingProperties = [
 ];
 const clearValues = ['left', 'right', 'both', 'inline-start', 'inline-end'];
 
+const gridPlacementProperties = ['grid-area', 'grid-row', 'grid-column', 'grid-row-start', 'grid-row-end', 'grid-column-start', 'grid-column-end'];
+const flexSizingProperties = [['flex', '1 0 100px'], ['flex-grow', '1'], ['flex-shrink', '0'], ['flex-basis', '100px']];
+const inFlowProperties = [...flexSizingProperties, ['order', '2'], ['vertical-align', 'middle']];
+const flowItemProperties = [...flexSizingProperties, ...gridPlacementProperties.map(property => [property, '2']), ['order', '2'], ['align-self', 'center']];
+
+test({
+	valid: [
+		'a { display: block; > .item { justify-self: center; place-self: center; float: right; clear: both; vertical-align: middle; } }',
+		'a { display: block; > .item { display: flex; flex-direction: column; justify-content: center; align-items: center; } }',
+		'a { display: block; > .item { position: absolute; grid-column: 2; align-self: center; justify-self: center; } }',
+		'a { display: flow-root; > .item { position: fixed; grid-area: header; align-self: end; } }',
+		...flowItemProperties.map(([property]) => `a { display: block; > .item { ${property}: inherit; } }`),
+		...flowItemProperties.map(([property]) => `a { display: block; > .item { ${property}: var(--value); } }`),
+		'a { display: block; > .item { display: contents; flex: 1; align-self: center; } }',
+		'a { display: block; > .item { display: none; flex: 1; align-self: center; } }',
+		'a { display: block; > .item { display: var(--display); flex: 1; } }',
+		'a { display: block; > .item { position: var(--position); flex: 1; } }',
+		'a { display: block; display: flex; > .item { flex: 1; } }',
+		'a { display: block; .item { flex: 1; align-self: center; } }',
+		'a { display: block; > .item::before { flex: 1; align-self: center; } }',
+		'a { display: block; > .item { all: unset; flex: 1; align-self: center; } }',
+		'a { all: unset; display: block; > .item { flex: 1; align-self: center; } }',
+		...['table', 'inline-table', 'ruby', 'contents', 'none', 'var(--display)'].map(display => `a { display: ${display}; > .item { flex: 1; align-self: center; } }`),
+	],
+	invalid: [
+		...flowItemProperties.map(([property, value]) => ({
+			code: `a { display: block; > .item { ${property}: ${value}; } }`,
+			errors: [{messageId: 'no-ineffective-properties/flow-item', data: {property}}],
+		})),
+		...['block', 'flow', 'flow-root', 'inline-block', 'block flow', 'flow block', 'block flow-root', 'inline flow-root', 'flow-root inline', 'inline', 'inline flow', 'list-item'].map(display => ({
+			code: `a { display: ${display}; & > .item { flex: 1; } }`,
+			errors: [{messageId: 'no-ineffective-properties/flow-item'}],
+		})),
+		{
+			code: 'a { display: block; > .item { float: left; clear: both; flex: 1; } }',
+			errors: [{messageId: 'no-ineffective-properties/flow-item'}],
+		},
+		{
+			code: 'a { display: block; > .item { display: flex; flex: 1; flex-direction: column; grid-column: 2; justify-self: center; } }',
+			errors: [{messageId: 'no-ineffective-properties/flow-item'}, {messageId: 'no-ineffective-properties/flow-item'}],
+		},
+		{
+			code: 'a { DISPLAY: FLOW-ROOT; &:hover > .item { ORDER: /* position */ 2 !important; ALIGN-SELF: CENTER; } }',
+			errors: [{messageId: 'no-ineffective-properties/flow-item'}, {messageId: 'no-ineffective-properties/flow-item'}],
+		},
+		{
+			code: '@media (width > 1px) { a { display: block; &.active > .item { grid-area: header; } } }',
+			errors: [{messageId: 'no-ineffective-properties/flow-item'}],
+		},
+		{
+			code: 'a { display: block; reading-flow: source-order; > .item { order: 2; reading-order: 1; } }',
+			errors: [{messageId: 'no-ineffective-properties/flow-item'}],
+		},
+	],
+});
+
+test({
+	valid: [
+		...[
+			'static',
+			'relative',
+			'sticky',
+			'var(--position)',
+			'inherit',
+		].map(position => `a { position: ${position}; flex: 1; flex-basis: 10rem; flex-grow: 1; flex-shrink: 0; order: 2; vertical-align: middle; }`),
+		...inFlowProperties.map(([property]) => `a { position: absolute; ${property}: var(--value); }`),
+		...inFlowProperties.map(([property]) => `a { position: fixed; ${property}: inherit; }`),
+		'a { position: absolute; position: relative; flex: 1; order: 2; vertical-align: middle; }',
+		'a { all: unset; position: fixed; flex: 1; order: 2; vertical-align: middle; }',
+		'a { position: absolute; justify-self: center; align-self: end; grid-area: header; grid-row: 1 / span 2; grid-column-start: 2; }',
+		'a { display: grid; > .item { position: fixed; justify-self: center; align-self: end; grid-column: 2; } }',
+		'@keyframes layout { to { position: absolute; flex: 1; order: 2; vertical-align: middle; } }',
+		':export { position: fixed; flex: 1; order: 2; vertical-align: middle; }',
+		...['wrap', 'wrap-reverse', 'row wrap', 'column wrap-reverse'].map(flow => `a { display: flex; flex-flow: ${flow}; align-content: center; }`),
+		'a { display: flex; flex-flow: column; flex-wrap: wrap; align-content: center; }',
+		'a { display: flex; flex-flow: row; flex-flow: column wrap; align-content: center; }',
+		'a { display: flex; -webkit-flex-flow: row wrap; flex-flow: column; align-content: center; }',
+		'a { display: flex; flex-flow: column; align-content: var(--alignment); }',
+		'a { display: flex; flex-flow: column; align-content: inherit; }',
+		'a { display: flex; flex-flow: var(--flow); align-content: center; }',
+		'a { display: flex; flex-flow: row column; align-content: center; }',
+	],
+	invalid: [
+		...['absolute', 'fixed'].flatMap(position => inFlowProperties.map(([property, value]) => ({
+			code: `a { position: ${position}; ${property}: ${value}; }`,
+			errors: [{messageId: 'no-ineffective-properties/position', data: {property, position}}],
+		}))),
+		...['inline', 'inline-block', 'inline-flex', 'inline-grid', 'table-cell'].map(display => ({
+			code: `a { display: ${display}; position: absolute; vertical-align: middle; }`,
+			errors: [{messageId: 'no-ineffective-properties/position'}],
+		})),
+		{
+			code: 'a { display: grid; > .item { position: absolute; flex: 1; justify-self: center; grid-area: header; } }',
+			errors: [{messageId: 'no-ineffective-properties/position'}],
+		},
+		{
+			code: 'a { display: grid; > .item { position: fixed; flex: 1; } }',
+			errors: [{messageId: 'no-ineffective-properties/position'}],
+		},
+		{
+			code: 'a { DISPLAY: INLINE-FLEX; POSITION: FIXED; FLEX-BASIS: /* size */ calc(10rem + 1px) !important; ORDER: 2; }',
+			errors: [{messageId: 'no-ineffective-properties/position'}, {messageId: 'no-ineffective-properties/position'}],
+		},
+		...['media (width > 1px)', 'supports (display: grid)', 'container (width > 1px)', 'layer example', 'scope (.example)'].map(atRule => ({
+			code: `@${atRule} { a { position: fixed; flex: 1; } }`,
+			errors: [{messageId: 'no-ineffective-properties/position'}],
+		})),
+		...['row', 'column', 'row-reverse', 'column-reverse'].map(flow => ({
+			code: `a { display: flex; flex-flow: ${flow}; align-content: center; }`,
+			errors: [{messageId: 'no-ineffective-properties/nowrap'}],
+		})),
+		{
+			code: 'a { DISPLAY: INLINE-FLEX; FLEX-FLOW: /* direction */ COLUMN !important; ALIGN-CONTENT: CENTER; }',
+			errors: [{messageId: 'no-ineffective-properties/nowrap'}],
+		},
+		{
+			code: 'a { @media (width > 1px) { display: flex; flex-flow: column; align-content: center; } }',
+			errors: [{messageId: 'no-ineffective-properties/nowrap'}],
+		},
+	],
+});
+
+test({
+	valid: [
+		...[
+			'inline',
+			'inline-block',
+			'inline-flex',
+			'inline-grid',
+			'inline-table',
+			'inline flex',
+			'flex inline',
+			'inline grid',
+			'grid inline',
+			'inline flow-root',
+			'inline list-item',
+			'table-cell',
+			'table-row',
+			'none',
+			'contents',
+			'inherit',
+			'var(--display)',
+			'imaginary',
+		].map(display => `a { display: ${display}; vertical-align: middle; }`),
+		'a { vertical-align: middle; }',
+		'a { display: block; display: inline; vertical-align: middle; }',
+		'a { display: block; vertical-align: inherit; }',
+		'a { display: flex; vertical-align: var(--alignment); }',
+		'a { all: initial; display: block; vertical-align: middle; }',
+		'@keyframes layout { to { display: block; vertical-align: middle; } }',
+		':export { display: block; vertical-align: middle; }',
+		'a { display: flex; justify-self: center; grid-area: header; }',
+		'a { display: grid; > .item { justify-self: center; grid-area: header; } }',
+		'a { display: flex; .item { justify-self: center; grid-area: header; } }',
+		'a { display: flex; & .item { justify-self: center; grid-area: header; } }',
+		'a { display: flex; & + .item { justify-self: center; grid-area: header; } }',
+		'a { display: flex; & > .wrapper .item { justify-self: center; grid-area: header; } }',
+		'a { display: flex; & > .wrapper > .item { justify-self: center; grid-area: header; } }',
+		'a { display: flex; & > .item::before { justify-self: center; grid-area: header; } }',
+		...['before', 'after', 'first-line', 'first-letter', 'BEFORE'].map(pseudoElement => `a { display: flex; > .item:${pseudoElement} { justify-self: center; grid-area: header; } }`),
+		'a { display: flex; & > .item, .other { justify-self: center; grid-area: header; } }',
+		...[
+			'.active > .item',
+			'& .active > .item',
+			'&.active + .item',
+			'&.active > .wrapper .item',
+			'&.active > .wrapper > .item',
+			'&::before > .item',
+			'&:before > .item',
+			'&:global(.active) > .item',
+			'&:unknown(.active) > .item',
+			'&.active > .item::before',
+			'&.active > .item, .other > .item',
+		].map(selector => `a { display: flex; ${selector} { justify-self: center; grid-area: header; } }`),
+		...[':global(.item)', ':local(.item)', ':unknown(.item)'].map(selector => `a { display: flex; > ${selector} { justify-self: center; grid-area: header; } }`),
+		...['absolute', 'fixed', 'var(--position)', 'inherit', 'imaginary'].map(position => `a { display: flex; > .item { position: ${position}; justify-self: center; grid-area: header; } }`),
+		'a { display: flex; > .item { position: relative; position: absolute; justify-self: center; grid-area: header; } }',
+		...['none', 'contents', 'var(--display)', 'inherit'].map(display => `a { display: flex; > .item { display: ${display}; justify-self: center; grid-area: header; } }`),
+		'a { display: flex; > .item { display: block; display: contents; justify-self: center; grid-area: header; } }',
+		'a { display: flex; > .item { justify-self: inherit; grid-area: revert-layer; } }',
+		'a { display: flex; > .item { justify-self: var(--alignment); grid-row: var(--row); } }',
+		'a { display: flex; > .item { all: unset; justify-self: center; grid-area: header; } }',
+		'a { all: unset; display: flex; > .item { justify-self: center; grid-area: header; } }',
+		'a { display: flex; display: grid; > .item { justify-self: center; grid-area: header; } }',
+		'a { display: var(--layout); > .item { justify-self: center; grid-area: header; } }',
+		'a { display: flex; @media (width > 1px) { > .item { justify-self: center; grid-area: header; } } }',
+		'a { display: flex; > .item { @media (width > 1px) { justify-self: center; grid-area: header; } } }',
+		'a { display: flex; } a > .item { justify-self: center; grid-area: header; }',
+		...flexSizingProperties.map(([property, value]) => `a { display: flex; > .item { ${property}: ${value}; } }`),
+		...flexSizingProperties.map(([property, value]) => `a { display: grid; ${property}: ${value}; }`),
+		...flexSizingProperties.map(([property]) => `a { display: grid; > .item { ${property}: var(--flex); } }`),
+		'a { display: grid; > .item { flex: initial; flex-grow: inherit; flex-shrink: revert-layer; flex-basis: unset; } }',
+		'a { display: grid; > .item { position: var(--position); flex: 1; } }',
+		'a { display: grid; > .item { display: contents; flex: 1; } }',
+		'a { display: grid; > .item { display: none; flex: 1; } }',
+		'a { display: grid; > .item { display: var(--display); flex: 1; } }',
+		'a { display: grid; display: flex; > .item { flex: 1; } }',
+		'a { display: grid; > .item { all: initial; flex: 1; } }',
+		'a { all: unset; display: grid; > .item { flex: 1; } }',
+		'a { display: grid; .item { flex: 1; } }',
+		'a { display: grid; > .item::before { flex: 1; } }',
+		...['flex', 'grid'].map(display => `a { display: ${display}; > .item { float: none; clear: none; order: 1; align-self: center; place-self: center; } }`),
+		...['flex', 'grid'].map(display => `a { display: ${display}; > .item { float: var(--side); clear: var(--side); } }`),
+		...['flex', 'grid'].map(display => `a { display: ${display}; > .item { float: initial; clear: inherit; } }`),
+		'a { display: flex; > .item { position: var(--position); float: left; clear: both; } }',
+	],
+	invalid: [
+		...[
+			'block',
+			'flow-root',
+			'flex',
+			'grid',
+			'table',
+			'table-caption',
+			'list-item',
+			'block flow',
+			'block flow-root',
+			'block flex',
+			'flex block',
+			'block grid',
+			'grid block',
+			'block table',
+			'flow-root list-item',
+		].map(display => ({
+			code: `a { display: ${display}; vertical-align: middle; }`,
+			errors: [{messageId: 'no-ineffective-properties/vertical-align', data: {display}}],
+		})),
+		{
+			code: 'a { VERTICAL-ALIGN: /* alignment */ 10% !important; DISPLAY: BLOCK; }',
+			errors: [{messageId: 'no-ineffective-properties/vertical-align'}],
+		},
+		...gridPlacementProperties.map(property => ({
+			code: `a { display: flex; & > .item { ${property}: 2; } }`,
+			errors: [{messageId: 'no-ineffective-properties/flex-item', data: {property}}],
+		})),
+		...['flex', 'inline-flex', 'inline flex', 'flex inline', 'block flex'].map(display => ({
+			code: `a { display: ${display}; > .item { justify-self: center; } }`,
+			errors: [{messageId: 'no-ineffective-properties/flex-item', data: {property: 'justify-self'}}],
+		})),
+		...['static', 'relative', 'sticky'].map(position => ({
+			code: `a { display: flex; > .item { position: ${position}; justify-self: center; } }`,
+			errors: [{messageId: 'no-ineffective-properties/flex-item'}],
+		})),
+		{
+			code: 'a { DISPLAY: FLEX; > .item { JUSTIFY-SELF: CENTER !important; GRID-ROW: 1 / span 2; } }',
+			errors: [{messageId: 'no-ineffective-properties/flex-item'}, {messageId: 'no-ineffective-properties/flex-item'}],
+		},
+		{
+			code: 'a { display: flex; & > .item, > #other { justify-self: /* alignment */ safe center; } }',
+			errors: [{messageId: 'no-ineffective-properties/flex-item'}],
+		},
+		{
+			code: String.raw`a { display: flex; & > .item\:active { justify-self: center; } }`,
+			errors: [{messageId: 'no-ineffective-properties/flex-item'}],
+		},
+		{
+			code: 'a { display: flex; & > button.item[data-active]:hover { justify-self: center; } }',
+			errors: [{messageId: 'no-ineffective-properties/flex-item'}],
+		},
+		...['block', 'inline-flex', 'inline-grid'].map(display => ({
+			code: `a { display: flex; > .item { display: ${display}; justify-self: center; } }`,
+			errors: [{messageId: 'no-ineffective-properties/flex-item'}],
+		})),
+		...['media (width > 1px)', 'supports (display: flex)', 'container (width > 1px)', 'layer example', 'scope (.example)'].map(atRule => ({
+			code: `@${atRule} { a { display: flex; > .item { justify-self: center; } } }`,
+			errors: [{messageId: 'no-ineffective-properties/flex-item'}],
+		})),
+		{
+			code: 'a { .container { display: flex; > .item { justify-self: center; } } }',
+			errors: [{messageId: 'no-ineffective-properties/flex-item'}],
+		},
+		...[':is(.item, .other)', '.item:not(.disabled)', ':where(.item)', ':nth-child(2)', ':nth-child(2 of .item)', '.item:has(> .icon)'].map(selector => ({
+			code: `a { display: flex; > ${selector} { justify-self: center; } }`,
+			errors: [{messageId: 'no-ineffective-properties/flex-item'}],
+		})),
+		...[
+			['flex', 'justify-self', 'center'],
+			['grid', 'flex', '1'],
+		].flatMap(([display, property, value]) => ['&.active', '&:hover', '&[data-layout]', '&:is(.active, .compact)', '&.active:not(.disabled)'].map(parent => ({
+			code: `a { display: ${display}; ${parent} > .item { ${property}: ${value}; } }`,
+			errors: [{messageId: `no-ineffective-properties/${display}-item`, data: {property}}],
+		}))),
+		{
+			code: 'a { display: flex; &.active > .item, &:hover > .other { grid-column: 2; } }',
+			errors: [{messageId: 'no-ineffective-properties/flex-item'}],
+		},
+		{
+			code: 'a { display: flex; &[data-layout] > button.item:not(.disabled) { justify-self: center; } }',
+			errors: [{messageId: 'no-ineffective-properties/flex-item'}],
+		},
+		...flexSizingProperties.map(([property, value]) => ({
+			code: `a { display: grid; & > .item { ${property}: ${value}; } }`,
+			errors: [{messageId: 'no-ineffective-properties/grid-item', data: {property}}],
+		})),
+		...['grid', 'inline-grid', 'inline grid', 'grid inline', 'block grid'].map(display => ({
+			code: `a { display: ${display}; > .item { display: inline-flex; flex: 1; } }`,
+			errors: [{messageId: 'no-ineffective-properties/grid-item'}],
+		})),
+		...['static', 'relative', 'sticky'].map(position => ({
+			code: `a { display: grid; > .item { position: ${position}; flex-basis: 10rem; } }`,
+			errors: [{messageId: 'no-ineffective-properties/grid-item'}],
+		})),
+		...['flex', 'grid'].flatMap(display => [
+			...['left', 'right', 'inline-start', 'inline-end'].map(value => ({
+				code: `a { display: ${display}; > .item { float: ${value}; } }`,
+				errors: [{messageId: `no-ineffective-properties/${display}-item`, data: {property: 'float'}}],
+			})),
+			...clearValues.map(value => ({
+				code: `a { display: ${display}; > .item { clear: ${value}; } }`,
+				errors: [{messageId: `no-ineffective-properties/${display}-item`, data: {property: 'clear'}}],
+			})),
+		]),
+		{
+			code: 'a { DISPLAY: INLINE-GRID; > .item:not(.disabled) { FLOAT: /* side */ RIGHT !important; CLEAR: BOTH; FLEX: 1; } }',
+			errors: [{messageId: 'no-ineffective-properties/grid-item'}, {messageId: 'no-ineffective-properties/grid-item'}, {messageId: 'no-ineffective-properties/grid-item'}],
+		},
+		{
+			code: '@supports (display: grid) { a { display: grid; > .item { flex-basis: calc(10rem + 1px); } } }',
+			errors: [{messageId: 'no-ineffective-properties/grid-item'}],
+		},
+	],
+});
+
 test.snapshot({
 	valid: [
 		...flexProperties.map(([property, value]) => `a { display: flex; ${property}: ${value}; }`),
@@ -124,7 +447,6 @@ test.snapshot({
 		'a { display: flex; flex-wrap: wrap; align-content: center; }',
 		'a { display: inline flex; flex-wrap: wrap-reverse; align-content: center; }',
 		'a { display: flex; align-content: center; }',
-		'a { display: flex; flex-flow: column; align-content: center; }',
 		'a { display: flex; flex-wrap: inherit; align-content: center; }',
 		'a { display: flex; flex-wrap: var(--wrapping); align-content: center; }',
 		'a { display: flex; flex-wrap: nowrap; flex-wrap: wrap; align-content: center; }',
