@@ -29,10 +29,36 @@ The lexer accepts plain nodes, but its trace methods are currently typed for lin
 */
 
 /**
+Additional components used only for comparison, without extending the shared shorthand serializers.
+
+@type {Map<string, string[]>}
+*/
+const additionalShorthandComponents = new Map([
+	['caret', ['caret-color', 'caret-animation', 'caret-shape']],
+	['container', ['container-name', 'container-type']],
+	['corner-block-end-shape', ['corner-end-start-shape', 'corner-end-end-shape']],
+	['corner-block-start-shape', ['corner-start-start-shape', 'corner-start-end-shape']],
+	['corner-bottom-shape', ['corner-bottom-left-shape', 'corner-bottom-right-shape']],
+	['corner-inline-end-shape', ['corner-start-end-shape', 'corner-end-end-shape']],
+	['corner-inline-start-shape', ['corner-start-start-shape', 'corner-end-start-shape']],
+	['corner-left-shape', ['corner-top-left-shape', 'corner-bottom-left-shape']],
+	['corner-right-shape', ['corner-top-right-shape', 'corner-bottom-right-shape']],
+	['corner-shape', ['corner-top-left-shape', 'corner-top-right-shape', 'corner-bottom-right-shape', 'corner-bottom-left-shape']],
+	['corner-top-shape', ['corner-top-left-shape', 'corner-top-right-shape']],
+	['offset', ['offset-position', 'offset-path', 'offset-distance', 'offset-rotate', 'offset-anchor']],
+	['scroll-timeline', ['scroll-timeline-name', 'scroll-timeline-axis']],
+	['text-box', ['text-box-trim', 'text-box-edge']],
+	['text-wrap', ['text-wrap-mode', 'text-wrap-style']],
+	['view-timeline', ['view-timeline-name', 'view-timeline-axis', 'view-timeline-inset']],
+	['white-space', ['white-space-collapse', 'text-wrap-mode', 'white-space-trim']],
+]);
+
+/**
 Shorthands whose components can be compared without computing styles.
 */
 export const supportedShorthands = new Set([
 	'animation',
+	'animation-range',
 	'background',
 	'border',
 	'border-block',
@@ -61,10 +87,13 @@ export const supportedShorthands = new Set([
 	'flex',
 	'flex-flow',
 	'font',
+	'font-synthesis',
 	'gap',
+	'grid',
 	'grid-area',
 	'grid-column',
 	'grid-row',
+	'grid-template',
 	'inset',
 	'inset-block',
 	'inset-inline',
@@ -91,15 +120,16 @@ export const supportedShorthands = new Set([
 	'text-decoration',
 	'text-emphasis',
 	'transition',
+	...additionalShorthandComponents.keys(),
 ]);
 
 /**
 @param {string} property
 @returns {string[]}
 */
-const getComponentNames = property => /** @type {{components: string[]}} */ (shorthandProperties.get(property)).components;
+const getComponentNames = property => additionalShorthandComponents.get(property) ?? /** @type {{components: string[]}} */ (shorthandProperties.get(property)).components;
 
-const layeredShorthands = new Set(['background', 'animation', 'transition']);
+const layeredShorthands = new Set(['background', 'animation', 'animation-range', 'transition', 'scroll-timeline', 'view-timeline']);
 const placeShorthands = new Set(['place-content', 'place-items', 'place-self']);
 const gridPlacementShorthands = new Set(['grid-row', 'grid-column', 'grid-area']);
 const fontComponents = ['font-style', 'font-variant-caps', 'font-weight', 'font-width', 'font-size', 'line-height', 'font-family'];
@@ -168,7 +198,7 @@ const getPositionalComponents = (property, nodes, getSlot) => {
 
 	const names = getComponentNames(property);
 	const values = nodes.map(node => getSlot([node]));
-	const expanded = fourSideShorthands.has(property) ? expandFourSides(values) : [values[0], values[1] ?? values[0]];
+	const expanded = fourSideShorthands.has(property) || property === 'corner-shape' ? expandFourSides(values) : [values[0], values[1] ?? values[0]];
 	return new Map(names.map((name, index) => [name, expanded[index]]));
 };
 
@@ -361,7 +391,7 @@ const getNamedComponents = (property, nodes, {canonicalNodes, match, getSlot}) =
 @param {ComponentOptions} options
 */
 const getGroupComponents = (property, nodes, options) => {
-	if (fourSideShorthands.has(property) || pairShorthands.has(property)) {
+	if (fourSideShorthands.has(property) || pairShorthands.has(property) || property.startsWith('corner-')) {
 		return getPositionalComponents(property, nodes, options.getSlot);
 	}
 
@@ -369,8 +399,32 @@ const getGroupComponents = (property, nodes, options) => {
 		return getRadiusComponents(nodes, options.getSlot);
 	}
 
+	if (property === 'font-synthesis') {
+		const names = getComponentNames(property);
+		const enabled = new Set();
+		for (const node of nodes) {
+			if (node.type !== 'Identifier') {
+				return;
+			}
+
+			const keyword = normalizeCssIdentifier(node.name);
+			if (keyword !== 'none' && !names.includes(`font-synthesis-${keyword}`)) {
+				return;
+			}
+
+			enabled.add(keyword);
+		}
+
+		return new Map(names.map(name => [name, getSyntheticKeyword(enabled.has(name.slice('font-synthesis-'.length)) ? 'auto' : 'none')]));
+	}
+
 	if (gridPlacementShorthands.has(property)) {
 		return getGridComponents(property, nodes, options);
+	}
+
+	// The lexer can split `entry 10%` between endpoints, although its end is implicitly `entry 100%`.
+	if (property === 'animation-range' && (nodes.length < 2 || (nodes.length === 2 && nodes[1].type !== 'Identifier' && options.match.isType(options.canonicalNodes[0], 'timeline-range-name')))) {
+		return;
 	}
 
 	return getNamedComponents(property, nodes, options);

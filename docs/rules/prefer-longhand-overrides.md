@@ -105,9 +105,12 @@ Background components are checked without changing the other layers:
 - `border`, its physical and logical side and axis shorthands, `border-width`, `border-style`, `border-color`, their `border-block-*` and `border-inline-*` variants, `border-radius`, and `border-image`.
 - `gap`, `overflow`, `overscroll-behavior`, `place-content`, `place-items`, and `place-self`.
 - `columns`, `column-rule`, `flex`, and `flex-flow`.
-- `grid-row`, `grid-column`, and `grid-area`.
+- `grid-row`, `grid-column`, `grid-area`, and explicit track forms of `grid` and `grid-template`.
 - `list-style`, `mask-border`, `outline`, `text-decoration`, and `text-emphasis`.
-- `font`, `background`, `animation`, and `transition`.
+- `font`, `font-synthesis`, `background`, `animation`, `animation-range`, and `transition`.
+- `text-wrap`, `white-space`, `text-box`, `caret`, `container`, and `offset`.
+- `scroll-timeline` and `view-timeline`.
+- `corner-shape` and its physical and logical side variants.
 
 The suggested component can itself be a shorthand, such as `border-color` or `background-position`.
 
@@ -123,14 +126,16 @@ Conditional and layer boundaries are not crossed. Rules inside the same `@media`
 
 Rules with unsupported selectors and declarations that affect supported shorthands interrupt comparisons with earlier bases. A later supported base can start a new comparison.
 
-Only one component may differ. The replacement must come from the override's explicit values or the shorthand's defined copying and dependent default rules. Independently omitted components are not filled with initial values. Comma-separated shorthands must have the same number of items. Other components are compared structurally without evaluating calculations or converting equivalent colors and units. Recognized keywords are ASCII case-insensitive; custom names remain case-sensitive.
+Only one component may differ. The replacement must come from the override's explicit values or the shorthand's defined copying and dependent default rules. Independently omitted components are not filled with initial values. The defined `font-synthesis` keyword mappings are expanded to `auto` and `none` longhand values. Comma-separated shorthands must have the same number of items. Other components are compared structurally without evaluating calculations or converting equivalent colors and units. Recognized keywords are ASCII case-insensitive; custom names remain case-sensitive.
 
 ## Limitations
 
 - This rule does not calculate the winning cascade or inspect imports and other stylesheets. Repeating a shorthand can intentionally reset another matching style.
 - Ambiguous bases, conflicting declarations of an affected property, `all`, mismatched `!important`, pseudo-elements, vendor-prefixed declarations, and unsupported selector relationships are skipped.
-- `animation-range`, `font-synthesis`, `font-variant`, `grid`, `grid-gap`, `grid-template`, and `mask` are not supported.
-- CSS-wide keywords, substitution functions such as `var()`, `random()`, invalid or unclassified syntax, system fonts, `flex: none`, `outline` values containing `auto`, and animation timeline syntax are skipped.
+- `font-variant`, `grid-gap`, and `mask` are not supported.
+- `grid` and `grid-template` values containing template-area strings or `auto-flow` are skipped. Every `animation-range` item must explicitly specify both its start and end.
+- Legacy `white-space` keywords (`normal`, `pre`, `pre-wrap`, and `pre-line`) and `text-box: normal` are skipped.
+- CSS-wide keywords, substitution functions such as `var()`, `random()`, invalid or unclassified syntax, system fonts, `flex: none`, `outline` values containing `auto`, and timeline syntax in the `animation` shorthand are skipped.
 - Declarations in keyframes, descriptor blocks, and CSS Modules interop blocks are ignored.
 - A comment in the replaced declaration prevents the suggestion. Other comments are kept.
 

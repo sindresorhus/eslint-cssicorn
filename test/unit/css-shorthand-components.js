@@ -4,15 +4,19 @@ import {generate, lexer, toPlainObject} from '@eslint/css-tree';
 import {shorthandProperties, pairShorthands, fourSideShorthands} from '../../rules/shared/css-shorthand-properties.js';
 import {getChangedShorthandComponent, getShorthandComponents, supportedShorthands} from '../../rules/shared/css-shorthand-components.js';
 import {parse} from '../../rules/utils/index.js';
+import propertyInteractions from '../../rules/shared/css-property-interactions.js';
 
 const getComponents = (property, value) => getShorthandComponents(toPlainObject(parse(`${property}: ${value}`, {context: 'declaration'})), {sourceCode: {lexer}});
 const getChange = (property, first, second) => getChangedShorthandComponent(getComponents(property, first), getComponents(property, second));
 const getSlotText = slot => slot.text ?? slot.nodes.map(node => generate(node)).join(' ');
 
 test('supports the practical shorthand catalog', () => {
-	assert.equal(supportedShorthands.size, 59);
+	assert.equal(supportedShorthands.size, 80);
 	const excluded = shorthandProperties.keys().filter(property => !supportedShorthands.has(property)).toArray();
-	assert.deepEqual(excluded, ['animation-range', 'font-synthesis', 'font-variant', 'grid', 'grid-gap', 'grid-template', 'mask']);
+	assert.deepEqual(excluded, ['font-variant', 'grid-gap', 'mask']);
+	for (const property of supportedShorthands) {
+		assert.ok(propertyInteractions.has(property), property);
+	}
 });
 
 test('expands every four-side shorthand', () => {
@@ -165,4 +169,28 @@ test('ignores unchanged, ambiguous, unresolved, and unsupported values', () => {
 	}
 
 	assert.equal(getShorthandComponents({property: 'border', value: {type: 'Raw', value: '??'}}, {sourceCode: {lexer}}), undefined);
+});
+
+test('expands font synthesis flags using the specified keyword mapping', () => {
+	for (const component of ['weight', 'style', 'small-caps', 'position']) {
+		const change = getChange('font-synthesis', 'none', component);
+		assert.equal(change?.property, `font-synthesis-${component}`);
+		assert.equal(getSlotText(change.slots[0]), 'auto');
+	}
+
+	assert.equal(getChange('font-synthesis', 'WEIGHT STYLE', 'style weight'), undefined);
+	assert.equal(getChange('font-synthesis', 'weight', 'style'), undefined);
+});
+
+test('requires explicit ends when comparing animation ranges', () => {
+	assert.equal(getComponents('animation-range', 'entry'), undefined);
+	assert.equal(getComponents('animation-range', 'entry 10%'), undefined);
+	assert.equal(getComponents('animation-range', 'entry 10% exit 90%, normal'), undefined);
+	assert.equal(getChange('animation-range', 'entry 10% exit 90%', 'entry 10% exit 80%')?.property, 'animation-range-end');
+});
+
+test('expands copied corner shapes before comparing', () => {
+	assert.equal(getChange('corner-shape', 'round', 'round round round bevel')?.property, 'corner-bottom-left-shape');
+	assert.equal(getChange('corner-inline-start-shape', 'round', 'round bevel')?.property, 'corner-end-start-shape');
+	assert.equal(getChange('corner-shape', 'round round round bevel', 'round round round superellipse(2)')?.property, 'corner-bottom-left-shape');
 });
