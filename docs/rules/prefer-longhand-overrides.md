@@ -11,7 +11,7 @@
 
 This rule reports an override that repeats a base shorthand while changing only one component, and suggests declaring that component instead. This keeps states tied to the base styles: changing a button's border width later also updates states that only change its color.
 
-There is no autofix because narrowing a shorthand can change which styles apply, but a suggestion is provided. [Shorthands set all their constituent properties](https://www.w3.org/TR/css-cascade-5/#shorthand), including omitted components and reset-only properties such as `border-image` for `border`. Review other matching styles before applying a suggestion.
+There is no autofix because narrowing a shorthand can change which styles apply, but a suggestion is provided. [Shorthands set all their constituent properties](https://www.w3.org/TR/css-cascade-5/#shorthand), including omitted components and reset-only properties such as `border-image` for `border`. Review other matching styles before applying a suggestion. For example, another matching rule may change the border width; accepting `border-color` preserves that width instead of resetting it.
 
 ## Examples
 

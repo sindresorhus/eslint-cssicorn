@@ -1,3 +1,5 @@
+// @ts-check
+
 import {generate} from '@eslint/css-tree';
 import {
 	decodeCssIdentifier,
@@ -8,6 +10,23 @@ import {
 	normalizeCssIdentifier,
 } from '../utils/index.js';
 import {fourSideShorthands, pairShorthands, shorthandProperties} from './css-shorthand-properties.js';
+
+/**
+@import {CssNodePlain, DeclarationPlain, Lexer, LexerMatchResult, SyntaxDescriptor} from '@eslint/css-tree';
+*/
+
+/**
+@typedef {{nodes: CssNodePlain[], keys: string[], text?: string}} ShorthandSlot
+@typedef {Map<string, (ShorthandSlot | undefined)[]>} ShorthandComponents
+@typedef {(nodes: CssNodePlain[]) => ShorthandSlot} GetSlot
+@typedef {{getSlot: GetSlot, match: PlainLexerMatchResult, canonicalNodes: CssNodePlain[]}} ComponentOptions
+*/
+
+/**
+The lexer accepts plain nodes, but its trace methods are currently typed for linked-list nodes only.
+
+@typedef {LexerMatchResult & {getTrace: (node: CssNodePlain) => SyntaxDescriptor[] | null, isKeyword: (node: CssNodePlain) => boolean, isType: (node: CssNodePlain, type: string) => boolean}} PlainLexerMatchResult
+*/
 
 /**
 Shorthands whose components can be compared without computing styles.
@@ -74,6 +93,12 @@ export const supportedShorthands = new Set([
 	'transition',
 ]);
 
+/**
+@param {string} property
+@returns {string[]}
+*/
+const getComponentNames = property => /** @type {{components: string[]}} */ (shorthandProperties.get(property)).components;
+
 const layeredShorthands = new Set(['background', 'animation', 'transition']);
 const placeShorthands = new Set(['place-content', 'place-items', 'place-self']);
 const gridPlacementShorthands = new Set(['grid-row', 'grid-column', 'grid-area']);
@@ -96,6 +121,11 @@ const componentTypes = new Map([
 	['transition-behavior-value', 'transition-behavior'],
 ]);
 
+/**
+@param {CssNodePlain} node
+@param {CssNodePlain} canonicalNode
+@param {PlainLexerMatchResult} match
+*/
 const getNodeKey = (node, canonicalNode, match) => {
 	if (node.type === 'Identifier') {
 		return `Identifier:${match.isKeyword(canonicalNode) ? normalizeCssIdentifier(node.name) : decodeCssIdentifier(node.name)}`;
@@ -112,45 +142,72 @@ const getNodeKey = (node, canonicalNode, match) => {
 	return `${node.type}:${generate(canonicalNode)}`;
 };
 
+/**
+@param {string} name
+@returns {ShorthandSlot}
+*/
 const getSyntheticKeyword = name => ({nodes: [], keys: [`Identifier:${name}`], text: name});
 
+/**
+@param {ShorthandSlot[]} values
+*/
 const expandFourSides = values => {
 	const [first, second = first, third = first, fourth = second] = values;
 	return [first, second, third, fourth];
 };
 
+/**
+@param {string} property
+@param {CssNodePlain[]} nodes
+@param {GetSlot} getSlot
+*/
 const getPositionalComponents = (property, nodes, getSlot) => {
 	if (nodes.some(node => node.type === 'Operator')) {
 		return;
 	}
 
-	const names = shorthandProperties.get(property).components;
+	const names = getComponentNames(property);
 	const values = nodes.map(node => getSlot([node]));
 	const expanded = fourSideShorthands.has(property) ? expandFourSides(values) : [values[0], values[1] ?? values[0]];
 	return new Map(names.map((name, index) => [name, expanded[index]]));
 };
 
+/**
+@param {CssNodePlain[]} nodes
+@param {GetSlot} getSlot
+*/
 const getRadiusComponents = (nodes, getSlot) => {
 	const slashIndex = nodes.findIndex(node => node.type === 'Operator' && node.value === '/');
 	const horizontal = expandFourSides((slashIndex === -1 ? nodes : nodes.slice(0, slashIndex)).map(node => getSlot([node])));
 	const vertical = slashIndex === -1 ? horizontal : expandFourSides(nodes.slice(slashIndex + 1).map(node => getSlot([node])));
-	return new Map(shorthandProperties.get('border-radius').components.map((name, index) => [name, {
+	return new Map(getComponentNames('border-radius').map((name, index) => [name, {
 		nodes: horizontal[index].keys[0] === vertical[index].keys[0] ? horizontal[index].nodes : [...horizontal[index].nodes, ...vertical[index].nodes],
 		keys: [...horizontal[index].keys, ...vertical[index].keys],
 	}]));
 };
 
+/**
+@param {string} property
+@param {CssNodePlain[]} nodes
+@param {ComponentOptions} options
+*/
 const getGridComponents = (property, nodes, {getSlot, match, canonicalNodes}) => {
+	/**
+	@type {CssNodePlain[][]}
+	*/
 	const groups = [[]];
 	for (const node of nodes) {
 		if (node.type === 'Operator' && node.value === '/') {
 			groups.push([]);
 		} else {
-			groups.at(-1).push(node);
+			/** @type {CssNodePlain[]} */ (groups.at(-1)).push(node);
 		}
 	}
 
 	const values = groups.map(nodes => getSlot(nodes));
+	/**
+	@param {number} index
+	*/
 	const getFallback = index => {
 		const group = groups[index];
 		const node = group?.[0];
@@ -165,9 +222,15 @@ const getGridComponents = (property, nodes, {getSlot, match, canonicalNodes}) =>
 		values[1] ??= getFallback(0);
 	}
 
-	return new Map(shorthandProperties.get(property).components.map((name, index) => [name, values[index]]));
+	return new Map(getComponentNames(property).map((name, index) => [name, values[index]]));
 };
 
+/**
+@param {string} property
+@param {CssNodePlain} canonicalNode
+@param {PlainLexerMatchResult} match
+@param {string[]} names
+*/
 const getNamedComponentName = (property, canonicalNode, match, names) => {
 	const trace = match.getTrace(canonicalNode) ?? [];
 	const directComponent = trace.find(part => part.type === 'Property' && names.includes(part.name))?.name;
@@ -188,10 +251,15 @@ const getNamedComponentName = (property, canonicalNode, match, names) => {
 	}
 
 	const type = trace.find(part => part.type === 'Type' && componentTypes.has(part.name))?.name;
-	const component = componentTypes.get(type);
+	const component = type === undefined ? undefined : componentTypes.get(type);
 	return component === 'timing-function' ? `${property}-timing-function` : component;
 };
 
+/**
+@param {string} property
+@param {Map<string, CssNodePlain[]>} components
+@param {{visualBoxes: CssNodePlain[], noneNodes: CssNodePlain[], getSlot: GetSlot}} options
+*/
 const getNamedComponentSlots = (property, components, {visualBoxes, noneNodes, getSlot}) => {
 	if (property === 'background' && visualBoxes.length > 0) {
 		components.set('background-origin', [visualBoxes[0]]);
@@ -200,17 +268,17 @@ const getNamedComponentSlots = (property, components, {visualBoxes, noneNodes, g
 
 	if (noneNodes.length > 0) {
 		for (const name of ['list-style-type', 'list-style-image']) {
-			if (components.get(name).length === 0) {
+			if (components.get(name)?.length === 0) {
 				components.set(name, [noneNodes[0]]);
 			}
 		}
 	}
 
-	if (property === 'animation' && components.get('animation-name').length === 0) {
+	if (property === 'animation' && components.get('animation-name')?.length === 0) {
 		return;
 	}
 
-	if (property === 'font' && (components.get('font-size').length === 0 || components.get('font-family').length === 0)) {
+	if (property === 'font' && (components.get('font-size')?.length === 0 || components.get('font-family')?.length === 0)) {
 		return;
 	}
 
@@ -218,7 +286,7 @@ const getNamedComponentSlots = (property, components, {visualBoxes, noneNodes, g
 	if (placeShorthands.has(property)) {
 		const [first, second] = components.keys();
 		if (!result.get(second)) {
-			const firstSlot = result.get(first);
+			const firstSlot = /** @type {ShorthandSlot} */ (result.get(first));
 			const isBaselineContent = property === 'place-content' && firstSlot.nodes.some(node => node.type === 'Identifier' && normalizeCssIdentifier(node.name) === 'baseline');
 			result.set(second, isBaselineContent ? getSyntheticKeyword('start') : firstSlot);
 		}
@@ -227,8 +295,16 @@ const getNamedComponentSlots = (property, components, {visualBoxes, noneNodes, g
 	return result;
 };
 
+/**
+@param {string} property
+@param {CssNodePlain[]} nodes
+@param {ComponentOptions} options
+*/
 const getNamedComponents = (property, nodes, {canonicalNodes, match, getSlot}) => {
-	const names = property === 'font' ? fontComponents : shorthandProperties.get(property).components;
+	const names = property === 'font' ? fontComponents : getComponentNames(property);
+	/**
+	@type {Map<string, CssNodePlain[]>}
+	*/
 	const components = new Map(names.map(name => [name, []]));
 	const visualBoxes = [];
 	const noneNodes = [];
@@ -241,7 +317,7 @@ const getNamedComponents = (property, nodes, {canonicalNodes, match, getSlot}) =
 			}
 
 			if (property === 'font' && node.value === ',') {
-				components.get('font-family').push(node);
+				/** @type {CssNodePlain[]} */ (components.get('font-family')).push(node);
 				continue;
 			}
 
@@ -269,16 +345,21 @@ const getNamedComponents = (property, nodes, {canonicalNodes, match, getSlot}) =
 			component = transitionTimeCount++ === 0 ? 'transition-duration' : 'transition-delay';
 		}
 
-		if (!components.has(component)) {
+		if (!component || !components.has(component)) {
 			return;
 		}
 
-		components.get(component).push(node);
+		/** @type {CssNodePlain[]} */ (components.get(component)).push(node);
 	}
 
 	return getNamedComponentSlots(property, components, {visualBoxes, noneNodes, getSlot});
 };
 
+/**
+@param {string} property
+@param {CssNodePlain[]} nodes
+@param {ComponentOptions} options
+*/
 const getGroupComponents = (property, nodes, options) => {
 	if (fourSideShorthands.has(property) || pairShorthands.has(property)) {
 		return getPositionalComponents(property, nodes, options.getSlot);
@@ -297,6 +378,10 @@ const getGroupComponents = (property, nodes, options) => {
 
 /**
 Decompose a supported shorthand into component slots, preserving original nodes for suggestions. Omitted independent components remain undefined rather than requiring an initial-value catalog.
+
+@param {DeclarationPlain} declaration
+@param {{sourceCode: {lexer: Lexer}}} context
+@returns {ShorthandComponents | undefined}
 */
 export const getShorthandComponents = (declaration, {sourceCode}) => {
 	const property = normalizeCssIdentifier(declaration.property);
@@ -306,17 +391,23 @@ export const getShorthandComponents = (declaration, {sourceCode}) => {
 	}
 
 	const canonicalValue = getCanonicalLexerNode(value);
-	const wholeMatch = sourceCode.lexer.matchProperty(property, canonicalValue);
+	const wholeMatch = /** @type {PlainLexerMatchResult} */ (sourceCode.lexer.matchProperty(property, canonicalValue));
 	if (!wholeMatch.matched) {
 		return;
 	}
 
 	const canonicalByNode = new Map(value.children.map((node, index) => [node, canonicalValue.children[index]]));
+	/**
+	@type {GetSlot}
+	*/
 	const getSlot = slotNodes => ({
 		nodes: slotNodes,
-		keys: slotNodes.map(node => getNodeKey(node, canonicalByNode.get(node), wholeMatch)),
+		keys: slotNodes.map(node => getNodeKey(node, /** @type {CssNodePlain} */ (canonicalByNode.get(node)), wholeMatch)),
 	});
 	const groups = layeredShorthands.has(property) ? getCommaSeparatedGroups(value) : [{nodes: value.children}];
+	/**
+	@type {ShorthandComponents}
+	*/
 	const result = new Map();
 	for (const {nodes} of groups) {
 		if (property === 'animation' && nodes.some(node => node.type === 'Identifier' && normalizeCssIdentifier(node.name) === 'auto')) {
@@ -330,7 +421,7 @@ export const getShorthandComponents = (declaration, {sourceCode}) => {
 		const components = getGroupComponents(property, nodes, {
 			getSlot,
 			match: wholeMatch,
-			canonicalNodes: nodes.map(node => canonicalByNode.get(node)),
+			canonicalNodes: nodes.map(node => /** @type {CssNodePlain} */ (canonicalByNode.get(node))),
 		});
 		if (!components) {
 			return;
@@ -344,7 +435,7 @@ export const getShorthandComponents = (declaration, {sourceCode}) => {
 			if (name === 'background-color') {
 				result.set(name, [slot]);
 			} else {
-				result.get(name).push(slot);
+				/** @type {(ShorthandSlot | undefined)[]} */ (result.get(name)).push(slot);
 			}
 		}
 	}
@@ -352,6 +443,10 @@ export const getShorthandComponents = (declaration, {sourceCode}) => {
 	return result;
 };
 
+/**
+@param {ShorthandSlot | undefined} first
+@param {ShorthandSlot | undefined} second
+*/
 const areEqualSlots = (first, second) => {
 	if (first === second) {
 		return true;
@@ -362,6 +457,10 @@ const areEqualSlots = (first, second) => {
 
 /**
 Get the sole differing component when every target slot has a concrete replacement, including copied values and dependent defaults.
+
+@param {ShorthandComponents | undefined} baseComponents
+@param {ShorthandComponents | undefined} targetComponents
+@returns {{property: string, slots: ShorthandSlot[]} | undefined}
 */
 export const getChangedShorthandComponent = (baseComponents, targetComponents) => {
 	if (!baseComponents || !targetComponents || baseComponents.size !== targetComponents.size) {
@@ -383,7 +482,7 @@ export const getChangedShorthandComponent = (baseComponents, targetComponents) =
 			return;
 		}
 
-		changed = {property, slots};
+		changed = {property, slots: /** @type {ShorthandSlot[]} */ (slots)};
 	}
 
 	return changed;

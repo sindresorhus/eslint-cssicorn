@@ -56,6 +56,14 @@ test({
 		'.button { border: initial; &:hover { border: 1px solid blue; } }',
 		'.button { border: 1px solid red; &:hover { border: solid blue; } }',
 		'.button { border: random(1px, 2px) solid red; &:hover { border: 1px solid blue; } }',
+		...[
+			['animation: fade 1s', 'animation: fade 2s', 'animation-timeline: --scroll'],
+			['font: 16px Arial', 'font: 18px Arial', 'font-feature-settings: "kern"'],
+			['margin: 1px 2px 3px 4px', 'margin: 1px 2px 3px 5px', 'margin-inline-start: 8px'],
+		].flatMap(([first, second, conflict]) => [
+			`.button { ${first}; ${conflict}; &:hover { ${second}; } }`,
+			`.button { ${first}; &:hover { ${second}; ${conflict}; } }`,
+		]),
 		'.button { --border: 1px solid red; &:hover { --border: 1px solid blue; } }',
 		'.button { -webkit-transition: opacity 1s; &:hover { -webkit-transition: opacity 2s; } }',
 		'.button { font: menu; &:hover { font: caption; } }',
@@ -123,6 +131,7 @@ test({
 			['font: 16px/1.5 Arial, serif', 'font: bold 16px/1.5 Arial, serif', 'font-weight: bold'],
 			['font: italic 16px Arial', 'font: oblique 15deg 16px Arial', 'font-style: oblique 15deg'],
 			['font: 16px Arial, serif', 'font: 16px Inter, sans-serif', 'font-family: Inter, sans-serif'],
+			['font: 16px Old Face', String.raw`font: 16px \46  ace`, String.raw`font-family: \46  ace`],
 			['font: 16px "/* Old Face */"', 'font: 16px "/* New Face */"', 'font-family: "/* New Face */"'],
 			['list-style: none inside', 'list-style: none outside', 'list-style-position: outside'],
 			['background: url(a) center/cover no-repeat red', 'background: url(a) center/cover no-repeat blue', 'background-color: blue'],

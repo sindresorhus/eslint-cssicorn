@@ -1,4 +1,6 @@
-import {find, generate} from '@eslint/css-tree';
+// @ts-check
+
+import {find, generate, toPlainObject} from '@eslint/css-tree';
 import propertyInteractions from './shared/css-property-interactions.js';
 import {canMatchSelector, isPseudoElementNode, isStyleRule} from './shared/css-selector-specificity.js';
 import {getChangedShorthandComponent, getShorthandComponents, supportedShorthands} from './shared/css-shorthand-components.js';
@@ -15,6 +17,9 @@ import {
 } from './utils/index.js';
 
 /**
+@import {BlockPlain, CssNodePlain, DeclarationPlain, RulePlain, SelectorPlain, ValuePlain} from '@eslint/css-tree';
+@import {ShorthandSlot} from './shared/css-shorthand-components.js';
+@import {CssicornProblem} from './rule/to-eslint-problem.js';
 @import {CssicornContext} from './rule/cssicorn-context.js';
 @import {CssicornRule} from './rule/to-eslint-rule.js';
 */
@@ -26,34 +31,50 @@ const messages = {
 	[MESSAGE_ID_SUGGESTION]: 'Replace the shorthand with `{{component}}`.',
 };
 const INVALID_BASELINE = Symbol('invalid baseline');
+
+/**
+@typedef {ReturnType<typeof getBlockDeclarations>} BlockDeclarations
+@typedef {NonNullable<ReturnType<typeof getSelectorPrefixes>>} SelectorPrefixes
+@typedef {Map<string, {families: Map<string, DeclarationPlain | typeof INVALID_BASELINE>, hasAll: boolean}>} SelectorIndex
+*/
 const refinementTypes = new Set(['ClassSelector', 'IdSelector', 'AttributeSelector', 'PseudoClassSelector']);
+/**
+@type {Map<string, Set<string>>}
+*/
 const familiesByInteraction = new Map();
 for (const property of supportedShorthands) {
 	for (const interaction of propertyInteractions.get(property) ?? []) {
-		if (!familiesByInteraction.has(interaction)) {
-			familiesByInteraction.set(interaction, new Set());
-		}
-
-		familiesByInteraction.get(interaction).add(property);
+		const families = familiesByInteraction.get(interaction) ?? new Set();
+		families.add(property);
+		familiesByInteraction.set(interaction, families);
 	}
 }
 
+/**
+@param {CssNodePlain[]} nodes
+*/
 const getSelectorKey = nodes => JSON.stringify(nodes.map(node => `${node.type}:${generate(node)}`));
 const nestingKey = getSelectorKey([{type: 'NestingSelector'}]);
 
+/**
+@param {RulePlain} rule
+*/
 const getSelectors = rule => {
 	if (rule.prelude?.type !== 'SelectorList' || rule.prelude.children.length === 0) {
 		return;
 	}
 
-	const selectors = rule.prelude.children;
-	if (selectors.some(selector => !canMatchSelector(selector) || find(selector, node => node.type === 'Raw' || isPseudoElementNode(node)))) {
+	const selectors = /** @type {SelectorPlain[]} */ (rule.prelude.children);
+	if (selectors.some(selector => !canMatchSelector(selector) || find(selector, node => node.type === 'Raw' || isPseudoElementNode(/** @type {CssNodePlain} */ (node))))) {
 		return;
 	}
 
 	return selectors;
 };
 
+/**
+@param {SelectorPlain} selector
+*/
 const getSelectorPrefixes = selector => {
 	const nodes = selector.children;
 	if (
@@ -80,8 +101,18 @@ const getSelectorPrefixes = selector => {
 	return {key: getSelectorKey(nodes), prefixes};
 };
 
+/**
+@param {BlockPlain} block
+@param {CssicornContext} context
+*/
 const getBlockDeclarations = (block, context) => {
+	/**
+	@type {Map<string, DeclarationPlain>}
+	*/
 	const declarations = new Map();
+	/**
+	@type {Map<string, number>}
+	*/
 	const affecting = new Map();
 	let hasAll = false;
 	for (const declaration of block.children) {
@@ -114,21 +145,27 @@ const getBlockDeclarations = (block, context) => {
 	return {declarations, affecting, hasAll};
 };
 
-const getFamilyDeclaration = (info, property) => !info.hasAll && info.affecting.get(property) === 1 && info.declarations.has(property)
-	? info.declarations.get(property)
+/**
+@param {BlockDeclarations} info
+@param {string} property
+*/
+const getFamilyDeclaration = (info, property) => !info.hasAll && info.affecting.get(property) === 1
+	? info.declarations.get(property) ?? INVALID_BASELINE
 	: INVALID_BASELINE;
 
+/**
+@param {SelectorIndex} index
+@param {string[]} keys
+@param {BlockDeclarations} info
+*/
 const registerSelectors = (index, keys, info) => {
 	if (info.affecting.size === 0 && !info.hasAll) {
 		return;
 	}
 
 	for (const key of new Set(keys)) {
-		if (!index.has(key)) {
-			index.set(key, {families: new Map(), hasAll: false});
-		}
-
-		const record = index.get(key);
+		const record = index.get(key) ?? {families: new Map(), hasAll: false};
+		index.set(key, record);
 		record.hasAll ||= info.hasAll;
 		for (const property of info.affecting.keys()) {
 			record.families.set(property, record.families.has(property) ? INVALID_BASELINE : getFamilyDeclaration(info, property));
@@ -136,6 +173,11 @@ const registerSelectors = (index, keys, info) => {
 	}
 };
 
+/**
+@param {SelectorPrefixes[]} selectorPrefixes
+@param {string} property
+@param {SelectorIndex} index
+*/
 const getBaseline = (selectorPrefixes, property, index) => {
 	let baseline;
 	for (const {key, prefixes} of selectorPrefixes) {
@@ -176,6 +218,10 @@ const getBaseline = (selectorPrefixes, property, index) => {
 	return baseline;
 };
 
+/**
+@param {ShorthandSlot} slot
+@param {CssicornContext['sourceCode']} sourceCode
+*/
 const getSlotText = (slot, sourceCode) => {
 	if (slot.text !== undefined) {
 		return slot.text;
@@ -201,12 +247,17 @@ const getSlotText = (slot, sourceCode) => {
 	return text;
 };
 
+/**
+@param {ShorthandSlot[]} slots
+@param {DeclarationPlain} declaration
+@param {CssicornContext['sourceCode']} sourceCode
+*/
 const getReplacementValue = (slots, declaration, sourceCode) => {
-	const groups = getCommaSeparatedGroups(declaration.value);
+	const groups = getCommaSeparatedGroups(/** @type {ValuePlain} */ (declaration.value));
 	let text = '';
 	for (const [index, slot] of slots.entries()) {
 		if (index > 0) {
-			text += sourceCode.text.slice(sourceCode.getRange(groups[index - 1].nodes.at(-1))[1], sourceCode.getRange(groups[index].nodes[0])[0]);
+			text += sourceCode.text.slice(sourceCode.getRange(/** @type {CssNodePlain} */ (groups[index - 1].nodes.at(-1)))[1], sourceCode.getRange(groups[index].nodes[0])[0]);
 		}
 
 		text += getSlotText(slot, sourceCode);
@@ -215,6 +266,11 @@ const getReplacementValue = (slots, declaration, sourceCode) => {
 	return text;
 };
 
+/**
+@param {DeclarationPlain} declaration
+@param {DeclarationPlain} baseline
+@param {{property: string, getComponents: (declaration: DeclarationPlain) => ReturnType<typeof getShorthandComponents>, context: CssicornContext}} options
+*/
 const getProblem = (declaration, baseline, {property, getComponents, context}) => {
 	const {sourceCode} = context;
 	if (isImportantDeclaration(baseline) !== isImportantDeclaration(declaration)) {
@@ -227,11 +283,16 @@ const getProblem = (declaration, baseline, {property, getComponents, context}) =
 	}
 
 	const value = getReplacementValue(changed.slots, declaration, sourceCode);
-	if (!sourceCode.lexer.matchProperty(changed.property, getCanonicalLexerNode(parse(value, {context: 'value'}))).matched) {
+	const parsedValue = /** @type {ValuePlain} */ (toPlainObject(parse(value, {context: 'value'})));
+	if (!sourceCode.lexer.matchProperty(changed.property, getCanonicalLexerNode(parsedValue)).matched) {
 		return;
 	}
 
+	const valueNodes = /** @type {ValuePlain} */ (declaration.value).children;
 	const data = {property, component: changed.property};
+	/**
+	@type {CssicornProblem}
+	*/
 	const problem = {node: declaration, messageId: MESSAGE_ID, data};
 	if (!hasCommentInRange(context, sourceCode.getRange(declaration))) {
 		const start = sourceCode.getRange(declaration)[0];
@@ -240,7 +301,7 @@ const getProblem = (declaration, baseline, {property, getComponents, context}) =
 			data,
 			* fix(fixer) {
 				yield fixer.replaceTextRange([start, start + declaration.property.length], changed.property);
-				yield fixer.replaceTextRange([sourceCode.getRange(declaration.value.children.at(0))[0], sourceCode.getRange(declaration.value.children.at(-1))[1]], value);
+				yield fixer.replaceTextRange([sourceCode.getRange(valueNodes[0])[0], sourceCode.getRange(/** @type {CssNodePlain} */ (valueNodes.at(-1)))[1]], value);
 			},
 		}];
 	}
@@ -253,16 +314,26 @@ const getProblem = (declaration, baseline, {property, getComponents, context}) =
 */
 const create = context => {
 	const {sourceCode} = context;
+	/**
+	@type {WeakMap<BlockPlain, BlockDeclarations>}
+	*/
 	const blockDeclarations = new WeakMap();
+	/**
+	@type {WeakMap<DeclarationPlain, ReturnType<typeof getShorthandComponents>>}
+	*/
 	const componentsByDeclaration = new WeakMap();
+	/**
+	@param {BlockPlain} block
+	*/
 	const getInfo = block => {
-		if (!blockDeclarations.has(block)) {
-			blockDeclarations.set(block, getBlockDeclarations(block, context));
-		}
-
-		return blockDeclarations.get(block);
+		const info = blockDeclarations.get(block) ?? getBlockDeclarations(block, context);
+		blockDeclarations.set(block, info);
+		return info;
 	};
 
+	/**
+	@param {DeclarationPlain} declaration
+	*/
 	const getComponents = declaration => {
 		if (!componentsByDeclaration.has(declaration)) {
 			componentsByDeclaration.set(declaration, getShorthandComponents(declaration, context));
@@ -276,9 +347,12 @@ const create = context => {
 			return;
 		}
 
+		/**
+		@type {SelectorIndex}
+		*/
 		const index = new Map();
 		const owner = sourceCode.getParent(container);
-		if (owner?.type === 'Rule' && isStyleRule(owner, context) && getSelectors(owner)) {
+		if (container.type === 'Block' && owner?.type === 'Rule' && isStyleRule(owner, context) && getSelectors(owner)) {
 			registerSelectors(index, [nestingKey], getInfo(container));
 		}
 
@@ -289,7 +363,7 @@ const create = context => {
 
 			const info = getInfo(rule.block);
 			const prefixes = getSelectors(rule)?.map(selector => getSelectorPrefixes(selector));
-			if (!prefixes || prefixes.some(selector => !selector)) {
+			if (!prefixes || prefixes.includes(undefined)) {
 				if (info.affecting.size > 0 || info.hasAll) {
 					index.clear();
 				}
@@ -297,12 +371,13 @@ const create = context => {
 				continue;
 			}
 
+			const selectorPrefixes = /** @type {SelectorPrefixes[]} */ (prefixes);
 			for (const [property, declaration] of info.declarations) {
 				if (getFamilyDeclaration(info, property) === INVALID_BASELINE) {
 					continue;
 				}
 
-				const baseline = getBaseline(prefixes, property, index);
+				const baseline = getBaseline(selectorPrefixes, property, index);
 				if (!baseline || sourceCode.getRange(baseline)[0] >= sourceCode.getRange(rule)[0]) {
 					continue;
 				}
@@ -310,7 +385,7 @@ const create = context => {
 				yield getProblem(declaration, baseline, {property, getComponents, context});
 			}
 
-			registerSelectors(index, prefixes.map(({key}) => key), info);
+			registerSelectors(index, selectorPrefixes.map(({key}) => key), info);
 		}
 	});
 };
