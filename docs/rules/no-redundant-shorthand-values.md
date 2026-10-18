@@ -9,7 +9,7 @@
 <!-- end auto-generated rule header -->
 <!-- Do not manually modify this header. Run: `npm run fix:eslint-docs` -->
 
-This rule reports repeated shorthand values that can be omitted without changing the result, and the autofix removes them.
+This rule reports repeated values and default components that can be omitted from a shorthand without changing its complete expansion, and the autofix removes them.
 
 ## Examples
 
@@ -40,6 +40,38 @@ These are not reported:
 }
 ```
 
+```css
+/* ❌ */
+.example {
+	border: 1px solid currentColor;
+	font: normal normal 16px/normal sans-serif;
+	flex-flow: row nowrap;
+}
+
+/* ✅ */
+.example {
+	border: 1px solid;
+	font: 16px sans-serif;
+	flex-flow: row;
+}
+```
+
+```css
+/* ❌ */
+.example {
+	background: 0% 0% / auto repeat scroll padding-box border-box red;
+	animation: 1s ease 0s 1 normal none running slide;
+	transition: opacity 1s ease 0s normal;
+}
+
+/* ✅ */
+.example {
+	background: red;
+	animation: 1s slide;
+	transition: opacity 1s;
+}
+```
+
 ## Supported properties
 
 - Physical edges: `margin`, `padding`, `border-color`, `border-style`, `border-width`, `scroll-margin`, `scroll-padding`, and `inset`.
@@ -53,10 +85,35 @@ Slash-separated `border-radius` values are shortened independently without remov
 
 `-webkit-border-radius` without a slash is never shortened to two values, because WebKit and Blink parse `-webkit-border-radius: 1px 2px` as `1px / 2px`.
 
+## Default components
+
+The following unprefixed shorthands also support omitting default components:
+
+| Shorthand | Defaults |
+| --- | --- |
+| `border` and its physical and logical side shorthands | `medium`, `none`, and `currentcolor`. |
+| `outline` | Width `medium` and style `none`. Explicit colors are retained, including `auto`, which is not supported consistently across browsers. |
+| `column-rule` | `medium`, `none`, and `currentcolor`. |
+| `font` | Optional `normal` components, weight `400`, and line height `/normal`. Size and family are required. |
+| `flex-flow` | `row` and `nowrap`. |
+| `columns` | Optional `auto` components, including height after `/`. |
+| `list-style` | Type `disc`, position `outside`, and image `none`. |
+| `text-decoration` | Line `none`, style `solid`, color `currentcolor`, and thickness `auto`. |
+| `background` | Image `none`, initial position, size `auto auto`, repeat `repeat`, attachment `scroll`, origin `padding-box`, clip `border-box`, and color `transparent`. |
+| `animation` | Duration `auto`, easing `ease`, delay `0s`, iteration count `1`, direction `normal`, fill mode `none`, play state `running`, and name `none`. |
+| `transition` | Property `all`, duration and delay `0s`, easing `ease`, and behavior `normal`. |
+
+Equivalent defaults are recognized conservatively, including constant numeric expressions, transparent-black hexadecimal and RGB colors, and `cubic-bezier(.25, .1, .25, 1)` for `ease`. Other color spaces and expressions that cannot be evaluated are retained.
+
+Default components are removed from right to left, retaining at least one original component in each comma-separated layer. Layers are never merged or removed. Components that disambiguate another value are retained, such as the easing in `animation: 1s ease ease` or the duration in `transition: opacity 0s 1s`.
+
+Explicit animation duration `0s` is retained because omitted duration defaults to `auto`, which can behave differently with scroll timelines. Nondefault values are retained even when they currently have no visible effect, such as a duration in `animation: 1s none`.
+
 ## Limitations
 
 - Declarations that cannot be validated are ignored.
 - Declarations with functions that may not repeat the same value are ignored: `random()` and the substitution functions (`attr()`, `env()`, `first-valid()`, `ident()`, `if()`, `inherit()`, `random-item()`, `var()`, and custom functions such as `--spacing()`).
-- Other functions are compared without evaluation, and numeric spellings such as `1px` and `1.0px` are kept distinct.
+- For repeated positional values, other functions are compared without evaluation, and numeric spellings such as `1px` and `1.0px` are kept distinct.
+- Default omission is limited to the component grammars listed above. Unrecognized components are ignored.
 - Declarations in CSS Modules `:export` and `:import()` blocks are ignored, because JavaScript reads them as exact strings.
 - The autofix is skipped if it would remove a comment.

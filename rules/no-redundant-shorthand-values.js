@@ -1,5 +1,6 @@
 import {fourSideShorthands, pairShorthands} from './shared/css-shorthand-properties.js';
 import {areEqualValues, getCondensedValueCount} from './shared/css-shorthand-values.js';
+import {getDefaultShorthandReduction, hasShorthandDefaults} from './shared/css-shorthand-defaults.js';
 import {
 	getBasePropertyName,
 	hasCommentInRange,
@@ -122,11 +123,13 @@ const create = context => {
 		}
 
 		const property = getBasePropertyName(declaration.property);
+		const hasDefaults = normalizeCssIdentifier(declaration.property) === property && hasShorthandDefaults(property);
 		if (
 			!fourSideShorthands.has(property)
 			&& !twoSideProperties.has(property)
 			&& property !== 'border-radius'
 			&& !placeProperties.has(property)
+			&& !hasDefaults
 		) {
 			return;
 		}
@@ -137,7 +140,9 @@ const create = context => {
 
 		const values = value.children;
 		let result;
-		if (property === 'border-radius') {
+		if (hasDefaults) {
+			result = getDefaultShorthandReduction(property, value, context);
+		} else if (property === 'border-radius') {
 			result = getBorderRadiusResult(values, normalizeCssIdentifier(declaration.property) === '-webkit-border-radius', sourceCode);
 		} else {
 			const reduction = placeProperties.has(property)
@@ -152,7 +157,7 @@ const create = context => {
 		// Match the grammar last, as it is slow and most values cannot be simplified.
 		if (
 			!result
-			|| !sourceCode.lexer.matchProperty(property, value).matched
+			|| (!hasDefaults && !sourceCode.lexer.matchProperty(property, value).matched)
 		) {
 			return;
 		}
