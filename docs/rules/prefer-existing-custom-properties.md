@@ -55,6 +55,8 @@ The rule does not discover the definitions or analyze the cascade, so the custom
 - A match that contains a comment, or a value that more than one configured custom property has, is not reported.
 - Simple hex and RGB equivalents match, and so do equal times in milliseconds and seconds. Other values match structurally, without evaluating calculations.
 
+Suggestions preserve surrounding formatting and add spaces where needed to keep adjacent CSS tokens separate.
+
 ## Limitations
 
 The rule ignores:

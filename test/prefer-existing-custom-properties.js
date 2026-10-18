@@ -69,6 +69,23 @@ test.snapshot({
 
 const withTokens = (code, customProperties) => ({code, options: [{customProperties}]});
 
+test({
+	valid: [],
+	invalid: [{
+		code: 'a{border:1px solid#fff}',
+		options: [{customProperties: {'--white': '#fff'}}],
+		errors: [{
+			messageId: 'prefer-existing-custom-properties/error',
+			data: {replacement: 'var(--white)'},
+			suggestions: [{
+				messageId: 'prefer-existing-custom-properties/suggestion',
+				data: {replacement: 'var(--white)'},
+				output: 'a{border:1px solid var(--white)}',
+			}],
+		}],
+	}],
+});
+
 test.snapshot({
 	valid: [
 		withTokens('a { color: #fff; }', {'--first': '#fff', '--second': 'rgb(255 255 255)'}),
@@ -239,3 +256,47 @@ for (const name of ['color', '--']) {
 		assert.throws(() => lint({[name]: 'red'}), /property name .* is invalid/v);
 	});
 }
+
+nodeTest('suggestions preserve adjacent tokens and compose across multiple replacements', () => {
+	const linter = new Linter();
+	const configuration = {
+		files: ['**'],
+		language: 'css/css',
+		plugins: {css, cssicorn: plugin},
+		rules: {
+			'cssicorn/prefer-existing-custom-properties': ['error', {customProperties: {'--white': '#fff'}}],
+			'css/no-invalid-properties': 'error',
+		},
+	};
+	const cases = [
+		['a{border:1px solid#fff}', 'a{border:1px solid var(--white)}'],
+		['a{box-shadow:0 0#fff}', 'a{box-shadow:0 0 var(--white)}'],
+		['a{border:solid 1px#fff}', 'a{border:solid 1px var(--white)}'],
+		['a{border:rgb(255 255 255)solid 1px}', 'a{border:var(--white)solid 1px}'],
+		['a{box-shadow:rgb(255 255 255)0 0}', 'a{box-shadow:var(--white)0 0}'],
+		['a{border-color:#fff#fff}', 'a{border-color:var(--white) var(--white)}'],
+		['a{border-color:rgb(255 255 255)rgb(255 255 255)}', 'a{border-color:var(--white)var(--white)}'],
+		['a{border:1px solid/* keep */#fff}', 'a{border:1px solid/* keep */var(--white)}'],
+		['a{border:rgb(255 255 255)/* keep */solid 1px}', 'a{border:var(--white)/* keep */solid 1px}'],
+		['a {\r\n  border: 1px solid#fff !important;\r\n}', 'a {\r\n  border: 1px solid var(--white) !important;\r\n}'],
+	];
+	for (const [originalCode, expectedOutput] of cases) {
+		const code = `:root{--white:#fff}${originalCode}`;
+		const expected = `:root{--white:#fff}${expectedOutput}`;
+		const result = linter.verifyAndFix(code, configuration, {filename: 'test.css'});
+		assert.equal(result.fixed, false);
+		assert.equal(result.output, code);
+		assert.ok(result.messages.length > 0);
+		assert.equal(result.messages.some(message => message.ruleId === 'css/no-invalid-properties'), false, code);
+		let suggestedCode = code;
+		for (const message of result.messages.toReversed()) {
+			const [{fix}] = message.suggestions;
+			const individualSuggestion = code.slice(0, fix.range[0]) + fix.text + code.slice(fix.range[1]);
+			assert.equal(linter.verify(individualSuggestion, configuration, {filename: 'test.css'}).some(message => message.ruleId === 'css/no-invalid-properties'), false, individualSuggestion);
+			suggestedCode = suggestedCode.slice(0, fix.range[0]) + fix.text + suggestedCode.slice(fix.range[1]);
+		}
+
+		assert.equal(suggestedCode, expected);
+		assert.deepEqual(linter.verify(suggestedCode, configuration, {filename: 'test.css'}), []);
+	}
+});

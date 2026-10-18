@@ -9,6 +9,7 @@ import {
 import {colorFunctions, nonColorFunctions} from './shared/css-color-functions.js';
 import {
 	decodeCssIdentifier,
+	getTokenSeparatedReplacement,
 	hasCommentInRange,
 	isCssModulesInteropDeclaration,
 	isCssWideKeyword,
@@ -356,7 +357,12 @@ const create = context => {
 								/**
 								@param {Parameters<CssicornRuleFixer>[0]} fixer
 								*/
-								fix: fixer => fixer.replaceTextRange(range, replacement),
+								fix(fixer) {
+									const [valueStart, valueEnd] = sourceCode.getRange(declaration.value);
+									const before = sourceCode.text.slice(valueStart, range[0]);
+									const after = sourceCode.text.slice(range[1], valueEnd);
+									return fixer.replaceTextRange(range, getTokenSeparatedReplacement(before, replacement, after));
+								},
 							}],
 						});
 					}

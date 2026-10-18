@@ -15,6 +15,7 @@ export {default as getParsableNestedRulePrelude} from './get-parsable-nested-rul
 export {default as getPseudoSelectorArgument} from './get-pseudo-selector-argument.js';
 export {default as getPseudoSelectorName} from './get-pseudo-selector-name.js';
 export {default as getSingleValueIdentifier} from './get-single-value-identifier.js';
+export {default as getTokenSeparatedReplacement} from './get-token-separated-replacement.js';
 export {default as hasCommentInRange} from './has-comment-in-range.js';
 export {default as hasDelimToken} from './has-delim-token.js';
 export {default as hasKeyframesAncestor} from './has-keyframes-ancestor.js';
