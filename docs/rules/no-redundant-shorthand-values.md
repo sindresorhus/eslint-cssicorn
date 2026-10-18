@@ -61,6 +61,18 @@ This rule reports repeated values and default components that can be omitted fro
 }
 ```
 
+```css
+/* ❌ */
+.heading {
+	text-wrap: wrap balance;
+}
+
+/* ✅ */
+.heading {
+	text-wrap: balance;
+}
+```
+
 These are not reported:
 
 ```css
@@ -72,7 +84,7 @@ These are not reported:
 }
 ```
 
-## Supported properties
+## Repeated values
 
 - Physical edges: `margin`, `padding`, `border-color`, `border-style`, `border-width`, `scroll-margin`, `scroll-padding`, and `inset`.
 - Logical edges: the `-block` and `-inline` variants of those properties.
@@ -99,7 +111,8 @@ The following unprefixed shorthands also support omitting default components:
 | `columns` | Optional `auto` components, including height after `/`. |
 | `list-style` | Type `disc`, position `outside`, and image `none`. |
 | `text-decoration` | Line `none`, style `solid`, color `currentcolor`, and thickness `auto`. |
-| `background` | Image `none`, initial position, size `auto auto`, repeat `repeat`, attachment `scroll`, origin `padding-box`, clip `border-box`, and color `transparent`. |
+| `text-wrap` | Mode `wrap` and style `auto`. |
+| `background` | Image `none`, position `0% 0%`, size `auto auto`, repeat `repeat`, attachment `scroll`, origin `padding-box`, clip `border-box`, and color `transparent`. |
 | `animation` | Duration `auto`, easing `ease`, delay `0s`, iteration count `1`, direction `normal`, fill mode `none`, play state `running`, and name `none`. |
 | `transition` | Property `all`, duration and delay `0s`, easing `ease`, and behavior `normal`. |
 
@@ -107,7 +120,7 @@ Equivalent defaults are recognized conservatively, including constant numeric ex
 
 Numeric expressions must have the correct CSS type. For example, a zero-valued time such as `calc(0s)` cannot be omitted as a background position, and unitless `calc(0)` is not a length.
 
-Default components are removed from right to left, retaining at least one original component in each comma-separated layer. Layers are never merged or removed. Components that disambiguate another value are retained, such as the easing in `animation: 1s ease ease` or the duration in `transition: opacity 0s 1s`.
+At least one original component is retained in each comma-separated layer. Layers are never merged or removed. Components that disambiguate another value are retained, such as the easing in `animation: 1s ease ease` or the duration in `transition: opacity 0s 1s`.
 
 Explicit animation duration `0s` is retained because omitted duration defaults to `auto`, which can behave differently with scroll timelines. Nondefault values are retained even when they currently have no visible effect, such as a duration in `animation: 1s none`.
 

@@ -1,3 +1,5 @@
+// @ts-check
+
 import {generate, toPlainObject} from '@eslint/css-tree';
 import {
 	evaluateCssMath,
@@ -9,6 +11,31 @@ import {
 import {areEquivalentColors} from './css-colors.js';
 import {getGroupAnimationNameNodes} from './css-animations.js';
 
+/**
+@import {CssNodePlain, Lexer, LexerMatchResult, SyntaxDescriptor, ValuePlain} from '@eslint/css-tree';
+@import {CssicornContext} from '../rule/cssicorn-context.js';
+*/
+
+/**
+@typedef {{name: string, type?: string, initial?: string, number?: number, unit?: string}} ShorthandComponent
+@typedef {{key: string, removableGroups: CssNodePlain[][]}} ShorthandExpansion
+*/
+
+/**
+Every profile component is initialized before nodes are assigned to its group.
+
+@typedef {Omit<Map<string, CssNodePlain[]>, 'get'> & {get: (name: string) => CssNodePlain[]}} ComponentGroups
+*/
+
+/**
+The lexer accepts plain nodes, but its trace method is currently typed for linked-list nodes only.
+
+@typedef {LexerMatchResult & {getTrace: (node: CssNodePlain) => SyntaxDescriptor[] | null}} PlainLexerMatchResult
+*/
+
+/**
+@type {ShorthandComponent[]}
+*/
 const borderComponents = [
 	{name: 'width', type: 'line-width', initial: 'medium'},
 	{name: 'style', type: 'line-style', initial: 'none'},
@@ -29,8 +56,11 @@ const borderProperties = [
 	'border-inline-end',
 ];
 
+/**
+@type {Map<string, ShorthandComponent[]>}
+*/
 const profiles = new Map([
-	...borderProperties.map(property => [property, borderComponents]),
+	...borderProperties.map(property => /** @type {[string, ShorthandComponent[]]} */ ([property, borderComponents])),
 	['outline', [
 		{name: 'outline-width', initial: 'medium'},
 		{name: 'outline-style', initial: 'none'},
@@ -71,6 +101,10 @@ const profiles = new Map([
 		{name: 'text-decoration-color', initial: 'currentcolor'},
 		{name: 'text-decoration-thickness', initial: 'auto'},
 	]],
+	['text-wrap', [
+		{name: 'text-wrap-mode', initial: 'wrap'},
+		{name: 'text-wrap-style', initial: 'auto'},
+	]],
 	['background', [
 		{name: 'background-image', type: 'bg-image', initial: 'none'},
 		{name: 'background-position', type: 'bg-position', initial: 'position'},
@@ -100,11 +134,23 @@ const profiles = new Map([
 ]);
 
 const layeredProperties = new Set(['background', 'animation', 'transition']);
+
+/**
+@param {CssNodePlain} node
+@param {string | undefined} keyword
+*/
 const isKeyword = (node, keyword) => node.type === 'Identifier' && normalizeCssIdentifier(node.name) === keyword;
+
+/**
+@param {CssNodePlain[]} nodes
+*/
 const getNodesKey = nodes => nodes.map(node => generate(node)).join(' ');
 
 /**
 Recognize a zero length or percentage without accepting unitless calculations or other dimension types.
+
+@param {CssNodePlain} node
+@param {Lexer} lexer
 */
 const isZeroPositionValue = (node, lexer) => {
 	const quantity = evaluateCssMath(node);
@@ -121,6 +167,9 @@ const isZeroPositionValue = (node, lexer) => {
 
 /**
 Recognize the initial two-axis position without resolving lengths against a layout.
+
+@param {CssNodePlain[]} nodes
+@param {Lexer} lexer
 */
 const isInitialPosition = (nodes, lexer) => {
 	if (nodes.length !== 2) {
@@ -134,6 +183,10 @@ const isInitialPosition = (nodes, lexer) => {
 
 /**
 Recognize only finite, exactly equal default values, retaining numeric units and nondefault color channels.
+
+@param {CssNodePlain[]} nodes
+@param {ShorthandComponent} component
+@param {Lexer} lexer
 */
 const isInitialComponent = (nodes, component, lexer) => {
 	if (nodes.length === 0) {
@@ -179,16 +232,24 @@ const isInitialComponent = (nodes, component, lexer) => {
 
 /**
 Assign every token in a validated layer to its shorthand component.
+
+@param {string} property
+@param {CssNodePlain[]} nodes
+@param {Lexer} lexer
 */
 const getComponentGroups = (property, nodes, lexer) => {
-	const components = profiles.get(property);
+	const components = /** @type {ShorthandComponent[]} */ (profiles.get(property));
+
+	/**
+	@type {ValuePlain}
+	*/
 	const value = {type: 'Value', children: nodes};
-	const match = lexer.matchProperty(property, value);
+	const match = /** @type {PlainLexerMatchResult} */ (lexer.matchProperty(property, value));
 	if (!match.matched) {
 		return;
 	}
 
-	const groups = new Map(components.map(component => [component.name, []]));
+	const groups = /** @type {ComponentGroups} */ (new Map(components.map(component => [component.name, []])));
 	let timeCount = 0;
 	let slash;
 	for (const node of nodes) {
@@ -250,6 +311,11 @@ const getComponentGroups = (property, nodes, lexer) => {
 
 /**
 Expand a validated layer into component keys. Reset-only longhands are unchanged because the shorthand itself is retained.
+
+@param {string} property
+@param {CssNodePlain[]} nodes
+@param {Lexer} lexer
+@returns {ShorthandExpansion | undefined}
 */
 const getExpansion = (property, nodes, lexer) => {
 	const result = getComponentGroups(property, nodes, lexer);
@@ -258,7 +324,7 @@ const getExpansion = (property, nodes, lexer) => {
 	}
 
 	const {groups, slash} = result;
-	const components = profiles.get(property);
+	const components = /** @type {ShorthandComponent[]} */ (profiles.get(property));
 	const expansion = components.map(component => isInitialComponent(groups.get(component.name), component, lexer) ? '' : getNodesKey(groups.get(component.name)));
 	const removableGroups = components.filter((component, index) => expansion[index] === '').map(component => groups.get(component.name)).filter(nodes => nodes.length > 0);
 	if (property === 'background') {
@@ -274,7 +340,7 @@ const getExpansion = (property, nodes, lexer) => {
 
 	if (slash) {
 		const slashComponents = {font: 'line-height', columns: 'column-height', background: 'background-size'};
-		const slashComponent = slashComponents[property];
+		const slashComponent = slashComponents[/** @type {keyof typeof slashComponents} */ (property)];
 		const group = removableGroups.find(group => group === groups.get(slashComponent));
 		if (group) {
 			removableGroups[removableGroups.indexOf(group)] = [slash, ...group];
@@ -286,10 +352,18 @@ const getExpansion = (property, nodes, lexer) => {
 
 /**
 Get nonoverlapping removal ranges, including an adjacent separator while retaining the other separator between surviving tokens.
+
+@param {CssNodePlain[]} nodes
+@param {CssNodePlain[]} retainedNodes
+@param {CssicornContext} context
 */
 const getRemovalRanges = (nodes, retainedNodes, context) => {
 	const {sourceCode} = context;
 	const retained = new Set(retainedNodes);
+
+	/**
+	@type {[number, number][]}
+	*/
 	const ranges = [];
 	for (let index = 0; index < nodes.length; index++) {
 		if (retained.has(nodes[index])) {
@@ -311,14 +385,23 @@ const getRemovalRanges = (nodes, retainedNodes, context) => {
 
 /**
 Whether this shorthand has an explicit, supported default-component profile.
+
+@param {string} property
 */
 export const hasShorthandDefaults = property => profiles.has(property);
 
 /**
 Try the rightmost default group first, keeping every nondefault component assigned to the same longhand.
+
+@param {string} property
+@param {CssNodePlain[]} nodes
+@param {ShorthandExpansion} expansion
+@param {Lexer} lexer
 */
 const getNextReduction = (property, nodes, expansion, lexer) => {
-	const groups = expansion.removableGroups.toSorted((first, second) => nodes.indexOf(second.at(-1)) - nodes.indexOf(first.at(-1)));
+	const groups = expansion.removableGroups.toSorted((first, second) =>
+		nodes.indexOf(/** @type {CssNodePlain} */ (second.at(-1))) - nodes.indexOf(/** @type {CssNodePlain} */ (first.at(-1))),
+	);
 	for (const group of groups) {
 		const candidate = nodes.filter(node => !group.includes(node));
 		if (candidate.length === 0) {
@@ -334,6 +417,11 @@ const getNextReduction = (property, nodes, expansion, lexer) => {
 
 /**
 Remove provably redundant default groups until no further omission is possible.
+
+@param {string} property
+@param {CssNodePlain[]} nodes
+@param {ShorthandExpansion} expansion
+@param {Lexer} lexer
 */
 const getRetainedNodes = (property, nodes, expansion, lexer) => {
 	while (true) {
@@ -348,6 +436,10 @@ const getRetainedNodes = (property, nodes, expansion, lexer) => {
 
 /**
 Find default components that can be removed without changing any expanded longhand or layer count.
+
+@param {string} property
+@param {ValuePlain} value
+@param {CssicornContext} context
 */
 export const getDefaultShorthandReduction = (property, value, context) => {
 	const {sourceCode} = context;
@@ -362,6 +454,10 @@ export const getDefaultShorthandReduction = (property, value, context) => {
 
 	const groups = layeredProperties.has(property) ? getCommaSeparatedGroups(canonicalValue) : [{nodes: canonicalValue.children}];
 	const ranges = [];
+
+	/**
+	@type {string[]}
+	*/
 	const originalKeys = [];
 	for (const {nodes} of groups) {
 		const original = getExpansion(property, nodes, sourceCode.lexer);
@@ -385,9 +481,13 @@ export const getDefaultShorthandReduction = (property, value, context) => {
 	}
 
 	// Validate the text as well as the filtered AST, since removing a separator can join tokens.
+
+	/**
+	@type {ValuePlain}
+	*/
 	let parsed;
 	try {
-		parsed = getCanonicalLexerNode(toPlainObject(parse(replacement, {context: 'value'})));
+		parsed = getCanonicalLexerNode(/** @type {ValuePlain} */ (toPlainObject(parse(replacement, {context: 'value'}))));
 	} catch {
 		return;
 	}
