@@ -210,7 +210,7 @@ const getComponentGroups = (property, nodes, lexer) => {
 		const trace = match.getTrace(node) ?? [];
 		let component;
 		if (property === 'transition' && trace.some(syntax => syntax.type === 'Type' && syntax.name === 'time')) {
-			const name = timeCount++ === 0 ? 'transition-duration' : 'transition-delay';
+			const name = ['transition-duration', 'transition-delay'][timeCount++];
 			component = components.find(component => component.name === name);
 		} else {
 			component = components.find(component => {
