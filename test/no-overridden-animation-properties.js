@@ -17,6 +17,7 @@ test.snapshot({
 	valid: [
 		'a { color: red; }',
 		stylesheet('animation: spin 1s infinite; animation-composition: replace;'),
+		stylesheet('animation: spin 1s, bounce 1s; animation-duration: 1s, 0s, 1s; animation-composition: replace;'),
 		stylesheet('animation: spin 1s, unknown 1s; animation-composition: replace;'),
 		stylesheet('animation: spin 1s, bounce 1s;'),
 		stylesheet(animations, '@keyframes spin { from, to { background-position-x: 0; } } @keyframes bounce { from, to { background-position-y: 10px; } }'),
@@ -86,6 +87,9 @@ test.snapshot({
 		stylesheet(animations, '@keyframes spin { from, to { margin-left: 1px; } } @keyframes bounce { from, to { margin-inline-start: 2px; } }'),
 		`${keyframes} .icon { animation: spin 1s, bounce 1s; } .icon { animation-composition: replace; }`,
 		`${keyframes} :export { ${animations} }`,
+		`${keyframes} @starting-style { .icon { ${animations} } }`,
+		`${keyframes} .icon { @starting-style { ${animations} } }`,
+		`${keyframes} @STARTING-STYLE { @media (width > 1px) { .icon { ${animations} } } }`,
 	],
 	invalid: [
 		stylesheet(),
@@ -158,5 +162,7 @@ test.snapshot({
 			'@keyframes spin { from, to { transform: var(--transform); opacity: .5; } }',
 			'@keyframes bounce { from, to { transform: translateY(1px); opacity: 1; } }',
 		].join(' ')),
+		stylesheet('animation: spin 1s, bounce 1s, spin 1s; animation-duration: 1s, 0s; animation-composition: replace;'),
+		stylesheet('animation: spin 1s, none, bounce 1s; animation-delay: 0s, 2s; animation-composition: replace;'),
 	],
 });

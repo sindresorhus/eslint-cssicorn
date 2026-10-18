@@ -313,6 +313,7 @@ const create = context => {
 			declarations.every(({property}) => property !== 'animation-composition')
 			|| !isStyleBlock(block, context)
 			|| isCssModulesInteropDeclaration(declarations[0].declaration, context)
+			|| sourceCode.getAncestors(block).some(node => node.type === 'Atrule' && normalizeCssIdentifier(node.name) === 'starting-style')
 		) {
 			return;
 		}

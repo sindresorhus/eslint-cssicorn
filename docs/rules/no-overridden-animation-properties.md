@@ -71,6 +71,7 @@ See [CSS animation composition](https://www.w3.org/TR/css-animations-2/#animatio
 - Active interval boundaries are rounded to the nearest millisecond. Shorter overlaps may be missed.
 - Default replacement without explicit `animation-composition` is not reported. The `animation` shorthand does not reset an explicit composition.
 - Paused animations, non-document timelines, fill-only overlap, and blocks containing `all`, `animation-delay-start`, `animation-delay-end`, or `animation-trigger` are skipped.
+- Animation declarations inside `@starting-style` are skipped because they only establish transition starting values and do not start animations.
 - Definitions containing non-important keyframe-level `animation-composition` are skipped. Important keyframe declarations are ignored, as they are by browsers.
 - Custom properties, unknown properties, and non-animatable properties are ignored. A candidate property is skipped if a relevant keyframe declaration has a substitution, CSS-wide value, malformed value, or unsupported syntax. Unresolved animation controls, including timing calculations, also prevent comparison.
 
