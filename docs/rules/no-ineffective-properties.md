@@ -141,6 +141,34 @@ a {
 }
 ```
 
+```css
+/* ❌ */
+.card {
+	mask-border-source: none;
+	mask-border-slice: 25 fill;
+}
+
+/* ✅ */
+.card {
+	mask-border-source: url("mask.png");
+	mask-border-slice: 25 fill;
+}
+```
+
+```css
+/* ❌ */
+.card {
+	view-transition-name: none;
+	view-transition-class: card;
+}
+
+/* ✅ */
+.card {
+	view-transition-name: card;
+	view-transition-class: card;
+}
+```
+
 ## Checks
 
 The rule reports:
@@ -153,9 +181,11 @@ The rule reports:
 - `shape-outside`, `shape-margin`, and `shape-image-threshold` on known ordinary flex or grid items selected by a nested child selector.
 - Flex sizing, grid placement, `order`, and `align-self` on known children of an ordinary flow container, such as `display: block`, `flow-root`, or `inline-block`, selected by a nested child selector.
 - `z-index` other than `auto` with explicit `position: static` on known children of an ordinary flow container selected by a nested child selector. Static flex and grid items are allowed.
+- `justify-self` and `place-self` on explicitly inline-level children of a known ordinary flow container selected by a nested child selector.
 - `justify-self`, `place-self`, `vertical-align`, and `column-span: all` on floated children of a known ordinary flow container selected by a nested child selector.
 - `columns`, `column-count`, `column-width`, `column-fill`, `column-height`, and `column-wrap` with flex, grid, or table display. Table cells and captions can still contain columns.
 - `align-content` on a flex container with `nowrap` in `flex-wrap` or `flex-flow`, including the implicit `nowrap` in direction-only shorthands such as `flex-flow: column`. Use `align-items` or wrapping instead.
+- `justify-content` on table boxes. Table cells and captions can still use it with multicolumn layout.
 - `gap`, `row-gap`, and `column-gap` on table boxes. Use `border-spacing` for spacing between cells.
 - Cross-axis gaps on explicitly single-line flex containers with a known direction: `row-gap` for rows and `column-gap` for columns. Main-axis gaps and the `gap` shorthand are allowed.
 - Physical and logical insets with `position: static`.
@@ -171,6 +201,8 @@ The rule reports:
 - `outline-color`, `outline-width`, and `outline-offset` with `outline-style: none`.
 - `column-rule-color` with `column-rule-style: none`. Column rule width is allowed because it can affect crossing gap decorations.
 - Related image controls, such as position, size, repeat, slice, and compositing, when `background-image`, `border-image-source`, or `mask-image` is `none`.
+- `mask-border-mode`, `mask-border-slice`, `mask-border-width`, `mask-border-outset`, and `mask-border-repeat` with `mask-border-source: none`.
+- `view-transition-class` with `view-transition-name: none`.
 - Non-`normal` background blending with `background-image: none`.
 - `scroll-snap-stop: always` with `scroll-snap-align: none` or `none none`. Mixed values such as `none start` are allowed because they still define a snap position on one axis.
 - Related animation or transition controls with `animation-name: none` or `transition-property: none`.
@@ -241,7 +273,7 @@ Grid placement requires a grid parent:
 }
 ```
 
-Flex sizing requires a flex parent, even if the item itself has flex display. An explicit ordinary flow parent, such as `display: block`, `flow-root`, or `inline-block`, also makes flex sizing, grid placement, `order`, and `align-self` ineffective on its ordinary direct children. `justify-self` and `place-self` are allowed on non-floating flow items. Floats and clearance are also allowed in flow layout.
+Flex sizing requires a flex parent, even if the item itself has flex display. An explicit ordinary flow parent, such as `display: block`, `flow-root`, or `inline-block`, also makes flex sizing, grid placement, `order`, and `align-self` ineffective on its ordinary direct children. `justify-self` and `place-self` are allowed on non-floating block-level flow items. Floats and clearance are also allowed in flow layout.
 
 ```css
 /* ❌ */
@@ -264,6 +296,32 @@ Flex sizing requires a flex parent, even if the item itself has flex display. An
 	}
 }
 ```
+
+Inline-level boxes in ordinary flow cannot use `justify-self` or `place-self`. Changing the box to a block-level box enables inline-axis self-alignment:
+
+```css
+/* ❌ */
+.container {
+	display: block;
+
+	> .item {
+		display: inline-flex;
+		justify-self: center;
+	}
+}
+
+/* ✅ */
+.container {
+	display: block;
+
+	> .item {
+		display: flex;
+		justify-self: center;
+	}
+}
+```
+
+Inline display on a flex or grid item is blockified, so the ordinary flow check does not apply to these items. Absolutely positioned and fixed boxes can also use self-alignment.
 
 Shape controls require a float or an initial-letter box. An ordinary flex or grid item is neither, and adding `float` does not change this because flex and grid items ignore it:
 
@@ -324,6 +382,22 @@ Table boxes use `border-spacing` instead of gaps between cells:
 .table {
 	display: table;
 	border-spacing: 1rem;
+}
+```
+
+`justify-content` aligns items or columns inside flex, grid, or multicolumn containers. It cannot align a table's cells:
+
+```css
+/* ❌ */
+.layout {
+	display: table;
+	justify-content: center;
+}
+
+/* ✅ */
+.layout {
+	display: grid;
+	justify-content: center;
 }
 ```
 

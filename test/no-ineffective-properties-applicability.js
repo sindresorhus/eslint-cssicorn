@@ -11,6 +11,7 @@ const anchorPlacementProperties = [
 	['position-try-order', 'most-height'],
 	['position-visibility', 'no-overflow'],
 ];
+const maskBorderProperties = [['mask-border-mode', 'luminance'], ['mask-border-slice', '25 fill'], ['mask-border-width', '2'], ['mask-border-outset', '3px'], ['mask-border-repeat', 'round']];
 const shapeProperties = [['shape-outside', 'circle()'], ['shape-margin', '8px'], ['shape-image-threshold', '0.5']];
 const tableMulticolProperties = [['columns', '12rem 2'], ['column-count', '3'], ['column-width', '12rem'], ['column-fill', 'balance'], ['column-height', '20rem'], ['column-wrap', 'wrap']];
 
@@ -468,6 +469,118 @@ test({
 		{
 			code: 'a { @supports (shape-outside: circle()) { shape-outside: circle(); shape-image-threshold: 0.5; } }',
 			errors: [{messageId: 'no-ineffective-properties/non-image-shape'}],
+		},
+	],
+});
+
+test({
+	valid: [
+		...['flex', 'grid', 'block', 'table-cell', 'table-caption'].map(display => `a { display: ${display}; justify-content: center; }`),
+		'a { display: table-cell; columns: 2; justify-content: center; }',
+		'a { display: table; align-content: baseline; place-content: baseline; }',
+		'a { display: table; justify-items: center; }',
+		'a { display: table; justify-content: inherit; }',
+		'a { display: table; justify-content: var(--alignment); }',
+		'a { display: table; display: flex; justify-content: center; }',
+		'a { display: var(--display); justify-content: center; }',
+		'a { all: unset; display: table; justify-content: center; }',
+		'a { display: table; > .item { justify-content: center; } }',
+	],
+	invalid: [
+		...['table', 'inline-table', 'block table', 'inline table'].map(display => ({
+			code: `a { display: ${display}; justify-content: space-between; }`,
+			errors: [{messageId: 'no-ineffective-properties/table-justify-content'}],
+		})),
+		{
+			code: '@supports (display: table) { a { DISPLAY: TABLE; JUSTIFY-CONTENT: /* alignment */ CENTER !important; } }',
+			errors: [{messageId: 'no-ineffective-properties/table-justify-content'}],
+		},
+	],
+});
+
+test({
+	valid: [
+		...['justify-self', 'place-self'].flatMap(property => ['block', 'flex', 'grid', 'table'].map(display => `a { display: block; > .item { display: ${display}; ${property}: center; } }`)),
+		'a { display: grid; > .item { display: inline-flex; justify-self: center; place-self: center; } }',
+		'a { display: flex; > .item { display: inline-flex; place-self: center; } }',
+		...['absolute', 'fixed', 'var(--position)'].map(position => `a { display: block; > .item { display: inline-flex; position: ${position}; justify-self: center; place-self: center; } }`),
+		'a { display: block; > .item { display: var(--display); justify-self: center; } }',
+		'a { display: block; > .item { display: inline; display: block; justify-self: center; } }',
+		'a { display: block; > .item { display: inline-flex; justify-self: inherit; place-self: var(--alignment); } }',
+		'a { display: block; > .item { all: unset; display: inline; justify-self: center; } }',
+		'a { display: block; .item { display: inline; justify-self: center; } }',
+		'a { display: block; @media (width > 1px) { > .item { display: inline; justify-self: center; } } }',
+		'a { display: inline; justify-self: center; }',
+	],
+	invalid: [
+		...['justify-self', 'place-self'].flatMap(property => ['inline', 'inline-block', 'inline-flex', 'inline-grid', 'inline-table', 'flow inline', 'inline list-item'].map(display => ({
+			code: `a { display: block; > .item { display: ${display}; ${property}: center; } }`,
+			errors: [{messageId: 'no-ineffective-properties/inline-flow-item', data: {property}}],
+		}))),
+		{
+			code: '@media (width > 1px) { a { DISPLAY: FLOW-ROOT; &:hover > .item { DISPLAY: INLINE-FLEX; PLACE-SELF: /* alignment */ CENTER !important; } } }',
+			errors: [{messageId: 'no-ineffective-properties/inline-flow-item', data: {property: 'place-self'}}],
+		},
+	],
+});
+
+test({
+	valid: [
+		...maskBorderProperties.map(([property, value]) => `a { ${property}: ${value}; }`),
+		...maskBorderProperties.map(([property, value]) => `a { mask-border-source: url("mask.png"); ${property}: ${value}; }`),
+		...[
+			'mask-border-source: url("mask.png")',
+			'mask-border: url("mask.png") 25 fill',
+			'mask: url("mask.png")',
+			'-webkit-mask-box-image-source: url("mask.png")',
+			'-webkit-mask-box-image: url("mask.png")',
+			'-webkit-mask: url("mask.png")',
+		].map(control => `a { mask-border-source: none; ${control}; mask-border-width: 2; }`),
+		'a { -webkit-mask-box-image-source: none; mask-border-width: 2; }',
+		...['inherit', 'var(--image)', 'none none'].map(source => `a { mask-border-source: ${source}; mask-border-repeat: round; }`),
+		...maskBorderProperties.map(([property]) => `a { mask-border-source: none; ${property}: inherit; }`),
+		...maskBorderProperties.map(([property]) => `a { mask-border-source: none; ${property}: var(--value); }`),
+		'a { all: unset; mask-border-source: none; mask-border-width: 2; }',
+		'a { mask-border-source: none; > .item { mask-border-width: 2; } }',
+		'@keyframes mask { to { mask-border-source: none; mask-border-width: 2; } }',
+		':export { mask-border-source: none; mask-border-width: 2; }',
+	],
+	invalid: [
+		...maskBorderProperties.map(([property, value]) => ({
+			code: `a { mask-border-source: none; ${property}: ${value}; }`,
+			errors: [{messageId: 'no-ineffective-properties/mask-border', data: {property}}],
+		})),
+		{
+			code: 'a { MASK-BORDER-SOURCE: /* disabled */ NONE; MASK-BORDER-SLICE: 25 FILL !important; }',
+			errors: [{messageId: 'no-ineffective-properties/mask-border'}],
+		},
+		{
+			code: 'a { @supports (mask-border-source: none) { mask-border-source: none; mask-image: url("mask.png"); mask-border-repeat: round; } }',
+			errors: [{messageId: 'no-ineffective-properties/mask-border'}],
+		},
+	],
+});
+
+test({
+	valid: [
+		'a { view-transition-class: card; }',
+		...['card', 'match-element', 'auto'].map(name => `a { view-transition-name: ${name}; view-transition-class: card; }`),
+		'a { view-transition-name: none; view-transition-name: card; view-transition-class: card; }',
+		...['inherit', 'var(--name)', 'none none'].map(name => `a { view-transition-name: ${name}; view-transition-class: card; }`),
+		...['inherit', 'var(--class)'].map(value => `a { view-transition-name: none; view-transition-class: ${value}; }`),
+		'a { all: unset; view-transition-name: none; view-transition-class: card; }',
+		'a { view-transition-name: none; > .item { view-transition-class: card; } }',
+		'@keyframes transition { to { view-transition-name: none; view-transition-class: card; } }',
+		':export { view-transition-name: none; view-transition-class: card; }',
+	],
+	invalid: [
+		...['card', 'card selected', 'none'].map(value => ({
+			code: `a { view-transition-name: none; view-transition-class: ${value}; }`,
+			errors: [{messageId: 'no-ineffective-properties/view-transition'}],
+		})),
+		{
+			code: 'a { @media (width > 1px) { VIEW-TRANSITION-NAME: /* disabled */ NONE; VIEW-TRANSITION-CLASS: card !important; } }',
+			errors: [{messageId: 'no-ineffective-properties/view-transition'}],
 		},
 	],
 });

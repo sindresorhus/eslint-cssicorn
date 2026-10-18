@@ -23,6 +23,7 @@ const MESSAGE_ID_VERTICAL_ALIGN = 'no-ineffective-properties/vertical-align';
 const MESSAGE_ID_FLEX_ITEM = 'no-ineffective-properties/flex-item';
 const MESSAGE_ID_GRID_ITEM = 'no-ineffective-properties/grid-item';
 const MESSAGE_ID_FLOW_ITEM = 'no-ineffective-properties/flow-item';
+const MESSAGE_ID_INLINE_FLOW_ITEM = 'no-ineffective-properties/inline-flow-item';
 const MESSAGE_ID_FLOATED_ITEM = 'no-ineffective-properties/floated-item';
 const MESSAGE_ID_NOWRAP = 'no-ineffective-properties/nowrap';
 const MESSAGE_ID_STATIC = 'no-ineffective-properties/static';
@@ -36,6 +37,7 @@ const MESSAGE_ID_TEXT_OVERFLOW_DISPLAY = 'no-ineffective-properties/text-overflo
 const MESSAGE_ID_TABLE_SPACING = 'no-ineffective-properties/table-spacing';
 const MESSAGE_ID_TABLE_PADDING = 'no-ineffective-properties/table-padding';
 const MESSAGE_ID_TABLE_GAP = 'no-ineffective-properties/table-gap';
+const MESSAGE_ID_TABLE_JUSTIFY_CONTENT = 'no-ineffective-properties/table-justify-content';
 const MESSAGE_ID_FLEX_GAP = 'no-ineffective-properties/flex-gap';
 const MESSAGE_ID_CLEAR = 'no-ineffective-properties/clear';
 const MESSAGE_ID_PERSPECTIVE = 'no-ineffective-properties/perspective';
@@ -50,10 +52,12 @@ const MESSAGE_ID_SCROLL_SNAP_STOP = 'no-ineffective-properties/scroll-snap-stop'
 const MESSAGE_ID_BACKGROUND_IMAGE = 'no-ineffective-properties/background-image';
 const MESSAGE_ID_BORDER_IMAGE = 'no-ineffective-properties/border-image';
 const MESSAGE_ID_MASK_IMAGE = 'no-ineffective-properties/mask-image';
+const MESSAGE_ID_MASK_BORDER = 'no-ineffective-properties/mask-border';
 const MESSAGE_ID_ANIMATION = 'no-ineffective-properties/animation';
 const MESSAGE_ID_TRANSITION = 'no-ineffective-properties/transition';
 const MESSAGE_ID_SCROLL_TIMELINE = 'no-ineffective-properties/scroll-timeline';
 const MESSAGE_ID_VIEW_TIMELINE = 'no-ineffective-properties/view-timeline';
+const MESSAGE_ID_VIEW_TRANSITION = 'no-ineffective-properties/view-transition';
 const MESSAGE_ID_OMITTED_SHORTHAND_COMPONENT = 'no-ineffective-properties/omitted-shorthand-component';
 const messages = {
 	[MESSAGE_ID_DISPLAY]: '`{{property}}` has no effect with `display: {{display}}`. It requires a {{layout}} container.',
@@ -61,6 +65,7 @@ const messages = {
 	[MESSAGE_ID_FLEX_ITEM]: '`{{property}}` has no effect on a flex item.',
 	[MESSAGE_ID_GRID_ITEM]: '`{{property}}` has no effect on a grid item.',
 	[MESSAGE_ID_FLOW_ITEM]: '`{{property}}` has no effect on an ordinary flow item.',
+	[MESSAGE_ID_INLINE_FLOW_ITEM]: '`{{property}}` has no effect on an inline-level box in ordinary flow.',
 	[MESSAGE_ID_FLOATED_ITEM]: '`{{property}}` has no effect on a floated item.',
 	[MESSAGE_ID_NOWRAP]: '`align-content` has no effect on a flex container with `nowrap`. Consider `align-items` or enabling wrapping.',
 	[MESSAGE_ID_STATIC]: '`{{property}}` has no effect with `position: static`. Insets require a positioned element.',
@@ -73,6 +78,7 @@ const messages = {
 	[MESSAGE_ID_TEXT_OVERFLOW_DISPLAY]: '`text-overflow: {{value}}` has no effect with `display: {{display}}`. Apply it to a block container holding the text.',
 	[MESSAGE_ID_TABLE_SPACING]: '`border-spacing` has no effect on this table with `border-collapse: collapse`. Use `border-collapse: separate` for spacing between cells.',
 	[MESSAGE_ID_TABLE_GAP]: '`{{property}}` has no effect on a table box. Use `border-spacing` for spacing between cells.',
+	[MESSAGE_ID_TABLE_JUSTIFY_CONTENT]: '`justify-content` has no effect on a table box. It requires a flex, grid, or multicol container.',
 	[MESSAGE_ID_FLEX_GAP]: '`{{property}}` has no effect between flex lines with `nowrap`. Enable wrapping to use this gap.',
 	[MESSAGE_ID_TABLE_PADDING]: '`{{property}}` has no effect on this table with `border-collapse: collapse`. Apply padding to table cells or use separate borders.',
 	[MESSAGE_ID_CLEAR]: '`clear: {{value}}` has no effect with `position: {{position}}`. Absolutely positioned elements do not participate in normal flow.',
@@ -88,10 +94,12 @@ const messages = {
 	[MESSAGE_ID_BACKGROUND_IMAGE]: '`{{property}}` has no effect with `background-image: none`. Set a background image to use this property.',
 	[MESSAGE_ID_BORDER_IMAGE]: '`{{property}}` has no effect with `border-image-source: none`. Set a border image to use this property.',
 	[MESSAGE_ID_MASK_IMAGE]: '`{{property}}` has no effect with `mask-image: none`. Set a mask image to use this property.',
+	[MESSAGE_ID_MASK_BORDER]: '`{{property}}` has no effect with `mask-border-source: none`. Set a mask border image to use this property.',
 	[MESSAGE_ID_ANIMATION]: '`{{property}}` has no effect with `animation-name: none`. Set an animation name to use this property.',
 	[MESSAGE_ID_TRANSITION]: '`{{property}}` has no effect with `transition-property: none`. Select at least one property to transition.',
 	[MESSAGE_ID_SCROLL_TIMELINE]: '`{{property}}` has no effect with `scroll-timeline-name: none`. Name a scroll timeline to use this property.',
 	[MESSAGE_ID_VIEW_TIMELINE]: '`{{property}}` has no effect with `view-timeline-name: none`. Name a view timeline to use this property.',
+	[MESSAGE_ID_VIEW_TRANSITION]: '`view-transition-class` has no effect with `view-transition-name: none`. Assign a transition name to use this class.',
 	[MESSAGE_ID_OMITTED_SHORTHAND_COMPONENT]: '`{{property}}` omits {{component}}, which defaults to `none`.',
 };
 
@@ -103,6 +111,7 @@ const flexSizingProperties = new Set(['flex', 'flex-basis', 'flex-grow', 'flex-s
 const flowItemProperties = new Set([...flexSizingProperties, ...gridPlacementProperties, 'order', 'align-self']);
 const shapeProperties = new Set(['shape-outside', 'shape-margin', 'shape-image-threshold']);
 const itemProperties = new Set([...flexItemProperties, ...flowItemProperties, ...shapeProperties, 'place-self', 'float', 'clear', 'column-span', 'z-index']);
+const inlineDisplayKeywords = new Set(['inline', 'inline-block', 'inline-flex', 'inline-grid', 'inline-table']);
 const flowDisplayKeywords = new Set(['block', 'inline', 'flow', 'flow-root', 'list-item']);
 const blockDisplayKeywords = new Set(['block', 'flow', 'flow-root', 'flex', 'grid', 'table', 'list-item', 'table-caption']);
 const insetProperties = new Set(['top', 'right', 'bottom', 'left', 'inset', 'inset-block', 'inset-inline', 'inset-block-start', 'inset-block-end', 'inset-inline-start', 'inset-inline-end']);
@@ -158,6 +167,11 @@ const inactivePropertyGroups = [
 		messageId: MESSAGE_ID_MASK_IMAGE,
 	},
 	{
+		properties: ['mask-border-mode', 'mask-border-slice', 'mask-border-width', 'mask-border-outset', 'mask-border-repeat'],
+		controllingProperties: ['mask-border-source', 'mask-border', 'mask', '-webkit-mask-box-image-source', '-webkit-mask-box-image', '-webkit-mask'],
+		messageId: MESSAGE_ID_MASK_BORDER,
+	},
+	{
 		properties: [
 			'animation-duration',
 			'animation-delay',
@@ -182,6 +196,7 @@ const inactivePropertyGroups = [
 	},
 	{properties: ['scroll-timeline-axis'], controllingProperties: ['scroll-timeline-name', 'scroll-timeline'], messageId: MESSAGE_ID_SCROLL_TIMELINE},
 	{properties: ['view-timeline-axis', 'view-timeline-inset'], controllingProperties: ['view-timeline-name', 'view-timeline'], messageId: MESSAGE_ID_VIEW_TIMELINE},
+	{properties: ['view-transition-class'], controllingProperties: ['view-transition-name'], messageId: MESSAGE_ID_VIEW_TRANSITION},
 ];
 const floatValues = new Set(['left', 'right', 'inline-start', 'inline-end']);
 const clearValues = new Set([...floatValues, 'both']);
@@ -234,6 +249,7 @@ const targetProperties = new Set([
 	...shorthandProperties,
 	...inactivePropertyGroups.flatMap(({properties}) => properties),
 	'align-content',
+	'justify-content',
 	'vertical-align',
 	'scroll-snap-stop',
 	'text-overflow',
@@ -389,24 +405,40 @@ const getItemLayout = (block, declarationsByProperty, {position, hasVisibleDispl
 };
 
 /**
+Get the problem for a property that cannot affect an ordinary flow item.
+
+@param {DeclarationPlain} node
+@param {string} property
+@param {string | undefined} keyword
+@param {{float: string | undefined, display: string | undefined}} item
+*/
+const getFlowItemProblem = (node, property, keyword, {float, display}) => {
+	if (floatValues.has(float) && (['justify-self', 'place-self', 'vertical-align'].includes(property) || (property === 'column-span' && keyword === 'all'))) {
+		return {node, messageId: MESSAGE_ID_FLOATED_ITEM, data: {property}};
+	}
+
+	if (['justify-self', 'place-self'].includes(property) && display?.split(' ').some(keyword => inlineDisplayKeywords.has(keyword))) {
+		return {node, messageId: MESSAGE_ID_INLINE_FLOW_ITEM, data: {property}};
+	}
+
+	return flowItemProperties.has(property) ? {node, messageId: MESSAGE_ID_FLOW_ITEM, data: {property}} : undefined;
+};
+
+/**
 Get the problem for a property that cannot affect an ordinary item in its known parent layout.
 
 @param {DeclarationPlain} node
 @param {string} property
 @param {string | undefined} keyword
-@param {{layout: 'flex' | 'grid' | 'flow' | undefined, float: string | undefined}} item
+@param {{layout: 'flex' | 'grid' | 'flow' | undefined, float: string | undefined, display: string | undefined}} item
 */
-const getItemProblem = (node, property, keyword, {layout, float}) => {
+const getItemProblem = (node, property, keyword, {layout, float, display}) => {
 	if (layout === undefined) {
 		return;
 	}
 
 	if (layout === 'flow') {
-		if (floatValues.has(float) && (['justify-self', 'place-self', 'vertical-align'].includes(property) || (property === 'column-span' && keyword === 'all'))) {
-			return {node, messageId: MESSAGE_ID_FLOATED_ITEM, data: {property}};
-		}
-
-		return flowItemProperties.has(property) ? {node, messageId: MESSAGE_ID_FLOW_ITEM, data: {property}} : undefined;
+		return getFlowItemProblem(node, property, keyword, {float, display});
 	}
 
 	const ineffectiveProperties = layout === 'flex' ? flexItemProperties : flexSizingProperties;
@@ -610,7 +642,7 @@ const getDeclarationProblem = (node, property, controls, itemLayout) => {
 		return {node, messageId: MESSAGE_ID_Z_INDEX};
 	}
 
-	const itemProblem = getItemProblem(node, property, keyword, {layout: itemLayout, float: controls.float});
+	const itemProblem = getItemProblem(node, property, keyword, {layout: itemLayout, float: controls.float, display: controls.display});
 	if (itemProblem) {
 		return itemProblem;
 	}
@@ -650,20 +682,22 @@ const getDeclarationProblem = (node, property, controls, itemLayout) => {
 };
 
 /**
-Get the gap properties disabled by an explicit table layout or single-line flex layout.
+Get the properties disabled by an explicit table layout or single-line flex layout.
 
 @param {Map<string, {node: DeclarationPlain, property: string}[]>} declarationsByProperty
 @param {CSSSourceCode} sourceCode
 @param {{isTable: boolean, hasNowrap: boolean}} layout
 @returns {Map<string, string>}
 */
-const getInactiveLayoutGaps = (declarationsByProperty, sourceCode, {isTable, hasNowrap}) => {
+const getInactiveLayoutProperties = (declarationsByProperty, sourceCode, {isTable, hasNowrap}) => {
 	const inactiveProperties = new Map();
 
 	if (isTable) {
 		for (const property of gapProperties) {
 			inactiveProperties.set(property, MESSAGE_ID_TABLE_GAP);
 		}
+
+		inactiveProperties.set('justify-content', MESSAGE_ID_TABLE_JUSTIFY_CONTENT);
 	}
 
 	if (hasNowrap) {
@@ -700,7 +734,7 @@ const getBlockControls = (declarationsByProperty, sourceCode) => {
 	/**
 	@type {Map<string, string>}
 	*/
-	const inactiveProperties = getInactiveLayoutGaps(declarationsByProperty, sourceCode, {isTable, hasNowrap});
+	const inactiveProperties = getInactiveLayoutProperties(declarationsByProperty, sourceCode, {isTable, hasNowrap});
 	for (const {properties, controllingProperties, messageId} of inactivePropertyGroups) {
 		if (!declarationsByProperty.has(controllingProperties[0]) || getControllingValue(declarationsByProperty, controllingProperties, sourceCode) !== 'none') {
 			continue;
