@@ -26,6 +26,7 @@ const MESSAGE_ID_FLOW_ITEM = 'no-ineffective-properties/flow-item';
 const MESSAGE_ID_INLINE_FLOW_ITEM = 'no-ineffective-properties/inline-flow-item';
 const MESSAGE_ID_FLOATED_ITEM = 'no-ineffective-properties/floated-item';
 const MESSAGE_ID_NOWRAP = 'no-ineffective-properties/nowrap';
+const MESSAGE_ID_FLEX_LINE_COUNT = 'no-ineffective-properties/flex-line-count';
 const MESSAGE_ID_STATIC = 'no-ineffective-properties/static';
 const MESSAGE_ID_Z_INDEX = 'no-ineffective-properties/z-index';
 const MESSAGE_ID_POSITION = 'no-ineffective-properties/position';
@@ -69,6 +70,7 @@ const messages = {
 	[MESSAGE_ID_INLINE_FLOW_ITEM]: '`{{property}}` has no effect on an inline-level box in ordinary flow.',
 	[MESSAGE_ID_FLOATED_ITEM]: '`{{property}}` has no effect on a floated item.',
 	[MESSAGE_ID_NOWRAP]: '`align-content` has no effect on a flex container with `nowrap`. Consider `align-items` or enabling wrapping.',
+	[MESSAGE_ID_FLEX_LINE_COUNT]: '`flex-line-count` has no effect on a flex container with `nowrap`. Enable wrapping to control the line count.',
 	[MESSAGE_ID_STATIC]: '`{{property}}` has no effect with `position: static`. Insets require a positioned element.',
 	[MESSAGE_ID_Z_INDEX]: '`z-index` has no effect on an ordinary flow item with `position: static`. It requires a positioned element or a flex or grid item.',
 	[MESSAGE_ID_POSITION]: '`{{property}}` has no effect with `position: {{position}}`. It requires an in-flow box.',
@@ -105,7 +107,7 @@ const messages = {
 	[MESSAGE_ID_OMITTED_SHORTHAND_COMPONENT]: '`{{property}}` omits {{component}}, which defaults to `none`.',
 };
 
-const flexProperties = new Set(['flex-direction', 'flex-wrap', 'flex-flow']);
+const flexProperties = new Set(['flex-direction', 'flex-wrap', 'flex-flow', 'flex-line-count']);
 const gridProperties = new Set(['grid', 'grid-template', 'grid-template-columns', 'grid-template-rows', 'grid-template-areas', 'grid-auto-columns', 'grid-auto-rows', 'grid-auto-flow']);
 const gridPlacementProperties = new Set(['grid-area', 'grid-row', 'grid-column', 'grid-row-start', 'grid-row-end', 'grid-column-start', 'grid-column-end']);
 const flexItemProperties = new Set(['justify-self', ...gridPlacementProperties]);
@@ -718,6 +720,7 @@ const getInactiveLayoutProperties = (declarationsByProperty, sourceCode, {isTabl
 	}
 
 	if (hasNowrap) {
+		inactiveProperties.set('flex-line-count', MESSAGE_ID_FLEX_LINE_COUNT);
 		const direction = getControllingValue(declarationsByProperty, ['flex-direction', 'flex-flow', '-webkit-flex-direction', '-webkit-flex-flow'], sourceCode);
 		if (direction !== undefined) {
 			const property = direction.split(' ').some(keyword => keyword === 'column' || keyword === 'column-reverse') ? 'column-gap' : 'row-gap';
@@ -743,7 +746,7 @@ const getBlockControls = (declarationsByProperty, sourceCode) => {
 	const isGrid = layout === 'grid';
 	const isTable = hasVisibleDisplay && (display === 'inline-table' || display.split(' ').includes('table'));
 	const wrapping = isFlex ? getControllingValue(declarationsByProperty, ['flex-wrap', 'flex-flow', '-webkit-flex-wrap', '-webkit-flex-flow'], sourceCode) : undefined;
-	const hasNowrap = wrapping !== undefined && wrapping.split(' ').every(keyword => !(keyword === 'wrap' || keyword === 'wrap-reverse'));
+	const hasNowrap = wrapping?.split(' ').includes('nowrap') || ['row', 'row-reverse', 'column', 'column-reverse'].includes(wrapping);
 	const position = getControllingValue(declarationsByProperty, ['position'], sourceCode);
 	const overflow = getControllingValue(declarationsByProperty, overflowProperties, sourceCode);
 	// Only the shorthand establishes both axes without needing writing-mode or computed-value inference.

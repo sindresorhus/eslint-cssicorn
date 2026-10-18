@@ -217,7 +217,7 @@ a {
 
 The rule reports:
 
-- `flex-direction`, `flex-wrap`, `flex-flow`, grid templates and auto-placement, and `table-layout` with an incompatible visible `display` mode.
+- `flex-direction`, `flex-wrap`, `flex-flow`, `flex-line-count`, grid templates and auto-placement, and `table-layout` with an incompatible visible `display` mode.
 - `vertical-align` with an explicitly block-level `display`, such as `block`, `flow-root`, `flex`, `grid`, or `table-caption`. Inline-level modes, including `inline-flex` and `inline-grid`, and table cells are allowed.
 - `justify-self`, `grid-area`, `grid-row`, `grid-column`, `grid-row-start`, `grid-row-end`, `grid-column-start`, and `grid-column-end` on a known ordinary flex item selected by a nested child selector.
 - `flex`, `flex-basis`, `flex-grow`, and `flex-shrink` on a known ordinary grid item selected by a nested child selector.
@@ -229,6 +229,7 @@ The rule reports:
 - `justify-self`, `place-self`, `vertical-align`, and `column-span: all` on floated children of a known ordinary flow container selected by a nested child selector.
 - `columns`, `column-count`, `column-width`, `column-fill`, `column-height`, and `column-wrap` with flex, grid, or table display. Table cells and captions can still contain columns.
 - `align-content` on a flex container with `nowrap` in `flex-wrap` or `flex-flow`, including the implicit `nowrap` in direction-only shorthands such as `flex-flow: column`. Use `align-items` or wrapping instead.
+- `flex-line-count` on a flex container with explicit `nowrap`, including direction-only `flex-flow` shorthands. Ordinary wrapping containers are allowed, even without `balance`.
 - `justify-content` on table boxes. Table cells and captions can still use it with multicolumn layout.
 - `gap`, `row-gap`, and `column-gap`, including their `grid-*` aliases, on table boxes. Use `border-spacing` for spacing between cells.
 - Cross-axis gaps on explicitly single-line flex containers with a known direction: `row-gap` for rows and `column-gap` for columns. Main-axis gaps and the `gap` shorthand are allowed.
@@ -470,7 +471,27 @@ Cross-axis flex gaps separate flex lines. A container with `nowrap` has only one
 }
 ```
 
+`balance` enables wrapping, including when `wrap` is omitted in `flex-wrap: balance` or `flex-flow: row balance`. Alignment and cross-axis gaps are allowed in these containers.
+
 The gap check requires explicit direction and wrapping controls. An explicit `flex-wrap: nowrap` also needs an explicit `flex-direction`. The `flex-flow` shorthand supplies omitted defaults, so `flex-flow: column` and `flex-flow: nowrap` establish both controls. The `gap` shorthand is allowed because it can still space items along the main axis.
+
+`flex-line-count` needs a wrapping flex container:
+
+```css
+/* ❌ */
+.cards {
+	display: flex;
+	flex-wrap: nowrap;
+	flex-line-count: 3;
+}
+
+/* ✅ */
+.cards {
+	display: flex;
+	flex-wrap: wrap;
+	flex-line-count: 3;
+}
+```
 
 `column-span: all` cannot make a flex or grid item span columns. Flex and grid containers establish their own formatting contexts, so their items cannot span an outer multicolumn container. A flex or grid container can itself span columns when it participates in ordinary flow layout.
 

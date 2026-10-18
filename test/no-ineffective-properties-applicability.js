@@ -757,3 +757,50 @@ test({
 		},
 	],
 });
+
+test({
+	valid: [
+		'a { display: flex; flex-flow: row balance; grid-row-gap: 1rem; }',
+		...['balance', 'wrap balance', 'wrap-reverse balance'].map(wrapping => `a { display: flex; flex-direction: row; flex-wrap: ${wrapping}; align-content: center; row-gap: 1rem; }`),
+		...[
+			'balance',
+			'row balance',
+			'column balance',
+			'balance row-reverse',
+			'column-reverse wrap balance',
+		].map(flow => `a { display: inline-flex; flex-flow: ${flow}; align-content: center; row-gap: 1rem; column-gap: 2rem; }`),
+	],
+	invalid: [],
+});
+
+test({
+	valid: [
+		'a { flex-line-count: 3; }',
+		...['inline-flex', 'block flex', 'inline flex'].map(display => `a { display: ${display}; flex-wrap: wrap; flex-line-count: 3; }`),
+		...['wrap', 'wrap-reverse', 'balance', 'wrap balance'].map(wrapping => `a { display: flex; flex-wrap: ${wrapping}; flex-line-count: 3; }`),
+		'a { display: flex; flex-flow: column balance; flex-line-count: 3; }',
+		'a { display: flex; flex-wrap: var(--wrap); flex-line-count: 3; }',
+		'a { display: flex; flex-wrap: nowrap; flex-wrap: wrap; flex-line-count: 3; }',
+		'a { display: flex; flex-flow: row; flex-wrap: wrap; flex-line-count: 3; }',
+		'a { display: flex; flex-wrap: nowrap; -webkit-flex-wrap: wrap; flex-line-count: 3; }',
+		'a { display: block; flex-line-count: var(--lines); }',
+		'a { display: flex; flex-wrap: nowrap; flex-line-count: inherit; }',
+		'a { all: unset; display: block; flex-line-count: 3; }',
+		'a { display: var(--display); flex-line-count: 3; }',
+		'a { display: block; display: flex; flex-line-count: 3; }',
+	],
+	invalid: [
+		...['block', 'grid', 'inline-grid', 'table', 'inline'].map(display => ({
+			code: `a { display: ${display}; flex-line-count: 3; }`,
+			errors: [{messageId: 'no-ineffective-properties/display', data: {property: 'flex-line-count', display, layout: 'flex'}}],
+		})),
+		...['nowrap', 'row', 'column', 'row-reverse nowrap'].map(flow => ({
+			code: `a { display: flex; flex-flow: ${flow}; flex-line-count: 3; }`,
+			errors: [{messageId: 'no-ineffective-properties/flex-line-count'}],
+		})),
+		{
+			code: '@supports (display: flex) { a { DISPLAY: INLINE-FLEX; FLEX-WRAP: /* lines */ NOWRAP; FLEX-LINE-COUNT: 3 !important; } }',
+			errors: [{messageId: 'no-ineffective-properties/flex-line-count'}],
+		},
+	],
+});
