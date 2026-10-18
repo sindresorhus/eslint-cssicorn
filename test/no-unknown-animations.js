@@ -48,6 +48,10 @@ test.snapshot({
 				&:hover { animation-name: fade; }
 			}
 		`,
+		':export { animation: token; animation-name: exportedName; }',
+		':export { animation: first 1s, second 2s; }',
+		String.raw`:\65 xport { animation-name: token; }`,
+		':import("./animations.css") { animation: importedName; animation-name: importedAlias; }',
 		'a { animation: none; }',
 		'a { animation-name: none; }',
 		'a { animation-name: inherit; }',
@@ -166,5 +170,16 @@ test.snapshot({
 		'a { animation: globalFade 1s; }',
 		'a { animation: global 1s; }',
 		'a { animation-name: auto; }',
+	],
+});
+
+// Mixed selectors still contain an ordinary style rule.
+test({
+	valid: [],
+	invalid: [
+		{
+			code: ':export, .card { animation-name: missing; }',
+			errors: [{messageId: 'no-unknown-animations', data: {name: 'missing'}, suggestions: 0}],
+		},
 	],
 });

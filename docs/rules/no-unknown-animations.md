@@ -48,6 +48,6 @@ The rule recognizes `@keyframes` and its `-webkit-`, `-moz-`, and `-o-` variants
 ## Limitations
 
 - Leave the rule disabled when keyframes are defined in another stylesheet, which is why it is not in the `recommended` config.
-- Vendor-prefixed animation properties are ignored.
+- Vendor-prefixed animation properties and CSS Modules interop declarations are ignored.
 - Names inside functions such as `var()`, including fallbacks, are ignored, but unambiguous static names outside them are checked.
 - Ambiguous shorthands such as `animation: backwards none --fade` may be missed when the CSS lexer interprets `none` as the name and `--fade` as the timeline.

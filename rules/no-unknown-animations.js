@@ -1,5 +1,5 @@
 import {getAnimationName, getAnimationNameNodes, getKeyframesName} from './shared/css-animations.js';
-import {normalizeCssIdentifier} from './utils/index.js';
+import {isCssModulesInteropDeclaration, normalizeCssIdentifier} from './utils/index.js';
 
 const MESSAGE_ID = 'no-unknown-animations';
 const messages = {
@@ -33,6 +33,7 @@ const create = context => {
 			!animationProperties.has(property)
 			|| declaration.value.type !== 'Value'
 			|| sourceCode.getParent(declaration)?.type !== 'Block'
+			|| isCssModulesInteropDeclaration(declaration, context)
 		) {
 			return;
 		}
