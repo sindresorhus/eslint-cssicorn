@@ -25,7 +25,9 @@ test({
 			'.button:after',
 			'.button:unknown',
 		].map(selector => flat('.button', selector)),
-		...[':hover', '& .icon', '& > .icon', '& + &', '.theme &', ':is(&):hover', '&&:hover', '&::before', '&:before', '&'].map(selector => nested(selector)),
+		...[
+			':hover', '& .icon', '& > .icon', '& + &', '.theme &', ':is(&):hover', '&:is(&)', '&&:hover', '&:hover&', '&::before', '&:before', '&',
+		].map(selector => nested(selector)),
 		flat('.toolbar > .button', '.toolbar .button:hover'),
 		flat('.button', '.button:hover, .link:hover'),
 		flat('.button::before', '.button::before:hover'),
@@ -38,6 +40,7 @@ test({
 		`.button { ${base}; } .button { border-width: 2px; } .button:hover { ${override}; }`,
 		`.button { ${base}; } .button.active { border-width: 2px; } .button.active:hover { ${override}; }`,
 		`.button { ${base}; } .button:hover { border-width: 2px; } .button:hover { ${override}; }`,
+		`.button { ${base}; &:hover { border-width: 2px; } &:hover { ${override}; } }`,
 		`.button { ${base}; } .link { ${base}; } .button:hover, .link:hover { ${override}; }`,
 		...['border-width: 2px', 'border-left-width: 2px', 'border-inline-width: 2px', 'border-image: none', 'all: initial', base].flatMap(extra => [
 			`.button { ${base}; ${extra}; &:hover { ${override}; } }`,
@@ -73,6 +76,7 @@ test({
 			flat('.button', '.button[disabled]'),
 			flat('.button', '.button#active'),
 			flat('.button', '.button:not([disabled])'),
+			flat(String.raw`.button\:large`, String.raw`.button\:large:hover`),
 			flat('.toolbar > .button', '.toolbar > .button:hover'),
 			flat('.button', '.button:hover, .button:focus'),
 			flat('.button, .link', '.button:hover, .link:hover'),
@@ -102,15 +106,31 @@ test({
 			['BORDER: 1px SOLID RED', 'BORDER: 1PX solid blue', 'border-color: blue'],
 			['outline: 1px solid red; outline-offset: 2px', 'outline: 1px solid blue', 'outline-color: blue'],
 			['margin: 1px 2px 3px 4px', 'margin: 1px 2px 3px 5px', 'margin-left: 5px'],
+			['border-width: 1px 2px 3px', 'border-width: 1px 2px 3px 4px', 'border-left-width: 4px'],
+			['gap: 1rem', 'gap: 1rem 2rem', 'column-gap: 2rem'],
+			['grid-area: 1 / 2 / 3 / 4', 'grid-area: 1 / 2 / 3', 'grid-column-end: auto'],
 			['font: 16px/1.5 Arial, serif', 'font: bold 16px/1.5 Arial, serif', 'font-weight: bold'],
 			['font: 16px Arial, serif', 'font: 16px Inter, sans-serif', 'font-family: Inter, sans-serif'],
+			['font: 16px "/* Old Face */"', 'font: 16px "/* New Face */"', 'font-family: "/* New Face */"'],
+			['list-style: none inside', 'list-style: none outside', 'list-style-position: outside'],
 			['background: url(a) center/cover no-repeat red', 'background: url(a) center/cover no-repeat blue', 'background-color: blue'],
+			['background: url(a) left top, url(b) right bottom', 'background: url(a) center, url(b) right bottom', 'background-position: center, right bottom'],
 			['animation: spin 1s, Fade 2s', 'animation: spin 3s, Fade 2s', 'animation-duration: 3s, 2s'],
+			['animation: spin 1s,\r\n    Fade 2s', 'animation: spin 3s,\r\n    Fade 2s', 'animation-duration: 3s,\r\n    2s'],
 			['animation: spin 1s', 'animation: Spin 1s', 'animation-name: Spin'],
 			['transition: opacity 1s ease 2s', 'transition: opacity 3s ease 2s', 'transition-duration: 3s'],
 		].map(([first, second, result]) => {
 			const code = `.button { ${first}; &:hover { ${second}; } }`;
-			return {code, errors: [{messageId: 'prefer-longhand-overrides', suggestions: [{messageId: 'prefer-longhand-overrides/suggestion', output: code.replace(second, () => result)}]}]};
+			return {
+				code,
+				errors: [{
+					messageId: 'prefer-longhand-overrides',
+					suggestions: [{
+						messageId: 'prefer-longhand-overrides/suggestion',
+						output: `.button { ${first}; &:hover { ${result}; } }`,
+					}],
+				}],
+			};
 		}),
 	],
 });

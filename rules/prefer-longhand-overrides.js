@@ -56,12 +56,10 @@ const getSelectors = rule => {
 
 const getSelectorPrefixes = selector => {
 	const nodes = selector.children;
-	let nestingCount = 0;
-	find(selector, node => {
-		nestingCount += Number(node.type === 'NestingSelector');
-		return false;
-	});
-	if (nestingCount > 0 && (nestingCount !== 1 || nodes[0].type !== 'NestingSelector' || nodes.slice(1).some(node => !refinementTypes.has(node.type)))) {
+	if (
+		find(selector, node => node.type === 'NestingSelector' && node !== nodes[0])
+		|| (nodes[0]?.type === 'NestingSelector' && nodes.slice(1).some(node => !refinementTypes.has(node.type)))
+	) {
 		return;
 	}
 
@@ -109,18 +107,14 @@ const getBlockDeclarations = (block, context) => {
 		}
 
 		for (const family of families) {
-			if (!affecting.has(family)) {
-				affecting.set(family, new Set());
-			}
-
-			affecting.get(family).add(declaration);
+			affecting.set(family, (affecting.get(family) ?? 0) + 1);
 		}
 	}
 
 	return {declarations, affecting, hasAll};
 };
 
-const getFamilyDeclaration = (info, property) => !info.hasAll && info.affecting.get(property)?.size === 1 && info.declarations.has(property)
+const getFamilyDeclaration = (info, property) => !info.hasAll && info.affecting.get(property) === 1 && info.declarations.has(property)
 	? info.declarations.get(property)
 	: INVALID_BASELINE;
 
@@ -223,7 +217,7 @@ const getReplacementValue = (slots, declaration, sourceCode) => {
 
 const getProblem = (declaration, baseline, {property, getComponents, context}) => {
 	const {sourceCode} = context;
-	if (!baseline || isImportantDeclaration(baseline) !== isImportantDeclaration(declaration)) {
+	if (isImportantDeclaration(baseline) !== isImportantDeclaration(declaration)) {
 		return;
 	}
 

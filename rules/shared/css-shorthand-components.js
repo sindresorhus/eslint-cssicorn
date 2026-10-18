@@ -311,15 +311,14 @@ export const getShorthandComponents = (declaration, {sourceCode}) => {
 		return;
 	}
 
+	const canonicalByNode = new Map(value.children.map((node, index) => [node, canonicalValue.children[index]]));
+	const getSlot = slotNodes => ({
+		nodes: slotNodes,
+		keys: slotNodes.map(node => getNodeKey(node, canonicalByNode.get(node), wholeMatch)),
+	});
 	const groups = layeredShorthands.has(property) ? getCommaSeparatedGroups(value) : [{nodes: value.children}];
 	const result = new Map();
 	for (const {nodes} of groups) {
-		const canonicalNodes = nodes.map(node => getCanonicalLexerNode(node));
-		const match = sourceCode.lexer.matchProperty(property, {...value, children: canonicalNodes});
-		if (!match.matched) {
-			return;
-		}
-
 		if (property === 'animation' && nodes.some(node => node.type === 'Identifier' && normalizeCssIdentifier(node.name) === 'auto')) {
 			return;
 		}
@@ -328,12 +327,11 @@ export const getShorthandComponents = (declaration, {sourceCode}) => {
 			return;
 		}
 
-		const canonicalByNode = new Map(nodes.map((node, index) => [node, canonicalNodes[index]]));
-		const getSlot = slotNodes => ({
-			nodes: slotNodes,
-			keys: slotNodes.map(node => getNodeKey(node, canonicalByNode.get(node), match)),
+		const components = getGroupComponents(property, nodes, {
+			getSlot,
+			match: wholeMatch,
+			canonicalNodes: nodes.map(node => canonicalByNode.get(node)),
 		});
-		const components = getGroupComponents(property, nodes, {getSlot, match, canonicalNodes});
 		if (!components) {
 			return;
 		}
@@ -363,7 +361,7 @@ const areEqualSlots = (first, second) => {
 };
 
 /**
-Get the sole differing component when every target slot has an explicit replacement.
+Get the sole differing component when every target slot has a concrete replacement, including copied values and dependent defaults.
 */
 export const getChangedShorthandComponent = (baseComponents, targetComponents) => {
 	if (!baseComponents || !targetComponents || baseComponents.size !== targetComponents.size) {

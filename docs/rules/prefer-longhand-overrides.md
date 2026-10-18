@@ -121,7 +121,7 @@ The rule compares an override with one earlier base declaration of the same shor
 
 Conditional and layer boundaries are not crossed. Rules inside the same `@media`, `@supports`, `@container`, `@layer`, or `@scope` block can still be compared.
 
-Only one component may differ. The replacement component must be explicit in the override, and comma-separated shorthands must have the same number of items. Other components are compared structurally without evaluating calculations or converting equivalent colors and units. Recognized keywords are ASCII case-insensitive; custom names remain case-sensitive.
+Only one component may differ. The replacement must come from the override's explicit values or the shorthand's defined copying and dependent default rules. Independently omitted components are not filled with initial values. Comma-separated shorthands must have the same number of items. Other components are compared structurally without evaluating calculations or converting equivalent colors and units. Recognized keywords are ASCII case-insensitive; custom names remain case-sensitive.
 
 ## Limitations
 
