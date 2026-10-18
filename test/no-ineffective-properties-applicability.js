@@ -16,6 +16,62 @@ const shapeProperties = [['shape-outside', 'circle()'], ['shape-margin', '8px'],
 const tableMulticolProperties = [['columns', '12rem 2'], ['column-count', '3'], ['column-width', '12rem'], ['column-fill', 'balance'], ['column-height', '20rem'], ['column-wrap', 'wrap']];
 const breakProperties = [['break-before', 'page'], ['break-after', 'column'], ['break-inside', 'avoid'], ['page-break-before', 'always'], ['page-break-after', 'left'], ['page-break-inside', 'avoid']];
 const decorationProperties = [['text-decoration-color', 'blue'], ['text-decoration-style', 'dashed'], ['text-decoration-thickness', '3px'], ['text-decoration-inset', '2px']];
+const backgroundRepeatProperties = ['background-repeat-x', 'background-repeat-y', 'background-repeat-block', 'background-repeat-inline'];
+const animationDelayProperties = ['animation-delay-start', 'animation-delay-end'];
+
+test({
+	valid: [
+		...backgroundRepeatProperties.map(property => `a { background-image: url("image.svg"); ${property}: no-repeat; }`),
+		...backgroundRepeatProperties.map(property => `a { ${property}: no-repeat; }`),
+		...['background-position-inline', 'background-position-block'].map(property => `a { background-image: url("image.svg"); ${property}: 20%; }`),
+		'a { background-image: none; background: url("image.svg"); background-repeat-x: no-repeat; }',
+		'a { background-image: none; background-tbd: url("image.svg"); background-size: cover; background-repeat-inline: no-repeat; }',
+		'a { background-image: none; background-repeat-y: inherit; background-repeat-inline: var(--repeat); }',
+		'a { background-image: var(--image); background-repeat-block: no-repeat; }',
+		'a { all: unset; background-image: none; background-repeat-inline: no-repeat; }',
+	],
+	invalid: [
+		...backgroundRepeatProperties.map(property => ({
+			code: `a { background-image: none; ${property}: no-repeat; }`,
+			errors: [{messageId: 'no-ineffective-properties/background-image', data: {property}}],
+		})),
+		...['background-position-inline', 'background-position-block'].map(property => ({
+			code: `a { background-image: none; ${property}: 20%; }`,
+			errors: [{messageId: 'no-ineffective-properties/background-image', data: {property}}],
+		})),
+		{
+			code: '@media (width > 1px) { a { BACKGROUND-IMAGE: /* disabled */ NONE; BACKGROUND-REPEAT-INLINE: SPACE !important; } }',
+			errors: [{messageId: 'no-ineffective-properties/background-image'}],
+		},
+	],
+});
+
+test({
+	valid: [
+		...animationDelayProperties.map(property => `a { animation-name: fade; ${property}: 1s; }`),
+		...animationDelayProperties.map(property => `a { ${property}: 1s; }`),
+		'a { animation-name: fade; animation-range-center: target 50%; }',
+		'a { animation-name: none; animation: fade 1s; animation-delay-end: 1s; }',
+		'a { animation-name: none; -webkit-animation-name: fade; animation-delay-start: 1s; }',
+		'a { animation-name: none; animation-delay-start: inherit; animation-delay-end: var(--delay); }',
+		'a { animation-name: var(--name); animation-delay-end: 1s; }',
+		'a { all: unset; animation-name: none; animation-delay-start: 1s; }',
+	],
+	invalid: [
+		...animationDelayProperties.map(property => ({
+			code: `a { animation-name: none; ${property}: 1s; }`,
+			errors: [{messageId: 'no-ineffective-properties/animation', data: {property}}],
+		})),
+		{
+			code: 'a { animation-name: none; animation-range-center: target 50%; }',
+			errors: [{messageId: 'no-ineffective-properties/animation', data: {property: 'animation-range-center'}}],
+		},
+		{
+			code: 'a { @supports (display: grid) { ANIMATION-NAME: /* disabled */ NONE; ANIMATION-DELAY-START: -1s !important; } }',
+			errors: [{messageId: 'no-ineffective-properties/animation'}],
+		},
+	],
+});
 
 test({
 	valid: [
@@ -824,6 +880,7 @@ const timelineTriggerProperties = [
 	['timeline-trigger-active-range', '0% 100%'],
 	['timeline-trigger-active-range-start', 'entry 0%'],
 	['timeline-trigger-active-range-end', 'exit 100%'],
+	['timeline-trigger-range', 'entry 10% exit 80% / entry 0% exit 100%'],
 ];
 const timelineTriggerRangeProperties = timelineTriggerProperties.slice(1);
 

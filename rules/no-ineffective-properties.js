@@ -145,6 +145,7 @@ const gapProperties = new Set(['gap', 'row-gap', 'column-gap', 'grid-gap', 'grid
 const decorationProperties = ['text-decoration-color', 'text-decoration-style', 'text-decoration-thickness', 'text-decoration-inset'];
 const decorationControllingProperties = ['text-decoration-line', 'text-decoration', '-webkit-text-decoration-line', '-webkit-text-decoration'];
 const timelineTriggerRangeProperties = [
+	'timeline-trigger-range',
 	'timeline-trigger-activation-range',
 	'timeline-trigger-activation-range-start',
 	'timeline-trigger-activation-range-end',
@@ -180,8 +181,22 @@ const inactivePropertyGroups = [
 		messageId: MESSAGE_ID_COLUMN_RULE_COLOR,
 	},
 	{
-		properties: ['background-position', 'background-position-x', 'background-position-y', 'background-size', 'background-repeat', 'background-origin', 'background-blend-mode'],
-		controllingProperties: ['background-image', 'background'],
+		properties: [
+			'background-position',
+			'background-position-x',
+			'background-position-y',
+			'background-position-inline',
+			'background-position-block',
+			'background-size',
+			'background-repeat',
+			'background-repeat-x',
+			'background-repeat-y',
+			'background-repeat-block',
+			'background-repeat-inline',
+			'background-origin',
+			'background-blend-mode',
+		],
+		controllingProperties: ['background-image', 'background', 'background-tbd'],
 		messageId: MESSAGE_ID_BACKGROUND_IMAGE,
 	},
 	{
@@ -203,6 +218,8 @@ const inactivePropertyGroups = [
 		properties: [
 			'animation-duration',
 			'animation-delay',
+			'animation-delay-start',
+			'animation-delay-end',
 			'animation-timing-function',
 			'animation-iteration-count',
 			'animation-direction',
@@ -214,6 +231,7 @@ const inactivePropertyGroups = [
 			'animation-range',
 			'animation-range-start',
 			'animation-range-end',
+			'animation-range-center',
 		],
 		controllingProperties: ['animation-name', 'animation', '-webkit-animation-name', '-webkit-animation'],
 		messageId: MESSAGE_ID_ANIMATION,

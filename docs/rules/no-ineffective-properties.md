@@ -46,6 +46,7 @@ a {
 a {
 	background-image: none;
 	background-size: cover;
+	background-repeat-inline: no-repeat;
 	background-blend-mode: multiply;
 }
 
@@ -53,6 +54,7 @@ a {
 a {
 	background-image: url("background.svg");
 	background-size: cover;
+	background-repeat-inline: no-repeat;
 	background-blend-mode: multiply;
 }
 ```
@@ -173,12 +175,16 @@ a {
 /* ❌ */
 .card {
 	animation-name: none;
+	animation-delay-start: 1s;
+	animation-delay-end: 500ms;
 	animation-trigger: --reveal play;
 }
 
 /* ✅ */
 .card {
 	animation-name: reveal;
+	animation-delay-start: 1s;
+	animation-delay-end: 500ms;
 	animation-trigger: --reveal play;
 }
 ```
@@ -218,14 +224,14 @@ a {
 .card {
 	timeline-trigger-name: --reveal;
 	timeline-trigger-source: none;
-	timeline-trigger-active-range: entry 0% exit 100%;
+	timeline-trigger-range: entry 10% exit 80% / entry 0% exit 100%;
 }
 
 /* ✅ */
 .card {
 	timeline-trigger-name: --reveal;
 	timeline-trigger-source: view();
-	timeline-trigger-active-range: entry 0% exit 100%;
+	timeline-trigger-range: entry 10% exit 80% / entry 0% exit 100%;
 }
 ```
 
@@ -264,14 +270,15 @@ The rule reports:
 - `outline-color`, `outline-width`, and `outline-offset` with `outline-style: none`.
 - `column-rule-color` with `column-rule-style: none`. Column rule width is allowed because it can affect crossing gap decorations.
 - Related image controls, such as position, size, repeat, slice, and compositing, when `background-image`, `border-image-source`, or `mask-image` is `none`.
+- `background-position-inline`, `background-position-block`, `background-repeat-x`, `background-repeat-y`, `background-repeat-block`, and `background-repeat-inline` with `background-image: none`.
 - `mask-border-mode`, `mask-border-slice`, `mask-border-width`, `mask-border-outset`, and `mask-border-repeat` with `mask-border-source: none`.
 - `view-transition-class` with `view-transition-name: none`.
 - Non-`normal` background blending with `background-image: none`.
 - `scroll-snap-stop: always` with `scroll-snap-align: none` or `none none`. Mixed values such as `none start` are allowed because they still define a snap position on one axis.
-- Related animation controls, including `animation-trigger`, with `animation-name: none`, and transition controls with `transition-property: none`.
+- Related animation controls, including `animation-delay-start`, `animation-delay-end`, `animation-range-center`, and `animation-trigger`, with `animation-name: none`, and transition controls with `transition-property: none`.
 - Related timeline axis and inset controls with `scroll-timeline-name: none` or `view-timeline-name: none`.
-- `timeline-trigger-source`, `timeline-trigger-activation-range`, and `timeline-trigger-active-range`, including range start and end longhands, with `timeline-trigger-name: none`.
-- `timeline-trigger-activation-range` and `timeline-trigger-active-range`, including range start and end longhands, with `timeline-trigger-source: none`. The trigger name and scope are allowed because they can still define a named trigger.
+- `timeline-trigger-source`, `timeline-trigger-range`, `timeline-trigger-activation-range`, and `timeline-trigger-active-range`, including range start and end longhands, with `timeline-trigger-name: none`.
+- `timeline-trigger-range`, `timeline-trigger-activation-range`, and `timeline-trigger-active-range`, including range start and end longhands, with `timeline-trigger-source: none`. The trigger name and scope are allowed because they can still define a named trigger.
 - Omitted styles in border shorthands, `outline`, `column-rule`, and `text-emphasis`, omitted lines in `text-decoration`, and omitted names in `animation` lists where no item has a name.
 
 Ellipsis needs a block container with clipped inline overflow. `white-space: nowrap` and dimensions are not required.
@@ -716,6 +723,7 @@ Display, disabled effects, and overflow:
 
 - Display checks ignore `display: none` and `display: contents`.
 - A disabled effect needs a single `none` value in the controlling longhand, except that text decoration controls also check `spelling-error` and `grammar-error`, and `shape-image-threshold` also checks basic shapes and shape boxes.
+- The background image checks also treat the draft `background-tbd` image-layer shorthand as a competing controller.
 - The scroll snap check also accepts `scroll-snap-align: none none`. Explicit `scroll-snap-stop: normal` and all-`normal` background blending lists are allowed as resets.
 - Basic shapes and shape boxes must match the CSS grammar. The installed grammar does not currently recognize a single percentage radius such as `circle(50%)`, so that form is skipped.
 - Visible overflow is only detected from the `overflow` shorthand.
