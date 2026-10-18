@@ -91,7 +91,7 @@ test({
 		...['none', 'inherit', 'var(--span)'].map(value => `a { display: flex; > .item { column-span: ${value}; } }`),
 		'a { display: grid; > .item { position: var(--position); column-span: all; } }',
 		'a { display: flex; > .item { display: contents; column-span: all; } }',
-		'a { display: block; > .item { justify-self: center; place-self: center; float: right; clear: both; vertical-align: middle; } }',
+		'a { display: block; > .item { justify-self: center; place-self: center; float: none; clear: both; vertical-align: middle; } }',
 		'a { display: block; > .item { display: flex; flex-direction: column; justify-content: center; align-items: center; } }',
 		'a { display: block; > .item { position: absolute; grid-column: 2; align-self: center; justify-self: center; } }',
 		'a { display: flow-root; > .item { position: fixed; grid-area: header; align-self: end; } }',

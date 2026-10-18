@@ -23,6 +23,7 @@ const MESSAGE_ID_VERTICAL_ALIGN = 'no-ineffective-properties/vertical-align';
 const MESSAGE_ID_FLEX_ITEM = 'no-ineffective-properties/flex-item';
 const MESSAGE_ID_GRID_ITEM = 'no-ineffective-properties/grid-item';
 const MESSAGE_ID_FLOW_ITEM = 'no-ineffective-properties/flow-item';
+const MESSAGE_ID_FLOATED_ITEM = 'no-ineffective-properties/floated-item';
 const MESSAGE_ID_NOWRAP = 'no-ineffective-properties/nowrap';
 const MESSAGE_ID_STATIC = 'no-ineffective-properties/static';
 const MESSAGE_ID_Z_INDEX = 'no-ineffective-properties/z-index';
@@ -40,6 +41,7 @@ const MESSAGE_ID_MOTION = 'no-ineffective-properties/motion';
 const MESSAGE_ID_SHAPE_IMAGE_THRESHOLD = 'no-ineffective-properties/shape-image-threshold';
 const MESSAGE_ID_NON_IMAGE_SHAPE = 'no-ineffective-properties/non-image-shape';
 const MESSAGE_ID_DECORATION = 'no-ineffective-properties/decoration';
+const MESSAGE_ID_OUTLINE = 'no-ineffective-properties/outline';
 const MESSAGE_ID_BACKGROUND_IMAGE = 'no-ineffective-properties/background-image';
 const MESSAGE_ID_BORDER_IMAGE = 'no-ineffective-properties/border-image';
 const MESSAGE_ID_MASK_IMAGE = 'no-ineffective-properties/mask-image';
@@ -54,6 +56,7 @@ const messages = {
 	[MESSAGE_ID_FLEX_ITEM]: '`{{property}}` has no effect on a flex item.',
 	[MESSAGE_ID_GRID_ITEM]: '`{{property}}` has no effect on a grid item.',
 	[MESSAGE_ID_FLOW_ITEM]: '`{{property}}` has no effect on an ordinary flow item.',
+	[MESSAGE_ID_FLOATED_ITEM]: '`{{property}}` has no effect on a floated item.',
 	[MESSAGE_ID_NOWRAP]: '`align-content` has no effect on a flex container with `nowrap`. Consider `align-items` or enabling wrapping.',
 	[MESSAGE_ID_STATIC]: '`{{property}}` has no effect with `position: static`. Insets require a positioned element.',
 	[MESSAGE_ID_Z_INDEX]: '`z-index` has no effect on an ordinary flow item with `position: static`. It requires a positioned element or a flex or grid item.',
@@ -71,6 +74,7 @@ const messages = {
 	[MESSAGE_ID_SHAPE_IMAGE_THRESHOLD]: '`shape-image-threshold` has no effect with `shape-outside: none`. It defines the alpha threshold for an image-based shape.',
 	[MESSAGE_ID_NON_IMAGE_SHAPE]: '`shape-image-threshold` has no effect with a basic shape or shape box. It defines the alpha threshold for an image-based shape.',
 	[MESSAGE_ID_DECORATION]: '`{{property}}` has no effect with `text-decoration-line: none`. Enable a text decoration line on this element.',
+	[MESSAGE_ID_OUTLINE]: '`{{property}}` has no effect with `outline-style: none`. Enable an outline style to use it.',
 	[MESSAGE_ID_BACKGROUND_IMAGE]: '`{{property}}` has no effect with `background-image: none`. Set a background image to use this property.',
 	[MESSAGE_ID_BORDER_IMAGE]: '`{{property}}` has no effect with `border-image-source: none`. Set a border image to use this property.',
 	[MESSAGE_ID_MASK_IMAGE]: '`{{property}}` has no effect with `mask-image: none`. Set a mask image to use this property.',
@@ -87,7 +91,7 @@ const gridPlacementProperties = new Set(['grid-area', 'grid-row', 'grid-column',
 const flexItemProperties = new Set(['justify-self', ...gridPlacementProperties]);
 const flexSizingProperties = new Set(['flex', 'flex-basis', 'flex-grow', 'flex-shrink']);
 const flowItemProperties = new Set([...flexSizingProperties, ...gridPlacementProperties, 'order', 'align-self']);
-const itemProperties = new Set([...flexItemProperties, ...flowItemProperties, 'float', 'clear', 'column-span', 'z-index']);
+const itemProperties = new Set([...flexItemProperties, ...flowItemProperties, 'place-self', 'float', 'clear', 'column-span', 'z-index']);
 const flowDisplayKeywords = new Set(['block', 'inline', 'flow', 'flow-root', 'list-item']);
 const blockDisplayKeywords = new Set(['block', 'flow', 'flow-root', 'flex', 'grid', 'table', 'list-item', 'table-caption']);
 const insetProperties = new Set(['top', 'right', 'bottom', 'left', 'inset', 'inset-block', 'inset-inline', 'inset-block-start', 'inset-block-end', 'inset-inline-start', 'inset-inline-end']);
@@ -114,6 +118,11 @@ const inactivePropertyGroups = [
 		properties: ['text-decoration-color', 'text-decoration-style', 'text-decoration-thickness'],
 		controllingProperties: ['text-decoration-line', 'text-decoration', '-webkit-text-decoration-line', '-webkit-text-decoration'],
 		messageId: MESSAGE_ID_DECORATION,
+	},
+	{
+		properties: ['outline-color', 'outline-width', 'outline-offset'],
+		controllingProperties: ['outline-style', 'outline', '-webkit-outline-style', '-webkit-outline', '-moz-outline-style', '-moz-outline'],
+		messageId: MESSAGE_ID_OUTLINE,
 	},
 	{
 		properties: ['background-position', 'background-position-x', 'background-position-y', 'background-size', 'background-repeat', 'background-origin'],
@@ -560,6 +569,14 @@ const getDeclarationProblem = (node, property, controls, itemLayout) => {
 		return {node, messageId: MESSAGE_ID_Z_INDEX};
 	}
 
+	if (
+		itemLayout === 'flow'
+		&& floatValues.has(controls.float)
+		&& (property === 'justify-self' || property === 'place-self' || (property === 'column-span' && keyword === 'all'))
+	) {
+		return {node, messageId: MESSAGE_ID_FLOATED_ITEM, data: {property}};
+	}
+
 	const itemProblem = getItemProblem(node, property, keyword, itemLayout);
 	if (itemProblem) {
 		return itemProblem;
@@ -646,6 +663,7 @@ const getBlockControls = (declarationsByProperty, sourceCode) => {
 		hasCollapsedTable,
 		hasNowrap,
 		position,
+		float: getControllingValue(declarationsByProperty, ['float'], sourceCode),
 		hasVisibleOverflow,
 		inactiveProperties,
 	};

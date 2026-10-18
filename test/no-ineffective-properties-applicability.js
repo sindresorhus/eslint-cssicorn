@@ -2,6 +2,89 @@ import {getTester} from './utils/test.js';
 
 const {test} = getTester(import.meta, 'no-ineffective-properties');
 
+const outlineProperties = [['outline-color', 'red'], ['outline-width', '2px'], ['outline-offset', '3px']];
+const floatedItemProperties = [['justify-self', 'center'], ['place-self', 'center'], ['column-span', 'all']];
+
+test({
+	valid: [
+		...['solid', 'dashed', 'auto'].map(style => `a { outline-style: ${style}; outline-color: red; outline-width: 2px; outline-offset: 3px; }`),
+		'a { outline-color: red; outline-width: 2px; outline-offset: 3px; }',
+		'a { outline: none; outline-color: red; outline-width: 2px; outline-offset: 3px; }',
+		...['outline: 2px solid red', 'outline-style: solid', '-webkit-outline: solid', '-moz-outline-style: solid'].map(control => `a { outline-style: none; ${control}; outline-offset: 3px; }`),
+		'a { outline: solid !important; outline-style: none; outline-color: red; }',
+		...['inherit', 'var(--style)', 'none none'].map(style => `a { outline-style: ${style}; outline-offset: 3px; }`),
+		...outlineProperties.map(([property]) => `a { outline-style: none; ${property}: inherit; }`),
+		...outlineProperties.map(([property]) => `a { outline-style: none; ${property}: var(--value); }`),
+		'a { all: unset; outline-style: none; outline-offset: 3px; }',
+		'a { outline-style: none; > .item { outline-color: red; } }',
+		'@keyframes focus { to { outline-style: none; outline-offset: 3px; } }',
+		':export { outline-style: none; outline-width: 2px; }',
+	],
+	invalid: [
+		...outlineProperties.map(([property, value]) => ({
+			code: `a { outline-style: none; ${property}: ${value}; }`,
+			errors: [{messageId: 'no-ineffective-properties/outline', data: {property}}],
+		})),
+		{
+			code: 'a { OUTLINE-STYLE: /* disabled */ NONE !important; OUTLINE-OFFSET: -3px; }',
+			errors: [{messageId: 'no-ineffective-properties/outline'}],
+		},
+		{
+			code: 'a { @media (width > 1px) { outline-style: none; outline-color: red; outline-width: calc(1px + 1px); outline-offset: 3px; } }',
+			errors: Array.from({length: 3}, () => ({messageId: 'no-ineffective-properties/outline'})),
+		},
+	],
+});
+
+test({
+	valid: [
+		'a { float: left; justify-self: center; place-self: center; column-span: all; }',
+		...['none', 'inherit', 'var(--float)'].map(value => `a { display: block; > .item { float: ${value}; justify-self: center; place-self: center; column-span: all; } }`),
+		'a { display: block; > .item { float: left; float: none; justify-self: center; } }',
+		'a { display: block; > .item { float: left; column-span: none; } }',
+		'a { display: block; > .item { --float: left; place-self: center; } }',
+		'a { display: block; > .item { position: var(--position); float: left; place-self: center; } }',
+		'a { display: block; > .item { display: contents; float: left; place-self: center; } }',
+		'a { display: block; display: grid; > .item { float: left; justify-self: center; } }',
+		'a { display: var(--layout); > .item { float: left; place-self: center; } }',
+		'a { display: block; .item { float: left; place-self: center; } }',
+		'a { display: block; @media (width > 1px) { > .item { float: left; place-self: center; } } }',
+		'a { display: block; > .item { all: unset; float: left; place-self: center; } }',
+		...floatedItemProperties.map(([property]) => `a { display: block; > .item { float: left; ${property}: inherit; } }`),
+		...floatedItemProperties.map(([property]) => `a { display: block; > .item { float: left; ${property}: var(--value); } }`),
+	],
+	invalid: [
+		...floatedItemProperties.map(([property, value]) => ({
+			code: `a { display: block; > .item { float: left; ${property}: ${value}; } }`,
+			errors: [{messageId: 'no-ineffective-properties/floated-item', data: {property}}],
+		})),
+		...['right', 'inline-start', 'inline-end'].map(value => ({
+			code: `a { display: flow-root; > .item { float: ${value}; justify-self: center; } }`,
+			errors: [{messageId: 'no-ineffective-properties/floated-item'}],
+		})),
+		{
+			code: '@supports (display: block) { a { display: block; &:hover > .item { FLOAT: /* side */ LEFT !important; PLACE-SELF: CENTER; } } }',
+			errors: [{messageId: 'no-ineffective-properties/floated-item'}],
+		},
+		{
+			code: 'a { display: block; > .item { justify-self: center; place-self: center; float: right; clear: both; vertical-align: middle; } }',
+			errors: [{messageId: 'no-ineffective-properties/floated-item'}, {messageId: 'no-ineffective-properties/floated-item'}],
+		},
+		{
+			code: 'a { display: grid; > .item { float: left; justify-self: center; place-self: center; } }',
+			errors: [{messageId: 'no-ineffective-properties/grid-item', data: {property: 'float'}}],
+		},
+		{
+			code: 'a { display: flex; > .item { float: left; place-self: center; } }',
+			errors: [{messageId: 'no-ineffective-properties/flex-item', data: {property: 'float'}}],
+		},
+		{
+			code: 'a { display: block; > .item { position: absolute; float: left; justify-self: center; place-self: center; column-span: all; } }',
+			errors: [{messageId: 'no-ineffective-properties/float'}, {messageId: 'no-ineffective-properties/column-span'}],
+		},
+	],
+});
+
 test({
 	valid: [
 		'a { position: static; z-index: 1; }',

@@ -57,6 +57,20 @@ a {
 
 ```css
 /* ❌ */
+.button {
+	outline-style: none;
+	outline-offset: 3px;
+}
+
+/* ✅ */
+.button {
+	outline-style: solid;
+	outline-offset: 3px;
+}
+```
+
+```css
+/* ❌ */
 .card {
 	border: 1px red;
 }
@@ -106,6 +120,7 @@ The rule reports:
 - Floats other than `none`, clearance, and `column-span: all` on known ordinary flex or grid items selected by a nested child selector.
 - Flex sizing, grid placement, `order`, and `align-self` on known children of an ordinary flow container, such as `display: block`, `flow-root`, or `inline-block`, selected by a nested child selector.
 - `z-index` other than `auto` with explicit `position: static` on known children of an ordinary flow container selected by a nested child selector. Static flex and grid items are allowed.
+- `justify-self`, `place-self`, and `column-span: all` on floated children of a known ordinary flow container selected by a nested child selector.
 - `columns`, `column-count`, `column-width`, and `column-fill` with flex or grid display.
 - `align-content` on a flex container with `nowrap` in `flex-wrap` or `flex-flow`, including the implicit `nowrap` in direction-only shorthands such as `flex-flow: column`. Use `align-items` or wrapping instead.
 - Physical and logical insets with `position: static`.
@@ -117,6 +132,7 @@ The rule reports:
 - `offset-distance`, `offset-rotate`, and `offset-anchor` with `offset-path: none`.
 - `shape-image-threshold` with `shape-outside: none`, a basic shape such as `circle()` or `polygon()`, or a shape box such as `margin-box`. Thresholds only affect image-based shapes, including gradients.
 - `text-decoration-color`, `text-decoration-style`, and `text-decoration-thickness` with `text-decoration-line: none`.
+- `outline-color`, `outline-width`, and `outline-offset` with `outline-style: none`.
 - Related image controls, such as position, size, repeat, slice, and compositing, when `background-image`, `border-image-source`, or `mask-image` is `none`.
 - Related animation or transition controls with `animation-name: none` or `transition-property: none`.
 - Related timeline axis and inset controls with `scroll-timeline-name: none` or `view-timeline-name: none`.
@@ -186,7 +202,7 @@ Grid placement requires a grid parent:
 }
 ```
 
-Flex sizing requires a flex parent, even if the item itself has flex display. An explicit ordinary flow parent, such as `display: block`, `flow-root`, or `inline-block`, also makes flex sizing, grid placement, `order`, and `align-self` ineffective on its ordinary direct children. `justify-self`, `place-self`, floats, and clearance are allowed in flow layout.
+Flex sizing requires a flex parent, even if the item itself has flex display. An explicit ordinary flow parent, such as `display: block`, `flow-root`, or `inline-block`, also makes flex sizing, grid placement, `order`, and `align-self` ineffective on its ordinary direct children. `justify-self` and `place-self` are allowed on non-floating flow items. Floats and clearance are also allowed in flow layout.
 
 ```css
 /* ❌ */
@@ -211,6 +227,30 @@ Flex sizing requires a flex parent, even if the item itself has flex display. An
 ```
 
 `column-span: all` cannot make a flex or grid item span columns. Flex and grid containers establish their own formatting contexts, so their items cannot span an outer multicolumn container. A flex or grid container can itself span columns when it participates in ordinary flow layout.
+
+Floated children of an ordinary flow container cannot use `justify-self`, `place-self`, or `column-span: all`. The parent layout must be explicit because flex and grid items ignore `float`, so their alignment can still apply:
+
+```css
+/* ❌ */
+.container {
+	display: block;
+
+	> .item {
+		float: left;
+		justify-self: center;
+	}
+}
+
+/* ✅ */
+.container {
+	display: block;
+
+	> .item {
+		float: none;
+		justify-self: center;
+	}
+}
+```
 
 Absolute and fixed positioning take a box out of flow. Flex sizing, item ordering, and inline vertical alignment no longer apply:
 
