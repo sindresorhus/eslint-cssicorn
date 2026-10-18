@@ -7,6 +7,53 @@ import {getTester} from './utils/test.js';
 
 const {test} = getTester(import.meta);
 
+nodeTest('unfinished functions are not fixed in tolerant mode', () => {
+	const linter = new Linter();
+	const config = {
+		files: ['**/*.css'],
+		language: 'css/css',
+		languageOptions: {tolerant: true},
+		plugins: {css, cssicorn: plugin},
+		rules: {'cssicorn/no-redundant-functions': 'error'},
+	};
+	for (const code of [
+		'a { width: calc-size(calc-size(auto, size / 2), size',
+		'a { width: clamp(0px, clamp(0px, var(--size), 100px), 100px',
+		'a { width: calc(calc(1px)',
+		'a { width: abs(abs(1px)',
+		'a { width: calc(calc(1px) /* keep */',
+		'a { --size: calc(calc(1px)',
+		'a { --size: clamp(0px, clamp(0px, var(--size), 100px), 100px',
+		'a {\r\n  width: clamp(0px,\r\n    clamp(0px, var(--size), 100px),\r\n    100px',
+	]) {
+		const result = linter.verifyAndFix(code, config, {filename: 'test.css'});
+		assert.equal(result.fixed, false, code);
+		assert.equal(result.output, code);
+	}
+});
+
+nodeTest('completed nested functions still simplify in tolerant mode and preserve comments', () => {
+	const linter = new Linter();
+	const config = {
+		files: ['**/*.css'],
+		language: 'css/css',
+		languageOptions: {tolerant: true},
+		plugins: {css, cssicorn: plugin},
+		rules: {'cssicorn/no-redundant-functions': 'error'},
+	};
+	for (const [code, output] of [
+		['a { width: calc-size(calc-size(auto, size / 2), size); }', 'a { width: calc-size(auto, size / 2) ; }'],
+		['a { width: clamp(0px, clamp(0px, 1vw, 100px), 100px); }', 'a { width:  clamp(0px, 1vw, 100px) ; }'],
+		['a { width: calc(calc(1px)); }', 'a { width: 1px; }'],
+		['a { width: calc-size(/*a*/calc-size(auto, size / 2)/*b*/,/*c*/size/*d*/); }', 'a { width: /*a*/calc-size(auto, size / 2)/*b*//*c*//*d*/; }'],
+	]) {
+		const result = linter.verifyAndFix(code, config, {filename: 'test.css'});
+		assert.equal(result.fixed, true, code);
+		assert.equal(result.output, output);
+		assert.deepEqual(result.messages, []);
+	}
+});
+
 nodeTest('over-range filter amounts and color alpha remain available for interpolation and diagnostics', () => {
 	const linter = new Linter();
 	const config = {

@@ -1661,8 +1661,18 @@ const create = context => {
 
 		const problems = [];
 		walk(value, {
-			visit: 'Function',
 			enter(node, item, siblings) {
+				if (node.type !== 'Function') {
+					return;
+				}
+
+				const [, end] = sourceCode.getRange(node);
+				const lastChild = Array.isArray(node.children) ? node.children.at(-1) : node.children.last;
+				// Tolerant parsing can end an unfinished function at its last child, including an inner closing parenthesis.
+				if (sourceCode.text[end - 1] !== ')' || (lastChild && sourceCode.getRange(lastChild)[1] >= end)) {
+					return this.skip;
+				}
+
 				const name = normalizeCssIdentifier(node.name);
 				const getProblem = functionProblemGetters.get(name);
 				let problem;
