@@ -93,14 +93,14 @@ async function renameRule(from, to) {
 	await renameFile(`test/${from}.js`, `test/${to}.js`);
 	await renameFile(`test/snapshots/${from}.js.snapshot`, `test/snapshots/${to}.js.snapshot`);
 
+	const relatedFiles = await Promise.all(['rules', 'test', 'docs'].map(async directory => {
+		const files = await fsAsync.readdir(resolveFile(directory), {recursive: true});
+		return files.filter(file => /\.(?:js(?:\.snapshot)?|md)$/v.test(file)).map(file => `${directory}/${file}`);
+	}));
 	const files = [
 		'readme.md',
 		'index.js',
-		'rules/index.js',
-		`docs/rules/${to}.md`,
-		`rules/${to}.js`,
-		`test/${to}.js`,
-		`test/snapshots/${to}.js.snapshot`,
+		...relatedFiles.flat(),
 	];
 
 	for (const filePath of files) {

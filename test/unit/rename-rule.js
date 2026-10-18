@@ -1,4 +1,6 @@
 import fs from 'node:fs/promises';
+import path from 'node:path';
+import {pathToFileURL} from 'node:url';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {
@@ -42,6 +44,52 @@ test('renameRule validates names before changing files', async t => {
 		await assert.rejects(renameRule('prefer-short-hex-color', to), {
 			message: 'Attempted to rename a file.',
 		});
+	}
+});
+
+test('renameRule updates references in other rules, integration tests, snapshots, and docs', async t => {
+	await fs.mkdir(new URL('../../.ai-temporary/', import.meta.url), {recursive: true});
+	const directory = await fs.mkdtemp(new URL('../../.ai-temporary/rename-rule-', import.meta.url));
+	t.after(() => fs.rm(directory, {recursive: true, force: true}));
+	const files = {
+		'index.js': 'export default {rules: {\'fixture-rule\': {}}};',
+		'readme.md': '| [fixture-rule](docs/rules/fixture-rule.md) | Description |',
+		'rules/index.js': 'export {default as \'fixture-rule\'} from \'./fixture-rule.js\';',
+		'rules/fixture-rule.js': 'export default {name: \'fixture-rule\'};',
+		'rules/shared/related.js': 'export const related = \'fixture-rule\';',
+		'test/fixture-rule.js': 'const rule = \'fixture-rule\';',
+		'test/prefer-nesting.js': 'const rules = {\'cssicorn/fixture-rule\': \'error\', \'cssicorn/fixture-rule-other\': \'off\'};',
+		'test/snapshots/fixture-rule.js.snapshot': 'exports.example = \'fixture-rule\';',
+		'test/snapshots/prefer-nesting.js.snapshot': 'exports.example = \'cssicorn/fixture-rule\';',
+		'docs/rules/fixture-rule.md': '# fixture-rule',
+		'docs/rules/prefer-nesting.md': '[fixture-rule](./fixture-rule.md)\n[fixture-rule-other](./fixture-rule-other.md)',
+	};
+	await Promise.all(Object.entries(files).map(async ([file, content]) => {
+		const filePath = path.join(directory, file);
+		await fs.mkdir(path.dirname(filePath), {recursive: true});
+		await fs.writeFile(filePath, content);
+	}));
+	await fs.mkdir(path.join(directory, 'scripts'));
+	const script = path.join(directory, 'scripts/rename-rule.js');
+	await fs.copyFile(new URL('../../scripts/rename-rule.js', import.meta.url), script);
+	const {renameRule: renameFixtureRule} = await import(pathToFileURL(script));
+	await renameFixtureRule('fixture-rule', 'renamed-rule');
+
+	for (const [file, expected] of Object.entries({
+		'test/prefer-nesting.js': 'const rules = {\'cssicorn/renamed-rule\': \'error\', \'cssicorn/fixture-rule-other\': \'off\'};',
+		'test/snapshots/prefer-nesting.js.snapshot': 'exports.example = \'cssicorn/renamed-rule\';',
+		'docs/rules/prefer-nesting.md': '[renamed-rule](./renamed-rule.md)\n[fixture-rule-other](./fixture-rule-other.md)',
+		'rules/shared/related.js': 'export const related = \'renamed-rule\';',
+		'rules/index.js': 'export {default as \'renamed-rule\'} from \'./renamed-rule.js\';',
+		'rules/renamed-rule.js': 'export default {name: \'renamed-rule\'};',
+		'test/renamed-rule.js': 'const rule = \'renamed-rule\';',
+		'test/snapshots/renamed-rule.js.snapshot': 'exports.example = \'renamed-rule\';',
+		'docs/rules/renamed-rule.md': '# renamed-rule',
+		'index.js': 'export default {rules: {\'renamed-rule\': {}}};',
+		'readme.md': '| [renamed-rule](docs/rules/renamed-rule.md) | Description |',
+	})) {
+		// eslint-disable-next-line no-await-in-loop
+		assert.equal(await fs.readFile(path.join(directory, file), 'utf8'), expected, file);
 	}
 });
 
