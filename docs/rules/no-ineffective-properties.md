@@ -87,7 +87,7 @@ The rule reports:
 - `vertical-align` with an explicitly block-level `display`, such as `block`, `flow-root`, `flex`, `grid`, or `table-caption`. Inline-level modes, including `inline-flex` and `inline-grid`, and table cells are allowed.
 - `justify-self`, `grid-area`, `grid-row`, `grid-column`, `grid-row-start`, `grid-row-end`, `grid-column-start`, and `grid-column-end` on a known ordinary flex item selected by a nested child selector.
 - `flex`, `flex-basis`, `flex-grow`, and `flex-shrink` on a known ordinary grid item selected by a nested child selector.
-- Floats other than `none` and clearance on known ordinary flex or grid items selected by a nested child selector.
+- Floats other than `none`, clearance, and `column-span: all` on known ordinary flex or grid items selected by a nested child selector.
 - Flex sizing, grid placement, `order`, and `align-self` on known children of an ordinary flow container, such as `display: block`, `flow-root`, or `inline-block`, selected by a nested child selector.
 - `columns`, `column-count`, `column-width`, and `column-fill` with flex or grid display.
 - `align-content` on a flex container with `nowrap` in `flex-wrap` or `flex-flow`, including the implicit `nowrap` in direction-only shorthands such as `flex-flow: column`. Use `align-items` or wrapping instead.
@@ -192,6 +192,8 @@ Flex sizing requires a flex parent, even if the item itself has flex display. An
 	}
 }
 ```
+
+`column-span: all` cannot make a flex or grid item span columns. Flex and grid containers establish their own formatting contexts, so their items cannot span an outer multicolumn container. A flex or grid container can itself span columns when it participates in ordinary flow layout.
 
 Absolute and fixed positioning take a box out of flow. Flex sizing, item ordering, and inline vertical alignment no longer apply:
 

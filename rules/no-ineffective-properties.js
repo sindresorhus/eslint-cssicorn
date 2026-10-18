@@ -83,7 +83,7 @@ const gridPlacementProperties = new Set(['grid-area', 'grid-row', 'grid-column',
 const flexItemProperties = new Set(['justify-self', ...gridPlacementProperties]);
 const flexSizingProperties = new Set(['flex', 'flex-basis', 'flex-grow', 'flex-shrink']);
 const flowItemProperties = new Set([...flexSizingProperties, ...gridPlacementProperties, 'order', 'align-self']);
-const itemProperties = new Set([...flexItemProperties, ...flowItemProperties, 'float', 'clear']);
+const itemProperties = new Set([...flexItemProperties, ...flowItemProperties, 'float', 'clear', 'column-span']);
 const flowDisplayKeywords = new Set(['block', 'inline', 'flow', 'flow-root', 'list-item']);
 const blockDisplayKeywords = new Set(['block', 'flow', 'flow-root', 'flex', 'grid', 'table', 'list-item', 'table-caption']);
 const insetProperties = new Set(['top', 'right', 'bottom', 'left', 'inset', 'inset-block', 'inset-inline', 'inset-block-start', 'inset-block-end', 'inset-inline-start', 'inset-inline-end']);
@@ -205,7 +205,6 @@ const targetProperties = new Set([
 	'text-overflow',
 	'border-spacing',
 	'table-layout',
-	'column-span',
 ]);
 const overflowProperties = ['overflow', 'overflow-x', 'overflow-y', 'overflow-inline', 'overflow-block'];
 
@@ -350,6 +349,7 @@ const getItemProblem = (node, property, keyword, layout) => {
 		ineffectiveProperties.has(property)
 		|| (property === 'float' && floatValues.has(keyword))
 		|| (property === 'clear' && clearValues.has(keyword))
+		|| (property === 'column-span' && keyword === 'all')
 	) {
 		return {node, messageId: layout === 'flex' ? MESSAGE_ID_FLEX_ITEM : MESSAGE_ID_GRID_ITEM, data: {property}};
 	}
