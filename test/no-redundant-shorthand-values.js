@@ -10,6 +10,9 @@ test({
 		'a { outline: solid currentcolor; }',
 		'a { animation: 0s 1s slide; }',
 		'a { animation: 0s ease ease; }',
+		String.raw`a { animation: 1s ease e\61 se; }`,
+		'a { animation: 1s cubic-bezier(.25, .1, .25, 1.00001) slide; }',
+		'a { animation: 1s calc(0s * infinity) slide; }',
 		'a { animation: 1s normal reverse; }',
 		'a { animation: 1s none backwards; }',
 		'a { animation: 1s running paused; }',
@@ -25,6 +28,7 @@ test({
 		'a { background: calc(0s) top red; }',
 		'a { background: calc(0) 0% red; }',
 		'a { background: calc(0fr) 0% red; }',
+		'a { background: calc(0px * infinity) 0% red; }',
 		'a { background: rgb(255 0 0 / 0); }',
 		'a { background: padding-box border-box; }',
 		'a { background: left 0px top 0px red; }',
@@ -94,6 +98,7 @@ test({
 		['animation: 1s cubic-bezier(.25, .1, .25, 1) slide', 'animation: 1s slide'],
 		['animation: 1s ease slide, 2s ease Slide', 'animation: 1s slide, 2s Slide'],
 		['animation: 1s ease "normal"', 'animation: 1s "normal"'],
+		[String.raw`animation: 1s ease e\61 se running`, String.raw`animation: 1s ease e\61 se`],
 		['animation: none ease, ease none', 'animation: none, ease'],
 		['animation: 1s ease none', 'animation: 1s'],
 		['transition: all 0s ease 0s normal', 'transition: all'],
@@ -125,6 +130,10 @@ test({
 		},
 		{
 			code: 'a { background: 0% 0%/auto/* keep */red; }',
+			errors: [{messageId: 'no-redundant-shorthand-values'}],
+		},
+		{
+			code: 'a { background: padding-box /* keep */ border-box red; }',
 			errors: [{messageId: 'no-redundant-shorthand-values'}],
 		},
 		{
