@@ -6,6 +6,8 @@ import {
 	getGroupAnimationNameNodes,
 	getKeyframesName,
 } from './shared/css-animations.js';
+import {nonAnimatableProperties} from './shared/css-property-animation-types.js';
+import {shorthandToAffectedProperties} from './shared/css-shorthand-properties.js';
 import {
 	getBasePropertyName,
 	getCanonicalLexerNode,
@@ -35,6 +37,11 @@ const targetProperties = new Set([...animationProperties, 'transition', 'transit
 const transitionControllerProperties = new Set(['transition', 'transition-property', '-webkit-transition', '-webkit-transition-property']);
 const resetKeywords = new Set(['initial', 'unset']);
 const transitionKeywords = new Set(['ease', 'ease-in', 'ease-out', 'ease-in-out', 'linear', 'step-start', 'step-end', 'normal', 'allow-discrete']);
+const nonAnimatablePropertyNames = new Set([
+	...nonAnimatableProperties,
+	'animation',
+	...shorthandToAffectedProperties.get('animation') ?? [],
+]);
 
 /**
 Check whether a parsed media expression guarantees an explicit positive motion preference.
@@ -110,7 +117,8 @@ function hasOnlyNonMotionKeyframes(block, lexer) {
 			}
 
 			const property = normalizeCssIdentifier(declaration.property);
-			return getBasePropertyName(property) === 'animation-timing-function' || isNonMotionProperty(property, lexer);
+			return nonAnimatablePropertyNames.has(getBasePropertyName(property))
+				|| isNonMotionProperty(property, lexer);
 		}));
 }
 

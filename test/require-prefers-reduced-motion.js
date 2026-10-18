@@ -7,6 +7,37 @@ import {getTester} from './utils/test.js';
 
 const {test} = getTester(import.meta);
 
+test({
+	valid: [
+		...[
+			'animation-duration: 2s',
+			'animation-delay: 5s',
+			'animation-name: moving',
+			'animation: moving 2s',
+			'will-change: transform',
+			'direction: rtl',
+			'contain: layout',
+			'container-type: size',
+			'transition: transform 2s',
+		].map(declaration => `@keyframes fade { from { opacity: 0; ${declaration}; } to { opacity: 1; } } a { animation: fade 1s; }`),
+		'@keyframes ignored { to { will-change: transform; } } a { animation-name: ignored; }',
+		'@keyframes fade { to { opacity: 1; will-change: var(--properties); } } a { animation: fade 1s; }',
+		'@-webkit-keyframes fade { to { opacity: 1; -webkit-animation-duration: 2s; } } a { -webkit-animation: fade 1s; }',
+		'@KEYFRAMES Fade { TO { OPACITY: 1; WILL-CHANGE: transform; } } a { ANIMATION-NAME: Fade; }',
+		'@layer effects { @keyframes fade { to { opacity: 1; direction: rtl; } } @media (hover) { .card { &:hover { animation: fade 1s; } } } }',
+	],
+	invalid: [
+		{
+			code: '@keyframes move { to { opacity: 1; will-change: transform; transform: translateX(10px); } } a { animation: move 1s; }',
+			errors: [{messageId: 'require-prefers-reduced-motion', data: {property: 'animation'}}],
+		},
+		{
+			code: '@keyframes effect { to { opacity: 1; animation-future-property: example; } } a { animation-name: effect; }',
+			errors: [{messageId: 'require-prefers-reduced-motion', data: {property: 'animation-name'}}],
+		},
+	],
+});
+
 test.snapshot({
 	valid: [
 		'a { transform: translateX(10px); translate: 10px; width: 100px; --effect: slide 1s; }',
@@ -43,6 +74,10 @@ test.snapshot({
 		'@keyframes fade { to { opacity: 1; } } a { animation: fade 1s, none 2s; }',
 		'@keyframes fade { to { opacity: 1; } } @media (hover) { @keyframes fade { to { color: red; } } } a { animation-name: fade; }',
 		'@keyframes empty {} a { animation-name: empty; }',
+		'@keyframes fade { to { opacity: 0.5; animation-composition: add; } } a { animation: fade 1s; }',
+		...['replace', 'add', 'accumulate'].map(composition => `@keyframes tint { from { color: red; animation-composition: ${composition}; } to { color: blue; } } a { animation-name: tint; }`),
+		'@keyframes empty { to { animation-composition: accumulate; } } a { animation: empty 1s; }',
+		String.raw`@KEYFRAMES Fade { TO { OPACITY: 0.5; ANIMATION-COMPO\53 ITION: add; } } a { animation-name: Fade; }`,
 		'@keyframes fade { to { opacity: 1; transform: scale(2) !important; } } a { animation: fade 1s; }',
 		'@keyframes ignored { to { transform: scale(2) !important; --offset: 10px !important; } } a { animation-name: ignored; }',
 		String.raw`@-webkit-keyframes fade { to { opacity: 1; transform: scale(2) !impor\74 ant; } } a { animation: fade 1s; }`,
@@ -220,6 +255,20 @@ test({
 		},
 		{
 			code: '@keyframes move { to { transform: translateX(1px); transform: translateX(10px) !important; } } a { animation-name: move; }',
+			errors: [{messageId: 'require-prefers-reduced-motion', data: {property: 'animation-name'}, suggestions: 0}],
+		},
+	],
+});
+
+test({
+	valid: [],
+	invalid: [
+		{
+			code: '@keyframes move { to { transform: translateX(10px); animation-composition: add; } } a { animation: move 1s; }',
+			errors: [{messageId: 'require-prefers-reduced-motion', data: {property: 'animation'}, suggestions: 0}],
+		},
+		{
+			code: '@keyframes move { from { animation-composition: replace; } to { translate: 10px; } } a { animation-name: move; }',
 			errors: [{messageId: 'require-prefers-reduced-motion', data: {property: 'animation-name'}, suggestions: 0}],
 		},
 	],
