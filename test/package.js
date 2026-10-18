@@ -405,3 +405,20 @@ test('nesting autofixes in Markdown CSS fences preserve surrounding prose and co
 	assert.deepEqual(repeated.messages, []);
 	assert.equal(repeated.output, undefined);
 });
+
+for (const [name, config] of Object.entries(eslintCssicorn.configs)) {
+	test(`${name} preset fixes preserve animation composition and adjacent margin values`, async () => {
+		const eslint = new ESLint({baseConfig: config, overrideConfigFile: true, fix: true});
+		const code = '@keyframes pulse { from { opacity: 0; } to { opacity: 1; } } .card { margin: 0px.5em; animation-composition: add; animation-trigger: initial; animation-range: initial; animation-duration: 1s; animation-timing-function: ease; animation-delay: 0s; animation-iteration-count: 1; animation-direction: normal; animation-fill-mode: none; animation-play-state: running; animation-name: pulse; animation-timeline: auto; }';
+		const [result] = await eslint.lintText(code, {filePath: 'file.css'});
+		assert.deepEqual(result.messages, []);
+		const output = result.output ?? code;
+		assert.ok(output.includes(name === 'unopinionated' ? 'margin: 0px.5em;' : 'margin: 0 .5em;'));
+		assert.ok(output.includes('animation-composition: add;'));
+		assert.ok(output.includes(name === 'unopinionated' ? 'animation-name: pulse;' : 'animation: 1s ease 0s 1 normal none running pulse;'));
+
+		const [repeated] = await eslint.lintText(output, {filePath: 'file.css'});
+		assert.deepEqual(repeated.messages, []);
+		assert.equal(repeated.output, undefined);
+	});
+}

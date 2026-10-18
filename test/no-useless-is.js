@@ -281,3 +281,29 @@ test('fixes converge with other selector rules', () => {
 		assert.deepEqual(second.messages, []);
 	}
 });
+
+ruleTest({
+	valid: [],
+	invalid: [
+		{
+			code: '.fallback, :is(:blank) { color: red; }',
+			output: '.fallback, :blank { color: red; }',
+			errors: [{messageId: 'no-useless-is'}],
+		},
+		{
+			code: '.fallback, :IS(:BLANK) { color: red; }',
+			output: '.fallback, :BLANK { color: red; }',
+			errors: [{messageId: 'no-useless-is'}],
+		},
+		{
+			code: '.card { .fallback, :is(:blank) { color: red; } }',
+			output: '.card { .fallback, :blank { color: red; } }',
+			errors: [{messageId: 'no-useless-is'}],
+		},
+		{
+			code: '.card { .fallback, :is(:not(:blank)) { color: red; } }',
+			output: '.card { .fallback, :not(:blank) { color: red; } }',
+			errors: [{messageId: 'no-useless-is'}],
+		},
+	],
+});
