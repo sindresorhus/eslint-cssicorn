@@ -2,7 +2,10 @@ import {getTester} from './utils/test.js';
 
 const {test} = getTester(import.meta);
 
-const keyframes = '@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } } @keyframes bounce { from { transform: translateY(0); } to { transform: translateY(10px); } }';
+const keyframes = [
+	'@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }',
+	'@keyframes bounce { from { transform: translateY(0); } to { transform: translateY(10px); } }',
+].join(' ');
 const animations = 'animation: spin 1s infinite, bounce 1s infinite; animation-composition: replace;';
 
 /**
@@ -16,6 +19,8 @@ test.snapshot({
 		stylesheet('animation: spin 1s infinite; animation-composition: replace;'),
 		stylesheet('animation: spin 1s, unknown 1s; animation-composition: replace;'),
 		stylesheet('animation: spin 1s, bounce 1s;'),
+		stylesheet(animations, '@keyframes spin { from, to { background-position-x: 0; } } @keyframes bounce { from, to { background-position-y: 10px; } }'),
+		stylesheet('animation: spin 1s, none, bounce 1s; animation-composition: add, replace;'),
 		...['add', 'accumulate', 'replace, add', 'replace, accumulate'].map(composition => stylesheet(`animation: spin 1s, bounce 1s; animation-composition: ${composition};`)),
 		stylesheet('animation: spin 1s, bounce 1s 1s; animation-composition: replace;'),
 		stylesheet('animation: spin 100ms 3, bounce 1s 300ms; animation-composition: replace;'),
@@ -27,8 +32,23 @@ test.snapshot({
 		stylesheet('animation: spin 1s 2s backwards, bounce 1s; animation-composition: replace;'),
 		...['0s infinite', '1s 0', '1s paused', '1s scroll()', 'auto'].map(timing => stylesheet(`animation: spin ${timing}, bounce 1s; animation-composition: replace;`)),
 		stylesheet('animation-name: spin, bounce; animation-duration: 1s; animation-composition: replace;'),
-		...['animation: var(--animations);', 'animation-duration: var(--duration);', 'animation-duration: calc(1s + 1s);', 'animation-delay: inherit;', 'animation-iteration-count: var(--count);', 'animation-play-state: var(--state);', 'animation-timeline: var(--timeline);', 'animation-composition: var(--composition);', 'animation-composition: initial;', 'all: unset;', 'animation-delay-start: 0s;', 'animation-delay-end: 0s;', 'animation-trigger: none;'].map(declaration => stylesheet(`${animations} ${declaration}`)),
+		...[
+			'animation: var(--animations);',
+			'animation-duration: var(--duration);',
+			'animation-duration: calc(1s + 1s);',
+			'animation-delay: inherit;',
+			'animation-iteration-count: var(--count);',
+			'animation-play-state: var(--state);',
+			'animation-timeline: var(--timeline);',
+			'animation-composition: var(--composition);',
+			'animation-composition: initial;',
+			'all: unset;',
+			'animation-delay-start: 0s;',
+			'animation-delay-end: 0s;',
+			'animation-trigger: none;',
+		].map(declaration => stylesheet(`${animations} ${declaration}`)),
 		stylesheet('animation: spin 1s, bounce 1s; animation-composition: add !important; animation-composition: replace;'),
+		stylesheet(`${animations} animation-duration: var(--duration) !important; animation-duration: 1s;`),
 		stylesheet('animation: spin 1s, bounce 1s !important; animation: spin 0s, bounce 0s !important; animation-composition: replace;'),
 		stylesheet(animations, keyframes.replace('bounce', 'Bounce')),
 		stylesheet(animations, `${keyframes} @keyframes spin { from, to { opacity: 1; } }`),
@@ -40,11 +60,18 @@ test.snapshot({
 		stylesheet(animations, '@keyframes spin { from { transform: none; } } @keyframes bounce { from, to { transform: none; } }'),
 		stylesheet(animations, '@keyframes spin { 50% { transform: none; } } @keyframes bounce { from, to { transform: none; } }'),
 		stylesheet(animations, '@keyframes spin { from, to { transform: none; } } @keyframes bounce { entry 0%, exit 100% { transform: none; } }'),
-		...['animation-composition: add;', 'animation-composition: replace;', 'animation-composition: var(--composition);'].map(declaration => stylesheet(animations, keyframes.replace('rotate(0deg);', () => `rotate(0deg); ${declaration}`))),
+		...[
+			'animation-composition: add;',
+			'animation-composition: replace;',
+			'animation-composition: var(--composition);',
+		].map(declaration => stylesheet(animations, keyframes.replace('rotate(0deg);', () => `rotate(0deg); ${declaration}`))),
 		...['var(--transform)', 'env(transform)', 'inherit', 'initial', 'unset', 'revert', 'revert-layer'].map(value => stylesheet(animations, keyframes.replace('rotate(360deg)', () => value))),
 		stylesheet(animations, keyframes.replace('rotate(0deg);', 'rotate(0deg); transform: var(--transform);')),
 		stylesheet(animations, keyframes.replace('rotate(360deg);', 'rotate(360deg) !important;')),
-		stylesheet(animations, '@keyframes spin { from, to { --transform: 1; unknown: 1; animation-duration: 1s; } } @keyframes bounce { from, to { --transform: 2; unknown: 2; animation-duration: 2s; } }'),
+		stylesheet(animations, [
+			'@keyframes spin { from, to { --transform: 1; unknown: 1; animation-duration: 1s; } }',
+			'@keyframes bounce { from, to { --transform: 2; unknown: 2; animation-duration: 2s; } }',
+		].join(' ')),
 		stylesheet(animations, '@keyframes spin { from, to { animation-delay: 1s; } } @keyframes bounce { from, to { animation-delay: 2s; } }'),
 		stylesheet(animations, '@keyframes spin { from, to { animation: other 1s; } } @keyframes bounce { from, to { animation: other 2s; } }'),
 		stylesheet(animations, '@keyframes spin { from, to { transform: none; } } @keyframes bounce { from, to { translate: 10px; rotate: 10deg; scale: 2; } }'),
@@ -68,7 +95,15 @@ test.snapshot({
 		stylesheet('animation: spin 1s linear(0, .5, 1), bounce 1s steps(2, end); animation-composition: replace;'),
 		stylesheet('animation: spin 1s; animation-name: spin, bounce; animation-composition: replace;'),
 		stylesheet('animation: spin 1s, bounce 1s; animation-duration: 2s; animation-delay: 0s, 1s; animation-composition: replace;'),
-		stylesheet('animation-name: spin, bounce; animation-duration: 1s; animation-delay: 0s; animation-iteration-count: infinite; animation-play-state: running; animation-timeline: auto; animation-composition: replace;'),
+		stylesheet([
+			'animation-name: spin, bounce;',
+			'animation-duration: 1s;',
+			'animation-delay: 0s;',
+			'animation-iteration-count: infinite;',
+			'animation-play-state: running;',
+			'animation-timeline: auto;',
+			'animation-composition: replace;',
+		].join(' ')),
 		stylesheet('animation: spin 1s, bounce 1s !important; animation-duration: 0s; animation-composition: replace;'),
 		stylesheet('animation: spin 0s, bounce 0s; animation-duration: 1s !important; animation-duration: 0s; animation-composition: replace;'),
 		stylesheet('animation: spin 1s, bounce 1s; animation-composition: replace !important; animation-composition: add;'),
@@ -88,7 +123,25 @@ test.snapshot({
 		stylesheet(animations, '@keyframes spin { from, to { opacity: .5; transform: none; } } @keyframes bounce { from, to { transform: translateY(1px); opacity: 1; } }'),
 		stylesheet(`${animations} animation-name: spin, bounce, spin;`),
 		`${keyframes} .icon { &.active { ${animations} } }`,
-		...['@media (width > 1px)', '@supports (display: grid)', '@container (width > 1px)', '@layer animations', '@scope (.icon)'].map(condition => `${keyframes} ${condition} { .icon { ${animations} } }`),
+		...[
+			'@media (width > 1px)',
+			'@supports (display: grid)',
+			'@container (width > 1px)',
+			'@layer animations',
+			'@scope (.icon)',
+		].map(condition => `${keyframes} ${condition} { .icon { ${animations} } }`),
 		stylesheet('animation: /* spin */ spin 1s, bounce /* bounce */ 1s; animation-composition: replace;'),
+		stylesheet('animation: linear linear 1s, bounce 1s; animation-composition: replace;', keyframes.replace('spin', 'linear')),
+		stylesheet('animation: "none" 1s, bounce 1s; animation-composition: replace;', keyframes.replace('spin', '"none"')),
+		stylesheet('animation: move 1s, fade 1s, combined 1s; animation-composition: replace;', [
+			'@keyframes move { from, to { transform: none; } }',
+			'@keyframes fade { from, to { opacity: 1; } }',
+			'@keyframes combined { from, to { opacity: .5; transform: translateX(1px); } }',
+		].join(' ')),
+		...['background-position-x', 'background-position-y'].map(property => stylesheet(animations, [
+			'@keyframes spin { from, to { background-position: 0 0; } }',
+			`@keyframes bounce { from, to { ${property}: 10px; } }`,
+		].join(' '))),
+		stylesheet(animations, '@keyframes spin { from, to { background: none 0 0; } } @keyframes bounce { from, to { background-position-x: 10px; } }'),
 	],
 });

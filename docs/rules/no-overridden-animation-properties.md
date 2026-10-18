@@ -31,7 +31,9 @@ There is no autofix because changing composition or combining property values ch
 	animation: spin 1s infinite, bounce 1s infinite;
 	animation-composition: replace;
 }
+```
 
+```css
 /* ✅ */
 @keyframes spin {
 	from { rotate: 0deg; }

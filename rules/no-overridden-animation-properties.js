@@ -10,9 +10,9 @@ import {shorthandToAffectedProperties} from './shared/css-shorthand-properties.j
 import {
 	getCanonicalLexerNode,
 	getCommaSeparatedGroups,
+	getCssWideKeyword,
 	hasSubstitutionOrRandomFunction,
 	isCssModulesInteropDeclaration,
-	isCssWideKeyword,
 	isImportantDeclaration,
 	isStyleBlock,
 	normalizeCssIdentifier,
@@ -86,7 +86,7 @@ const getAnimationLists = (declaration, property, lexer) => {
 	if (
 		value.type !== 'Value'
 		|| hasSubstitutionOrRandomFunction(value)
-		|| value.children.some(node => node.type === 'Identifier' && isCssWideKeyword(normalizeCssIdentifier(node.name)))
+		|| getCssWideKeyword(declaration)
 	) {
 		return;
 	}
@@ -207,7 +207,7 @@ const getKeyframesProperties = (atRule, lexer) => {
 			const {value} = declaration;
 			const known = value.type === 'Value'
 				&& !hasSubstitutionOrRandomFunction(value)
-				&& value.children.every(node => !(node.type === 'Identifier' && isCssWideKeyword(normalizeCssIdentifier(node.name))))
+				&& !getCssWideKeyword(declaration)
 				&& lexer.matchProperty(propertyNameAliases.get(property) ?? property, getCanonicalLexerNode(value)).matched;
 			for (const affectedProperty of properties) {
 				if (!known) {
