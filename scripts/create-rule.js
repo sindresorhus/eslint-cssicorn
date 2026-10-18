@@ -123,8 +123,9 @@ const files = await Promise.all([
 	},
 ].map(template => renderTemplate(template, data)));
 
-const shouldOpenFiles = await enquirer.prompt({
+const {shouldOpenFiles} = await enquirer.prompt({
 	type: 'confirm',
+	name: 'shouldOpenFiles',
 	message: 'Open files in editor?',
 	initial: true,
 });
