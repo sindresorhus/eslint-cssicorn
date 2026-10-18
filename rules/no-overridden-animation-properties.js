@@ -1,3 +1,5 @@
+// @ts-check
+
 import {
 	getAnimationName,
 	getGroupAnimationNameNodes,
@@ -8,6 +10,7 @@ import {nonAnimatableProperties} from './shared/css-property-animation-types.js'
 import {propertyNameAliases} from './shared/css-property-name-aliases.js';
 import {shorthandToAffectedProperties} from './shared/css-shorthand-properties.js';
 import {
+	evaluateCssMath,
 	getCanonicalLexerNode,
 	getCommaSeparatedGroups,
 	getCssWideKeyword,
@@ -19,8 +22,17 @@ import {
 } from './utils/index.js';
 
 /**
+@import {BlockPlain, CssNodePlain, DeclarationPlain, Lexer} from '@eslint/css-tree';
+@import {PlainLexerMatchResult} from './shared/css-animations.js';
 @import {CssicornContext} from './rule/cssicorn-context.js';
 @import {CssicornRule} from './rule/to-eslint-rule.js';
+*/
+
+/**
+@typedef {{property: string, type?: string, defaultValue?: string | number}} AnimationComponent
+@typedef {{node: CssNodePlain | undefined, value: string | number | undefined}} AnimationEntry
+@typedef {{declaration: DeclarationPlain, property: string}} AnimationDeclaration
+@typedef {{entries: AnimationEntry[] | undefined, important: boolean}} AnimationControl
 */
 
 const MESSAGE_ID = 'no-overridden-animation-properties';
@@ -28,6 +40,9 @@ const messages = {
 	[MESSAGE_ID]: 'Animation `{{name}}` replaces {{properties}} from earlier overlapping animations.',
 };
 
+/**
+@type {AnimationComponent[]}
+*/
 const animationComponents = [
 	{property: 'animation-name'},
 	{property: 'animation-duration', defaultValue: 0},
@@ -41,11 +56,39 @@ const unsupportedProperties = new Set(['all', 'animation-delay-start', 'animatio
 const nonAnimatablePropertyNames = new Set(nonAnimatableProperties);
 
 /**
-Get the supported literal value of an animation component.
+Resolve a constant numeric calculation in the receiving animation property's units and range.
+
+@param {CssNodePlain} node
+@param {string} property
+*/
+const getCalculatedComponentValue = (node, property) => {
+	const quantity = evaluateCssMath(node);
+	const isIterations = property === 'animation-iteration-count';
+	if (!quantity || quantity.unit !== (isIterations ? undefined : 's')) {
+		return;
+	}
+
+	const value = quantity.value * (isIterations ? 1 : 1000);
+	if (!Number.isFinite(value)) {
+		return;
+	}
+
+	return property === 'animation-delay' ? value : Math.max(0, value);
+};
+
+/**
+Get the supported value of an animation component, resolving constant numeric calculations.
+
+@param {CssNodePlain} node
+@param {string} property
 */
 const getComponentValue = (node, property) => {
 	if (property === 'animation-name') {
 		return getAnimationName(node);
+	}
+
+	if (node.type === 'Function' && ['animation-duration', 'animation-delay', 'animation-iteration-count'].includes(property)) {
+		return getCalculatedComponentValue(node, property);
 	}
 
 	if (property === 'animation-duration' || property === 'animation-delay') {
@@ -80,6 +123,10 @@ const getComponentValue = (node, property) => {
 
 /**
 Get fully parsed animation control lists, leaving unresolved declarations unknown.
+
+@param {DeclarationPlain} declaration
+@param {string} property
+@param {Lexer} lexer
 */
 const getAnimationLists = (declaration, property, lexer) => {
 	const {value} = declaration;
@@ -92,7 +139,26 @@ const getAnimationLists = (declaration, property, lexer) => {
 	}
 
 	const canonicalValue = getCanonicalLexerNode(value);
-	const matchResult = lexer.matchProperty(property, canonicalValue);
+	// Typed placeholders disambiguate calculations in shorthands before applying the receiving property's range.
+	canonicalValue.children = canonicalValue.children.map(node => {
+		if (node.type !== 'Function') {
+			return node;
+		}
+
+		const quantity = evaluateCssMath(node);
+		if (quantity && Number.isFinite(quantity.value)) {
+			if (quantity.unit === 's') {
+				return {type: 'Dimension', value: '1', unit: 's'};
+			}
+
+			if (quantity.unit === undefined) {
+				return {type: 'Number', value: '1'};
+			}
+		}
+
+		return node;
+	});
+	const matchResult = /** @type {PlainLexerMatchResult} */ (lexer.matchProperty(property, canonicalValue));
 	if (!matchResult.matched) {
 		return;
 	}
@@ -100,18 +166,21 @@ const getAnimationLists = (declaration, property, lexer) => {
 	const groups = getCommaSeparatedGroups(value);
 	const canonicalGroups = getCommaSeparatedGroups(canonicalValue);
 	const components = property === 'animation' ? animationComponents : [{property}];
+	/**
+	@type {Record<string, AnimationEntry[]>}
+	*/
 	const lists = Object.fromEntries(components.map(({property}) => [property, []]));
 	for (const [index, {nodes}] of groups.entries()) {
 		const canonicalNodes = canonicalGroups[index].nodes;
 		for (const component of components) {
 			let node;
 			if (component.property === 'animation-name') {
-				const names = getGroupAnimationNameNodes(nodes, property, value, lexer);
+				const names = getGroupAnimationNameNodes(canonicalNodes, property, canonicalValue, lexer);
 				if (names.length > 1) {
 					return;
 				}
 
-				[node] = names;
+				node = nodes[canonicalNodes.indexOf(names[0])];
 			} else if (property === 'animation') {
 				const componentIndex = canonicalNodes.findIndex(node => component.type
 					? matchResult.isType(node, component.type)
@@ -139,8 +208,14 @@ const getAnimationLists = (declaration, property, lexer) => {
 
 /**
 Resolve source order and importance for locally declared animation controls.
+
+@param {AnimationDeclaration[]} declarations
+@param {Lexer} lexer
 */
 const getBlockAnimations = (declarations, lexer) => {
+	/**
+	@type {Map<string, AnimationControl>}
+	*/
 	const controls = new Map();
 	for (const {declaration, property} of declarations) {
 		const important = isImportantDeclaration(declaration);
@@ -161,6 +236,9 @@ const getBlockAnimations = (declarations, lexer) => {
 
 /**
 Get the known leaf properties affected by a keyframe declaration.
+
+@param {string} property
+@param {Lexer} lexer
 */
 const getAnimatedProperties = (property, lexer) => {
 	property = propertyNameAliases.get(property) ?? property;
@@ -174,12 +252,15 @@ const getAnimatedProperties = (property, lexer) => {
 
 /**
 Get properties with explicit, known values at both endpoints of a keyframes definition.
+
+@param {BlockPlain} block
+@param {Lexer} lexer
 */
-const getKeyframesProperties = (atRule, lexer) => {
+const getKeyframesProperties = (block, lexer) => {
 	const starts = new Set();
 	const ends = new Set();
 	const unknown = new Set();
-	for (const keyframe of atRule.block.children) {
+	for (const keyframe of block.children) {
 		if (keyframe.type !== 'Rule' || keyframe.block?.type !== 'Block') {
 			return new Set();
 		}
@@ -230,6 +311,9 @@ const getKeyframesProperties = (atRule, lexer) => {
 
 /**
 Get eligible tracks and their active intervals after initial application.
+
+@param {Map<string, AnimationControl>} controls
+@param {Map<string, Set<string>>} keyframes
 */
 const getTracks = (controls, keyframes) => {
 	const names = controls.get('animation-name')?.entries;
@@ -238,6 +322,13 @@ const getTracks = (controls, keyframes) => {
 	}
 
 	return names.map(({node, value: name}, index) => {
+		if (typeof name !== 'string') {
+			return;
+		}
+
+		/**
+		@param {string} property
+		*/
 		const getValue = property => {
 			const entries = controls.get(property)?.entries;
 			return entries?.[index % entries.length]?.value;
@@ -250,6 +341,9 @@ const getTracks = (controls, keyframes) => {
 		if (
 			!node
 			|| !properties?.size
+			|| typeof duration !== 'number'
+			|| typeof iterations !== 'number'
+			|| typeof delay !== 'number'
 			|| duration <= 0
 			|| iterations <= 0
 			|| getValue('animation-play-state') !== 'running'
@@ -270,8 +364,17 @@ const getTracks = (controls, keyframes) => {
 const create = context => {
 	const {sourceCode} = context;
 	const {lexer} = sourceCode;
+	/**
+	@type {Map<string, BlockPlain>}
+	*/
 	const keyframes = new Map();
+	/**
+	@type {Set<string>}
+	*/
 	const definedNames = new Set();
+	/**
+	@type {AnimationDeclaration[][]}
+	*/
 	const blocks = [];
 
 	context.on('Atrule', atRule => {
@@ -286,8 +389,8 @@ const create = context => {
 		}
 
 		definedNames.add(name);
-		if (normalizeCssIdentifier(atRule.name) === 'keyframes' && sourceCode.getParent(atRule)?.type === 'StyleSheet') {
-			keyframes.set(name, atRule);
+		if (atRule.block && normalizeCssIdentifier(atRule.name) === 'keyframes' && sourceCode.getParent(atRule)?.type === 'StyleSheet') {
+			keyframes.set(name, atRule.block);
 		}
 	});
 
@@ -326,7 +429,7 @@ const create = context => {
 			return;
 		}
 
-		const propertiesByName = new Map([...keyframes].map(([name, atRule]) => [name, getKeyframesProperties(atRule, lexer)]));
+		const propertiesByName = new Map([...keyframes].map(([name, block]) => [name, getKeyframesProperties(block, lexer)]));
 		for (const declarations of blocks) {
 			const tracks = getTracks(getBlockAnimations(declarations, lexer), propertiesByName);
 			for (const [index, track] of tracks.entries()) {
