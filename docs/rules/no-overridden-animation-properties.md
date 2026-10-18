@@ -73,9 +73,3 @@ See [CSS animation composition](https://www.w3.org/TR/css-animations-2/#animatio
 - Skips paused tracks, non-document timelines, `@starting-style`, and blocks containing `all`, `animation-delay-start`, `animation-delay-end`, or `animation-trigger`.
 - Ignores `!important` keyframe declarations; otherwise, keyframe-level `animation-composition` skips the definition.
 - Ignores custom, unknown, and non-animatable properties. Skips properties with unresolved keyframe values and comparisons with unresolved controls, including substitutions, CSS-wide values, invalid syntax, or unsupported or non-finite calculations.
-
-## Related rules
-
-- [no-unknown-animations](no-unknown-animations.md) checks whether referenced keyframes exist.
-- [no-ineffective-keyframe-declarations](no-ineffective-keyframe-declarations.md) checks declarations that do not work inside keyframes.
-- [no-ineffective-transitions](no-ineffective-transitions.md) checks whether declared properties can transition.
