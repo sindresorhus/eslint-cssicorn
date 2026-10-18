@@ -304,3 +304,36 @@ nodeTest('layout animations are opt-in and cannot be automatically changed', () 
 	assert.equal(plugin.configs.unopinionated.rules['cssicorn/no-layout-animations'], 'off');
 	assert.equal(plugin.configs.all.rules['cssicorn/no-layout-animations'], 'error');
 });
+
+test({
+	valid: [
+		'a { transition: -webkit-transform 1s, -webkit-flex-direction 1s, -webkit-width 1s, -moz-flex-basis 1s; }',
+		'@keyframes resize { to { -webkit-transform: scale(2); -webkit-width: 100px; -moz-flex-basis: 100px; } }',
+		'@keyframes resize { to { -webkit-flex-basis: 100px !important; } }',
+		'a { transition: var(--effect, -webkit-flex-basis 1s); --webkit-flex-basis: 100px; }',
+	],
+	invalid: [
+		...['-webkit-flex', '-webkit-flex-basis', '-webkit-flex-grow', '-webkit-flex-shrink'].flatMap(property => [
+			{
+				code: `a { transition: ${property} 1s; }`,
+				errors: [{messageId: MESSAGE_ID, data: {property}, suggestions: 0}],
+			},
+			{
+				code: `a { transition-property: ${property}; }`,
+				errors: [{messageId: MESSAGE_ID, data: {property}, suggestions: 0}],
+			},
+			{
+				code: `@keyframes resize { to { ${property}: ${property.endsWith('-basis') ? '2px' : '2'}; } }`,
+				errors: [{messageId: MESSAGE_ID, data: {property}, suggestions: 0}],
+			},
+		]),
+		{
+			code: String.raw`@-webkit-keyframes resize { to { -WEBKIT-FLEX-GR\4f W: 2; } }`,
+			errors: [{messageId: MESSAGE_ID, data: {property: '-webkit-flex-grow'}, suggestions: 0}],
+		},
+		{
+			code: 'a { @media (hover) { -webkit-transition: -WEBKIT-FLEX-BASIS /* target */ 1s !important; } }',
+			errors: [{messageId: MESSAGE_ID, data: {property: '-webkit-flex-basis'}, suggestions: 0}],
+		},
+	],
+});

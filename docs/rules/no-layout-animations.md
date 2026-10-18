@@ -58,7 +58,7 @@ The rule checks these longhands and their shorthands:
 
 Shorthands include `inset`, `margin`, `padding`, their logical variants, `gap`, `flex`, `grid`, `grid-template`, `font`, and border side, axis, and width shorthands. They report even when only a component such as border color changes.
 
-Property names are matched ASCII case-insensitively, also with CSS escapes. Vendor-prefixed transition declarations and prefixed `@keyframes` are also checked.
+Property names are matched ASCII case-insensitively, also with CSS escapes. Vendor-prefixed transition declarations and prefixed `@keyframes` are also checked. Known aliases of the checked properties, such as `-webkit-flex-basis`, are recognized in transition targets and keyframe declarations.
 
 ## Limitations
 

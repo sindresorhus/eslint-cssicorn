@@ -1,3 +1,4 @@
+import {propertyNameAliases} from './shared/css-property-name-aliases.js';
 import {shorthandToAffectedProperties} from './shared/css-shorthand-properties.js';
 import sizeProperties from './shared/css-size-properties.js';
 import {
@@ -72,6 +73,13 @@ const layoutProperties = new Set([
 for (const [shorthand, affectedProperties] of shorthandToAffectedProperties) {
 	if (!affectedProperties.isDisjointFrom(layoutProperties)) {
 		layoutProperties.add(shorthand);
+	}
+}
+
+// Compatibility aliases have the same layout effects as their canonical properties.
+for (const [alias, property] of propertyNameAliases) {
+	if (layoutProperties.has(property)) {
+		layoutProperties.add(alias);
 	}
 }
 
