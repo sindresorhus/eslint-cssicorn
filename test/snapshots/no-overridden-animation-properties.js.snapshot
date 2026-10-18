@@ -594,6 +594,34 @@ Message:
 
 `;
 
+exports[`invalid(48): @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } } @keyframes bounce { from { transform: translateY(0); } to { transform: translateY(10px); } } .icon { animation: spin 100ms 1.1, bounce 1s 109ms; animation-composition: replace; } 1`] = `
+
+  1 | @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } } @keyframes bounce { from { transform: translateY(0); } to { transform: translateY(10px); } } .icon { animation: spin 100ms 1.1, bounce 1s 109ms; animation-composition: replace; }
+
+`;
+
+exports[`invalid(48): @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } } @keyframes bounce { from { transform: translateY(0); } to { transform: translateY(10px); } } .icon { animation: spin 100ms 1.1, bounce 1s 109ms; animation-composition: replace; } 2`] = `
+
+Message:
+> 1 | @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } } @keyframes bounce { from { transform: translateY(0); } to { transform: translateY(10px); } } .icon { animation: spin 100ms 1.1, bounce 1s 109ms; animation-composition: replace; }
+    |                                                                                                                                                                                                                         ^^^^^^ Animation \`bounce\` replaces \`transform\` from earlier overlapping animations.
+
+`;
+
+exports[`invalid(49): @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } } @keyframes bounce { from { transform: translateY(0); } to { transform: translateY(10px); } } .icon { animation: spin 100ms 2.3, bounce 1s 229ms; animation-composition: replace; } 1`] = `
+
+  1 | @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } } @keyframes bounce { from { transform: translateY(0); } to { transform: translateY(10px); } } .icon { animation: spin 100ms 2.3, bounce 1s 229ms; animation-composition: replace; }
+
+`;
+
+exports[`invalid(49): @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } } @keyframes bounce { from { transform: translateY(0); } to { transform: translateY(10px); } } .icon { animation: spin 100ms 2.3, bounce 1s 229ms; animation-composition: replace; } 2`] = `
+
+Message:
+> 1 | @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } } @keyframes bounce { from { transform: translateY(0); } to { transform: translateY(10px); } } .icon { animation: spin 100ms 2.3, bounce 1s 229ms; animation-composition: replace; }
+    |                                                                                                                                                                                                                         ^^^^^^ Animation \`bounce\` replaces \`transform\` from earlier overlapping animations.
+
+`;
+
 exports[`invalid(5): @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } } @keyframes bounce { from { transform: translateY(0); } to { transform: translateY(10px); } } .icon { animation: spin 1s, bounce 1s; animation-composition: accumulate, replace; } 1`] = `
 
   1 | @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } } @keyframes bounce { from { transform: translateY(0); } to { transform: translateY(10px); } } .icon { animation: spin 1s, bounce 1s; animation-composition: accumulate, replace; }
@@ -605,6 +633,34 @@ exports[`invalid(5): @keyframes spin { from { transform: rotate(0deg); } to { tr
 Message:
 > 1 | @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } } @keyframes bounce { from { transform: translateY(0); } to { transform: translateY(10px); } } .icon { animation: spin 1s, bounce 1s; animation-composition: accumulate, replace; }
     |                                                                                                                                                                                                                  ^^^^^^ Animation \`bounce\` replaces \`transform\` from earlier overlapping animations.
+
+`;
+
+exports[`invalid(50): @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } } @keyframes bounce { from { -webkit-transform: translateY(0); } to { -webkit-transform: translateY(10px); } } .icon { animation: spin 1s infinite, bounce 1s infinite; animation-composition: replace; } 1`] = `
+
+  1 | @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } } @keyframes bounce { from { -webkit-transform: translateY(0); } to { -webkit-transform: translateY(10px); } } .icon { animation: spin 1s infinite, bounce 1s infinite; animation-composition: replace; }
+
+`;
+
+exports[`invalid(50): @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } } @keyframes bounce { from { -webkit-transform: translateY(0); } to { -webkit-transform: translateY(10px); } } .icon { animation: spin 1s infinite, bounce 1s infinite; animation-composition: replace; } 2`] = `
+
+Message:
+> 1 | @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } } @keyframes bounce { from { -webkit-transform: translateY(0); } to { -webkit-transform: translateY(10px); } } .icon { animation: spin 1s infinite, bounce 1s infinite; animation-composition: replace; }
+    |                                                                                                                                                                                                                                           ^^^^^^ Animation \`bounce\` replaces \`transform\` from earlier overlapping animations.
+
+`;
+
+exports[`invalid(51): @keyframes spin { from, to { transform: var(--transform); opacity: .5; } } @keyframes bounce { from, to { transform: translateY(1px); opacity: 1; } } .icon { animation: spin 1s infinite, bounce 1s infinite; animation-composition: replace; } 1`] = `
+
+  1 | @keyframes spin { from, to { transform: var(--transform); opacity: .5; } } @keyframes bounce { from, to { transform: translateY(1px); opacity: 1; } } .icon { animation: spin 1s infinite, bounce 1s infinite; animation-composition: replace; }
+
+`;
+
+exports[`invalid(51): @keyframes spin { from, to { transform: var(--transform); opacity: .5; } } @keyframes bounce { from, to { transform: translateY(1px); opacity: 1; } } .icon { animation: spin 1s infinite, bounce 1s infinite; animation-composition: replace; } 2`] = `
+
+Message:
+> 1 | @keyframes spin { from, to { transform: var(--transform); opacity: .5; } } @keyframes bounce { from, to { transform: translateY(1px); opacity: 1; } } .icon { animation: spin 1s infinite, bounce 1s infinite; animation-composition: replace; }
+    |                                                                                                                                                                                            ^^^^^^ Animation \`bounce\` replaces \`opacity\` from earlier overlapping animations.
 
 `;
 

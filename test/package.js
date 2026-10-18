@@ -347,6 +347,8 @@ test('animation property documentation fences report only the failing example', 
 	});
 	const code = fs.readFileSync('docs/rules/no-overridden-animation-properties.md', 'utf8');
 	const [result] = await eslint.lintText(code, {filePath: 'example.md'});
+	const animationLine = code.split('\n').findIndex(line => line.includes('animation: spin')) + 1;
+	assert.equal(result.messages[0]?.line, animationLine);
 	assert.deepEqual(result.messages.map(({ruleId, message}) => ({ruleId, message})), [{
 		ruleId,
 		message: 'Animation `bounce` replaces `transform` from earlier overlapping animations.',

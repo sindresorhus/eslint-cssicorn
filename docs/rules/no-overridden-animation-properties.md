@@ -68,7 +68,7 @@ See [CSS animation composition](https://www.w3.org/TR/css-animations-2/#animatio
 
 - Definitions must be unique, unprefixed `@keyframes` directly inside the stylesheet. Duplicate names anywhere in the file, including conditional and prefixed definitions, make a name ambiguous. Definitions inside grouping rules, layers, or scopes are skipped.
 - Each style block is analyzed independently. External stylesheets, selector cascade, and animation start times changed by scripts or later style changes are not resolved.
-- Sub-millisecond timing is best effort. Floating-point rounding can make touching active intervals appear to overlap.
+- Active interval boundaries are rounded to the nearest millisecond. Shorter overlaps may be missed.
 - Default replacement without explicit `animation-composition` is not reported. The `animation` shorthand does not reset an explicit composition.
 - Paused animations, non-document timelines, fill-only overlap, and blocks containing `all`, `animation-delay-start`, `animation-delay-end`, or `animation-trigger` are skipped.
 - Definitions containing non-important keyframe-level `animation-composition` are skipped. Important keyframe declarations are ignored, as they are by browsers.

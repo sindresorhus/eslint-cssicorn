@@ -47,9 +47,16 @@ for (const {name, animationType, longhands} of properties) {
 	}
 }
 
-// Classify a shorthand only when every affected longhand has the same known animation type.
+// Use Webref's longhands for shorthands that are not in the cascade catalog, without enabling their serialization.
+const shorthands = new Map(properties
+	.filter(({name, longhands}) => !name.startsWith('-') && !excludedProperties.has(name) && longhands?.length > 0)
+	.map(({name, longhands}) => [name, longhands]));
 for (const [shorthand, affectedProperties] of shorthandToAffectedProperties) {
-	const longhands = [...affectedProperties].filter(property => !shorthandToAffectedProperties.has(property));
+	shorthands.set(shorthand, [...affectedProperties].filter(property => !shorthandToAffectedProperties.has(property)));
+}
+
+// Classify a shorthand only when every affected longhand has the same known animation type.
+for (const [shorthand, longhands] of shorthands) {
 	for (const properties of [nonAnimatableProperties, discreteProperties]) {
 		if (longhands.length > 0 && longhands.every(property => properties.has(property))) {
 			properties.add(shorthand);

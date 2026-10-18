@@ -169,7 +169,7 @@ const getAnimatedProperties = (property, lexer) => {
 	}
 
 	return [...shorthandToAffectedProperties.get(property) ?? [property]]
-		.filter(property => !shorthandToAffectedProperties.has(property) && !nonAnimatablePropertyNames.has(property) && !animationProperties.has(property));
+		.filter(property => !shorthandToAffectedProperties.has(property) && !nonAnimatablePropertyNames.has(property));
 };
 
 /**
@@ -259,7 +259,7 @@ const getTracks = (controls, keyframes) => {
 		}
 
 		return {
-			node, name, properties, start: Math.max(0, delay), end: delay + (duration * iterations), composition: getValue('animation-composition'),
+			node, name, properties, start: Math.max(0, Math.round(delay)), end: Math.round(delay + (duration * iterations)), composition: getValue('animation-composition'),
 		};
 	});
 };
