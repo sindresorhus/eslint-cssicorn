@@ -25,6 +25,7 @@ const MESSAGE_ID_GRID_ITEM = 'no-ineffective-properties/grid-item';
 const MESSAGE_ID_FLOW_ITEM = 'no-ineffective-properties/flow-item';
 const MESSAGE_ID_NOWRAP = 'no-ineffective-properties/nowrap';
 const MESSAGE_ID_STATIC = 'no-ineffective-properties/static';
+const MESSAGE_ID_Z_INDEX = 'no-ineffective-properties/z-index';
 const MESSAGE_ID_POSITION = 'no-ineffective-properties/position';
 const MESSAGE_ID_OVERFLOW = 'no-ineffective-properties/overflow';
 const MESSAGE_ID_MULTICOL = 'no-ineffective-properties/multicol';
@@ -37,6 +38,7 @@ const MESSAGE_ID_PERSPECTIVE = 'no-ineffective-properties/perspective';
 const MESSAGE_ID_COLUMN_SPAN = 'no-ineffective-properties/column-span';
 const MESSAGE_ID_MOTION = 'no-ineffective-properties/motion';
 const MESSAGE_ID_SHAPE_IMAGE_THRESHOLD = 'no-ineffective-properties/shape-image-threshold';
+const MESSAGE_ID_NON_IMAGE_SHAPE = 'no-ineffective-properties/non-image-shape';
 const MESSAGE_ID_DECORATION = 'no-ineffective-properties/decoration';
 const MESSAGE_ID_BACKGROUND_IMAGE = 'no-ineffective-properties/background-image';
 const MESSAGE_ID_BORDER_IMAGE = 'no-ineffective-properties/border-image';
@@ -54,6 +56,7 @@ const messages = {
 	[MESSAGE_ID_FLOW_ITEM]: '`{{property}}` has no effect on an ordinary flow item.',
 	[MESSAGE_ID_NOWRAP]: '`align-content` has no effect on a flex container with `nowrap`. Consider `align-items` or enabling wrapping.',
 	[MESSAGE_ID_STATIC]: '`{{property}}` has no effect with `position: static`. Insets require a positioned element.',
+	[MESSAGE_ID_Z_INDEX]: '`z-index` has no effect on an ordinary flow item with `position: static`. It requires a positioned element or a flex or grid item.',
 	[MESSAGE_ID_POSITION]: '`{{property}}` has no effect with `position: {{position}}`. It requires an in-flow box.',
 	[MESSAGE_ID_OVERFLOW]: '`text-overflow: {{value}}` has no effect with `overflow: visible`. Ellipsis requires clipped inline overflow.',
 	[MESSAGE_ID_MULTICOL]: '`{{property}}` has no effect with `display: {{display}}`. Multicol properties require a block container.',
@@ -66,6 +69,7 @@ const messages = {
 	[MESSAGE_ID_COLUMN_SPAN]: '`column-span: all` has no effect with `position: {{position}}`. Only in-flow elements can span columns.',
 	[MESSAGE_ID_MOTION]: '`{{property}}` has no effect with `offset-path: none`. Set an offset path to use this property.',
 	[MESSAGE_ID_SHAPE_IMAGE_THRESHOLD]: '`shape-image-threshold` has no effect with `shape-outside: none`. It defines the alpha threshold for an image-based shape.',
+	[MESSAGE_ID_NON_IMAGE_SHAPE]: '`shape-image-threshold` has no effect with a basic shape or shape box. It defines the alpha threshold for an image-based shape.',
 	[MESSAGE_ID_DECORATION]: '`{{property}}` has no effect with `text-decoration-line: none`. Enable a text decoration line on this element.',
 	[MESSAGE_ID_BACKGROUND_IMAGE]: '`{{property}}` has no effect with `background-image: none`. Set a background image to use this property.',
 	[MESSAGE_ID_BORDER_IMAGE]: '`{{property}}` has no effect with `border-image-source: none`. Set a border image to use this property.',
@@ -83,7 +87,7 @@ const gridPlacementProperties = new Set(['grid-area', 'grid-row', 'grid-column',
 const flexItemProperties = new Set(['justify-self', ...gridPlacementProperties]);
 const flexSizingProperties = new Set(['flex', 'flex-basis', 'flex-grow', 'flex-shrink']);
 const flowItemProperties = new Set([...flexSizingProperties, ...gridPlacementProperties, 'order', 'align-self']);
-const itemProperties = new Set([...flexItemProperties, ...flowItemProperties, 'float', 'clear', 'column-span']);
+const itemProperties = new Set([...flexItemProperties, ...flowItemProperties, 'float', 'clear', 'column-span', 'z-index']);
 const flowDisplayKeywords = new Set(['block', 'inline', 'flow', 'flow-root', 'list-item']);
 const blockDisplayKeywords = new Set(['block', 'flow', 'flow-root', 'flex', 'grid', 'table', 'list-item', 'table-caption']);
 const insetProperties = new Set(['top', 'right', 'bottom', 'left', 'inset', 'inset-block', 'inset-inline', 'inset-block-start', 'inset-block-end', 'inset-inline-start', 'inset-inline-end']);
@@ -238,6 +242,33 @@ const getControllingValue = (declarationsByProperty, properties, sourceCode) => 
 	}
 
 	return value;
+};
+
+/**
+Check whether a single unprefixed shape-outside declaration defines a basic shape or shape box instead of an image.
+
+@param {Map<string, {node: DeclarationPlain, property: string}[]>} declarationsByProperty
+@param {CSSSourceCode} sourceCode
+@returns {boolean}
+*/
+const hasNonImageShape = (declarationsByProperty, sourceCode) => {
+	const declarations = ['shape-outside', '-webkit-shape-outside'].flatMap(property => declarationsByProperty.get(property) ?? []);
+	if (declarations.length !== 1) {
+		return false;
+	}
+
+	const [{node, property}] = declarations;
+	if (property !== 'shape-outside' || node.value.type !== 'Value' || getCssWideKeyword(node) !== undefined || hasSubstitutionOrRandomFunction(node.value)) {
+		return false;
+	}
+
+	const value = getCanonicalLexerNode(node.value);
+	const match = sourceCode.lexer.matchProperty(property, value);
+	if (!match.matched) {
+		return false;
+	}
+
+	return value.children.some(child => match.isType(child, 'basic-shape') || match.isType(child, 'shape-box'));
 };
 
 /**
@@ -525,6 +556,10 @@ const getDeclarationProblem = (node, property, controls, itemLayout) => {
 		return;
 	}
 
+	if (property === 'z-index' && keyword !== 'auto' && controls.position === 'static' && itemLayout === 'flow') {
+		return {node, messageId: MESSAGE_ID_Z_INDEX};
+	}
+
 	const itemProblem = getItemProblem(node, property, keyword, itemLayout);
 	if (itemProblem) {
 		return itemProblem;
@@ -596,6 +631,10 @@ const getBlockControls = (declarationsByProperty, sourceCode) => {
 		for (const property of properties) {
 			inactiveProperties.set(property, messageId);
 		}
+	}
+
+	if (declarationsByProperty.has('shape-image-threshold') && hasNonImageShape(declarationsByProperty, sourceCode)) {
+		inactiveProperties.set('shape-image-threshold', MESSAGE_ID_NON_IMAGE_SHAPE);
 	}
 
 	return {

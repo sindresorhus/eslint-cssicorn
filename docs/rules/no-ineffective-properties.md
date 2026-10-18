@@ -79,6 +79,22 @@ a {
 }
 ```
 
+```css
+/* ❌ */
+.shape {
+	float: left;
+	shape-outside: circle(10px);
+	shape-image-threshold: 0.5;
+}
+
+/* ✅ */
+.shape {
+	float: left;
+	shape-outside: url("shape.png");
+	shape-image-threshold: 0.5;
+}
+```
+
 ## Checks
 
 The rule reports:
@@ -89,6 +105,7 @@ The rule reports:
 - `flex`, `flex-basis`, `flex-grow`, and `flex-shrink` on a known ordinary grid item selected by a nested child selector.
 - Floats other than `none`, clearance, and `column-span: all` on known ordinary flex or grid items selected by a nested child selector.
 - Flex sizing, grid placement, `order`, and `align-self` on known children of an ordinary flow container, such as `display: block`, `flow-root`, or `inline-block`, selected by a nested child selector.
+- `z-index` other than `auto` with explicit `position: static` on known children of an ordinary flow container selected by a nested child selector. Static flex and grid items are allowed.
 - `columns`, `column-count`, `column-width`, and `column-fill` with flex or grid display.
 - `align-content` on a flex container with `nowrap` in `flex-wrap` or `flex-flow`, including the implicit `nowrap` in direction-only shorthands such as `flex-flow: column`. Use `align-items` or wrapping instead.
 - Physical and logical insets with `position: static`.
@@ -98,7 +115,7 @@ The rule reports:
 - `border-spacing` and padding with `border-collapse: collapse` on `display: table` or `inline-table`.
 - `perspective-origin` with `perspective: none`.
 - `offset-distance`, `offset-rotate`, and `offset-anchor` with `offset-path: none`.
-- `shape-image-threshold` with `shape-outside: none`.
+- `shape-image-threshold` with `shape-outside: none`, a basic shape such as `circle()` or `polygon()`, or a shape box such as `margin-box`. Thresholds only affect image-based shapes, including gradients.
 - `text-decoration-color`, `text-decoration-style`, and `text-decoration-thickness` with `text-decoration-line: none`.
 - Related image controls, such as position, size, repeat, slice, and compositing, when `background-image`, `border-image-source`, or `mask-image` is `none`.
 - Related animation or transition controls with `animation-name: none` or `transition-property: none`.
@@ -221,6 +238,30 @@ Absolute and fixed positioning take a box out of flow. Flex sizing, item orderin
 
 `justify-self`, `align-self`, and grid placement can affect positioned boxes and are allowed with absolute or fixed positioning.
 
+`z-index` applies to positioned boxes and to flex and grid items. An explicitly static child of an ordinary flow container cannot use it, even when the child itself has grid or flex display:
+
+```css
+/* ❌ */
+.container {
+	display: block;
+
+	> .item {
+		position: static;
+		z-index: 1;
+	}
+}
+
+/* ✅ */
+.container {
+	display: block;
+
+	> .item {
+		position: relative;
+		z-index: 1;
+	}
+}
+```
+
 ## Intentional declarations
 
 `border-spacing` is inherited and can still affect descendant tables with separate borders, so disable the rule when you intentionally supply inherited spacing.
@@ -252,7 +293,8 @@ General:
 Display, disabled effects, and overflow:
 
 - Display checks ignore `display: none` and `display: contents`.
-- A disabled effect needs a single `none` value in the controlling longhand.
+- A disabled effect needs a single `none` value in the controlling longhand, except that `shape-image-threshold` also checks basic shapes and shape boxes.
+- Basic shapes and shape boxes must match the CSS grammar. The installed grammar does not currently recognize a single percentage radius such as `circle(50%)`, so that form is skipped.
 - Visible overflow is only detected from the `overflow` shorthand.
 - For `text-overflow`, strings and `fade` values are not checked.
 
@@ -262,6 +304,7 @@ Parent layout:
 - The parent may be filtered in the same compound after a leading `&`, as in `&.active > .item`, `&:hover > .item`, or `&[data-layout] > .item`. These filters still select children of the known container.
 - Separate parent and child rules, descendant selectors, pseudo-elements, framework pseudo-classes such as `:global()`, and relationships through intervening conditional blocks are not checked.
 - Parent layout checks skip absolutely positioned and fixed children. An explicit position must be unambiguously `static`, `relative`, or `sticky`; an omitted position is treated as in-flow.
+- The `z-index` check additionally requires explicit `position: static`; an omitted position is not inferred.
 - Children with explicit hidden, boxless, or ambiguous display are skipped. A child may itself be a flex or grid container; its own display does not determine its parent's layout.
 
 Shorthand defaults:
