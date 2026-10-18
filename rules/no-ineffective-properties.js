@@ -47,6 +47,7 @@ const MESSAGE_ID_MOTION = 'no-ineffective-properties/motion';
 const MESSAGE_ID_SHAPE_IMAGE_THRESHOLD = 'no-ineffective-properties/shape-image-threshold';
 const MESSAGE_ID_NON_IMAGE_SHAPE = 'no-ineffective-properties/non-image-shape';
 const MESSAGE_ID_DECORATION = 'no-ineffective-properties/decoration';
+const MESSAGE_ID_ERROR_DECORATION = 'no-ineffective-properties/error-decoration';
 const MESSAGE_ID_OUTLINE = 'no-ineffective-properties/outline';
 const MESSAGE_ID_COLUMN_RULE_COLOR = 'no-ineffective-properties/column-rule-color';
 const MESSAGE_ID_SCROLL_SNAP_STOP = 'no-ineffective-properties/scroll-snap-stop';
@@ -91,6 +92,7 @@ const messages = {
 	[MESSAGE_ID_SHAPE_IMAGE_THRESHOLD]: '`shape-image-threshold` has no effect with `shape-outside: none`. It defines the alpha threshold for an image-based shape.',
 	[MESSAGE_ID_NON_IMAGE_SHAPE]: '`shape-image-threshold` has no effect with a basic shape or shape box. It defines the alpha threshold for an image-based shape.',
 	[MESSAGE_ID_DECORATION]: '`{{property}}` has no effect with `text-decoration-line: none`. Enable a text decoration line on this element.',
+	[MESSAGE_ID_ERROR_DECORATION]: '`{{property}}` has no effect on `spelling-error` or `grammar-error` decorations. Their appearance is controlled by the browser.',
 	[MESSAGE_ID_OUTLINE]: '`{{property}}` has no effect with `outline-style: none`. Enable an outline style to use it.',
 	[MESSAGE_ID_COLUMN_RULE_COLOR]: '`column-rule-color` has no effect with `column-rule-style: none`. Enable a column rule style to use it.',
 	[MESSAGE_ID_SCROLL_SNAP_STOP]: '`scroll-snap-stop: always` has no effect when `scroll-snap-align` disables snapping on both axes. Define a snap position to use it.',
@@ -112,6 +114,7 @@ const gridProperties = new Set(['grid', 'grid-template', 'grid-template-columns'
 const gridPlacementProperties = new Set(['grid-area', 'grid-row', 'grid-column', 'grid-row-start', 'grid-row-end', 'grid-column-start', 'grid-column-end']);
 const flexItemProperties = new Set(['justify-self', ...gridPlacementProperties]);
 const flexSizingProperties = new Set(['flex', 'flex-basis', 'flex-grow', 'flex-shrink']);
+const breakProperties = new Set(['break-before', 'break-after', 'break-inside', 'page-break-before', 'page-break-after', 'page-break-inside']);
 const flowItemProperties = new Set([...flexSizingProperties, ...gridPlacementProperties, 'order', 'align-self']);
 const shapeProperties = new Set(['shape-outside', 'shape-margin', 'shape-image-threshold']);
 const itemProperties = new Set([...flexItemProperties, ...flowItemProperties, ...shapeProperties, 'place-self', 'float', 'clear', 'column-span', 'z-index']);
@@ -135,15 +138,23 @@ const paddingProperties = new Set([
 ]);
 const multicolProperties = new Set(['columns', 'column-count', 'column-width', 'column-fill', 'column-height', 'column-wrap']);
 const gapProperties = new Set(['gap', 'row-gap', 'column-gap', 'grid-gap', 'grid-row-gap', 'grid-column-gap']);
+const decorationProperties = ['text-decoration-color', 'text-decoration-style', 'text-decoration-thickness', 'text-decoration-inset'];
+const decorationControllingProperties = ['text-decoration-line', 'text-decoration', '-webkit-text-decoration-line', '-webkit-text-decoration'];
 // The first controller must be explicit. Other controllers can override or reset it.
 const inactivePropertyGroups = [
 	{properties: ['perspective-origin'], controllingProperties: ['perspective', '-webkit-perspective'], messageId: MESSAGE_ID_PERSPECTIVE},
 	{properties: ['offset-distance', 'offset-rotate', 'offset-anchor'], controllingProperties: ['offset-path', 'offset'], messageId: MESSAGE_ID_MOTION},
 	{properties: ['shape-image-threshold'], controllingProperties: ['shape-outside', '-webkit-shape-outside'], messageId: MESSAGE_ID_SHAPE_IMAGE_THRESHOLD},
 	{
-		properties: ['text-decoration-color', 'text-decoration-style', 'text-decoration-thickness', 'text-decoration-inset'],
-		controllingProperties: ['text-decoration-line', 'text-decoration', '-webkit-text-decoration-line', '-webkit-text-decoration'],
+		properties: decorationProperties,
+		controllingProperties: decorationControllingProperties,
 		messageId: MESSAGE_ID_DECORATION,
+	},
+	{
+		properties: decorationProperties,
+		controllingProperties: decorationControllingProperties,
+		values: ['spelling-error', 'grammar-error'],
+		messageId: MESSAGE_ID_ERROR_DECORATION,
 	},
 	{
 		properties: ['outline-color', 'outline-width', 'outline-offset'],
@@ -261,6 +272,7 @@ const targetProperties = new Set([
 	...itemProperties,
 	...insetProperties,
 	...anchorPlacementProperties,
+	...breakProperties,
 	...paddingProperties,
 	...multicolProperties,
 	...gapProperties,
@@ -543,7 +555,7 @@ const getPositionProblem = (node, property, keyword, {position}) => {
 		return;
 	}
 
-	if (flexSizingProperties.has(property) || property === 'order' || property === 'vertical-align') {
+	if (flexSizingProperties.has(property) || breakProperties.has(property) || property === 'order' || property === 'vertical-align') {
 		return {node, messageId: MESSAGE_ID_POSITION, data: {property, position}};
 	}
 
@@ -756,8 +768,8 @@ const getBlockControls = (declarationsByProperty, sourceCode) => {
 	@type {Map<string, string>}
 	*/
 	const inactiveProperties = getInactiveLayoutProperties(declarationsByProperty, sourceCode, {isTable, hasNowrap});
-	for (const {properties, controllingProperties, messageId} of inactivePropertyGroups) {
-		if (!declarationsByProperty.has(controllingProperties[0]) || getControllingValue(declarationsByProperty, controllingProperties, sourceCode) !== 'none') {
+	for (const {properties, controllingProperties, values = ['none'], messageId} of inactivePropertyGroups) {
+		if (!declarationsByProperty.has(controllingProperties[0]) || !values.includes(getControllingValue(declarationsByProperty, controllingProperties, sourceCode))) {
 			continue;
 		}
 

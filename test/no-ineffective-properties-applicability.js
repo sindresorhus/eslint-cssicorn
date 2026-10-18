@@ -14,6 +14,72 @@ const anchorPlacementProperties = [
 const maskBorderProperties = [['mask-border-mode', 'luminance'], ['mask-border-slice', '25 fill'], ['mask-border-width', '2'], ['mask-border-outset', '3px'], ['mask-border-repeat', 'round']];
 const shapeProperties = [['shape-outside', 'circle()'], ['shape-margin', '8px'], ['shape-image-threshold', '0.5']];
 const tableMulticolProperties = [['columns', '12rem 2'], ['column-count', '3'], ['column-width', '12rem'], ['column-fill', 'balance'], ['column-height', '20rem'], ['column-wrap', 'wrap']];
+const breakProperties = [['break-before', 'page'], ['break-after', 'column'], ['break-inside', 'avoid'], ['page-break-before', 'always'], ['page-break-after', 'left'], ['page-break-inside', 'avoid']];
+const decorationProperties = [['text-decoration-color', 'blue'], ['text-decoration-style', 'dashed'], ['text-decoration-thickness', '3px'], ['text-decoration-inset', '2px']];
+
+test({
+	valid: [
+		...breakProperties.map(([property, value]) => `a { ${property}: ${value}; }`),
+		...['static', 'relative', 'sticky'].map(position => `a { position: ${position}; break-before: page; break-after: column; break-inside: avoid; }`),
+		'a { position: absolute; position: relative; break-before: page; }',
+		'a { position: var(--position); page-break-inside: avoid; }',
+		'a { position: inherit; break-after: page; }',
+		'a { position: fixed; break-before: inherit; break-after: var(--break); }',
+		'a { position: absolute; break-inside: revert-layer; }',
+		'a { position: absolute; > .item { break-before: page; break-inside: avoid; } }',
+		'a { position: absolute; widows: 3; orphans: 3; }',
+		'a { all: unset; position: absolute; break-after: page; }',
+		'@keyframes layout { to { position: fixed; break-inside: avoid; } }',
+		':export { position: absolute; page-break-before: always; }',
+	],
+	invalid: [
+		...breakProperties.flatMap(([property, value]) => ['absolute', 'fixed'].map(position => ({
+			code: `a { position: ${position}; ${property}: ${value}; }`,
+			errors: [{messageId: 'no-ineffective-properties/position', data: {property, position}}],
+		}))),
+		{
+			code: 'a { @media print { POSITION: ABSOLUTE; BREAK-BEFORE: /* page */ PAGE !important; } }',
+			errors: [{messageId: 'no-ineffective-properties/position', data: {property: 'break-before', position: 'absolute'}}],
+		},
+		{
+			code: 'a { display: grid; > .item { position: fixed; page-break-after: always; } }',
+			errors: [{messageId: 'no-ineffective-properties/position'}],
+		},
+		{
+			code: 'a { position: absolute; break-inside: auto; }',
+			errors: [{messageId: 'no-ineffective-properties/position'}],
+		},
+	],
+});
+
+test({
+	valid: [
+		...decorationProperties.map(([property, value]) => `a { text-decoration-line: underline; ${property}: ${value}; }`),
+		...['inherit', 'var(--line)', 'spelling-error underline', 'grammar-error spelling-error'].map(line => `a { text-decoration-line: ${line}; text-decoration-color: blue; }`),
+		...[
+			'text-decoration-line: underline',
+			'text-decoration: underline',
+			'-webkit-text-decoration-line: underline',
+			'-webkit-text-decoration: underline',
+		].map(control => `a { text-decoration-line: spelling-error; ${control}; text-decoration-color: blue; }`),
+		'a { text-decoration-line: spelling-error; color: blue; fill: blue; stroke: blue; text-underline-position: under; text-underline-offset: 3px; text-decoration-skip-ink: none; }',
+		'a { text-decoration-line: grammar-error; text-decoration-color: inherit; text-decoration-style: var(--style); }',
+		'a { text-decoration-line: spelling-error; > .item { text-decoration-color: blue; } }',
+		'a { all: unset; text-decoration-line: grammar-error; text-decoration-color: blue; }',
+		'@keyframes spell { to { text-decoration-line: spelling-error; text-decoration-color: blue; } }',
+		':export { text-decoration-line: grammar-error; text-decoration-color: blue; }',
+	],
+	invalid: [
+		...decorationProperties.flatMap(([property, value]) => ['spelling-error', 'grammar-error'].map(line => ({
+			code: `a { text-decoration-line: ${line}; ${property}: ${value}; }`,
+			errors: [{messageId: 'no-ineffective-properties/error-decoration', data: {property}}],
+		}))),
+		{
+			code: '@supports (text-decoration-line: spelling-error) { a { TEXT-DECORATION-LINE: /* error */ SPELLING-ERROR; TEXT-DECORATION-THICKNESS: 3px !important; } }',
+			errors: [{messageId: 'no-ineffective-properties/error-decoration'}],
+		},
+	],
+});
 
 test({
 	valid: [

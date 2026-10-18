@@ -237,12 +237,13 @@ The rule reports:
 - `position-area`, `position-try`, `position-try-fallbacks`, `position-try-order`, and `position-visibility` with explicit `position: static`, `relative`, or `sticky`. These controls require absolute or fixed positioning.
 - Floats other than `none`, clearance, and `column-span: all` with `position: absolute` or `fixed`.
 - `flex`, `flex-basis`, `flex-grow`, `flex-shrink`, `order`, and `vertical-align` with `position: absolute` or `fixed`.
+- `break-before`, `break-after`, `break-inside`, and their `page-break-*` aliases with `position: absolute` or `fixed`.
 - Ellipsis in `text-overflow` with flex, grid, or table display, or with `overflow: visible` (including `visible visible`).
 - `border-spacing` and padding with `border-collapse: collapse` on `display: table` or `inline-table`.
 - `perspective-origin` with `perspective: none`.
 - `offset-distance`, `offset-rotate`, and `offset-anchor` with `offset-path: none`.
 - `shape-image-threshold` with `shape-outside: none`, a basic shape such as `circle()` or `polygon()`, or a shape box such as `margin-box`. Thresholds only affect image-based shapes, including gradients.
-- `text-decoration-color`, `text-decoration-style`, `text-decoration-thickness`, and `text-decoration-inset` with `text-decoration-line: none`.
+- `text-decoration-color`, `text-decoration-style`, `text-decoration-thickness`, and `text-decoration-inset` with `text-decoration-line: none`, `spelling-error`, or `grammar-error`. Error decorations use browser-defined styling.
 - `outline-color`, `outline-width`, and `outline-offset` with `outline-style: none`.
 - `column-rule-color` with `column-rule-style: none`. Column rule width is allowed because it can affect crossing gap decorations.
 - Related image controls, such as position, size, repeat, slice, and compositing, when `background-image`, `border-image-source`, or `mask-image` is `none`.
@@ -565,6 +566,22 @@ Absolute and fixed positioning take a box out of flow. Flex sizing, item orderin
 
 `justify-self`, `align-self`, and grid placement can affect positioned boxes and are allowed with absolute or fixed positioning.
 
+Break controls do not apply to absolutely positioned or fixed boxes. Their contents can still fragment, so break controls on in-flow descendants and inherited `widows` and `orphans` remain allowed:
+
+```css
+/* ❌ */
+.chapter {
+	position: absolute;
+	break-before: page;
+}
+
+/* ✅ */
+.chapter {
+	position: relative;
+	break-before: page;
+}
+```
+
 Anchor placement and position fallback controls require absolute or fixed positioning. Relative and sticky positioning do not enable them:
 
 ```css
@@ -611,6 +628,26 @@ These checks include reset values, just like the static inset checks. An omitted
 }
 ```
 
+## Error decorations
+
+The browser controls the appearance of `spelling-error` and `grammar-error` decorations. Use an ordinary decoration line when you want to customize its appearance:
+
+```css
+/* ❌ */
+.annotation {
+	text-decoration-line: spelling-error;
+	text-decoration-color: blue;
+}
+
+/* ✅ */
+.annotation {
+	text-decoration-line: underline;
+	text-decoration-color: blue;
+}
+```
+
+Inherited underline and skip controls are allowed because they can affect decorations on descendants. Properties such as `color`, `fill`, and `stroke` can still style the text itself.
+
 ## Intentional declarations
 
 `border-spacing` is inherited and can still affect descendant tables with separate borders, so disable the rule when you intentionally supply inherited spacing.
@@ -642,7 +679,7 @@ General:
 Display, disabled effects, and overflow:
 
 - Display checks ignore `display: none` and `display: contents`.
-- A disabled effect needs a single `none` value in the controlling longhand, except that `shape-image-threshold` also checks basic shapes and shape boxes.
+- A disabled effect needs a single `none` value in the controlling longhand, except that text decoration controls also check `spelling-error` and `grammar-error`, and `shape-image-threshold` also checks basic shapes and shape boxes.
 - The scroll snap check also accepts `scroll-snap-align: none none`. Explicit `scroll-snap-stop: normal` and all-`normal` background blending lists are allowed as resets.
 - Basic shapes and shape boxes must match the CSS grammar. The installed grammar does not currently recognize a single percentage radius such as `circle(50%)`, so that form is skipped.
 - Visible overflow is only detected from the `overflow` shorthand.
