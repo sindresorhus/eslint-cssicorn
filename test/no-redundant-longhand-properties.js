@@ -115,6 +115,10 @@ testRule.snapshot({
 		'a { font-synthesis-weight: auto; font-synthesis-style: none; font-synthesis-small-caps: none; font-synthesis-position: auto; }',
 		'a { font-variant-ligatures: normal; font-variant-position: normal; font-variant-caps: small-caps; font-variant-numeric: normal; font-variant-alternates: normal; font-variant-east-asian: normal; font-variant-emoji: emoji; }',
 		'a { transition-property: opacity; transition-duration: 1s; transition-timing-function: ease; transition-delay: 0s; }',
+		'a { transition-property: normal; transition-duration: 1s; transition-timing-function: ease; transition-delay: 0s; transition-behavior: normal; }',
+		'a { transition-property: allow-discrete; transition-duration: 1s; transition-timing-function: ease; transition-delay: 0s; transition-behavior: normal; }',
+		'a { transition-property: NORMAL; transition-duration: 1s; transition-timing-function: ease; transition-delay: 0s; transition-behavior: NORMAL; }',
+		'a { transition-property: opacity, allow-discrete; transition-duration: 1s; transition-timing-function: ease; transition-delay: 0s; transition-behavior: normal; }',
 		'a { transition: opacity 1s allow-discrete; transition-property: opacity; transition-duration: 1s; transition-timing-function: ease; transition-delay: 0s; }',
 		outdent`
 			a {
@@ -1213,6 +1217,15 @@ testRule({
 	valid: [],
 	invalid: [{
 		code: 'a { animation-trigger: initial; animation-composition: initial; animation-range: initial; animation-duration: 1s; animation-timing-function: ease; animation-delay: 0s; animation-iteration-count: 1; animation-direction: normal; animation-fill-mode: none; animation-play-state: running; animation-name: fade; animation-timeline: auto; }',
+		errors: 1,
+	}],
+});
+
+testRule({
+	valid: [],
+	invalid: [{
+		code: 'a { transition-property: linear; transition-duration: 1s; transition-timing-function: ease; transition-delay: 0s; transition-behavior: normal; }',
+		output: 'a { transition: 1s ease 0s linear; }',
 		errors: 1,
 	}],
 });

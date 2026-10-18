@@ -196,6 +196,11 @@ const serializeTransition = (declarations, sourceCode) => {
 		return;
 	}
 
+	// Without an explicit behavior component, these property names become behavior keywords in the shorthand.
+	if (splitCommaList(declarations[0].value, sourceCode).some(value => ['normal', 'allow-discrete'].includes(normalizeCssIdentifier(value)))) {
+		return;
+	}
+
 	return serializeCyclicLists(declarations, sourceCode, [1, 2, 3, 0], 0);
 };
 
