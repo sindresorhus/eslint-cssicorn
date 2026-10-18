@@ -169,6 +169,34 @@ a {
 }
 ```
 
+```css
+/* ❌ */
+.card {
+	animation-name: none;
+	animation-trigger: --reveal play;
+}
+
+/* ✅ */
+.card {
+	animation-name: reveal;
+	animation-trigger: --reveal play;
+}
+```
+
+```css
+/* ❌ */
+.link {
+	text-decoration-line: none;
+	text-decoration-inset: 2px;
+}
+
+/* ✅ */
+.link {
+	text-decoration-line: underline;
+	text-decoration-inset: 2px;
+}
+```
+
 ## Checks
 
 The rule reports:
@@ -181,7 +209,7 @@ The rule reports:
 - `shape-outside`, `shape-margin`, and `shape-image-threshold` on known ordinary flex or grid items selected by a nested child selector.
 - Flex sizing, grid placement, `order`, and `align-self` on known children of an ordinary flow container, such as `display: block`, `flow-root`, or `inline-block`, selected by a nested child selector.
 - `z-index` other than `auto` with explicit `position: static` on known children of an ordinary flow container selected by a nested child selector. Static flex and grid items are allowed.
-- `justify-self` and `place-self` on explicitly inline-level children of a known ordinary flow container selected by a nested child selector.
+- `justify-self`, `place-self`, and `column-span: all` on explicitly inline-level children of a known ordinary flow container selected by a nested child selector.
 - `justify-self`, `place-self`, `vertical-align`, and `column-span: all` on floated children of a known ordinary flow container selected by a nested child selector.
 - `columns`, `column-count`, `column-width`, `column-fill`, `column-height`, and `column-wrap` with flex, grid, or table display. Table cells and captions can still contain columns.
 - `align-content` on a flex container with `nowrap` in `flex-wrap` or `flex-flow`, including the implicit `nowrap` in direction-only shorthands such as `flex-flow: column`. Use `align-items` or wrapping instead.
@@ -192,12 +220,12 @@ The rule reports:
 - `position-area`, `position-try`, `position-try-fallbacks`, `position-try-order`, and `position-visibility` with explicit `position: static`, `relative`, or `sticky`. These controls require absolute or fixed positioning.
 - Floats other than `none`, clearance, and `column-span: all` with `position: absolute` or `fixed`.
 - `flex`, `flex-basis`, `flex-grow`, `flex-shrink`, `order`, and `vertical-align` with `position: absolute` or `fixed`.
-- Ellipsis in `text-overflow` with flex or grid display, or with `overflow: visible` (including `visible visible`).
+- Ellipsis in `text-overflow` with flex, grid, or table display, or with `overflow: visible` (including `visible visible`).
 - `border-spacing` and padding with `border-collapse: collapse` on `display: table` or `inline-table`.
 - `perspective-origin` with `perspective: none`.
 - `offset-distance`, `offset-rotate`, and `offset-anchor` with `offset-path: none`.
 - `shape-image-threshold` with `shape-outside: none`, a basic shape such as `circle()` or `polygon()`, or a shape box such as `margin-box`. Thresholds only affect image-based shapes, including gradients.
-- `text-decoration-color`, `text-decoration-style`, and `text-decoration-thickness` with `text-decoration-line: none`.
+- `text-decoration-color`, `text-decoration-style`, `text-decoration-thickness`, and `text-decoration-inset` with `text-decoration-line: none`.
 - `outline-color`, `outline-width`, and `outline-offset` with `outline-style: none`.
 - `column-rule-color` with `column-rule-style: none`. Column rule width is allowed because it can affect crossing gap decorations.
 - Related image controls, such as position, size, repeat, slice, and compositing, when `background-image`, `border-image-source`, or `mask-image` is `none`.
@@ -205,7 +233,7 @@ The rule reports:
 - `view-transition-class` with `view-transition-name: none`.
 - Non-`normal` background blending with `background-image: none`.
 - `scroll-snap-stop: always` with `scroll-snap-align: none` or `none none`. Mixed values such as `none start` are allowed because they still define a snap position on one axis.
-- Related animation or transition controls with `animation-name: none` or `transition-property: none`.
+- Related animation controls, including `animation-trigger`, with `animation-name: none`, and transition controls with `transition-property: none`.
 - Related timeline axis and inset controls with `scroll-timeline-name: none` or `view-timeline-name: none`.
 - Omitted styles in border shorthands, `outline`, `column-rule`, and `text-emphasis`, omitted lines in `text-decoration`, and omitted names in `animation` lists where no item has a name.
 
@@ -297,26 +325,30 @@ Flex sizing requires a flex parent, even if the item itself has flex display. An
 }
 ```
 
-Inline-level boxes in ordinary flow cannot use `justify-self` or `place-self`. Changing the box to a block-level box enables inline-axis self-alignment:
+Inline-level boxes in ordinary flow cannot use `justify-self`, `place-self`, or `column-span: all`. Changing the box to a block-level box enables inline-axis self-alignment and column spanning:
 
 ```css
 /* ❌ */
 .container {
 	display: block;
+	columns: 2;
 
 	> .item {
 		display: inline-flex;
 		justify-self: center;
+		column-span: all;
 	}
 }
 
 /* ✅ */
 .container {
 	display: block;
+	columns: 2;
 
 	> .item {
 		display: flex;
 		justify-self: center;
+		column-span: all;
 	}
 }
 ```
@@ -446,6 +478,24 @@ Floated children of an ordinary flow container cannot use `justify-self`, `place
 		justify-self: center;
 		vertical-align: middle;
 	}
+}
+```
+
+A table box does not directly hold inline text for ellipsis. Apply `text-overflow` to a table cell or another block container holding the text:
+
+```css
+/* ❌ */
+.label {
+	display: table;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+/* ✅ */
+.label {
+	display: block;
+	overflow: hidden;
+	text-overflow: ellipsis;
 }
 ```
 

@@ -137,7 +137,7 @@ const inactivePropertyGroups = [
 	{properties: ['offset-distance', 'offset-rotate', 'offset-anchor'], controllingProperties: ['offset-path', 'offset'], messageId: MESSAGE_ID_MOTION},
 	{properties: ['shape-image-threshold'], controllingProperties: ['shape-outside', '-webkit-shape-outside'], messageId: MESSAGE_ID_SHAPE_IMAGE_THRESHOLD},
 	{
-		properties: ['text-decoration-color', 'text-decoration-style', 'text-decoration-thickness'],
+		properties: ['text-decoration-color', 'text-decoration-style', 'text-decoration-thickness', 'text-decoration-inset'],
 		controllingProperties: ['text-decoration-line', 'text-decoration', '-webkit-text-decoration-line', '-webkit-text-decoration'],
 		messageId: MESSAGE_ID_DECORATION,
 	},
@@ -182,6 +182,7 @@ const inactivePropertyGroups = [
 			'animation-play-state',
 			'animation-composition',
 			'animation-timeline',
+			'animation-trigger',
 			'animation-range',
 			'animation-range-start',
 			'animation-range-end',
@@ -417,7 +418,7 @@ const getFlowItemProblem = (node, property, keyword, {float, display}) => {
 		return {node, messageId: MESSAGE_ID_FLOATED_ITEM, data: {property}};
 	}
 
-	if (['justify-self', 'place-self'].includes(property) && display?.split(' ').some(keyword => inlineDisplayKeywords.has(keyword))) {
+	if ((['justify-self', 'place-self'].includes(property) || (property === 'column-span' && keyword === 'all')) && display?.split(' ').some(keyword => inlineDisplayKeywords.has(keyword))) {
 		return {node, messageId: MESSAGE_ID_INLINE_FLOW_ITEM, data: {property}};
 	}
 
@@ -652,7 +653,7 @@ const getDeclarationProblem = (node, property, controls, itemLayout) => {
 		return containerProblem;
 	}
 
-	const {display, isFlex, isGrid, hasNowrap, hasVisibleOverflow} = controls;
+	const {display, isFlex, isGrid, isTable, hasNowrap, hasVisibleOverflow} = controls;
 	if (property === 'align-content' && hasNowrap) {
 		return {node, messageId: MESSAGE_ID_NOWRAP};
 	}
@@ -667,13 +668,14 @@ const getDeclarationProblem = (node, property, controls, itemLayout) => {
 		return inactiveEffectProblem;
 	}
 
-	if (property === 'text-overflow' && (isFlex || isGrid || hasVisibleOverflow)) {
+	const hasIncompatibleTextDisplay = isFlex || isGrid || isTable;
+	if (property === 'text-overflow' && (hasIncompatibleTextDisplay || hasVisibleOverflow)) {
 		const value = getEllipsisValue(node.value);
 		if (!value) {
 			return;
 		}
 
-		if (isFlex || isGrid) {
+		if (hasIncompatibleTextDisplay) {
 			return {node, messageId: MESSAGE_ID_TEXT_OVERFLOW_DISPLAY, data: {value, display}};
 		}
 

@@ -584,3 +584,104 @@ test({
 		},
 	],
 });
+
+test({
+	valid: [
+		...['block', 'flex', 'grid', 'table'].map(display => `a { display: block; > .item { display: ${display}; column-span: all; } }`),
+		'a { display: block; > .item { display: inline-flex; column-span: none; } }',
+		'a { display: block; > .item { display: inline-flex; column-span: var(--span); } }',
+		'a { display: block; > .item { display: inline-flex; column-span: inherit; } }',
+		'a { display: block; > .item { display: var(--display); column-span: all; } }',
+		'a { display: block; > .item { display: inline; display: block; column-span: all; } }',
+		'a { display: block; > .item { display: inline-flex; position: var(--position); column-span: all; } }',
+		'a { display: inline-flex; column-span: all; }',
+	],
+	invalid: [
+		...['inline', 'inline-block', 'inline-flex', 'inline-grid', 'inline-table', 'flow inline'].map(display => ({
+			code: `a { display: block; > .item { display: ${display}; column-span: all; } }`,
+			errors: [{messageId: 'no-ineffective-properties/inline-flow-item', data: {property: 'column-span'}}],
+		})),
+		{
+			code: '@supports (columns: 2) { a { display: flow-root; columns: 2; & > .heading { DISPLAY: INLINE-FLEX; COLUMN-SPAN: /* heading */ ALL !important; } } }',
+			errors: [{messageId: 'no-ineffective-properties/inline-flow-item'}],
+		},
+	],
+});
+
+test({
+	valid: [
+		...['table-cell', 'table-caption', 'block'].map(display => `a { display: ${display}; overflow: hidden; text-overflow: ellipsis; }`),
+		'a { display: table; text-overflow: clip; }',
+		'a { display: table; text-overflow: "…"; }',
+		'a { display: table; text-overflow: var(--overflow); }',
+		'a { display: table; text-overflow: inherit; }',
+		'a { display: table; display: block; text-overflow: ellipsis; }',
+		'a { display: var(--display); text-overflow: ellipsis; }',
+		'a { all: unset; display: table; text-overflow: ellipsis; }',
+		'a { display: table; > .item { text-overflow: ellipsis; } }',
+	],
+	invalid: [
+		...['table', 'inline-table', 'block table', 'inline table'].map(display => ({
+			code: `a { display: ${display}; overflow: hidden; text-overflow: ellipsis; }`,
+			errors: [{messageId: 'no-ineffective-properties/text-overflow-display', data: {value: 'ellipsis', display}}],
+		})),
+		{
+			code: 'a { @media (width > 1px) { DISPLAY: INLINE-TABLE; TEXT-OVERFLOW: /* edges */ CLIP ELLIPSIS !important; } }',
+			errors: [{messageId: 'no-ineffective-properties/text-overflow-display', data: {value: 'clip ellipsis', display: 'inline-table'}}],
+		},
+	],
+});
+
+test({
+	valid: [
+		'a { animation-trigger: --reveal play; }',
+		'a { animation-name: reveal; animation-trigger: --reveal play; }',
+		'a { animation-name: none, reveal; animation-trigger: --reveal play; }',
+		...[
+			'animation-name: reveal',
+			'animation: reveal 1s',
+			'-webkit-animation-name: reveal',
+			'-webkit-animation: reveal 1s',
+		].map(control => `a { animation-name: none; ${control}; animation-trigger: --reveal play; }`),
+		...['inherit', 'var(--name)'].map(name => `a { animation-name: ${name}; animation-trigger: --reveal play; }`),
+		...['inherit', 'var(--trigger)'].map(trigger => `a { animation-name: none; animation-trigger: ${trigger}; }`),
+		'a { all: unset; animation-name: none; animation-trigger: --reveal play; }',
+		'a { animation-name: none; > .item { animation-trigger: --reveal play; } }',
+	],
+	invalid: [
+		...['--reveal play', '--reveal play pause', '--enter play, --exit play'].map(value => ({
+			code: `a { animation-name: none; animation-trigger: ${value}; }`,
+			errors: [{messageId: 'no-ineffective-properties/animation', data: {property: 'animation-trigger'}}],
+		})),
+		{
+			code: 'a { @media (width > 1px) { ANIMATION-NAME: /* disabled */ NONE; ANIMATION-TRIGGER: --reveal PLAY !important; } }',
+			errors: [{messageId: 'no-ineffective-properties/animation'}],
+		},
+	],
+});
+
+test({
+	valid: [
+		'a { text-decoration-inset: 2px; }',
+		'a { text-decoration-line: underline; text-decoration-inset: 2px; }',
+		...[
+			'text-decoration-line: underline',
+			'text-decoration: underline',
+			'-webkit-text-decoration: underline',
+		].map(control => `a { text-decoration-line: none; ${control}; text-decoration-inset: 2px; }`),
+		'a { text-decoration-line: var(--line); text-decoration-inset: 2px; }',
+		...['inherit', 'var(--inset)'].map(value => `a { text-decoration-line: none; text-decoration-inset: ${value}; }`),
+		'a { all: unset; text-decoration-line: none; text-decoration-inset: 2px; }',
+		'a { text-decoration-line: none; > .item { text-decoration-inset: 2px; } }',
+	],
+	invalid: [
+		...['2px', '-2px 4px', 'auto'].map(value => ({
+			code: `a { text-decoration-line: none; text-decoration-inset: ${value}; }`,
+			errors: [{messageId: 'no-ineffective-properties/decoration', data: {property: 'text-decoration-inset'}}],
+		})),
+		{
+			code: 'a { text-decoration-line: underline; > .item { TEXT-DECORATION-LINE: /* disabled */ NONE; TEXT-DECORATION-INSET: 2px !important; } }',
+			errors: [{messageId: 'no-ineffective-properties/decoration'}],
+		},
+	],
+});
