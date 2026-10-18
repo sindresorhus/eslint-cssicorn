@@ -176,6 +176,11 @@ function getUnknownFeatureProblem(node, name, context) {
 function getInvalidValueProblem(sourceCode, valueNode, name, syntax) {
 	// CSSTree's feature value types use lists for function children, but @eslint/css supplies plain nodes with arrays.
 	const node = /** @type {CssNodePlain} */ (valueNode);
+	// Tolerant recovery can produce a ratio without a denominator, which the lexer cannot serialize.
+	if (node.type === 'Ratio' && !node.right) {
+		return;
+	}
+
 	const {error} = sourceCode.lexer.match(syntax, node);
 
 	if (!error || hasUnknownFunction(node, sourceCode.lexer)) {

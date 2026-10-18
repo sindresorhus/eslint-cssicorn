@@ -2,6 +2,30 @@ import {getTester} from './utils/test.js';
 
 const {test} = getTester(import.meta);
 
+test({
+	testerOptions: {languageOptions: {tolerant: true}},
+	valid: [
+		'@media (width: calc(var(',
+		'@media (aspect-ratio: min(var(',
+		'@media (height: max(var(',
+		'@media (width > calc(var(',
+		'@media (10px < width < calc(var(',
+		'@media (aspect-ratio: 1) {}',
+		'@media (aspect-ratio: calc(1)) {}',
+		'@media (aspect-ratio: 16 / 9) {}',
+	],
+	invalid: [
+		{
+			code: '@media (aspect-ratio: -1 / 2) {}',
+			errors: [{messageId: 'no-invalid-media-features/invalid-value'}],
+		},
+		{
+			code: '@media (width: calc(var(--breakpoint))) {}',
+			errors: [{messageId: 'no-invalid-media-features/invalid-value'}],
+		},
+	],
+});
+
 const validMediaFeatureValues = [
 	['any-hover', 'hover'],
 	['any-pointer', 'fine'],
