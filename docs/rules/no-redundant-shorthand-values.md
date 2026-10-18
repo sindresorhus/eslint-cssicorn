@@ -29,17 +29,6 @@ This rule reports repeated values and default components that can be omitted fro
 }
 ```
 
-These are not reported:
-
-```css
-/* ✅ */
-.button {
-	margin: 1px 2px 3px 2px;
-	border-radius: 4px / 4px;
-	padding: var(--padding) var(--padding);
-}
-```
-
 ```css
 /* ❌ */
 .example {
@@ -69,6 +58,17 @@ These are not reported:
 	background: red;
 	animation: 1s slide;
 	transition: opacity 1s;
+}
+```
+
+These are not reported:
+
+```css
+/* ✅ */
+.button {
+	margin: 1px 2px 3px 2px;
+	border-radius: 4px / 4px;
+	padding: var(--padding) var(--padding);
 }
 ```
 
@@ -105,6 +105,8 @@ The following unprefixed shorthands also support omitting default components:
 
 Equivalent defaults are recognized conservatively, including constant numeric expressions, transparent-black hexadecimal and RGB colors, and `cubic-bezier(.25, .1, .25, 1)` for `ease`. Other color spaces and expressions that cannot be evaluated are retained.
 
+Numeric expressions must have the correct CSS type. For example, a zero-valued time such as `calc(0s)` cannot be omitted as a background position, and unitless `calc(0)` is not a length.
+
 Default components are removed from right to left, retaining at least one original component in each comma-separated layer. Layers are never merged or removed. Components that disambiguate another value are retained, such as the easing in `animation: 1s ease ease` or the duration in `transition: opacity 0s 1s`.
 
 Explicit animation duration `0s` is retained because omitted duration defaults to `auto`, which can behave differently with scroll timelines. Nondefault values are retained even when they currently have no visible effect, such as a duration in `animation: 1s none`.
@@ -114,6 +116,6 @@ Explicit animation duration `0s` is retained because omitted duration defaults t
 - Declarations that cannot be validated are ignored.
 - Declarations with functions that may not repeat the same value are ignored: `random()` and the substitution functions (`attr()`, `env()`, `first-valid()`, `ident()`, `if()`, `inherit()`, `random-item()`, `var()`, and custom functions such as `--spacing()`).
 - For repeated positional values, other functions are compared without evaluation, and numeric spellings such as `1px` and `1.0px` are kept distinct.
-- Default omission is limited to the component grammars listed above. Unrecognized components are ignored.
+- Default omission is limited to the component grammars listed above. Declarations with unrecognized component syntax are ignored.
 - Declarations in CSS Modules `:export` and `:import()` blocks are ignored, because JavaScript reads them as exact strings.
 - The autofix is skipped if it would remove a comment.

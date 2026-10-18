@@ -104,26 +104,44 @@ const isKeyword = (node, keyword) => node.type === 'Identifier' && normalizeCssI
 const getNodesKey = nodes => nodes.map(node => generate(node)).join(' ');
 
 /**
+Recognize a zero length or percentage without accepting unitless calculations or other dimension types.
+*/
+const isZeroPositionValue = (node, lexer) => {
+	const quantity = evaluateCssMath(node);
+	if (quantity?.value !== 0) {
+		return false;
+	}
+
+	if (quantity.unit === undefined) {
+		return node.type === 'Number';
+	}
+
+	return quantity.unit === '%' || Boolean(lexer.matchType('length', {type: 'Dimension', value: '0', unit: quantity.unit}).matched);
+};
+
+/**
 Recognize the initial two-axis position without resolving lengths against a layout.
 */
-const isInitialPosition = nodes => nodes.length === 2 && (
-	(nodes.every(node => evaluateCssMath(node)?.value === 0))
-	|| (isKeyword(nodes[0], 'left') && isKeyword(nodes[1], 'top'))
-	|| (isKeyword(nodes[0], 'top') && isKeyword(nodes[1], 'left'))
-	|| (isKeyword(nodes[0], 'left') && evaluateCssMath(nodes[1])?.value === 0)
-	|| (evaluateCssMath(nodes[0])?.value === 0 && isKeyword(nodes[1], 'top'))
-);
+const isInitialPosition = (nodes, lexer) => {
+	if (nodes.length !== 2) {
+		return false;
+	}
+
+	const [horizontal, vertical] = nodes;
+	return (isKeyword(horizontal, 'top') && isKeyword(vertical, 'left'))
+		|| ((isKeyword(horizontal, 'left') || isZeroPositionValue(horizontal, lexer)) && (isKeyword(vertical, 'top') || isZeroPositionValue(vertical, lexer)));
+};
 
 /**
 Recognize only finite, exactly equal default values, retaining numeric units and nondefault color channels.
 */
-const isInitialComponent = (nodes, component) => {
+const isInitialComponent = (nodes, component, lexer) => {
 	if (nodes.length === 0) {
 		return true;
 	}
 
 	if (component.initial === 'position') {
-		return isInitialPosition(nodes);
+		return isInitialPosition(nodes, lexer);
 	}
 
 	if (component.name === 'background-size' || component.name === 'background-repeat') {
@@ -189,12 +207,17 @@ const getComponentGroups = (property, nodes, lexer) => {
 			return;
 		}
 
+		const trace = match.getTrace(node) ?? [];
 		let component;
-		if (property === 'transition' && match.isType(node, 'time')) {
+		if (property === 'transition' && trace.some(syntax => syntax.type === 'Type' && syntax.name === 'time')) {
 			const name = timeCount++ === 0 ? 'transition-duration' : 'transition-delay';
 			component = components.find(component => component.name === name);
 		} else {
-			component = components.find(component => component.type ? match.isType(node, component.type) : match.isProperty(node, component.name));
+			component = components.find(component => {
+				const syntaxType = component.type ? 'Type' : 'Property';
+				const syntaxName = component.type ?? component.name;
+				return trace.some(syntax => syntax.type === syntaxType && syntax.name === syntaxName);
+			});
 		}
 
 		if (!component && ['animation', 'transition'].includes(property) && isKeyword(node, 'none')) {
@@ -236,7 +259,7 @@ const getExpansion = (property, nodes, lexer) => {
 
 	const {groups, slash} = result;
 	const components = profiles.get(property);
-	const expansion = components.map(component => isInitialComponent(groups.get(component.name), component) ? '' : getNodesKey(groups.get(component.name)));
+	const expansion = components.map(component => isInitialComponent(groups.get(component.name), component, lexer) ? '' : getNodesKey(groups.get(component.name)));
 	const removableGroups = components.filter((component, index) => expansion[index] === '').map(component => groups.get(component.name)).filter(nodes => nodes.length > 0);
 	if (property === 'background') {
 		const boxes = groups.get('background-boxes');
