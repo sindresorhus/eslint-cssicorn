@@ -54,8 +54,7 @@ function getTokenKey(token, text) {
 	}
 
 	if (type === tokenTypes.Function) {
-		const name = decodeCssIdentifier(value.slice(0, -1));
-		return [type, name.startsWith('--') ? name : normalizeCssIdentifier(name)];
+		return [type, normalizeCssIdentifier(value.slice(0, -1))];
 	}
 
 	if ([tokenTypes.Number, tokenTypes.Dimension, tokenTypes.Percentage].includes(type)) {

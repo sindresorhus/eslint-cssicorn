@@ -15,6 +15,10 @@ test.snapshot({
 	valid: [
 		'a { color: var(--brand, purple); } b { color: var(--brand, blue); }',
 		{code: 'a { color: var(--brand, purple); color: var(--brand, blue); }', options: [{customProperties: []}]},
+		{
+			code: 'a { color: var(--brand, red); background-color: var(--Brand, blue); } b { color: var(--brand, red); background-color: var(--Brand, blue); }',
+			options: [{customProperties: ['--brand', '--Brand']}],
+		},
 		...[
 			'a { color: var(--other, red); color: var(--other, blue); }',
 			'a { color: var(--brand, purple); } b { color: var(--brand, purple); }',
@@ -34,6 +38,7 @@ test.snapshot({
 			'a { margin: var(--shared, 1px 2px); padding: var(--shared, 1px /* keep */ 2px); }',
 			'a { font-family: var(--shared, Arial, sans-serif); font-family: var(--shared, Arial , sans-serif); }',
 			'a { width: var(--shared, calc(100% - 2px)); height: var(--shared, calc( 100% - 2px )); }',
+			'a { width: var(--shared, calc(100% - 2px)); height: var(--shared, CALC(100% - 2px)); }',
 			'a { color: var(--brand, rgb(1 2 3)); color: var(--brand, rgb( 1 2 3 )); }',
 			'a { color: var(--brand, red); background-color: var(--brand, #f00); border-color: var(--brand, rgb(255 0 0)); }',
 			'a { COLOR: VAR(--brand, RED); background-color: var(--brand, #ff0000); }',
@@ -225,4 +230,12 @@ test({
 			messageId: 'consistent-custom-property-fallbacks', data: {property: '--brand'}, line: 3, column: 12, endLine: 3, endColumn: 31,
 		}],
 	}],
+});
+
+nodeTest('configured tokens keep independent baselines and report each conflict', () => {
+	const messages = linter.verify('a { color: var(--brand, red); margin: var(--shared, 1px); } b { color: var(--brand, blue); margin: var(--shared, 2px); }', config, {filename: 'tokens.css'});
+	assert.deepEqual(messages.map(message => message.message), [
+		'Fallback for custom property `--brand` differs from its first fallback.',
+		'Fallback for custom property `--shared` differs from its first fallback.',
+	]);
 });
