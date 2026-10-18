@@ -818,6 +818,20 @@ Message:
 
 `;
 
+exports[`invalid(62): @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } } @keyframes bounce { from { transform: translateY(0); } to { transform: translateY(10px); } } .icon { animation: spin calc(500ms + .5s) calc(3 / 2) calc(-250ms), bounce 1s calc(1000ms); animation-composition: replace; } 1`] = `
+
+  1 | @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } } @keyframes bounce { from { transform: translateY(0); } to { transform: translateY(10px); } } .icon { animation: spin calc(500ms + .5s) calc(3 / 2) calc(-250ms), bounce 1s calc(1000ms); animation-composition: replace; }
+
+`;
+
+exports[`invalid(62): @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } } @keyframes bounce { from { transform: translateY(0); } to { transform: translateY(10px); } } .icon { animation: spin calc(500ms + .5s) calc(3 / 2) calc(-250ms), bounce 1s calc(1000ms); animation-composition: replace; } 2`] = `
+
+Message:
+> 1 | @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } } @keyframes bounce { from { transform: translateY(0); } to { transform: translateY(10px); } } .icon { animation: spin calc(500ms + .5s) calc(3 / 2) calc(-250ms), bounce 1s calc(1000ms); animation-composition: replace; }
+    |                                                                                                                                                                                                                                                          ^^^^^^ Animation \`bounce\` replaces \`transform\` from earlier overlapping animations.
+
+`;
+
 exports[`invalid(7): @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } } @keyframes bounce { from { transform: translateY(0); } to { transform: translateY(10px); } } .icon { animation: spin 1s, none, bounce 1s; animation-composition: replace; } 1`] = `
 
   1 | @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } } @keyframes bounce { from { transform: translateY(0); } to { transform: translateY(10px); } } .icon { animation: spin 1s, none, bounce 1s; animation-composition: replace; }

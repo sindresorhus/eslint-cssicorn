@@ -104,6 +104,7 @@ test.snapshot({
 			'animation-delay: calc(infinity * 1s);',
 			'animation-iteration-count: calc(infinity);',
 		].map(declaration => stylesheet(`${animations} ${declaration}`)),
+		stylesheet('animation: spin calc(500ms + .5s) calc(3 / 2) calc(-250ms), bounce 1s calc(1250ms); animation-composition: replace;'),
 	],
 	invalid: [
 		stylesheet(),
@@ -186,5 +187,6 @@ test.snapshot({
 		stylesheet('animation: spin 1s, bounce 1s; animation-delay: calc(1s - 750ms), 0s; animation-composition: replace;'),
 		stylesheet('animation: spin calc(-1s) infinite, spin 1s calc(-1), spin 1s, bounce 1s; animation-composition: replace;'),
 		stylesheet('animation: spin 1s, bounce 1s 1s; animation-iteration-count: calc(3 / 2); animation-composition: replace;'),
+		stylesheet('animation: spin calc(500ms + .5s) calc(3 / 2) calc(-250ms), bounce 1s calc(1000ms); animation-composition: replace;'),
 	],
 });

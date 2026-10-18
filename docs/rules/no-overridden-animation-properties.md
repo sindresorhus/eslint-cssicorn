@@ -9,6 +9,8 @@
 
 This rule reports properties replaced by a later animation during overlapping active intervals. For example, two animations can work separately but fail to combine because both animate `transform` and the later effect replaces the earlier effect.
 
+Earlier and later refer to positions in the `animation-name` list, regardless of when each animation starts.
+
 Only locally explicit `animation-composition: replace` is checked. Replacement can be intentional; use an ESLint disable comment for those cases. This rule does not prove that an entire animation is ineffective.
 
 There is no autofix because changing composition or combining property values changes the animation's behavior.
