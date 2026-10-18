@@ -78,3 +78,13 @@ test('classified shorthands have uniformly classified longhands', () => {
 		}
 	}
 });
+
+test('Webref shorthands are classified without local expansion entries', () => {
+	for (const property of ['animation-delay', 'container', 'pointer-timeline', 'scroll-timeline', 'view-timeline', 'timeline-trigger-activation-range', 'timeline-trigger-active-range']) {
+		assert.ok(nonAnimatableProperties.includes(property), property);
+	}
+
+	for (const property of ['color-adjust', 'marker', 'rule-break', 'rule-style', 'rule-visibility-items', 'text-spacing']) {
+		assert.ok(discreteProperties.includes(property), property);
+	}
+});

@@ -1,3 +1,4 @@
+import {getKeyframeOffsets} from './shared/css-animations.js';
 import {
 	getDeclarationRemovalRange,
 	isImportantDeclaration,
@@ -34,33 +35,6 @@ const animationControlProperties = new Set([
 	'animation-range-end',
 	'animation-trigger',
 ]);
-
-const getKeyframeOffset = selector => {
-	if (selector.children.length !== 1) {
-		return;
-	}
-
-	const [node] = selector.children;
-	if (node.type === 'Percentage') {
-		const offset = Number(node.value);
-		if (offset >= 0 && offset <= 100) {
-			return offset;
-		}
-	} else if (node.type === 'TypeSelector') {
-		const name = normalizeCssIdentifier(node.name);
-		if (name === 'from') {
-			return 0;
-		}
-
-		if (name === 'to') {
-			return 100;
-		}
-	}
-};
-
-const getKeyframeOffsets = rule => rule.prelude?.type === 'SelectorList'
-	? rule.prelude.children.map(selector => getKeyframeOffset(selector))
-	: [undefined];
 
 const getMessageId = (declaration, property, isTerminalKeyframe) => {
 	if (isImportantDeclaration(declaration)) {

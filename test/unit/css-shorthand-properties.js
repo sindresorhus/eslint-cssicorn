@@ -31,3 +31,12 @@ test('independent properties are not treated as shorthand resets', () => {
 	assert.equal(shorthandToAffectedProperties.get('animation').has('animation-composition'), false);
 	assert.equal(shorthandToAffectedProperties.has('text-align'), false);
 });
+
+test('background position expands physical axes without enabling shorthand serialization', () => {
+	assert.equal(shorthandProperties.has('background-position'), false);
+	assert.deepEqual([...shorthandToAffectedProperties.get('background-position')], ['background-position-x', 'background-position-y']);
+	const properties = shorthandToAffectedProperties.get('background');
+	for (const property of ['background-position', 'background-position-x', 'background-position-y']) {
+		assert.ok(properties.has(property), property);
+	}
+});

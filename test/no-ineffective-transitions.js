@@ -4,6 +4,26 @@ const {test} = getTester(import.meta);
 
 test({
 	valid: [
+		'a { transition: marker 1s allow-discrete; }',
+	],
+	invalid: [
+		{
+			code: 'a { transition: container 1s; }',
+			errors: [{messageId: 'no-ineffective-transitions/non-animatable', data: {property: 'container'}, suggestions: 0}],
+		},
+		{
+			code: 'a { transition: marker 1s; }',
+			errors: [{
+				messageId: 'no-ineffective-transitions/discrete',
+				data: {property: 'marker'},
+				suggestions: [{messageId: 'no-ineffective-transitions/allow-discrete', output: 'a { transition: allow-discrete marker 1s; }'}],
+			}],
+		},
+	],
+});
+
+test({
+	valid: [
 		'a { transition: display 1s; -webkit-transition: opacity 1s; }',
 		'a { -webkit-transition: display 1s; transition: opacity 1s; }',
 		'a { transition: display 1s; -webkit-transition-property: opacity; }',

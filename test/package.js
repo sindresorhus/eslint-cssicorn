@@ -328,6 +328,33 @@ test('unknown type selectors in Markdown CSS fences use original document locati
 	}]);
 });
 
+test('animation property documentation fences report only the failing example', async () => {
+	const ruleId = 'cssicorn/no-overridden-animation-properties';
+	const eslint = new ESLint({
+		overrideConfigFile: true,
+		baseConfig: [
+			{
+				files: ['**/*.md'],
+				plugins: {markdown},
+				language: 'markdown/commonmark',
+				processor: 'markdown/markdown',
+			},
+			{
+				...eslintCssicorn.configs.recommended,
+				rules: {[ruleId]: 'error'},
+			},
+		],
+	});
+	const code = fs.readFileSync('docs/rules/no-overridden-animation-properties.md', 'utf8');
+	const [result] = await eslint.lintText(code, {filePath: 'example.md'});
+	const animationLine = code.split('\n').findIndex(line => line.includes('animation: spin')) + 1;
+	assert.equal(result.messages[0]?.line, animationLine);
+	assert.deepEqual(result.messages.map(({ruleId, message}) => ({ruleId, message})), [{
+		ruleId,
+		message: 'Animation `bounce` replaces `transform` from earlier overlapping animations.',
+	}]);
+});
+
 test('nesting autofixes in Markdown CSS fences preserve surrounding prose and converge', async () => {
 	const eslint = new ESLint({
 		overrideConfigFile: true,
