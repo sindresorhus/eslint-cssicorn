@@ -34,6 +34,7 @@ Additional components used only for comparison, without extending the shared sho
 @type {Map<string, string[]>}
 */
 const additionalShorthandComponents = new Map([
+	['-webkit-text-stroke', ['-webkit-text-stroke-width', '-webkit-text-stroke-color']],
 	['background-position', ['background-position-x', 'background-position-y']],
 	['caret', ['caret-color', 'caret-animation', 'caret-shape']],
 	['contain-intrinsic-size', ['contain-intrinsic-width', 'contain-intrinsic-height']],
@@ -141,6 +142,7 @@ const getComponentNames = property => additionalShorthandComponents.get(property
 const layeredShorthands = new Set(['background', 'background-position', 'mask', 'animation', 'animation-range', 'transition', 'scroll-timeline', 'view-timeline']);
 const copyingPairShorthands = new Set(['place-content', 'place-items', 'place-self', 'cue', 'pause', 'rest']);
 const gridPlacementShorthands = new Set(['grid-row', 'grid-column', 'grid-area']);
+const uniqueGrammarShorthands = new Set(['-webkit-text-stroke', 'font-variant', 'mask']);
 const fontComponents = ['font-style', 'font-variant-caps', 'font-weight', 'font-width', 'font-size', 'line-height', 'font-family'];
 const componentTypes = new Map([
 	['bg-image', 'background-image'],
@@ -296,7 +298,7 @@ const getGridComponents = (property, nodes, {getSlot, match, canonicalNodes}) =>
 @param {Pick<ComponentOptions, 'match' | 'lexer'>} options
 */
 const getNamedComponentName = (property, canonicalNode, names, {match, lexer}) => {
-	if (property === 'font-variant' || property === 'mask') {
+	if (uniqueGrammarShorthands.has(property)) {
 		// Ambiguous values, such as mask geometry boxes, need coupled expansion and are skipped.
 		const matches = names.filter(name => lexer.matchProperty(name, canonicalNode).matched);
 		return matches.length === 1 ? matches[0] : undefined;

@@ -10,6 +10,20 @@ const nested = selector => `.button { ${base}; ${selector} { ${override}; } }`;
 test({
 	valid: [
 		...[
+			['1px red', '2px blue'],
+			['1px red', 'blue'],
+			['1px red', 'var(--stroke)'],
+			['1px red', 'initial'],
+			['thin red', 'thin blue'],
+		].map(([first, second]) => `.button { -webkit-text-stroke: ${first}; &:hover { -webkit-text-stroke: ${second}; } }`),
+		...['-webkit-text-stroke-width: 2px', '-webkit-text-stroke-color: green', '-webkit-text-stroke: 2px red', 'all: initial'].flatMap(conflict => [
+			`.button { -webkit-text-stroke: 1px red; ${conflict}; &:hover { -webkit-text-stroke: 1px blue; } }`,
+			`.button { -webkit-text-stroke: 1px red; &:hover { -webkit-text-stroke: 1px blue; ${conflict}; } }`,
+		]),
+		'.button { -webkit-text-stroke: 1px red !important; &:hover { -webkit-text-stroke: 1px blue; } }',
+		'.button { -webkit-transition-duration: 2s; transition: opacity 1s; &:hover { transition: opacity 3s; } }',
+		'.button { -webkit-text-stroke: 1px red; } .button { -webkit-text-stroke-color: green; } .button:hover { -webkit-text-stroke: 1px blue; }',
+		...[
 			['left', 'right'],
 			['left top', 'left'],
 			['top left', 'bottom left'],
@@ -186,6 +200,20 @@ test({
 		'@keyframes spin { from { border: 1px solid red; } to { border: 1px solid blue; } }',
 	],
 	invalid: [
+		{
+			code: '.title {\r\n    -webkit-text-stroke: 1px red !important;\r\n}\r\n.title:hover {\r\n    -WEBKIT-TEXT-STROKE : 1PX BLUE !IMPORTANT;\r\n}',
+			errors: [{
+				messageId: 'prefer-longhand-overrides',
+				suggestions: [{
+					messageId: 'prefer-longhand-overrides/suggestion',
+					output: '.title {\r\n    -webkit-text-stroke: 1px red !important;\r\n}\r\n.title:hover {\r\n    -webkit-text-stroke-color : BLUE !IMPORTANT;\r\n}',
+				}],
+			}],
+		},
+		{
+			code: '.button { -webkit-text-stroke: 1px red; &:hover { -webkit-text-stroke: 1px /* retain */ blue; } }',
+			errors: [{messageId: 'prefer-longhand-overrides', suggestions: []}],
+		},
 		...[
 			nested('&:hover'),
 			nested('&.active'),
@@ -254,6 +282,15 @@ test({
 			['animation: "spin" 1s', 'animation: "Spin" 1s', 'animation-name: "Spin"'],
 			['transition: opacity 1s ease 2s', 'transition: opacity 3s ease 2s', 'transition-duration: 3s'],
 			['transition: display 1s normal', 'transition: display 1s allow-discrete', 'transition-behavior: allow-discrete'],
+			['-webkit-text-stroke: 1px red', '-webkit-text-stroke: 1px blue', '-webkit-text-stroke-color: blue'],
+			['-webkit-text-stroke: 1px red', '-webkit-text-stroke: red 2px', '-webkit-text-stroke-width: 2px'],
+			['-webkit-text-stroke: 1PX RED', '-webkit-text-stroke: blue 1px', '-webkit-text-stroke-color: blue'],
+			['-webkit-text-stroke: 1px', '-webkit-text-stroke: 2px', '-webkit-text-stroke-width: 2px'],
+			['-webkit-text-stroke: red', '-webkit-text-stroke: blue', '-webkit-text-stroke-color: blue'],
+			['-webkit-text-stroke: 1px red', '-webkit-text-stroke: 1px rgb(0 0 255 / 50%)', '-webkit-text-stroke-color: rgb(0 0 255 / 50%)'],
+			['-webkit-text-stroke: 1px currentcolor', '-webkit-text-stroke: 2px CURRENTCOLOR', '-webkit-text-stroke-width: 2px'],
+			['-webkit-text-stroke: 0 red', '-webkit-text-stroke: 0 blue', '-webkit-text-stroke-color: blue'],
+			['-webkit-text-stroke: 1px red; -webkit-text-fill-color: green', '-webkit-text-stroke: 1px blue', '-webkit-text-stroke-color: blue'],
 			['background-position: 10px 20px', 'background-position: 10px 30px', 'background-position-y: 30px'],
 			['background-position: 10% 20%', 'background-position: -10% 20%', 'background-position-x: -10%'],
 			['background-position: left top', 'background-position: right top', 'background-position-x: right'],

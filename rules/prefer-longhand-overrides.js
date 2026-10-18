@@ -131,7 +131,7 @@ const getBlockDeclarations = (block, context) => {
 		}
 
 		const families = new Set();
-		for (const interaction of propertyInteractions.get(getBasePropertyName(property)) ?? []) {
+		for (const interaction of propertyInteractions.get(property) ?? propertyInteractions.get(getBasePropertyName(property)) ?? []) {
 			for (const family of familiesByInteraction.get(interaction) ?? []) {
 				families.add(family);
 			}

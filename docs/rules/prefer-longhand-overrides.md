@@ -113,6 +113,7 @@ Background components are checked without changing the other layers:
 - The speech shorthands `cue`, `pause`, and `rest`.
 - `scroll-timeline` and `view-timeline`.
 - `corner-shape` and its physical and logical side variants.
+- The standardized [`-webkit-text-stroke`](https://compat.spec.whatwg.org/#text-fill-and-stroking) shorthand. Suggestions retain the prefix. Stroke-width keywords (`thin`, `medium`, and `thick`) are skipped.
 
 The suggested component can itself be a shorthand, such as `border-color` or `background-position`.
 
@@ -133,7 +134,7 @@ Only one component may differ. The replacement must come from the override's exp
 ## Limitations
 
 - This rule does not calculate the winning cascade or inspect imports and other stylesheets. Repeating a shorthand can intentionally reset another matching style.
-- Ambiguous bases, conflicting declarations of an affected property, `all`, mismatched `!important`, pseudo-elements, vendor-prefixed declarations, and unsupported selector relationships are skipped.
+- Ambiguous bases, conflicting declarations of an affected property, `all`, mismatched `!important`, pseudo-elements, and unsupported selector relationships are skipped. Vendor-prefixed shorthands other than `-webkit-text-stroke` are skipped.
 - The legacy `grid-gap` alias is not supported.
 - Every `background-position` layer must have exactly two values in horizontal and vertical order, such as `left top` or `10px 20%`. Single values, reversed keywords, and three-value or four-value edge offsets are skipped.
 - Ambiguous component assignments are skipped. This includes `font-variant: normal` and `mask` values containing geometry boxes or lengths and percentages that could specify either position or size.
