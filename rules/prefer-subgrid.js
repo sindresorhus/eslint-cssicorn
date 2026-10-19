@@ -34,6 +34,16 @@ const groupingRules = new Set(['media', 'supports', 'container', 'layer', 'scope
 const resetProperties = new Set(['all', 'grid', 'grid-template', 'grid-template-areas', 'writing-mode']);
 const gridDisplays = new Set(['grid', 'inline-grid', 'block grid', 'inline grid', 'grid block', 'grid inline']);
 const templateFunctions = new Set(['repeat', 'minmax', 'fit-content', ...cssMathFunctions]);
+const templateProperties = new Set(['grid-template-columns', 'grid-template-rows']);
+
+/**
+Check whether a rule declares a track definition, which every reported rule has.
+
+@param {RulePlain} rule
+*/
+function hasTrackDefinition(rule) {
+	return rule.block.children.some(child => child.type === 'Declaration' && templateProperties.has(normalizeCssIdentifier(child.property)));
+}
 
 /**
 Exclude local child positioning and containment controls instead of interpreting their values.
@@ -283,7 +293,11 @@ const create = context => {
 
 	context.onExit(['StyleSheet', 'Block'], function * (block) {
 		const rules = block.children.filter(node => node.type === 'Rule');
-		if (rules.length === 0 || !isSupportedContext(block, context)) {
+		// Only a rule with a track definition can be reported, so skip building selector keys for blocks without one.
+		if (
+			rules.every(rule => !hasTrackDefinition(rule))
+			|| !isSupportedContext(block, context)
+		) {
 			return;
 		}
 

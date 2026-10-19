@@ -418,6 +418,11 @@ const canUseRelatedParents = parents => {
 		return false;
 	}
 
+	// A single parent always agrees with itself.
+	if (parents.length === 1) {
+		return true;
+	}
+
 	const specificities = parents.map(parent => getRuleSelectorSpecificity(parent, [0, 0, 0]));
 	return specificities.every((specificity, index) => compareSpecificity(specificity, specificities[0]) === 0
 		&& getInheritedSpecificityCount(parents[index]) === getInheritedSpecificityCount(parents[0]));
@@ -426,13 +431,14 @@ const canUseRelatedParents = parents => {
 const canUseRelatedSelector = selector => canMatchSelector(selector) && !find(selector, node => node.type === 'Raw');
 
 const getPrefixedSelectorText = (parentSelector, selector, sourceCode) => {
-	if (!canUseRelatedSelector(selector)) {
-		return;
-	}
-
 	const parentNodes = parentSelector.children;
 	// An implicit ancestor must keep constraining the original leftmost compound, so only remove a leading parent prefix.
-	if (selector.children.length < parentNodes.length || parentNodes.some((node, index) => !isSameSelectorNode(node, selector.children[index], sourceCode))) {
+	// Compare the prefix first, as it is cheaper than walking the selector and rejects most selectors.
+	if (
+		selector.children.length < parentNodes.length
+		|| parentNodes.some((node, index) => !isSameSelectorNode(node, selector.children[index], sourceCode))
+		|| !canUseRelatedSelector(selector)
+	) {
 		return;
 	}
 
@@ -458,8 +464,6 @@ const getContextualSelectorText = (parentSelector, selector, rule, context) => {
 		parentNodes.some(node => node.type === 'Combinator')
 		|| selector.children.at(0)?.type === 'Combinator'
 		|| hasAncestorStyleRule(rule, context)
-		|| hasNestingSelector(selector)
-		|| !canUseRelatedSelector(selector)
 	) {
 		return;
 	}
@@ -469,7 +473,12 @@ const getContextualSelectorText = (parentSelector, selector, rule, context) => {
 		&& nodes[index - 1].type === 'Combinator'
 		&& index + parentNodes.length <= nodes.length
 		&& parentNodes.every((parentNode, offset) => isSameSelectorNode(parentNode, nodes[index + offset], sourceCode)));
-	if (parentStart === -1) {
+	// Find the parent first, as it is cheaper than walking the selector and rejects most selectors.
+	if (
+		parentStart === -1
+		|| hasNestingSelector(selector)
+		|| !canUseRelatedSelector(selector)
+	) {
 		return;
 	}
 

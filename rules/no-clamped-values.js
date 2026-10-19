@@ -294,7 +294,15 @@ function getTargetProperty(property, declarationProperty, lexer) {
 	return isAmbiguous ? declarationProperty : property;
 }
 
-function getCalculationProblem(node, trace, declarationProperty, sourceCode) {
+function getCalculationProblem(node, getTrace, declarationProperty, sourceCode) {
+	// Percentages retain their type or stay unresolved without an intrinsic basis.
+	// Evaluate before getting the trace, as most calculations cannot be resolved, like `calc(100% - var(--gap))`, and matching the value with the grammar is slow.
+	let quantity = evaluateCssMath(node);
+	if (!quantity || !Number.isFinite(quantity.value)) {
+		return;
+	}
+
+	const trace = getTrace(node);
 	if (!trace) {
 		return;
 	}
@@ -307,12 +315,6 @@ function getCalculationProblem(node, trace, declarationProperty, sourceCode) {
 	}
 
 	if (!range && !integerMinimumProperties.has(property)) {
-		return;
-	}
-
-	// Percentages retain their type or stay unresolved without an intrinsic basis.
-	let quantity = evaluateCssMath(node);
-	if (!quantity || !Number.isFinite(quantity.value)) {
 		return;
 	}
 
@@ -424,7 +426,7 @@ const create = context => {
 				const name = normalizeCssIdentifier(node.name);
 				if (isCssMathFunction(node)) {
 					if (!handled.has(node)) {
-						const problem = getCalculationProblem(node, getTrace(node), property, sourceCode);
+						const problem = getCalculationProblem(node, getTrace, property, sourceCode);
 						if (problem) {
 							problems.push(problem);
 						}

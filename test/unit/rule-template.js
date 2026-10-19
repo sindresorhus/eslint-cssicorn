@@ -56,6 +56,7 @@ for (const {name, ...data} of cases) {
 			encoding: 'utf8',
 		});
 		assert.equal(result.status, 0, result.stderr);
+		assert.match(source, /^\t\t\tdescription: '/mv);
 		const metadata = JSON.parse(result.stdout);
 		assert.equal(metadata.docs.description, data.description);
 		assert.equal(metadata.fixable, data.fixableType || undefined);

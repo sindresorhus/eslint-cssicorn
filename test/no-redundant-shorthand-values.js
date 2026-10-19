@@ -58,6 +58,7 @@ test.snapshot({
 		// WebKit and Blink parse `-webkit-border-radius: 1px 2px` as `1px / 2px`, so it is never reduced to two values.
 		'a { -webkit-border-radius: 1px 2px 1px 2px; }',
 		'a { -webkit-border-radius: 1px 2px 1px; }',
+		'a { margin: red red; }',
 		'a { -WEBKIT-BORDER-RADIUS: 1px 2px 1px 2px; }',
 	],
 	invalid: [

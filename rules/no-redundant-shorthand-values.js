@@ -131,10 +131,7 @@ const create = context => {
 			return;
 		}
 
-		if (
-			hasSubstitutionOrRandomFunction(value)
-			|| !sourceCode.lexer.matchProperty(property, value).matched
-		) {
+		if (hasSubstitutionOrRandomFunction(value)) {
 			return;
 		}
 
@@ -152,7 +149,11 @@ const create = context => {
 			};
 		}
 
-		if (!result) {
+		// Match the grammar last, as it is slow and most values cannot be simplified.
+		if (
+			!result
+			|| !sourceCode.lexer.matchProperty(property, value).matched
+		) {
 			return;
 		}
 

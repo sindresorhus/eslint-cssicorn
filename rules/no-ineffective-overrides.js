@@ -31,6 +31,7 @@ import {
 @typedef {ReturnType<typeof getSelectorAnalysis>} SelectorAnalysis
 @typedef {{conditions: Set<string>, layered: boolean, selectors?: SelectorAnalysis[]}} DeclarationContext
 @typedef {DeclarationContext & {selectors: SelectorAnalysis[], declaration: DeclarationPlain, property: string, important: boolean}} DeclarationRecord
+@typedef {{declaration: DeclarationPlain, parent: CssNodePlain, property: string, important: boolean}} CollectedDeclaration
 */
 
 const MESSAGE_ID = 'no-ineffective-overrides';
@@ -255,6 +256,15 @@ const create = context => {
 	@type {WeakMap<DeclarationPlain, boolean>}
 	*/
 	const blockerValidity = new WeakMap();
+	/**
+	@type {CollectedDeclaration[]}
+	*/
+	const declarations = [];
+	/**
+	@type {Set<string>}
+	*/
+	const importantProperties = new Set();
+	let hasLayer = false;
 
 	/**
 	@param {CssNodePlain | undefined} node
@@ -334,6 +344,22 @@ const create = context => {
 			}
 		}
 
+		declarations.push({
+			declaration, parent, property, important,
+		});
+		if (important) {
+			importantProperties.add(property);
+		}
+	});
+
+	context.on('Atrule', node => {
+		hasLayer ||= normalizeCssIdentifier(node.name) === 'layer';
+	});
+
+	/**
+	@param {CollectedDeclaration} collectedDeclaration
+	*/
+	const addRecord = ({declaration, parent, property, important}) => {
 		const declarationContext = getContext(parent);
 		if (!declarationContext?.selectors) {
 			return;
@@ -361,7 +387,7 @@ const create = context => {
 
 			entriesByPriority[priority].push({record, selector, order: records.length});
 		}
-	});
+	};
 
 	/**
 	@param {DeclarationRecord} override
@@ -397,6 +423,13 @@ const create = context => {
 	};
 
 	context.onExit('StyleSheet', function * () {
+		for (const collectedDeclaration of declarations) {
+			// Only `!important` and layers give declarations different cascade priority. Without layers, a property without `!important` declarations cannot be blocked, so skip analyzing its selectors.
+			if (hasLayer || importantProperties.has(collectedDeclaration.property)) {
+				addRecord(collectedDeclaration);
+			}
+		}
+
 		for (const override of records) {
 			/**
 			@type {DeclarationRecord | undefined}

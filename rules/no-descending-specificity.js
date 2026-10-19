@@ -11,7 +11,6 @@ import {
 	getMaximumSpecificity,
 	getParentStyleRule,
 	getRuleSelectorSpecificity,
-	getRuleSpecificities,
 	hasAncestorStyleRule,
 	getTerminalCompoundNodes,
 	hasLeadingCombinator,
@@ -205,9 +204,10 @@ const getRuleTerminalKeys = analyses => {
 	return [...terminalKeys];
 };
 
-const getNestingSpecificities = (rule, nestingSpecificity) => rule.prelude.children.some(selector => !canBeRepresentedByNestingSelector(selector))
+// Without unresolved selectors, there is an analysis for every selector, so reuse their specificities.
+const getNestingSpecificities = analyses => analyses.some(({selector}) => !canBeRepresentedByNestingSelector(selector))
 	? []
-	: getRuleSpecificities(rule, nestingSpecificity);
+	: analyses.map(({specificity}) => specificity);
 
 const getStrongerEntry = (first, second) => {
 	if (!first) {
@@ -404,7 +404,7 @@ const create = context => {
 			}
 		}
 
-		const specificities = hasUnresolvedParent || hasUnresolvedSelectors || exceedsTerminalKeyBudget || parentSpecificities?.length === 0 ? [] : getNestingSpecificities(rule, nestingSpecificity);
+		const specificities = hasUnresolvedParent || hasUnresolvedSelectors || exceedsTerminalKeyBudget || parentSpecificities?.length === 0 ? [] : getNestingSpecificities(analyses);
 		analysisByRule.set(rule, {analyses, specificities, terminalKeys: getRuleTerminalKeys(analyses)});
 	});
 

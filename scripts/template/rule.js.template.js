@@ -3,6 +3,15 @@ import indentString from 'indent-string';
 
 const indent = (string, count) => indentString(string, count, {indent: '\t'});
 
+const stringEscapes = new Map([
+	['\\', '\\\\'],
+	['\'', String.raw`\'`],
+	['\n', String.raw`\n`],
+	['\r', String.raw`\r`],
+]);
+// Use a single-quoted string to match the code style.
+const toStringLiteral = string => `'${string.replaceAll(/[\n\r'\\]/gv, character => stringEscapes.get(character))}'`;
+
 const imports = outdent`
 	import {} from './utils/index.js';
 `;
@@ -79,7 +88,7 @@ const createConfig = data => outdent`
 		meta: {
 			type: '${data.type}',
 			docs: {
-				description: ${JSON.stringify(data.description)},
+				description: ${toStringLiteral(data.description)},
 				recommended: 'unopinionated',
 			},
 			${data.fixableType ? `fixable: '${data.fixableType}',` : ''}

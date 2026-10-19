@@ -133,6 +133,7 @@ test.snapshot({
 		`.wrapper { ${getPair()} }`,
 		getPair().replace('.parent > .child', '.parent > .child[data-kind]:not(.disabled)'),
 		...childContextDeclarations.map(([declaration]) => getPair(`${columns} ${declaration}`)),
+		getPair().replaceAll('grid-template-columns', 'GRID-TEMPLATE-COLUMNS'),
 	],
 });
 

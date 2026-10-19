@@ -139,7 +139,7 @@ function checkTestCaseProperty(propertyNode, context) {
 			const testCase = propertyNode.parent;
 			if (testCase.properties.length === 1) {
 				const commentsCount = sourceCode.getCommentsInside(testCase).length
-					- sourceCode.getCommentsInside(propertyNode).length;
+					- sourceCode.getCommentsInside(propertyNode.value).length;
 				context.report({
 					node: testCase,
 					messageId: MESSAGE_ID_NO_SINGLE_CODE_OBJECT,
