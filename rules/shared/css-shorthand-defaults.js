@@ -72,6 +72,13 @@ const profiles = new Map([
 		{name: 'column-rule-style', default: 'none'},
 		{name: 'column-rule-color', default: 'currentcolor'},
 	]],
+	['offset', [
+		{name: 'offset-position', default: 'normal'},
+		{name: 'offset-path', default: 'none'},
+		{name: 'offset-distance'},
+		{name: 'offset-rotate', default: 'auto'},
+		{name: 'offset-anchor', default: 'auto'},
+	]],
 	['font', [
 		{name: 'font-style', default: 'normal'},
 		{name: 'font-variant', type: 'font-variant-css2', default: 'normal'},
@@ -376,6 +383,7 @@ const getExpansion = (property, nodes, lexer) => {
 			columns: 'column-height',
 			container: 'container-type',
 			background: 'background-size',
+			offset: 'offset-anchor',
 		};
 		const slashComponent = slashComponents[/** @type {keyof typeof slashComponents} */ (property)];
 		const group = removableGroups.find(group => group === groups.get(slashComponent));

@@ -35,6 +35,7 @@ This rule reports repeated values and default components that can be omitted fro
 	border: 1px solid currentColor;
 	font: normal normal 16px/normal sans-serif;
 	flex-flow: row nowrap;
+	offset: normal path("M0 0L100 100") auto / auto;
 }
 
 /* ✅ */
@@ -42,6 +43,7 @@ This rule reports repeated values and default components that can be omitted fro
 	border: 1px solid;
 	font: 16px sans-serif;
 	flex-flow: row;
+	offset: path("M0 0L100 100");
 }
 ```
 
@@ -150,6 +152,7 @@ The following unprefixed shorthands also support omitting default components:
 | `border` and its physical and logical side shorthands | `medium`, `none`, and `currentcolor`. |
 | `outline` | Width `medium` and style `none`. Explicit colors are retained, including `auto`, which is not supported consistently across browsers. |
 | `column-rule` | `medium`, `none`, and `currentcolor`. |
+| `offset` | Position `normal`, path `none`, rotation `auto`, and anchor `/auto`. Explicit distances and rotation angles are retained, including zeros. |
 | `font` | Optional `normal` components, weight `400`, and line height `/normal`. Size and family are required. |
 | `flex-flow` | `row` and `nowrap`. |
 | `columns` | Optional `auto` components, including height after `/`. |
