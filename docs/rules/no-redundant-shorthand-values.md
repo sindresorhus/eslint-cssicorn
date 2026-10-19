@@ -161,6 +161,18 @@ This rule reports repeated values and default components that can be omitted fro
 }
 ```
 
+```css
+/* ❌ */
+.table {
+	border-spacing: 2px 2px;
+}
+
+/* ✅ */
+.table {
+	border-spacing: 2px;
+}
+```
+
 These are not reported:
 
 ```css
@@ -176,7 +188,7 @@ These are not reported:
 
 - Physical edges: `margin`, `padding`, `border-color`, `border-style`, `border-width`, `scroll-margin`, `scroll-padding`, and `inset`.
 - Logical edges: the `-block` and `-inline` variants of those properties.
-- `gap`, `grid-gap`, `overflow`, `overscroll-behavior`, and `border-radius`.
+- `gap`, `grid-gap`, `overflow`, `overscroll-behavior`, `border-radius`, and `border-spacing`.
 - `place-content`, `place-items`, and `place-self`.
 - `contain-intrinsic-size`, including repeated `auto` and size groups.
 - `background-repeat` and `mask-repeat`, independently in each comma-separated layer.

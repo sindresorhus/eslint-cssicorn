@@ -37,6 +37,7 @@ const twoSideProperties = new Set([
 	'background-repeat',
 	'mask-repeat',
 	'border-image-repeat',
+	'border-spacing',
 	'corner-top-shape',
 	'corner-right-shape',
 	'corner-bottom-shape',
