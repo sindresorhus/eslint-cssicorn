@@ -123,6 +123,20 @@ This rule reports repeated values and default components that can be omitted fro
 }
 ```
 
+```css
+/* ❌ */
+.example {
+	flex: 2 1 10px;
+	border-image: url("border.svg") 100% / 1 stretch;
+}
+
+/* ✅ */
+.example {
+	flex: 2 10px;
+	border-image: url("border.svg");
+}
+```
+
 These are not reported:
 
 ```css
@@ -158,11 +172,13 @@ The following unprefixed shorthands also support omitting default components:
 | Shorthand | Defaults |
 | --- | --- |
 | `border` and its physical and logical side shorthands | `medium`, `none`, and `currentcolor`. |
+| `border-image` | Source `none`, single slice `100%`, single width `/1`, and repeat `stretch` or `stretch stretch`. `fill` is retained. |
 | `outline` | Width `medium` and style `none`. Explicit colors are retained, including `auto`, which is not supported consistently across browsers. |
 | `column-rule` | `medium`, `none`, and `currentcolor`. |
 | `offset` | Position `normal`, path `none`, rotation `auto`, and anchor `/auto`. Explicit distances and rotation angles are retained, including zeros. |
 | `font` | Optional `normal` components, weight `400`, and line height `/normal`. Size and family are required. |
 | `flex-flow` | `row` and `nowrap`. |
+| `flex` | Grow and shrink factors `1`. Explicit bases are retained. |
 | `columns` | Optional `auto` components, including height after `/`. |
 | `container` | Type `/normal`. Names are required and retained. |
 | `position-try` | Order `normal`. The required fallback list and its ordering are retained. |
@@ -182,6 +198,8 @@ Equivalent defaults are recognized conservatively, including constant numeric ex
 
 For `text-box`, omitted trimming defaults to `trim-both`, unlike the longhand's initial value `none`. The `normal` alias is retained.
 
+For `flex`, omitted grow and shrink factors are both `1`. Explicit bases are retained, including `0`, `0px`, and `0%`. Factors that prevent a unitless zero from being reassigned are retained.
+
 Timeline axes `x` and `y` are retained because the default `block` axis depends on the writing mode. Explicit zero view insets are retained because `auto` uses `scroll-padding`.
 
 Numeric expressions must have the correct CSS type. For example, a zero-valued time such as `calc(0s)` cannot be omitted as a background position, and unitless `calc(0)` is not a length.
@@ -196,6 +214,8 @@ Explicit animation duration `0s` is retained because omitted duration defaults t
 - Declarations with functions that may not repeat the same value are ignored: `random()` and the substitution functions (`attr()`, `env()`, `first-valid()`, `ident()`, `if()`, `inherit()`, `random-item()`, `var()`, and custom functions such as `--spacing()`).
 - For repeated positional values, other functions are compared without evaluation, and numeric spellings such as `1px` and `1.0px` are kept distinct.
 - Default omission is limited to the component grammars listed above. Declarations with unrecognized component syntax are ignored.
+- `border-image` declarations with two slashes are ignored. Multiple slice and width values are retained.
+- `flex` declarations containing functions or unitless zeros are ignored because their component assignment can be ambiguous.
 - Default components in query conditions such as `@supports`, `@import supports()`, and `@container style()` are retained to preserve the syntax being tested.
 - Declarations in CSS Modules `:export` and `:import()` blocks are ignored, because JavaScript reads them as exact strings.
 - The autofix is skipped if it would remove a comment.

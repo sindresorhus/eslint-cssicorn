@@ -61,6 +61,13 @@ const borderProperties = [
 */
 const profiles = new Map([
 	...borderProperties.map(property => /** @type {[string, ShorthandComponent[]]} */ ([property, borderComponents])),
+	['border-image', [
+		{name: 'border-image-source', default: 'none'},
+		{name: 'border-image-slice', number: 100, unit: '%'},
+		{name: 'border-image-width', number: 1},
+		{name: 'border-image-outset'},
+		{name: 'border-image-repeat', default: 'stretch'},
+	]],
 	['outline', [
 		{name: 'outline-width', default: 'medium'},
 		{name: 'outline-style', default: 'none'},
@@ -91,6 +98,11 @@ const profiles = new Map([
 	['flex-flow', [
 		{name: 'flex-direction', default: 'row'},
 		{name: 'flex-wrap', default: 'nowrap'},
+	]],
+	['flex', [
+		{name: 'flex-grow', number: 1},
+		{name: 'flex-shrink', number: 1},
+		{name: 'flex-basis'},
 	]],
 	['columns', [
 		{name: 'column-width', default: 'auto'},
@@ -234,7 +246,7 @@ const isDefaultComponent = (nodes, component, lexer) => {
 		return isInitialPosition(nodes, lexer);
 	}
 
-	if (['background-size', 'background-repeat', 'view-timeline-inset'].includes(component.name)) {
+	if (['background-size', 'background-repeat', 'border-image-repeat', 'view-timeline-inset'].includes(component.name)) {
 		return nodes.every(node => isKeyword(node, component.default));
 	}
 
@@ -383,6 +395,7 @@ const getExpansion = (property, nodes, lexer) => {
 			columns: 'column-height',
 			container: 'container-type',
 			background: 'background-size',
+			'border-image': 'border-image-width',
 			offset: 'offset-anchor',
 		};
 		const slashComponent = slashComponents[/** @type {keyof typeof slashComponents} */ (property)];
@@ -488,7 +501,11 @@ Find default components that can be removed without changing any expanded longha
 */
 export const getDefaultShorthandReduction = (property, value, context) => {
 	const {sourceCode} = context;
-	if (value.children.length < 2) {
+	// The lexer cannot reliably assign `flex` calculations or unitless zero spellings to factors and bases.
+	if (
+		value.children.length < 2
+		|| (property === 'flex' && value.children.some(node => node.type === 'Function' || (node.type === 'Number' && Number(node.value) === 0)))
+	) {
 		return;
 	}
 
