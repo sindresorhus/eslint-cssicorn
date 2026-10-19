@@ -5,6 +5,7 @@ import {
 	evaluateCssMath,
 	getCanonicalLexerNode,
 	getCommaSeparatedGroups,
+	isCssMathFunction,
 	normalizeCssIdentifier,
 	parse,
 } from '../utils/index.js';
@@ -337,7 +338,14 @@ const getComponentGroups = (property, nodes, lexer) => {
 			component = components.find(component => {
 				const syntaxType = component.type ? 'Type' : 'Property';
 				const syntaxName = component.type ?? component.name;
-				return trace.some(syntax => syntax.type === syntaxType && syntax.name === syntaxName);
+
+				// A number-valued calculation can be misassigned to a time instead of the iteration count.
+				return trace.some(syntax => syntax.type === syntaxType && syntax.name === syntaxName) && (
+					property !== 'animation'
+					|| node.type !== 'Function'
+					|| !['animation-duration', 'animation-delay'].includes(component.name)
+					|| evaluateCssMath(node)?.unit === 's'
+				);
 			});
 		}
 
@@ -516,6 +524,11 @@ export const getDefaultShorthandReduction = (property, value, context) => {
 		value.children.length < 2
 		|| (property === 'flex' && value.children.some(node => node.type === 'Function' || (node.type === 'Number' && Number(node.value) === 0)))
 	) {
+		return;
+	}
+
+	// Calculations can obscure the assignment of offset positions, distances, and rotation angles.
+	if (property === 'offset' && value.children.some(node => isCssMathFunction(node))) {
 		return;
 	}
 

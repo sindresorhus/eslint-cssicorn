@@ -275,6 +275,8 @@ Explicit animation duration `0s` is retained because omitted duration defaults t
 - `border-image` declarations with two slashes are ignored. Multiple slice and width values are retained.
 - `mask` declarations containing `no-clip` are ignored.
 - `flex` declarations containing functions or unitless zeros are ignored because their component assignment can be ambiguous.
+- `animation` declarations with ambiguous calculation types are ignored.
+- `offset` declarations with calculated positions, distances, or angles are ignored.
 - Default components in query conditions such as `@supports`, `@import supports()`, and `@container style()` are retained to preserve the syntax being tested.
 - Declarations in CSS Modules `:export` and `:import()` blocks are ignored, because JavaScript reads them as exact strings.
 - The autofix is skipped if it would remove a comment.
