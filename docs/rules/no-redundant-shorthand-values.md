@@ -19,6 +19,8 @@ This rule reports repeated values and default components that can be omitted fro
 	margin: 1px 1px 1px 1px;
 	border-radius: 4px 4px 4px 4px;
 	place-items: center center;
+	contain-intrinsic-size: auto 100px auto 100px;
+	background-repeat: round round;
 }
 
 /* ✅ */
@@ -26,6 +28,8 @@ This rule reports repeated values and default components that can be omitted fro
 	margin: 1px;
 	border-radius: 4px;
 	place-items: center;
+	contain-intrinsic-size: auto 100px;
+	background-repeat: round;
 }
 ```
 
@@ -136,6 +140,10 @@ These are not reported:
 - Logical edges: the `-block` and `-inline` variants of those properties.
 - `gap`, `grid-gap`, `overflow`, `overscroll-behavior`, and `border-radius`.
 - `place-content`, `place-items`, and `place-self`.
+- `contain-intrinsic-size`, including repeated `auto` and size groups.
+- Single-layer `background-repeat`.
+
+For `contain-intrinsic-size`, both complete components must match, including `auto`. Values such as `100px auto 100px` are retained because the width and height components differ.
 
 Four-value edge declarations are not reduced to three, because naming every edge can be easier to read, but are still reduced to one or two values. This exception does not apply to `border-radius`.
 

@@ -30,9 +30,10 @@ const messages = {
 };
 
 // `grid-gap` is excluded from the shared set because `grid-row-gap`/`grid-column-gap` are reported as `gap` instead.
-const twoSideProperties = new Set([...pairShorthands, 'grid-gap']);
+const twoSideProperties = new Set([...pairShorthands, 'grid-gap', 'background-repeat']);
 
-const placeProperties = new Set([
+const repeatedGroupProperties = new Set([
+	'contain-intrinsic-size',
 	'place-content',
 	'place-items',
 	'place-self',
@@ -47,7 +48,7 @@ const getValuesText = (values, sourceCode) => values.map(node => sourceCode.getT
 /**
 @param {CssNodePlain[]} values
 */
-const getRepeatedPlaceValueCount = values => {
+const getRepeatedGroupValueCount = values => {
 	if (values.length % 2 !== 0) {
 		return values.length;
 	}
@@ -142,12 +143,12 @@ const getBorderRadiusResult = (values, isWebkitBorderRadius, sourceCode) => {
 @param {CssNodePlain[]} values
 @param {CSSSourceCode} sourceCode
 */
-const getPlaceReduction = (values, sourceCode) => {
+const getRepeatedGroupReduction = (values, sourceCode) => {
 	if (values.length < 2 || values.some(node => node.type === 'Operator')) {
 		return;
 	}
 
-	return getReduction(values, getRepeatedPlaceValueCount(values), sourceCode);
+	return getReduction(values, getRepeatedGroupValueCount(values), sourceCode);
 };
 
 /**
@@ -173,7 +174,7 @@ const create = context => {
 			!fourSideShorthands.has(property)
 			&& !twoSideProperties.has(property)
 			&& property !== 'border-radius'
-			&& !placeProperties.has(property)
+			&& !repeatedGroupProperties.has(property)
 			&& !canOmitDefaults
 		) {
 			return;
@@ -190,8 +191,8 @@ const create = context => {
 		} else if (property === 'border-radius') {
 			result = getBorderRadiusResult(values, normalizeCssIdentifier(declaration.property) === '-webkit-border-radius', sourceCode);
 		} else {
-			const reduction = placeProperties.has(property)
-				? getPlaceReduction(values, sourceCode)
+			const reduction = repeatedGroupProperties.has(property)
+				? getRepeatedGroupReduction(values, sourceCode)
 				: getSimpleReduction(values, fourSideShorthands.has(property), sourceCode);
 			result = reduction && {
 				reductions: [reduction],
