@@ -31,7 +31,7 @@ const messages = {
 };
 
 // `grid-gap` is excluded from the shared set because `grid-row-gap`/`grid-column-gap` are reported as `gap` instead.
-const twoSideProperties = new Set([...pairShorthands, 'grid-gap', 'background-repeat']);
+const twoSideProperties = new Set([...pairShorthands, 'grid-gap', 'background-repeat', 'mask-repeat', 'border-image-repeat']);
 
 const repeatedGroupProperties = new Set([
 	'contain-intrinsic-size',
@@ -215,7 +215,7 @@ const create = context => {
 			result = getDefaultShorthandReduction(property, value, context);
 		} else if (property === 'border-radius') {
 			result = getBorderRadiusResult(values, normalizeCssIdentifier(declaration.property) === '-webkit-border-radius', sourceCode);
-		} else if (property === 'background-repeat') {
+		} else if (['background-repeat', 'mask-repeat'].includes(property)) {
 			result = getLayeredResult(values, sourceCode);
 		} else {
 			const reduction = repeatedGroupProperties.has(property)

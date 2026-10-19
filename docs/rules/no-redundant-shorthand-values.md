@@ -86,12 +86,16 @@ This rule reports repeated values and default components that can be omitted fro
 .example {
 	mask: url("mask.svg") 0% 0% / auto auto repeat add match-source;
 	background-repeat: round round, space space;
+	mask-repeat: no-repeat no-repeat, round round;
+	border-image-repeat: stretch stretch;
 }
 
 /* ✅ */
 .example {
 	mask: url("mask.svg");
 	background-repeat: round, space;
+	mask-repeat: no-repeat, round;
+	border-image-repeat: stretch;
 }
 ```
 
@@ -169,7 +173,8 @@ These are not reported:
 - `gap`, `grid-gap`, `overflow`, `overscroll-behavior`, and `border-radius`.
 - `place-content`, `place-items`, and `place-self`.
 - `contain-intrinsic-size`, including repeated `auto` and size groups.
-- `background-repeat`, independently in each comma-separated layer.
+- `background-repeat` and `mask-repeat`, independently in each comma-separated layer.
+- `border-image-repeat`.
 
 For `contain-intrinsic-size`, both complete components must match, including `auto`. Values such as `100px auto 100px` are retained because the width and height components differ.
 
