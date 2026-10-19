@@ -21,6 +21,9 @@ This rule reports repeated values and default components that can be omitted fro
 	place-items: center center;
 	contain-intrinsic-size: auto 100px auto 100px;
 	background-repeat: round round;
+	corner-shape: bevel scoop notch scoop;
+	corner-block-start-shape: squircle squircle;
+	border-image-width: 1 1 1 1;
 }
 
 /* ✅ */
@@ -30,6 +33,9 @@ This rule reports repeated values and default components that can be omitted fro
 	place-items: center;
 	contain-intrinsic-size: auto 100px;
 	background-repeat: round;
+	corner-shape: bevel scoop notch;
+	corner-block-start-shape: squircle;
+	border-image-width: 1;
 }
 ```
 
@@ -175,10 +181,12 @@ These are not reported:
 - `contain-intrinsic-size`, including repeated `auto` and size groups.
 - `background-repeat` and `mask-repeat`, independently in each comma-separated layer.
 - `border-image-repeat`.
+- `border-image-slice`, `border-image-width`, and `border-image-outset`. Slice values containing `fill` are retained.
+- `corner-shape` and its physical and logical side shorthands, such as `corner-top-shape` and `corner-block-start-shape`.
 
 For `contain-intrinsic-size`, both complete components must match, including `auto`. Values such as `100px auto 100px` are retained because the width and height components differ.
 
-Four-value edge declarations are not reduced to three, because naming every edge can be easier to read, but are still reduced to one or two values. This exception does not apply to `border-radius`.
+Four-value edge declarations are not reduced to three, because naming every edge can be easier to read, but are still reduced to one or two values. This exception does not apply to `border-radius` or `corner-shape`.
 
 Slash-separated `border-radius` values are shortened independently without removing the slash.
 

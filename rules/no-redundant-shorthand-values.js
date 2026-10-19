@@ -31,7 +31,28 @@ const messages = {
 };
 
 // `grid-gap` is excluded from the shared set because `grid-row-gap`/`grid-column-gap` are reported as `gap` instead.
-const twoSideProperties = new Set([...pairShorthands, 'grid-gap', 'background-repeat', 'mask-repeat', 'border-image-repeat']);
+const twoSideProperties = new Set([
+	...pairShorthands,
+	'grid-gap',
+	'background-repeat',
+	'mask-repeat',
+	'border-image-repeat',
+	'corner-top-shape',
+	'corner-right-shape',
+	'corner-bottom-shape',
+	'corner-left-shape',
+	'corner-block-start-shape',
+	'corner-block-end-shape',
+	'corner-inline-start-shape',
+	'corner-inline-end-shape',
+]);
+
+const fourSideProperties = new Set([
+	...fourSideShorthands,
+	'border-image-slice',
+	'border-image-width',
+	'border-image-outset',
+]);
 
 const repeatedGroupProperties = new Set([
 	'contain-intrinsic-size',
@@ -196,9 +217,9 @@ const create = context => {
 			&& hasShorthandDefaults(property)
 			&& sourceCode.getParent(declaration)?.type === 'Block';
 		if (
-			!fourSideShorthands.has(property)
+			!fourSideProperties.has(property)
 			&& !twoSideProperties.has(property)
-			&& property !== 'border-radius'
+			&& !['border-radius', 'corner-shape'].includes(property)
 			&& !repeatedGroupProperties.has(property)
 			&& !canOmitDefaults
 		) {
@@ -220,7 +241,7 @@ const create = context => {
 		} else {
 			const reduction = repeatedGroupProperties.has(property)
 				? getRepeatedGroupReduction(values, sourceCode)
-				: getSimpleReduction(values, fourSideShorthands.has(property), sourceCode);
+				: getSimpleReduction(values, fourSideProperties.has(property), sourceCode);
 			result = reduction && {
 				reductions: [reduction],
 				replacement: reduction.replacement,
