@@ -84,6 +84,20 @@ This rule reports repeated values and default components that can be omitted fro
 ```css
 /* ❌ */
 .example {
+	mask: url("mask.svg") 0% 0% / auto auto repeat add match-source;
+	background-repeat: round round, space space;
+}
+
+/* ✅ */
+.example {
+	mask: url("mask.svg");
+	background-repeat: round, space;
+}
+```
+
+```css
+/* ❌ */
+.example {
 	container: Card / normal;
 	white-space: preserve wrap;
 }
@@ -155,7 +169,7 @@ These are not reported:
 - `gap`, `grid-gap`, `overflow`, `overscroll-behavior`, and `border-radius`.
 - `place-content`, `place-items`, and `place-self`.
 - `contain-intrinsic-size`, including repeated `auto` and size groups.
-- Single-layer `background-repeat`.
+- `background-repeat`, independently in each comma-separated layer.
 
 For `contain-intrinsic-size`, both complete components must match, including `auto`. Values such as `100px auto 100px` are retained because the width and height components differ.
 
@@ -191,6 +205,7 @@ The following unprefixed shorthands also support omitting default components:
 | `text-wrap` | Mode `wrap` and style `auto`. |
 | `white-space` | Collapsing `collapse` and wrapping `wrap`. Legacy keywords such as `normal` and `pre` are retained. |
 | `background` | Image `none`, position `0% 0%`, size `auto auto`, repeat `repeat`, attachment `scroll`, origin `padding-box`, clip `border-box`, and color `transparent`. |
+| `mask` | Image `none`, position `0% 0%`, size `auto auto`, repeat `repeat`, composite `add`, and mode `match-source`. Origin and clip boxes are retained. |
 | `animation` | Duration `auto`, easing `ease`, delay `0s`, iteration count `1`, direction `normal`, fill mode `none`, play state `running`, and name `none`. |
 | `transition` | Property `all`, duration and delay `0s`, easing `ease`, and behavior `normal`. |
 
@@ -215,6 +230,7 @@ Explicit animation duration `0s` is retained because omitted duration defaults t
 - For repeated positional values, other functions are compared without evaluation, and numeric spellings such as `1px` and `1.0px` are kept distinct.
 - Default omission is limited to the component grammars listed above. Declarations with unrecognized component syntax are ignored.
 - `border-image` declarations with two slashes are ignored. Multiple slice and width values are retained.
+- `mask` declarations containing `no-clip` are ignored.
 - `flex` declarations containing functions or unitless zeros are ignored because their component assignment can be ambiguous.
 - Default components in query conditions such as `@supports`, `@import supports()`, and `@container style()` are retained to preserve the syntax being tested.
 - Declarations in CSS Modules `:export` and `:import()` blocks are ignored, because JavaScript reads them as exact strings.

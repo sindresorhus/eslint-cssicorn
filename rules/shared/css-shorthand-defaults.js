@@ -163,6 +163,15 @@ const profiles = new Map([
 		{name: 'background-boxes', type: 'visual-box'},
 		{name: 'background-color', default: 'transparent'},
 	]],
+	['mask', [
+		{name: 'mask-image', type: 'mask-reference', default: 'none'},
+		{name: 'mask-position', type: 'position', default: 'position'},
+		{name: 'mask-size', type: 'bg-size', default: 'auto'},
+		{name: 'mask-repeat', type: 'repeat-style', default: 'repeat'},
+		{name: 'mask-boxes', type: 'geometry-box'},
+		{name: 'mask-composite', type: 'compositing-operator', default: 'add'},
+		{name: 'mask-mode', type: 'masking-mode', default: 'match-source'},
+	]],
 	['animation', [
 		{name: 'animation-duration', default: 'auto'},
 		{name: 'animation-timing-function', type: 'easing-function', default: 'ease'},
@@ -182,7 +191,7 @@ const profiles = new Map([
 	]],
 ]);
 
-const layeredProperties = new Set(['background', 'animation', 'transition', 'scroll-timeline', 'view-timeline']);
+const layeredProperties = new Set(['background', 'mask', 'animation', 'transition', 'scroll-timeline', 'view-timeline']);
 
 /**
 @param {CssNodePlain} node
@@ -246,7 +255,7 @@ const isDefaultComponent = (nodes, component, lexer) => {
 		return isInitialPosition(nodes, lexer);
 	}
 
-	if (['background-size', 'background-repeat', 'border-image-repeat', 'view-timeline-inset'].includes(component.name)) {
+	if (['background-size', 'background-repeat', 'mask-size', 'mask-repeat', 'border-image-repeat', 'view-timeline-inset'].includes(component.name)) {
 		return nodes.every(node => isKeyword(node, component.default));
 	}
 
@@ -395,6 +404,7 @@ const getExpansion = (property, nodes, lexer) => {
 			columns: 'column-height',
 			container: 'container-type',
 			background: 'background-size',
+			mask: 'mask-size',
 			'border-image': 'border-image-width',
 			offset: 'offset-anchor',
 		};

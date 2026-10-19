@@ -5,6 +5,7 @@ import {areEqualValues, getCondensedValueCount} from './shared/css-shorthand-val
 import {getDefaultShorthandReduction, hasShorthandDefaults} from './shared/css-shorthand-defaults.js';
 import {
 	getBasePropertyName,
+	getCommaSeparatedGroups,
 	hasCommentInRange,
 	hasSubstitutionOrRandomFunction,
 	isCssModulesInteropDeclaration,
@@ -103,6 +104,30 @@ const getSimpleReduction = (values, preserveFourValueEdges, sourceCode) => {
 
 /**
 @param {CssNodePlain[]} values
+@param {CSSSourceCode} sourceCode
+@returns {ShorthandReduction | undefined}
+*/
+const getLayeredResult = (values, sourceCode) => {
+	const layers = getCommaSeparatedGroups({children: values}).map(({nodes}) => {
+		const reduction = getSimpleReduction(nodes, false, sourceCode);
+		return {
+			reduction,
+			replacement: reduction?.replacement ?? getValuesText(nodes, sourceCode),
+		};
+	});
+	const reductions = layers.flatMap(({reduction}) => reduction ? [reduction] : []);
+	if (reductions.length === 0) {
+		return;
+	}
+
+	return {
+		reductions,
+		replacement: layers.map(({replacement}) => replacement).join(', '),
+	};
+};
+
+/**
+@param {CssNodePlain[]} values
 @param {boolean} isWebkitBorderRadius
 @param {CSSSourceCode} sourceCode
 @returns {ShorthandReduction | undefined}
@@ -190,6 +215,8 @@ const create = context => {
 			result = getDefaultShorthandReduction(property, value, context);
 		} else if (property === 'border-radius') {
 			result = getBorderRadiusResult(values, normalizeCssIdentifier(declaration.property) === '-webkit-border-radius', sourceCode);
+		} else if (property === 'background-repeat') {
+			result = getLayeredResult(values, sourceCode);
 		} else {
 			const reduction = repeatedGroupProperties.has(property)
 				? getRepeatedGroupReduction(values, sourceCode)
