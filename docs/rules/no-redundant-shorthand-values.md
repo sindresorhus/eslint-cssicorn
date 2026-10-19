@@ -89,6 +89,20 @@ This rule reports repeated values and default components that can be omitted fro
 }
 ```
 
+```css
+/* ❌ */
+.example {
+	text-box: trim-both cap alphabetic;
+	position-try: normal --above, --below;
+}
+
+/* ✅ */
+.example {
+	text-box: cap alphabetic;
+	position-try: --above, --below;
+}
+```
+
 These are not reported:
 
 ```css
@@ -126,9 +140,11 @@ The following unprefixed shorthands also support omitting default components:
 | `flex-flow` | `row` and `nowrap`. |
 | `columns` | Optional `auto` components, including height after `/`. |
 | `container` | Type `/normal`. Names are required and retained. |
+| `position-try` | Order `normal`. The required fallback list and its ordering are retained. |
 | `list-style` | Type `disc`, position `outside`, and image `none`. |
 | `text-decoration` | Line `none`, style `solid`, color `currentcolor`, and thickness `auto`. |
 | `text-emphasis` | Style `none` and color `currentcolor`. The separate `text-emphasis-position` property is preserved. |
+| `text-box` | Trimming `trim-both` and edge `auto`. Explicit trimming `none` is retained. |
 | `text-wrap` | Mode `wrap` and style `auto`. |
 | `white-space` | Collapsing `collapse` and wrapping `wrap`. Legacy keywords such as `normal` and `pre` are retained. |
 | `background` | Image `none`, position `0% 0%`, size `auto auto`, repeat `repeat`, attachment `scroll`, origin `padding-box`, clip `border-box`, and color `transparent`. |
@@ -136,6 +152,8 @@ The following unprefixed shorthands also support omitting default components:
 | `transition` | Property `all`, duration and delay `0s`, easing `ease`, and behavior `normal`. |
 
 Equivalent defaults are recognized conservatively, including constant numeric expressions, transparent-black hexadecimal and RGB colors, and `cubic-bezier(.25, .1, .25, 1)` for `ease`. Other color spaces and expressions that cannot be evaluated are retained.
+
+For `text-box`, omitted trimming defaults to `trim-both`, unlike the longhand's initial value `none`. The `normal` alias is retained.
 
 Numeric expressions must have the correct CSS type. For example, a zero-valued time such as `calc(0s)` cannot be omitted as a background position, and unitless `calc(0)` is not a length.
 

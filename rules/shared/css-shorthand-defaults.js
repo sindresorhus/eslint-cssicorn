@@ -17,7 +17,7 @@ import {getGroupAnimationNameNodes} from './css-animations.js';
 */
 
 /**
-@typedef {{name: string, type?: string, initial?: string, number?: number, unit?: string}} ShorthandComponent
+@typedef {{name: string, type?: string, default?: string, number?: number, unit?: string}} ShorthandComponent
 @typedef {{key: string, removableGroups: CssNodePlain[][]}} ShorthandExpansion
 */
 
@@ -37,9 +37,9 @@ The lexer accepts plain nodes, but its trace method is currently typed for linke
 @type {ShorthandComponent[]}
 */
 const borderComponents = [
-	{name: 'width', type: 'line-width', initial: 'medium'},
-	{name: 'style', type: 'line-style', initial: 'none'},
-	{name: 'color', type: 'color', initial: 'currentcolor'},
+	{name: 'width', type: 'line-width', default: 'medium'},
+	{name: 'style', type: 'line-style', default: 'none'},
+	{name: 'color', type: 'color', default: 'currentcolor'},
 ];
 
 const borderProperties = [
@@ -62,86 +62,95 @@ const borderProperties = [
 const profiles = new Map([
 	...borderProperties.map(property => /** @type {[string, ShorthandComponent[]]} */ ([property, borderComponents])),
 	['outline', [
-		{name: 'outline-width', initial: 'medium'},
-		{name: 'outline-style', initial: 'none'},
+		{name: 'outline-width', default: 'medium'},
+		{name: 'outline-style', default: 'none'},
 		// Explicit color `auto` is not supported consistently, so removing it can turn an ignored declaration into an applied one.
 		{name: 'outline-color'},
 	]],
 	['column-rule', [
-		{name: 'column-rule-width', initial: 'medium'},
-		{name: 'column-rule-style', initial: 'none'},
-		{name: 'column-rule-color', initial: 'currentcolor'},
+		{name: 'column-rule-width', default: 'medium'},
+		{name: 'column-rule-style', default: 'none'},
+		{name: 'column-rule-color', default: 'currentcolor'},
 	]],
 	['font', [
-		{name: 'font-style', initial: 'normal'},
-		{name: 'font-variant', type: 'font-variant-css2', initial: 'normal'},
-		{name: 'font-weight', initial: 'normal', number: 400},
-		{name: 'font-width', type: 'font-width-css3', initial: 'normal'},
+		{name: 'font-style', default: 'normal'},
+		{name: 'font-variant', type: 'font-variant-css2', default: 'normal'},
+		{name: 'font-weight', default: 'normal', number: 400},
+		{name: 'font-width', type: 'font-width-css3', default: 'normal'},
 		{name: 'font-size'},
-		{name: 'line-height', initial: 'normal'},
+		{name: 'line-height', default: 'normal'},
 		{name: 'font-family'},
 	]],
 	['flex-flow', [
-		{name: 'flex-direction', initial: 'row'},
-		{name: 'flex-wrap', initial: 'nowrap'},
+		{name: 'flex-direction', default: 'row'},
+		{name: 'flex-wrap', default: 'nowrap'},
 	]],
 	['columns', [
-		{name: 'column-width', initial: 'auto'},
-		{name: 'column-count', initial: 'auto'},
-		{name: 'column-height', initial: 'auto'},
+		{name: 'column-width', default: 'auto'},
+		{name: 'column-count', default: 'auto'},
+		{name: 'column-height', default: 'auto'},
 	]],
 	['container', [
 		{name: 'container-name'},
-		{name: 'container-type', initial: 'normal'},
+		{name: 'container-type', default: 'normal'},
+	]],
+	['position-try', [
+		{name: 'position-try-order', default: 'normal'},
+		{name: 'position-try-fallbacks'},
 	]],
 	['list-style', [
-		{name: 'list-style-type', initial: 'disc'},
-		{name: 'list-style-position', initial: 'outside'},
-		{name: 'list-style-image', initial: 'none'},
+		{name: 'list-style-type', default: 'disc'},
+		{name: 'list-style-position', default: 'outside'},
+		{name: 'list-style-image', default: 'none'},
 	]],
 	['text-decoration', [
-		{name: 'text-decoration-line', initial: 'none'},
-		{name: 'text-decoration-style', initial: 'solid'},
-		{name: 'text-decoration-color', initial: 'currentcolor'},
-		{name: 'text-decoration-thickness', initial: 'auto'},
+		{name: 'text-decoration-line', default: 'none'},
+		{name: 'text-decoration-style', default: 'solid'},
+		{name: 'text-decoration-color', default: 'currentcolor'},
+		{name: 'text-decoration-thickness', default: 'auto'},
 	]],
 	['text-emphasis', [
-		{name: 'text-emphasis-style', initial: 'none'},
-		{name: 'text-emphasis-color', initial: 'currentcolor'},
+		{name: 'text-emphasis-style', default: 'none'},
+		{name: 'text-emphasis-color', default: 'currentcolor'},
+	]],
+	['text-box', [
+		// Omitted trimming defaults to `trim-both`, while the longhand's initial value is `none`.
+		{name: 'text-box-trim', default: 'trim-both'},
+		{name: 'text-box-edge', default: 'auto'},
 	]],
 	['text-wrap', [
-		{name: 'text-wrap-mode', initial: 'wrap'},
-		{name: 'text-wrap-style', initial: 'auto'},
+		{name: 'text-wrap-mode', default: 'wrap'},
+		{name: 'text-wrap-style', default: 'auto'},
 	]],
 	['white-space', [
-		{name: 'white-space-collapse', initial: 'collapse'},
-		{name: 'text-wrap-mode', initial: 'wrap'},
+		{name: 'white-space-collapse', default: 'collapse'},
+		{name: 'text-wrap-mode', default: 'wrap'},
 	]],
 	['background', [
-		{name: 'background-image', type: 'bg-image', initial: 'none'},
-		{name: 'background-position', type: 'bg-position', initial: 'position'},
-		{name: 'background-size', type: 'bg-size', initial: 'auto'},
-		{name: 'background-repeat', type: 'repeat-style', initial: 'repeat'},
-		{name: 'background-attachment', type: 'attachment', initial: 'scroll'},
+		{name: 'background-image', type: 'bg-image', default: 'none'},
+		{name: 'background-position', type: 'bg-position', default: 'position'},
+		{name: 'background-size', type: 'bg-size', default: 'auto'},
+		{name: 'background-repeat', type: 'repeat-style', default: 'repeat'},
+		{name: 'background-attachment', type: 'attachment', default: 'scroll'},
 		{name: 'background-boxes', type: 'visual-box'},
-		{name: 'background-color', initial: 'transparent'},
+		{name: 'background-color', default: 'transparent'},
 	]],
 	['animation', [
-		{name: 'animation-duration', initial: 'auto'},
-		{name: 'animation-timing-function', type: 'easing-function', initial: 'ease'},
+		{name: 'animation-duration', default: 'auto'},
+		{name: 'animation-timing-function', type: 'easing-function', default: 'ease'},
 		{name: 'animation-delay', number: 0, unit: 's'},
 		{name: 'animation-iteration-count', type: 'single-animation-iteration-count', number: 1},
-		{name: 'animation-direction', type: 'single-animation-direction', initial: 'normal'},
-		{name: 'animation-fill-mode', type: 'single-animation-fill-mode', initial: 'none'},
-		{name: 'animation-play-state', type: 'single-animation-play-state', initial: 'running'},
-		{name: 'animation-name', type: 'keyframes-name', initial: 'none'},
+		{name: 'animation-direction', type: 'single-animation-direction', default: 'normal'},
+		{name: 'animation-fill-mode', type: 'single-animation-fill-mode', default: 'none'},
+		{name: 'animation-play-state', type: 'single-animation-play-state', default: 'running'},
+		{name: 'animation-name', type: 'keyframes-name', default: 'none'},
 	]],
 	['transition', [
-		{name: 'transition-property', type: 'single-transition-property', initial: 'all'},
+		{name: 'transition-property', type: 'single-transition-property', default: 'all'},
 		{name: 'transition-duration', number: 0, unit: 's'},
-		{name: 'transition-timing-function', type: 'easing-function', initial: 'ease'},
+		{name: 'transition-timing-function', type: 'easing-function', default: 'ease'},
 		{name: 'transition-delay', number: 0, unit: 's'},
-		{name: 'transition-behavior', type: 'transition-behavior-value', initial: 'normal'},
+		{name: 'transition-behavior', type: 'transition-behavior-value', default: 'normal'},
 	]],
 ]);
 
@@ -200,17 +209,17 @@ Recognize only finite, exactly equal default values, retaining numeric units and
 @param {ShorthandComponent} component
 @param {Lexer} lexer
 */
-const isInitialComponent = (nodes, component, lexer) => {
+const isDefaultComponent = (nodes, component, lexer) => {
 	if (nodes.length === 0) {
 		return true;
 	}
 
-	if (component.initial === 'position') {
+	if (component.default === 'position') {
 		return isInitialPosition(nodes, lexer);
 	}
 
 	if (component.name === 'background-size' || component.name === 'background-repeat') {
-		return nodes.every(node => isKeyword(node, component.initial));
+		return nodes.every(node => isKeyword(node, component.default));
 	}
 
 	if (nodes.length !== 1) {
@@ -218,7 +227,7 @@ const isInitialComponent = (nodes, component, lexer) => {
 	}
 
 	const [node] = nodes;
-	if (component.initial && isKeyword(node, component.initial)) {
+	if (component.default && isKeyword(node, component.default)) {
 		return true;
 	}
 
@@ -227,11 +236,11 @@ const isInitialComponent = (nodes, component, lexer) => {
 		return quantity?.value === component.number && quantity.unit === component.unit;
 	}
 
-	if (component.initial === 'transparent') {
+	if (component.default === 'transparent') {
 		return areEquivalentColors(node, {type: 'Identifier', name: 'transparent'});
 	}
 
-	if (component.initial === 'ease' && node.type === 'Function' && normalizeCssIdentifier(node.name) === 'cubic-bezier') {
+	if (component.default === 'ease' && node.type === 'Function' && normalizeCssIdentifier(node.name) === 'cubic-bezier') {
 		const arguments_ = node.children.filter(child => child.type !== 'Operator');
 		return arguments_.length === 4 && arguments_.every((argument, index) => {
 			const quantity = evaluateCssMath(argument);
@@ -271,13 +280,15 @@ const getComponentGroups = (property, nodes, lexer) => {
 				continue;
 			}
 
+			if (node.value !== ',') {
+				return;
+			}
+
 			// Font family commas are not layer boundaries.
-			if (property === 'font' && node.value === ',') {
+			if (property === 'font') {
 				groups.get('font-family').push(node);
 				continue;
 			}
-
-			return;
 		}
 
 		const trace = match.getTrace(node) ?? [];
@@ -337,7 +348,7 @@ const getExpansion = (property, nodes, lexer) => {
 
 	const {groups, slash} = result;
 	const components = /** @type {ShorthandComponent[]} */ (profiles.get(property));
-	const expansion = components.map(component => isInitialComponent(groups.get(component.name), component, lexer) ? '' : getNodesKey(groups.get(component.name)));
+	const expansion = components.map(component => isDefaultComponent(groups.get(component.name), component, lexer) ? '' : getNodesKey(groups.get(component.name)));
 	const removableGroups = components.filter((component, index) => expansion[index] === '').map(component => groups.get(component.name)).filter(nodes => nodes.length > 0);
 	if (property === 'background') {
 		const boxes = groups.get('background-boxes');
