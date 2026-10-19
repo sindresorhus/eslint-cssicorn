@@ -98,6 +98,15 @@ const profiles = new Map([
 		{name: 'position-try-order', default: 'normal'},
 		{name: 'position-try-fallbacks'},
 	]],
+	['scroll-timeline', [
+		{name: 'scroll-timeline-name'},
+		{name: 'scroll-timeline-axis', default: 'block'},
+	]],
+	['view-timeline', [
+		{name: 'view-timeline-name'},
+		{name: 'view-timeline-axis', default: 'block'},
+		{name: 'view-timeline-inset', default: 'auto'},
+	]],
 	['list-style', [
 		{name: 'list-style-type', default: 'disc'},
 		{name: 'list-style-position', default: 'outside'},
@@ -154,7 +163,7 @@ const profiles = new Map([
 	]],
 ]);
 
-const layeredProperties = new Set(['background', 'animation', 'transition']);
+const layeredProperties = new Set(['background', 'animation', 'transition', 'scroll-timeline', 'view-timeline']);
 
 /**
 @param {CssNodePlain} node
@@ -218,7 +227,7 @@ const isDefaultComponent = (nodes, component, lexer) => {
 		return isInitialPosition(nodes, lexer);
 	}
 
-	if (component.name === 'background-size' || component.name === 'background-repeat') {
+	if (['background-size', 'background-repeat', 'view-timeline-inset'].includes(component.name)) {
 		return nodes.every(node => isKeyword(node, component.default));
 	}
 

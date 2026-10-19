@@ -103,6 +103,20 @@ This rule reports repeated values and default components that can be omitted fro
 }
 ```
 
+```css
+/* ❌ */
+.example {
+	scroll-timeline: --page block, --sidebar inline;
+	view-timeline: --card block auto auto;
+}
+
+/* ✅ */
+.example {
+	scroll-timeline: --page, --sidebar inline;
+	view-timeline: --card;
+}
+```
+
 These are not reported:
 
 ```css
@@ -141,6 +155,8 @@ The following unprefixed shorthands also support omitting default components:
 | `columns` | Optional `auto` components, including height after `/`. |
 | `container` | Type `/normal`. Names are required and retained. |
 | `position-try` | Order `normal`. The required fallback list and its ordering are retained. |
+| `scroll-timeline` | Axis `block`. Names and list lengths are retained. |
+| `view-timeline` | Axis `block` and insets `auto` or `auto auto`. Names and list lengths are retained. |
 | `list-style` | Type `disc`, position `outside`, and image `none`. |
 | `text-decoration` | Line `none`, style `solid`, color `currentcolor`, and thickness `auto`. |
 | `text-emphasis` | Style `none` and color `currentcolor`. The separate `text-emphasis-position` property is preserved. |
@@ -154,6 +170,8 @@ The following unprefixed shorthands also support omitting default components:
 Equivalent defaults are recognized conservatively, including constant numeric expressions, transparent-black hexadecimal and RGB colors, and `cubic-bezier(.25, .1, .25, 1)` for `ease`. Other color spaces and expressions that cannot be evaluated are retained.
 
 For `text-box`, omitted trimming defaults to `trim-both`, unlike the longhand's initial value `none`. The `normal` alias is retained.
+
+Timeline axes `x` and `y` are retained because the default `block` axis depends on the writing mode. Explicit zero view insets are retained because `auto` uses `scroll-padding`.
 
 Numeric expressions must have the correct CSS type. For example, a zero-valued time such as `calc(0s)` cannot be omitted as a background position, and unitless `calc(0)` is not a length.
 
