@@ -90,6 +90,10 @@ const profiles = new Map([
 		{name: 'column-count', initial: 'auto'},
 		{name: 'column-height', initial: 'auto'},
 	]],
+	['container', [
+		{name: 'container-name'},
+		{name: 'container-type', initial: 'normal'},
+	]],
 	['list-style', [
 		{name: 'list-style-type', initial: 'disc'},
 		{name: 'list-style-position', initial: 'outside'},
@@ -108,6 +112,10 @@ const profiles = new Map([
 	['text-wrap', [
 		{name: 'text-wrap-mode', initial: 'wrap'},
 		{name: 'text-wrap-style', initial: 'auto'},
+	]],
+	['white-space', [
+		{name: 'white-space-collapse', initial: 'collapse'},
+		{name: 'text-wrap-mode', initial: 'wrap'},
 	]],
 	['background', [
 		{name: 'background-image', type: 'bg-image', initial: 'none'},
@@ -343,7 +351,12 @@ const getExpansion = (property, nodes, lexer) => {
 	}
 
 	if (slash) {
-		const slashComponents = {font: 'line-height', columns: 'column-height', background: 'background-size'};
+		const slashComponents = {
+			font: 'line-height',
+			columns: 'column-height',
+			container: 'container-type',
+			background: 'background-size',
+		};
 		const slashComponent = slashComponents[/** @type {keyof typeof slashComponents} */ (property)];
 		const group = removableGroups.find(group => group === groups.get(slashComponent));
 		if (group) {

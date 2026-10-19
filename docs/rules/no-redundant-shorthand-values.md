@@ -75,6 +75,20 @@ This rule reports repeated values and default components that can be omitted fro
 }
 ```
 
+```css
+/* ❌ */
+.example {
+	container: Card / normal;
+	white-space: preserve wrap;
+}
+
+/* ✅ */
+.example {
+	container: Card;
+	white-space: preserve;
+}
+```
+
 These are not reported:
 
 ```css
@@ -111,10 +125,12 @@ The following unprefixed shorthands also support omitting default components:
 | `font` | Optional `normal` components, weight `400`, and line height `/normal`. Size and family are required. |
 | `flex-flow` | `row` and `nowrap`. |
 | `columns` | Optional `auto` components, including height after `/`. |
+| `container` | Type `/normal`. Names are required and retained. |
 | `list-style` | Type `disc`, position `outside`, and image `none`. |
 | `text-decoration` | Line `none`, style `solid`, color `currentcolor`, and thickness `auto`. |
 | `text-emphasis` | Style `none` and color `currentcolor`. The separate `text-emphasis-position` property is preserved. |
 | `text-wrap` | Mode `wrap` and style `auto`. |
+| `white-space` | Collapsing `collapse` and wrapping `wrap`. Legacy keywords such as `normal` and `pre` are retained. |
 | `background` | Image `none`, position `0% 0%`, size `auto auto`, repeat `repeat`, attachment `scroll`, origin `padding-box`, clip `border-box`, and color `transparent`. |
 | `animation` | Duration `auto`, easing `ease`, delay `0s`, iteration count `1`, direction `normal`, fill mode `none`, play state `running`, and name `none`. |
 | `transition` | Property `all`, duration and delay `0s`, easing `ease`, and behavior `normal`. |
