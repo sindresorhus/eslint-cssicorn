@@ -173,6 +173,22 @@ This rule reports repeated values and default components that can be omitted fro
 }
 ```
 
+```css
+/* ❌ */
+.card {
+	scroll-snap-align: center center;
+	interest-delay: 1s 1s;
+	border-start-start-radius: 10% 10%;
+}
+
+/* ✅ */
+.card {
+	scroll-snap-align: center;
+	interest-delay: 1s;
+	border-start-start-radius: 10%;
+}
+```
+
 These are not reported:
 
 ```css
@@ -189,6 +205,8 @@ These are not reported:
 - Physical edges: `margin`, `padding`, `border-color`, `border-style`, `border-width`, `scroll-margin`, `scroll-padding`, and `inset`.
 - Logical edges: the `-block` and `-inline` variants of those properties.
 - `gap`, `grid-gap`, `overflow`, `overscroll-behavior`, `border-radius`, and `border-spacing`.
+- `scroll-snap-align` and `interest-delay`.
+- Individual physical and logical corner radii, such as `border-top-left-radius` and `border-start-start-radius`.
 - `place-content`, `place-items`, and `place-self`.
 - `contain-intrinsic-size`, including repeated `auto` and size groups.
 - `background-repeat` and `mask-repeat`, independently in each comma-separated layer.
