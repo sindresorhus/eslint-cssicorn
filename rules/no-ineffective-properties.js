@@ -12,7 +12,7 @@ import {
 } from './utils/index.js';
 
 /**
-@import {BlockPlain, DeclarationPlain, Raw, ValuePlain} from '@eslint/css-tree';
+@import {BlockPlain, DeclarationPlain} from '@eslint/css-tree';
 @import {CSSSourceCode} from '@eslint/css';
 @import {CssicornContext} from './rule/cssicorn-context.js';
 @import {CssicornRule} from './rule/to-eslint-rule.js';
@@ -32,11 +32,9 @@ const MESSAGE_ID_Z_INDEX = 'no-ineffective-properties/z-index';
 const MESSAGE_ID_POSITION = 'no-ineffective-properties/position';
 const MESSAGE_ID_ABSOLUTE_POSITION = 'no-ineffective-properties/absolute-position';
 const MESSAGE_ID_POSITION_TRY_ORDER = 'no-ineffective-properties/position-try-order';
-const MESSAGE_ID_OVERFLOW = 'no-ineffective-properties/overflow';
 const MESSAGE_ID_MULTICOL = 'no-ineffective-properties/multicol';
 const MESSAGE_ID_MULTICOL_GAP = 'no-ineffective-properties/multicol-gap';
 const MESSAGE_ID_FLOAT = 'no-ineffective-properties/float';
-const MESSAGE_ID_TEXT_OVERFLOW_DISPLAY = 'no-ineffective-properties/text-overflow-display';
 const MESSAGE_ID_TABLE_SPACING = 'no-ineffective-properties/table-spacing';
 const MESSAGE_ID_TABLE_PADDING = 'no-ineffective-properties/table-padding';
 const MESSAGE_ID_TABLE_GAP = 'no-ineffective-properties/table-gap';
@@ -81,11 +79,9 @@ const messages = {
 	[MESSAGE_ID_POSITION]: '`{{property}}` has no effect with `position: {{position}}`. It requires an in-flow box.',
 	[MESSAGE_ID_ABSOLUTE_POSITION]: '`{{property}}` has no effect with `position: {{position}}`. It requires absolute or fixed positioning.',
 	[MESSAGE_ID_POSITION_TRY_ORDER]: '`position-try-order` has no effect with `position-try-fallbacks: none`. Add fallback positions to order them.',
-	[MESSAGE_ID_OVERFLOW]: '`text-overflow: {{value}}` has no effect with `overflow: visible`. Ellipsis requires clipped inline overflow.',
 	[MESSAGE_ID_MULTICOL]: '`{{property}}` has no effect with `display: {{display}}`. Multicol properties require a block container.',
 	[MESSAGE_ID_MULTICOL_GAP]: '`{{property}}` has no effect between column rows with `column-wrap: nowrap`. Enable column wrapping to use this gap.',
 	[MESSAGE_ID_FLOAT]: '`float: {{value}}` has no effect with `position: {{position}}`. Absolutely positioned elements cannot float.',
-	[MESSAGE_ID_TEXT_OVERFLOW_DISPLAY]: '`text-overflow: {{value}}` has no effect with `display: {{display}}`. Apply it to a block container holding the text.',
 	[MESSAGE_ID_TABLE_SPACING]: '`border-spacing` has no effect on this table with `border-collapse: collapse`. Use `border-collapse: separate` for spacing between cells.',
 	[MESSAGE_ID_TABLE_GAP]: '`{{property}}` has no effect on a table box. Use `border-spacing` for spacing between cells.',
 	[MESSAGE_ID_TABLE_JUSTIFY_CONTENT]: '`justify-content` has no effect on a table box. It requires a flex, grid, or multicol container.',
@@ -305,6 +301,9 @@ const shorthandPropertyGroups = [
 	},
 ];
 const shorthandProperties = new Set(shorthandPropertyGroups.flatMap(({properties}) => properties));
+/**
+Text overflow is intentionally not checked because native form controls can still show ellipsis regardless of the element's display and overflow.
+*/
 const targetProperties = new Set([
 	...flexProperties,
 	...gridProperties,
@@ -320,11 +319,9 @@ const targetProperties = new Set([
 	'align-content',
 	'justify-content',
 	'scroll-snap-stop',
-	'text-overflow',
 	'border-spacing',
 	'table-layout',
 ]);
-const overflowProperties = ['overflow', 'overflow-x', 'overflow-y', 'overflow-inline', 'overflow-block'];
 
 /**
 Get a validated keyword value from a single unprefixed controlling declaration. Multiple declarations in the property or shorthand group may be intentional fallbacks.
@@ -522,25 +519,6 @@ const getItemProblem = (node, property, keyword, {layout, float, display}) => {
 };
 
 /**
-Get a validated one- or two-keyword text-overflow value that includes ellipsis.
-
-@param {ValuePlain | Raw} value
-@returns {string | undefined}
-*/
-const getEllipsisValue = value => {
-	if (value.type !== 'Value' || value.children.length > 2) {
-		return;
-	}
-
-	const keywords = value.children.map(child => child.type === 'Identifier' ? normalizeCssIdentifier(child.name) : undefined);
-	if (!keywords.includes('ellipsis') || keywords.some(keyword => keyword !== 'clip' && keyword !== 'ellipsis')) {
-		return;
-	}
-
-	return keywords.join(' ');
-};
-
-/**
 Get the problem for a container property given the explicit layout controls in its block.
 
 @param {DeclarationPlain} node
@@ -721,8 +699,7 @@ const getDeclarationProblem = (node, property, controls, itemLayout) => {
 		return containerProblem;
 	}
 
-	const {display, isFlex, isGrid, isTable, hasNowrap, hasVisibleOverflow} = controls;
-	if (property === 'align-content' && hasNowrap) {
+	if (property === 'align-content' && controls.hasNowrap) {
 		return {node, messageId: MESSAGE_ID_NOWRAP};
 	}
 
@@ -731,24 +708,7 @@ const getDeclarationProblem = (node, property, controls, itemLayout) => {
 		return positionProblem;
 	}
 
-	const inactiveEffectProblem = getInactiveEffectProblem(node, property, keyword, controls);
-	if (inactiveEffectProblem) {
-		return inactiveEffectProblem;
-	}
-
-	const hasIncompatibleTextDisplay = isFlex || isGrid || isTable;
-	if (property === 'text-overflow' && (hasIncompatibleTextDisplay || hasVisibleOverflow)) {
-		const value = getEllipsisValue(node.value);
-		if (!value) {
-			return;
-		}
-
-		if (hasIncompatibleTextDisplay) {
-			return {node, messageId: MESSAGE_ID_TEXT_OVERFLOW_DISPLAY, data: {value, display}};
-		}
-
-		return {node, messageId: MESSAGE_ID_OVERFLOW, data: {value}};
-	}
+	return getInactiveEffectProblem(node, property, keyword, controls);
 };
 
 /**
@@ -799,6 +759,7 @@ Get the explicit controlling values for a declaration block.
 @param {CSSSourceCode} sourceCode
 */
 const getBlockControls = (declarationsByProperty, sourceCode) => {
+	// Only explicit controls are used, without writing-mode or computed-value inference.
 	const display = getControllingValue(declarationsByProperty, ['display'], sourceCode);
 	const hasVisibleDisplay = display !== undefined && display !== 'none' && display !== 'contents';
 	const layout = getDisplayLayout(display);
@@ -808,9 +769,6 @@ const getBlockControls = (declarationsByProperty, sourceCode) => {
 	const wrapping = isFlex ? getControllingValue(declarationsByProperty, ['flex-wrap', 'flex-flow', '-webkit-flex-wrap', '-webkit-flex-flow'], sourceCode) : undefined;
 	const hasNowrap = wrapping?.split(' ').includes('nowrap') || ['row', 'row-reverse', 'column', 'column-reverse'].includes(wrapping);
 	const position = getControllingValue(declarationsByProperty, ['position'], sourceCode);
-	const overflow = getControllingValue(declarationsByProperty, overflowProperties, sourceCode);
-	// Only the shorthand establishes both axes without needing writing-mode or computed-value inference.
-	const hasVisibleOverflow = declarationsByProperty.has('overflow') && (overflow === 'visible' || overflow === 'visible visible');
 	const hasCollapsedTable = isTable && getControllingValue(declarationsByProperty, ['border-collapse'], sourceCode) === 'collapse';
 	/**
 	@type {Map<string, string>}
@@ -844,7 +802,6 @@ const getBlockControls = (declarationsByProperty, sourceCode) => {
 		hasNowrap,
 		position,
 		float: getControllingValue(declarationsByProperty, ['float'], sourceCode),
-		hasVisibleOverflow,
 		inactiveProperties,
 	};
 };

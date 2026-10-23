@@ -906,17 +906,10 @@ test({
 		'a { display: var(--display); text-overflow: ellipsis; }',
 		'a { all: unset; display: table; text-overflow: ellipsis; }',
 		'a { display: table; > .item { text-overflow: ellipsis; } }',
+		...['table', 'inline-table', 'block table', 'inline table'].map(display => `a { display: ${display}; overflow: hidden; text-overflow: ellipsis; }`),
+		'a { @media (width > 1px) { DISPLAY: INLINE-TABLE; TEXT-OVERFLOW: /* edges */ CLIP ELLIPSIS !important; } }',
 	],
-	invalid: [
-		...['table', 'inline-table', 'block table', 'inline table'].map(display => ({
-			code: `a { display: ${display}; overflow: hidden; text-overflow: ellipsis; }`,
-			errors: [{messageId: 'no-ineffective-properties/text-overflow-display', data: {value: 'ellipsis', display}}],
-		})),
-		{
-			code: 'a { @media (width > 1px) { DISPLAY: INLINE-TABLE; TEXT-OVERFLOW: /* edges */ CLIP ELLIPSIS !important; } }',
-			errors: [{messageId: 'no-ineffective-properties/text-overflow-display', data: {value: 'clip ellipsis', display: 'inline-table'}}],
-		},
-	],
+	invalid: [],
 });
 
 test({

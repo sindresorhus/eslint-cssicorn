@@ -278,7 +278,6 @@ The rule reports:
 - Floats other than `none`, clearance, and `column-span: all` with `position: absolute` or `fixed`.
 - `flex`, `flex-basis`, `flex-grow`, `flex-shrink`, `order`, and `vertical-align` with `position: absolute` or `fixed`.
 - `break-before`, `break-after`, `break-inside`, and their `page-break-*` aliases with `position: absolute` or `fixed`.
-- Ellipsis in `text-overflow` with flex, grid, or table display, or with `overflow: visible` (including `visible visible`).
 - `border-spacing` and padding with `border-collapse: collapse` on `display: table` or `inline-table`.
 - `perspective-origin` with `perspective: none`.
 - `offset-distance`, `offset-rotate`, and `offset-anchor` with `offset-path: none`.
@@ -298,8 +297,6 @@ The rule reports:
 - `timeline-trigger-source`, `timeline-trigger-range`, `timeline-trigger-activation-range`, and `timeline-trigger-active-range`, including range start and end longhands, with `timeline-trigger-name: none`.
 - `timeline-trigger-range`, `timeline-trigger-activation-range`, and `timeline-trigger-active-range`, including range start and end longhands, with `timeline-trigger-source: none`. The trigger name and scope are allowed because they can still define a named trigger.
 - Omitted styles in border shorthands, `outline`, `column-rule`, and `text-emphasis`, omitted lines in `text-decoration`, and omitted names in `animation` lists where no item has a name.
-
-Ellipsis needs a block container with clipped inline overflow. `white-space: nowrap` and dimensions are not required.
 
 ## Layout applicability
 
@@ -587,24 +584,6 @@ Floated children of an ordinary flow container cannot use `justify-self`, `place
 }
 ```
 
-A table box does not directly hold inline text for ellipsis. Apply `text-overflow` to a table cell or another block container holding the text:
-
-```css
-/* ❌ */
-.label {
-	display: table;
-	overflow: hidden;
-	text-overflow: ellipsis;
-}
-
-/* ✅ */
-.label {
-	display: block;
-	overflow: hidden;
-	text-overflow: ellipsis;
-}
-```
-
 Absolute and fixed positioning take a box out of flow. Flex sizing, item ordering, and inline vertical alignment no longer apply:
 
 ```css
@@ -779,7 +758,7 @@ General:
 - Blocks that contain `all`, keyframes, descriptor blocks, and CSS Modules interop blocks are not checked.
 - Except for the shorthand defaults, each check needs an explicit controlling declaration, and is skipped when the control is unsupported or repeated (also through a shorthand or a prefixed alias), or when the control or the affected declaration uses a CSS-wide value, a substitution, or `random()`.
 
-Display, disabled effects, and overflow:
+Display and disabled effects:
 
 - Display checks ignore `display: none` and `display: contents`.
 - A disabled effect needs a single `none` value in the controlling longhand, except that text decoration controls also check `spelling-error` and `grammar-error`, column rule colors also check `hidden`, `offset-position` checks coordinate-box keywords, and `shape-image-threshold` also checks basic shapes and shape boxes.
@@ -787,8 +766,7 @@ Display, disabled effects, and overflow:
 - The background image checks also treat the draft `background-tbd` image-layer shorthand as a competing controller.
 - The scroll snap check also accepts `scroll-snap-align: none none`. Explicit `scroll-snap-stop: normal` and all-`normal` background blending lists are allowed as resets.
 - Basic shapes and shape boxes must match the CSS grammar. The installed grammar does not currently recognize a single percentage radius such as `circle(50%)`, so that form is skipped.
-- Visible overflow is only detected from the `overflow` shorthand.
-- For `text-overflow`, strings and `fade` values are not checked.
+- Text overflow is not checked because [native text input controls](https://www.w3.org/TR/css-ui-4/#input-text) can show ellipsis regardless of their outer display and overflow.
 
 Parent layout:
 
