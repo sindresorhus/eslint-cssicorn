@@ -119,21 +119,16 @@ The suggested component can itself be a shorthand, such as `border-color` or `ba
 
 ## Matching base styles
 
-The rule requires one unambiguous earlier declaration of the same shorthand with matching `!important`:
+The rule requires one unambiguous earlier declaration of the same shorthand, with matching `!important`, in the same containing block.
 
-- Sibling rules must preserve the base selector's structure and extend its final element with classes, IDs, attributes, or pseudo-classes, such as `.button` → `.button:hover`.
-- Direct nesting must target the same element, such as `&:hover` or `&.active`.
-- Every branch in a selector list must resolve to the same base declaration.
+Sibling selectors must preserve the ancestor path and extend the final compound, such as `.button` → `.button:hover`. Direct nesting supports same-element refinements such as `&.active`. All selector-list branches must share the same base declaration.
 
-Comparisons stay within one containing block, including conditional, layer, and scope blocks. Rules with unsupported selectors and relevant declarations interrupt comparisons with earlier bases.
-
-Only one component may differ, and its replacement must be explicit or follow the shorthand's copying and default rules. Independently omitted components are not expanded. Layer, animation, transition, and timeline lists require matching item counts. Values are compared structurally; keywords are ASCII case-insensitive, while custom names are case-sensitive.
+Only one component may change, and its replacement must be explicit or derived from the shorthand. Layered lists need matching item counts. Comparison is structural, with ASCII case-insensitive keywords and case-sensitive custom names.
 
 ## Limitations
 
-- The rule does not resolve the cascade or inspect other files. Conflicting declarations, `all`, pseudo-elements, and unsupported selectors are skipped.
-- Each `background-position` layer needs two values in horizontal and vertical order, such as `left top`. Each `animation-range` item needs explicit start and end values.
-- Ambiguous component assignments, such as `font-variant: normal` and `mask` geometry boxes, are skipped. Grid template areas and `auto-flow` are also skipped.
-- Unsupported forms include `grid-gap`, vendor-prefixed shorthands other than `-webkit-text-stroke`, system fonts, `flex: none`, `outline` with `auto`, timeline syntax in `animation`, `text-box: normal`, and the `white-space` keywords `normal`, `pre`, `pre-wrap`, and `pre-line`.
-- CSS-wide keywords, substitutions such as `var()`, `random()`, and invalid or unclassified values are skipped.
-- Keyframes, descriptor blocks, and CSS Modules interop blocks are ignored. Comments in a replaced declaration prevent the suggestion.
+- No cascade resolution or cross-file matching. Conflicts, `all`, and unsupported selectors can prevent matching. Pseudo-elements are skipped.
+- Independently omitted components are not expanded. `background-position` needs explicit horizontal and vertical values; `animation-range` needs explicit endpoints.
+- Implicit or ambiguous forms may be skipped, including system fonts, grid template areas, animation timelines, and some `white-space` keywords.
+- `grid-gap`, vendor-prefixed shorthands other than `-webkit-text-stroke`, CSS-wide keywords, substitutions, `random()`, and invalid values are skipped.
+- Keyframes, descriptor blocks, and CSS Modules interop blocks are ignored. Declaration comments prevent suggestions.
