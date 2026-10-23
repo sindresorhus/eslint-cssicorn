@@ -46,30 +46,12 @@ a {
 a {
 	background-image: none;
 	background-size: cover;
-	background-repeat-inline: no-repeat;
-	background-blend-mode: multiply;
 }
 
 /* ✅ */
 a {
 	background-image: url("background.svg");
 	background-size: cover;
-	background-repeat-inline: no-repeat;
-	background-blend-mode: multiply;
-}
-```
-
-```css
-/* ❌ */
-.button {
-	outline-style: none;
-	outline-offset: 3px;
-}
-
-/* ✅ */
-.button {
-	outline-style: solid;
-	outline-offset: 3px;
 }
 ```
 
@@ -97,210 +79,42 @@ a {
 }
 ```
 
-```css
-/* ❌ */
-.shape {
-	float: left;
-	shape-outside: circle(10px);
-	shape-image-threshold: 0.5;
-}
-
-/* ✅ */
-.shape {
-	float: left;
-	shape-outside: url("shape.png");
-	shape-image-threshold: 0.5;
-}
-```
-
-```css
-/* ❌ */
-.article {
-	columns: 2;
-	column-rule-style: hidden;
-	column-rule-color: red;
-}
-
-/* ✅ */
-.article {
-	columns: 2;
-	column-rule-style: solid;
-	column-rule-color: red;
-}
-```
-
-```css
-/* ❌ */
-.slide {
-	scroll-snap-align: none;
-	scroll-snap-stop: always;
-}
-
-/* ✅ */
-.slide {
-	scroll-snap-align: start;
-	scroll-snap-stop: always;
-}
-```
-
-```css
-/* ❌ */
-.card {
-	mask-border-source: none;
-	mask-border-slice: 25 fill;
-}
-
-/* ✅ */
-.card {
-	mask-border-source: url("mask.png");
-	mask-border-slice: 25 fill;
-}
-```
-
-```css
-/* ❌ */
-.card {
-	view-transition-name: none;
-	view-transition-class: card;
-}
-
-/* ✅ */
-.card {
-	view-transition-name: card;
-	view-transition-class: card;
-}
-```
-
-```css
-/* ❌ */
-.card {
-	view-transition-name: none;
-	view-transition-group: contain;
-}
-
-/* ✅ */
-.card {
-	view-transition-name: card;
-	view-transition-group: contain;
-}
-```
-
-`view-transition-group` only groups elements that participate independently in the transition. `view-transition-scope` is allowed with `view-transition-name: none` because it can still limit the discoverability of names on descendants.
-
-```css
-/* ❌ */
-.card {
-	animation-name: none;
-	animation-delay-start: 1s;
-	animation-delay-end: 500ms;
-	animation-trigger: --reveal play;
-}
-
-/* ✅ */
-.card {
-	animation-name: reveal;
-	animation-delay-start: 1s;
-	animation-delay-end: 500ms;
-	animation-trigger: --reveal play;
-}
-```
-
-```css
-/* ❌ */
-.link {
-	text-decoration-line: none;
-	text-decoration-inset: 2px;
-}
-
-/* ✅ */
-.link {
-	text-decoration-line: underline;
-	text-decoration-inset: 2px;
-}
-```
-
-```css
-/* ❌ */
-.card {
-	timeline-trigger-name: none;
-	timeline-trigger-source: view();
-	timeline-trigger-activation-range: entry 10% exit 80%;
-}
-
-/* ✅ */
-.card {
-	timeline-trigger-name: --reveal;
-	timeline-trigger-source: view();
-	timeline-trigger-activation-range: entry 10% exit 80%;
-}
-```
-
-```css
-/* ❌ */
-.card {
-	timeline-trigger-name: --reveal;
-	timeline-trigger-source: none;
-	timeline-trigger-range: entry 10% exit 80% / entry 0% exit 100%;
-}
-
-/* ✅ */
-.card {
-	timeline-trigger-name: --reveal;
-	timeline-trigger-source: view();
-	timeline-trigger-range: entry 10% exit 80% / entry 0% exit 100%;
-}
-```
-
 ## Checks
 
 The rule reports:
 
-- `flex-direction`, `flex-wrap`, `flex-flow`, `flex-line-count`, grid templates and auto-placement, and `table-layout` with an incompatible visible `display` mode.
-- `vertical-align` with an explicitly block-level `display`, such as `block`, `flow-root`, `flex`, `grid`, or `table-caption`. Inline-level modes, including `inline-flex` and `inline-grid`, table cells, and known flex and grid items are allowed.
-- `justify-self`, `grid-area`, `grid-row`, `grid-column`, `grid-row-start`, `grid-row-end`, `grid-column-start`, and `grid-column-end` on a known ordinary flex item selected by a nested child selector.
-- `flex`, `flex-basis`, `flex-grow`, and `flex-shrink` on a known ordinary grid item selected by a nested child selector.
-- Floats other than `none`, clearance, and `column-span: all` on known ordinary flex or grid items selected by a nested child selector.
-- `shape-outside`, `shape-margin`, and `shape-image-threshold` on known ordinary flex or grid items selected by a nested child selector.
-- Flex sizing, grid placement, `order`, and `align-self` on known children of an ordinary flow container, such as `display: block`, `flow-root`, or `inline-block`, selected by a nested child selector.
-- `z-index` other than `auto` with explicit `position: static` on known children of an ordinary flow container selected by a nested child selector. Static flex and grid items are allowed.
-- `justify-self`, `place-self`, and `column-span: all` on explicitly inline-level children of a known ordinary flow container selected by a nested child selector.
-- `justify-self`, `place-self`, `vertical-align`, and `column-span: all` on floated children of a known ordinary flow container selected by a nested child selector.
-- `columns`, `column-count`, `column-width`, `column-fill`, `column-height`, and `column-wrap` with flex, grid, or table display. Table cells and captions can still contain columns.
-- `align-content` on a flex container with `nowrap` in `flex-wrap` or `flex-flow`, including the implicit `nowrap` in direction-only shorthands such as `flex-flow: column`. Use `align-items` or wrapping instead.
-- `flex-line-count` on a flex container with explicit `nowrap`, including direction-only `flex-flow` shorthands. Ordinary wrapping containers are allowed, even without `balance`.
-- `justify-content` on table boxes. Table cells and captions can still use it with multicolumn layout.
-- `gap`, `row-gap`, and `column-gap`, including their `grid-*` aliases, on table boxes. Use `border-spacing` for spacing between cells.
-- Cross-axis gaps on explicitly single-line flex containers with a known direction: `row-gap` for rows and `column-gap` for columns. Main-axis gaps and the `gap` shorthand are allowed.
-- `row-gap` and `grid-row-gap` with explicit ordinary flow display and `column-wrap: nowrap`. Column gaps and the `gap` shorthand are allowed.
+- Flex, grid, multicolumn, and table controls with an incompatible visible `display` mode.
+- `vertical-align` on explicitly block-level boxes, except known flex and grid items. Inline-level boxes, including `inline-flex` and `inline-grid`, and table cells are allowed.
+- `justify-self` and grid placement on known flex items; flex sizing on known grid items.
+- Non-`none` floats, clearance, shape controls, and `column-span: all` on known flex or grid items.
+- Flex sizing, grid placement, `order`, and `align-self` on known ordinary flow children.
+- `z-index` other than `auto` on known ordinary flow children with explicit `position: static`.
+- `justify-self`, `place-self`, and `column-span: all` on explicitly inline-level or floated flow children; `vertical-align` on floated flow children.
+- `align-content`, `flex-line-count`, and cross-axis gaps on explicitly single-line flex containers. Gap checks also require a known direction; main-axis gaps and the `gap` shorthand are allowed.
+- `row-gap` with explicit ordinary flow display and `column-wrap: nowrap`.
+- Gaps and `justify-content` on table boxes. Gap checks include the `grid-*` aliases.
 - Physical and logical insets with `position: static`.
-- `position-area`, `position-try`, `position-try-fallbacks`, `position-try-order`, and `position-visibility` with explicit `position: static`, `relative`, or `sticky`. These controls require absolute or fixed positioning.
-- `position-try-order` with explicit `position-try-fallbacks: none`, because there are no alternative positions to order.
-- Floats other than `none`, clearance, and `column-span: all` with `position: absolute` or `fixed`.
-- `flex`, `flex-basis`, `flex-grow`, `flex-shrink`, `order`, and `vertical-align` with `position: absolute` or `fixed`.
-- `break-before`, `break-after`, `break-inside`, and their `page-break-*` aliases with `position: absolute` or `fixed`.
+- Anchor placement and position fallback controls with explicit static, relative, or sticky positioning. `position-anchor` is allowed because descendants can use it through `match-parent`.
+- `position-try-order` with `position-try-fallbacks: none`.
+- Non-`none` floats, clearance, `column-span: all`, flex sizing, `order`, `vertical-align`, and break controls with absolute or fixed positioning. Self-alignment and grid placement are allowed.
 - `border-spacing` and padding with `border-collapse: collapse` on `display: table` or `inline-table`.
-- `perspective-origin` with `perspective: none`.
-- `offset-distance`, `offset-rotate`, and `offset-anchor` with `offset-path: none`.
-- `offset-position` when `offset-path` is a single coordinate-box keyword, such as `border-box` or `padding-box`. Functions and combined path values are allowed.
-- `shape-image-threshold` with `shape-outside: none`, a basic shape such as `circle()` or `polygon()`, or a shape box such as `margin-box`. Thresholds only affect image-based shapes, including gradients.
-- `text-decoration-color`, `text-decoration-style`, `text-decoration-thickness`, and `text-decoration-inset` with `text-decoration-line: none`, `spelling-error`, or `grammar-error`. Error decorations use browser-defined styling.
-- `outline-color`, `outline-width`, and `outline-offset` with `outline-style: none`.
-- `column-rule-color` with `column-rule-style: none` or `hidden`. Column rule width is allowed because it can affect crossing gap decorations.
-- Related image controls, such as position, size, repeat, slice, and compositing, when `background-image`, `border-image-source`, or `mask-image` is `none`.
-- `background-position-inline`, `background-position-block`, `background-repeat-x`, `background-repeat-y`, `background-repeat-block`, and `background-repeat-inline` with `background-image: none`.
-- `mask-border-mode`, `mask-border-slice`, `mask-border-width`, `mask-border-outset`, and `mask-border-repeat` with `mask-border-source: none`.
-- `view-transition-class` and `view-transition-group` with `view-transition-name: none`.
-- Non-`normal` background blending with `background-image: none`.
-- `scroll-snap-stop: always` with `scroll-snap-align: none` or `none none`. Mixed values such as `none start` are allowed because they still define a snap position on one axis.
-- Related animation controls, including `animation-delay-start`, `animation-delay-end`, `animation-range-center`, and `animation-trigger`, with `animation-name: none`, and transition controls with `transition-property: none`.
-- Related timeline axis and inset controls with `scroll-timeline-name: none` or `view-timeline-name: none`.
-- `timeline-trigger-source`, `timeline-trigger-range`, `timeline-trigger-activation-range`, and `timeline-trigger-active-range`, including range start and end longhands, with `timeline-trigger-name: none`.
-- `timeline-trigger-range`, `timeline-trigger-activation-range`, and `timeline-trigger-active-range`, including range start and end longhands, with `timeline-trigger-source: none`. The trigger name and scope are allowed because they can still define a named trigger.
+- `perspective-origin` with `perspective: none`; `offset-distance`, `offset-rotate`, and `offset-anchor` with `offset-path: none`.
+- `offset-position` with a single coordinate-box path such as `offset-path: border-box`. Functions and combined path values are allowed.
+- `shape-image-threshold` with `shape-outside: none`, a basic shape, or a shape box. Thresholds only affect image-based shapes.
+- Decoration color, style, thickness, and inset with `text-decoration-line: none`, `spelling-error`, or `grammar-error`. Inherited underline and skip controls remain allowed.
+- Outline color, width, and offset with `outline-style: none`; `column-rule-color` with `column-rule-style: none` or `hidden`. Column rule width can still affect crossing gap decorations.
+- Related image controls when `background-image`, `border-image-source`, `mask-image`, or `mask-border-source` is `none`.
+- `scroll-snap-stop: always` when `scroll-snap-align` disables snapping on both axes.
+- `view-transition-class` and `view-transition-group` with `view-transition-name: none`. `view-transition-scope` remains allowed.
+- Related animation or transition controls with `animation-name: none` or `transition-property: none`.
+- Related timeline controls with `scroll-timeline-name`, `view-timeline-name`, or `timeline-trigger-name` set to `none`; trigger range controls with `timeline-trigger-source: none`.
 - Omitted styles in border shorthands, `outline`, `column-rule`, and `text-emphasis`, omitted lines in `text-decoration`, and omitted names in `animation` lists where no item has a name.
 
 ## Layout applicability
 
-`vertical-align` aligns inline-level boxes or table cells. Its `alignment-baseline` component can also affect flex and grid items, so the rule allows those items when their parent layout is explicit. A flex or grid container can still be an inline-level box:
+Direction-only `flex-flow` values imply `nowrap`; `balance` enables wrapping even when `wrap` is omitted.
+
+A flex or grid container can still be an inline-level box:
 
 ```css
 /* ❌ */
@@ -316,29 +130,7 @@ The rule reports:
 }
 ```
 
-[`justify-self` does not apply to flex items](https://www.w3.org/TR/css-align-3/#justify-self-property). Use `align-self` for cross-axis alignment, or the parent's `justify-content` for main-axis alignment:
-
-```css
-/* ❌ */
-.container {
-	display: flex;
-
-	& > .item {
-		justify-self: center;
-	}
-}
-
-/* ✅ */
-.container {
-	display: flex;
-
-	& > .item {
-		align-self: center;
-	}
-}
-```
-
-Grid placement requires a grid parent:
+[`justify-self` does not apply to flex items](https://www.w3.org/TR/css-align-3/#justify-self-property), and grid placement requires a grid parent:
 
 ```css
 /* ❌ */
@@ -346,6 +138,7 @@ Grid placement requires a grid parent:
 	display: flex;
 
 	> .item {
+		justify-self: center;
 		grid-column: 2;
 	}
 }
@@ -355,380 +148,35 @@ Grid placement requires a grid parent:
 	display: grid;
 
 	> .item {
+		justify-self: center;
 		grid-column: 2;
 	}
 }
 ```
 
-Flex sizing requires a flex parent, even if the item itself has flex display. An explicit ordinary flow parent, such as `display: block`, `flow-root`, or `inline-block`, also makes flex sizing, grid placement, `order`, and `align-self` ineffective on its ordinary direct children. `justify-self` and `place-self` are allowed on non-floating block-level flow items. Floats and clearance are also allowed in flow layout.
+An item's own display does not determine its parent's layout. Flex sizing requires a flex parent:
 
 ```css
 /* ❌ */
 .container {
 	display: grid;
 
-	> .item:not(.hidden) {
+	> .item {
+		display: flex;
+		flex: 1;
+	}
+}
+
+/* ✅ */
+.container {
+	display: flex;
+
+	> .item {
 		display: flex;
 		flex: 1;
 	}
 }
-
-/* ✅ */
-.container {
-	display: flex;
-
-	> .item:not(.hidden) {
-		display: flex;
-		flex: 1;
-	}
-}
 ```
-
-Inline-level boxes in ordinary flow cannot use `justify-self`, `place-self`, or `column-span: all`. Changing the box to a block-level box enables inline-axis self-alignment and column spanning:
-
-```css
-/* ❌ */
-.container {
-	display: block;
-	columns: 2;
-
-	> .item {
-		display: inline-flex;
-		justify-self: center;
-		column-span: all;
-	}
-}
-
-/* ✅ */
-.container {
-	display: block;
-	columns: 2;
-
-	> .item {
-		display: flex;
-		justify-self: center;
-		column-span: all;
-	}
-}
-```
-
-Inline display on a flex or grid item is blockified, so the ordinary flow check does not apply to these items. Absolutely positioned and fixed boxes can also use self-alignment.
-
-Shape controls require a float or an initial-letter box. An ordinary flex or grid item is neither, and adding `float` does not change this because flex and grid items ignore it:
-
-```css
-/* ❌ */
-.container {
-	display: flex;
-
-	> .item {
-		float: left;
-		shape-outside: circle();
-		shape-margin: 8px;
-	}
-}
-
-/* ✅ */
-.container {
-	display: block;
-
-	> .item {
-		float: left;
-		shape-outside: circle();
-		shape-margin: 8px;
-	}
-}
-```
-
-Multicolumn layout requires a block container other than a table wrapper. A table cannot itself be a multicolumn container:
-
-```css
-/* ❌ */
-.article {
-	display: table;
-	columns: 2;
-	column-height: 20rem;
-	column-wrap: wrap;
-}
-
-/* ✅ */
-.article {
-	display: block;
-	columns: 2;
-	column-height: 20rem;
-	column-wrap: wrap;
-}
-```
-
-`grid-gap`, `grid-row-gap`, and `grid-column-gap` are standard aliases for `gap`, `row-gap`, and `column-gap`. The table and single-line flex gap checks also cover these aliases.
-
-Table boxes use `border-spacing` instead of gaps between cells:
-
-```css
-/* ❌ */
-.table {
-	display: table;
-	gap: 1rem;
-}
-
-/* ✅ */
-.table {
-	display: table;
-	border-spacing: 1rem;
-}
-```
-
-`justify-content` aligns items or columns inside flex, grid, or multicolumn containers. It cannot align a table's cells:
-
-```css
-/* ❌ */
-.layout {
-	display: table;
-	justify-content: center;
-}
-
-/* ✅ */
-.layout {
-	display: grid;
-	justify-content: center;
-}
-```
-
-Cross-axis flex gaps separate flex lines. A container with `nowrap` has only one line, so only its main-axis gap can add spacing:
-
-```css
-/* ❌ */
-.toolbar {
-	display: flex;
-	flex-flow: row nowrap;
-	row-gap: 1rem;
-}
-
-/* ✅ */
-.toolbar {
-	display: flex;
-	flex-flow: row nowrap;
-	column-gap: 1rem;
-}
-```
-
-`balance` enables wrapping, including when `wrap` is omitted in `flex-wrap: balance` or `flex-flow: row balance`. Alignment and cross-axis gaps are allowed in these containers.
-
-The gap check requires explicit direction and wrapping controls. An explicit `flex-wrap: nowrap` also needs an explicit `flex-direction`. The `flex-flow` shorthand supplies omitted defaults, so `flex-flow: column` and `flex-flow: nowrap` establish both controls. The `gap` shorthand is allowed because it can still space items along the main axis.
-
-`flex-line-count` needs a wrapping flex container:
-
-```css
-/* ❌ */
-.cards {
-	display: flex;
-	flex-wrap: nowrap;
-	flex-line-count: 3;
-}
-
-/* ✅ */
-.cards {
-	display: flex;
-	flex-wrap: wrap;
-	flex-line-count: 3;
-}
-```
-
-`column-wrap: nowrap` creates overflow columns in the inline direction, so `row-gap` cannot separate column rows. The check requires explicit ordinary flow display:
-
-```css
-/* ❌ */
-.article {
-	display: block;
-	column-count: 2;
-	column-height: 20rem;
-	column-wrap: nowrap;
-	row-gap: 1rem;
-}
-
-/* ✅ */
-.article {
-	display: block;
-	column-count: 2;
-	column-height: 20rem;
-	column-wrap: wrap;
-	row-gap: 1rem;
-}
-```
-
-`column-span: all` cannot make a flex or grid item span columns. Flex and grid containers establish their own formatting contexts, so their items cannot span an outer multicolumn container. A flex or grid container can itself span columns when it participates in ordinary flow layout.
-
-Floated children of an ordinary flow container cannot use `justify-self`, `place-self`, `vertical-align`, or `column-span: all`. The parent layout must be explicit because flex and grid items ignore `float`, so their alignment can still apply:
-
-```css
-/* ❌ */
-.container {
-	display: block;
-
-	> .item {
-		float: left;
-		justify-self: center;
-		vertical-align: middle;
-	}
-}
-
-/* ✅ */
-.container {
-	display: block;
-
-	> .item {
-		float: none;
-		justify-self: center;
-		vertical-align: middle;
-	}
-}
-```
-
-Absolute and fixed positioning take a box out of flow. Flex sizing, item ordering, and inline vertical alignment no longer apply:
-
-```css
-/* ❌ */
-.container {
-	display: flex;
-
-	> .item {
-		position: absolute;
-		flex: 1;
-	}
-}
-
-/* ✅ */
-.container {
-	display: flex;
-
-	> .item {
-		position: relative;
-		flex: 1;
-	}
-}
-```
-
-`justify-self`, `align-self`, and grid placement can affect positioned boxes and are allowed with absolute or fixed positioning.
-
-Break controls do not apply to absolutely positioned or fixed boxes. Their contents can still fragment, so break controls on in-flow descendants and inherited `widows` and `orphans` remain allowed:
-
-```css
-/* ❌ */
-.chapter {
-	position: absolute;
-	break-before: page;
-}
-
-/* ✅ */
-.chapter {
-	position: relative;
-	break-before: page;
-}
-```
-
-Anchor placement and position fallback controls require absolute or fixed positioning. Relative and sticky positioning do not enable them:
-
-```css
-/* ❌ */
-.tooltip {
-	position: relative;
-	position-anchor: --button;
-	position-area: top;
-	position-try-fallbacks: flip-block;
-}
-
-/* ✅ */
-.tooltip {
-	position: absolute;
-	position-anchor: --button;
-	position-area: top;
-	position-try-fallbacks: flip-block;
-}
-```
-
-These checks include reset values, just like the static inset checks. An omitted position is not inferred because elements such as popovers can have absolute or fixed positioning supplied by the browser. `position-anchor` is not checked because its value can be used by descendants through `match-parent`.
-
-`position-try-order` sorts the available position options. With `position-try-fallbacks: none`, only the base position remains, so the order cannot affect the result:
-
-```css
-/* ❌ */
-.tooltip {
-	position: fixed;
-	position-try-fallbacks: none;
-	position-try-order: most-height;
-}
-
-/* ✅ */
-.tooltip {
-	position: fixed;
-	position-try-fallbacks: flip-block;
-	position-try-order: most-height;
-}
-```
-
-`z-index` applies to positioned boxes and to flex and grid items. An explicitly static child of an ordinary flow container cannot use it, even when the child itself has grid or flex display:
-
-```css
-/* ❌ */
-.container {
-	display: block;
-
-	> .item {
-		position: static;
-		z-index: 1;
-	}
-}
-
-/* ✅ */
-.container {
-	display: block;
-
-	> .item {
-		position: relative;
-		z-index: 1;
-	}
-}
-```
-
-## Error decorations
-
-The browser controls the appearance of `spelling-error` and `grammar-error` decorations. Use an ordinary decoration line when you want to customize its appearance:
-
-```css
-/* ❌ */
-.annotation {
-	text-decoration-line: spelling-error;
-	text-decoration-color: blue;
-}
-
-/* ✅ */
-.annotation {
-	text-decoration-line: underline;
-	text-decoration-color: blue;
-}
-```
-
-Inherited underline and skip controls are allowed because they can affect decorations on descendants. Properties such as `color`, `fill`, and `stroke` can still style the text itself.
-
-## Motion paths
-
-A coordinate-box path already defines its position, so `offset-position` cannot move it. A ray can use `offset-position` to choose its starting position:
-
-```css
-/* ❌ */
-.marker {
-	offset-path: border-box;
-	offset-position: right bottom;
-}
-
-/* ✅ */
-.marker {
-	offset-path: ray(45deg);
-	offset-position: right bottom;
-}
-```
-
-Only a single explicit coordinate-box keyword is checked. The check skips path functions, combined values such as `ray(45deg) border-box`, and competing `offset` shorthands.
 
 ## Intentional declarations
 
@@ -770,12 +218,10 @@ Display and disabled effects:
 
 Parent layout:
 
-- Only nested direct child selectors such as `& > .item` and `> .item` immediately inside a block with explicit flex, grid, or ordinary flow display are checked. Every selector in a list must select direct children. The child compound may contain type, class, ID, attribute, and standard pseudo-class selectors, including `:is()`, `:not()`, and `:nth-child()`.
-- The parent may be filtered in the same compound after a leading `&`, as in `&.active > .item`, `&:hover > .item`, or `&[data-layout] > .item`. These filters still select children of the known container.
-- Separate parent and child rules, descendant selectors, pseudo-elements, framework pseudo-classes such as `:global()`, and relationships through intervening conditional blocks are not checked.
-- Parent layout checks skip absolutely positioned and fixed children. An explicit position must be unambiguously `static`, `relative`, or `sticky`; an omitted position is treated as in-flow.
-- The `z-index` check additionally requires explicit `position: static`; an omitted position is not inferred.
-- Children with explicit hidden, boxless, or ambiguous display are skipped. A child may itself be a flex or grid container; its own display does not determine its parent's layout.
+- Only nested direct child selectors such as `> .item` and `&.active > .item` immediately inside an explicit flex, grid, or ordinary flow container are checked. Every selector in a list must select direct children; type, class, ID, attribute, and standard pseudo-class filters are supported.
+- Separate rules, descendant selectors, pseudo-elements, framework pseudo-classes such as `:global()`, and relationships through intervening conditional blocks are skipped.
+- Absolutely positioned and fixed children, ambiguous positioning, and hidden, boxless, or ambiguous child display are skipped. An omitted position is treated as in-flow; the `z-index` check additionally requires explicit `position: static`.
+- Known flex and grid items are allowed to use `vertical-align` because its `alignment-baseline` component can apply to them.
 
 Shorthand defaults:
 
