@@ -415,7 +415,7 @@ for (const [name, config] of Object.entries(eslintCssicorn.configs)) {
 		const output = result.output ?? code;
 		assert.ok(output.includes(name === 'unopinionated' ? 'margin: 0px.5em;' : 'margin: 0 .5em;'));
 		assert.ok(output.includes('animation-composition: add;'));
-		assert.ok(output.includes(name === 'unopinionated' ? 'animation-name: pulse;' : 'animation: 1s ease 0s 1 normal none running pulse;'));
+		assert.ok(output.includes(name === 'unopinionated' ? 'animation-name: pulse;' : 'animation: 1s pulse;'));
 
 		const [repeated] = await eslint.lintText(output, {filePath: 'file.css'});
 		assert.deepEqual(repeated.messages, []);
