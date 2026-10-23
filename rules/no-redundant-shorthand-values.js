@@ -1,12 +1,29 @@
+// @ts-check
+
 import {fourSideShorthands, pairShorthands} from './shared/css-shorthand-properties.js';
 import {areEqualValues, getCondensedValueCount} from './shared/css-shorthand-values.js';
+import {getDefaultShorthandReduction, hasShorthandDefaults} from './shared/css-shorthand-defaults.js';
 import {
 	getBasePropertyName,
+	getCommaSeparatedGroups,
 	hasCommentInRange,
 	hasSubstitutionOrRandomFunction,
 	isCssModulesInteropDeclaration,
 	normalizeCssIdentifier,
 } from './utils/index.js';
+
+/**
+@import {CSSSourceCode} from '@eslint/css';
+@import {CssNodePlain} from '@eslint/css-tree';
+@import {CssicornContext} from './rule/cssicorn-context.js';
+@import {CssicornRule} from './rule/to-eslint-rule.js';
+@import {CssicornRuleFixer} from './rule/to-eslint-rule-fixer.js';
+*/
+
+/**
+@typedef {{replacement: string, removeRange: [number, number]}} ValueReduction
+@typedef {NonNullable<ReturnType<typeof getDefaultShorthandReduction>>} ShorthandReduction
+*/
 
 const MESSAGE_ID = 'no-redundant-shorthand-values';
 const messages = {
@@ -14,17 +31,57 @@ const messages = {
 };
 
 // `grid-gap` is excluded from the shared set because `grid-row-gap`/`grid-column-gap` are reported as `gap` instead.
-const twoSideProperties = new Set([...pairShorthands, 'grid-gap']);
+const twoSideProperties = new Set([
+	...pairShorthands,
+	'grid-gap',
+	'background-repeat',
+	'mask-repeat',
+	'border-image-repeat',
+	'border-spacing',
+	'scroll-snap-align',
+	'interest-delay',
+	'border-top-left-radius',
+	'border-top-right-radius',
+	'border-bottom-right-radius',
+	'border-bottom-left-radius',
+	'border-start-start-radius',
+	'border-start-end-radius',
+	'border-end-start-radius',
+	'border-end-end-radius',
+	'corner-top-shape',
+	'corner-right-shape',
+	'corner-bottom-shape',
+	'corner-left-shape',
+	'corner-block-start-shape',
+	'corner-block-end-shape',
+	'corner-inline-start-shape',
+	'corner-inline-end-shape',
+]);
 
-const placeProperties = new Set([
+const fourSideProperties = new Set([
+	...fourSideShorthands,
+	'border-image-slice',
+	'border-image-width',
+	'border-image-outset',
+]);
+
+const repeatedGroupProperties = new Set([
+	'contain-intrinsic-size',
 	'place-content',
 	'place-items',
 	'place-self',
 ]);
 
+/**
+@param {CssNodePlain[]} values
+@param {CSSSourceCode} sourceCode
+*/
 const getValuesText = (values, sourceCode) => values.map(node => sourceCode.getText(node)).join(' ');
 
-const getRepeatedPlaceValueCount = values => {
+/**
+@param {CssNodePlain[]} values
+*/
+const getRepeatedGroupValueCount = values => {
 	if (values.length % 2 !== 0) {
 		return values.length;
 	}
@@ -39,6 +96,12 @@ const getRepeatedPlaceValueCount = values => {
 	return halfLength;
 };
 
+/**
+@param {CssNodePlain[]} values
+@param {number} condensedValueCount
+@param {CSSSourceCode} sourceCode
+@returns {ValueReduction | undefined}
+*/
 const getReduction = (values, condensedValueCount, sourceCode) => {
 	if (condensedValueCount === values.length) {
 		return;
@@ -49,11 +112,16 @@ const getReduction = (values, condensedValueCount, sourceCode) => {
 		replacement: getValuesText(retainedValues, sourceCode),
 		removeRange: [
 			sourceCode.getRange(values[condensedValueCount - 1])[1],
-			sourceCode.getRange(values.at(-1))[1],
+			sourceCode.getRange(/** @type {CssNodePlain} */ (values.at(-1)))[1],
 		],
 	};
 };
 
+/**
+@param {CssNodePlain[]} values
+@param {boolean} preserveFourValueEdges
+@param {CSSSourceCode} sourceCode
+*/
 const getSimpleReduction = (values, preserveFourValueEdges, sourceCode) => {
 	if (
 		values.length < 2
@@ -66,6 +134,36 @@ const getSimpleReduction = (values, preserveFourValueEdges, sourceCode) => {
 	return getReduction(values, getCondensedValueCount(values, preserveFourValueEdges), sourceCode);
 };
 
+/**
+@param {CssNodePlain[]} values
+@param {CSSSourceCode} sourceCode
+@returns {ShorthandReduction | undefined}
+*/
+const getLayeredResult = (values, sourceCode) => {
+	const layers = getCommaSeparatedGroups({children: values}).map(({nodes}) => {
+		const reduction = getSimpleReduction(nodes, false, sourceCode);
+		return {
+			reduction,
+			replacement: reduction?.replacement ?? getValuesText(nodes, sourceCode),
+		};
+	});
+	const reductions = layers.flatMap(({reduction}) => reduction ? [reduction] : []);
+	if (reductions.length === 0) {
+		return;
+	}
+
+	return {
+		reductions,
+		replacement: layers.map(({replacement}) => replacement).join(', '),
+	};
+};
+
+/**
+@param {CssNodePlain[]} values
+@param {boolean} isWebkitBorderRadius
+@param {CSSSourceCode} sourceCode
+@returns {ShorthandReduction | undefined}
+*/
 const getBorderRadiusResult = (values, isWebkitBorderRadius, sourceCode) => {
 	const slashIndex = values.findIndex(node => node.type === 'Operator' && node.value === '/');
 	if (slashIndex === -1) {
@@ -85,7 +183,7 @@ const getBorderRadiusResult = (values, isWebkitBorderRadius, sourceCode) => {
 	const verticalValues = values.slice(slashIndex + 1);
 	const horizontalReduction = getSimpleReduction(horizontalValues, false, sourceCode);
 	const verticalReduction = getSimpleReduction(verticalValues, false, sourceCode);
-	const reductions = [horizontalReduction, verticalReduction].filter(Boolean);
+	const reductions = /** @type {ValueReduction[]} */ ([horizontalReduction, verticalReduction].filter(Boolean));
 	if (reductions.length === 0) {
 		return;
 	}
@@ -98,16 +196,20 @@ const getBorderRadiusResult = (values, isWebkitBorderRadius, sourceCode) => {
 	};
 };
 
-const getPlaceReduction = (values, sourceCode) => {
+/**
+@param {CssNodePlain[]} values
+@param {CSSSourceCode} sourceCode
+*/
+const getRepeatedGroupReduction = (values, sourceCode) => {
 	if (values.length < 2 || values.some(node => node.type === 'Operator')) {
 		return;
 	}
 
-	return getReduction(values, getRepeatedPlaceValueCount(values), sourceCode);
+	return getReduction(values, getRepeatedGroupValueCount(values), sourceCode);
 };
 
 /**
-@param {import('eslint').Rule.RuleContext} context
+@param {CssicornContext} context
 */
 const create = context => {
 	const {sourceCode} = context;
@@ -122,11 +224,15 @@ const create = context => {
 		}
 
 		const property = getBasePropertyName(declaration.property);
+		const canOmitDefaults = normalizeCssIdentifier(declaration.property) === property
+			&& hasShorthandDefaults(property)
+			&& sourceCode.getParent(declaration)?.type === 'Block';
 		if (
-			!fourSideShorthands.has(property)
+			!fourSideProperties.has(property)
 			&& !twoSideProperties.has(property)
-			&& property !== 'border-radius'
-			&& !placeProperties.has(property)
+			&& !['border-radius', 'corner-shape'].includes(property)
+			&& !repeatedGroupProperties.has(property)
+			&& !canOmitDefaults
 		) {
 			return;
 		}
@@ -137,12 +243,16 @@ const create = context => {
 
 		const values = value.children;
 		let result;
-		if (property === 'border-radius') {
+		if (canOmitDefaults) {
+			result = getDefaultShorthandReduction(property, value, context);
+		} else if (property === 'border-radius') {
 			result = getBorderRadiusResult(values, normalizeCssIdentifier(declaration.property) === '-webkit-border-radius', sourceCode);
+		} else if (['background-repeat', 'mask-repeat'].includes(property)) {
+			result = getLayeredResult(values, sourceCode);
 		} else {
-			const reduction = placeProperties.has(property)
-				? getPlaceReduction(values, sourceCode)
-				: getSimpleReduction(values, fourSideShorthands.has(property), sourceCode);
+			const reduction = repeatedGroupProperties.has(property)
+				? getRepeatedGroupReduction(values, sourceCode)
+				: getSimpleReduction(values, fourSideProperties.has(property), sourceCode);
 			result = reduction && {
 				reductions: [reduction],
 				replacement: reduction.replacement,
@@ -152,7 +262,7 @@ const create = context => {
 		// Match the grammar last, as it is slow and most values cannot be simplified.
 		if (
 			!result
-			|| !sourceCode.lexer.matchProperty(property, value).matched
+			|| (!canOmitDefaults && !sourceCode.lexer.matchProperty(property, value).matched)
 		) {
 			return;
 		}
@@ -162,6 +272,11 @@ const create = context => {
 			node: value,
 			messageId: MESSAGE_ID,
 			data: {replacement},
+
+			/**
+			@param {Parameters<CssicornRuleFixer>[0]} fixer
+			@param {Parameters<CssicornRuleFixer>[1]} options
+			*/
 			* fix(fixer, {abort}) {
 				if (reductions.some(({removeRange}) => hasCommentInRange(context, removeRange))) {
 					return abort();
@@ -176,7 +291,7 @@ const create = context => {
 };
 
 /**
-@type {import('eslint').Rule.RuleModule}
+@type {CssicornRule}
 */
 const config = {
 	create,
